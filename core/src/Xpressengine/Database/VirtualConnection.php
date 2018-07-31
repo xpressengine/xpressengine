@@ -15,13 +15,10 @@
 namespace Xpressengine\Database;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
-use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DetectsDeadlocks;
 use Illuminate\Database\DetectsLostConnections;
-use PDO;
 use Closure;
-use Exception;
-use Throwable;
 
 /**
  * VirtualConnection
@@ -39,70 +36,14 @@ class VirtualConnection implements VirtualConnectionInterface
         DetectsLostConnections;
 
     /**
-     * master type key name
+     * @var ConnectionInterface
      */
-    const TYPE_MASTER = 'master';
+    protected $connection;
 
     /**
-     * slave type key name
+     * @var ProxyManager
      */
-    const TYPE_SLAVE = 'slave';
-
-    /**
-     * default database connection name (config/database.php 의 기본 connection 설정 이름)
-     */
-    const DEFAULT_CONNECTION_NAME = 'default';
-
-    /**
-     * @var DatabaseCoupler
-     */
-    protected $coupler;
-
-    /**
-     * @var DynamicQuery
-     */
-    protected $queryBuilder;
-
-    /**
-     * connector name
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * config/database.php config name for create master connection instance
-     *
-     * @var string
-     */
-    protected $master;
-
-    /**
-     * config/database.php config name for create slave connection instance
-     *
-     * @var string
-     */
-    protected $slave;
-
-    /**
-     * @var string $tablePrefix
-     */
-    protected $tablePrefix;
-
-    /**
-     * connections list
-     * * config/xe.php database key 에 따라 master, slave 로 구분해서
-     * /Illuminate/Database/Connection 을 갖는다.
-     * ```php
-     *      $connections = [
-     *          'master' => /Illuminate/Database/Connection,
-     *           'slave' => /Illuminate/Database/Connection,
-     *      ]
-     * ```
-     *
-     * @var array
-     */
-    protected $connections;
+    protected $proxy;
 
     /**
      * Cache store instance
@@ -121,102 +62,13 @@ class VirtualConnection implements VirtualConnectionInterface
     /**
      * Create instance
      *
-     * @param DatabaseCoupler $coupler database coupler
-     * @param string          $name    connector name
-     * @param array           $config  database config (xe.php file 의 database 설정)
+     * @param ConnectionInterface $connection connection instance
+     * @param ProxyManager        $proxy      proxy manager instance
      */
-    public function __construct(DatabaseCoupler $coupler, $name, array $config)
+    public function __construct(ConnectionInterface $connection, ProxyManager $proxy)
     {
-        $this->coupler = $coupler;
-        $this->name = $name;
-        $this->setNames($config);
-    }
-
-    /**
-     * get name for connector
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * DynamicQuery 에서 사용
-     * \Illuminate\Database\Query\Builder 를 만들 때 Connection 이 필요함.
-     *
-     * @return Connection
-     */
-    public function getDefaultConnection()
-    {
-        return $this->coupler->connect();
-    }
-
-    /**
-     * Get a schema builder instance for the connection.
-     *
-     * @return \Illuminate\Database\Schema\Builder
-     */
-    public function getSchemaBuilder()
-    {
-        return $this->getDefaultConnection()->getSchemaBuilder();
-    }
-
-    /**
-     * Get table prefix name.
-     *
-     * @return string
-     */
-    public function getTablePrefix()
-    {
-        return $this->getDefaultConnection()->getTablePrefix();
-    }
-
-    /**
-     * set connection name.
-     * 설정된 master, slave 이름들에서 사용 할 이름을 선택.
-     *
-     * @param array $config database config
-     * @return void
-     */
-    private function setNames(array $config)
-    {
-        foreach ($this->fixConfig($config) as $type => $names) {
-            $this->{$type} = $this->connectionName($names);
-        }
-    }
-
-    /**
-     * 설정 정보 확인
-     * master, slave 설정이 없을 경우 기본 설정을 넣어 줌
-     *
-     * @param array $config database config
-     * @return mixed
-     */
-    private function fixConfig(array $config)
-    {
-        if (isset($config[self::TYPE_MASTER]) === false) {
-            $config[self::TYPE_MASTER] = [self::DEFAULT_CONNECTION_NAME];
-        }
-
-        if (isset($config[self::TYPE_SLAVE]) === false) {
-            $config[self::TYPE_SLAVE] = [self::DEFAULT_CONNECTION_NAME];
-        }
-
-        return $config;
-    }
-
-    /**
-     * $type 에서 사용 될 connection name 결정.
-     *
-     * @param array $names connection 이름
-     * @return \Illuminate\Database\Connection
-     */
-    private function connectionName($names)
-    {
-        $index = $_SERVER['REQUEST_TIME'] % count($names);
-        return $names[$index];
+        $this->connection = $connection;
+        $this->proxy = $proxy;
     }
 
     /**
@@ -227,59 +79,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function getProxyManager()
     {
-        return $this->coupler->getProxy();
-    }
-
-    /**
-     * get connection
-     *
-     * @param string $type master or slave
-     * @return \Illuminate\Database\Connection
-     */
-    public function connection($type = self::DEFAULT_CONNECTION_NAME)
-    {
-        $connection = ($this->connections[$type] === null) ?
-            $this->coupler->connect($this->{$type}) :
-            $this->connections[$type];
-
-        return $connection;
-    }
-
-    /**
-     * get master connection
-     *
-     * @return \Illuminate\Database\Connection
-     */
-    public function master()
-    {
-        return $this->connection(self::TYPE_MASTER);
-    }
-
-    /**
-     * get slave connection
-     *
-     * @return \Illuminate\Database\Connection
-     */
-    public function slave()
-    {
-        return $this->connection(self::TYPE_SLAVE);
-    }
-
-    /**
-     * get connection by $queryType.
-     * 'select' 쿼리일 경우 $slaveConnection 을 넘겨주고 그렇지 않을 경우 $masterConnection 을 반환.
-     * database 를 쿼리 실행 시 연결.
-     *
-     * @param string $type query type
-     * @return \Illuminate\Database\ConnectionInterface
-     */
-    public function getConnection($type = 'select')
-    {
-        if ($type === 'select') {
-            return $this->connection(self::TYPE_SLAVE);
-        } else {
-            return $this->connection(self::TYPE_MASTER);
-        }
+        return $this->proxy;
     }
 
     /**
@@ -323,8 +123,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function query()
     {
-        /** @var VirtualConnection $this */
-        return new DynamicQuery($this, $this->getQueryGrammar(), $this->getPostProcessor());
+        return new DynamicQuery($this, $this->connection->getQueryGrammar(), $this->connection->getPostProcessor());
     }
 
     /**
@@ -335,7 +134,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function raw($value)
     {
-        return $this->getConnection()->raw($value);
+        return $this->connection->raw($value);
     }
 
     /**
@@ -347,7 +146,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function selectOne($query, $bindings = array())
     {
-        return $this->getConnection()->selectOne($query, $bindings);
+        return $this->connection->selectOne($query, $bindings);
     }
 
     /**
@@ -359,7 +158,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function select($query, $bindings = array())
     {
-        return $this->getConnection()->select($query, $bindings);
+        return $this->connection->select($query, $bindings);
     }
 
     /**
@@ -371,7 +170,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function insert($query, $bindings = array())
     {
-        return $this->getConnection('insert')->insert($query, $bindings);
+        return $this->connection->insert($query, $bindings);
     }
 
     /**
@@ -383,7 +182,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function update($query, $bindings = array())
     {
-        return $this->getConnection('update')->update($query, $bindings);
+        return $this->connection->update($query, $bindings);
     }
 
     /**
@@ -395,7 +194,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function delete($query, $bindings = array())
     {
-        return $this->getConnection('delete')->delete($query, $bindings);
+        return $this->connection->delete($query, $bindings);
     }
 
     /**
@@ -407,7 +206,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function statement($query, $bindings = array())
     {
-        return $this->getConnection()->statement($query, $bindings);
+        return $this->connection->statement($query, $bindings);
     }
 
     /**
@@ -419,7 +218,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function affectingStatement($query, $bindings = array())
     {
-        return $this->getConnection()->affectingStatement($query, $bindings);
+        return $this->connection->affectingStatement($query, $bindings);
     }
 
     /**
@@ -430,7 +229,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function unprepared($query)
     {
-        return $this->getConnection()->unprepared($query);
+        return $this->connection->unprepared($query);
     }
 
     /**
@@ -441,7 +240,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function prepareBindings(array $bindings)
     {
-        return $this->getConnection()->prepareBindings($bindings);
+        return $this->connection->prepareBindings($bindings);
     }
 
     /**
@@ -455,18 +254,9 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
-        return $this->transactionHandler()->transaction($this->coupler, $callback, $attempts);
+        return $this->connection->transaction($callback, $attempts);
     }
 
-    /**
-     * get TransactionHandler
-     *
-     * @return TransactionHandler
-     */
-    public function transactionHandler()
-    {
-        return $this->coupler->getTransaction();
-    }
     /**
      * Start a new database transaction.
      * DatabaseHandler 를 통해서 transaction 관리.
@@ -475,7 +265,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function beginTransaction()
     {
-        $this->transactionHandler()->beginTransaction($this->coupler);
+        $this->connection->beginTransaction();
     }
 
     /**
@@ -486,7 +276,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function commit()
     {
-        $this->transactionHandler()->commit($this->coupler);
+        $this->connection->commit();
     }
 
     /**
@@ -496,7 +286,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function rollBack()
     {
-        $this->transactionHandler()->rollBack($this->coupler);
+        $this->connection->rollBack();
     }
 
     /**
@@ -506,7 +296,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function transactionLevel()
     {
-        return $this->transactionHandler()->transactionLevel();
+        return $this->connection->transactionLevel();
     }
 
     /**
@@ -517,7 +307,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function pretend(Closure $callback)
     {
-        return $this->getConnection()->pretend($callback);
+        return $this->connection->pretend($callback);
     }
 
     /**
@@ -554,7 +344,7 @@ class VirtualConnection implements VirtualConnectionInterface
             $cache->forget($table);
         }
 
-        $schema = $this->getConnection('master')->getSchemaBuilder()->getColumnListing($table);
+        $schema = $this->connection->getSchemaBuilder()->getColumnListing($table);
         if (count($schema) === 0) {
             return false;
         }
@@ -605,6 +395,6 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array(array($this->getConnection('master'), $method), $parameters);
+        return call_user_func_array([$this->connection, $method], $parameters);
     }
 }
