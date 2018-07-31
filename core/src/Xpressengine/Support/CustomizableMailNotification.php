@@ -189,7 +189,7 @@ abstract class CustomizableMailNotification extends Notification
     protected function subject($notifiable)
     {
         if (static::$subjectResolver) {
-            return call_user_func(static::$subjectResolver, $notifiable);
+            return call_user_func(static::$subjectResolver, $notifiable, $this);
         }
 
         return $this->getDefaultSubject($notifiable);
