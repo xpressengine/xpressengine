@@ -51,6 +51,16 @@ abstract class CustomizableMailNotification extends Notification
     protected static $views = [];
 
     /**
+     * @var array
+     */
+    protected static $channels = [];
+
+    /**
+     * @var array
+     */
+    protected static $defaultChannel = ['mail'];
+
+    /**
      * Get the notification's channels.
      *
      * @param mixed $notifiable notifiable
@@ -58,7 +68,7 @@ abstract class CustomizableMailNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return static::getChannel();
     }
 
     /**
@@ -201,5 +211,62 @@ abstract class CustomizableMailNotification extends Notification
     protected function createMessage()
     {
         return new MailMessage;
+    }
+
+    /**
+     * Get channels for the notification
+     *
+     * @return array
+     */
+    public static function getChannel()
+    {
+        return static::$channels[get_called_class()] ?? static::getDefaultChannel();
+    }
+
+    /**
+     * Set the array of notification channels
+     *
+     * @param string|array $channels channels
+     * @return void
+     */
+    public static function setChannel($channels)
+    {
+        $channels = is_array($channels) ? $channels : [$channels];
+
+        static::$channels[get_called_class()] = $channels;
+    }
+
+    /**
+     * Add channels to the notification.
+     *
+     * @param string|array $channels channels
+     * @return void
+     */
+    public static function addChannel($channels)
+    {
+        $channels = is_array($channels) ? $channels : [$channels];
+
+        static::$channels[get_called_class()] = array_unique(static::$channels[get_called_class()] + $channels);
+    }
+
+    /**
+     * Get default channels for the notification
+     *
+     * @return array
+     */
+    public static function getDefaultChannel()
+    {
+        return static::$defaultChannel;
+    }
+
+    /**
+     * Set the array of notification default channels
+     *
+     * @param string|array $channels channels
+     * @return void
+     */
+    public static function setDefaultChannel($channels)
+    {
+        static::$defaultChannel = is_array($channels) ? $channels : [$channels];
     }
 }
