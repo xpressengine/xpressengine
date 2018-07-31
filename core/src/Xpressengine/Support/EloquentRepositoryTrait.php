@@ -19,6 +19,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @category    Support
  * @package     Xpressengine\Support
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 trait EloquentRepositoryTrait
 {
@@ -85,7 +89,7 @@ trait EloquentRepositoryTrait
     }
 
     /**
-     * The name of Category model class
+     * The name of model class
      *
      * @return string
      */
@@ -95,7 +99,7 @@ trait EloquentRepositoryTrait
     }
 
     /**
-     * Set the name of Category model
+     * Set the name of model
      *
      * @param string $model model class
      * @return void

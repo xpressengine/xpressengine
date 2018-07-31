@@ -273,9 +273,9 @@ if (function_exists('xe_trans') === false) {
      *
      * @package Xpressengine\Translation
      *
-     * @param null   $id         다국어 키
-     * @param array  $parameters 파라매터
-     * @param null   $locale     로케일
+     * @param null  $id         다국어 키
+     * @param array $parameters 파라매터
+     * @param null  $locale     로케일
      *
      * @return string
      */
@@ -423,13 +423,17 @@ if (!function_exists('expose_route')) {
      *
      * @package Xpressengine\Routing
      *
-     * @param string    $routeName   Route name
-     * @param array     $params      route parameter
+     * @param string $routeName Route name
+     * @param array  $params    route parameter
+     * @return void
      */
-    function expose_route($routeName, $params = []) {
+    function expose_route($routeName, $params = [])
+    {
         $route = app('router')->getRoutes()->getByName($routeName);
 
-        if (in_array('settings', $route->middleware()) && !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])) {
+        if (in_array('settings', $route->middleware()) &&
+            !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])
+        ) {
             return;
         }
 
@@ -447,9 +451,10 @@ if (!function_exists('expose_instance_route')) {
      *
      * @package Xpressengine\Routing
      *
-     * @param string    $routeName   Route name
-     * @param array     $params      route parameter
-     * @param string    $instanceId  instance ID
+     * @param string $routeName  Route name
+     * @param array  $params     route parameter
+     * @param string $instanceId instance ID
+     * @return void
      */
     function expose_instance_route($routeName, $params = [], $instanceId = null)
     {
@@ -471,7 +476,9 @@ if (!function_exists('expose_instance_route')) {
         $routeName = $module . '.' . $routeName;
 
         $route = app('router')->getRoutes()->getByName($routeName);
-        if (in_array('settings', $route->middleware()) && !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])) {
+        if (in_array('settings', $route->middleware()) &&
+            !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])
+        ) {
             return;
         }
 
@@ -496,9 +503,11 @@ if (!function_exists('expose_trans')) {
     /**
      * front-end에서 사용할 수 있도록 지정한 Translation 정보를 노출
      *
-     * @param string    $keys   trans ID
+     * @param string $keys trans ID
+     * @return void
      */
-    function expose_trans($keys) {
+    function expose_trans($keys)
+    {
         XeFrontend::translation($keys);
     }
 }
