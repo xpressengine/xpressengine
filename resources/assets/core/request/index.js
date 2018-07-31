@@ -68,7 +68,7 @@ export default class Request extends Singleton {
 
     axiosConfig = Object.assign({}, axiosConfig)
     axiosConfig.url = this.resolveRoute(url)
-    axiosConfig.method = options.method
+    if (!axiosConfig.method) axiosConfig.method = 'get'
     axiosConfig.data = options.data
     axiosConfig.params = options.params
     axiosConfig.container = (options.container) ? options.container : $('body')
