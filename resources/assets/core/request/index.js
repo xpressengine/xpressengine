@@ -68,9 +68,10 @@ export default class Request extends Singleton {
 
     axiosConfig = Object.assign({}, axiosConfig)
     axiosConfig.url = this.resolveRoute(url)
-    if (!axiosConfig.method) axiosConfig.method = 'get'
+    axiosConfig.method = options.method
     axiosConfig.data = options.data
     axiosConfig.params = options.params
+    axiosConfig.headers = options.headers
     axiosConfig.container = (options.container) ? options.container : $('body')
 
     return this.axiosInstance.request(axiosConfig)
@@ -98,7 +99,7 @@ export default class Request extends Singleton {
    */
   post (url, data, config = {}) {
     config.method = 'post'
-    return this.request(url, Object.assign({}, { method: 'post', data: this.prepareData(data) }, config))
+    return this.request(url, Object.assign({}, { data }, config))
   }
 
   /**
@@ -108,9 +109,9 @@ export default class Request extends Singleton {
    * @param {object} config
    * @return {Promise}
    */
-  delete (url, data = null, config = {}) {
+  delete (url, params = null, config = {}) {
     config.method = 'delete'
-    return this.request(url, this.prepareData(data), config)
+    return this.request(url, Object.assign({}, { params }, config))
   }
 
   /**
@@ -122,7 +123,7 @@ export default class Request extends Singleton {
    */
   put (url, data, config = {}) {
     config.method = 'put'
-    return this.request(url, this.prepareData(data), config)
+    return this.request(url, Object.assign({}, { data }, config))
   }
 
   /**
@@ -133,9 +134,9 @@ export default class Request extends Singleton {
    * @param {object} config
    * @return {Promise}
    */
-  head (url, data = null, headers = null, config = {}) {
+  head (url, params = null, headers = null, config = {}) {
     config.method = 'head'
-    return this.request(url, Object.assign({}, { data: this.prepareData(data), headers }, config))
+    return this.request(url, Object.assign({}, { params, headers }, config))
   }
 
   prepareData (data) {
