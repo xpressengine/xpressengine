@@ -25,9 +25,13 @@
         <p class="ellipsis">{{ $plugin->getDescription() }}</p>
         {{-- component list --}}
         @foreach($componentTypes as $type => $typeText)
-            @foreach($plugin->getComponentList($type) as $key => $component)
-                <span class="label label-{{ $color[$type] }}" title="{{ $component['name'] }}" data-toggle="tooltip">{{ $type }}</span>
-            @endforeach
+            @if(!empty($group = $plugin->getComponentList($type)))
+                <span class="label label-{{ $color[$type] }}" data-html="true" title="
+                @foreach($group as $key => $component)
+                    {!! $loop->index > 0 ? '<br>' : '' !!}{{ $component['name'] }}
+                @endforeach
+                " data-toggle="tooltip">{{ $type }}</span>
+            @endif
         @endforeach
 
         @if(array_has($unresolvedComponents, $plugin->getId()))

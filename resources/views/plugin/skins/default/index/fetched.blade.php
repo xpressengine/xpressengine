@@ -7,7 +7,9 @@
 @stop
 
 @include($_skin::view('index.tab'))
-
+<style>
+    .panel>.list-group.list-plugin li {overflow: unset;}
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
