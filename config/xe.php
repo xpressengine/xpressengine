@@ -422,7 +422,6 @@ return [
             'user/auth' => 'user/auth/skin/xpressengine@default',
             'user/profile' => 'user/profile/skin/xpressengine@default',
             'user/settings' => 'user/settings/skin/xpressengine@default',
-            'error' => 'error/skin/xpressengine@default',
         ],
         'defaultSettingsSkins' => [
         ],
