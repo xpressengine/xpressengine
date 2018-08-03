@@ -9,7 +9,7 @@ return [
             'Core.RemoveInvalidImg' => false,
             'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,StyleAttribute,Tables'.
                 ',Text,Structure,Legacy,NonXMLCommonAttributes,XMLCommonAttributes,TargetBlank,Presentation',
-            'AutoFormat.AutoParagraph' => true,
+            'AutoFormat.AutoParagraph' => false,
             'AutoFormat.RemoveEmpty' => true,
             'HTML.TargetBlank' => true
         ]
