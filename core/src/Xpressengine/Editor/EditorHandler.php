@@ -302,6 +302,38 @@ class EditorHandler
     }
 
     /**
+     * Unset tools for specific instance
+     *
+     * @param string $instanceId instance id
+     * @return void
+     */
+    public function unsetTools($instanceId)
+    {
+        $this->setConfig($instanceId, ['tools' => null]);
+    }
+
+    /**
+     * Set tools for global
+     *
+     * @param array $tools tool component ids
+     * @return void
+     */
+    public function setGlobalTools(array $tools)
+    {
+        $this->setGlobalConfig(['tools' => $tools]);
+    }
+
+    /**
+     * Get tools for global
+     *
+     * @return string[]
+     */
+    public function getGlobalTools()
+    {
+        return $this->getGlobalConfig()->get('tools', []);
+    }
+
+    /**
      * Compile the raw content to be useful
      *
      * @param string $instanceId instance id
@@ -402,14 +434,35 @@ class EditorHandler
     }
 
     /**
+     * Set the global config for specific instance
+     *
+     * @param array $data config data
+     * @return \Xpressengine\Config\ConfigEntity
+     */
+    public function setGlobalConfig(array $data)
+    {
+        return $this->configManager->set($this->getConfigKey(), $data);
+    }
+
+    /**
+     * Get the global config for specific instance
+     *
+     * @return \Xpressengine\Config\ConfigEntity
+     */
+    public function getGlobalConfig()
+    {
+        return $this->configManager->getOrNew($this->getConfigKey());
+    }
+
+    /**
      * Get a key string for the config
      *
      * @param string $instanceId instance identifier
      * @return string
      */
-    protected function getConfigKey($instanceId)
+    protected function getConfigKey($instanceId = null)
     {
-        return static::CONFIG_NAME . '.' . $instanceId;
+        return $instanceId ? static::CONFIG_NAME . '.' . $instanceId : static::CONFIG_NAME;
     }
 
     /**
@@ -418,7 +471,7 @@ class EditorHandler
      * @param string $instanceId instance identifier
      * @return string
      */
-    public function getPermKey($instanceId)
+    public function getPermKey($instanceId = null)
     {
         return $this->getConfigKey($instanceId);
     }

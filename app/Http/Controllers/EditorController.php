@@ -62,13 +62,13 @@ class EditorController extends Controller
             'fontSize' => $request->get('fontSize'),
             'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
             'stylesheet' => $request->get('stylesheet'),
-            'uploadActive' => !!$request->get('uploadActive', false),
-            'fileMaxSize' => $request->get('fileMaxSize', 0),
-            'attachMaxSize' => $request->get('attachMaxSize', 0),
+            'uploadActive' => !is_null($request->get('uploadActive')) ? !!$request->get('uploadActive') : null,
+            'fileMaxSize' => $request->get('fileMaxSize'),
+            'attachMaxSize' => $request->get('attachMaxSize'),
             'extensions' => empty($request->get('extensions')) ? null : strtolower($request->get('extensions')),
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     public function getPermSetting($instanceId)
@@ -86,12 +86,14 @@ class EditorController extends Controller
     {
         $this->permissionRegister($request, XeEditor::getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
 
-        return redirect()->back();
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     public function getToolSetting($instanceId)
     {
         $tools = XeEditor::getToolAll();
+
+        $inherit = !XeEditor::getConfig($instanceId)->getPure('tools');
 
         $toolIds = XeEditor::getTools($instanceId);
         $activated = array_intersect_key($tools, array_flip($toolIds));
@@ -109,14 +111,96 @@ class EditorController extends Controller
         return XePresenter::make('editor.tool', [
             'instanceId' => $instanceId,
             'items' => $items,
+            'inherit' => $inherit,
         ]);
     }
 
     public function postToolSetting(Request $request, $instanceId)
     {
-        XeEditor::setTools($instanceId, $request->get('tools', []));
+        if ($request->get('inherit')) {
+            XeEditor::unsetTools($instanceId);
+        } else {
+            XeEditor::setTools($instanceId, $request->get('tools', []));
+        }
 
-        return redirect()->back();
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    public function redirectGlobalSetting()
+    {
+        return redirect()->route('settings.editor.global.detail');
+    }
+
+    public function getGlobalDetailSetting()
+    {
+        return XePresenter::make('editor.global.detail', [
+            'config' => XeEditor::getGlobalConfig(),
+        ]);
+    }
+
+    public function postGlobalDetailSetting(Request $request)
+    {
+        $this->validate($request, [
+            'height' => 'required|numeric',
+            'fontSize' => 'required',
+            'fileMaxSize' => 'numeric',
+            'attachMaxSize' => 'numeric',
+        ]);
+        XeEditor::setGlobalConfig([
+            'height' => $request->get('height'),
+            'fontSize' => $request->get('fontSize'),
+            'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
+            'stylesheet' => $request->get('stylesheet'),
+            'uploadActive' => !!$request->get('uploadActive', false),
+            'fileMaxSize' => $request->get('fileMaxSize', 0),
+            'attachMaxSize' => $request->get('attachMaxSize', 0),
+            'extensions' => empty($request->get('extensions')) ? null : strtolower($request->get('extensions')),
+        ]);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    public function getGlobalPermSetting()
+    {
+        return XePresenter::make('editor.global.perm', [
+            'permArgs' => $this->getPermArguments(XeEditor::getPermKey(), ['html', 'tool', 'upload', 'download']),
+        ]);
+    }
+
+    public function postGlobalPermSetting(Request $request)
+    {
+        $this->permissionRegister($request, XeEditor::getPermKey(), ['html', 'tool', 'upload', 'download']);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    public function getGlobalToolSetting()
+    {
+        $tools = XeEditor::getToolAll();
+
+        $toolIds = XeEditor::getGlobalTools();
+        $activated = array_intersect_key($tools, array_flip($toolIds));
+        $activated = array_merge(array_flip($toolIds), $activated);
+        $deactivated = array_diff_key($tools, array_flip($toolIds));
+
+        $items = [];
+        foreach ($activated as $key => $item) {
+            $items[$key] = ['class' => $item, 'activated' => true];
+        }
+        foreach ($deactivated as $key => $item) {
+            $items[$key] = ['class' => $item, 'activated' => false];
+        }
+
+        return XePresenter::make('editor.global.tool', [
+            'items' => $items,
+        ]);
+    }
+
+    public function postGlobalToolSetting(Request $request)
+    {
+        XeEditor::setGlobalTools($request->get('tools', []));
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**

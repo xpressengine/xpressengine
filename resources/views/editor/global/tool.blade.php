@@ -1,8 +1,8 @@
 {{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
 
-@include('editor._title')
+@include('editor.global._title')
 
-@include('editor._tab', ['_active' => 'tool', 'instanceId' => $instanceId])
+@include('editor.global._tab', ['_active' => 'tool'])
 
 <div class="panel-group" role="tablist" aria-multiselectable="true">
     <div class="panel">
@@ -12,15 +12,11 @@
             </div>
         </div>
         <div class="panel-collapse collapse in">
-            <form method="post" id="f-editor-tool" action="{{ route('settings.editor.setting.tool', $instanceId) }}">
+            <form method="post" action="{{ route('settings.editor.global.tool') }}">
                 {{ csrf_field() }}
                 <div class="panel-body">
 
                     <div class="panel">
-                            <label>
-                                <input type="checkbox" class="__xe_inherit" name="inherit" {{ $inherit ? 'checked' : '' }}>
-                                {{ xe_trans('xe::inheritMode') }}
-                            </label>
                         <ul class="list-group item-setting">
                             @foreach ($items as $id => $item)
                                 <li class="list-group-item">
@@ -35,9 +31,6 @@
                                         </label>
                                     </div>
                                     <div class="pull-right">
-                                        @if($uri = $item['class']::getInstanceSettingURI($instanceId))
-                                            <a href="{{ $uri }}">{{ xe_trans('xe::setup') }}</a>
-                                        @endif
                                     </div>
                                 </li>
                             @endforeach
@@ -63,14 +56,5 @@
             handle: '.handler',
             cancel: ''
         }).disableSelection();
-
-
-      $('.__xe_inherit', '#f-editor-tool').click(function (e) {
-        var bool = $(this).is(':checked');
-        $('input,select,textarea', $('#f-editor-tool .item-setting')).not(this).prop('disabled', $(this).is(':checked'));
-        bool ? $('.item-setting').sortable('disable') : $('.item-setting').sortable('enable');
-      }).each(function () {
-        $(this).triggerHandler('click');
-      });
     });
 </script>

@@ -1,6 +1,6 @@
-@include('editor._title')
+@include('editor.global._title')
 
-@include('editor._tab', ['_active' => 'detail', 'instanceId' => $instanceId])
+@include('editor.global._tab', ['_active' => 'detail'])
 
 <div class="panel-group" role="tablist" aria-multiselectable="true">
     <div class="panel">
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="panel-collapse collapse in">
-            <form method="post" id="f-editor-setting" action="{{ route('settings.editor.setting.detail', $instanceId) }}">
+            <form method="post" action="{{ route('settings.editor.global.detail') }}">
                 {{ csrf_field() }}
                 <div class="panel-body">
 
@@ -29,12 +29,6 @@
                                                 {{ xe_trans('xe::editorHeight') }}
                                                 <small> {{ xe_trans('xe::unit') }}: px</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('height')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="height" value="{{ $config->get('height') }}">
@@ -49,12 +43,6 @@
                                                 {{ xe_trans('xe::fontSize') }}
                                                 <small>{{ xe_trans('xe::explainFontSize') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('fontSize')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <input type="text" class="form-control" name="fontSize" value="{{ $config->get('fontSize') }}">
                                     </div>
@@ -69,12 +57,6 @@
                                                 {{ xe_trans('xe::fontFamily') }}
                                                 <small>{{ xe_trans('xe::explainFontFamily') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('fontFamily')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <input type="text" class="form-control" name="fontFamily" value="{{ $config->get('fontFamily') }}" placeholder="Ex) Tahoma, Geneva, sans-serif">
                                     </div>
@@ -89,12 +71,6 @@
                                                 CSS
                                                 <small>{{ xe_trans('xe::explainStylesheet') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('stylesheet')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <input type="text" class="form-control" name="stylesheet" value="{{ $config->get('stylesheet') }}" placeholder="Ex) plugin/myplugin/assets/some.css">
                                     </div>
@@ -118,23 +94,12 @@
                                         <div class="clearfix">
                                             <label>
                                                 {{ xe_trans('xe::enableUpload') }}
-                                                <small>{{ xe_trans('xe::explainEnableUpload') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('uploadActive')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
-                                        <select name="uploadActive" class="form-control">
-                                            <option value="1" {{ $config->get('uploadActive') ? 'checked' : '' }}>{{ xe_trans('xe::use') }}</option>
-                                            <option value="0" {{ $config->get('uploadActive') ? '' : 'checked' }}>{{ xe_trans('xe::disuse') }}</option>
-                                        </select>
-                                        {{--<label>--}}
-                                            {{--<input type="checkbox" name="uploadActive" value="1" {{ $config->get('uploadActive') ? 'checked' : '' }}>--}}
-                                            {{--{{ xe_trans('xe::explainEnableUpload') }}--}}
-                                        {{--</label>--}}
+                                        <label>
+                                            <input type="checkbox" name="uploadActive" value="1" {{ $config->get('uploadActive') ? 'checked' : '' }}>
+                                            {{ xe_trans('xe::explainEnableUpload') }}
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -144,12 +109,6 @@
                                                 {{ xe_trans('xe::availableExtension') }}
                                                 <small>{{ xe_trans('xe::explainAvailableExtension') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('extensions')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <input type="text" class="form-control" name="extensions" value="{{ $config->get('extensions') }}">
                                     </div>
@@ -163,12 +122,6 @@
                                                 {{ xe_trans('xe::maxFileSize') }}
                                                 <small>{{ xe_trans('xe::descMaxFileSize') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('fileMaxSize')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="fileMaxSize" value="{{ $config->get('fileMaxSize') }}">
@@ -183,12 +136,6 @@
                                                 {{ xe_trans('xe::attachMaxSize') }}
                                                 <small>{{ xe_trans('xe::descAttachMaxSize') }}</small>
                                             </label>
-                                            <div class="checkbox pull-right">
-                                                <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('attachMaxSize')? 'checked' : '' }}>
-                                                    {{ xe_trans('xe::inheritMode') }}
-                                                </label>
-                                            </div>
                                         </div>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="attachMaxSize" value="{{ $config->get('attachMaxSize') }}">
@@ -212,14 +159,3 @@
     </div>
 
 </div>
-
-<script>
-  window.jQuery(function ($) {
-    $('.__xe_inherit', '#f-editor-setting').click(function (e) {
-      var $group = $(this).closest('.form-group');
-      $('input,select,textarea', $group).not(this).prop('disabled', $(this).is(':checked'));
-    }).each(function () {
-      $(this).triggerHandler('click');
-    });
-  });
-</script>

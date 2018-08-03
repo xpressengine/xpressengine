@@ -990,15 +990,27 @@ Route::settings(
 );
 
 Route::settings('editor', function () {
-    Route::post('setting/{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
-    Route::get('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@getDetailSetting']);
-    Route::post('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@postDetailSetting']);
+    Route::group(['prefix' => 'global', 'settings_menu' => 'setting.editor'], function () {
+        Route::get('detail', ['as' => 'settings.editor.global.detail', 'uses' => 'EditorController@getGlobalDetailSetting']);
+        Route::post('detail', ['as' => 'settings.editor.global.detail', 'uses' => 'EditorController@postGlobalDetailSetting']);
+        Route::get('perm', ['as' => 'settings.editor.global.perm', 'uses' => 'EditorController@getGlobalPermSetting']);
+        Route::post('perm', ['as' => 'settings.editor.global.perm', 'uses' => 'EditorController@postGlobalPermSetting']);
+        Route::get('tool', ['as' => 'settings.editor.global.tool', 'uses' => 'EditorController@getGlobalToolSetting']);
+        Route::post('tool', ['as' => 'settings.editor.global.tool', 'uses' => 'EditorController@postGlobalToolSetting']);
 
-    Route::get('setting/{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@getPermSetting']);
-    Route::post('setting/{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@postPermSetting']);
+        Route::get('/', ['as' => 'settings.editor.global.redirect', 'uses' => 'EditorController@redirectGlobalSetting']);
+    });
+    Route::group(['prefix' => 'setting'], function () {
+        Route::post('{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
+        Route::get('{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@getDetailSetting']);
+        Route::post('{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@postDetailSetting']);
 
-    Route::get('setting/{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@getToolSetting']);
-    Route::post('setting/{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@postToolSetting']);
+        Route::get('{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@getPermSetting']);
+        Route::post('{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@postPermSetting']);
+
+        Route::get('{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@getToolSetting']);
+        Route::post('{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@postToolSetting']);
+    });
 });
 
 Route::group(['prefix' => 'editor'], function () {

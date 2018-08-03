@@ -334,9 +334,9 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * Set cover fild id
+     * Set cover file id
      *
-     * @param $coverId
+     * @param string $coverId cover file id
      * @return void
      */
     public function setCover($coverId)
@@ -345,7 +345,7 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * Get cover fild id
+     * Get cover file id
      *
      * @return string
      */

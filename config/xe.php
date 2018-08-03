@@ -244,6 +244,12 @@ return [
                 'description' => '관리자 권한을 가진 회원이 실행한 작업을 볼 수 있습니다.',
                 'ordering' => 400
             ],
+            'setting.editor' => [
+                'title' => 'xe::editorSetting',
+                'display' => true,
+                'description' => '',
+                'ordering' => 500
+            ],
             'setting.seo' => [
                 'title' => 'xe::SEOSettings',
                 'display' => true,
