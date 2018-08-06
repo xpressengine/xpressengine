@@ -147,7 +147,7 @@ class Rule
     public static function getRuleList()
     {
         $rules = [];
-        foreach(self::$ruleList as $name => $rule) {
+        foreach (self::$ruleList as $name => $rule) {
             $rules[$name] = $rule->getRules();
         }
         return $rules;

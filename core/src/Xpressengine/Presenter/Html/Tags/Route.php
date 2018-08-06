@@ -14,8 +14,6 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
-use Illuminate\Routing\Route as Router;
-
 /**
  * Rule
  *
@@ -31,7 +29,7 @@ class Route
     use EmptyStringTrait;
 
     /**
-     * @var routes[]
+     * @var \Illuminate\Routing\Route[]
      */
     protected static $routes = [];
 
@@ -59,7 +57,7 @@ class Route
      * create instance
      *
      * @param string $routeName route 이름
-     * @param array  $route    route
+     * @param array  $route     route
      *
      * @throws \Exception
      */
@@ -78,7 +76,7 @@ class Route
      *
      * @return void
      */
-    public static function init ()
+    public static function init()
     {
     }
 
@@ -87,7 +85,7 @@ class Route
      *
      * @return array
      */
-    public static function getRoutes ()
+    public static function getRoutes()
     {
         return json_dec(json_enc(self::$routes));
     }
