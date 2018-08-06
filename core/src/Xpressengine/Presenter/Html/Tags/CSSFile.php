@@ -34,6 +34,7 @@ class CSSFile
     use SortTrait;
     use TargetTrait;
     use EmptyStringTrait;
+    use ParameterTrait;
 
     /**
      * @var CSSFile[] $fileList $fileList[filename] = CSSFile Instance
@@ -305,7 +306,7 @@ class CSSFile
         }
 
         // src
-        $tag = '<link href="'.$file.'"'.$attr.'>'.PHP_EOL;
+        $tag = '<link href="'.$this->buildSource($file).'"'.$attr.'>'.PHP_EOL;
 
         // target
         if ($this->target !== null) {

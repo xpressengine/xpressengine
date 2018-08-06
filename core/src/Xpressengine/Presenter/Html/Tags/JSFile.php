@@ -34,6 +34,7 @@ class JSFile
     use SortTrait;
     use TargetTrait;
     use EmptyStringTrait;
+    use ParameterTrait;
 
     /**
      * @var JSFile[] $fileList 3차원 배열의 형태(location x position x filename)
@@ -285,7 +286,7 @@ class JSFile
             $file = $this->minified;
         }
         // src
-        $tag = '<script src="'.$file.'"'.$attr.'></script>'.PHP_EOL;
+        $tag = '<script src="'.$this->buildSource($file).'"'.$attr.'></script>'.PHP_EOL;
 
         // target
         if ($this->target !== null) {
