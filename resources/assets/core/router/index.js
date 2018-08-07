@@ -7,12 +7,13 @@ export default class Router extends Singleton {
   constructor (base = '/', fixed = 'plugin', settings = '') {
     super()
 
-    this.routes = new Map()
     this.setup(base, fixed, settings)
   }
 
   boot (XE) {
     if (super.boot()) return
+
+    this.routes = new Map()
 
     XE.$$on('setup', (eventName, options) => {
       this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
