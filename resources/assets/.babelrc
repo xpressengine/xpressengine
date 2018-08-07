@@ -2,14 +2,10 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["last 2 versions", "ie >= 10"]
-      }
+        "browsers": ["last 2 versions", "ie >= 9"]
+      },
+      "modules": "umd"
     }]
   ],
-  "plugins": [
-    ["babel-plugin-transform-builtin-extend", {
-      "globals": ["Error", "Array"],
-      "approximate": true
-    }]
-  ]
+  "plugins": ["transform-runtime"]
 }

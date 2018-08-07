@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import XEeditor from './editor.core'
 
 /**
  * @class XEtextarea

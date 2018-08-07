@@ -269,7 +269,7 @@
 
         if (cssLen > 0) {
           for (var i = 0, max = cssLen; i < max; i += 1) {
-            XE.cssLoad(css[i], loadDone, loadDone)
+            XE.DynamicLoadManager.cssLoad(css[i], loadDone, loadDone)
           }
         }
 

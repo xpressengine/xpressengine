@@ -1,4 +1,3 @@
-import XEeditor from './editor.core'
 import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
 /**
