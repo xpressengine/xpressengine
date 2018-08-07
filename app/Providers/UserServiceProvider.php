@@ -39,6 +39,7 @@ use Xpressengine\User\Parts\DefaultPart;
 use Xpressengine\User\Parts\DynamicFieldPart;
 use Xpressengine\User\Parts\RegisterFormPart;
 use Xpressengine\User\Parts\EmailVerifyPart;
+use Xpressengine\User\PasswordValidator;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -146,6 +147,7 @@ class UserServiceProvider extends ServiceProvider
         $this->registerImageHandler();
 
         $this->registerTerms();
+        $this->registerPasswordValidator();
     }
 
     /**
@@ -247,6 +249,13 @@ class UserServiceProvider extends ServiceProvider
             return new TermsHandler($app[TermsRepository::class]);
         });
         $this->app->alias(TermsHandler::class, 'xe.terms');
+    }
+
+    private function registerPasswordValidator()
+    {
+        $this->app->singleton('xe.password.validator', function ($app) {
+            return new PasswordValidator($app);
+        });
     }
 
     /**
@@ -383,46 +392,6 @@ class UserServiceProvider extends ServiceProvider
 
     private function configValidation()
     {
-        // set password validation to config
-        $passwordLevels =  [
-            'weak' => [
-                'title' => 'xe::weak',
-                'validate' => function ($password) {
-                    return strlen($password) >= 4;
-                },
-                'description' => 'xe::passwordStrengthWeakDescription'
-            ],
-            'normal' => [
-                'title' => 'xe::normal',
-                'validate' => function ($password) {
-                    if (!preg_match_all(
-                        '$\S*(?=\S{6,})(?=\S*[a-zA-Z])(?=\S*[\d])\S*$',
-                        $password
-                    )
-                    ) {
-                        return false;
-                    }
-                    return true;
-                },
-                'description' => 'xe::passwordStrengthNormalDescription'
-            ],
-            'strong' => [
-                'title' => 'xe::strong',
-                'validate' => function ($password) {
-                    if (!preg_match_all(
-                        '$\S*(?=\S{8,})(?=\S*[a-zA-Z])(?=\S*[\d])(?=\S*[\W])\S*$',
-                        $password
-                    )
-                    ) {
-                        return false;
-                    }
-                    return true;
-                },
-                'description' => 'xe::passwordStrengthStrongDescription'
-            ]
-        ];
-        app('config')->set('xe.user.password.levels', $passwordLevels);
-
         // set display name validation to config
         if ($this->isInstalled()) {
             app('config')->set('xe.user.displayName.validate', function ($value) {
@@ -497,18 +466,12 @@ class UserServiceProvider extends ServiceProvider
             xe_trans('xe::validationDisplayName')
         );
 
-        $passwordConfig = app('config')->get('xe.user.password');
-        $levels = $passwordConfig['levels'];
-        $level = $levels[$passwordConfig['default']];
-        $validate = $level['validate'];
-
-        $validator->extend(
-            'password',
-            function ($attribute, $value, $parameters) use ($validate) {
-                return $validate($value);
-            },
-            xe_trans($level['description'])
-        );
+        $validator->extend('password', function ($attribute, $value, $parameters) {
+            return $this->app['xe.password.validator']->handle($value);
+        });
+        $validator->replacer('password', function () {
+            return $this->app['xe.password.validator']->getMessage();
+        });
     }
 
     /**

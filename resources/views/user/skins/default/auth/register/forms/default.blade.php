@@ -1,3 +1,4 @@
+@inject('passwordValidator', 'xe.password.validator')
 <h4>{{xe_trans('xe::enterDefaultInfo')}}</h4>
 <div class="auth-group">
     <label for="email" class="xe-sr-only">{{xe_trans('xe::email')}}</label>
@@ -10,7 +11,7 @@
 <div class="auth-group">
     <label for="pwd" class="xe-sr-only">{{xe_trans('xe::password')}}</label>
     <input type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}" name="password" onfocus="$('.__xe_password-description').slideDown();" data-valid-name="{{xe_trans('xe::password')}}">
-    <em style="display: none;" class="text-message __xe_password-description">{{ xe_trans($passwordLevel['description']) }}</em>
+    <em style="display: none;" class="text-message __xe_password-description">{{ $passwordValidator->getMessage() }}</em>
 </div>
 <div class="auth-group">
     <label for="pwd2" class="xe-sr-only">{{xe_trans('xe::passwordConfirm')}}</label>
