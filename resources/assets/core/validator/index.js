@@ -84,7 +84,15 @@ export default class Validator extends Singleton {
         const value = that.getValue($dst)
 
         if (value === '') {
-          that.error($dst, Lang.instance.trans('validation.required', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          let errorMessage = 'validation.required'
+
+          if ($dst.is('input[type=checkbox]') || $dst.is('input[type=radio]')) {
+            errorMessage = 'validation.required_check'
+          } else if ($dst.is('input[type=select]')) {
+            errorMessage = 'validation.required_select'
+          }
+
+          that.error($dst, Lang.instance.trans(errorMessage, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -552,6 +560,9 @@ export default class Validator extends Singleton {
           } else {
             lang.push('validation.' + langKey)
           }
+
+          lang.push('validation.required_check')
+          lang.push('validation.required_select')
         }
       })
     })
