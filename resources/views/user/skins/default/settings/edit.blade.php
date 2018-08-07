@@ -1,3 +1,4 @@
+@inject('passwordValidator', 'xe.password.validator')
 <h1>{{ xe_trans('xe::privateInfoAndOptionSettings') }}</h1>
 <p>{{xe_trans('xe::privateInfoAndOptionSettingsDescription')}}</p>
 <div class="setting-card">
@@ -125,7 +126,7 @@
         <div class="setting-detail" style="display: none;">
             <div class="setting-detail-content">
                 <p>{{ xe_trans('xe::changePassword') }}</p>
-                <em class="text-gray2">{{ xe_trans($passwordLevel['description']) }}</em>
+                <em class="text-gray2">{{ $passwordValidator->getMessage() }}</em>
                 <div class="password-content __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
                     <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
                     <input type="password" class="xe-form-control" name="current_password">
