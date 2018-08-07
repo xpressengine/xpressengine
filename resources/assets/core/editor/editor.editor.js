@@ -1,4 +1,3 @@
-import XEeditor from './editor.core.js'
 import EditorValidation from './editor.validation.js'
 import InstanceObj from './editor.instanceObj.js'
 import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
@@ -53,8 +52,8 @@ class Editor {
         let toolInfoListFilter = []
 
         for (let i = 0, max = toolInfoList.length; i < max; i += 1) {
-          if (XEeditor.getTool(toolInfoList[i].id)) {
-            tools[toolInfoList[i].id] = XEeditor.getTool(toolInfoList[i].id)
+          if (window.XEeditor.getTool(toolInfoList[i].id)) {
+            tools[toolInfoList[i].id] = window.XEeditor.getTool(toolInfoList[i].id)
             toolInfoListFilter.push(toolInfoList[i])
           } else {
             console.error('define된 tool이 존재하지 않음. [' + toolInfoList[i].id + ']')
