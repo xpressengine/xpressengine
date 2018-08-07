@@ -2896,4 +2896,26 @@ return [
         'ko' => '파일이 특별한 곳에 있다면 프로젝트 루트로 부터의 경로를 입력해야 합니다.',
         'en' => 'If the file is in a specific path, you must enter the path from the project root.',
     ],
+    'alpha' => [
+        'ko' => '영문자',
+        'en' => 'letters',
+    ],
+    'numeric' => [
+        'ko' => '숫자',
+        'en' => 'numbers',
+    ],
+    'specialChar' => [
+        'ko' => '특수문자',
+        'en' => 'special characters',
+    ],
+
+    'lenMin' => [
+        'ko' => '최소 :len자',
+        'en' => 'least :len characters',
+    ],
+
+    'passwordMustBe' => [
+        'ko' => '비밀번호는 [:requires]를 포함해야 합니다.',
+        'en' => 'The Password must be contain [:requires]',
+    ],
 ];

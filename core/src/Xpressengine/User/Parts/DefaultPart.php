@@ -14,8 +14,6 @@
 
 namespace Xpressengine\User\Parts;
 
-use Illuminate\Support\Arr;
-
 /**
  * Class DefaultPart
  *
@@ -47,19 +45,6 @@ class DefaultPart extends RegisterFormPart
      * @var string
      */
     protected static $view = 'register.forms.default';
-
-    /**
-     * Get data for form part view
-     *
-     * @return array
-     */
-    protected function data()
-    {
-        $passwordConfig = $this->service('config')->get('xe.user.password');
-        $passwordLevel = Arr::get($passwordConfig['levels'], $passwordConfig['default']);
-
-        return compact('passwordLevel');
-    }
 
     /**
      * Get validation rules of the form part

@@ -285,10 +285,17 @@ return [
         'displayName' => [
             'validate' => null
         ],
+
         'password' => [
-            'default' => 'normal', /* weak, normal, strong */
-            'levels' => []
+            'default' => 'strong',
+            'levels' => [
+                'weak' => 'min:4',
+                'normal' => 'min:6|alpha|numeric',
+                'strong' => 'min:8|alpha|numeric|special_char',
+            ]
         ],
+
+
         'profileImage' => [
             'default' => 'assets/core/user/img/default_avatar.jpg',
             'size' => ['width' => 240, 'height' => 240],
