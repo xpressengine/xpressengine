@@ -62,8 +62,8 @@ class LangEditorBox {
 
   render () {
     var _this = this
-    var locale = window.XE.Lang.locales[0]
-    var fallback = window.XE.Lang.locales.slice(1)
+    var locale = window.XE.defaultLocale
+    var fallback = window.XE.Lang.locales
     var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq
     var value = this.getValueFromLinesWithLocale(locale) || ''
     var inputClass = this.multiline ? 'textarea' : 'text'

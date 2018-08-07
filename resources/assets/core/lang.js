@@ -15,6 +15,8 @@ export default class Lang extends Singleton {
 
   boot (XE) {
     this.XE = XE
+    this.locales = XE.options.translation.locales
+
     XE.$$on('setup', (eventName, options) => {
       if (options.translation) {
         this.set(options.translation.terms)
