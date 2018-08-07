@@ -159,8 +159,10 @@ export default class Request extends Singleton {
       routeName = uri
     }
 
-    if (Router.instance.has(routeName)) {
-      url = Router.instance.get(routeName).url(params)
+    const router = new Router()
+
+    if (router.has(routeName)) {
+      url = router.get(routeName).url(params)
     } else {
       url = uri
     }

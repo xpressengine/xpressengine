@@ -21,7 +21,7 @@ var Progress = {
   cssLoad: function () {
     if (cssLoaded === false) {
       cssLoaded = true
-      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
+      window.XE.DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
     }
   },
 
@@ -32,7 +32,7 @@ var Progress = {
    **/
   start: function (context) {
     if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
-      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
+      window.XE.DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
     }
 
     var $context = $(context)

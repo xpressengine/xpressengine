@@ -29,13 +29,13 @@ class XE {
 
     // internal libraries
     this.Utils = $$
-    this.Component = Component.instance
-    this.DynamicLoadManager = DynamicLoadManager.instance
-    this.Lang = Lang.instance
+    this.Component = new Component()
+    this.DynamicLoadManager = new DynamicLoadManager()
+    this.Lang = new Lang()
     this.Progress = Progress
-    this.Request = Request.instance
-    this.Router = Router.instance
-    this.Validator = Validator.instance
+    this.Request = new Request()
+    this.Router = new Router()
+    this.Validator = new Validator()
 
     // external libraries
     this.moment = moment // @DEPRECATED

@@ -8,6 +8,8 @@ import $ from 'jquery'
 
 const originalRules = {}
 
+const langInstance = new Lang()
+
 export default class Validator extends Singleton {
   constructor () {
     super()
@@ -55,7 +57,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (['yes', 'ok', 'accept', 'accepted', 'on', '1', 'true'].indexOf(String(value).toLowerCase()) === -1) {
-          that.error($dst, Lang.instance.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -74,7 +76,7 @@ export default class Validator extends Singleton {
             messageType = 'xe::validatorCheckedMax'
           }
 
-          that.error($dst, Lang.instance.trans(messageType))
+          that.error($dst, langInstance.trans(messageType))
           return false
         }
 
@@ -92,7 +94,7 @@ export default class Validator extends Singleton {
             errorMessage = 'validation.required_select'
           }
 
-          that.error($dst, Lang.instance.trans(errorMessage, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans(errorMessage, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -105,7 +107,7 @@ export default class Validator extends Singleton {
         const pattern = /[a-zA-Z]/
 
         if (!pattern.test(value)) {
-          that.error($dst, Lang.instance.trans('validation.alpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.alpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -124,7 +126,7 @@ export default class Validator extends Singleton {
           let langKey = 'validation.alpha_num'
           if (alias) langKey = 'validation.alphanum'
 
-          that.error($dst, Lang.instance.trans(langKey, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans(langKey, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -137,7 +139,7 @@ export default class Validator extends Singleton {
         const pattern = /[^a-zA-Z0-9\-_]/
 
         if (pattern.test(value)) {
-          that.error($dst, Lang.instance.trans('validation.alpha_dash', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.alpha_dash', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -145,7 +147,7 @@ export default class Validator extends Singleton {
       },
       array: function ($dst, parameters) {
         if (Array.isArray(that.getValue($dst))) {
-          that.error($dst, Lang.instance.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -156,7 +158,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (['1', '0', 'true', 'false'].indexOf(String(value).toLowerCase()) === -1) {
-          that.error($dst, Lang.instance.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -167,7 +169,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!$$.strtotime(value)) {
-          that.error($dst, Lang.instance.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -178,7 +180,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!moment(value, parameters).isValid()) {
-          that.error($dst, Lang.instance.trans('validation.date_format', {
+          that.error($dst, langInstance.trans('validation.date_format', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             format: parameters
           }))
@@ -195,7 +197,7 @@ export default class Validator extends Singleton {
         const size = parseInt(parameters)
 
         if (pattern.test(value) || $dst.val().toString().length !== size) {
-          that.error($dst, Lang.instance.trans('validation.digits', {
+          that.error($dst, langInstance.trans('validation.digits', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             digits: $$.addCommas(size)
           }))
@@ -211,7 +213,7 @@ export default class Validator extends Singleton {
         const size = value.toString().length
 
         if (range[0] > size && size < range[1]) {
-          that.error($dst, Lang.instance.trans('validation.digits_between', {
+          that.error($dst, langInstance.trans('validation.digits_between', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             min: $$.addCommas(range[0]),
             max: $$.addCommas(range[1])
@@ -222,7 +224,7 @@ export default class Validator extends Singleton {
       },
       filled: function ($dst, parameters) {
         if (that.getValue($dst) === '') {
-          that.error($dst, Lang.instance.trans('validation.filled', { attribute: $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.filled', { attribute: $dst.attr('name') }))
           return false
         }
         return true
@@ -231,7 +233,7 @@ export default class Validator extends Singleton {
         var value = that.getValue($dst)
 
         if (typeof value !== 'number' || isNaN(value) || Math.floor(value) !== value || !$.isNumeric(value)) {
-          that.error($dst, Lang.instance.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
         return true
@@ -243,7 +245,7 @@ export default class Validator extends Singleton {
         const pattern = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/
 
         if (!pattern.test(value)) {
-          that.error($dst, Lang.instance.trans('validation.ip', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.ip', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -256,7 +258,7 @@ export default class Validator extends Singleton {
         const exts = parameters.split(',')
 
         if (exts.indexOf(value.split('.').pop()) === -1) {
-          that.error($dst, Lang.instance.trans('validation.mimes', {
+          that.error($dst, langInstance.trans('validation.mimes', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             values: '[' + parameters + ']'
           }))
@@ -269,7 +271,7 @@ export default class Validator extends Singleton {
       //   var value = $dst.val()
       //
       //   if (value != null) {
-      //     that.error($dst, Lang.instance.trans('validation.nullable'))
+      //     that.error($dst, langInstance.trans('validation.nullable'))
       //     return false
       //   }
       //
@@ -280,7 +282,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!pattern.text(value)) {
-          that.error($dst, Lang.instance.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -294,7 +296,7 @@ export default class Validator extends Singleton {
           JSON.parse(value)
           return true
         } catch (e) {
-          that.error($dst, Lang.instance.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
       },
@@ -303,7 +305,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (typeof value !== 'string') {
-          that.error($dst, Lang.instance.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -318,7 +320,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (parseInt(value) <= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.min.numeric', {
+              that.error($dst, langInstance.trans('validation.min.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -330,7 +332,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) <= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.min.file', {
+              that.error($dst, langInstance.trans('validation.min.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -342,7 +344,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length <= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.min.string', {
+              that.error($dst, langInstance.trans('validation.min.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -354,7 +356,7 @@ export default class Validator extends Singleton {
 
           default:
             if (value.length <= parseInt(parameters)) {
-              that.error($dst, Lang.instance.transChoice('xe::validatorMin', parameters, { charCount: $$.addCommas(parameters) }))
+              that.error($dst, langInstance.transChoice('xe::validatorMin', parameters, { charCount: $$.addCommas(parameters) }))
               return false
             }
         }
@@ -370,7 +372,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (parseInt(value) >= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.max.numeric', {
+              that.error($dst, langInstance.trans('validation.max.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -382,7 +384,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) >= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.max.file', {
+              that.error($dst, langInstance.trans('validation.max.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -394,7 +396,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length >= parseInt(parameters)) {
-              that.error($dst, Lang.instance.trans('validation.max.string', {
+              that.error($dst, langInstance.trans('validation.max.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -414,7 +416,7 @@ export default class Validator extends Singleton {
         const pattern = /\w+@\w{2,}\.\w{2,}/
 
         if (!value.match(pattern)) {
-          that.error($dst, Lang.instance.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -427,7 +429,7 @@ export default class Validator extends Singleton {
         const pattern = /^https?:\/\/\S+/
 
         if (!value.match(pattern)) {
-          that.error($dst, Lang.instance.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -442,7 +444,7 @@ export default class Validator extends Singleton {
         if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
           return true
         } else {
-          that.error($dst, Lang.instance.trans('validation.numeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, langInstance.trans('validation.numeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
       },
@@ -456,7 +458,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (!$.isNumeric(value) || parseInt(value) < parseInt(range[0]) || parseInt(value) > parseInt(range[1])) {
-              that.error($dst, Lang.instance.trans('validation.between.numeric', {
+              that.error($dst, langInstance.trans('validation.between.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -469,7 +471,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ((($dst[0].files[0].size / 1024) < range[0]) || (($dst[0].files[0].size / 1024) > range[1]))) {
-              that.error($dst, Lang.instance.trans('validation.between.file', {
+              that.error($dst, langInstance.trans('validation.between.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -482,7 +484,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length < range[0] || value.length > range[1]) {
-              that.error($dst, Lang.instance.trans('validation.between.string', {
+              that.error($dst, langInstance.trans('validation.between.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -495,7 +497,7 @@ export default class Validator extends Singleton {
 
           default:
             if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-              that.error($dst, Lang.instance.trans('xe::validatorBetween', { between: parameters }))
+              that.error($dst, langInstance.trans('xe::validatorBetween', { between: parameters }))
               return false
             }
         }
@@ -568,7 +570,8 @@ export default class Validator extends Singleton {
     })
 
     if (lang.length > 0) {
-      Lang.instance.requestTransAll(lang)
+      const langInstance = new Lang()
+      langInstance.requestTransAll(lang)
     }
 
     if (this.rules[ruleName] !== undefined) {
