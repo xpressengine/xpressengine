@@ -24,6 +24,7 @@ describe('Request', function () {
     const baseURL = 'http://localhost'
 
     requestInstance.setup({ baseURL })
+    requestInstance.boot({ $$on: () => {} })
 
     it('Config instance를 반환해야 함', function () {
       expect(requestInstance.config).to.be.an.instanceof(Config)
@@ -85,6 +86,7 @@ describe('Request', function () {
 
   describe('Router 연동', function () {
     it('route URI로 URL을 얻어 요청하고 응답을 받아야 함', function (done) {
+      routerInstance.boot({ $$on: () => {} })
       routerInstance.setup('http://localhost')
 
       routerInstance.addRoutes({'module/board@board.slug':

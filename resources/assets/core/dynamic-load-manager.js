@@ -1,5 +1,4 @@
 import Singleton from 'xe/singleton'
-import XE from 'xe'
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 

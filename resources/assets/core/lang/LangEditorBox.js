@@ -1,7 +1,4 @@
-import validator from 'xe-common/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
-import 'xe-common/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
-import XE from 'xe'
 
 /**
  * @private
@@ -31,7 +28,7 @@ class LangEditorBox {
 
   init () {
     if (this.langKey && this.lines.length == 0) {
-      XE.ajax({
+      window.XE.ajax({
         type: 'get',
         dataType: 'json',
         url: window.xeBaseURL + '/lang/lines/' + this.langKey,
@@ -50,7 +47,7 @@ class LangEditorBox {
   bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/lang/search/' + XE.Lang.locales[0],
+        source: '/lang/search/' + window.XE.Lang.locales[0],
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault()
@@ -65,8 +62,8 @@ class LangEditorBox {
 
   render () {
     var _this = this
-    var locale = XE.Lang.locales[0]
-    var fallback = XE.Lang.locales.slice(1)
+    var locale = window.XE.Lang.locales[0]
+    var fallback = window.XE.Lang.locales.slice(1)
     var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq
     var value = this.getValueFromLinesWithLocale(locale) || ''
     var inputClass = this.multiline ? 'textarea' : 'text'
@@ -115,7 +112,7 @@ class LangEditorBox {
     var _this = this
     this.lines = lines
 
-    XE.Lang.locales.map(function (locale) {
+    window.XE.Lang.locales.map(function (locale) {
       var selector = '#input-' + _this.seq + '-' + locale
       var value = _this.getValueFromLinesWithLocale(locale)
       $(selector).val(value)
@@ -220,10 +217,10 @@ function renderLangEditorBox () {
     })
 
     if (langKeys.length > 0) {
-      XE.ajax({
+      window.XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: XE.baseURL + '/lang/lines/many',
+        url: window.XE.baseURL + '/lang/lines/many',
         data: {
           keys: langKeys
         },
@@ -248,13 +245,13 @@ function renderLangEditorBox () {
     }
   }
 
-  validator.put('langrequired', function ($dst, parameters) {
+  window.XE.Validator.put('langrequired', function ($dst, parameters) {
     var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first")
     var value = $input.val()
     var name = $dst.closest('.lang-editor-box').data('valid-name') || $dst.closest('.lang-editor-box').data('name')
 
     if (value === '') {
-      validator.error($input, XE.Lang.trans('validation.required', { attribute: name }))
+      window.XE.Validator.error($input, window.XE.Lang.trans('validation.required', { attribute: name }))
       return false
     }
 

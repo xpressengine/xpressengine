@@ -3,6 +3,8 @@ import { routerInstance } from 'xe/router'
 import Route from 'xe/router/route'
 
 describe('Router', function () {
+  routerInstance.boot({ $$on: () => {} })
+
   describe('setup(baseURL, fixed, settings)', function () {
     describe('fixed, settings는 지정하지 않아도 됨', function () {
       routerInstance.setup('http://localhost')

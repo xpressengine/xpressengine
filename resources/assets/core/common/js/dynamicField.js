@@ -1,6 +1,5 @@
 import $ from 'jquery'
 import Validator from 'xe-common/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
-import XE from 'xe'
 
 /**
  * @class
@@ -118,12 +117,12 @@ var DynamicField = function () {
     var params = { group: this.group }
     var that = this
 
-    var jqxhr = XE.ajax({
+    var jqxhr = window.XE.ajax({
       context: this.$container[0],
       type: 'get',
       dataType: 'json',
       data: params,
-      url: XE.route('manage.dynamicField.index')
+      url: window.XE.route('manage.dynamicField.index')
     })
 
     jqxhr.done(function (data, textStatus, jqxhr) {
@@ -187,19 +186,19 @@ var DynamicField = function () {
     var form = this.formClone()
 
     form.data('isEdit', '1')
-    form.attr('action', XE.route('manage.dynamicField.update'))
+    form.attr('action', window.XE.route('manage.dynamicField.update'))
     this.$container.$modal.$body.html(form)
     this.$container.$modal.xeModal('show')
 
     var params = { group: this.group, id: id }
     var that = this
 
-    XE.ajax({
+    window.XE.ajax({
       context: this.$container.$modal.$body[0],
       type: 'get',
       dataType: 'json',
       data: params,
-      url: XE.route('manage.dynamicField.getEditInfo'),
+      url: window.XE.route('manage.dynamicField.getEditInfo'),
       success: function (response) {
         form.find('[name="id"]').val(response.config.id).prop('readonly', true)
         form.find('[name="typeId"] option').each(function () {
@@ -262,12 +261,12 @@ var DynamicField = function () {
     var params = { group: this.group, databaseName: this.databaseName, id: id }
     var that = this
 
-    XE.ajax({
+    window.XE.ajax({
       context: this.$container[0],
       type: 'post',
       dataType: 'json',
       data: params,
-      url: XE.route('manage.dynamicField.destroy'),
+      url: window.XE.route('manage.dynamicField.destroy'),
       success: function (response) {
         var id = response.id
 
@@ -293,12 +292,12 @@ var DynamicField = function () {
       return
     }
 
-    XE.ajax({
+    window.XE.ajax({
       context: this.$container.$modal.$body[0],
       type: 'get',
       dataType: 'json',
       data: params,
-      url: XE.route('manage.dynamicField.getSkinOption'),
+      url: window.XE.route('manage.dynamicField.getSkinOption'),
       success: function (response) {
         that.skinOptions(form, response.skins, response.skinId)
       }
@@ -339,7 +338,7 @@ var DynamicField = function () {
       params[item.name] = item.value
     })
 
-    XE.get('manage.dynamicField.getAdditionalConfigure', params, {headers: {'X-XE-Async-Expose': true}})
+    window.XE.get('manage.dynamicField.getAdditionalConfigure', params, {headers: {'X-XE-Async-Expose': true}})
       .then(response => {
         $form.find('.__xe_additional_configure').html(response.data.result)
       })
@@ -361,7 +360,7 @@ var DynamicField = function () {
 
     var params = $form.serialize()
 
-    XE.ajax({
+    window.XE.ajax({
       context: this.$container.$modal.$body[0],
       type: 'post',
       dataType: 'json',

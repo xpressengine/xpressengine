@@ -22,6 +22,7 @@ export default class Request extends Singleton {
     if (super.boot()) return
 
     this.router = new Router()
+    this.router.boot(XE)
 
     XE.$$on('setup', (eventName, options) => {
       this.setup(options)

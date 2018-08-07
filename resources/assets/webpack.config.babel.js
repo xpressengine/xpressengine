@@ -47,6 +47,7 @@ const config = [
   {
     entry: {
       'vendor': [
+        'babel-polyfill',
         path.resolve(__dirname, './core/vendor.js')
       ],
       'common': [path.resolve(__dirname, './core/common.js')]
@@ -98,6 +99,7 @@ const config = [
   {
     entry: {
       'core/common/js/xe.bundle': [
+        'babel-polyfill',
         pathInfo.common + '/js/xe.js',
         pathInfo.common + '/js/lang.js',
         pathInfo.common + '/js/progress.js',
