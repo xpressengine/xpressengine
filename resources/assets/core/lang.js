@@ -1,7 +1,7 @@
 import Singleton from 'xe/singleton'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
-import $$ from 'xe/utils'
+import * as $$ from 'xe/utils'
 
 export default class Lang extends Singleton {
   constructor () {
@@ -116,10 +116,9 @@ export default class Lang extends Singleton {
 
     return new Promise((resolve, reject) => {
       that.XE.get(that.XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
-        console.debug('response.data', response.data)
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
-            result[key] = $$.find(val, { 'locale': that.locales[0] }).value
+            result[key] = $$.find(val, { 'locale': that.XE.defaultLocale }).value
             Translator.add(key, result[key])
           }
         })

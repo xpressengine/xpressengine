@@ -112,6 +112,10 @@ class XE {
         Progress.done()
       }
 
+      if (settings.useXeToast === false) {
+        return
+      }
+
       const status = jqxhr.status
       let errorMessage = 'Not defined error message (' + status + ')'
 
