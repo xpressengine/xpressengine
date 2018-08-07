@@ -69,6 +69,8 @@ return [
     'present'              => ':attribute 필드가 있어야 합니다.',
     'regex'                => ':attribute 형식은 유효하지 않습니다.',
     'required'             => ':attribute 필드는 필수입니다.',
+    'required_check'       => ':attribute 필드는 필수입니다.',
+    'required_select'      => ':attribute 필드는 필수입니다.',
     'required_if'          => ':other이(가) :value 일때 :attribute 필드는 필수입니다.',
     'required_unless'      => ':other이(가) :value 에 있지 않는 경우 :attribute 필드는 필수입니다.',
     'required_with'        => ':values이(가) 있는 경우 :attribute 필드는 필수입니다.',
