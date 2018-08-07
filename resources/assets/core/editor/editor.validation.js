@@ -1,5 +1,3 @@
-import XEeditor from './editor.core'
-
 /**
  * @private
  */
@@ -78,7 +76,7 @@ class EditorValidation {
       console.error('구현 필요 [fn:addPlugins]')
     }
 
-    if (XEeditor.editorSet.hasOwnProperty(editorSettings.name)) {
+    if (window.XEeditor.editorSet.hasOwnProperty(editorSettings.name)) {
       console.error('등록된 에디터 있음 [' + editorSettings.name + ']')
       valid = false
     }
