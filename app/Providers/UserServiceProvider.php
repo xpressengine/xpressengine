@@ -551,17 +551,13 @@ class UserServiceProvider extends ServiceProvider
                 // dynamic field
                 $fieldTypes = $this->app['xe.dynamicField']->gets('user');
 
-                // password configuration
-                $passwordConfig = $this->app['config']->get('xe.user.password');
-                $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-
                 $this->app['xe.frontend']->js(
                     ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
                 )->load();
 
                 $skin = $this->app['xe.skin']->getAssigned('user/settings');
 
-                return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
+                return $skin->setView('edit')->setData(compact('user', 'fieldTypes'));
             }
         ]);
     }

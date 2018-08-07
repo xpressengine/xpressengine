@@ -187,12 +187,9 @@ class PasswordController extends Controller {
                     ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgTokenIsInvalid')]);
 
             default:
-                // password configuration
-                $passwordConfig = app('config')->get('xe.user.password');
-                $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
                 return redirect()->back()
                     ->withInput($request->only('email'))
-                    ->with('alert', ['type' => 'danger', 'message' => xe_trans($passwordLevel['description'])]);
+                    ->with('alert', ['type' => 'danger', 'message' => app('xe.password.validator')->getMessage()]);
         }
     }
 }
