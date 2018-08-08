@@ -2,10 +2,8 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["last 2 versions", "ie >= 9"]
-      },
-      "modules": "umd"
+        "browsers": ["last 2 versions", "ie >= 10"]
+      }
     }]
-  ],
-  "plugins": ["transform-runtime"]
+  ]
 }

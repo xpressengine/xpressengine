@@ -2,14 +2,6 @@ const singleton = Symbol('singleton')
 const booted = Symbol('booted')
 
 export default class Singleton {
-  static get instance () {
-    if (!this[singleton]) {
-      this[singleton] = new this
-    }
-
-    return this[singleton]
-  }
-
   constructor () {
     let Class = this.constructor // or this.constructor
 
@@ -18,6 +10,14 @@ export default class Singleton {
     }
 
     return Class[singleton]
+  }
+
+  static get instance () {
+    if (!this[singleton]) {
+      this[singleton] = new this()
+    }
+
+    return this[singleton]
   }
 
   boot () {

@@ -130,7 +130,7 @@
     };
 
     // 누적된 룰을 제거하고, 새로운 룰만 추가
-    XE.Validator.$$on('setRules', (eventName, ruleName, rules, additional, origin, reassign) => {
+    XE.Validator.$$on('setRules', function (eventName, ruleName, rules, additional, origin, reassign) {
         if (ruleName === 'dynamicFieldSection') {
             reassign($.extend({}, origin, additional))
         }

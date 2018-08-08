@@ -21,6 +21,9 @@ export default class Request extends Singleton {
   boot (XE) {
     if (super.boot()) return
 
+    this.router = new Router()
+    this.router.boot(XE)
+
     XE.$$on('setup', (eventName, options) => {
       this.setup(options)
     })
@@ -159,10 +162,8 @@ export default class Request extends Singleton {
       routeName = uri
     }
 
-    const router = new Router()
-
-    if (router.has(routeName)) {
-      url = router.get(routeName).url(params)
+    if (this.router.has(routeName)) {
+      url = this.router.get(routeName).url(params)
     } else {
       url = uri
     }
