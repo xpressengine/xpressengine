@@ -47,7 +47,7 @@ class LangEditorBox {
   bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/lang/search/' + window.XE.Lang.locales[0],
+        source: '/lang/search/' + window.XE.options.translation.locales[0],
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault()
@@ -63,7 +63,7 @@ class LangEditorBox {
   render () {
     var _this = this
     var locale = window.XE.defaultLocale
-    var fallback = window.XE.Lang.locales
+    var fallback = window.XE.options.translation.locales.slice(1)
     var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq
     var value = this.getValueFromLinesWithLocale(locale) || ''
     var inputClass = this.multiline ? 'textarea' : 'text'
