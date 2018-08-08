@@ -258,9 +258,8 @@ class UserController extends Controller
 
     /**
      * update user
-     *
      * @param         $id
-     * @param Request $request
+     * @param Request $request request
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
@@ -287,8 +286,7 @@ class UserController extends Controller
             ]
         );
 
-        if (
-            $user->isAdmin() &&
+        if ($user->isAdmin() &&
             ($request->get('status') === User::STATUS_DENIED || $request->get('rating') !== Rating::SUPER)
         ) {
             $cnt = $this->handler->users()

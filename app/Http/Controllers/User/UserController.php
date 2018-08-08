@@ -182,16 +182,15 @@ class UserController extends Controller
     /**
      * update Password
      *
-     * @param Request $request
-     *
+     * @param Request $request request
+     * @throws Exception
      * @return \Xpressengine\Presenter\RendererInterface
      */
     public function updatePassword(Request $request)
     {
-
         $this->validate(
             $request,
-            ['password' => 'required|confirmed']
+            ['password' => 'required|confirmed|password']
         );
 
         $result = true;
@@ -199,7 +198,6 @@ class UserController extends Controller
         $target = null;
 
         if ($request->user()->getAuthPassword() !== "") {
-
             $credentials = [
                 'id' => $request->user()->getId(),
                 'password' => $request->get('current_password')

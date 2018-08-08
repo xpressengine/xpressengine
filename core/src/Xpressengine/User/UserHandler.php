@@ -425,6 +425,8 @@ class UserHandler
      * @param string $password 유효성 검사를 할 비밀번호
      *
      * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
+     *
+     * @deprecated since rc.3. Use validate(['password' => 'password']) instead.
      */
     public function validatePassword($password)
     {
@@ -446,10 +448,6 @@ class UserHandler
      */
     public function validateForUpdate(UserInterface $user, array $data)
     {
-        if (!empty($data['password'])) {
-            $this->validatePassword($data['password']);
-        }
-
         if (array_get($data, 'display_name') !== null) {
             if (strcmp($user->display_name, $data['display_name']) !== 0) {
                 $this->validateDisplayName($data['display_name'], $user);

@@ -49,8 +49,8 @@ class PasswordController extends Controller {
     /**
      * Create a new password controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Guard  $auth
-     * @param  \Illuminate\Contracts\Auth\PasswordBroker  $passwords
+     * @param  \Illuminate\Contracts\Auth\Guard          $auth
+     * @param  \Illuminate\Contracts\Auth\PasswordBroker $passwords
      * @return void
      */
     public function __construct(Guard $auth, PasswordBroker $passwords)
@@ -58,14 +58,6 @@ class PasswordController extends Controller {
         $this->auth = $auth;
         $this->passwords = $passwords;
         $this->handler = app('xe.user');
-
-        $this->passwords->validator(function ($credentials) {
-            try {
-                return app('xe.user')->validatePassword($credentials['password']);
-            } catch (\Exception $e) {
-                return false;
-            }
-        });
 
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
@@ -139,7 +131,7 @@ class PasswordController extends Controller {
     /**
      * Reset the given user's password.
      *
-     * @param  Request  $request
+     * @param  Request $request request
      * @return Response
      */
     public function postPassword(Request $request)
@@ -147,12 +139,10 @@ class PasswordController extends Controller {
         $this->validate($request, [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|password',
         ]);
 
-        $credentials = $request->only(
-            'email', 'password', 'password_confirmation', 'token'
-        );
+        $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
 
         \Event::dispatch(new PreResetUserPasswordEvent($credentials));
 
@@ -167,8 +157,7 @@ class PasswordController extends Controller {
             }
         );
 
-        switch ($result)
-        {
+        switch ($result) {
             case PasswordBroker::PASSWORD_RESET:
                 if (app('config')->get('xe.user.registrationAutoLogin') == true) {
                     return redirect('/')->with('status', PasswordBroker::PASSWORD_RESET);
