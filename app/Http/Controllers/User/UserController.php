@@ -13,6 +13,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use XeDB;
@@ -234,34 +235,24 @@ class UserController extends Controller
     /**
      * validate Password
      *
-     * @param Request $request
-     *
+     * @param Request $request request
+     * @throws Exception
      * @return \Xpressengine\Presenter\RendererInterface
      */
     public function validatePassword(Request $request)
     {
-        $password = $request->get('password');
-        $password = trim($password);
-
         try {
-            $secure = '';
-            if ($this->handler->validatePassword($password)) {
-                $levels = app('config')->get('xe.user.password.levels');
+            $this->validate($request, ['password' => 'password']);
 
-                foreach ($levels as $key => $level) {
-                    $validate = $level['validate'];
-                    if ($validate($password)) {
-                        $secure = $key;
-                    }
-                }
-            }
             return XePresenter::makeApi(
-                ['type' => 'success', 'message' => 'success', 'valid' => true, 'level' => $secure]
+                ['type' => 'success', 'message' => 'success', 'valid' => true]
+            );
+        } catch (ValidationException $e) {
+            return XePresenter::makeApi(
+                ['type' => 'success', 'message' => app('xe.password.validator')->getMessage(), 'valid' => false]
             );
         } catch (\Exception $e) {
-            return XePresenter::makeApi(
-                ['type' => 'success', 'message' => $e->getMessage(), 'valid' => false]
-            );
+            throw $e;
         }
     }
 

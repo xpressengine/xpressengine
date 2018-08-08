@@ -136,7 +136,6 @@
                     <p class="txt_pw">{{ xe_trans('xe::newPassword') }}</p>
                     <input type="password" class="xe-form-control" name="password">
                     <em class="text-message">&nbsp;</em>
-                    <em class="__xe_secure text-message" style="display: none;">{{ xe_trans('xe::passwordStrength') }}: <span class="__xe_low txt_red">{{ xe_trans('xe::weak') }}</span> <span class="__xe_normal">{{ xe_trans('xe::normal') }}</span> <span class="__xe_high txt_blue">{{ xe_trans('xe::strong') }}</span></em>
                 </div>
                 <div class="password-content __xe_passwordConfirm">
                     <p class="txt_pw">{{ xe_trans('xe::newPasswordConfirm') }}</p>
