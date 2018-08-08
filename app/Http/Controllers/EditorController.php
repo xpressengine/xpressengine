@@ -51,12 +51,6 @@ class EditorController extends Controller
 
     public function postDetailSetting(Request $request, $instanceId)
     {
-        $this->validate($request, [
-            'height' => 'required|numeric',
-            'fontSize' => 'required',
-            'fileMaxSize' => 'numeric',
-            'attachMaxSize' => 'numeric',
-        ]);
         XeEditor::setConfig($instanceId, [
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
