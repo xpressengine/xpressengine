@@ -287,7 +287,7 @@ return [
         ],
 
         'password' => [
-            'default' => 'strong',
+            'default' => 'normal',
             'levels' => [
                 'weak' => 'min:4',
                 'normal' => 'min:6|alpha|numeric',
