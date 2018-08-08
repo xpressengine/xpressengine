@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import Validator from 'xe-common/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import Validator from 'xe/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
 /**
  * @class
@@ -23,6 +23,7 @@ var DynamicField = function () {
     this.$container.$form = this.$container.find('.__xe_add_form')
     this.$container.$modal = this.$container.find('.__xe_df_modal')
     this.$container.$modal.$body = this.$container.$modal.find('.modal-body')
+    this.validator = new Validator()
 
     this.attachEvent()
 
@@ -379,10 +380,9 @@ var DynamicField = function () {
    * @param {object} addRules
    */
   this.setValidateRule = function ($form, addRules) {
-    var ruleName = Validator.getRuleName($form)
+    var ruleName = this.validator.getRuleName($form)
     if (addRules != undefined && ruleName != undefined) {
-      // console.debug
-      Validator.setRules(ruleName, addRules)
+      this.validator.setRules(ruleName, addRules)
     }
   }
 
@@ -391,7 +391,7 @@ var DynamicField = function () {
    * @param {jQuery} $form
    */
   this.validateCheck = function ($form) {
-    Validator.check($form)
+    this.validator.check($form)
   }
 }
 
