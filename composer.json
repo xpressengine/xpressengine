@@ -29,7 +29,7 @@
         "ramsey/uuid": "~3.0",
         "google/recaptcha": "~1.1",
         "intervention/image": "2.1.*",
-        "jenssegers/agent": "*",
+        "jenssegers/agent": "~2.6",
         "ezyang/htmlpurifier": "~4.7",
         "guzzlehttp/guzzle": "~6.1",
         "symfony/yaml": "~3.3",
