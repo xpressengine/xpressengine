@@ -7,6 +7,7 @@
         <div class="panel-heading">
             <div class="pull-left">
                 <h3 class="panel-title">{{ xe_trans('xe::detailSettings') }}</h3>
+                <small><a href="{{ route('settings.editor.global.detail') }}" target="_blank">{{xe_trans('xe::moveToParentSettingPage')}}</a></small>
             </div>
         </div>
         <div class="panel-collapse collapse in">
