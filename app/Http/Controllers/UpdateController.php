@@ -219,7 +219,6 @@ class UpdateController extends Controller
 
         set_time_limit($timeLimit);
         ignore_user_abort(true);
-        ini_set('allow_url_fopen', '1');
 
         $memoryInBytes = function ($value) {
             $unit = strtolower(substr($value, -1, 1));

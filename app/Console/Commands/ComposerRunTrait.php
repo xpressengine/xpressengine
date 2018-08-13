@@ -33,7 +33,6 @@ trait ComposerRunTrait
      */
     protected function prepareComposer()
     {
-        ini_set('allow_url_fopen', '1');
         if (!ini_get('allow_url_fopen')) {
             throw new \Exception(
                 'allow_url_fopen is turned off. allow_url_fopen must be enabled in php.ini for executing this command.'
