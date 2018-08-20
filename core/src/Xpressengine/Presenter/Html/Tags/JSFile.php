@@ -166,6 +166,9 @@ class JSFile
             $file = $this->asset($file);
             $this->files[] = $file;
         }
+
+        // initialization
+        $this->attr('type', 'text/javascript');
     }
 
     /**
