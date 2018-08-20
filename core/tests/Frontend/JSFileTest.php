@@ -45,10 +45,10 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
         $output = JSFileStub::output('body.append');
 
         $this->assertEquals(
-'<script src="path/to/file1.js" type="text/javascript"></script>
-<script src="path/to/file2.js" type="text/javascript"></script>
-<script src="path/to/file3.js" type="text/javascript"></script>
-<script src="path/to/file4.js" type="text/javascript"></script>', trim($output));
+'<script src="path/to/file1.js"></script>
+<script src="path/to/file2.js"></script>
+<script src="path/to/file3.js"></script>
+<script src="path/to/file4.js"></script>', trim($output));
     }
 
     public function testTarget()
@@ -58,10 +58,10 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
         $output = JSFileStub::output('body.append');
 
         $this->assertEquals(
-'<!--[if gt IE 10]><!-->;<script src="path/to/file1.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file2.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file3.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file4.js" type="text/javascript"></script>
+'<!--[if gt IE 10]><!-->;<script src="path/to/file1.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file2.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file3.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file4.js"></script>
 <![endif]-->', trim($output));
     }
 
@@ -79,7 +79,7 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
 
         $output = JSFileStub::output('head.append');
 
-        $this->assertEquals('<script src="path/to/afterfile.js" type="text/javascript"></script>', trim($output));
+        $this->assertEquals('<script src="path/to/afterfile.js"></script>', trim($output));
     }
 
     public function testPrependTo()
@@ -96,7 +96,7 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
 
         $output = JSFileStub::output('body.prepend');
 
-        $this->assertEquals('<script src="path/to/file1.js" type="text/javascript"></script>', trim($output));
+        $this->assertEquals('<script src="path/to/file1.js"></script>', trim($output));
     }
 
 
@@ -111,11 +111,11 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
         $output = JSFileStub::output('body.append');
 
         $this->assertEquals(
-'<!--[if gt IE 10]><!-->;<script src="path/to/file1.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file2.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file3.js" type="text/javascript"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file4.js" type="text/javascript"></script>
-<![endif]--><script src="path/to/afterfile.js" type="text/javascript"></script>', trim($output));
+'<!--[if gt IE 10]><!-->;<script src="path/to/file1.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file2.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file3.js"></script>
+<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file4.js"></script>
+<![endif]--><script src="path/to/afterfile.js"></script>', trim($output));
     }
 
     public function testBefore2()
@@ -134,11 +134,11 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
         $output = JSFileStub::output('body.append');
 
         $this->assertEquals(
-'<script src="path/to/file1.js" type="text/javascript"></script>
-<script src="path/to/target.js" type="text/javascript"></script>
-<script src="path/to/file2.js" type="text/javascript"></script>
-<script src="path/to/file3.js" type="text/javascript"></script>
-<script src="path/to/file4.js" type="text/javascript"></script>', trim($output));
+'<script src="path/to/file1.js"></script>
+<script src="path/to/target.js"></script>
+<script src="path/to/file2.js"></script>
+<script src="path/to/file3.js"></script>
+<script src="path/to/file4.js"></script>', trim($output));
     }
 
     public function testMin()
@@ -148,7 +148,7 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
 
         $output = $jsfile->output('body.append', true);
 
-        $this->assertEquals('<script src="path/to/file1.min.js" type="text/javascript"></script>', trim($output));
+        $this->assertEquals('<script src="path/to/file1.min.js"></script>', trim($output));
     }
 
     public function testType()
