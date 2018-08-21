@@ -51,6 +51,14 @@ class EditorController extends Controller
 
     public function postDetailSetting(Request $request, $instanceId)
     {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+
+        $this->validate($request, [
+            'fileMaxSize' => 'numeric|max:' . $uploadMaxSize,
+            'attachMaxSize' => 'numeric|max:' . $postMaxSize,
+        ]);
+
         XeEditor::setConfig($instanceId, [
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
@@ -134,12 +142,16 @@ class EditorController extends Controller
 
     public function postGlobalDetailSetting(Request $request)
     {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+
         $this->validate($request, [
             'height' => 'required|numeric',
             'fontSize' => 'required',
-            'fileMaxSize' => 'numeric',
-            'attachMaxSize' => 'numeric',
+            'fileMaxSize' => 'numeric|max:' . $uploadMaxSize,
+            'attachMaxSize' => 'numeric|max:' . $postMaxSize,
         ]);
+
         XeEditor::setGlobalConfig([
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
@@ -391,5 +403,35 @@ class EditorController extends Controller
         }
 
         return XePresenter::makeApi($suggestions);
+    }
+
+    /**
+    **
+    * Get php.ini setting file size to MegaByte Size
+    *
+    * @param  string $originalSize php.ini setting value
+    * @return float|int|mixed
+    */
+    protected function getMegaSize($originalSize)
+    {
+        $originalSize = strtoupper($originalSize);
+        $unit = substr($originalSize, -1);
+        $size = str_replace($unit, '', $originalSize);
+
+        switch ($unit) {
+            case 'K':
+                $size = $size / 1024;
+                break;
+
+            case 'G':
+                $size = $size * 1024;
+                break;
+
+            case 'T':
+                $size = $size * 1024 * 1024;
+                break;
+        }
+
+        return $size;
     }
 }
