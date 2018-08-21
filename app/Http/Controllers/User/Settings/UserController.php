@@ -51,7 +51,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = $this->handler->users()->query();
-        $allUserCount = count($query->get());
+        $allUserCount = $query->count();
 
         // resolve group
         if ($group = $request->get('group')) {
