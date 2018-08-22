@@ -1,14 +1,19 @@
 import { expect } from 'chai'
-import { requestInstance } from 'xe/request'
+import Request from 'xe/request'
 import Config from 'xe/request/config'
 import ResponseEntity from 'xe/request/response_entity'
-import { routerInstance } from 'xe/router'
+import Router from 'xe/router'
 import moxios from 'moxios'
 import sinon from 'sinon'
+import XE from 'xe'
+
+/* global describe, it, beforeEach, afterEach */
 
 describe('Request', function () {
   let onFulfilled
   let onRejected
+  const requestInstance = Request.getInstance()
+  const routerInstance = Router.getInstance()
 
   beforeEach(function () {
     onFulfilled = sinon.spy()
@@ -23,8 +28,10 @@ describe('Request', function () {
   describe('setup(options)', function () {
     const baseURL = 'http://localhost'
 
+    XE.setup({ baseURL })
+    routerInstance.boot(XE)
+    requestInstance.boot(XE)
     requestInstance.setup({ baseURL })
-    requestInstance.boot({ $$on: () => {} })
 
     it('Config instance를 반환해야 함', function () {
       expect(requestInstance.config).to.be.an.instanceof(Config)
@@ -86,7 +93,7 @@ describe('Request', function () {
 
   describe('Router 연동', function () {
     it('route URI로 URL을 얻어 요청하고 응답을 받아야 함', function (done) {
-      routerInstance.boot({ $$on: () => {} })
+      routerInstance.boot(XE)
       routerInstance.setup('http://localhost')
 
       routerInstance.addRoutes({'module/board@board.slug':

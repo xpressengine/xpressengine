@@ -1,9 +1,9 @@
-const singleton = Symbol('singleton')
 const booted = Symbol('booted')
+const singleton = Symbol('singleton')
 
 export default class Singleton {
   constructor () {
-    let Class = this.constructor // or this.constructor
+    const Class = this.constructor
 
     if (!Class[singleton]) {
       Class[singleton] = this

@@ -1,8 +1,7 @@
-import Singleton from 'xe/singleton'
+import App from 'xe/app'
 import Axios from 'axios'
 import Qs from 'qs'
-import { eventify } from 'xe/common/js/utils'
-import Router from 'xe/router'
+import { eventify } from 'xe/utils'
 import $ from 'jquery'
 
 import Config from './config'
@@ -10,7 +9,7 @@ import RequestEntity from './request_entity'
 import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
 
-export default class Request extends Singleton {
+export default class Request extends App {
   constructor () {
     super()
     eventify(this)
@@ -18,21 +17,34 @@ export default class Request extends Singleton {
     this.config = new Config()
   }
 
+  static appName () {
+    return 'Request'
+  }
+
   boot (XE) {
-    if (super.boot()) return
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
 
-    this.router = new Router()
-    this.router.boot(XE)
+    return new Promise((resolve) => {
+      super.boot(XE)
 
-    XE.$$on('setup', (eventName, options) => {
-      this.setup(options)
+      XE.$$on('setup', (eventName, options) => {
+        this.setup(options)
+      })
+
+      XE.getApp('Router').then(app => {
+        this.router = app
+      })
+
+      resolve(this)
     })
   }
 
   /**
-   * ajax 옵션을 세팅한다.
-   * @param {object} options jQuery ajax options
-   */
+  * ajax 옵션을 세팅한다.
+  * @param {object} options jQuery ajax options
+  */
   setup (options) {
     this.config.set(options)
     this.options = {
@@ -81,62 +93,62 @@ export default class Request extends Singleton {
   }
 
   /**
-   *
-   * @param {string} url
-   * @param {object} params
-   * @param {object} config
-   * @return {Promise}
-   */
+  *
+  * @param {string} url
+  * @param {object} params
+  * @param {object} config
+  * @return {Promise}
+  */
   get (url, params = null, config = {}) {
     config.method = 'get'
     return this.request(url, Object.assign({}, { params }, config))
   }
 
   /**
-   * ajax를 method post 방식으로 호출한다.
-   * @param {string} url
-   * @param {object} data
-   * @param {function} success
-   * @param {string} dataType
-   * @return {Promise}
-   */
+  * ajax를 method post 방식으로 호출한다.
+  * @param {string} url
+  * @param {object} data
+  * @param {function} success
+  * @param {string} dataType
+  * @return {Promise}
+  */
   post (url, data, config = {}) {
     config.method = 'post'
     return this.request(url, Object.assign({}, { data: this.prepareData(data) }, config))
   }
 
   /**
-   *
-   * @param {string} url
-   * @param {object} data
-   * @param {object} config
-   * @return {Promise}
-   */
+  *
+  * @param {string} url
+  * @param {object} data
+  * @param {object} config
+  * @return {Promise}
+  */
   delete (url, params = null, config = {}) {
     config.method = 'delete'
     return this.request(url, Object.assign({}, { params }, config))
   }
 
   /**
-   *
-   * @param {string} url
-   * @param {object} data
-   * @param {object} config
-   * @return {Promise}
-   */
+  *
+  * @param {string} url
+  * @param {object} data
+  * @param {object} config
+  * @return {Promise}
+  */
   put (url, data, config = {}) {
     config.method = 'put'
     return this.request(url, Object.assign({}, { data }, config))
   }
 
   /**
-   *
-   * @param {string} url
-   * @param {object} data
-   * @param {object} headers
-   * @param {object} config
-   * @return {Promise}
-   */
+  *
+  * @param {string} url
+  * @param {object} data
+  * @param {object} headers
+  * @param {object} config
+  * @return {Promise}
+  */
   head (url, params = null, headers = null, config = {}) {
     config.method = 'head'
     return this.request(url, Object.assign({}, { params, headers }, config))
@@ -151,6 +163,8 @@ export default class Request extends Singleton {
   }
 
   resolveRoute (uri) {
+    if (!this.router) return
+
     let routeName
     let params = {}
     let url

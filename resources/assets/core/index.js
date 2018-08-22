@@ -16,6 +16,17 @@ import Router from 'xe/router'
 import Translator from 'xe/common/js/translator'
 import Validator from 'xe/validator'
 
+const symbolApp = Symbol('App')
+
+const defaultConfig = {
+  baseURL: window.location.origin,
+  fixedPrefix: 'plugin',
+  settingsPrefix: 'settings',
+  translation: {
+    locales: ['ko', 'en']
+  }
+}
+
 /**
  * @class XE
  * @global
@@ -25,150 +36,193 @@ import Validator from 'xe/validator'
 class XE {
   constructor () {
     $$.eventify(this)
-    this.options = {}
+    this.options = defaultConfig
+
+    this[symbolApp] = new Map()
 
     // internal libraries
     this.Utils = $$
-    this.Component = new Component()
-    this.DynamicLoadManager = new DynamicLoadManager()
-    this.Lang = new Lang()
-    this.Progress = Progress
-    this.Request = new Request()
-    this.Router = new Router()
-    this.Validator = new Validator()
+    this.Progress = this.registerApp('Progress', Progress)
+    this.Router = this.registerApp('Router', Router.getInstance())
+    this.Request = this.registerApp('Request', Request.getInstance())
+    this.Lang = this.registerApp('Lang', Lang.getInstance())
+    this.DynamicLoadManager = this.registerApp('DynamicLoadManager', DynamicLoadManager.getInstance())
+    this.Validator = this.registerApp('Validator', Validator.getInstance())
+    this.Component = this.registerApp('Component', Component.getInstance())
 
     // external libraries
     this.moment = moment // @DEPRECATED
     this.Translator = Translator // @DEPRECATED
   }
 
+  /**
+   *
+   * @param {*} name App Name
+   * @param {*} callback pass instance
+   * @return {Promise}
+   */
+  getApp (name, callback) {
+    const app = this[symbolApp].get(name)
+
+    if (typeof callback === 'function') {
+      callback(app)
+    }
+
+    return app.boot(this) // return promise
+  }
+
+  registerApp (name, appInstance) {
+    if (!this[symbolApp].has(name)) {
+      this[symbolApp].set(name, appInstance)
+    }
+
+    return appInstance
+  }
+
+  intercept (appName, pointcut) {
+    const app = this.getApp(appName)
+    return app.intercept(pointcut)
+  }
+
   boot () {
-    this.Router.boot(this)
-    this.Request.boot(this)
-    this.Lang.boot(this)
-    this.DynamicLoadManager.boot(this)
-    this.Validator.boot(this)
-    this.Component.boot(this)
+    // this.Router = this.getApp('Router')
+    // this.Request = this.getApp('Request')
+    // this.Lang = this.getApp('Lang')
+    // this.DynamicLoadManager = this.getApp('DynamicLoadManager')
+    // this.Validator = this.getApp('Validator')
+    // this.Component = this.getApp('Component')
 
-    this.Request.$$on('exposed', (eventName, exposed) => {
-      if (exposed.assets) {
-        if (exposed.assets.js) {
-          this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
+    return Promise.all([
+      this.Router.boot(this),
+      this.Request.boot(this),
+      this.Lang.boot(this),
+      this.DynamicLoadManager.boot(this),
+      this.Validator.boot(this),
+      this.Component.boot(this)
+    ]).then(() => {
+      this.Request.$$on('exposed', (eventName, exposed) => {
+        if (exposed.assets) {
+          if (exposed.assets.js) {
+            this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
+          }
+
+          if (exposed.assets.css) {
+            exposed.assets.css.forEach((src) => {
+              this.DynamicLoadManager.cssLoad(src)
+            })
+          }
         }
 
-        if (exposed.assets.css) {
-          exposed.assets.css.forEach((src) => {
-            this.DynamicLoadManager.cssLoad(src)
-          })
-        }
-      }
+        this.Router.addRoutes(exposed.routes)
 
-      this.Router.addRoutes(exposed.routes)
+        this.Lang.set(exposed.translations)
 
-      this.Lang.set(exposed.translations)
-
-      Object.entries(exposed.rules).forEach((rule) => {
-        if (rule[1]) {
-          this.Validator.setRules(rule[0], rule[1])
-        }
+        Object.entries(exposed.rules).forEach((rule) => {
+          if (rule[1]) {
+            this.Validator.setRules(rule[0], rule[1])
+          }
+        })
       })
-    })
 
-    $(() => {
-      $('body').on('click', 'a[target]', (e) => {
-        const $this = $(e.target)
-        const href = String($this.attr('href')).trim()
-        const target = String($this.attr('target'))
+      $(() => {
+        $('body').on('click', 'a[target]', (e) => {
+          const $this = $(e.target)
+          const href = String($this.attr('href')).trim()
+          const target = String($this.attr('target'))
 
-        if (!href) return
-        if (target === '_top' || target === '_self' || target === '_parent') return
-        if (!href.match(/^(https?:\/\/)/)) return
-        if (this.isSameHost(href)) return
+          if (!href) return
+          if (target === '_top' || target === '_self' || target === '_parent') return
+          if (!href.match(/^(https?:\/\/)/)) return
+          if (this.isSameHost(href)) return
 
-        let rel = $this.attr('rel')
+          let rel = $this.attr('rel')
 
-        if (typeof rel === 'string') {
-          $this.attr('rel', rel + ' noopener')
+          if (typeof rel === 'string') {
+            $this.attr('rel', rel + ' noopener')
+          } else {
+            $this.attr('rel', 'noopener')
+          }
+
+          blankshield.open(href)
+          e.preventDefault()
+        })
+      })
+
+      // @FIXME
+      $(document).ajaxSend((event, jqxhr, settings) => {
+        if (settings.useXeSpinner) {
+          Progress.start((typeof settings.context === 'undefined') ? $('body') : settings.context)
+        }
+      }).ajaxComplete((event, jqxhr, settings) => {
+        if (settings.useXeSpinner) {
+          Progress.done((typeof settings.context === 'undefined') ? $('body') : settings.context)
+        }
+      }).ajaxError((event, jqxhr, settings, thrownError) => {
+        if (settings.useXeSpinner) {
+          Progress.done()
+        }
+
+        if (settings.useXeToast === false) {
+          return
+        }
+
+        const status = jqxhr.status
+        let errorMessage = 'Not defined error message (' + status + ')'
+
+        // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
+        if (jqxhr.status === 422) {
+          var list = JSON.parse(jqxhr.responseText).errors || {}
+
+          errorMessage = ''
+          errorMessage += '<ul>'
+          for (var i in list) {
+            errorMessage += '<li>' + list[i] + '</li>'
+          }
+
+          errorMessage += '</ul>'
+        } else if (settings.dataType === 'json') {
+          errorMessage = JSON.parse(jqxhr.responseText).message
         } else {
-          $this.attr('rel', 'noopener')
+          errorMessage = jqxhr.statusText
         }
 
-        blankshield.open(href)
-        e.preventDefault()
+        this.toastByStatus(status, errorMessage)
+      })
+
+      // @FIXME 분리
+      this.Request.$$on('start', (eventName, options) => {
+        Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
+      })
+      this.Request.$$on('sucess', (eventName, options) => {
+        Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
+      })
+      this.Request.$$on('error', (eventName, error) => {
+        Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
+
+        let errorMessage = ''
+
+        if (error.status === 422) {
+          var list = error.data.errors || {}
+
+          errorMessage = error.data.message
+          errorMessage += '<ul>'
+          for (var i in list) {
+            errorMessage += '<li>' + list[i] + '</li>'
+          }
+
+          errorMessage += '</ul>'
+        } else if (error.request.responseType === 'json') {
+          errorMessage = JSON.parse(error.request.responseText).message
+        } else {
+          errorMessage = error.statusText
+        }
+
+        this.toastByStatus(error.status, errorMessage)
       })
     })
-
-    // @FIXME
-    $(document).ajaxSend((event, jqxhr, settings) => {
-      if (settings.useXeSpinner) {
-        Progress.start((typeof settings.context === 'undefined') ? $('body') : settings.context)
-      }
-    }).ajaxComplete((event, jqxhr, settings) => {
-      if (settings.useXeSpinner) {
-        Progress.done((typeof settings.context === 'undefined') ? $('body') : settings.context)
-      }
-    }).ajaxError((event, jqxhr, settings, thrownError) => {
-      if (settings.useXeSpinner) {
-        Progress.done()
-      }
-
-      if (settings.useXeToast === false) {
-        return
-      }
-
-      const status = jqxhr.status
-      let errorMessage = 'Not defined error message (' + status + ')'
-
-      // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
-      if (jqxhr.status === 422) {
-        var list = JSON.parse(jqxhr.responseText).errors || {}
-
-        errorMessage = ''
-        errorMessage += '<ul>'
-        for (var i in list) {
-          errorMessage += '<li>' + list[i] + '</li>'
-        }
-
-        errorMessage += '</ul>'
-      } else if (settings.dataType === 'json') {
-        errorMessage = JSON.parse(jqxhr.responseText).message
-      } else {
-        errorMessage = jqxhr.statusText
-      }
-
-      this.toastByStatus(status, errorMessage)
-    })
-
-    // @FIXME 분리
-    this.Request.$$on('start', (eventName, options) => {
-      Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
-    })
-    this.Request.$$on('sucess', (eventName, options) => {
-      Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
-    })
-    this.Request.$$on('error', (eventName, error) => {
-      Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
-
-      let errorMessage = ''
-
-      if (error.status === 422) {
-        var list = error.data.errors || {}
-
-        errorMessage = error.data.message
-        errorMessage += '<ul>'
-        for (var i in list) {
-          errorMessage += '<li>' + list[i] + '</li>'
-        }
-
-        errorMessage += '</ul>'
-      } else if (error.request.responseType === 'json') {
-        errorMessage = JSON.parse(error.request.responseText).message
-      } else {
-        errorMessage = error.statusText
-      }
-
-      this.toastByStatus(error.status, errorMessage)
-    })
+      .catch((e) => {
+        console.debug('app.promise error', e)
+      })
   }
 
   /**
@@ -180,19 +234,19 @@ class XE {
    *   - useXESpinner : ajax요청시 UI상에 spinner 사용여부
    * </pre>
    */
-  setup (options) {
-    options.baseURL = $$.trimEnd(options.baseURL, '/')
-
-    $$.setBaseURL(options.baseURL)
-
+  setup (options = {}) {
     this.configure(options)
-    this.boot()
-
-    this.$$emit('setup', this.options)
+    this.boot().then(() => {
+      this.$$emit('setup', this.options)
+    })
   }
 
-  configure (options) {
-    $.extend(this.options, options)
+  configure (options = {}) {
+    const config = Object.assign({}, defaultConfig, options)
+    config.baseURL = $$.trimEnd(config.baseURL, '/')
+    $$.setBaseURL(config.baseURL)
+
+    Object.assign(this.options, options)
   }
 
   route (routeName, params = {}) {

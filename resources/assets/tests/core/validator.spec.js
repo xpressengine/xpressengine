@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import $ from 'jquery'
 import Validator from 'xe/validator'
+import XE from 'xe'
 
 /* global describe, it */
 
@@ -8,7 +9,7 @@ let validator
 
 describe('Validator', function () {
   describe('Instance', function () {
-    validator = new Validator()
+    validator = Validator.getInstance()
 
     it('$$.eventify 메소드를 가져야 함', function () {
       expect(validator).to.have.property('$$on').that.is.a('function')
@@ -31,7 +32,8 @@ describe('Validator', function () {
   })
 
   describe('boot(XE)', function () {
-    validator.boot({locale: 'ko'})
+    XE.setup({locale: 'ko'})
+    validator.boot(XE)
 
     it('locale 멤버를 가져야 함', function () {
       expect(validator).to.have.property('locale').is.equal('ko')

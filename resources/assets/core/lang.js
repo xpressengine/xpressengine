@@ -1,9 +1,9 @@
-import Singleton from 'xe/singleton'
+import App from 'xe/app'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 import * as $$ from 'xe/utils'
 
-export default class Lang extends Singleton {
+export default class Lang extends App {
   constructor () {
     super()
 
@@ -13,15 +13,29 @@ export default class Lang extends Singleton {
     this.locales = []
   }
 
-  boot (XE) {
-    this.XE = XE
-    this.locales = XE.options.translation.locales
+  static appName () {
+    return 'Lang'
+  }
 
-    XE.$$on('setup', (eventName, options) => {
-      if (options.translation) {
-        this.set(options.translation.terms)
-        this.locales = options.translation.locales
-      }
+  boot (XE) {
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
+
+    return new Promise((resolve) => {
+      super.boot(XE)
+
+      this.XE = XE
+      this.locales = XE.options.translation.locales || []
+
+      XE.$$on('setup', (eventName, options) => {
+        if (options.translation) {
+          this.set(options.translation.terms)
+          this.locales = options.translation.locales
+        }
+      })
+
+      resolve(this)
     })
   }
 

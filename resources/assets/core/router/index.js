@@ -1,27 +1,40 @@
-import Singleton from 'xe/singleton'
+import App from 'xe/app'
 import Route from './route'
-import { requestInstance } from 'xe/request'
 import RouteNotFoundError from './errors/route.notfound.error'
 
-export default class Router extends Singleton {
+export default class Router extends App {
   constructor (base = '/', fixed = 'plugin', settings = '') {
     super()
 
     this.setup(base, fixed, settings)
   }
 
+  static appName () {
+    return 'Router'
+  }
+
   boot (XE) {
-    if (super.boot()) return
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
 
     this.routes = new Map()
 
-    XE.$$on('setup', (eventName, options) => {
-      this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
-      if (options.routes) this.addRoutes(options.routes)
-    })
+    return new Promise((resolve) => {
+      super.boot(XE)
 
-    requestInstance.$$on('exposed', (eventName, exposed) => {
-      if (exposed.routes) this.addRoutes(exposed.routes)
+      XE.$$on('setup', (eventName, options) => {
+        this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
+        if (options.routes) this.addRoutes(options.routes)
+      })
+
+      XE.getApp('Request', (request) => {
+        request.$$on('exposed', (eventName, exposed) => {
+          if (exposed.routes) this.addRoutes(exposed.routes)
+        })
+      })
+
+      resolve(this)
     })
   }
 
@@ -34,7 +47,7 @@ export default class Router extends Singleton {
   addRoutes (routes) {
     for (const key in routes) {
       if (routes.hasOwnProperty(key)) {
-        this.routes.set(key, new Route(key, routes[key]))
+        this.routes.set(key, new Route(this, key, routes[key]))
       }
     }
   }
@@ -52,4 +65,4 @@ export default class Router extends Singleton {
   }
 }
 
-export const routerInstance = new Router()
+export const routerInstance = Router.getInstance()
