@@ -53,11 +53,27 @@ class EditorController extends Controller
     {
         $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
         $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
 
-        $this->validate($request, [
-            'fileMaxSize' => 'numeric|max:' . $uploadMaxSize,
-            'attachMaxSize' => 'numeric|max:' . $postMaxSize,
-        ]);
+        $defaultRule = [
+            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
+        ];
+
+        $attachMaxSizeRule = [];
+        if ($editAttachMaxSize = $request->get('attachMaxSize')) {
+            if ($editAttachMaxSize != 0) {
+                $editorConfig = XeEditor::getConfig($instanceId);
+                $fileMaxSize = $request->get('fileMaxSize', $editorConfig->get('fileMaxSize'));
+
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $fileMaxSize];
+            } else {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
+            }
+        }
+
+        $rule = array_merge($defaultRule, $attachMaxSizeRule);
+
+        $this->validate($request, $rule);
 
         XeEditor::setConfig($instanceId, [
             'height' => $request->get('height'),
@@ -144,13 +160,26 @@ class EditorController extends Controller
     {
         $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
         $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
 
-        $this->validate($request, [
+        $defaultRule = [
             'height' => 'required|numeric',
             'fontSize' => 'required',
-            'fileMaxSize' => 'numeric|max:' . $uploadMaxSize,
-            'attachMaxSize' => 'numeric|max:' . $postMaxSize,
-        ]);
+            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
+            ];
+
+        $attachMaxSizeRule = [];
+        if ($attachMaxSize = $request->get('attachMaxSize', 0)) {
+            if ($attachMaxSize != 0) {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $request->get('fileMaxSize', 0)];
+            } else {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
+            }
+        }
+
+        $rule = array_merge($defaultRule, $attachMaxSizeRule);
+
+        $this->validate($request, $rule);
 
         XeEditor::setGlobalConfig([
             'height' => $request->get('height'),
