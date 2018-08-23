@@ -50,10 +50,6 @@
   font-size: 2em;
 }
 
-.c3-line {
-  stroke-width: 1px;
-}
-
 .c3-circle._expanded_ {
   stroke-width: 1px;
   stroke: #fff;
@@ -106,7 +102,7 @@
   opacity: .75;
   fill: #fff;
   stroke: #d3d3d3;
-  stroke-width: 1;
+  stroke-width: 1px;
 }
 
 .c3-title {
