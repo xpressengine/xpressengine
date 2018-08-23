@@ -40,14 +40,13 @@
   fill: #aaa;
 }
 
-.c3-xgrid,
-.c3-ygrid {
-  stroke-dasharray: 3 3;
-}
-
 .c3-text.c3-empty {
   fill: grey;
   font-size: 2em;
+}
+
+.c3-line {
+  stroke-width: 1px;
 }
 
 .c3-circle._expanded_ {
