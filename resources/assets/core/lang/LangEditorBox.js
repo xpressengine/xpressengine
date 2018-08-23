@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import config from 'xe/config'
 
 /**
  * @private
@@ -31,7 +32,7 @@ class LangEditorBox {
       window.XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/lang/lines/' + this.langKey,
+        url: config.getters.urlOrigin + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -220,7 +221,7 @@ function renderLangEditorBox () {
       window.XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.XE.baseURL + '/lang/lines/many',
+        url: config.getters.urlOrigin + '/lang/lines/many',
         data: {
           keys: langKeys
         },

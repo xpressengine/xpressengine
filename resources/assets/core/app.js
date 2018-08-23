@@ -1,5 +1,6 @@
 import * as $$ from 'xe/utils'
 import Aspect from 'xe/aspect'
+import config from 'xe/config'
 const symbolPlugins = Symbol('Plugin')
 const booted = Symbol('booted')
 const symbolResolveBoot = Symbol('Resolve boot')
@@ -14,6 +15,7 @@ export default class App {
 
     instances.set(this.constructor.appName(), this)
 
+    this.$$config = config
     $$.eventify(this)
 
     this[booted] = false

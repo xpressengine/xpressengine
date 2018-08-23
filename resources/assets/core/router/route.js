@@ -1,5 +1,5 @@
 import trimEnd from 'lodash/trimEnd'
-import { routerInstance } from 'xe/router'
+import config from 'xe/config'
 
 export default class Route {
   constructor (router, name, route) {
@@ -32,11 +32,7 @@ export default class Route {
     // 값이 지정되지 않은 필수적이지 않은 params 제거
     uri = uri.replace(/\{[a-z_]+\?\}/i, '').replace('//', '/')
 
-    let url = trimEnd(this.router.baseURL) + '/' + uri
-    // 마지막 `/` 제거
-    url = trimEnd(url, '/')
-
-    return url
+    return trimEnd(config.getters.urlOrigin + '/' + uri, '/#? ')
   }
 
   getParams () {

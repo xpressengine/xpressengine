@@ -1,4 +1,6 @@
 import EventEmitter from './EventEmitter'
+import config from 'xe/config'
+import { STORE_URL } from 'xe/config/mutations'
 
 // lodash
 import curry from 'lodash/curry'
@@ -10,8 +12,6 @@ import throttle from 'lodash/throttle'
 import trim from 'lodash/trim'
 import trimEnd from 'lodash/trimEnd'
 import trimStart from 'lodash/trimStart'
-
-let baseURL = ''
 
 export * from './_deprecated'
 export {
@@ -28,8 +28,12 @@ export {
   trimStart
 }
 
+/**
+ * @deprecated
+ * @param {String} url
+ */
 export function setBaseURL (url) {
-  baseURL = trimEnd(url, '/')
+  config.commit(STORE_URL, { origin: url })
 }
 
 /**
@@ -143,13 +147,9 @@ export function isURL (url) {
 export function asset (resourceUri) {
   let result = ''
 
-  if (!baseURL) {
-    baseURL = window.location.origin
-  }
-
   // 절대 경로로 변경
   if (!isURL(resourceUri)) {
-    result = baseURL
+    result = config.getters.urlOrigin
 
     if (result.substr(-1) === '/') {
       result = result.substr(0, -1)

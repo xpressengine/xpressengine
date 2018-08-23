@@ -3,6 +3,8 @@ import $ from 'jquery'
 import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
+import config from 'xe/config'
+import { STORE_URL } from './config/mutations'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -36,7 +38,17 @@ const defaultConfig = {
 class XE {
   constructor () {
     $$.eventify(this)
+    // @deprecated
     this.options = defaultConfig
+    this.config = config // veux store
+
+    this.config.subscribe((mutation, state) => {
+      if (mutation.type === STORE_URL) {
+        this.options.baseURL = state.url.origin
+        this.options.fixedPrefix = state.url.fixedPrefix
+        this.options.settingsPrefix = state.url.settingsPrefix
+      }
+    })
 
     this[symbolApp] = new Map()
 
@@ -243,10 +255,14 @@ class XE {
 
   configure (options = {}) {
     const config = Object.assign({}, defaultConfig, options)
-    config.baseURL = $$.trimEnd(config.baseURL, '/')
-    $$.setBaseURL(config.baseURL)
 
-    Object.assign(this.options, options)
+    Object.assign(this.options, config)
+
+    this.config.commit(STORE_URL, {
+      origin: config.baseURL,
+      fixedPrefix: config.fixedPrefix,
+      settingsPrefix: config.settingsPrefix
+    })
   }
 
   route (routeName, params = {}) {
@@ -326,7 +342,7 @@ class XE {
     if (typeof url !== 'string') return false
 
     const base = {
-      url: URI(this.baseURL).normalizePathname()
+      url: URI(this.config.getters.urlOrigin).normalizePathname()
     }
     const target = {
       url: URI(url).normalizePathname()
@@ -335,7 +351,7 @@ class XE {
     if (target.url.is('urn')) return false
 
     if (!target.url.hostname()) {
-      target.url = target.url.absoluteTo(this.baseURL)
+      target.url = target.url.absoluteTo(this.config.getters.urlOrigin)
     }
 
     base.port = Number(base.url.port())
@@ -438,7 +454,7 @@ class XE {
    * @return {string} baseURL
    */
   get baseURL () {
-    return this.options.baseURL
+    return this.config.getters.urlOrigin
   }
 
   /**

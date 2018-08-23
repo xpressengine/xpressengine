@@ -54,7 +54,7 @@ export default class Request extends App {
     }
 
     this.axiosInstance = Axios.create({
-      baseURL: this.config.baseURL
+      baseURL: this.$$config.getters.urlOrigin
     })
 
     this.axiosInstance.interceptors.response.use(response => {

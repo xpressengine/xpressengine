@@ -131,7 +131,7 @@ export default class Lang extends App {
     const that = this
 
     return new Promise((resolve, reject) => {
-      that.XE.get(that.XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
+      that.XE.get(this.$$config.getters.urlOrigin + '/lang/lines/many', {keys: langKeys}).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
             result[key] = $$.find(val, { 'locale': that.XE.defaultLocale }).value

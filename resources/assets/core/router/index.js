@@ -1,12 +1,11 @@
 import App from 'xe/app'
 import Route from './route'
 import RouteNotFoundError from './errors/route.notfound.error'
+import { STORE_URL } from 'xe/config/mutations'
 
 export default class Router extends App {
-  constructor (base = '/', fixed = 'plugin', settings = '') {
+  constructor () {
     super()
-
-    this.setup(base, fixed, settings)
   }
 
   static appName () {
@@ -23,8 +22,15 @@ export default class Router extends App {
     return new Promise((resolve) => {
       super.boot(XE)
 
+      this.$$config.subscribe((mutation, state) => {
+        if (mutation.type === STORE_URL) {
+          this.baseURL = state.url.origin
+          this.fixedPrefix = state.url.fixedPrefix
+          this.settingsPrefix = state.url.settingsPrefix
+        }
+      })
+
       XE.$$on('setup', (eventName, options) => {
-        this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
         if (options.routes) this.addRoutes(options.routes)
       })
 
@@ -38,10 +44,15 @@ export default class Router extends App {
     })
   }
 
+  /**
+   * @deprecated
+   */
   setup (base, fixed = 'plugin', settings = '') {
-    this.baseURL = base
-    this.fixedPrefix = fixed
-    this.settingsPrefix = settings
+    this.$$config.commit(STORE_URL, {
+      origin: base,
+      fixedPrefix: fixed,
+      settingsPrefix: settings
+    })
   }
 
   addRoutes (routes) {

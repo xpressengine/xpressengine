@@ -43,9 +43,9 @@ export default class DynamicLoadManager extends App {
 
         // this.use(new DyPlugin())
 
-        assets.js.add(XE.baseURL + '/assets/vendor.js')
-        assets.js.add(XE.baseURL + '/assets/common.js')
-        assets.js.add(XE.baseURL + '/assets/core/common/js/xe.bundle.js')
+        assets.js.add(this.$$config.getters.urlOrigin + '/assets/vendor.js')
+        assets.js.add(this.$$config.getters.urlOrigin + '/assets/common.js')
+        assets.js.add(this.$$config.getters.urlOrigin + '/assets/core/common/js/xe.bundle.js')
 
         resolve(this)
       }

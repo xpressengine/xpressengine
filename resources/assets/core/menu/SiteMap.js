@@ -56,7 +56,7 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
       var url = item.url
       if (item.type !== 'xpressengine@directLink') {
         url = '/' + url
-        url = XE.Utils.getUri(window.xeBaseURL + url) // @FIXME
+        url = XE.Utils.getUri(window.XE.config.getters.urlOrigin + url) // @FIXME
       }
 
       return url
