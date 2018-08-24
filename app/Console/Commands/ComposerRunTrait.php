@@ -140,7 +140,7 @@ trait ComposerRunTrait
         $memoryLimit = trim(ini_get('memory_limit'));
         // Increase memory_limit if it is lower than 1GB
         if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1024) {
-            ini_set('memory_limit', '1G');
+            ini_set('memory_limit', '-1');
         }
 
         if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
