@@ -191,7 +191,7 @@ class UserServiceProvider extends ServiceProvider
     {
         // register register-token repository
         $this->app->singleton(RegisterTokenRepository::class, function ($app) {
-            $connection = $app['xe.db']->connection('user');
+            $connection = $app['xe.db']->connection();
 
             // The database token repository is an implementation of the token repository
             // interface, and is responsible for the actual storing of auth tokens and
