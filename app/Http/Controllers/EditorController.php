@@ -51,6 +51,30 @@ class EditorController extends Controller
 
     public function postDetailSetting(Request $request, $instanceId)
     {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
+
+        $defaultRule = [
+            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
+        ];
+
+        $attachMaxSizeRule = [];
+        if ($editAttachMaxSize = $request->get('attachMaxSize')) {
+            if ($editAttachMaxSize != 0) {
+                $editorConfig = XeEditor::getConfig($instanceId);
+                $fileMaxSize = $request->get('fileMaxSize', $editorConfig->get('fileMaxSize'));
+
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $fileMaxSize];
+            } else {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
+            }
+        }
+
+        $rule = array_merge($defaultRule, $attachMaxSizeRule);
+
+        $this->validate($request, $rule);
+
         XeEditor::setConfig($instanceId, [
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
@@ -134,12 +158,29 @@ class EditorController extends Controller
 
     public function postGlobalDetailSetting(Request $request)
     {
-        $this->validate($request, [
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
+
+        $defaultRule = [
             'height' => 'required|numeric',
             'fontSize' => 'required',
-            'fileMaxSize' => 'numeric',
-            'attachMaxSize' => 'numeric',
-        ]);
+            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
+            ];
+
+        $attachMaxSizeRule = [];
+        if ($attachMaxSize = $request->get('attachMaxSize', 0)) {
+            if ($attachMaxSize != 0) {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $request->get('fileMaxSize', 0)];
+            } else {
+                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
+            }
+        }
+
+        $rule = array_merge($defaultRule, $attachMaxSizeRule);
+
+        $this->validate($request, $rule);
+
         XeEditor::setGlobalConfig([
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
@@ -391,5 +432,35 @@ class EditorController extends Controller
         }
 
         return XePresenter::makeApi($suggestions);
+    }
+
+    /**
+    **
+    * Get php.ini setting file size to MegaByte Size
+    *
+    * @param  string $originalSize php.ini setting value
+    * @return float|int|mixed
+    */
+    protected function getMegaSize($originalSize)
+    {
+        $originalSize = strtoupper($originalSize);
+        $unit = substr($originalSize, -1);
+        $size = str_replace($unit, '', $originalSize);
+
+        switch ($unit) {
+            case 'K':
+                $size = $size / 1024;
+                break;
+
+            case 'G':
+                $size = $size * 1024;
+                break;
+
+            case 'T':
+                $size = $size * 1024 * 1024;
+                break;
+        }
+
+        return $size;
     }
 }

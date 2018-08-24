@@ -34,7 +34,7 @@ class InstallController extends Controller
             case "directoryPermission" :
                 $paths = [
                     base_path('bootstrap/cache'),
-                    base_path('config/production'),
+                    base_path('config/' . env('APP_ENV', 'production')),
                     base_path('storage/'),
                 ];
 

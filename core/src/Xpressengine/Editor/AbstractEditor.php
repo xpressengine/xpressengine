@@ -473,11 +473,43 @@ abstract class AbstractEditor implements ComponentInterface
         $data['files'] = $this->files;
 
         if ($this->isPrivileged()) {
-            $data['fileMaxSize'] = 999;
-            $data['attachMaxSize'] = 999;
+            $data['fileMaxSize'] = min(
+                $this->getMegaSize(ini_get('upload_max_filesize')),
+                $this->getMegaSize(ini_get('post_max_size'))
+            );
+            $data['attachMaxSize'] = 0;
         }
 
         return $data;
+    }
+
+    /**
+     * Get php.ini setting file size to MegaByte Size
+     *
+     * @param  string $originalSize php.ini setting value
+     * @return float|int|mixed
+     */
+    protected function getMegaSize($originalSize)
+    {
+        $originalSize = strtoupper($originalSize);
+        $unit = substr($originalSize, -1);
+        $size = str_replace($unit, '', $originalSize);
+
+        switch ($unit) {
+            case 'K':
+                $size = $size / 1024;
+                break;
+
+            case 'G':
+                $size = $size * 1024;
+                break;
+
+            case 'T':
+                $size = $size * 1024 * 1024;
+                break;
+        }
+
+        return $size;
     }
 
     /**

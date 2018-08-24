@@ -495,7 +495,7 @@ class XeInstall extends Command
      */
     private function configFileGenerate($key, array $data)
     {
-        $dir = config_path() . '/production';
+        $dir = config_path() . '/' . env('APP_ENV', 'production');
         $this->makeDir($dir);
 
         $data = $this->encodeArr2Str($data);

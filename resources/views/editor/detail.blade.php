@@ -186,7 +186,7 @@
                                             </label>
                                             <div class="checkbox pull-right">
                                                 <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('attachMaxSize')? 'checked' : '' }}>
+                                                    <input type="checkbox" class="__xe_inherit" {{ $config->getPure('attachMaxSize') === null ? 'checked' : '' }}>
                                                     {{ xe_trans('xe::inheritMode') }}
                                                 </label>
                                             </div>

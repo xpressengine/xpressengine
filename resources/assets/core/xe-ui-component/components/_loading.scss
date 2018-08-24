@@ -71,7 +71,7 @@
   background: transparent;
   &:before {
     @include loadinglayout(type2, 0, #33ffcd);
-    left:: 0;
+    left: 0;
   }
   .xe-loading-inner {
     position: absolute;
@@ -101,44 +101,3 @@
   from, to{ transform: translateY(0)}
   50%{ transform: translateY(10px)}
 }
-
-// IE9 CSS
-.xe-loading-inner {
-  display: none\0;
-}
-.xe-loading,.xe-loading2 {
-  &:before {
-    display: none\0;
-  }
-}
-.xe-loading {
-  background: url(img/square.gif) 0 0 no-repeat\0;
-}
-.xe-loading2 {
-  height: 30px\0;
-  background: url(img/stick.gif) 0 0 no-repeat\0;
-}
-@media all and (-ms-high-contrast:none){
- .xe-loading-inner {
-   display: block\0;
- }
- .xe-loading,.xe-loading2 {
-   &:before {
-     display: block\0;
-   }
- }
- .xe-loading {
-   background: transparent\0;
- }
- .xe-loading2 {
-   height: 30px\0;
-   background: transparent\0;
- }
- 
-}
-
-
-
-
-
-
