@@ -28,7 +28,7 @@ export default class Component extends App {
       super.boot(XE)
 
       this.$$xe.$$on('setup', (eventName, options) => {
-        moment.locale(this.$$xe.locale)
+        moment.locale(this.$$config.getters['lang/current'].code)
       })
 
       $(() => {

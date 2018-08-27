@@ -43,8 +43,10 @@ const actions = {
 
 const mutations = {
   [STORE_LOCALE]: (state, payload) => {
-    if (!Array.isArray(payload.locales)) {
-      payload.locales = [payload.locales]
+    if (typeof payload.locales[0] === 'string') {
+      payload.locales.forEach((locale, idx) => {
+        payload.locales[idx] = { code: locale, nativeName: locale }
+      })
     }
 
     if (!payload.default) {

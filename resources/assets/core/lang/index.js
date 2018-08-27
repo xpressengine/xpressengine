@@ -2,6 +2,7 @@ import App from 'xe/app'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 import * as $$ from 'xe/utils'
+import config from 'xe/config'
 
 export default class Lang extends App {
   constructor () {
@@ -10,7 +11,7 @@ export default class Lang extends App {
     Translator.placeHolderPrefix = ':'
     Translator.placeHolderSuffix = ''
 
-    this.locales = []
+    this.locales = [] // @FIXME
   }
 
   static appName () {
@@ -26,12 +27,12 @@ export default class Lang extends App {
       super.boot(XE)
 
       this.XE = XE
-      this.locales = XE.options.translation.locales || []
+      this.locales = this.$$config.getters['lang/locales'] || []
 
       XE.$$on('setup', (eventName, options) => {
         if (options.translation) {
           this.set(options.translation.terms)
-          this.locales = options.translation.locales
+          this.locales = this.$$config.getters['lang/locales']
         }
       })
 
@@ -77,7 +78,7 @@ export default class Lang extends App {
   * @return {string}
   */
   getCurrentLocale () {
-    return this.locales[0]
+    return config.getters['lang/current'].code
   }
 
   /**
@@ -131,10 +132,10 @@ export default class Lang extends App {
     const that = this
 
     return new Promise((resolve, reject) => {
-      that.XE.get(this.$$config.getters.urlOrigin + '/lang/lines/many', {keys: langKeys}).then(response => {
+      that.XE.get(this.$$config.getters['router/origin'] + '/lang/lines/many', {keys: langKeys}).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
-            result[key] = $$.find(val, { 'locale': that.XE.defaultLocale }).value
+            result[key] = $$.find(val, { 'locale': config.getters['lang/current'].code }).value
             Translator.add(key, result[key])
           }
         })

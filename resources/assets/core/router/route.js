@@ -32,7 +32,7 @@ export default class Route {
     // 값이 지정되지 않은 필수적이지 않은 params 제거
     uri = uri.replace(/\{[a-z_]+\?\}/i, '').replace('//', '/')
 
-    return trimEnd(config.getters.urlOrigin + '/' + uri, '/#? ')
+    return trimEnd(config.getters['router/origin'] + '/' + uri, '/#? ')
   }
 
   getParams () {

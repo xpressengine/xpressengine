@@ -4,6 +4,7 @@ import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
+import config from 'xe/config'
 
 const originalRules = {}
 
@@ -512,13 +513,14 @@ export default class Validator extends App {
 
     return new Promise((resolve) => {
       super.boot(XE)
+      const that = this
 
-      this.locale = XE.locale
+      this.locale = config.getters['lang/current'].code
       $(() => {
-        // @FIXME window.ruleSet
-        $('form[data-rule]').each(() => {
-          if (window.hasOwnProperty('ruleSet')) {
-            this.setRules(window.ruleSet.ruleName, window.ruleSet.rules)
+        $('form[data-rule]').each(function () {
+          const rule = config.getters['validator/rule']($(this).data('rule'))
+          if (rule) {
+            that.setRules(rule.ruleName, rule.rules)
           }
         })
 

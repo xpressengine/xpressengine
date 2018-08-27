@@ -1,11 +1,13 @@
 import App from 'xe/app'
 import Route from './route'
 import RouteNotFoundError from './errors/route.notfound.error'
-import { STORE_URL } from 'xe/config/mutations'
+import { STORE_URL } from 'xe/router/store'
 
 export default class Router extends App {
-  constructor () {
+  constructor (base, fixed = 'plugin', settings = '') {
     super()
+
+    this.setup(base, fixed, settings)
   }
 
   static appName () {
@@ -23,15 +25,21 @@ export default class Router extends App {
       super.boot(XE)
 
       this.$$config.subscribe((mutation, state) => {
-        if (mutation.type === STORE_URL) {
-          this.baseURL = state.url.origin
-          this.fixedPrefix = state.url.fixedPrefix
-          this.settingsPrefix = state.url.settingsPrefix
+        if (mutation.type === `router/${STORE_URL}`) {
+          this.baseURL = state.router.origin
+          this.fixedPrefix = state.router.fixedPrefix
+          this.settingsPrefix = state.router.settingsPrefix
         }
       })
 
       XE.$$on('setup', (eventName, options) => {
         if (options.routes) this.addRoutes(options.routes)
+
+        this.$$config.dispatch('router/setUrl', {
+          origin: options.baseURL,
+          fixedPrefix: options.fixedPrefix,
+          settingsPrefix: options.settingsPrefix
+        })
       })
 
       XE.getApp('Request', (request) => {
@@ -48,7 +56,11 @@ export default class Router extends App {
    * @deprecated
    */
   setup (base, fixed = 'plugin', settings = '') {
-    this.$$config.commit(STORE_URL, {
+    this.baseURL = base
+    this.fixedPrefix = fixed
+    this.settingsPrefix = settings
+
+    this.$$config.dispatch('router/setUrl', {
       origin: base,
       fixedPrefix: fixed,
       settingsPrefix: settings
@@ -76,4 +88,4 @@ export default class Router extends App {
   }
 }
 
-export const routerInstance = Router.getInstance()
+export const routerInstance = new Router()

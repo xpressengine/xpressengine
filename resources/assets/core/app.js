@@ -1,10 +1,8 @@
 import * as $$ from 'xe/utils'
-import Aspect from 'xe/aspect'
 import config from 'xe/config'
-const symbolPlugins = Symbol('Plugin')
-const booted = Symbol('booted')
-const symbolResolveBoot = Symbol('Resolve boot')
 
+const symbolPlugins = Symbol('Plugin')
+const symbolBooted = Symbol('booted')
 const instances = new Map()
 
 export default class App {
@@ -18,35 +16,34 @@ export default class App {
     this.$$config = config
     $$.eventify(this)
 
-    this[booted] = false
+    this[symbolBooted] = false
     this[symbolPlugins] = new Map()
 
     return instances.get(this.constructor.appName())
   }
 
-  static getInstance () {
-    if (instances.has(this.appName())) {
-      return instances.get(this.appName())
-    }
+  // IE에서 오류로 인해 사용하지 않음
+  // static getInstance () {
+  //   if (instances.has(this.appName())) {
+  //     return instances.get(this.appName())
+  //   }
 
-    return new this()
-  }
+  //   return new this()
+  // }
 
   booted () {
-    return this[booted]
+    return this[symbolBooted]
   }
 
   boot (XE) {
     return new Promise((resolve) => {
-      this[symbolResolveBoot] = resolve
-
-      if (this[booted]) {
+      if (this[symbolBooted]) {
         resolve(this)
       } else {
         this.$$xe = XE
 
         resolve(this)
-        this[booted] = true
+        this[symbolBooted] = true
       }
     })
   }

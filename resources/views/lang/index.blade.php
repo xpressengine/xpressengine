@@ -86,10 +86,11 @@ XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     window.jQuery(function ($) {
+        // @FIXME 네가 왜 여기서 나와
         $('button.save').click(function (e) {
-            var url = XE.baseURL + '/' + XE.Router.settingsPrefix + '/lang/save'
+            var url = XE.config.getters['router/origin'] + '/' + XE.config.state.router.settingsPrefix + '/lang/save'
             var data = $(this).closest('form').serialize();
 
             window.XE.put(url, data).then(function (response) {

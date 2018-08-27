@@ -49,12 +49,12 @@ export default class Request extends App {
     this.config.set(options)
     this.options = {
       headers: {
-        'X-CSRF-TOKEN': options.userToken
+        'X-CSRF-TOKEN': this.$$config.getters['request/xsrfToken']
       }
     }
 
     this.axiosInstance = Axios.create({
-      baseURL: this.$$config.getters.urlOrigin
+      baseURL: this.$$config.getters['router/origin']
     })
 
     this.axiosInstance.interceptors.response.use(response => {

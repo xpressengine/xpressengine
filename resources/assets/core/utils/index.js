@@ -33,7 +33,7 @@ export {
  * @param {String} url
  */
 export function setBaseURL (url) {
-  config.commit(STORE_URL, { origin: url })
+  config.dispatch('router/changeOrigin', url)
 }
 
 /**
@@ -149,7 +149,7 @@ export function asset (resourceUri) {
 
   // 절대 경로로 변경
   if (!isURL(resourceUri)) {
-    result = config.getters.urlOrigin
+    result = config.getters['router/origin']
 
     if (result.substr(-1) === '/') {
       result = result.substr(0, -1)
