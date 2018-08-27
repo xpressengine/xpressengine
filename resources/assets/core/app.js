@@ -1,4 +1,5 @@
 import * as $$ from 'xe/utils'
+import Aspect from 'xe/aspect'
 import config from 'xe/config'
 
 const symbolPlugins = Symbol('Plugin')
@@ -46,5 +47,17 @@ export default class App {
         this[symbolBooted] = true
       }
     })
+  }
+
+  intercept (pointcut, name = null, advice = null) {
+    const inst = Aspect.aspect(pointcut, this[pointcut])
+
+    this[pointcut] = inst.proxy
+
+    // if (name && advice) {
+    //   return inst.around(name, advice)
+    // }
+
+    return inst
   }
 }
