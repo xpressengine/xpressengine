@@ -108,7 +108,7 @@ const config = [
       ],
 
       'core/editor/editor.bundle': [
-        pathInfo.core + '/editor/editor.core.js',
+        pathInfo.core + '/editor/index',
         pathInfo.core + '/editor/textarea.define.js'
       ],
 

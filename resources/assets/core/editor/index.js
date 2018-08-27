@@ -1,18 +1,18 @@
 import $ from 'jquery'
-import { eventify } from 'xe/utils'
-import Editor from './editor.editor'
-import EditorValidation from './editor.validation'
+import App from 'xe/app'
+import EditorDefine from './editorDefine'
+import EditorValidation from './editorValidation'
 
 /**
  * @class
  **/
-class EditorCore {
+class Editor extends App {
   constructor () {
+    super()
+
     this.toolsSet = {}
     this.editorSet = {}
     this.editorOptionSet = {}
-
-    eventify(this)
 
     /**
      * @DEPRECATED
@@ -40,6 +40,10 @@ class EditorCore {
     }
   }
 
+  static appName () {
+    return 'Editor'
+  }
+
   /**
    * 에디터를 정의한다.
    * @param {object} obj
@@ -53,7 +57,7 @@ class EditorCore {
     const interfaces = obj.interfaces
 
     if (EditorValidation.isValidEditorOptions(editorSettings, interfaces)) {
-      const editor = new Editor(editorSettings, interfaces)
+      const editor = new EditorDefine(editorSettings, interfaces)
       this.editorSet[editorSettings.name] = editor
       this.editorOptionSet[editorSettings.name] = editorSettings
     }
@@ -120,9 +124,9 @@ const Tools = function (obj) {
 }
 
 /**
- * @type       {EditorCore}
+ * @type       {Editor}
  */
-const XEeditor = new EditorCore()
+const XEeditor = new Editor()
 window.XEeditor = XEeditor
 
 export default XEeditor

@@ -1,6 +1,6 @@
-import EditorValidation from './editor.validation.js'
-import InstanceObj from './editor.instanceObj.js'
-import { eventify } from 'xe/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import EditorValidation from './editorValidation'
+import EditorInstance from './editorInstance'
+import { eventify } from 'xe/utils'
 import $ from 'jquery'
 
 /**
@@ -8,7 +8,7 @@ import $ from 'jquery'
  * @param {object} editorSettings
  * @param {object}interfaces
  **/
-class Editor {
+class EditorDefine {
   constructor (editorSettings, interfaces) {
     this.name = editorSettings.name
     this.configs = editorSettings.configs
@@ -42,7 +42,7 @@ class Editor {
     editorOptions = $.extend(this.configs || {}, editorOptions || {})
 
     if (EditorValidation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
-      const editorIntance = new InstanceObj(this.name, sel, editorOptions, toolInfoList)
+      const editorIntance = new EditorInstance(this.name, sel, editorOptions, toolInfoList)
       editorIntance._editor = this
       this.editorList[sel] = editorIntance
       this.initialize.call(this.editorList[sel], sel, options, editorOptions)
@@ -70,4 +70,4 @@ class Editor {
   }
 }
 
-export default Editor
+export default EditorDefine

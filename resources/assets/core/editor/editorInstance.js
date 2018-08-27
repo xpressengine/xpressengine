@@ -8,7 +8,7 @@ import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xp
  * @param {array} toolInfoList 에디터에 추가될 tool 정보 리스트
  **/
 
-class InstanceObj {
+class editorInstance {
   constructor (editorName, sel, editorOptions, toolInfoList) {
     /** @private */
     let _options = {
@@ -126,4 +126,4 @@ class InstanceObj {
   }
 }
 
-export default InstanceObj
+export default editorInstance
