@@ -62,17 +62,20 @@ class Rule
      */
     public static function output()
     {
-        $output = '<script type="text/javascript">'.PHP_EOL;
+        $output = [];
 
         $list = static::$ruleList;
 
-        foreach ($list as $rule) {
-            $output .= $rule->render();
+        foreach ($list as $runeName => $rules) {
+            $output[] = [
+                'ruleName' => $runeName,
+                'rules' => $rules->render()
+            ];
         }
 
-        $output .= '</script>';
+        // $output .= '</script>';
 
-        return $output;
+        return json_enc($output);
     }
 
     /**
@@ -130,13 +133,13 @@ class Rule
      */
     public function render()
     {
-        $rule = sprintf(
-            "var ruleSet = { ruleName: \"%s\", rules: %s }",
-            $this->ruleName,
-            json_enc($this->rules)
-        ).PHP_EOL;
+        // $rule = sprintf(
+        //     "var ruleSet = { ruleName: \"%s\", rules: %s }",
+        //     $this->ruleName,
+        //     json_enc($this->rules)
+        // ).PHP_EOL;
 
-        return $rule;
+        return $this->rules;
     }
 
     /**

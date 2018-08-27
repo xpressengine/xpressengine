@@ -39,6 +39,7 @@
                     settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
                 @endif
                 routes: {!! XeFrontend::output('route') !!},
+                ruleSet: {!! XeFrontend::output('rule') !!},
                 translation: {!! XeFrontend::output('translation') !!}
             });
         }
@@ -67,9 +68,6 @@
 
 <!-- CUSTOM TAGS -->
 {!! XeFrontend::output('html', 'body.append') !!}
-
-<!-- Rule -->
-{!! XeFrontend::output('rule') !!}
 
 @include(app('config')['xe.HtmlWrapper.alert'])
 
