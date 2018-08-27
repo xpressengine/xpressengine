@@ -1,28 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mutations from './mutations'
+import { module as lang } from 'xe/lang/store'
+import { module as router } from 'xe/router/store'
+import { module as validator } from 'xe/validator/store'
+import { module as request } from 'xe/request/store'
+import { module as user } from 'xe/user/store'
 
 Vue.use(Vuex)
+Vue.config.productionTip = false
 
 const state = {
-  url: {
-    origin: (window && window.location) ? window.location.origin : '',
-    fixedPrefix: 'plugin',
-    settingsPrefix: 'settings'
-  }
+  useXeSpinner: true,
+  userToken: null,
+  loginUserId: null
 }
-
-const getters = {
-  urlOrigin: state => {
-    return state.url.origin
-  }
-}
-
-const actions = {}
 
 export default new Vuex.Store({
-  state,
-  getters,
-  actions,
-  mutations
+  modules: {
+    lang,
+    request,
+    router,
+    user,
+    validator
+  }
 })
