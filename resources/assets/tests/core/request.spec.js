@@ -12,8 +12,8 @@ import XE from 'xe'
 describe('Request', function () {
   let onFulfilled
   let onRejected
-  const requestInstance = Request.getInstance()
-  const routerInstance = Router.getInstance()
+  const requestInstance = new Request()
+  const routerInstance = new Router()
 
   beforeEach(function () {
     onFulfilled = sinon.spy()
@@ -28,7 +28,17 @@ describe('Request', function () {
   describe('setup(options)', function () {
     const baseURL = 'http://localhost'
 
-    XE.setup({ baseURL })
+    XE.setup({
+      baseURL,
+      locale: 'ko',
+      defaultLocale: 'en',
+      translation: {
+        locales: [
+          { code: 'ko', nativeName: '한국어' },
+          { code: 'en', nativeName: 'English' }
+        ]
+      }
+    })
     routerInstance.boot(XE)
     requestInstance.boot(XE)
     requestInstance.setup({ baseURL })

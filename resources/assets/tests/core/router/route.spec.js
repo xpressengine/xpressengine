@@ -2,8 +2,10 @@ import { expect } from 'chai'
 import Router from 'xe/router'
 import Route from 'xe/router/route'
 
+/* global describe, it */
+
 describe('Route', function () {
-  let routerinstance = Router.getInstance()
+  let routerinstance = new Router()
 
   describe('Router의 baseURL을 참조하여 URL을 반환 함', function () {
     routerinstance.setup('http://localhost')

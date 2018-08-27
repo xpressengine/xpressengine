@@ -1,7 +1,21 @@
 import {assert, expect} from 'chai'
 import XE from 'xe'
 
+/* global describe, it */
+
 describe('XE', function () {
+  XE.setup({
+    baseURL: 'http://localhost',
+    locale: 'ko',
+    defaultLocale: 'en',
+    translation: {
+      locales: [
+        { code: 'ko', nativeName: '한국어' },
+        { code: 'en', nativeName: 'English' }
+      ]
+    }
+  })
+
   describe('EventEmitter', function () {
     it('eventify', function () {
       expect(XE).to.have.property('$$emit').that.is.a('function')
@@ -62,11 +76,6 @@ describe('XE', function () {
 
   describe('function', function () {
     it('locale', function () {
-      XE.configure({
-        locale: 'ko',
-        defaultLocale: 'en'
-      })
-
       assert.equal(XE.locale, 'ko')
       assert.equal(XE.defaultLocale, 'en')
 
@@ -76,7 +85,6 @@ describe('XE', function () {
 
     describe('isSameHost', function () {
       it('slash 및 protocol 생략해도 true', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('http://localhost'), true)
         assert.equal(XE.isSameHost('http://localhost/'), true)
         assert.equal(XE.isSameHost('http://localhost/public'), true)
@@ -86,42 +94,37 @@ describe('XE', function () {
       })
 
       it('폴더만 붙은 경우 true', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('http://localhost/docs'), true)
         assert.equal(XE.isSameHost('http://localhost/~docs'), true)
       })
 
       it('기본 port는 true', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('http://localhost:80'), true)
       })
 
       it('port가 다르면 false', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('http://localhost:8080/'), false)
       })
 
       it('protocol 다르면 false', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('https://localhost/'), false)
       })
 
       it('subdomain이 다르면 false', function () {
-        XE.configure({baseURL: 'http://localhost/'})
         assert.equal(XE.isSameHost('http://www.localhost/'), false)
         assert.equal(XE.isSameHost('http://docs.localhost/'), false)
       })
 
       describe('port가 지정된 경우', function () {
         it('port가 지정되거나 다르면 false', function () {
-          XE.configure({baseURL: 'http://localhost:8080/'})
+          XE.config.dispatch('router/changeOrigin', 'http://localhost:8080')
           assert.equal(XE.isSameHost('http://localhost:8080'), true)
           assert.equal(XE.isSameHost('http://localhost'), false)
           assert.equal(XE.isSameHost('http://localhost:80'), false)
         })
 
         it('https + custom protocol', function () {
-          XE.configure({baseURL: 'https://localhost:4433'})
+          XE.config.dispatch('router/changeOrigin', 'https://localhost:4433')
           assert.equal(XE.isSameHost('https://localhost:4433/board'), true)
           assert.equal(XE.isSameHost('http://localhost:4433/board'), false)
           assert.equal(XE.isSameHost('//localhost:4433/board'), true)
@@ -130,7 +133,7 @@ describe('XE', function () {
         })
 
         it('기본 port 나열 및 생략 가능', function () {
-          XE.configure({baseURL: 'https://localhost:443'})
+          XE.config.dispatch('router/changeOrigin', 'http://localhost:443')
           assert.equal(XE.isSameHost('https://localhost:443/board'), true)
           assert.equal(XE.isSameHost('https://localhost/board'), true)
         })

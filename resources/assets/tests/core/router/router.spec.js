@@ -3,8 +3,10 @@ import Router from 'xe/router'
 import Route from 'xe/router/route'
 import XE from 'xe'
 
+/* global describe, it */
+
 describe('Router', function () {
-  const routerInstance = Router.getInstance()
+  const routerInstance = new Router()
   routerInstance.boot(XE)
 
   describe('setup(baseURL, fixed, settings)', function () {
