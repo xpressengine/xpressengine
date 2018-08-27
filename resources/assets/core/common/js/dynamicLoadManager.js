@@ -1,3 +1,3 @@
 // @deprecated
 import DynamicLoadManager from '../../dynamic-load-manager'
-export default DynamicLoadManager.getInstance()
+export default new DynamicLoadManager()

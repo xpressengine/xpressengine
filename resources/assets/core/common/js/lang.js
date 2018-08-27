@@ -1,3 +1,3 @@
 // @deprecated
 import Lang from '../../lang'
-export default Lang.getInstance()
+export default new Lang()

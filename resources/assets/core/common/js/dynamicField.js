@@ -23,7 +23,7 @@ var DynamicField = function () {
     this.$container.$form = this.$container.find('.__xe_add_form')
     this.$container.$modal = this.$container.find('.__xe_df_modal')
     this.$container.$modal.$body = this.$container.$modal.find('.modal-body')
-    this.validator = Validator.getInstance()
+    this.validator = new Validator()
 
     this.attachEvent()
 
