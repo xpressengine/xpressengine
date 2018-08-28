@@ -6,6 +6,7 @@ import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
+import Form from 'xe/form'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -149,6 +150,11 @@ class XE {
     })
 
     $(() => {
+      $('form').each((idx, form) => {
+        /* eslint no-new:off */
+        new Form(form)
+      })
+
       $('body').on('click', 'a[target]', (e) => {
         const $this = $(e.target)
         const href = String($this.attr('href')).trim()
