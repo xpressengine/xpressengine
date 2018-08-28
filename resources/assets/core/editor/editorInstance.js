@@ -1,4 +1,5 @@
 import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import $ from 'jquery'
 
 /**
  * @class

@@ -3,6 +3,7 @@ import App from 'xe/app'
 import EditorDefine from './editorDefine'
 import EditorValidation from './editorValidation'
 import Tool from './tool'
+import XE from 'xe'
 
 /**
  * @class
@@ -18,31 +19,32 @@ class Editor extends App {
     /**
      * @DEPRECATED
      **/
-    this.tools = {}
-    /**
-     * @DEPRECATED
-     **/
-    this.tools.define = obj => {
-      if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
-        console.warn('DEPRECATED: XEeditor.tools.define() is deprecated. use XEeditor.defineTool')
-        console.trace()
+    this.tools = {
+      define: obj => {
+        if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
+          console.warn('DEPRECATED: XEeditor.tools.define() is deprecated. use XEeditor.defineTool')
+          console.trace()
+        }
+        this.defineTool(obj)
+      },
+      get: id => {
+        if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
+          console.warn('DEPRECATED: XEeditor.tools.get() is deprecated. use XEeditor.getTool')
+          console.trace()
+        }
+        return this.getTool(id)
       }
-      this.defineTool(obj)
-    }
-    /**
-     * @DEPRECATED
-     **/
-    this.tools.get = id => {
-      if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
-        console.warn('DEPRECATED: XEeditor.tools.get() is deprecated. use XEeditor.getTool')
-        console.trace()
-      }
-      return this.getTool(id)
     }
   }
 
   static appName () {
     return 'Editor'
+  }
+
+  boot (XE) {
+    super.boot(XE)
+
+    return Promise.resolve(this)
   }
 
   /**
@@ -67,7 +69,7 @@ class Editor extends App {
   /**
    * 에디터를 반환한다.
    * @param {string} name
-   * @return {object}
+   * @return {EditorDefine}
    **/
   getEditor (name) {
     return this.editorSet[name]
@@ -119,5 +121,6 @@ class Editor extends App {
  */
 const XEeditor = new Editor()
 window.XEeditor = XEeditor
+XE.registerApp('Editor', XEeditor)
 
 export default XEeditor
