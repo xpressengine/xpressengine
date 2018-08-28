@@ -5,6 +5,7 @@ import Translator from 'xe-common/translator' // @FIXME https://github.com/xpres
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 import config from 'xe/config'
+import { getForm } from 'xe/form'
 
 const originalRules = {}
 
@@ -522,15 +523,14 @@ export default class Validator extends App {
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }
-        })
-
-        $('body').on('submit', 'form[data-rule]', (event) => {
-          try {
-            this.check($(event.target))
-          } catch (e) {
-            // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
-            event.preventDefault()
-          }
+          getForm(this).$$on('submit', (eventName, formEl, jqEvent) => {
+            try {
+              that.check($(formEl))
+            } catch (e) {
+              // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
+              jqEvent.preventDefault()
+            }
+          })
         })
       })
 
