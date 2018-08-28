@@ -83,6 +83,8 @@ export default class EventEmitter {
     if (typeof eventName !== 'string') return
     if (!(this.eventMaps[eventName] instanceof Map)) return
 
+    const listeners = []
+
     // listener 호출
     this.eventMaps[eventName].forEach((item, symbolKey) => {
       let listenerContext = item.context || this.target
@@ -90,8 +92,11 @@ export default class EventEmitter {
       if (item.once) this.eventMaps[eventName].delete(symbolKey)
 
       let listenerArgs = (args.length) ? [eventName, ...args] : [eventName]
-      item.listener.apply(listenerContext, listenerArgs)
+
+      listeners.push(item.listener.apply(listenerContext, listenerArgs))
     })
+
+    return Promise.all(listeners)
   }
 
   $$off (eventName, symbolKey) {

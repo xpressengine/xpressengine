@@ -527,9 +527,11 @@ export default class Validator extends App {
             try {
               that.check($(formEl))
             } catch (e) {
-              // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
               jqEvent.preventDefault()
+              return Promise.reject(e)
             }
+
+            return Promise.resolve()
           })
         })
       })

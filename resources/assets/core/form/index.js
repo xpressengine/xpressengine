@@ -28,9 +28,21 @@ export default class Form {
     this.$element = $(element)
     formElements.set(element, this)
 
-    // @TODO debounce
-    this.$element.on('submit', function (jqueryEvent) {
-      that.$$emit('submit', element, jqueryEvent)
+    const emitFormSubmit = $$.debounce(function emitFormSubmit (element, event) {
+      return that.$$emit('submit', element, event)
+    }, 750, { leading: true, trailing: false })
+
+    this.$element.on('submit', function (event) {
+      event.preventDefault()
+
+      emitFormSubmit(element, event)
+        .then(() => {
+          if (event.isDefaultPrevented()) {
+            this.submit()
+          }
+        })
+        .catch(() => {
+        })
     })
   }
 }
