@@ -2,6 +2,7 @@ import $ from 'jquery'
 import App from 'xe/app'
 import EditorDefine from './editorDefine'
 import EditorValidation from './editorValidation'
+import Tool from './tool'
 
 /**
  * @class
@@ -79,7 +80,7 @@ class Editor extends App {
    */
   defineTool (obj) {
     if (EditorValidation.isValidToolsObject(obj)) {
-      this.toolsSet[obj.id] = new Tools(obj)
+      this.toolsSet[obj.id] = new Tool(obj)
     }
   }
 
@@ -87,7 +88,7 @@ class Editor extends App {
    * EditorTool 반환
    *
    * @param {string} id
-   * @return {object}
+   * @return {Tool}
    */
   getTool (id) {
     return this.toolsSet[id]
@@ -110,16 +111,6 @@ class Editor extends App {
    **/
   getDomSelector (id) {
     return '[xe-tool-id="' + id + '"]'
-  }
-}
-
-/**
- * @private
- * @class Tools
- **/
-const Tools = function (obj) {
-  for (let o in obj) {
-    this[o] = obj[o]
   }
 }
 
