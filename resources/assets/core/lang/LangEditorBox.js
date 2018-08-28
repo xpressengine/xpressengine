@@ -114,8 +114,8 @@ class LangEditorBox {
     this.lines = lines
 
     window.XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + _this.seq + '-' + locale
-      var value = _this.getValueFromLinesWithLocale(locale)
+      var selector = '#input-' + _this.seq + '-' + locale.code
+      var value = _this.getValueFromLinesWithLocale(locale.code)
       $(selector).val(value)
     })
   }
