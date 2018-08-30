@@ -1,10 +1,11 @@
+import { getForm } from 'xe/form'
+
 // @TODO 재작성. 사용되지 않음
 (function (XE, $) {
   'use strict'
-
   /**
-   * @class
-   * */
+  * @class
+  */
   function Draft (elem, key, callback, withForm, container, apiUrl) {
     var _this = this
     this.key = key
@@ -42,21 +43,23 @@
   }
 
   /**
-   * @lends Draft
-   * */
+  * @lends Draft
+  */
   Draft.prototype = {
     /**
-     * 초기화한다.
-     * @function
-     * */
+    * 초기화한다.
+    * @function
+    */
     init: function () {
       this.uid = this._getUid()
       this.appendComponent()
+
+      XE.Lang.requestTransAll(['xe::draftSave', 'xe::autoSave'])
     },
 
     _getUid: function () {
       return Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15)
+      Math.random().toString(36).substring(2, 15)
     },
 
     bindEvents: function () {
@@ -79,7 +82,7 @@
             _this.$component.xeModal('hide')
             break
           case 'collapse':
-            _this.$component.collapse('hide').find('.panel-body').empty()
+            _this.$component.show().find('.panel-body').empty()
             break
         }
       })
@@ -99,9 +102,9 @@
         })
       })
 
-      $(_this.elem).closest('form').on('submit', function (e) {
-        _this.deleteAuto(_this.autoDraftId)
-      })
+      getForm($(_this.elem).closest('form')).$$on('submit', () => {
+        return _this.deleteAuto(_this.autoDraftId) // Promise
+      }, { name: 'xe.draft' })
     },
 
     toggle: function (show) {
@@ -145,7 +148,7 @@
         case 'collapse':
 
           if (!show && _this.$component.hasClass('in')) {
-            _this.$component.collapse('hide')
+            _this.$component.hide()
           } else {
             _this.load({ key: _this.key }, function (data) {
               var temp = `<div class="draft_save_list">`
@@ -172,7 +175,7 @@
               temp += `</div>`
 
               _this.$component.find('.panel-body').html(temp)
-              _this.$component.collapse('show')
+              _this.$component.show()
             })
           }
 
@@ -323,15 +326,23 @@
     },
 
     deleteAuto: function (key) {
-      var key = key || this.key
+      key = key || this.key
 
-      if (key) {
-        XE.ajax({
-          url: this.apiUrl.auto.unset,
-          type: 'post',
-          data: 'key=' + key
-        })
-      }
+      return new Promise((resolve, reject) => {
+        if (key) {
+          XE.ajax({
+            url: this.apiUrl.auto.unset,
+            type: 'post',
+            data: 'key=' + key,
+            success: () => {
+              resolve()
+            },
+            error: (e) => {
+              reject(e)
+            }
+          })
+        }
+      })
     },
 
     load: function (param, callback) {
@@ -471,7 +482,15 @@
     }
   }
 
+  // jQuery 플러그인
   $.fn.draft = function (args) {
+    /**
+     * 옵션
+     * @type {object}
+     * @prop {?jQuery} container 임시 저장 목록이 표시될 영역
+     * @prop {boolean} withForm form의 전체 fields 데이터 저장 여부
+     * @prop {?function} callback
+     */
     var defaultArgs = {
       container: null,
       withForm: false,
@@ -489,13 +508,11 @@
 
     $(args.btnLoad).unbind('click.draft').bind('click.draft', function (e) {
       e.preventDefault()
-
       draft.toggle(true)
     })
 
     $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
       e.preventDefault()
-
       draft.draftSet()
     })
 

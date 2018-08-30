@@ -121,6 +121,7 @@ const config = [
       'core/common/js/storeCategory': [pathInfo.common + '/js/storeCategory.js'],
       'core/user/settings/edit': [pathInfo.user + '/settings/edit.js'],
       'core/settings/js/admin.bundle': [pathInfo.settings + '/js/admin.js'],
+      'core/common/js/draft': [pathInfo.common + '/js/draft.js'],
 
       // gulp assets:tree
       // @FIXME
