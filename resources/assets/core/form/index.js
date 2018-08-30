@@ -4,6 +4,11 @@ import * as $$ from 'xe/utils'
 const formElements = new WeakMap()
 
 export function getForm (element) {
+  // jQuery instance
+  if (element instanceof $) {
+    element = element[0]
+  }
+
   if (typeof element.name === 'string' && element.name !== 'form') {
     element = $(element).closest('form')[0]
   }
