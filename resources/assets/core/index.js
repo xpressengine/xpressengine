@@ -1,5 +1,3 @@
-const booted = Symbol('booted')
-
 // external libraries
 import $ from 'jquery'
 import blankshield from 'blankshield'
@@ -21,7 +19,9 @@ import Translator from 'xe/common/js/translator'
 import Validator from 'xe/validator'
 import { STORE_URL, CHANGE_ORIGIN } from './router/store'
 import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
+import { STORE_TOKEN } from './request/store';
 
+const booted = Symbol('booted')
 const symbolApp = Symbol('App')
 
 const defaultConfig = {
@@ -68,6 +68,8 @@ class XE {
         this.options.translation.defaultLocale = state.lang.default
         this.options.translation.locale = state.lang.current
       } else if (mutation.type === `lang/${CHANGE_LOCALE}`) {
+        this.options.locale = state.lang.current
+      } else if (mutation.type === `request/${STORE_TOKEN}`) {
         this.options.locale = state.lang.current
       }
     })
@@ -338,10 +340,10 @@ class XE {
    */
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, url)
+      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, { url: url })
+      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, { url: url })
       url = undefined
     }
 

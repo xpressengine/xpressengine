@@ -223,7 +223,7 @@
       dataType: 'json',
       data: options.data || {},
       headers: {
-        'X-CSRF-TOKEN': XE.Request.config.userToken,
+        'X-CSRF-TOKEN': XE.config.getters['request/xsrfToken'],
         'X-XE-Async-Expose': true
       }
     }
