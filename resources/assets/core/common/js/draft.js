@@ -54,7 +54,7 @@ import { getForm } from 'xe/form'
       this.uid = this._getUid()
       this.appendComponent()
 
-      XE.Lang.requestTransAll(['xe::draftSave', 'xe::autoSave'])
+      XE.Lang.requestTransAll(['xe::draftSave', 'xe::autoSave', 'xe::draftLoad'])
     },
 
     _getUid: function () {

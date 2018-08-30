@@ -945,6 +945,10 @@ return [
         'ko' => '임시저장',
         'en' => 'Manual Save',
     ],
+    'draftLoad' => [
+        'ko' => '임시저장 로드',
+        'en' => 'Import',
+    ],
     'enterKeyword' => [
         'ko' => '검색어를 입력하세요',
         'en' => 'Enter keyword',
