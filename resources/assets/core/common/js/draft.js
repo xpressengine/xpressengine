@@ -113,7 +113,7 @@ import { getForm } from 'xe/form'
 
               data.forEach(function (item, i) {
                 temp += `<li>`
-                temp += `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="modal">${item.val}</a>`
+                temp += `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="modal">${$($.parseHTML(item.val)).text()}</a>`
                 temp += `<div class="draft_info">`
 
                 if (item.is_auto == 1) {

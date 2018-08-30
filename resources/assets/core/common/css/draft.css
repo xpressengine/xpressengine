@@ -2,6 +2,7 @@
 .draft_save_list {
   width: 100%;
   max-height: 350px;
+  overflow-y: scroll;
   border: 0px solid #ddd;
   background-color: #fff
 }
@@ -83,6 +84,7 @@
 
 .draft_info .btn_draft_delete {
   display: inline-block;
+  margin-right: 20px;
   width: 14px;
   height: 14px;
   border-radius: 50%;
