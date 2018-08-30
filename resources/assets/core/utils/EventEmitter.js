@@ -83,8 +83,12 @@ export default class EventEmitter {
   }
 
   $$emit (eventName, ...args) {
-    if (typeof eventName !== 'string') return
-    if (!(this.eventMaps[eventName] instanceof Map)) return
+    if (typeof eventName !== 'string') {
+      return Promise.resolve()
+    }
+    if (!(this.eventMaps[eventName] instanceof Map)) {
+      return Promise.resolve()
+    }
 
     let listenerChain = Promise.resolve()
 
