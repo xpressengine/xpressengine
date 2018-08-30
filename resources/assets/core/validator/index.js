@@ -523,7 +523,7 @@ export default class Validator extends App {
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }
-          getForm(this).$$on('submit', (eventName, formEl, jqEvent) => {
+          getForm(this).$$on('submit', function (eventName, formEl, jqEvent) {
             try {
               that.check($(formEl))
             } catch (e) {
@@ -532,7 +532,7 @@ export default class Validator extends App {
             }
 
             return Promise.resolve()
-          })
+          }, { name: 'xe.validator' })
         })
       })
 
