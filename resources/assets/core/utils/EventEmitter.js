@@ -22,12 +22,12 @@ export default class EventEmitter {
   static extend (target) {
     const emitter = new EventEmitter(target)
 
-    target.$$on = (eventName, listener, context = null) => {
-      return emitter.$$on(eventName, listener, context)
+    target.$$on = (eventName, listener, options = {}) => {
+      return emitter.$$on(eventName, listener, options)
     }
 
-    target.$$once = (eventName, listener, context = null) => {
-      return emitter.$$once(eventName, listener, context)
+    target.$$once = (eventName, listener, options = {}) => {
+      return emitter.$$once(eventName, listener, options)
     }
 
     target.$$emit = (eventName, ...args) => {
@@ -53,7 +53,7 @@ export default class EventEmitter {
     }
   }
 
-  $$on (eventName, listener, context = null, options = {}) {
+  $$on (eventName, listener, options = {}) {
     if (typeof eventName !== 'string') return
     if (typeof listener !== 'function') return
 
@@ -67,36 +67,37 @@ export default class EventEmitter {
     // listener 등록
     const symbolKey = Symbol('EventEmitter Listener')
     this.eventMaps[eventName].set(symbolKey, {
+      name: options.name,
       listener,
-      context,
-      once: options.once
+      options
     })
+
+    this.eventMaps[eventName] = sortListener(this.eventMaps[eventName])
 
     return symbolKey
   }
 
-  $$once (eventName, listener, context = null) {
-    return this.$$on(eventName, listener, context, { 'once': true })
+  $$once (eventName, listener, options = {}) {
+    options.once = true
+    return this.$$on(eventName, listener, options)
   }
 
   $$emit (eventName, ...args) {
     if (typeof eventName !== 'string') return
     if (!(this.eventMaps[eventName] instanceof Map)) return
 
-    const listeners = []
+    let listenerChain = Promise.resolve()
 
     // listener 호출
     this.eventMaps[eventName].forEach((item, symbolKey) => {
-      let listenerContext = item.context || this.target
-
-      if (item.once) this.eventMaps[eventName].delete(symbolKey)
+      if (item.options.once) this.eventMaps[eventName].delete(symbolKey)
 
       let listenerArgs = (args.length) ? [eventName, ...args] : [eventName]
 
-      listeners.push(item.listener.apply(listenerContext, listenerArgs))
+      listenerChain = listenerChain.then(() => item.listener.apply(this.target, listenerArgs))
     })
 
-    return Promise.all(listeners)
+    return listenerChain
   }
 
   $$off (eventName, symbolKey) {
@@ -112,4 +113,31 @@ export default class EventEmitter {
 
     this.eventMaps[eventName] = new Map()
   }
+}
+
+const sortListener = (arr) => {
+  const sortList = Array.from(arr)
+    .map(([symbol, listener]) => ({symbol, listener}))
+    .sort((a, b) => {
+      const name = b.listener.name
+      const before = a.listener.options.before
+
+      if (!name || !before) {
+        return 0
+      }
+
+      if (before === name) {
+        return -1
+      }
+
+      return 0
+    })
+
+  const result = new Map()
+
+  sortList.forEach((item) => {
+    result.set(item.symbol, item.listener)
+  })
+
+  return result
 }
