@@ -8,6 +8,7 @@ import Config from './config'
 import RequestEntity from './request_entity'
 import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
+import { STORE_TOKEN } from './store';
 
 export default class Request extends App {
   constructor () {
@@ -28,6 +29,12 @@ export default class Request extends App {
 
     return new Promise((resolve) => {
       super.boot(XE)
+
+      this.$$config.subscribe((mutation, state) => {
+        if (mutation.type === `request/${STORE_TOKEN}`) {
+          this.options.headers['X-CSRF-TOKEN'] = state.request.xsrfToken
+        }
+      })
 
       XE.$$on('setup', (eventName, options) => {
         this.setup(options)
