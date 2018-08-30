@@ -30,14 +30,6 @@ import { getForm } from 'xe/form'
 
     this.init()
     this.bindEvents()
-    this.load({ key: key }, function (data) {
-      data.forEach(function (obj, i) {
-        if (obj.is_auto === 1) {
-          $(_this.elem).val(obj.val)
-          _this.callback(obj)
-        }
-      })
-    })
 
     return this
   }
