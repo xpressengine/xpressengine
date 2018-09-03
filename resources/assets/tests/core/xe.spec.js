@@ -1,5 +1,11 @@
 import {assert, expect} from 'chai'
 import XE from 'xe'
+import Component from 'xe/component'
+import DynamicLoadManager from 'xe/dynamic-load-manager'
+import Lang from 'xe/lang'
+import Request from 'xe/request'
+import Router from 'xe/router'
+import Validator from 'xe/validator'
 
 describe('XE', function () {
   describe('EventEmitter', function () {
@@ -24,14 +30,38 @@ describe('XE', function () {
       })
     })
 
-    it('sub', function () {
+    describe('locale', function () {
+      XE.setup({
+        locale: 'ko',
+        defaultLocale: 'en',
+        translation: {
+          locales: ['ko', 'en']
+        }
+      })
+
+      describe('local/locales 속성을 가지고', function () {
+        it('값을 확인할 수 있어야 함', function () {
+          assert.equal(XE.locale, 'ko')
+          assert.equal(XE.getLocale(), 'ko') // @deprecated
+
+          assert.equal(XE.defaultLocale, 'en')
+          assert.equal(XE.getDefaultLocale(), 'en') // @deprecated
+        })
+      })
+    })
+  })
+
+  describe('moduels/functions', function () {
+    it('설정된 서브 모듈의 instance를 가져야 함', function () {
       expect(XE).to.have.property('Utils')
-      expect(XE).to.have.property('Validator')
-      expect(XE).to.have.property('Lang')
-      expect(XE).to.have.property('Request')
+      expect(XE).to.have.property('Validator').that.is.instanceof(Validator)
+      expect(XE).to.have.property('Lang').that.is.instanceof(Lang)
+      expect(XE).to.have.property('Request').that.is.instanceof(Request)
+      expect(XE).to.have.property('Component').that.is.instanceof(Component)
+      expect(XE).to.have.property('DynamicLoadManager').that.is.instanceof(DynamicLoadManager)
+      expect(XE).to.have.property('Router').that.is.instanceof(Router)
       expect(XE).to.have.property('Progress')
-      expect(XE).to.have.property('Component')
-      expect(XE).to.have.property('DynamicLoadManager')
+      expect(XE).to.have.property('Translator')
       expect(XE).to.have.property('moment') // @deprecated
       expect(XE).to.have.property('Translator') // @deprecated
     })
@@ -56,7 +86,12 @@ describe('XE', function () {
       XE.$$on('setup', function () {
         done()
       })
-      XE.setup({})
+      XE.setup({
+        locale: 'ko',
+        translation: {
+          locales: ['ko', 'en']
+        }
+      })
     })
   })
 
@@ -64,7 +99,10 @@ describe('XE', function () {
     it('locale', function () {
       XE.configure({
         locale: 'ko',
-        defaultLocale: 'en'
+        defaultLocale: 'en',
+        translation: {
+          locales: ['ko', 'en']
+        }
       })
 
       assert.equal(XE.locale, 'ko')

@@ -67,11 +67,13 @@ class XE {
 
       this.Lang.set(exposed.translations)
 
-      Object.entries(exposed.rules).forEach((rule) => {
-        if (rule[1]) {
-          this.Validator.setRules(rule[0], rule[1])
-        }
-      })
+      if(exposed.rules) {
+        Object.entries(exposed.rules).forEach((rule) => {
+          if (rule[1]) {
+            this.Validator.setRules(rule[0], rule[1])
+          }
+        })
+      }
     })
 
     $(() => {

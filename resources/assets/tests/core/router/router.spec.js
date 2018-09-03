@@ -1,9 +1,15 @@
 import { expect } from 'chai'
 import { routerInstance } from 'xe/router'
+import { requestInstance } from 'xe/request'
 import Route from 'xe/router/route'
+import XE from 'xe'
 
 describe('Router', function () {
-  routerInstance.boot({ $$on: () => {} })
+  requestInstance.boot(XE)
+  routerInstance.boot(XE)
+  requestInstance.$$emit('exposed', [
+    {"manage.dynamicField.index":{"uri":"settings\/dynamicField","methods":["GET","HEAD"],"params":[]}}
+  ])
 
   describe('setup(baseURL, fixed, settings)', function () {
     describe('fixed, settings는 지정하지 않아도 됨', function () {

@@ -1,8 +1,10 @@
 const symbolRawResponse = Symbol('Response')
+const symbolExposed = Symbol('exposed')
 
 export default class ResponseEntity {
   constructor (response) {
     this[symbolRawResponse] = response
+    this[symbolExposed] = response.data._XE_
     return this
   }
 
@@ -27,7 +29,7 @@ export default class ResponseEntity {
   }
 
   get exposed () {
-    return this[symbolRawResponse].data._XE_ || false
+    return this[symbolExposed]
   }
 
   removeExposed () {
