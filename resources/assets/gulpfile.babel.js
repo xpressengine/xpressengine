@@ -27,8 +27,9 @@ gulp.task('jsdoc', () => {
     gulp.src('./jsdoc')
       .pipe($.clean({ force: true })),
     gulp.src([
-      '**/*.js',
-      '!xe-ui-component/slickgrid/*'
+      'core/**/*.js',
+      '!xe-ui-component/slickgrid/*',
+      '!node_modules/**/*'
     ])
       .pipe(jsdoc({
         'opts': {

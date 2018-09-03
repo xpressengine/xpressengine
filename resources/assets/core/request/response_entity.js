@@ -1,6 +1,9 @@
 const symbolRawResponse = Symbol('Response')
 
-export default class ResponseEntity {
+/**
+ * @class
+ */
+class ResponseEntity {
   constructor (response) {
     this[symbolRawResponse] = response
     return this
@@ -34,3 +37,5 @@ export default class ResponseEntity {
     delete this[symbolRawResponse].data._XE_
   }
 }
+
+export default ResponseEntity

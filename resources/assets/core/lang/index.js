@@ -4,7 +4,12 @@ import $ from 'jquery'
 import * as $$ from 'xe/utils'
 import config from 'xe/config'
 
-export default class Lang extends App {
+/**
+ * @class
+ * @extends App
+ * @requires Translator
+ */
+class Lang extends App {
   constructor () {
     super()
 
@@ -42,7 +47,6 @@ export default class Lang extends App {
 
   /**
   * 번역리스트를 Translator 객체에 담는다.
-  * @memberof module:Lang
   * @param {object} items
   */
   set (items) {
@@ -54,7 +58,6 @@ export default class Lang extends App {
 
   /**
   * Locale을 세팅한다.
-  * @memberof module:Lang
   * @param {locales} locales
   */
   setLocales (locales) {
@@ -64,7 +67,6 @@ export default class Lang extends App {
 
   /**
   * language code를 반환한다.
-  * @memberof module:Lang
   * @param {string} locale
   * @return {string}
   */
@@ -74,7 +76,6 @@ export default class Lang extends App {
 
   /**
   * 현재 선택된 locale 정보를 반환한다.
-  * @memberof module:Lang
   * @return {string}
   */
   getCurrentLocale () {
@@ -83,7 +84,6 @@ export default class Lang extends App {
 
   /**
   * 등록된 번역 id에 대한 번역 메시지를 반환한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {object} parameters
   * @return {string}
@@ -94,7 +94,6 @@ export default class Lang extends App {
 
   /**
   * 동적으로 번역 id에 해당하는 메시지를 가져와 callback으로 반환한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {object} parameters
   * @param {function} callback @deprecated
@@ -122,7 +121,6 @@ export default class Lang extends App {
 
   /**
   * id list로 번역리스트를 요청한다.
-  * @memberof module:Lang
   * @param {array} langKeys
   * @param {function} callback @deprecated
   * @return {Promise}
@@ -150,7 +148,6 @@ export default class Lang extends App {
 
   /**
   * number에 따라 번역을 선택하여 주어진 메시지를 전달한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {number} number
   * @param {object} parameters
@@ -159,6 +156,8 @@ export default class Lang extends App {
     return Translator.transChoice(id, number, parameters)
   }
 }
+
+export default Lang
 
 const _items = {
   af: 'af-ZA',

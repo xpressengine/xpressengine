@@ -7,7 +7,8 @@ import XE from 'xe'
 
 /**
  * @class
- **/
+ * @extends App
+ */
 class Editor extends App {
   constructor () {
     super()
@@ -41,6 +42,9 @@ class Editor extends App {
     return 'Editor'
   }
 
+  /**
+   * @param {XE} XE
+   */
   boot (XE) {
     super.boot(XE)
 

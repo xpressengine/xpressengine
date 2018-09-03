@@ -15,7 +15,10 @@ const state = {
   loginUserId: null
 }
 
-export default new Vuex.Store({
+/**
+ * Config
+ */
+const config = new Vuex.Store({
   modules: {
     lang,
     request,
@@ -24,3 +27,5 @@ export default new Vuex.Store({
     validator
   }
 })
+
+export default config

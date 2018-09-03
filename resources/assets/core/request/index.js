@@ -10,7 +10,11 @@ import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
 import { STORE_TOKEN } from './store';
 
-export default class Request extends App {
+/**
+ * @class
+ * @extends App
+ */
+class Request extends App {
   constructor () {
     super()
     eventify(this)
@@ -22,6 +26,11 @@ export default class Request extends App {
     return 'Request'
   }
 
+  /**
+   *
+   * @param {XE} XE
+   * @return {Promise}
+   */
   boot (XE) {
     if (this.booted()) {
       return Promise.resolve(this)
@@ -82,6 +91,13 @@ export default class Request extends App {
     })
   }
 
+  /**
+   *
+   * @param {string} url
+   * @param {*} options
+   * @param {*} axiosConfig
+   * @return {Axios}
+   */
   request (url, options, axiosConfig = {}) {
     this.$$emit('start', new RequestEntity({
       method: (options.method === 'delete') ? 'post' : options.method,
@@ -193,4 +209,5 @@ export default class Request extends App {
   }
 }
 
+export default Request
 export const requestInstance = new Request()

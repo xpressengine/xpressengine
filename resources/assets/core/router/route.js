@@ -1,7 +1,11 @@
 import trimEnd from 'lodash/trimEnd'
 import config from 'xe/config'
 
-export default class Route {
+/**
+ * @class
+ * @extends App
+ */
+class Route {
   constructor (router, name, route) {
     this.router = router
     this.name = name
@@ -10,6 +14,11 @@ export default class Route {
     this.params = route.params || {}
   }
 
+  /**
+   *
+   * @param {object} params
+   * @return {string}
+   */
   url (params = {}) {
     let uri = this.uri
     let _params = Object.assign({}, this.params, params)
@@ -35,14 +44,25 @@ export default class Route {
     return trimEnd(config.getters['router/origin'] + '/' + uri, '/#? ')
   }
 
+  /**
+   * @return {object}
+   */
   getParams () {
     return this.params
   }
 
+  /**
+   * @return {array}
+   */
   allowedMethods () {
     return this.methods
   }
 
+  /**
+   *
+   * @param {string} method
+   * @return {boolean}
+   */
   isAllow (method) {
     let isAllow = true
 
@@ -53,3 +73,5 @@ export default class Route {
     return isAllow
   }
 }
+
+export default Route

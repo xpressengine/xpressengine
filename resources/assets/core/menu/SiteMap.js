@@ -1,6 +1,6 @@
 /**
- * @namespace SiteMap
- * */
+ * @module SiteMap
+ */
 var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
   var _this
   var _$wrap = $('#menuContainer')
@@ -12,9 +12,11 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
   return {
     /**
      * SiteMap 초기설정을 한다.
-     * @memberof SiteMap
+     * @private
+     * @memberof module:SiteMap
      * @return {object}
-     * */
+     * @instance
+     */
     init: function () {
       _this = this
 
@@ -35,9 +37,10 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
 
     /**
      * sitemap페이지에서 사용되는 기본 dom 템플릿을 리턴한다.
-     * @memberof SiteMap
+     * @memberof module:SiteMap
+     * @instance
      * @return htmlstring
-     * */
+     */
     getTemplate: function () {
       return [
         '<div class="col-sm-12">',
@@ -63,10 +66,11 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * Node 템플릿을 리턴한다.
-     * @memberof SiteMap
+     * @memberof module:SiteMap
      * @param {object} item
      * @return {string}
-     * */
+     * @instance
+     */
     getNodeTemplate: function (item) {
       var url = _this.getUrl(item)
       var homeOn = ''
@@ -97,10 +101,11 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * Menu에 사용되는 HTML을 만든다.
-     * @memberof SiteMap
+     * @memberof module:SiteMap
      * @param {object} menus
      * @return {string}
-     * */
+     * @instance
+     */
     generateDom: function (menus) {
       var menu = []
 
@@ -121,8 +126,9 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * 사이트맵에서 사용되는 이벤트 핸들러를 등록한다.
-     * @memberof SiteMap
-     * */
+     * @memberof module:SiteMap
+     * @instance
+     */
     bindEvents: function () {
       $('.btn-more').on('click', function () {
         var $moreArea = $(this).parents('.item-content').find('.more-area')
@@ -170,6 +176,10 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
         }
       })
     },
+    /**
+     * @memberof module:SiteMap
+     * @instance
+     */
     changeHome: function ($current, $selected) {
       $current.find('.btn-sethome').removeClass('home-on')
       var currentOriginUrl = _this.getUrl($current.data('item'))
@@ -181,8 +191,9 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * Tree를 구성한다.
-     * @memberof SiteMap
-     * */
+     * @memberof module:SiteMap
+     * @instance
+     */
     runSortable: function () {
       var config = {
         update: _this.updateNode
@@ -192,14 +203,15 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * 기본템플릿을 구성한다.
-     * @memberof SiteMap
-     * */
+     * @memberof module:SiteMap
+     * @instance
+     */
     appendDefaultTemplate: function () {
       _$wrap.append(this.getTemplate())
     },
     /**
      * Node정보를 저장한다.
-     * @memberof SiteMap
+     * @memberof module:SiteMap
      * @param {object} obj
      * <pre>
      *   item: jquery object. move된 NODE
@@ -208,7 +220,8 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
      *   ordering: node ordering
      * </pre>
      * @description 변경된 Node를 업데이트 한다
-     * */
+     * @instance
+     */
     updateNode: function (obj) {
       Tree.setPrevent(true)
 
@@ -243,7 +256,7 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     /**
      * UI상의 MenuId를 업데이트한다.
-     * @memberof SiteMap
+     * @memberof module:SiteMap
      * @param {element} $item
      * @param {string} menuId
      * @description
@@ -251,7 +264,8 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
      *   - 하위 노드를 찾아가며 menuId를 변경한다
      *   - 재귀
      * </pre>
-     * */
+     * @instance
+     */
     updateMenuId: function ($item, menuId) {
       var itemData = $item.find('> .item-content').data('item')
       var $link = $item.find('> .item-content .item-info .ellipsis:eq(0) a')

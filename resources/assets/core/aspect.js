@@ -2,7 +2,11 @@ const symbolAdvices = Symbol('Advices')
 const mapTargets = new WeakMap()
 const symbolDummy = Symbol('dummy')
 
-export default class Aspect {
+/**
+ * Aspect
+ * @property {Proxy} proxy
+ */
+class Aspect {
   constructor (pointcut, target) {
     if (this.proxy) return this
 
@@ -54,6 +58,11 @@ export default class Aspect {
     return this
   }
 
+  /**
+   *
+   * @param {string} pointcut
+   * @param {function} target
+   */
   static aspect (pointcut, target) {
     if (mapTargets.has(target.prototype)) {
       return mapTargets.get(target.prototype)
@@ -62,18 +71,36 @@ export default class Aspect {
     return new Aspect(pointcut, target)
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {function} advice
+   * @return {Aspect}
+   */
   before (name, advice) {
     this.registerAdvice('before', name, advice)
 
     return this
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {function} advice
+   * @return {Aspect}
+   */
   after (name, advice) {
     this.registerAdvice('after', name, advice)
 
     return this
   }
 
+  /**
+   * @private
+   * @param {string} position
+   * @param {object} thisArg
+   * @param {object} adviceArguments
+   */
   applyTarget (position, thisArg, adviceArguments) {
     if (this[symbolAdvices].has(position)) {
       let advices = this[symbolAdvices].get(position)
@@ -84,10 +111,20 @@ export default class Aspect {
     }
   }
 
+  /**
+   * @param {string} position
+   * @param {*} name
+   * @return {function} advice
+   */
   getAdvice (position, name) {
     return this[symbolAdvices].get(position).get(name)
   }
 
+  /**
+   * @param {string} position
+   * @param {*} name
+   * @param {*} advice
+   */
   registerAdvice (position, name, advice) {
     if (!this[symbolAdvices].has(position)) {
       this[symbolAdvices].set(position, new Map())
@@ -100,3 +137,5 @@ export default class Aspect {
     }
   }
 }
+
+export default Aspect

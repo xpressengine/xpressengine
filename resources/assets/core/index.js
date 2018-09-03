@@ -37,10 +37,14 @@ const defaultConfig = {
 }
 
 /**
+ * XE
  * @class XE
- * @global
- * @namespace XE
- * @type {object}
+ * @borrows EventEmitter#$$emit
+ * @borrows EventEmitter#$$on
+ * @borrows EventEmitter#$$once
+ * @borrows EventEmitter#$$off
+ * @borrows EventEmitter#$$offAll
+ * @borrows config
  */
 class XE {
   constructor () {
@@ -48,9 +52,6 @@ class XE {
     this[booted] = false
     // @deprecated
     this.options = defaultConfig
-    /**
-     * veux store
-     */
     this.config = config
 
     this.config.subscribe((mutation, state) => {

@@ -9,7 +9,7 @@ import $ from 'jquery'
  * @param {array} toolInfoList 에디터에 추가될 tool 정보 리스트
  **/
 
-class editorInstance {
+class EditorInstance {
   constructor (editorName, sel, editorOptions, toolInfoList) {
     /** @private */
     let _options = {
@@ -127,4 +127,4 @@ class editorInstance {
   }
 }
 
-export default editorInstance
+export default EditorInstance

@@ -1,4 +1,9 @@
-export default class EventEmitter {
+/**
+ * @class
+ * @property {object} eventMaps
+ * @property {?function} target
+ */
+class EventEmitter {
   constructor () {
     this.eventMaps = {}
     this.target = null
@@ -53,6 +58,12 @@ export default class EventEmitter {
     }
   }
 
+  /**
+   *
+   * @param {string} eventName 이벤트 이름
+   * @param {function} listener
+   * @param {object} [options]
+   */
   $$on (eventName, listener, options = {}) {
     if (typeof eventName !== 'string') return
     if (typeof listener !== 'function') return
@@ -77,11 +88,22 @@ export default class EventEmitter {
     return symbolKey
   }
 
+  /**
+   *
+   * @param {string} eventName
+   * @param {*} listener
+   * @param {*} options
+   */
   $$once (eventName, listener, options = {}) {
     options.once = true
     return this.$$on(eventName, listener, options)
   }
 
+  /**
+   *
+   * @param {string} eventName
+   * @param  {...any} args
+   */
   $$emit (eventName, ...args) {
     if (typeof eventName !== 'string') {
       return Promise.resolve()
@@ -104,6 +126,11 @@ export default class EventEmitter {
     return listenerChain
   }
 
+  /**
+   *
+   * @param {string} eventName
+   * @param {Symbol} symbolKey
+   */
   $$off (eventName, symbolKey) {
     if (typeof eventName !== 'string') return
     if (typeof symbolKey !== 'symbol') return
@@ -112,6 +139,10 @@ export default class EventEmitter {
     this.eventMaps[eventName].delete(symbolKey)
   }
 
+  /**
+   *
+   * @param {string} eventName
+   */
   $$offAll (eventName) {
     if (typeof eventName !== 'string') return
 
@@ -145,3 +176,5 @@ const sortListener = (arr) => {
 
   return result
 }
+
+export default EventEmitter

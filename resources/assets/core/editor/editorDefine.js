@@ -5,10 +5,13 @@ import $ from 'jquery'
 
 /**
  * @class
- * @param {object} editorSettings
- * @param {object}interfaces
  **/
 class EditorDefine {
+  /**
+   *
+   * @param {object} editorSettings
+   * @param {object} interfaces
+   */
   constructor (editorSettings, interfaces) {
     this.name = editorSettings.name
     this.configs = editorSettings.configs
@@ -31,7 +34,6 @@ class EditorDefine {
 
   /**
    * 에디터를 생성 및 툴을 추가한다.
-   * @memberof Editor
    * @param {string} sel selector
    * @param {object} options
    * @param {object} editorOptions

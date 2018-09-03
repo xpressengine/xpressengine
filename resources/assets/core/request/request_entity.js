@@ -1,6 +1,9 @@
 const symbolRawResponse = Symbol('Response')
 
-export default class RequestEntity {
+/**
+ * @class
+ */
+class RequestEntity {
   constructor (request) {
     this[symbolRawResponse] = request
     return this
@@ -14,3 +17,5 @@ export default class RequestEntity {
     return this[symbolRawResponse].container
   }
 }
+
+export default RequestEntity

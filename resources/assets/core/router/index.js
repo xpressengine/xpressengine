@@ -3,7 +3,11 @@ import Route from './route'
 import RouteNotFoundError from './errors/route.notfound.error'
 import { STORE_URL } from 'xe/router/store'
 
-export default class Router extends App {
+/**
+ * @class
+ * @extends App
+ */
+class Router extends App {
   constructor (base, fixed = 'plugin', settings = '') {
     super()
 
@@ -14,6 +18,10 @@ export default class Router extends App {
     return 'Router'
   }
 
+  /**
+   *
+   * @param {XE} XE
+   */
   boot (XE) {
     if (this.booted()) {
       return Promise.resolve(this)
@@ -67,6 +75,10 @@ export default class Router extends App {
     })
   }
 
+  /**
+   *
+   * @param {object} routes
+   */
   addRoutes (routes) {
     for (const key in routes) {
       if (routes.hasOwnProperty(key)) {
@@ -75,10 +87,20 @@ export default class Router extends App {
     }
   }
 
+  /**
+   *
+   * @param {string} routeName
+   */
   has (routeName) {
     return this.routes.has(routeName)
   }
 
+  /**
+   *
+   * @param {string} routeName
+   * @return {Route}
+   * @throws {RouteNotFoundError}
+   */
   get (routeName) {
     if (!this.has(routeName)) {
       throw new RouteNotFoundError(routeName)
@@ -88,4 +110,5 @@ export default class Router extends App {
   }
 }
 
+export default Router
 export const routerInstance = new Router()

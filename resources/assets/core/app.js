@@ -6,7 +6,18 @@ const symbolPlugins = Symbol('Plugin')
 const symbolBooted = Symbol('booted')
 const instances = new Map()
 
-export default class App {
+/**
+ * @class
+ * @property {Vuex.Store} $$config vuex store
+ * @property {XE} [$$xe] App.boot 실행 후 생성됨
+ * @borrows EventEmitter#$$emit
+ * @borrows EventEmitter#$$on
+ * @borrows EventEmitter#$$once
+ * @borrows EventEmitter#$$off
+ * @borrows EventEmitter#$$offAll
+ * @borrows config as $$config
+ */
+class App {
   constructor () {
     if (instances.has(this.constructor.appName())) {
       return instances.get(this.constructor.appName())
@@ -23,19 +34,17 @@ export default class App {
     return instances.get(this.constructor.appName())
   }
 
-  // IE에서 오류로 인해 사용하지 않음
-  // static getInstance () {
-  //   if (instances.has(this.appName())) {
-  //     return instances.get(this.appName())
-  //   }
-
-  //   return new this()
-  // }
-
+  /**
+   * booting이 끝났는지 확인
+   */
   booted () {
     return this[symbolBooted]
   }
 
+  /**
+   *
+   * @param {XE} XE
+   */
   boot (XE) {
     return new Promise((resolve) => {
       if (this[symbolBooted]) {
@@ -49,6 +58,11 @@ export default class App {
     })
   }
 
+  /**
+   *
+   * @param {string} pointcut
+   * @return {Aspect}
+   */
   intercept (pointcut, name = null, advice = null) {
     const inst = Aspect.aspect(pointcut, this[pointcut])
 
@@ -61,3 +75,5 @@ export default class App {
     return inst
   }
 }
+
+export default App
