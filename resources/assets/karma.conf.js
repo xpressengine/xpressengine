@@ -15,6 +15,8 @@ module.exports = function (config) {
       'tests/**/*.spec.js'
     ],
 
+    // plugins: ['karma-coverage-istanbul-reporter'],
+
     // list of files / patterns to exclude
     exclude: [
     ],
@@ -22,14 +24,14 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'core/**/*.js': ['webpack'],
+      'core/**/*.js': ['webpack', 'coverage'],
       'tests/**/*.js': ['webpack']
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['mocha', 'coverage-istanbul'],
 
     // web server port
     port: 9876,
@@ -59,7 +61,11 @@ module.exports = function (config) {
     webpack: {
       module: {
         loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=env' }
+          {
+            test: /\.js$/,
+            exclude: /node_modules|\.spec\.js$|translator\.js|xe-ui-component\/js|_deprecated\.js/,
+            loader: 'babel-loader?presets[]=env'
+          }
         ]
       },
       resolve: {

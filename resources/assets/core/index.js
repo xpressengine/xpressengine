@@ -10,7 +10,8 @@ import Form from 'xe/form'
 import * as $$ from 'xe/utils'
 import Component from 'xe/component'
 import DynamicLoadManager from 'xe/dynamic-load-manager'
-import griper from 'xe/common/js/griper'
+const griper = require('xe/common/js/griper')
+// import griper from 'xe/common/js/griper'
 import Lang from 'xe/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
@@ -145,11 +146,13 @@ class XE {
 
       this.Lang.set(exposed.translations)
 
-      Object.entries(exposed.rules).forEach((rule) => {
-        if (rule[1]) {
-          this.Validator.setRules(rule[0], rule[1])
-        }
-      })
+      if(exposed.rules) {
+        Object.entries(exposed.rules).forEach((rule) => {
+          if (rule[1]) {
+            this.Validator.setRules(rule[0], rule[1])
+          }
+        })
+      }
     })
 
     $(() => {

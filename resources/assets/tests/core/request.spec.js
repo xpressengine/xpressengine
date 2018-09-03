@@ -15,9 +15,26 @@ describe('Request', function () {
   const requestInstance = new Request()
   const routerInstance = new Router()
 
+  const baseURL = 'http://localhost'
+
+  XE.setup({
+    baseURL,
+    locale: 'ko',
+    defaultLocale: 'en',
+    translation: {
+      locales: [
+        { code: 'ko', nativeName: '한국어' },
+        { code: 'en', nativeName: 'English' }
+      ]
+    }
+  })
+  routerInstance.boot(XE)
+  requestInstance.boot(XE)
+
   beforeEach(function () {
     onFulfilled = sinon.spy()
     onRejected = sinon.spy()
+    requestInstance.setup(XE.options)
     moxios.install(requestInstance.axiosInstance)
   })
 
@@ -26,23 +43,6 @@ describe('Request', function () {
   })
 
   describe('setup(options)', function () {
-    const baseURL = 'http://localhost'
-
-    XE.setup({
-      baseURL,
-      locale: 'ko',
-      defaultLocale: 'en',
-      translation: {
-        locales: [
-          { code: 'ko', nativeName: '한국어' },
-          { code: 'en', nativeName: 'English' }
-        ]
-      }
-    })
-    routerInstance.boot(XE)
-    requestInstance.boot(XE)
-    requestInstance.setup({ baseURL })
-
     it('Config instance를 반환해야 함', function () {
       expect(requestInstance.config).to.be.an.instanceof(Config)
     })
@@ -53,48 +53,66 @@ describe('Request', function () {
   })
 
   describe('response', function () {
-    it('정상 응답', function (done) {
-      requestInstance.get('/response').then(onFulfilled)
+    describe('정상 응답', function () {
+      it('onFulfilled 호출하고 ResponseEntity instance를 반환해야 함', function (done) {
+        moxios.stubRequest(/.+/, { status: 200, response: {} })
+        requestInstance.put('res').then(onFulfilled, onRejected)
+        moxios.wait(function () {
+          expect(onFulfilled.called).to.be.true
+          let response = onFulfilled.getCall(0).args[0]
+          expect(response).to.be.an.instanceOf(ResponseEntity)
+          done()
+        })
+      })
 
-      moxios.wait(function () {
-        let mox = moxios.requests.mostRecent()
-        mox.respondWith({
+      it('data 및 statusText 등을 반환해야 함', function (done) {
+        moxios.stubRequest(/.+/, {
           status: 200,
-          response: {}
-        }).then(function () {
-          it('onFulfilled 호출되고 ResponseEntity instance를 반환해야 함', function () {
-            expect(onFulfilled.called).to.be.true
+          statusText: 'OK',
+          method: 'post',
+          response: { val: 'TRUE' }
+        })
+        requestInstance.post('res').then(onFulfilled, onRejected)
+        moxios.wait(function () {
+          let response = onFulfilled.getCall(0).args[0]
+          expect(response.status).to.be.equal(200)
+          expect(response.statusText).to.be.equal('OK')
+          expect(response.method).to.be.equal('post')
+          expect(response.data.val).to.be.equal('TRUE')
+          done()
+        })
+      })
 
-            let response = onFulfilled.getCall(0).args[0]
-            expect(response).to.be.an.instanceOf(ResponseEntity)
-          })
+      it('exposed가 있으면 데이터를 반환해야 함', function (done) {
+        moxios.stubRequest(/.+/, { status: 200, response: { '_XE_': { assets: { js: [], css: [] } } } })
+        requestInstance.get('res').then(onFulfilled, onRejected)
+        moxios.wait(function () {
+          let response = onFulfilled.getCall(0).args[0]
+          expect(response.exposed).to.be.an('object')
+          expect(response.exposed.assets.js).to.be.an('array')
+          expect(response.exposed.assets.css).to.be.an('array')
           done()
         })
       })
     })
 
-    it('비정상 응답', function (done) {
-      requestInstance.get('/error').then(onFulfilled, onRejected)
+    describe('error', function () {
+      it('onRejected 호출', function (done) {
+        moxios.stubRequest(/.+/, { status: 404, response: { msg: '@@@@' } })
+        requestInstance.head('/error').then(onFulfilled, onRejected)
+        moxios.wait(function () {
+          expect(onFulfilled.called).to.be.false
+          expect(onRejected.called).to.be.true
+          done()
+        })
+      })
 
-      moxios.wait(function () {
-        let mox = moxios.requests.mostRecent()
-        mox.respondWith({
-          status: 404,
-          response: {}
-        }).then(function () {
-          it('onFulfilled는 호출하지 않음', function () {
-            expect(onFulfilled.called).to.be.false
-          })
-
-          it('onRejected 호출 함', function () {
-            expect(onRejected.called).to.be.true
-          })
-
-          it('Error instance를 반환 함', function () {
-            let response = onRejected.getCall(0).args[0]
-            expect(response).to.be.instanceOf(Error)
-          })
-
+      it('Error instance를 반환 함', function (done) {
+        moxios.stubRequest(/.+/, { status: 404, response: { msg: '@@@@' } })
+        requestInstance.delete('/error').then(onFulfilled, onRejected)
+        moxios.wait(function () {
+          let response = onRejected.getCall(0).args[0]
+          expect(response).to.be.instanceOf(Error)
           done()
         })
       })
@@ -106,26 +124,23 @@ describe('Request', function () {
       routerInstance.boot(XE)
       routerInstance.setup('http://localhost')
 
-      routerInstance.addRoutes({'module/board@board.slug':
-        {
+      routerInstance.addRoutes({
+        'module/board@board.slug': {
           'uri': '{url}/{slug}',
           'methods': [],
           'params': {'url': 'freeboard'}
         }
       })
 
-      moxios.stubRequest('http://localhost/freeboard/slug-string', {
-        status: 200,
-        response: {}
-      })
+      moxios.stubRequest('http://localhost/freeboard/slug-string', { status: 200, response: { '_XE_': {js: []} } })
 
       requestInstance.get(['module/board@board.slug', {slug: 'slug-string'}]).then(onFulfilled)
 
       moxios.wait(function () {
+        const response = onFulfilled.getCall(0).args[0]
         expect(onFulfilled.called).to.be.true
         done()
       })
-
     })
   })
 })

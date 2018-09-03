@@ -5,5 +5,10 @@
         "browsers": ["last 2 versions", "ie >= 10"]
       }
     }]
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }

@@ -116,13 +116,13 @@ describe('Utils', function () {
       eventifyObj.$$on('eventify.on.with-context', function (eventName, data) {
         expect(data).to.be.equal(30)
         expect(this).to.be.an.instanceof(Cat)
-      }, new Cat())
+      }.bind(new Cat()))
       eventifyObj.$$emit('eventify.on.with-context', 30)
 
       eventifyObj.$$once('eventify.once.with-context', function (eventName, data) {
         expect(data).to.be.equal(30)
         expect(this).to.be.an.instanceof(Cat)
-      }, new Cat())
+      }.bind(new Cat()))
       eventifyObj.$$emit('eventify.once.with-context', 30)
     })
 

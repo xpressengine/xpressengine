@@ -1,13 +1,17 @@
 import { expect } from 'chai'
-import Router from 'xe/router'
+import { routerInstance } from 'xe/router'
+import { requestInstance } from 'xe/request'
 import Route from 'xe/router/route'
 import XE from 'xe'
 
 /* global describe, it */
 
 describe('Router', function () {
-  const routerInstance = new Router()
+  requestInstance.boot(XE)
   routerInstance.boot(XE)
+  requestInstance.$$emit('exposed', [
+    {"manage.dynamicField.index":{"uri":"settings\/dynamicField","methods":["GET","HEAD"],"params":[]}}
+  ])
 
   describe('setup(baseURL, fixed, settings)', function () {
     describe('fixed, settings는 지정하지 않아도 됨', function () {

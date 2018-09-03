@@ -20,6 +20,11 @@ class Request extends App {
     eventify(this)
 
     this.config = new Config()
+    this.options = {
+      headers: {
+        'X-CSRF-TOKEN': this.$$config.getters['request/xsrfToken']
+      }
+    }
   }
 
   static appName () {
@@ -63,11 +68,6 @@ class Request extends App {
   */
   setup (options) {
     this.config.set(options)
-    this.options = {
-      headers: {
-        'X-CSRF-TOKEN': this.$$config.getters['request/xsrfToken']
-      }
-    }
 
     this.axiosInstance = Axios.create({
       baseURL: this.$$config.getters['router/origin']
@@ -109,7 +109,7 @@ class Request extends App {
     axiosConfig.method = options.method || 'get'
     axiosConfig.data = options.data
     axiosConfig.params = options.params
-    axiosConfig.headers = Object.assign({}, this.axiosInstance.defaults.headers[axiosConfig.method], options.headers)
+    // axiosConfig.headers = Object.assign({}, this.axiosInstance.defaults.headers[axiosConfig.method], options.headers)
     axiosConfig.container = (options.container) ? options.container : $('body')
 
     return this.axiosInstance.request(axiosConfig)

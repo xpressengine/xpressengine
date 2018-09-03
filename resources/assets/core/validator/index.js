@@ -1,5 +1,5 @@
 import App from 'xe/app'
-import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+const griper = require('xe/common/js/griper')
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'

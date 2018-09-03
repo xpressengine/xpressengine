@@ -1,4 +1,5 @@
 const symbolRawResponse = Symbol('Response')
+const symbolExposed = Symbol('exposed')
 
 /**
  * @class
@@ -6,6 +7,7 @@ const symbolRawResponse = Symbol('Response')
 class ResponseEntity {
   constructor (response) {
     this[symbolRawResponse] = response
+    this[symbolExposed] = response.data._XE_
     return this
   }
 
@@ -30,7 +32,7 @@ class ResponseEntity {
   }
 
   get exposed () {
-    return this[symbolRawResponse].data._XE_ || false
+    return this[symbolExposed]
   }
 
   removeExposed () {
