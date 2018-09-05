@@ -2,7 +2,7 @@ import $ from 'jquery'
 import App from 'xe/app'
 import EditorDefine from './editorDefine'
 import EditorValidation from './editorValidation'
-import Tool from './tool'
+import EditorTool from './editorTool'
 import XE from 'xe'
 
 /**
@@ -85,8 +85,8 @@ class Editor extends App {
    * @param {object} obj
    */
   defineTool (obj) {
-    if (EditorValidation.isValidToolsObject(obj)) {
-      this.toolsSet[obj.id] = new Tool(obj)
+      if (EditorValidation.isValidToolsObject(obj)) {
+        this.toolsSet[obj.id] = new EditorTool(obj)
     }
   }
 
