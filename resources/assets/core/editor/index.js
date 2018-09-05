@@ -50,20 +50,20 @@ class Editor extends App {
 
   /**
    * 에디터를 정의한다.
-   * @param {object} obj
-   * <pre>
-   *   - editorSettings : 에디터 설정 정보
-   *   - interfaces : 구현된 에디터 인터페이스
-   * </pre>
+   * @property {editorDefinition} obj
    **/
   define (obj) {
     const editorSettings = obj.editorSettings
     const interfaces = obj.interfaces
 
-    if (EditorValidation.isValidEditorOptions(editorSettings, interfaces)) {
-      const editor = new EditorDefine(editorSettings, interfaces)
-      this.editorSet[editorSettings.name] = editor
-      this.editorOptionSet[editorSettings.name] = editorSettings
+    try {
+      if (EditorValidation.isValidEditorOptions(editorSettings, interfaces)) {
+        const editor = new EditorDefine(editorSettings, interfaces)
+        this.editorSet[editorSettings.name] = editor
+        this.editorOptionSet[editorSettings.name] = editorSettings
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -79,11 +79,15 @@ class Editor extends App {
   /**
    * EditorTool 정의
    *
-   * @param {object} obj
+   * @param {editorToolDefinition} obj
    */
   defineTool (obj) {
+    try {
       if (EditorValidation.isValidToolsObject(obj)) {
         this.toolsSet[obj.id] = new EditorTool(obj)
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
