@@ -3,6 +3,7 @@ import { routerInstance } from 'xe/router'
 import { requestInstance } from 'xe/request'
 import Route from 'xe/router/route'
 import XE from 'xe'
+import { RouteNotFoundError } from 'xe/router/errors/route.error'
 
 /* global describe, it */
 
@@ -43,6 +44,10 @@ describe('Router', function () {
 
     it('get()은 route instance를 반환', function () {
       expect(routerInstance.get('user.profile')).to.be.instanceof(Route)
+    })
+
+    it('RouteNotFoundError', function () {
+      expect(() => routerInstance.get('route.notfound')).to.be.throw(RouteNotFoundError)
     })
   })
 })

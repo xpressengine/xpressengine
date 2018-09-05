@@ -16,7 +16,8 @@ const state = {
 }
 
 /**
- * Config
+ * Config store
+ * @ignore
  */
 const config = new Vuex.Store({
   modules: {

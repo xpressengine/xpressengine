@@ -3,7 +3,7 @@ import * as $$ from 'xe/utils'
 
 const formElements = new WeakMap()
 
-export function getForm (element) {
+function getForm (element) {
   // jQuery instance
   if (element instanceof $) {
     element = element[0]
@@ -20,7 +20,13 @@ export function getForm (element) {
   return formElements.get(element)
 }
 
-export default class Form {
+/**
+ * @class
+ */
+class Form {
+  /**
+   * @param {DOM|jQuery} element
+   */
   constructor (element) {
     $$.eventify(this)
 
@@ -50,4 +56,10 @@ export default class Form {
         })
     })
   }
+}
+
+export default Form
+
+export {
+  getForm
 }

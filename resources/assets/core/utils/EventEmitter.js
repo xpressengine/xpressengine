@@ -12,7 +12,7 @@ class EventEmitter {
   /**
    * prototype 확장
    *
-   * @param      {<type>}  target  The target
+   * @param {function} target
    */
   static mixin (target) {
     EventEmitter.extend(target.prototype)
@@ -21,8 +21,7 @@ class EventEmitter {
   /**
    * 객체 확장
    *
-   * @param      {<type>}  target  The target
-   * @return     {<type>}  { description_of_the_return_value }
+   * @param {object} target  The target
    */
   static extend (target) {
     const emitter = new EventEmitter(target)
@@ -50,6 +49,9 @@ class EventEmitter {
     emitter.target = target
   }
 
+  /**
+   * @param {(object|function)} target
+   */
   static eventify (target) {
     if (typeof target === 'function') {
       EventEmitter.mixin(target)
@@ -59,7 +61,6 @@ class EventEmitter {
   }
 
   /**
-   *
    * @param {string} eventName 이벤트 이름
    * @param {function} listener
    * @param {object} [options]
@@ -91,8 +92,8 @@ class EventEmitter {
   /**
    *
    * @param {string} eventName
-   * @param {*} listener
-   * @param {*} options
+   * @param {function} listener
+   * @param {object} options
    */
   $$once (eventName, listener, options = {}) {
     options.once = true
@@ -102,7 +103,7 @@ class EventEmitter {
   /**
    *
    * @param {string} eventName
-   * @param  {...any} args
+   * @param {...*} args
    */
   $$emit (eventName, ...args) {
     if (typeof eventName !== 'string') {
@@ -150,6 +151,11 @@ class EventEmitter {
   }
 }
 
+/**
+ * @private
+ * @param {ArrayLike} arr
+ * @returns {Array}
+ */
 const sortListener = (arr) => {
   const sortList = Array.from(arr)
     .map(([symbol, listener]) => ({symbol, listener}))

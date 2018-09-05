@@ -1,15 +1,19 @@
 import App from 'xe/app'
-const griper = require('xe/common/js/griper')
+import griper from 'xe/common/js/griper'
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 import config from 'xe/config'
 import { getForm } from 'xe/form'
+import { ValidationError } from 'xe/validator/errors/validator.error.js'
 
 const originalRules = {}
 
-export default class Validator extends App {
+/**
+ * @class
+ */
+class Validator extends App {
   constructor () {
     super()
 
@@ -21,34 +25,33 @@ export default class Validator extends App {
 
     /**
     * validation 실패 메시지를 노출한다.
-    * @memberof module:validator
-    * @property {object} validator
-    * @property {function} validator.accepted
-    * @property {function} validator.checked
-    * @property {function} validator.required
-    * @property {function} validator.alpha
-    * @property {function} validator.alphanum
-    * @property {function} validator.alpha_num
-    * @property {function} validator.alpha_dash
-    * @property {function} validator.array
-    * @property {function} validator.boolean
-    * @property {function} validator.date
-    * @property {function} validator.date_format
-    * @property {function} validator.digits
-    * @property {function} validator.digits_between
-    * @property {function} validator.filled
-    * @property {function} validator.integer
-    * @property {function} validator.ip
-    * @property {function} validator.mimes
-    * @property {function} validator.regex
-    * @property {function} validator.json
-    * @property {function} validator.string
-    * @property {function} validator.min
-    * @property {function} validator.max
-    * @property {function} validator.email
-    * @property {function} validator.url
-    * @property {function} validator.numeric
-    * @property {function} validator.between
+    * @property {object} evaluator
+    * @property {function} evaluator.accepted
+    * @property {function} evaluator.checked
+    * @property {function} evaluator.required
+    * @property {function} evaluator.alpha
+    * @property {function} evaluator.alphanum
+    * @property {function} evaluator.alpha_num
+    * @property {function} evaluator.alpha_dash
+    * @property {function} evaluator.array
+    * @property {function} evaluator.boolean
+    * @property {function} evaluator.date
+    * @property {function} evaluator.date_format
+    * @property {function} evaluator.digits
+    * @property {function} evaluator.digits_between
+    * @property {function} evaluator.filled
+    * @property {function} evaluator.integer
+    * @property {function} evaluator.ip
+    * @property {function} evaluator.mimes
+    * @property {function} evaluator.regex
+    * @property {function} evaluator.json
+    * @property {function} evaluator.string
+    * @property {function} evaluator.min
+    * @property {function} evaluator.max
+    * @property {function} evaluator.email
+    * @property {function} evaluator.url
+    * @property {function} evaluator.numeric
+    * @property {function} evaluator.between
     */
     this.evaluator = {
       accepted: function ($dst, parameters) {
@@ -542,12 +545,12 @@ export default class Validator extends App {
 
   /**
   * @deprecated
+  * @ignore
   */
   init (ruleName) { }
 
   /**
   * 룰을 세팅한다.
-  * @memberof module:validator
   * @param {string} ruleName
   * @param {object} rules
   */
@@ -613,18 +616,17 @@ export default class Validator extends App {
 
   /**
   * 폼요소의 룰명을 리턴한다.
-  * @memberof module:validator
-  * @param {jQuery} $frm jQuery form element
+  * @param {jQuery} $form jQuery form element
   * @return {string}
   */
-  getRuleName ($frm) {
-    return $frm.data('rule')
+  getRuleName ($form) {
+    return $form.data('rule')
   }
 
   /**
-  * 폼에서 element가 출력되는 순서로 정렬하여 반환
+  * 대상 폼 안의 fields 반환.
+  * jQuery의 특성을 이용해 field가 나타나는 순서대로 정렬된다.
   *
-  * @memberof module:validator
   * @param {jQuery} $form jQuery form element
   */
   getTargetElements ($form) {
@@ -643,7 +645,6 @@ export default class Validator extends App {
 
   /**
   * 폼에 정의 된 룰을 실행한다.
-  * @memberof module:validator
   * @param {jQuery} $form jQuery form element
   */
   check ($form) {
@@ -662,28 +663,26 @@ export default class Validator extends App {
 
   /**
   * 폼에 정의 된 룰을 실행한다.
-  * @memberof module:validator
-  * @param {jQuery} $frm jQuery form element
+  * @param {jQuery} $form jQuery form element
   * @deprecated
   */
-  checkRuleContainers ($frm) {
+  checkRuleContainers ($form) {
     let that = this
-    let containers = $frm.find('[data-rule]')
+    let containers = $form.find('[data-rule]')
 
     $.each(containers, function (index, container) {
       let ruleName = $(container).data('rule')
       let rules = that.rules[ruleName]
 
       $.each(rules, function (name, rule) {
-        that.validate($frm, name, rule)
+        that.validate($form, name, rule)
       })
     })
   }
 
   /**
   * 폼안의 요소에 정의된 룰을 실행한다.
-  * @memberof module:validator
-  * @param {jQuery} $frm jQuery form element
+  * @param {jQuery} $form jQuery form element
   * @deprecated
   */
   formValidate ($form) {
@@ -702,17 +701,16 @@ export default class Validator extends App {
 
   /**
   * 폼 내의 name요소에 대한 rule을 실행한다.
-  * @memberof module:validator
-  * @param {jQuery} $frm jQuery form element
+  * @param {jQuery} $form jQuery form element
   * @param {string} name
   * @param {string} rule
-  * @throws {Error} validation 실패시
+  * @throws {ValidationError} validation 실패시
   */
-  validate ($frm, name, rule) {
+  validate ($form, name, rule) {
     let parts = rule.split('|')
     let that = this
 
-    $frm.data('valid-result', true)
+    $form.data('valid-result', true)
 
     $.each(parts, function (index, part) {
       let res = part.split(':')
@@ -720,21 +718,30 @@ export default class Validator extends App {
       let parameters = res[1]
 
       if (typeof that.evaluator[command] === 'function') {
-        let $dst = $frm.find('[name="' + name + '"]')
+        let $dst = $form.find('[name="' + name + '"]')
 
-        that.errorClear($frm)
+        that.errorClear($form)
         if (that.evaluator[command]($dst, parameters) === false) {
-          $frm.data('valid-result', false)
-          throw Error('Validation error.')
+          $form.data('valid-result', false)
+          throw ValidationError('Validation error.')
         }
       }
     })
   }
 
+  /**
+  * alert type을 확장
+  * @param {string} type 이름
+  * @param {function} callback
+  */
   extendAlertType (type, callback) {
     this.alertTypes[type] = callback
   }
 
+  /**
+  * 정의된 항목 중 지정된 alert type을 반환
+  * @param {string} type 이름
+  */
   getAlertType (type) {
     return this.alertTypes[type] || null
   }
@@ -742,7 +749,6 @@ export default class Validator extends App {
   /**
   * evaluator 추가
   * @deprecated
-  * @memberof module:validator
   * @param {string} name evaluator name
   * @param {function} callback validation 실패시 호출
   */
@@ -752,7 +758,6 @@ export default class Validator extends App {
 
   /**
   * evaluator 추가
-  * @memberof module:validator
   * @param {string} name evaluator name
   * @param {function} callback validation 실패시 호출
   */
@@ -762,7 +767,6 @@ export default class Validator extends App {
 
   /**
   * evaluator 존재 확인
-  * @memberof module:validator
   * @param {string} name evaluator name
   * @return {boolean}
   */
@@ -772,7 +776,6 @@ export default class Validator extends App {
 
   /**
   * evaluator 반환
-  * @memberof module:validator
   * @param {string} name evaluator name
   * @return {mixed}
   */
@@ -782,7 +785,6 @@ export default class Validator extends App {
 
   /**
   * validation 메시지 제거
-  * @memberof module:validator
   * @param {jQuery} $form jQuery form element
   */
   errorClear ($form) {
@@ -791,7 +793,6 @@ export default class Validator extends App {
 
   /**
   * validation 실패 메시지를 노출한다.
-  * @memberof module:validator
   * @param {jQuery} $element
   * @param {string} message
   * @param {object} replaceStrMap
@@ -820,7 +821,6 @@ export default class Validator extends App {
 
   /**
   * validation 엘리먼트 요소의 value를 리턴한다.
-  * @memberof module:validator
   * @param {jQuery} $ele
   * @return {string}
   */
@@ -840,3 +840,5 @@ export default class Validator extends App {
     return value
   }
 }
+
+export default Validator

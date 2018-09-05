@@ -6,21 +6,12 @@ import Lang from 'xe/lang'
 import Request from 'xe/request'
 import Router from 'xe/router'
 import Validator from 'xe/validator'
+import { xeSetupOptions, xeLegacySetupOptions } from './sample'
 
 /* global describe, it */
 
 describe('XE', function () {
-  XE.setup({
-    baseURL: 'http://localhost',
-    locale: 'ko',
-    defaultLocale: 'en',
-    translation: {
-      locales: [
-        { code: 'ko', nativeName: '한국어' },
-        { code: 'en', nativeName: 'English' }
-      ]
-    }
-  })
+  XE.setup(xeSetupOptions)
 
   describe('EventEmitter', function () {
     it('eventify', function () {
@@ -45,13 +36,7 @@ describe('XE', function () {
     })
 
     describe('locale', function () {
-      XE.setup({
-        locale: 'ko',
-        defaultLocale: 'en',
-        translation: {
-          locales: ['ko', 'en']
-        }
-      })
+      XE.setup(xeLegacySetupOptions)
 
       describe('local/locales 속성을 가지고', function () {
         it('값을 확인할 수 있어야 함', function () {

@@ -42,8 +42,8 @@ class App {
   }
 
   /**
-   *
    * @param {XE} XE
+   * @returns {Promise}
    */
   boot (XE) {
     return new Promise((resolve) => {

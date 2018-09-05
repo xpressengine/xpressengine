@@ -1,5 +1,9 @@
 import $ from 'jquery'
 
+/**
+ * @module griper
+ */
+
 // @FIXME
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -16,7 +20,10 @@ import $ from 'jquery'
   /**
    * @memberof module:griper
    * @name options
-   * @prop {object} options
+   * @property {object} options
+   * @property {object} options.toastContainer
+   * @property {object} options.toast toast 옵션
+   * @property {object} options.form form 옵션
    **/
   exports.options = {
     toastContainer: {
@@ -135,7 +142,6 @@ import $ from 'jquery'
       }
 
       var cssJSON = {}
-      var direction = 'up'
 
       if (!pos) {
         pos = 'bottom'

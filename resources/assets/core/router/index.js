@@ -1,6 +1,6 @@
 import App from 'xe/app'
 import Route from './route'
-import RouteNotFoundError from './errors/route.notfound.error'
+import { RouteNotFoundError } from './errors/route.error'
 import { STORE_URL } from 'xe/router/store'
 
 /**
@@ -18,10 +18,6 @@ class Router extends App {
     return 'Router'
   }
 
-  /**
-   *
-   * @param {XE} XE
-   */
   boot (XE) {
     if (this.booted()) {
       return Promise.resolve(this)

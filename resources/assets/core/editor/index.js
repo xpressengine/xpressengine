@@ -42,9 +42,6 @@ class Editor extends App {
     return 'Editor'
   }
 
-  /**
-   * @param {XE} XE
-   */
   boot (XE) {
     super.boot(XE)
 
@@ -94,7 +91,7 @@ class Editor extends App {
    * EditorTool 반환
    *
    * @param {string} id
-   * @return {Tool}
+   * @return {EditorTool}
    */
   getTool (id) {
     return this.toolsSet[id]
@@ -127,4 +124,4 @@ const XEeditor = new Editor()
 window.XEeditor = XEeditor
 XE.registerApp('Editor', XEeditor)
 
-export default XEeditor
+export default Editor

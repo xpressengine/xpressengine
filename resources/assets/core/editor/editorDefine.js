@@ -5,10 +5,9 @@ import $ from 'jquery'
 
 /**
  * @class
- **/
+ */
 class EditorDefine {
   /**
-   *
    * @param {object} editorSettings
    * @param {object} interfaces
    */
@@ -38,7 +37,7 @@ class EditorDefine {
    * @param {object} options
    * @param {object} editorOptions
    * @param {array} toolInfoList
-   **/
+   */
   create (sel, options, editorOptions, toolInfoList) {
     toolInfoList = toolInfoList || []
     editorOptions = $.extend(this.configs || {}, editorOptions || {})

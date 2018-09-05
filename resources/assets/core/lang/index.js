@@ -50,7 +50,6 @@ class Lang extends App {
   * @param {object} items
   */
   set (items) {
-    // $.extend(_items, items);
     $.each(items, function (key, value) {
       Translator.add(key, value)
     })

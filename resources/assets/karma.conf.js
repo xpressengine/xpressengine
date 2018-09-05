@@ -63,7 +63,7 @@ module.exports = function (config) {
         loaders: [
           {
             test: /\.js$/,
-            exclude: /node_modules|\.spec\.js$|translator\.js|xe-ui-component\/js|_deprecated\.js/,
+            exclude: /node_modules|\.spec\.js$|tests|translator\.js|xe-ui-component\/js|_deprecated\.js/,
             loader: 'babel-loader?presets[]=env'
           }
         ]

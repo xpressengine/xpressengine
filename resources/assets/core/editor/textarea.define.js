@@ -33,7 +33,7 @@ XE.app('Editor', (Editor) => {
      *   - callback : function
      * </pre>
      * @prop {function} interfaces.reset 에디터 컨텐츠를 초기화한다.
-     **/
+     */
     interfaces: {
       initialize: function (selector, options) {
         options = $.extend(true, {

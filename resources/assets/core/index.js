@@ -10,8 +10,7 @@ import Form from 'xe/form'
 import * as $$ from 'xe/utils'
 import Component from 'xe/component'
 import DynamicLoadManager from 'xe/dynamic-load-manager'
-const griper = require('xe/common/js/griper')
-// import griper from 'xe/common/js/griper'
+import griper from 'xe/common/js/griper'
 import Lang from 'xe/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
@@ -496,7 +495,7 @@ class XE {
    * @param {object} jquery form object
    */
   formValidate ($form) {
-    Validator.formValidate($form)
+    this.Validator.formValidate($form)
   }
 
   /**

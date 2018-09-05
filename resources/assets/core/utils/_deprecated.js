@@ -1,7 +1,9 @@
+/**
+ * @module Utils
+ */
 
 /**
  * uri를 리턴한다.
- * @memberof Utils
  * @param {string} url
  * @return {string}
  * @DEPRECATED
@@ -21,7 +23,6 @@ export function getUri (url) {
 
 /**
  * 3자릿수마다 콤마(,)를 추가하여 리턴합니다.
- * @memberof Utils
  * @param {string} str
  * @return {string}
  * @DEPRECATED
@@ -68,7 +69,6 @@ export function addCommas (str) {
 
 /**
  * 날짜문자열을 timestamp값으로 리턴한다.
- * @memberof Utils
  * @param {string} text
  * @param {number} now
  * @return {number}

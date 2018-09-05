@@ -8,7 +8,7 @@ import Config from './config'
 import RequestEntity from './request_entity'
 import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
-import { STORE_TOKEN } from './store';
+import { STORE_TOKEN } from './store'
 
 /**
  * @class
@@ -31,11 +31,6 @@ class Request extends App {
     return 'Request'
   }
 
-  /**
-   *
-   * @param {XE} XE
-   * @return {Promise}
-   */
   boot (XE) {
     if (this.booted()) {
       return Promise.resolve(this)

@@ -2,15 +2,14 @@ import { expect } from 'chai'
 import $ from 'jquery'
 import Validator from 'xe/validator'
 import XE from 'xe'
+import { xeSetupOptions } from './sample'
 
 /* global describe, it */
 
-let validator
-
 describe('Validator', function () {
-  describe('Instance', function () {
-    validator = new Validator()
+  const validator = new Validator()
 
+  describe('Instance', function () {
     it('$$.eventify 메소드를 가져야 함', function () {
       expect(validator).to.have.property('$$on').that.is.a('function')
     })
@@ -32,16 +31,7 @@ describe('Validator', function () {
   })
 
   describe('boot(XE)', function () {
-    XE.setup({
-      locale: 'ko',
-      defaultLocale: 'en',
-      translation: {
-        locales: [
-          { code: 'ko', nativeName: '한국어' },
-          { code: 'en', nativeName: 'English' }
-        ]
-      }
-    })
+    XE.setup(xeSetupOptions)
 
     it('locale 멤버를 가져야 함', function () {
       expect(validator).to.have.property('locale').is.equal('ko')
