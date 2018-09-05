@@ -99,7 +99,7 @@ class XE {
    * @param {*} callback pass instance
    * @return {Promise}
    */
-  getApp (name, callback) {
+  app (name, callback) {
     const app = this[symbolApp].get(name)
 
     if (typeof callback === 'function') {
@@ -118,7 +118,7 @@ class XE {
   }
 
   intercept (appName, pointcut) {
-    const app = this.getApp(appName)
+    const app = this.app(appName)
     return app.intercept(pointcut)
   }
 

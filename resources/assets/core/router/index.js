@@ -50,7 +50,7 @@ class Router extends App {
         })
       })
 
-      XE.getApp('Request', (request) => {
+      XE.app('Request', (request) => {
         request.$$on('exposed', (eventName, exposed) => {
           if (exposed.routes) this.addRoutes(exposed.routes)
         })

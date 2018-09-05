@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import XE from 'xe'
 
-XE.getApp('Editor', (Editor) => {
+XE.app('Editor', (Editor) => {
   Editor.define({
     editorSettings: {
       name: 'XEtextarea',

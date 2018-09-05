@@ -583,7 +583,7 @@ export default class Validator extends App {
     })
 
     if (lang.length > 0) {
-      this.$$xe.getApp('Lang').then((langInstance) => {
+      this.$$xe.app('Lang').then((langInstance) => {
         langInstance.requestTransAll(lang)
       })
     }

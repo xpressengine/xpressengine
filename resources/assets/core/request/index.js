@@ -54,7 +54,7 @@ class Request extends App {
         this.setup(options)
       })
 
-      XE.getApp('Router').then(app => {
+      XE.app('Router').then(app => {
         this.router = app
       })
 

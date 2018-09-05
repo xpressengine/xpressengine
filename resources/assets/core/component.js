@@ -32,7 +32,7 @@ export default class Component extends App {
       })
 
       $(() => {
-        this.$$xe.getApp('DynamicLoadManager').then((DynamicLoadManager) => {
+        this.$$xe.app('DynamicLoadManager').then((DynamicLoadManager) => {
           DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css')
         })
 
