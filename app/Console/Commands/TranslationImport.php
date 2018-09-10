@@ -95,7 +95,7 @@ class TranslationImport extends Command
                 $path = $dirPath . DIRECTORY_SEPARATOR . $entry;
                 if (is_dir($path)) {
                     continue;
-                } elseif (pathinfo($path, PATHINFO_EXTENSION) !== 'php') {
+                } elseif (strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== 'php') {
                     continue;
                 }
 
