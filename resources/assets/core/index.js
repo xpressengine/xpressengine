@@ -173,6 +173,7 @@ class XE {
         if (target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
         if (this.isSameHost(href)) return
+        if ($this.closest('.xe-content-editable').length) return
 
         let rel = $this.attr('rel')
 
