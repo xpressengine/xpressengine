@@ -64,6 +64,8 @@ class Request extends App {
   setup (options) {
     this.config.set(options)
 
+    this.$$config.dispatch('request/setXsrfToken', options.userToken)
+
     this.axiosInstance = Axios.create({
       baseURL: this.$$config.getters['router/origin']
     })

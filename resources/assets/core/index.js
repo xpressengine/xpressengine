@@ -19,8 +19,9 @@ import Translator from 'xe/common/js/translator'
 import Validator from 'xe/validator'
 import { STORE_URL, CHANGE_ORIGIN } from './router/store'
 import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
-import { STORE_TOKEN } from './request/store';
+import { STORE_TOKEN } from './request/store'
 
+let xeInstance
 const booted = Symbol('booted')
 const symbolApp = Symbol('App')
 
@@ -28,6 +29,7 @@ const defaultConfig = {
   baseURL: window.location.origin,
   fixedPrefix: 'plugin',
   settingsPrefix: 'settings',
+  useXeSpinner: true,
   translation: {
     locales: [
       { code: 'ko', nativeName: '한국어' },
@@ -48,6 +50,8 @@ const defaultConfig = {
  */
 class XE {
   constructor () {
+    if (xeInstance) return xeInstance
+
     $$.eventify(this)
     this[booted] = false
     // @deprecated
@@ -145,7 +149,7 @@ class XE {
 
       this.Lang.set(exposed.translations)
 
-      if(exposed.rules) {
+      if (exposed.rules) {
         Object.entries(exposed.rules).forEach((rule) => {
           if (rule[1]) {
             this.Validator.setRules(rule[0], rule[1])
@@ -546,6 +550,7 @@ class XE {
   }
 }
 
-window.XE = new XE()
+xeInstance = new XE()
+if (!window.XE) window.XE = xeInstance
 
-export default window.XE
+export default xeInstance
