@@ -2,6 +2,7 @@
 
 import $ from 'jquery'
 import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import XE from 'xe'
 
 window.jQuery('#btnCreateCategory').on('click', (e) => {
   var _this = e.target
@@ -18,13 +19,13 @@ window.jQuery('#btnCreateCategory').on('click', (e) => {
 
   params.categoryName = id
 
-  window.XE.post('fieldType.storeCategory', params)
+  XE.post('fieldType.storeCategory', params)
     .then(function success (response) {
       var section = $(_this).closest('.__xe_df_category')
       section.find('[name="category_id"]').val(response.data.id)
       section.find('button').hide()
       section.append($('<a>')
-        .text(window.XE.Lang.trans('xe::categoryManagement'))
+        .text(XE.Lang.trans('xe::categoryManagement'))
         .prop('target', '_blank')
         .prop('href', '/settings/category/' + response.data.id))
     })
