@@ -28,6 +28,11 @@ class Router extends App {
     return new Promise((resolve) => {
       super.boot(XE)
 
+      this.baseURL = XE.options.baseURL
+      this.fixedPrefix = XE.options.fixedPrefix
+      this.settingsPrefix = XE.options.settingsPrefix
+      if (XE.options.routes) this.addRoutes(XE.options.routes)
+
       this.$$config.subscribe((mutation, state) => {
         if (mutation.type === `router/${STORE_URL}`) {
           this.baseURL = state.router.origin
@@ -36,9 +41,13 @@ class Router extends App {
         }
       })
 
-      XE.$$on('setup', (eventName, options) => {
-        if (options.routes) this.addRoutes(options.routes)
+      this.$$config.dispatch('router/setUrl', {
+        origin: XE.options.baseURL,
+        fixedPrefix: XE.options.fixedPrefix,
+        settingsPrefix: XE.options.settingsPrefix
+      })
 
+      XE.$$on('setup', (eventName, options) => {
         this.$$config.dispatch('router/setUrl', {
           origin: options.baseURL,
           fixedPrefix: options.fixedPrefix,
@@ -52,6 +61,7 @@ class Router extends App {
         })
       })
 
+
       resolve(this)
     })
   }
@@ -60,9 +70,9 @@ class Router extends App {
    * @deprecated
    */
   setup (base, fixed = 'plugin', settings = '') {
-    this.baseURL = base
-    this.fixedPrefix = fixed
-    this.settingsPrefix = settings
+    // this.baseURL = base
+    // this.fixedPrefix = fixed
+    // this.settingsPrefix = settings
 
     this.$$config.dispatch('router/setUrl', {
       origin: base,

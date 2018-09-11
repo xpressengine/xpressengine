@@ -189,12 +189,12 @@ class XE {
     })
 
     return Promise.all([
-      this.Router.boot(this),
-      this.Request.boot(this),
-      this.Lang.boot(this),
-      this.DynamicLoadManager.boot(this),
-      this.Validator.boot(this),
-      this.Component.boot(this)
+      this.Router.boot(this, this.options),
+      this.Request.boot(this, this.options),
+      this.Lang.boot(this, this.options),
+      this.DynamicLoadManager.boot(this, this.options),
+      this.Validator.boot(this, this.options),
+      this.Component.boot(this, this.options)
     ])
       .then(() => {
         // @FIXME
@@ -293,7 +293,7 @@ class XE {
   configure (options = {}) {
     const config = Object.assign({}, defaultConfig, options)
 
-    Object.assign(this.options, config)
+    this.options = Object.assign({}, this.options, config)
 
     if (config.routes) {
       this.config.dispatch('router/setRoutes', config.routes)

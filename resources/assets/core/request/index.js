@@ -8,7 +8,9 @@ import Config from './config'
 import RequestEntity from './request_entity'
 import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
+
 import { STORE_TOKEN } from './store'
+import { routerInstance } from '../router'
 
 /**
  * @class
@@ -31,7 +33,7 @@ class Request extends App {
     return 'Request'
   }
 
-  boot (XE) {
+  boot (XE, config111) {
     if (this.booted()) {
       return Promise.resolve(this)
     }
@@ -39,19 +41,41 @@ class Request extends App {
     return new Promise((resolve) => {
       super.boot(XE)
 
+      this.options.headers['X-CSRF-TOKEN'] = this.$$config.getters['request/xsrfToken']
+
       this.$$config.subscribe((mutation, state) => {
         if (mutation.type === `request/${STORE_TOKEN}`) {
-          this.options.headers['X-CSRF-TOKEN'] = state.request.xsrfToken
+          this.options.headers['X-CSRF-TOKEN'] = this.$$config.getters['request/xsrfToken']
         }
       })
 
-      XE.$$on('setup', (eventName, options) => {
-        this.setup(options)
+      this.axiosInstance = Axios.create({
+        baseURL: this.$$config.getters['router/origin']
       })
 
-      XE.app('Router').then(app => {
-        this.router = app
+      this.axiosInstance.interceptors.response.use(response => {
+        const res = new ResponseEntity(response)
+        this.$$emit('sucess', res)
+
+        if (res.exposed) {
+          this.$$emit('exposed', res.exposed)
+          res.removeExposed()
+        }
+
+        return res
+      }, error => {
+        const errorObj = new RequestError(error, error.response.request, error.response.data, error.response.headers)
+        errorObj._axiosConfig = error.config
+        this.$$emit('error', errorObj)
+        return Promise.reject(errorObj)
       })
+
+      this.config.set(config111)
+
+      if (config111 && config111.userToken) {
+        this.$$config.dispatch('request/setXsrfToken', config111.userToken)
+      }
+      this.setup(config111)
 
       resolve(this)
     })
@@ -62,30 +86,6 @@ class Request extends App {
   * @param {object} options jQuery ajax options
   */
   setup (options) {
-    this.config.set(options)
-
-    this.$$config.dispatch('request/setXsrfToken', options.userToken)
-
-    this.axiosInstance = Axios.create({
-      baseURL: this.$$config.getters['router/origin']
-    })
-
-    this.axiosInstance.interceptors.response.use(response => {
-      const res = new ResponseEntity(response)
-      this.$$emit('sucess', res)
-
-      if (res.exposed) {
-        this.$$emit('exposed', res.exposed)
-        res.removeExposed()
-      }
-
-      return res
-    }, error => {
-      const errorObj = new RequestError(error, error.response.request, error.response.data, error.response.headers)
-      errorObj._axiosConfig = error.config
-      this.$$emit('error', errorObj)
-      return Promise.reject(errorObj)
-    })
   }
 
   /**
@@ -183,8 +183,6 @@ class Request extends App {
   }
 
   resolveRoute (uri) {
-    if (!this.router) return
-
     let routeName
     let params = {}
     let url
@@ -196,8 +194,8 @@ class Request extends App {
       routeName = uri
     }
 
-    if (this.router.has(routeName)) {
-      url = this.router.get(routeName).url(params)
+    if (routerInstance.has(routeName)) {
+      url = routerInstance.get(routeName).url(params)
     } else {
       url = uri
     }

@@ -1,27 +1,10 @@
 import App from 'xe/app'
-import Plugin from 'xe/plugin'
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 
 const assets = {
   css: new Set(),
   js: new Set()
-}
-
-class DyPlugin extends Plugin {
-  constructor () {
-    super()
-    this.name = 'DyPlugin'
-  }
-
-  boot (XE) {
-    super.boot(XE)
-
-    this.setup()
-  }
-
-  setup () {
-  }
 }
 
 export default class DynamicLoadManager extends App {
@@ -37,11 +20,6 @@ export default class DynamicLoadManager extends App {
         resolve(this)
       } else {
         super.boot(XE)
-
-        XE.$$on('setup', (eventName, options) => {
-        })
-
-        // this.use(new DyPlugin())
 
         assets.js.add(this.$$config.getters['router/origin'] + '/assets/vendor.js')
         assets.js.add(this.$$config.getters['router/origin'] + '/assets/common.js')

@@ -510,7 +510,7 @@ class Validator extends App {
     return 'Validator'
   }
 
-  boot (XE) {
+  boot (XE, config) {
     if (this.booted()) {
       return Promise.resolve(this)
     }
@@ -519,10 +519,11 @@ class Validator extends App {
       super.boot(XE)
       const that = this
 
-      this.locale = config.getters['lang/current'].code
+      this.locale = this.$$config.getters['lang/current'].code
+
       $(() => {
         $('form[data-rule]').each(function () {
-          const rule = config.getters['validator/rule']($(this).data('rule'))
+          const rule = that.$$config.getters['validator/rule']($(this).data('rule'))
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }

@@ -23,7 +23,7 @@ class Lang extends App {
     return 'Lang'
   }
 
-  boot (XE) {
+  boot (XE, config) {
     if (this.booted()) {
       return Promise.resolve(this)
     }
@@ -34,12 +34,9 @@ class Lang extends App {
       this.XE = XE
       this.locales = this.$$config.getters['lang/locales'] || []
 
-      XE.$$on('setup', (eventName, options) => {
-        if (options.translation) {
-          this.set(options.translation.terms)
-          this.locales = this.$$config.getters['lang/locales']
-        }
-      })
+      if (config.translation) {
+        this.set(config.translation.terms)
+      }
 
       resolve(this)
     })

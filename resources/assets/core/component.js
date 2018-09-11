@@ -27,9 +27,7 @@ export default class Component extends App {
     return new Promise((resolve) => {
       super.boot(XE)
 
-      this.$$xe.$$on('setup', (eventName, options) => {
-        moment.locale(this.$$config.getters['lang/current'].code)
-      })
+      moment.locale(this.$$config.getters['lang/current'].code)
 
       $(() => {
         this.$$xe.app('DynamicLoadManager').then((DynamicLoadManager) => {
