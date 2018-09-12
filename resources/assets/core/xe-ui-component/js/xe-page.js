@@ -358,7 +358,7 @@
    *     4)modal show
    * </pre>
    */
-  pageModal = function (url, options, callback) {
+  function pageModal (url, options, callback) {
     var defaultOptions = {
       type: 'get'
     }
@@ -389,6 +389,7 @@
       })
     }
   }
+  XE.pageModal = pageModal
 
   /**
    * 실행하여 .xe-toggle-menu-items 영역에 html을 로드하고 .xe-toggle-popup 을 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -411,7 +412,7 @@
    *     4)modal show
    * </pre>
    */
-  XE.pageToggleMenu = function (url, $this, options, callback) {
+  function pageToggleMenu (url, $this, options, callback) {
     var $container = $this.parent()
 
     if ($container.hasClass('xe-dropdown') == false) {
@@ -451,4 +452,5 @@
       })
     }
   }
+  XE.pageToggleMenu = pageToggleMenu
 })(window.XE, window.jQuery)
