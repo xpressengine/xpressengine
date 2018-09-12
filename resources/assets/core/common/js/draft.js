@@ -94,7 +94,7 @@ import { getForm } from 'xe/form'
         })
       })
 
-      getForm($(_this.elem).closest('form')).$$on('submit', () => {
+      getForm($(_this.elem)).$$on('submit', () => {
         return _this.deleteAuto(_this.autoDraftId) // Promise
       }, { name: 'xe.draft' })
     },

@@ -652,7 +652,11 @@ abstract class AbstractEditor implements ComponentInterface
         $editorScript = '
         <script>
             jQuery(function($) {
-                XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
+                XE.app("Editor").then(function (Editor) {
+                    Editor.getEditor(\'%s\').then(function(editor) {
+                        editor.create(\'%s\', %s, %s, %s);
+                    })
+                })
             });
         </script>';
 

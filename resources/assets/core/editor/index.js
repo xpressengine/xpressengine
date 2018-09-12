@@ -61,6 +61,7 @@ class Editor extends App {
         const editor = new EditorDefine(editorSettings, interfaces)
         this.editorSet[editorSettings.name] = editor
         this.editorOptionSet[editorSettings.name] = editorSettings
+        this.$$emit('editor.define', editor)
       }
     } catch (e) {
       console.error(e)
@@ -70,10 +71,18 @@ class Editor extends App {
   /**
    * 에디터를 반환한다.
    * @param {string} name
-   * @return {EditorDefine}
+   * @return {Promise}
    **/
   getEditor (name) {
-    return this.editorSet[name]
+    if (this.editorSet[name]) {
+      return Promise.resolve(this.editorSet[name])
+    }
+
+    return new Promise((resolve) => {
+      this.$$on('editor.define', (eventName, editor) => {
+        resolve(editor)
+      })
+    })
   }
 
   /**
@@ -125,7 +134,7 @@ class Editor extends App {
  * @type       {Editor}
  */
 const XEeditor = new Editor()
-window.XEeditor = XEeditor
+if (!window.XEeditor) window.XEeditor = XEeditor
 XE.registerApp('Editor', XEeditor)
 
 export default Editor
