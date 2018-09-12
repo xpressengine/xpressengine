@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{app('xe.translator')->getLocale()}}">
 <head>
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.prepend') !!}
@@ -26,28 +26,31 @@
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script>
-        XE.setup({
-            baseURL: '{{  url()->to(null) }}',
-            userToken: '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
-            useXeSpinner: true, // @DEPRECATED
-            locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
-            defaultLocale: '{{ app('xe.translator')->getLocale() }}',
-            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
-            @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-                settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
-            @endif
-            routes: {!! XeFrontend::output('route') !!},
-            translation: {!! XeFrontend::output('translation') !!}
-        });
+        if (window.XE) {
+            XE.setup({
+                baseURL: '{{  url()->to(null) }}',
+                userToken: '{!! csrf_token() !!}',
+                loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
+                useXeSpinner: true, // @DEPRECATED
+                locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
+                defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+                fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
+                @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+                    settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
+                @endif
+                routes: {!! XeFrontend::output('route') !!},
+                ruleSet: {!! XeFrontend::output('rule') !!},
+                translation: {!! XeFrontend::output('translation') !!}
+            });
+        }
     </script>
 
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
 
-
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
+
 </head>
 
 <body class="{{ XeFrontend::output('bodyClass') }}">
@@ -65,9 +68,6 @@
 
 <!-- CUSTOM TAGS -->
 {!! XeFrontend::output('html', 'body.append') !!}
-
-<!-- Rule -->
-{!! XeFrontend::output('rule') !!}
 
 @include(app('config')['xe.HtmlWrapper.alert'])
 
