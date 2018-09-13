@@ -593,6 +593,13 @@ abstract class AbstractEditor implements ComponentInterface
         $content = $this->link($content);
         $content = $this->image($content);
 
+        $content = sprintf(
+            '<xe-content data-instance-id="%s" class="xe-content xe-content-%s">%s</xe-content>',
+            $this->getInstanceId(),
+            $this->getInstanceId(),
+            $content
+        );
+
         return $this->compileBody($content);
     }
 
