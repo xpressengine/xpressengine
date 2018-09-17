@@ -16,6 +16,7 @@ namespace Xpressengine\Support;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
+use Illuminate\Container\Container;
 use Xpressengine\Editor\PurifierModules\EditorContent;
 use Xpressengine\Support\PurifierModules;
 use Xpressengine\Widget\PurifierModules\Widget;
@@ -44,19 +45,26 @@ class Purifier
     public $modules = [];
 
     /**
-     * Purifier constructor
+     * @var Container
      */
-    public function __construct()
+    protected $app;
+
+    /**
+     * Purifier constructor
+     *
+     * @param Container $app container instance
+     */
+    public function __construct(Container $app = null)
     {
-        $app = app();
+        $this->app = $app ?: $this->getContainer();
 
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->autoFinalize = false;
 
         $this->config->loadArray(array_merge(
-            $app['config']['purifier.settings.default'],
+            $this->app['config']['purifier.settings.default'],
             [
-                'Cache.SerializerPath' => $app['config']['purifier.cachePath']
+                'Cache.SerializerPath' => $this->app['config']['purifier.cachePath']
             ]
         ));
     }
@@ -90,7 +98,7 @@ class Purifier
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
      * @param string $module module
-     * @return boid
+     * @return void
      */
     public function allowModule($module)
     {
@@ -189,6 +197,10 @@ class Purifier
      */
     public function purify($content)
     {
+        if (!$this->app['request']->user()->isAdmin()) {
+            $this->config->set('HTML.Nofollow', true);
+        }
+
         $htmlDef = $this->config->getHTMLDefinition(true);
 
         foreach ($this->modules as $module) {
@@ -220,5 +232,10 @@ class Purifier
 
         $purifier = new HTMLPurifier($this->config);
         return $purifier->purify($content);
+    }
+
+    protected function getContainer()
+    {
+        return Container::getInstance();
     }
 }
