@@ -98,19 +98,22 @@ class SeoHandler
      */
     public function import($items)
     {
-        if ($this->executable !== true || $this->isExecuted === true) {
+        if ($this->executable !== true) {
+            $this->noIndex();
             return;
         }
 
-        $items = is_array($items) ? $items : [$items];
+        if ($this->isExecuted !== true) {
+            $items = is_array($items) ? $items : [$items];
 
-        $data = $this->resolveData($this->extract($items));
+            $data = $this->resolveData($this->extract($items));
 
-        foreach ($this->importers as $importer) {
-            $importer->exec($data);
+            foreach ($this->importers as $importer) {
+                $importer->exec($data);
+            }
+
+            $this->isExecuted = true;
         }
-
-        $this->isExecuted = true;
     }
 
     /**
@@ -230,6 +233,11 @@ class SeoHandler
     public function notExec()
     {
         $this->executable = false;
+    }
+
+    protected function noIndex()
+    {
+        $this->frontend->meta('robots')->name('robots')->content('noindex')->load();
     }
 
     /**
