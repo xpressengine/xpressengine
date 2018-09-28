@@ -123,14 +123,14 @@
                                             </label>
                                             <div class="checkbox pull-right">
                                                 <label>
-                                                    <input type="checkbox" class="__xe_inherit" {{ !$config->getPure('uploadActive')? 'checked' : '' }}>
+                                                    <input type="checkbox" class="__xe_inherit" {{ $config->getPure('uploadActive') === null ? 'checked' : '' }}>
                                                     {{ xe_trans('xe::inheritMode') }}
                                                 </label>
                                             </div>
                                         </div>
                                         <select name="uploadActive" class="form-control">
-                                            <option value="1" {{ $config->get('uploadActive') ? 'checked' : '' }}>{{ xe_trans('xe::use') }}</option>
-                                            <option value="0" {{ $config->get('uploadActive') ? '' : 'checked' }}>{{ xe_trans('xe::disuse') }}</option>
+                                            <option value="1" {{ $config->get('uploadActive') ? 'selected' : '' }}>{{ xe_trans('xe::use') }}</option>
+                                            <option value="0" {{ $config->get('uploadActive') ? '' : 'selected' }}>{{ xe_trans('xe::disuse') }}</option>
                                         </select>
                                         {{--<label>--}}
                                             {{--<input type="checkbox" name="uploadActive" value="1" {{ $config->get('uploadActive') ? 'checked' : '' }}>--}}
