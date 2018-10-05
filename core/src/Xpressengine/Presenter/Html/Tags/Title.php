@@ -29,12 +29,12 @@ class Title
     use EmptyStringTrait;
 
     /**
-     * @var Meta[] $classes $tags[$attributeName][$attributeValue] = $content;
+     * @var string
      */
     protected static $title;
 
     /**
-     * @return Meta[]
+     * @return string
      */
     public static function output()
     {
