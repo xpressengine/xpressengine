@@ -108,7 +108,7 @@ const config = [
       ],
 
       'core/editor/editor.bundle': [
-        pathInfo.core + '/editor/editor.core.js',
+        pathInfo.core + '/editor/index',
         pathInfo.core + '/editor/textarea.define.js'
       ],
 
@@ -121,6 +121,7 @@ const config = [
       'core/common/js/storeCategory': [pathInfo.common + '/js/storeCategory.js'],
       'core/user/settings/edit': [pathInfo.user + '/settings/edit.js'],
       'core/settings/js/admin.bundle': [pathInfo.settings + '/js/admin.js'],
+      'core/common/js/draft': [pathInfo.common + '/js/draft.js'],
 
       // gulp assets:tree
       // @FIXME
@@ -154,6 +155,7 @@ const config = [
             'core/common/js/utils.js',
             'core/common/js/validator.js',
             'core/common/js/xe.js',
+            'core/**/index.js',
             'core/component.js',
             'core/dynamic-load-manager.js',
             'core/editor/**/*.js',
@@ -170,7 +172,6 @@ const config = [
             'core/request/**/*.js',
             'core/router/**/*.js',
             'core/settings/js/admin.js',
-            'core/singleton.js',
             'core/tree/**/*.js',
             'core/user/settings/edit.js',
             'core/utils/**/*.js',

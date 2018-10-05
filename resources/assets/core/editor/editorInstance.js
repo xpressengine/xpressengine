@@ -1,14 +1,17 @@
 import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import $ from 'jquery'
 
 /**
  * @class
- * @param {string} editorName
- * @param {string} sel selector
- * @param {object} editorOptions
- * @param {array} toolInfoList 에디터에 추가될 tool 정보 리스트
- **/
-
-class InstanceObj {
+ */
+class EditorInstance {
+  /**
+   * @constructor
+   * @param {string} editorName
+   * @param {string} sel selector
+   * @param {object} editorOptions
+   * @param {array} toolInfoList 에디터에 추가될 tool 정보 리스트
+   */
   constructor (editorName, sel, editorOptions, toolInfoList) {
     /** @private */
     let _options = {
@@ -28,7 +31,7 @@ class InstanceObj {
      * 에디터 옵션을 반환한다.
      * @public
      * @method
-     **/
+     */
     this.getOptions = function () {
       return _options
     }
@@ -38,7 +41,7 @@ class InstanceObj {
    * 생성된 instance를 반환한다InstanceObj.
    * @method
    * @return {object}
-   **/
+   */
   getInstance () {
     return this
   }
@@ -47,7 +50,7 @@ class InstanceObj {
    * 에디터에 작성된 컨텐츠를 반환한다.
    * @method
    * @return {string}
-   **/
+   */
   getContents () {
     return XEeditor.editorSet[this.editorName].getContents.call(this)
   }
@@ -56,7 +59,7 @@ class InstanceObj {
    * 에디터에 내용을 입력한다.
    * @method
    * @param {string} text
-   **/
+   */
   setContents (text) {
     XEeditor.editorSet[this.editorName].setContents.call(this, text)
   }
@@ -65,7 +68,7 @@ class InstanceObj {
    * 에디터에 내용을 입력한다.
    * @method
    * @param {string} text
-   **/
+   */
   addContents (text) {
     XEeditor.editorSet[this.editorName].addContents.call(this, text)
   }
@@ -74,7 +77,7 @@ class InstanceObj {
    * 생성된 instance에 property를 등록한다.
    * @method
    * @param {object} obj
-   **/
+   */
   addProps (obj) {
     for (var o in obj) {
       this.props[o] = obj[o]
@@ -85,7 +88,7 @@ class InstanceObj {
    * 에디터에 툴을 추가한다.
    * @method
    * @param {array} toolInstanceList
-   **/
+   */
   addTools (toolInstanceList) {
     XEeditor.editorSet[this.editorName].addTools.call(this, this.getOptions().toolInfoList, toolInstanceList)
   }
@@ -95,7 +98,7 @@ class InstanceObj {
    * @method
    * @param {string} eventName
    * @param {function} callback event callback
-   **/
+   */
   on (eventName, callback) {
     XEeditor.editorSet[this.editorName].on.call(this, eventName, callback)
   }
@@ -104,7 +107,7 @@ class InstanceObj {
    * 구현된 에디터 파일 업로드 기능을 호춣한다.
    * @method
    * @param {object} customOptions
-   **/
+   */
   renderFileUploader (customOptions) {
     XEeditor.editorSet[this.editorName].renderFileUploader.call(this, customOptions)
   }
@@ -120,10 +123,10 @@ class InstanceObj {
    * 구현된 에디터 reset 함수를 호출한다.
    * @method
    * @param {object} customOptions
-   **/
+   */
   reset () {
     XEeditor.editorSet[this.editorName].reset.call(this)
   }
 }
 
-export default InstanceObj
+export default EditorInstance

@@ -355,7 +355,6 @@ class Permission {
       dataType: 'json',
       cache: false,
       success: function (data) {
-        console.log(data)
         // TODO:: view renderin
         if (data.length > 0) {
           var temp = ''

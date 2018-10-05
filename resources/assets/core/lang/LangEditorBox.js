@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import config from 'xe/config'
 
 /**
  * @private
@@ -31,7 +32,7 @@ class LangEditorBox {
       window.XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/lang/lines/' + this.langKey,
+        url: config.getters['router/origin'] + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -47,7 +48,7 @@ class LangEditorBox {
   bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/lang/search/' + window.XE.options.translation.locales[0],
+        source: '/lang/search/' + config.getters['lang/current'].code,
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault()
@@ -62,27 +63,27 @@ class LangEditorBox {
 
   render () {
     var _this = this
-    var locale = window.XE.defaultLocale
-    var fallback = window.XE.options.translation.locales.slice(1)
+    var locale = config.getters['lang/default']
+    var fallback = config.getters['lang/fallback']
     var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq
-    var value = this.getValueFromLinesWithLocale(locale) || ''
+    var value = this.getValueFromLinesWithLocale(locale.code) || ''
     var inputClass = this.multiline ? 'textarea' : 'text'
     var multiline = this.multiline
       ? `<input type="hidden" name="${resource + '/multiline'}" value="true" />`
       : ''
 
-    var editor = this.getEditor(resource, locale, value)
+    var editor = this.getEditor(resource, locale.code, value)
     var subTemplate = ''
 
     fallback.forEach(function (locale, i) {
-      var value = _this.getValueFromLinesWithLocale(locale) || ''
-      var editor = _this.getEditor(resource, locale, value)
+      var value = _this.getValueFromLinesWithLocale(locale.code) || ''
+      var editor = _this.getEditor(resource, locale.code, value)
 
       subTemplate += [
-        `<div key="${locale}" class="input-group">`,
+        `<div key="${locale.code}" class="input-group">`,
         `${editor}`,
         `<span class="input-group-addon">`,
-        `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+        `<span class="flag-code"><i class="${locale.code + ' xe-flag'}"></i>${locale.nativeName}</span>`,
         `</span>`,
         `</div>`
       ].join('\n')
@@ -95,10 +96,10 @@ class LangEditorBox {
       `<input type="hidden" name="${resource + '/key'}" value="${this.langKey || ''}" />`,
       `${multiline}`,
       `<input type="hidden" name="${this.name}" value="${this.langKey || ''}" />`,
-      `<div key="${locale}" class="input-group">`,
+      `<div key="${locale.code}" class="input-group">`,
       `${editor}`,
       `<span class="input-group-addon">`,
-      `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+      `<span class="flag-code"><i class="${locale.code + ' xe-flag'}"></i>${locale.nativeName}</span>`,
       `</span>`,
       `</div>`,
       `<div class="sub">${subTemplate}</div>`,
@@ -113,8 +114,8 @@ class LangEditorBox {
     this.lines = lines
 
     window.XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + _this.seq + '-' + locale
-      var value = _this.getValueFromLinesWithLocale(locale)
+      var selector = '#input-' + _this.seq + '-' + locale.code
+      var value = _this.getValueFromLinesWithLocale(locale.code)
       $(selector).val(value)
     })
   }
@@ -220,7 +221,7 @@ function renderLangEditorBox () {
       window.XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.XE.baseURL + '/lang/lines/many',
+        url: config.getters['router/origin'] + '/lang/lines/many',
         data: {
           keys: langKeys
         },

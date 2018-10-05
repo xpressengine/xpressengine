@@ -1,5 +1,9 @@
 import XeError from 'xe/error'
-export default class RequestError extends XeError {
+/**
+ * @module XeError/RequestError
+ * @extends XeError
+ */
+class RequestError extends XeError {
   constructor (message, request, responseData = null, responseHeaders = null) {
     super(message)
 
@@ -13,3 +17,5 @@ export default class RequestError extends XeError {
     this.headers = responseHeaders
   }
 }
+
+export default RequestError

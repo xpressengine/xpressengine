@@ -4,7 +4,6 @@ import $ from 'jquery'
 import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import XE from 'xe'
 
-
 window.jQuery('#btnCreateCategory').on('click', (e) => {
   var _this = e.target
   var id = $(_this).closest('form').find('[name="id"]').val()

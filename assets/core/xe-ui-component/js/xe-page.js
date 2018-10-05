@@ -223,7 +223,7 @@
       dataType: 'json',
       data: options.data || {},
       headers: {
-        'X-CSRF-TOKEN': XE.Request.config.userToken,
+        'X-CSRF-TOKEN': XE.config.getters['request/xsrfToken'],
         'X-XE-Async-Expose': true
       }
     }
@@ -304,7 +304,7 @@
 
   /**
    * selecor영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
-   * @memberof XE
+   * @memberof XE.prototype
    * @param {string} url
    * @param {string} target selector
    * @param {object} options
@@ -322,7 +322,7 @@
    *     3)callback 실행
    * </pre>
    */
-  XE.page = function (url, target, options, callback) {
+  function page (url, target, options, callback) {
     var defaultOptions = {
       type: 'get'
     }
@@ -337,6 +337,7 @@
       _page(options, callback)
     }
   }
+  XE.page = page
 
   /**
    * modal을 실행하여 .xe-modal-content 영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -357,7 +358,7 @@
    *     4)modal show
    * </pre>
    */
-  XE.pageModal = function (url, options, callback) {
+  function pageModal (url, options, callback) {
     var defaultOptions = {
       type: 'get'
     }
@@ -388,6 +389,7 @@
       })
     }
   }
+  XE.pageModal = pageModal
 
   /**
    * 실행하여 .xe-toggle-menu-items 영역에 html을 로드하고 .xe-toggle-popup 을 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -410,7 +412,7 @@
    *     4)modal show
    * </pre>
    */
-  XE.pageToggleMenu = function (url, $this, options, callback) {
+  function pageToggleMenu (url, $this, options, callback) {
     var $container = $this.parent()
 
     if ($container.hasClass('xe-dropdown') == false) {
@@ -450,4 +452,5 @@
       })
     }
   }
+  XE.pageToggleMenu = pageToggleMenu
 })(window.XE, window.jQuery)

@@ -52,8 +52,15 @@ class Translation
      */
     public static function output()
     {
-        $locales = XeLang::getLocales();
+        $locales = [];
         $terms = [];
+
+        foreach(XeLang::getLocales() as $code) {
+            $locales[] = [
+                'code' => $code,
+                'nativeName' => XeLang::getLocaleText($code)
+            ];
+        }
 
         foreach (self::$keys as $key => $null) {
             $line = XeLang::getOriginalLine($key);

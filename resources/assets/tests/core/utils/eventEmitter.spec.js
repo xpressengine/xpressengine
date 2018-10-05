@@ -1,6 +1,8 @@
 import { expect } from 'chai'
 import { eventify, EventEmitter } from 'xe/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
+/* global describe, it */
+
 describe('Utils', function () {
   describe('EventEmitter', function () {
     it('shortcut', function () {
@@ -114,13 +116,13 @@ describe('Utils', function () {
       eventifyObj.$$on('eventify.on.with-context', function (eventName, data) {
         expect(data).to.be.equal(30)
         expect(this).to.be.an.instanceof(Cat)
-      }, new Cat())
+      }.bind(new Cat()))
       eventifyObj.$$emit('eventify.on.with-context', 30)
 
       eventifyObj.$$once('eventify.once.with-context', function (eventName, data) {
         expect(data).to.be.equal(30)
         expect(this).to.be.an.instanceof(Cat)
-      }, new Cat())
+      }.bind(new Cat()))
       eventifyObj.$$emit('eventify.once.with-context', 30)
     })
 

@@ -1,16 +1,19 @@
-import Singleton from 'xe/singleton'
-import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import App from 'xe/app'
+import griper from 'xe/common/js/griper'
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
-import Lang from 'xe/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
+import config from 'xe/config'
+import { getForm } from 'xe/form'
+import { ValidationError } from 'xe/validator/errors/validator.error.js'
 
 const originalRules = {}
 
-const langInstance = new Lang()
-
-export default class Validator extends Singleton {
+/**
+ * @class
+ */
+class Validator extends App {
   constructor () {
     super()
 
@@ -21,43 +24,42 @@ export default class Validator extends Singleton {
     this.alertTypes = {}
 
     /**
-     * validation 실패 메시지를 노출한다.
-     * @memberof module:validator
-     * @property {object} validator
-     * @property {function} validator.accepted
-     * @property {function} validator.checked
-     * @property {function} validator.required
-     * @property {function} validator.alpha
-     * @property {function} validator.alphanum
-     * @property {function} validator.alpha_num
-     * @property {function} validator.alpha_dash
-     * @property {function} validator.array
-     * @property {function} validator.boolean
-     * @property {function} validator.date
-     * @property {function} validator.date_format
-     * @property {function} validator.digits
-     * @property {function} validator.digits_between
-     * @property {function} validator.filled
-     * @property {function} validator.integer
-     * @property {function} validator.ip
-     * @property {function} validator.mimes
-     * @property {function} validator.regex
-     * @property {function} validator.json
-     * @property {function} validator.string
-     * @property {function} validator.min
-     * @property {function} validator.max
-     * @property {function} validator.email
-     * @property {function} validator.url
-     * @property {function} validator.numeric
-     * @property {function} validator.between
-     */
+    * validation 실패 메시지를 노출한다.
+    * @property {object} evaluator
+    * @property {function} evaluator.accepted
+    * @property {function} evaluator.checked
+    * @property {function} evaluator.required
+    * @property {function} evaluator.alpha
+    * @property {function} evaluator.alphanum
+    * @property {function} evaluator.alpha_num
+    * @property {function} evaluator.alpha_dash
+    * @property {function} evaluator.array
+    * @property {function} evaluator.boolean
+    * @property {function} evaluator.date
+    * @property {function} evaluator.date_format
+    * @property {function} evaluator.digits
+    * @property {function} evaluator.digits_between
+    * @property {function} evaluator.filled
+    * @property {function} evaluator.integer
+    * @property {function} evaluator.ip
+    * @property {function} evaluator.mimes
+    * @property {function} evaluator.regex
+    * @property {function} evaluator.json
+    * @property {function} evaluator.string
+    * @property {function} evaluator.min
+    * @property {function} evaluator.max
+    * @property {function} evaluator.email
+    * @property {function} evaluator.url
+    * @property {function} evaluator.numeric
+    * @property {function} evaluator.between
+    */
     this.evaluator = {
       accepted: function ($dst, parameters) {
         const value = that.getValue($dst)
         if (!value) return
 
         if (['yes', 'ok', 'accept', 'accepted', 'on', '1', 'true'].indexOf(String(value).toLowerCase()) === -1) {
-          that.error($dst, langInstance.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -76,7 +78,7 @@ export default class Validator extends Singleton {
             messageType = 'xe::validatorCheckedMax'
           }
 
-          that.error($dst, langInstance.trans(messageType))
+          that.error($dst, that.$$xe.Lang.trans(messageType))
           return false
         }
 
@@ -84,7 +86,6 @@ export default class Validator extends Singleton {
       },
       required: function ($dst, parameters) {
         const value = that.getValue($dst)
-
         if (value === '') {
           let errorMessage = 'validation.required'
 
@@ -94,7 +95,7 @@ export default class Validator extends Singleton {
             errorMessage = 'validation.required_select'
           }
 
-          that.error($dst, langInstance.trans(errorMessage, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans(errorMessage, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -107,7 +108,7 @@ export default class Validator extends Singleton {
         const pattern = /[a-zA-Z]/
 
         if (!pattern.test(value)) {
-          that.error($dst, langInstance.trans('validation.alpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.alpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -126,7 +127,7 @@ export default class Validator extends Singleton {
           let langKey = 'validation.alpha_num'
           if (alias) langKey = 'validation.alphanum'
 
-          that.error($dst, langInstance.trans(langKey, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans(langKey, { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -139,7 +140,7 @@ export default class Validator extends Singleton {
         const pattern = /[^a-zA-Z0-9\-_]/
 
         if (pattern.test(value)) {
-          that.error($dst, langInstance.trans('validation.alpha_dash', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.alpha_dash', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -147,7 +148,7 @@ export default class Validator extends Singleton {
       },
       array: function ($dst, parameters) {
         if (Array.isArray(that.getValue($dst))) {
-          that.error($dst, langInstance.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -158,7 +159,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (['1', '0', 'true', 'false'].indexOf(String(value).toLowerCase()) === -1) {
-          that.error($dst, langInstance.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -169,7 +170,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!$$.strtotime(value)) {
-          that.error($dst, langInstance.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -180,7 +181,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!moment(value, parameters).isValid()) {
-          that.error($dst, langInstance.trans('validation.date_format', {
+          that.error($dst, that.$$xe.Lang.trans('validation.date_format', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             format: parameters
           }))
@@ -197,7 +198,7 @@ export default class Validator extends Singleton {
         const size = parseInt(parameters)
 
         if (pattern.test(value) || $dst.val().toString().length !== size) {
-          that.error($dst, langInstance.trans('validation.digits', {
+          that.error($dst, that.$$xe.Lang.trans('validation.digits', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             digits: $$.addCommas(size)
           }))
@@ -213,7 +214,7 @@ export default class Validator extends Singleton {
         const size = value.toString().length
 
         if (range[0] > size && size < range[1]) {
-          that.error($dst, langInstance.trans('validation.digits_between', {
+          that.error($dst, that.$$xe.Lang.trans('validation.digits_between', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             min: $$.addCommas(range[0]),
             max: $$.addCommas(range[1])
@@ -224,7 +225,7 @@ export default class Validator extends Singleton {
       },
       filled: function ($dst, parameters) {
         if (that.getValue($dst) === '') {
-          that.error($dst, langInstance.trans('validation.filled', { attribute: $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.filled', { attribute: $dst.attr('name') }))
           return false
         }
         return true
@@ -233,7 +234,7 @@ export default class Validator extends Singleton {
         var value = that.getValue($dst)
 
         if (typeof value !== 'number' || isNaN(value) || Math.floor(value) !== value || !$.isNumeric(value)) {
-          that.error($dst, langInstance.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
         return true
@@ -245,7 +246,7 @@ export default class Validator extends Singleton {
         const pattern = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/
 
         if (!pattern.test(value)) {
-          that.error($dst, langInstance.trans('validation.ip', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.ip', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -258,7 +259,7 @@ export default class Validator extends Singleton {
         const exts = parameters.split(',')
 
         if (exts.indexOf(value.split('.').pop()) === -1) {
-          that.error($dst, langInstance.trans('validation.mimes', {
+          that.error($dst, that.$$xe.Lang.trans('validation.mimes', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             values: '[' + parameters + ']'
           }))
@@ -271,7 +272,7 @@ export default class Validator extends Singleton {
       //   var value = $dst.val()
       //
       //   if (value != null) {
-      //     that.error($dst, langInstance.trans('validation.nullable'))
+      //     that.error($dst, that.$$xe.Lang.trans('validation.nullable'))
       //     return false
       //   }
       //
@@ -282,7 +283,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (!pattern.text(value)) {
-          that.error($dst, langInstance.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -296,7 +297,7 @@ export default class Validator extends Singleton {
           JSON.parse(value)
           return true
         } catch (e) {
-          that.error($dst, langInstance.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
       },
@@ -305,7 +306,7 @@ export default class Validator extends Singleton {
         if (!value) return
 
         if (typeof value !== 'string') {
-          that.error($dst, langInstance.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -320,7 +321,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (parseInt(value) <= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.min.numeric', {
+              that.error($dst, that.$$xe.Lang.trans('validation.min.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -332,7 +333,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) <= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.min.file', {
+              that.error($dst, that.$$xe.Lang.trans('validation.min.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -344,7 +345,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length <= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.min.string', {
+              that.error($dst, that.$$xe.Lang.trans('validation.min.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(parameters)
               }))
@@ -356,7 +357,7 @@ export default class Validator extends Singleton {
 
           default:
             if (value.length <= parseInt(parameters)) {
-              that.error($dst, langInstance.transChoice('xe::validatorMin', parameters, { charCount: $$.addCommas(parameters) }))
+              that.error($dst, that.$$xe.Lang.transChoice('xe::validatorMin', parameters, { charCount: $$.addCommas(parameters) }))
               return false
             }
         }
@@ -372,7 +373,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (parseInt(value) >= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.max.numeric', {
+              that.error($dst, that.$$xe.Lang.trans('validation.max.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -384,7 +385,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) >= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.max.file', {
+              that.error($dst, that.$$xe.Lang.trans('validation.max.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -396,7 +397,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length >= parseInt(parameters)) {
-              that.error($dst, langInstance.trans('validation.max.string', {
+              that.error($dst, that.$$xe.Lang.trans('validation.max.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 max: $$.addCommas(parameters)
               }))
@@ -416,7 +417,7 @@ export default class Validator extends Singleton {
         const pattern = /\w+@\w{2,}\.\w{2,}/
 
         if (!value.match(pattern)) {
-          that.error($dst, langInstance.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -429,7 +430,7 @@ export default class Validator extends Singleton {
         const pattern = /^https?:\/\/\S+/
 
         if (!value.match(pattern)) {
-          that.error($dst, langInstance.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
 
@@ -444,7 +445,7 @@ export default class Validator extends Singleton {
         if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
           return true
         } else {
-          that.error($dst, langInstance.trans('validation.numeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
+          that.error($dst, that.$$xe.Lang.trans('validation.numeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
       },
@@ -458,7 +459,7 @@ export default class Validator extends Singleton {
         switch (type) {
           case 'numeric':
             if (!$.isNumeric(value) || parseInt(value) < parseInt(range[0]) || parseInt(value) > parseInt(range[1])) {
-              that.error($dst, langInstance.trans('validation.between.numeric', {
+              that.error($dst, that.$$xe.Lang.trans('validation.between.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -471,7 +472,7 @@ export default class Validator extends Singleton {
 
           case 'file':
             if ($dst[0].files[0] && ((($dst[0].files[0].size / 1024) < range[0]) || (($dst[0].files[0].size / 1024) > range[1]))) {
-              that.error($dst, langInstance.trans('validation.between.file', {
+              that.error($dst, that.$$xe.Lang.trans('validation.between.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -484,7 +485,7 @@ export default class Validator extends Singleton {
 
           case 'string':
             if (value.length < range[0] || value.length > range[1]) {
-              that.error($dst, langInstance.trans('validation.between.string', {
+              that.error($dst, that.$$xe.Lang.trans('validation.between.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
                 min: $$.addCommas(range[0]),
                 max: $$.addCommas(range[1])
@@ -497,7 +498,7 @@ export default class Validator extends Singleton {
 
           default:
             if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-              that.error($dst, langInstance.trans('xe::validatorBetween', { between: parameters }))
+              that.error($dst, that.$$xe.Lang.trans('xe::validatorBetween', { between: parameters }))
               return false
             }
         }
@@ -505,39 +506,55 @@ export default class Validator extends Singleton {
     }
   }
 
-  boot (XE) {
-    this.locale = XE.locale
+  static appName () {
+    return 'Validator'
+  }
 
-    $(() => {
-      // @FIXME window.ruleSet
-      $('form[data-rule]').each(() => {
-        if (window.hasOwnProperty('ruleSet')) {
-          this.setRules(window.ruleSet.ruleName, window.ruleSet.rules)
-        }
+  boot (XE, config) {
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
+
+    return new Promise((resolve) => {
+      super.boot(XE)
+      const that = this
+
+      this.locale = this.$$config.getters['lang/current'].code
+
+      $(() => {
+        $('form[data-rule]').each(function () {
+          const rule = that.$$config.getters['validator/rule']($(this).data('rule'))
+          if (rule) {
+            that.setRules(rule.ruleName, rule.rules)
+          }
+          getForm(this).$$on('submit', function (eventName, formEl, jqEvent) {
+            try {
+              that.check($(formEl))
+            } catch (e) {
+              jqEvent.preventDefault()
+              return Promise.reject(e)
+            }
+
+            return Promise.resolve()
+          }, { name: 'xe.validator' })
+        })
       })
 
-      $('body').on('submit', 'form[data-rule]', (event) => {
-        try {
-          this.check($(event.target))
-        } catch (e) {
-          // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
-          event.preventDefault()
-        }
-      })
+      resolve(this)
     })
   }
 
   /**
-   * @deprecated
-   */
+  * @deprecated
+  * @ignore
+  */
   init (ruleName) { }
 
   /**
-   * 룰을 세팅한다.
-   * @memberof module:validator
-   * @param {string} ruleName
-   * @param {object} rules
-   */
+  * 룰을 세팅한다.
+  * @param {string} ruleName
+  * @param {object} rules
+  */
   setRules (ruleName, rules) {
     let lang = []
     let langMap = {}
@@ -570,8 +587,9 @@ export default class Validator extends Singleton {
     })
 
     if (lang.length > 0) {
-      const langInstance = new Lang()
-      langInstance.requestTransAll(lang)
+      this.$$xe.app('Lang').then((langInstance) => {
+        langInstance.requestTransAll(lang)
+      })
     }
 
     if (this.rules[ruleName] !== undefined) {
@@ -582,12 +600,12 @@ export default class Validator extends Singleton {
       this.rules[ruleName] = Object.assign({}, this.rules[ruleName], rules)
 
       /*
-       * eventName
-       * ruleName
-       * rules : 누적
-       * additional : 새로 추가된 룰
-       * origin : 처음 설정된 룰
-       * reassign : 룰을 다시 설정
+      * eventName
+      * ruleName
+      * rules : 누적
+      * additional : 새로 추가된 룰
+      * origin : 처음 설정된 룰
+      * reassign : 룰을 다시 설정
       */
       this.$$emit('setRules', ruleName, this.rules[ruleName], rules, originalRules[ruleName], (rules) => {
         this.rules[ruleName] = rules
@@ -598,21 +616,20 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * 폼요소의 룰명을 리턴한다.
-   * @memberof module:validator
-   * @param {jQuery} $frm jQuery form element
-   * @return {string}
-   */
-  getRuleName ($frm) {
-    return $frm.data('rule')
+  * 폼요소의 룰명을 리턴한다.
+  * @param {jQuery} $form jQuery form element
+  * @return {string}
+  */
+  getRuleName ($form) {
+    return $form.data('rule')
   }
 
   /**
-   * 폼에서 element가 출력되는 순서로 정렬하여 반환
-   *
-   * @memberof module:validator
-   * @param {jQuery} $form jQuery form element
-   */
+  * 대상 폼 안의 fields 반환.
+  * jQuery의 특성을 이용해 field가 나타나는 순서대로 정렬된다.
+  *
+  * @param {jQuery} $form jQuery form element
+  */
   getTargetElements ($form) {
     if (!$($form).is('form')) return
 
@@ -628,10 +645,9 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * 폼에 정의 된 룰을 실행한다.
-   * @memberof module:validator
-   * @param {jQuery} $form jQuery form element
-   */
+  * 폼에 정의 된 룰을 실행한다.
+  * @param {jQuery} $form jQuery form element
+  */
   check ($form) {
     if (!$($form).is('form')) return
 
@@ -639,7 +655,6 @@ export default class Validator extends Singleton {
     const ruleName = this.getRuleName($form)
     const rules = this.rules[ruleName]
     const elements = this.getTargetElements($form)
-
     elements.each(function () {
       const name = $(this).attr('name')
       const rule = rules[name]
@@ -648,31 +663,29 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * 폼에 정의 된 룰을 실행한다.
-   * @memberof module:validator
-   * @param {jQuery} $frm jQuery form element
-   * @deprecated
-   */
-  checkRuleContainers ($frm) {
+  * 폼에 정의 된 룰을 실행한다.
+  * @param {jQuery} $form jQuery form element
+  * @deprecated
+  */
+  checkRuleContainers ($form) {
     let that = this
-    let containers = $frm.find('[data-rule]')
+    let containers = $form.find('[data-rule]')
 
     $.each(containers, function (index, container) {
       let ruleName = $(container).data('rule')
       let rules = that.rules[ruleName]
 
       $.each(rules, function (name, rule) {
-        that.validate($frm, name, rule)
+        that.validate($form, name, rule)
       })
     })
   }
 
   /**
-   * 폼안의 요소에 정의된 룰을 실행한다.
-   * @memberof module:validator
-   * @param {jQuery} $frm jQuery form element
-   * @deprecated
-   */
+  * 폼안의 요소에 정의된 룰을 실행한다.
+  * @param {jQuery} $form jQuery form element
+  * @deprecated
+  */
   formValidate ($form) {
     let that = this
 
@@ -688,18 +701,17 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * 폼 내의 name요소에 대한 rule을 실행한다.
-   * @memberof module:validator
-   * @param {jQuery} $frm jQuery form element
-   * @param {string} name
-   * @param {string} rule
-   * @throws {Error} validation 실패시
-   */
-  validate ($frm, name, rule) {
+  * 폼 내의 name요소에 대한 rule을 실행한다.
+  * @param {jQuery} $form jQuery form element
+  * @param {string} name
+  * @param {string} rule
+  * @throws {ValidationError} validation 실패시
+  */
+  validate ($form, name, rule) {
     let parts = rule.split('|')
     let that = this
 
-    $frm.data('valid-result', true)
+    $form.data('valid-result', true)
 
     $.each(parts, function (index, part) {
       let res = part.split(':')
@@ -707,86 +719,88 @@ export default class Validator extends Singleton {
       let parameters = res[1]
 
       if (typeof that.evaluator[command] === 'function') {
-        let $dst = $frm.find('[name="' + name + '"]')
+        let $dst = $form.find('[name="' + name + '"]')
 
-        that.errorClear($frm)
+        that.errorClear($form)
         if (that.evaluator[command]($dst, parameters) === false) {
-          $frm.data('valid-result', false)
-          throw Error('Validation error.')
+          $form.data('valid-result', false)
+          throw ValidationError('Validation error.')
         }
       }
     })
   }
 
+  /**
+  * alert type을 확장
+  * @param {string} type 이름
+  * @param {function} callback
+  */
   extendAlertType (type, callback) {
     this.alertTypes[type] = callback
   }
 
+  /**
+  * 정의된 항목 중 지정된 alert type을 반환
+  * @param {string} type 이름
+  */
   getAlertType (type) {
     return this.alertTypes[type] || null
   }
 
   /**
-   * evaluator 추가
-   * @deprecated
-   * @memberof module:validator
-   * @param {string} name evaluator name
-   * @param {function} callback validation 실패시 호출
-   */
+  * evaluator 추가
+  * @deprecated
+  * @param {string} name evaluator name
+  * @param {function} callback validation 실패시 호출
+  */
   put (name, callback) {
     this.putEvaluator(name, callback)
   }
 
   /**
-   * evaluator 추가
-   * @memberof module:validator
-   * @param {string} name evaluator name
-   * @param {function} callback validation 실패시 호출
-   */
+  * evaluator 추가
+  * @param {string} name evaluator name
+  * @param {function} callback validation 실패시 호출
+  */
   putEvaluator (name, callback) {
     this.evaluator[name] = callback
   }
 
   /**
-   * evaluator 존재 확인
-   * @memberof module:validator
-   * @param {string} name evaluator name
-   * @return {boolean}
-   */
+  * evaluator 존재 확인
+  * @param {string} name evaluator name
+  * @return {boolean}
+  */
   hasEvaluator (name) {
     return !!this.evaluator[name]
   }
 
   /**
-   * evaluator 반환
-   * @memberof module:validator
-   * @param {string} name evaluator name
-   * @return {mixed}
-   */
+  * evaluator 반환
+  * @param {string} name evaluator name
+  * @return {mixed}
+  */
   getEvaluator (name) {
     return this.evaluator[name] || null
   }
 
   /**
-   * validation 메시지 제거
-   * @memberof module:validator
-   * @param {jQuery} $form jQuery form element
-   */
+  * validation 메시지 제거
+  * @param {jQuery} $form jQuery form element
+  */
   errorClear ($form) {
     griper.form.fn.clear($form)
   }
 
   /**
-   * validation 실패 메시지를 노출한다.
-   * @memberof module:validator
-   * @param {jQuery} $element
-   * @param {string} message
-   * @param {object} replaceStrMap
-   */
+  * validation 실패 메시지를 노출한다.
+  * @param {jQuery} $element
+  * @param {string} message
+  * @param {object} replaceStrMap
+  */
   error ($element, message, replaceStrMap) {
     const inlineMessage = $element.data('valid-message-' + this.locale) || $element.data('valid-message')
     const alertType = $element.closest('form').data('rule-alert-type') || 'form'
-
     if (inlineMessage) {
       message = inlineMessage
     }
@@ -807,11 +821,10 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * validation 엘리먼트 요소의 value를 리턴한다.
-   * @memberof module:validator
-   * @param {jQuery} $ele
-   * @return {string}
-   */
+  * validation 엘리먼트 요소의 value를 리턴한다.
+  * @param {jQuery} $ele
+  * @return {string}
+  */
   getValue ($ele) {
     let value = ''
 
@@ -828,3 +841,5 @@ export default class Validator extends Singleton {
     return value
   }
 }
+
+export default Validator

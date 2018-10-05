@@ -1,4 +1,4 @@
-import Singleton from 'xe/singleton'
+import App from 'xe/app'
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 
@@ -7,7 +7,7 @@ const assets = {
   js: new Set()
 }
 
-export default class DynamicLoadManager extends Singleton {
+export default class DynamicLoadManager extends App {
   constructor () {
     super()
 
@@ -15,12 +15,23 @@ export default class DynamicLoadManager extends Singleton {
   }
 
   boot (XE) {
-    XE.$$on('setup', (eventName, options) => {
-    })
+    return new Promise((resolve) => {
+      if (this.booted()) {
+        resolve(this)
+      } else {
+        super.boot(XE)
 
-    assets.js.add(XE.baseURL + '/assets/vendor.js')
-    assets.js.add(XE.baseURL + '/assets/common.js')
-    assets.js.add(XE.baseURL + '/assets/core/common/js/xe.bundle.js')
+        assets.js.add(this.$$config.getters['router/origin'] + '/assets/vendor.js')
+        assets.js.add(this.$$config.getters['router/origin'] + '/assets/common.js')
+        assets.js.add(this.$$config.getters['router/origin'] + '/assets/core/common/js/xe.bundle.js')
+
+        resolve(this)
+      }
+    })
+  }
+
+  static appName () {
+    return 'DynamicLoadManager'
   }
 
   /**
@@ -43,7 +54,7 @@ export default class DynamicLoadManager extends Singleton {
       let src = $$.asset(arrjs[idx])
       if (!assets.js.has(src)) {
         result = result.then(() => new Promise((resolve, reject) => {
-          XE.ajax({
+          this.$$xe.ajax({
             url: src,
             dataType: 'script',
             success: function () {
@@ -118,26 +129,35 @@ export default class DynamicLoadManager extends Singleton {
   * @param {function} error
   */
   cssLoad (url, load, error) {
-    const src = $$.asset(url)
+    return new Promise((resolve, reject) => {
+      const src = $$.asset(url)
 
-    if (!assets.css.has(src) && !$('link[href*="' + src + '"]').length) {
-      const $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src })
+      if (!assets.css.has(src) && !$('link[href*="' + src + '"]').length) {
+        const $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src })
 
-      if (load) {
-        $css.on('load', load)
+        $css.on('load', () => {
+          resolve(src)
+          if (load) {
+            load()
+          }
+        })
+
+        $css.on('error', (err) => {
+          reject(src)
+          if (error) {
+            error(err)
+          }
+        })
+
+        $('head').append($css)
+
+        assets.css.add(src)
+      } else {
+        resolve(src)
+        if (load) {
+          load()
+        }
       }
-
-      if (error) {
-        $css.on('error', error)
-      }
-
-      $('head').append($css)
-
-      assets.css.add(src)
-    } else {
-      if (load) {
-        load()
-      }
-    }
+    })
   }
 }

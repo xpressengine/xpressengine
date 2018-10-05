@@ -1,5 +1,7 @@
 import { expect } from 'chai'
-import * as $$ from 'xe/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import * as $$ from 'xe/utils'
+
+/* global describe, it */
 
 describe('Utils', function () {
   it('lodash functions', function () {

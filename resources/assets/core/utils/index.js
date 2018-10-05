@@ -1,4 +1,5 @@
 import EventEmitter from './EventEmitter'
+import config from 'xe/config'
 
 // lodash
 import curry from 'lodash/curry'
@@ -10,8 +11,6 @@ import throttle from 'lodash/throttle'
 import trim from 'lodash/trim'
 import trimEnd from 'lodash/trimEnd'
 import trimStart from 'lodash/trimStart'
-
-let baseURL = ''
 
 export * from './_deprecated'
 export {
@@ -28,16 +27,22 @@ export {
   trimStart
 }
 
+/**
+ * @module Utils
+ */
+
+/**
+ * @deprecated
+ * @param {String} url
+ */
 export function setBaseURL (url) {
-  baseURL = trimEnd(url, '/')
+  config.dispatch('router/changeOrigin', url)
 }
 
 /**
  * object, function에 EventEmmiter 확장
  *
- * @memberof Utils
  * @param {object|function}
- * @return {avoid}
  */
 export function eventify (target) {
   EventEmitter.eventify(target)
@@ -45,7 +50,6 @@ export function eventify (target) {
 
 /**
  * image mime type의 결과를 리턴한다.
- * @memberof Utils
  * @param {string} mime
  * @return {boolean}
  */
@@ -55,7 +59,6 @@ export function isImage (mime) {
 
 /**
  * video mime type의 결과를 리턴한다.
- * @memberof Utils
  * @param {string} mime
  * @return {boolean}
  */
@@ -65,7 +68,6 @@ export function isVideo (mime) {
 
 /**
  * audio mime type의 결과를 리턴한다.
- * @memberof Utils
  * @param {string} mime
  * @return {boolean}
  */
@@ -75,7 +77,6 @@ export function isAudio (mime) {
 
 /**
  * 파일 사이즈 포멧을 변경하여 리턴한다.
- * @memberof Utils
  * @param {number} bytes
  * @return {string}
  * @FIXME
@@ -100,7 +101,6 @@ export function formatSizeUnits (bytes) {
 
 /**
  * GB, MB, KB, bytes, byte로 정의된 파일 크기를 byte단위로 리턴한다.
- * @memberof Utils
  * @param {string} str
  * @return {number}
  * @FIXME
@@ -125,7 +125,6 @@ export function sizeFormatToBytes (str) {
 
 /**
  * URL문자열인지의 결과를 리턴한다.
- * @memberof Utils
  * @param {string} url
  * @return {boolean}
  * @FIXME
@@ -136,20 +135,15 @@ export function isURL (url) {
 
 /**
  * full url을 리턴한다.
- * @memberof Utils
  * @param {string} url
  * @return {string}
  */
 export function asset (resourceUri) {
   let result = ''
 
-  if (!baseURL) {
-    baseURL = window.location.origin
-  }
-
   // 절대 경로로 변경
   if (!isURL(resourceUri)) {
-    result = baseURL
+    result = config.getters['router/origin']
 
     if (result.substr(-1) === '/') {
       result = result.substr(0, -1)

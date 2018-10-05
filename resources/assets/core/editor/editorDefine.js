@@ -1,14 +1,16 @@
-import EditorValidation from './editor.validation.js'
-import InstanceObj from './editor.instanceObj.js'
-import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import EditorValidation from './editorValidation'
+import EditorInstance from './editorInstance'
+import { eventify } from 'xe/utils'
 import $ from 'jquery'
 
 /**
  * @class
- * @param {object} editorSettings
- * @param {object}interfaces
- **/
-class Editor {
+ */
+class EditorDefine {
+  /**
+   * @param {object} editorSettings
+   * @param {object} interfaces
+   */
   constructor (editorSettings, interfaces) {
     this.name = editorSettings.name
     this.configs = editorSettings.configs
@@ -31,18 +33,17 @@ class Editor {
 
   /**
    * 에디터를 생성 및 툴을 추가한다.
-   * @memberof Editor
    * @param {string} sel selector
    * @param {object} options
    * @param {object} editorOptions
    * @param {array} toolInfoList
-   **/
+   */
   create (sel, options, editorOptions, toolInfoList) {
     toolInfoList = toolInfoList || []
     editorOptions = $.extend(this.configs || {}, editorOptions || {})
 
     if (EditorValidation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
-      const editorIntance = new InstanceObj(this.name, sel, editorOptions, toolInfoList)
+      const editorIntance = new EditorInstance(this.name, sel, editorOptions, toolInfoList)
       editorIntance._editor = this
       this.editorList[sel] = editorIntance
       this.initialize.call(this.editorList[sel], sel, options, editorOptions)
@@ -70,4 +71,4 @@ class Editor {
   }
 }
 
-export default Editor
+export default EditorDefine

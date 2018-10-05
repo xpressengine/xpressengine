@@ -2,8 +2,13 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["last 2 versions", "ie >= 10"]
+        "browsers": ["last 3 versions", "ie > 9"]
       }
     }]
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }

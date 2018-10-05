@@ -3,6 +3,8 @@ import $ from 'jquery'
 import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
+import config from 'xe/config'
+import Form from 'xe/form'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -15,40 +17,120 @@ import Request from 'xe/request'
 import Router from 'xe/router'
 import Translator from 'xe/common/js/translator'
 import Validator from 'xe/validator'
+import { STORE_URL, CHANGE_ORIGIN } from './router/store'
+import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
+import { STORE_TOKEN } from './request/store'
+
+let xeInstance
+const booted = Symbol('booted')
+const symbolApp = Symbol('App')
+
+const defaultConfig = {
+  baseURL: window.location.origin,
+  fixedPrefix: 'plugin',
+  settingsPrefix: 'settings',
+  useXeSpinner: true,
+  translation: {
+    locales: [
+      { code: 'ko', nativeName: '한국어' },
+      { code: 'en', nativeName: 'English' }
+    ]
+  }
+}
 
 /**
+ * XE
  * @class XE
- * @global
- * @namespace XE
- * @type {object}
+ * @borrows EventEmitter#$$emit
+ * @borrows EventEmitter#$$on
+ * @borrows EventEmitter#$$once
+ * @borrows EventEmitter#$$off
+ * @borrows EventEmitter#$$offAll
+ * @borrows config
  */
 class XE {
   constructor () {
+    if (xeInstance) return xeInstance
+
     $$.eventify(this)
-    this.options = {}
+    this[booted] = false
+    // @deprecated
+    this.options = defaultConfig
+    this.config = config
+
+    this.config.subscribe((mutation, state) => {
+      if (mutation.type === `router/${STORE_URL}`) {
+        this.options.baseURL = state.router.origin
+        this.options.fixedPrefix = state.router.fixedPrefix
+        this.options.settingsPrefix = state.router.settingsPrefix
+      } else if (mutation.type === `router/${CHANGE_ORIGIN}`) {
+        this.options.baseURL = state.router.origin
+      } else if (mutation.type === `lang/${STORE_LOCALE}`) {
+        this.options.translation.locales = []
+        state.lang.locales.forEach(locale => {
+          this.options.translation.locales.push(locale.code)
+        })
+        this.options.translation.defaultLocale = state.lang.default
+        this.options.translation.locale = state.lang.current
+      } else if (mutation.type === `lang/${CHANGE_LOCALE}`) {
+        this.options.locale = state.lang.current
+      } else if (mutation.type === `request/${STORE_TOKEN}`) {
+        this.options.locale = state.lang.current
+      }
+    })
+
+    this[symbolApp] = new Map()
 
     // internal libraries
     this.Utils = $$
-    this.Component = new Component()
-    this.DynamicLoadManager = new DynamicLoadManager()
-    this.Lang = new Lang()
-    this.Progress = Progress
-    this.Request = new Request()
-    this.Router = new Router()
-    this.Validator = new Validator()
+    this.Progress = this.registerApp('Progress', Progress)
+    this.Router = this.registerApp('Router', new Router())
+    this.Request = this.registerApp('Request', new Request())
+    this.Lang = this.registerApp('Lang', new Lang())
+    this.DynamicLoadManager = this.registerApp('DynamicLoadManager', new DynamicLoadManager())
+    this.Validator = this.registerApp('Validator', new Validator())
+    this.Component = this.registerApp('Component', new Component())
 
     // external libraries
     this.moment = moment // @DEPRECATED
     this.Translator = Translator // @DEPRECATED
   }
 
+  /**
+   *
+   * @param {*} name App Name
+   * @param {*} callback pass instance
+   * @return {Promise}
+   */
+  app (name, callback) {
+    const app = this[symbolApp].get(name)
+
+    if (typeof callback === 'function') {
+      callback(app)
+    }
+
+    return app.boot(this) // return promise
+  }
+
+  registerApp (name, appInstance) {
+    if (!this[symbolApp].has(name)) {
+      this[symbolApp].set(name, appInstance)
+    }
+
+    return appInstance
+  }
+
+  intercept (appName, pointcut) {
+    const app = this.app(appName)
+    return app.intercept(pointcut)
+  }
+
   boot () {
-    this.Router.boot(this)
-    this.Request.boot(this)
-    this.Lang.boot(this)
-    this.DynamicLoadManager.boot(this)
-    this.Validator.boot(this)
-    this.Component.boot(this)
+    if (this[booted]) {
+      Promise.resolve()
+    }
+
+    this[booted] = true
 
     this.Request.$$on('exposed', (eventName, exposed) => {
       if (exposed.assets) {
@@ -67,14 +149,21 @@ class XE {
 
       this.Lang.set(exposed.translations)
 
-      Object.entries(exposed.rules).forEach((rule) => {
-        if (rule[1]) {
-          this.Validator.setRules(rule[0], rule[1])
-        }
-      })
+      if (exposed.rules) {
+        Object.entries(exposed.rules).forEach((rule) => {
+          if (rule[1]) {
+            this.Validator.setRules(rule[0], rule[1])
+          }
+        })
+      }
     })
 
     $(() => {
+      $('form').each((idx, form) => {
+        /* eslint no-new:off */
+        new Form(form)
+      })
+
       $('body').on('click', 'a[target]', (e) => {
         const $this = $(e.target)
         const href = String($this.attr('href')).trim()
@@ -84,6 +173,7 @@ class XE {
         if (target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
         if (this.isSameHost(href)) return
+        if ($this.closest('.xe-content-editable').length) return
 
         let rel = $this.attr('rel')
 
@@ -98,77 +188,90 @@ class XE {
       })
     })
 
-    // @FIXME
-    $(document).ajaxSend((event, jqxhr, settings) => {
-      if (settings.useXeSpinner) {
-        Progress.start((typeof settings.context === 'undefined') ? $('body') : settings.context)
-      }
-    }).ajaxComplete((event, jqxhr, settings) => {
-      if (settings.useXeSpinner) {
-        Progress.done((typeof settings.context === 'undefined') ? $('body') : settings.context)
-      }
-    }).ajaxError((event, jqxhr, settings, thrownError) => {
-      if (settings.useXeSpinner) {
-        Progress.done()
-      }
+    return Promise.all([
+      this.Router.boot(this, this.options),
+      this.Request.boot(this, this.options),
+      this.Lang.boot(this, this.options),
+      this.DynamicLoadManager.boot(this, this.options),
+      this.Validator.boot(this, this.options),
+      this.Component.boot(this, this.options)
+    ])
+      .then(() => {
+        // @FIXME
+        $(document).ajaxSend((event, jqxhr, settings) => {
+          if (settings.useXeSpinner) {
+            Progress.start((typeof settings.context === 'undefined') ? $('body') : settings.context)
+          }
+        }).ajaxComplete((event, jqxhr, settings) => {
+          if (settings.useXeSpinner) {
+            Progress.done((typeof settings.context === 'undefined') ? $('body') : settings.context)
+          }
+        }).ajaxError((event, jqxhr, settings, thrownError) => {
+          if (settings.useXeSpinner) {
+            Progress.done()
+          }
 
-      if (settings.useXeToast === false) {
-        return
-      }
+          if (settings.useXeToast === false) {
+            return
+          }
 
-      const status = jqxhr.status
-      let errorMessage = 'Not defined error message (' + status + ')'
+          const status = jqxhr.status
+          let errorMessage = 'Not defined error message (' + status + ')'
 
-      // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
-      if (jqxhr.status === 422) {
-        var list = JSON.parse(jqxhr.responseText).errors || {}
+          // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
+          if (jqxhr.status === 422) {
+            var list = JSON.parse(jqxhr.responseText).errors || {}
 
-        errorMessage = ''
-        errorMessage += '<ul>'
-        for (var i in list) {
-          errorMessage += '<li>' + list[i] + '</li>'
-        }
+            errorMessage = ''
+            errorMessage += '<ul>'
+            for (var i in list) {
+              errorMessage += '<li>' + list[i] + '</li>'
+            }
 
-        errorMessage += '</ul>'
-      } else if (settings.dataType === 'json') {
-        errorMessage = JSON.parse(jqxhr.responseText).message
-      } else {
-        errorMessage = jqxhr.statusText
-      }
+            errorMessage += '</ul>'
+          } else if (settings.dataType === 'json') {
+            errorMessage = JSON.parse(jqxhr.responseText).message
+          } else {
+            errorMessage = jqxhr.statusText
+          }
 
-      this.toastByStatus(status, errorMessage)
-    })
+          this.toastByStatus(status, errorMessage)
+        })
 
-    // @FIXME 분리
-    this.Request.$$on('start', (eventName, options) => {
-      Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
-    })
-    this.Request.$$on('sucess', (eventName, options) => {
-      Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
-    })
-    this.Request.$$on('error', (eventName, error) => {
-      Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
+        // @FIXME 분리
+        this.Request.$$on('start', (eventName, options) => {
+          Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
+        })
+        this.Request.$$on('sucess', (eventName, options) => {
+          Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
+        })
+        this.Request.$$on('error', (eventName, error) => {
+          Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
 
-      let errorMessage = ''
+          let errorMessage = ''
 
-      if (error.status === 422) {
-        var list = error.data.errors || {}
+          if (error.status === 422) {
+            var list = error.data.errors || {}
 
-        errorMessage = error.data.message
-        errorMessage += '<ul>'
-        for (var i in list) {
-          errorMessage += '<li>' + list[i] + '</li>'
-        }
+            errorMessage = error.data.message
+            errorMessage += '<ul>'
+            for (var i in list) {
+              errorMessage += '<li>' + list[i] + '</li>'
+            }
 
-        errorMessage += '</ul>'
-      } else if (error.request.responseType === 'json') {
-        errorMessage = JSON.parse(error.request.responseText).message
-      } else {
-        errorMessage = error.statusText
-      }
+            errorMessage += '</ul>'
+          } else if (error.request.responseType === 'json') {
+            errorMessage = JSON.parse(error.request.responseText).message
+          } else {
+            errorMessage = error.statusText
+          }
 
-      this.toastByStatus(error.status, errorMessage)
-    })
+          this.toastByStatus(error.status, errorMessage)
+        })
+      })
+      .catch((e) => {
+        console.debug('app.promise error', e)
+      })
   }
 
   /**
@@ -180,19 +283,40 @@ class XE {
    *   - useXESpinner : ajax요청시 UI상에 spinner 사용여부
    * </pre>
    */
-  setup (options) {
-    options.baseURL = $$.trimEnd(options.baseURL, '/')
-
-    $$.setBaseURL(options.baseURL)
-
+  setup (options = {}) {
     this.configure(options)
-    this.boot()
-
-    this.$$emit('setup', this.options)
+    this.boot().then(() => {
+      this.$$emit('setup', this.options)
+    })
   }
 
-  configure (options) {
-    $.extend(this.options, options)
+  configure (options = {}) {
+    const config = Object.assign({}, defaultConfig, options)
+
+    this.options = Object.assign({}, this.options, config)
+
+    if (config.routes) {
+      this.config.dispatch('router/setRoutes', config.routes)
+    }
+
+    if (config.translation.locales) {
+      this.config.dispatch('lang/setLocales', {
+        locales: config.translation.locales,
+        default: config.defaultLocale,
+        current: config.locale
+      })
+    }
+
+    if (config.translation.terms) {
+      this.config.dispatch('lang/setTerms', config.translation.terms)
+    }
+    this.config.dispatch('request/setXsrfToken', config.userToken)
+    if (config.ruleSet) {
+      this.config.dispatch('validator/setRuleSet', config.ruleSet)
+    }
+    if (config.loginUserId) {
+      this.config.dispatch('user/login', { id: config.loginUserId })
+    }
   }
 
   route (routeName, params = {}) {
@@ -224,10 +348,10 @@ class XE {
    */
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, url)
+      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, { url: url })
+      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, { url: url })
       url = undefined
     }
 
@@ -272,7 +396,7 @@ class XE {
     if (typeof url !== 'string') return false
 
     const base = {
-      url: URI(this.baseURL).normalizePathname()
+      url: URI(this.config.getters['router/origin']).normalizePathname()
     }
     const target = {
       url: URI(url).normalizePathname()
@@ -281,7 +405,7 @@ class XE {
     if (target.url.is('urn')) return false
 
     if (!target.url.hostname()) {
-      target.url = target.url.absoluteTo(this.baseURL)
+      target.url = target.url.absoluteTo(this.config.getters['router/origin'])
     }
 
     base.port = Number(base.url.port())
@@ -376,7 +500,7 @@ class XE {
    * @param {object} jquery form object
    */
   formValidate ($form) {
-    Validator.formValidate($form)
+    this.Validator.formValidate($form)
   }
 
   /**
@@ -384,7 +508,7 @@ class XE {
    * @return {string} baseURL
    */
   get baseURL () {
-    return this.options.baseURL
+    return this.config.getters['router/origin']
   }
 
   /**
@@ -392,7 +516,7 @@ class XE {
    * @return {string} locale
    */
   get locale () {
-    return this.options.locale
+    return this.config.getters['lang/current'].code
   }
 
   /**
@@ -400,6 +524,7 @@ class XE {
    * @param {string} 변경할 locale
    */
   set locale (locale) {
+    this.config.dispatch('lang/changeLocale', locale)
     this.options.locale = locale
   }
 
@@ -415,7 +540,7 @@ class XE {
    * @return {string} defaultLocale
    */
   get defaultLocale () {
-    return this.options.defaultLocale
+    return this.config.getters['lang/default'].code
   }
 
   /**
@@ -426,6 +551,7 @@ class XE {
   }
 }
 
-window.XE = new XE()
+xeInstance = new XE()
+if (!window.XE) window.XE = xeInstance
 
-export default window.XE
+export default xeInstance

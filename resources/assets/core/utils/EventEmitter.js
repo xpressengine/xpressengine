@@ -1,4 +1,9 @@
-export default class EventEmitter {
+/**
+ * @class
+ * @property {object} eventMaps
+ * @property {?function} target
+ */
+class EventEmitter {
   constructor () {
     this.eventMaps = {}
     this.target = null
@@ -7,7 +12,7 @@ export default class EventEmitter {
   /**
    * prototype 확장
    *
-   * @param      {<type>}  target  The target
+   * @param {function} target
    */
   static mixin (target) {
     EventEmitter.extend(target.prototype)
@@ -16,18 +21,17 @@ export default class EventEmitter {
   /**
    * 객체 확장
    *
-   * @param      {<type>}  target  The target
-   * @return     {<type>}  { description_of_the_return_value }
+   * @param {object} target  The target
    */
   static extend (target) {
     const emitter = new EventEmitter(target)
 
-    target.$$on = (eventName, listener, context = null) => {
-      return emitter.$$on(eventName, listener, context)
+    target.$$on = (eventName, listener, options = {}) => {
+      return emitter.$$on(eventName, listener, options)
     }
 
-    target.$$once = (eventName, listener, context = null) => {
-      return emitter.$$once(eventName, listener, context)
+    target.$$once = (eventName, listener, options = {}) => {
+      return emitter.$$once(eventName, listener, options)
     }
 
     target.$$emit = (eventName, ...args) => {
@@ -45,6 +49,9 @@ export default class EventEmitter {
     emitter.target = target
   }
 
+  /**
+   * @param {(object|function)} target
+   */
   static eventify (target) {
     if (typeof target === 'function') {
       EventEmitter.mixin(target)
@@ -53,7 +60,12 @@ export default class EventEmitter {
     }
   }
 
-  $$on (eventName, listener, context = null, options = {}) {
+  /**
+   * @param {string} eventName 이벤트 이름
+   * @param {function} listener
+   * @param {object} [options]
+   */
+  $$on (eventName, listener, options = {}) {
     if (typeof eventName !== 'string') return
     if (typeof listener !== 'function') return
 
@@ -67,33 +79,59 @@ export default class EventEmitter {
     // listener 등록
     const symbolKey = Symbol('EventEmitter Listener')
     this.eventMaps[eventName].set(symbolKey, {
+      name: options.name,
       listener,
-      context,
-      once: options.once
+      options
     })
+
+    this.eventMaps[eventName] = sortListener(this.eventMaps[eventName])
 
     return symbolKey
   }
 
-  $$once (eventName, listener, context = null) {
-    return this.$$on(eventName, listener, context, { 'once': true })
+  /**
+   *
+   * @param {string} eventName
+   * @param {function} listener
+   * @param {object} options
+   */
+  $$once (eventName, listener, options = {}) {
+    options.once = true
+    return this.$$on(eventName, listener, options)
   }
 
+  /**
+   *
+   * @param {string} eventName
+   * @param {...*} args
+   */
   $$emit (eventName, ...args) {
-    if (typeof eventName !== 'string') return
-    if (!(this.eventMaps[eventName] instanceof Map)) return
+    if (typeof eventName !== 'string') {
+      return Promise.resolve()
+    }
+    if (!(this.eventMaps[eventName] instanceof Map)) {
+      return Promise.resolve()
+    }
+
+    let listenerChain = Promise.resolve()
 
     // listener 호출
     this.eventMaps[eventName].forEach((item, symbolKey) => {
-      let listenerContext = item.context || this.target
-
-      if (item.once) this.eventMaps[eventName].delete(symbolKey)
+      if (item.options.once) this.eventMaps[eventName].delete(symbolKey)
 
       let listenerArgs = (args.length) ? [eventName, ...args] : [eventName]
-      item.listener.apply(listenerContext, listenerArgs)
+
+      listenerChain = listenerChain.then(() => item.listener.apply(this.target, listenerArgs))
     })
+
+    return listenerChain
   }
 
+  /**
+   *
+   * @param {string} eventName
+   * @param {Symbol} symbolKey
+   */
   $$off (eventName, symbolKey) {
     if (typeof eventName !== 'string') return
     if (typeof symbolKey !== 'symbol') return
@@ -102,9 +140,47 @@ export default class EventEmitter {
     this.eventMaps[eventName].delete(symbolKey)
   }
 
+  /**
+   *
+   * @param {string} eventName
+   */
   $$offAll (eventName) {
     if (typeof eventName !== 'string') return
 
     this.eventMaps[eventName] = new Map()
   }
 }
+
+/**
+ * @private
+ * @param {ArrayLike} arr
+ * @returns {Array}
+ */
+const sortListener = (arr) => {
+  const sortList = Array.from(arr)
+    .map(([symbol, listener]) => ({symbol, listener}))
+    .sort((a, b) => {
+      const name = b.listener.name
+      const before = a.listener.options.before
+
+      if (!name || !before) {
+        return 0
+      }
+
+      if (before === name) {
+        return -1
+      }
+
+      return 0
+    })
+
+  const result = new Map()
+
+  sortList.forEach((item) => {
+    result.set(item.symbol, item.listener)
+  })
+
+  return result
+}
+
+export default EventEmitter

@@ -1,14 +1,24 @@
 import trimEnd from 'lodash/trimEnd'
-import { routerInstance } from 'xe/router'
+import config from 'xe/config'
 
-export default class Route {
-  constructor (name, route) {
+/**
+ * @class
+ * @extends App
+ */
+class Route {
+  constructor (router, name, route) {
+    this.router = router
     this.name = name
     this.uri = route.uri
     this.methods = route.methods || []
     this.params = route.params || {}
   }
 
+  /**
+   *
+   * @param {object} params
+   * @return {string}
+   */
   url (params = {}) {
     let uri = this.uri
     let _params = Object.assign({}, this.params, params)
@@ -31,21 +41,28 @@ export default class Route {
     // 값이 지정되지 않은 필수적이지 않은 params 제거
     uri = uri.replace(/\{[a-z_]+\?\}/i, '').replace('//', '/')
 
-    let url = routerInstance.baseURL + '/' + uri
-    // 마지막 `/` 제거
-    url = trimEnd(url, '/')
-
-    return url
+    return trimEnd(config.getters['router/origin'] + '/' + uri, '/#? ')
   }
 
+  /**
+   * @return {object}
+   */
   getParams () {
     return this.params
   }
 
+  /**
+   * @return {array}
+   */
   allowedMethods () {
     return this.methods
   }
 
+  /**
+   *
+   * @param {string} method
+   * @return {boolean}
+   */
   isAllow (method) {
     let isAllow = true
 
@@ -56,3 +73,5 @@ export default class Route {
     return isAllow
   }
 }
+
+export default Route

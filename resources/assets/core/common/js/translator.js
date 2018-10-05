@@ -1,3 +1,7 @@
+/**
+ * @module Translator
+ */
+
 /*!
  * William DURAND <william.durand1@gmail.com>
  * MIT Licensed
@@ -427,67 +431,74 @@ var Translator = (function (document, undefined) {
     /**
      * The current locale.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     locale: getCurrentLocale(),
 
     /**
      * Fallback locale.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     fallback: 'en',
 
     /**
      * Placeholder prefix.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     placeHolderPrefix: '%',
 
     /**
      * Placeholder suffix.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     placeHolderSuffix: '%',
 
     /**
      * Default domain.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     defaultDomain: 'messages',
 
     /**
      * Plural separator.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @type {String}
      * @api public
+     * @instance
      */
     pluralSeparator: '|',
 
     /**
      * Adds a translation entry.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @param {String} id         The message id
      * @param {String} message    The message to register for the given id
      * @param {String} [domain]   The domain for the message or null to use the default
      * @param {String} [locale]   The locale or null to use the default
      * @return {Object}           Translator
      * @api public
+     * @instance
      */
     add: function (id, message, domain, locale) {
       var _locale = locale || this.locale || this.fallback
@@ -513,13 +524,14 @@ var Translator = (function (document, undefined) {
     /**
      * Translates the given message.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @param {String} id               The message id
      * @param {Object} [parameters]     An array of parameters for the message
      * @param {String} [domain]         The domain for the message or null to guess it
      * @param {String} [locale]         The locale or null to use the default
      * @return {String}                 The translated string
      * @api public
+     * @instance
      */
     trans: function (id, parameters, domain, locale) {
       var _message = getMessage(
@@ -536,7 +548,7 @@ var Translator = (function (document, undefined) {
     /**
      * Translates the given choice message by choosing a translation according to a number.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @param {String} id               The message id
      * @param {Number} number           The number to use to find the indice of the message
      * @param {Object} [parameters]     An array of parameters for the message
@@ -544,6 +556,7 @@ var Translator = (function (document, undefined) {
      * @param {String} [locale]         The locale or null to use the default
      * @return {String}                 The translated string
      * @api public
+     * @instance
      */
     transChoice: function (id, number, parameters, domain, locale) {
       var _message = getMessage(
@@ -570,10 +583,11 @@ var Translator = (function (document, undefined) {
     /**
      * Loads translations from JSON.
      *
-     * @memberof Translator
+     * @memberof module:Translator
      * @param {String} data     A JSON string or object literal
      * @return {Object}         Translator
      * @api public
+     * @instance
      */
     fromJSON: function (data) {
       if (typeof data === 'string') {
@@ -606,8 +620,9 @@ var Translator = (function (document, undefined) {
     },
 
     /**
-     * @memberof Translator
+     * @memberof module:Translator
      * @api public
+     * @instance
      */
     reset: function () {
       _messages = {}
@@ -615,10 +630,11 @@ var Translator = (function (document, undefined) {
       this.locale = getCurrentLocale()
     },
     /**
-     * @memberof Translator
+     * @memberof module:Translator
      * @param {string} id
      * @return {string}
-     * */
+     * @instance
+     */
     hasMessage: function (id) {
       return hasMessage(this.locale, 'messages', id)
     }

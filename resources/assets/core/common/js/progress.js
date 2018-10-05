@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import DynamicLoadManager from 'xe-common/dynamicLoadManager' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
 /**
  * @module Progress

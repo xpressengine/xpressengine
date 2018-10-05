@@ -1,37 +1,52 @@
-import Singleton from 'xe/singleton'
+import App from 'xe/app'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 import * as $$ from 'xe/utils'
+import config from 'xe/config'
 
-export default class Lang extends Singleton {
+/**
+ * @class
+ * @extends App
+ * @requires Translator
+ */
+class Lang extends App {
   constructor () {
     super()
 
     Translator.placeHolderPrefix = ':'
     Translator.placeHolderSuffix = ''
 
-    this.locales = []
+    this.locales = [] // @FIXME
   }
 
-  boot (XE) {
-    this.XE = XE
-    this.locales = XE.options.translation.locales
+  static appName () {
+    return 'Lang'
+  }
 
-    XE.$$on('setup', (eventName, options) => {
-      if (options.translation) {
-        this.set(options.translation.terms)
-        this.locales = options.translation.locales
+  boot (XE, config) {
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
+
+    return new Promise((resolve) => {
+      super.boot(XE)
+
+      this.XE = XE
+      this.locales = this.$$config.getters['lang/locales'] || []
+
+      if (config.translation) {
+        this.set(config.translation.terms)
       }
+
+      resolve(this)
     })
   }
 
   /**
   * 번역리스트를 Translator 객체에 담는다.
-  * @memberof module:Lang
   * @param {object} items
   */
   set (items) {
-    // $.extend(_items, items);
     $.each(items, function (key, value) {
       Translator.add(key, value)
     })
@@ -39,7 +54,6 @@ export default class Lang extends Singleton {
 
   /**
   * Locale을 세팅한다.
-  * @memberof module:Lang
   * @param {locales} locales
   */
   setLocales (locales) {
@@ -49,7 +63,6 @@ export default class Lang extends Singleton {
 
   /**
   * language code를 반환한다.
-  * @memberof module:Lang
   * @param {string} locale
   * @return {string}
   */
@@ -59,16 +72,14 @@ export default class Lang extends Singleton {
 
   /**
   * 현재 선택된 locale 정보를 반환한다.
-  * @memberof module:Lang
   * @return {string}
   */
   getCurrentLocale () {
-    return this.locales[0]
+    return config.getters['lang/current'].code
   }
 
   /**
   * 등록된 번역 id에 대한 번역 메시지를 반환한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {object} parameters
   * @return {string}
@@ -79,7 +90,6 @@ export default class Lang extends Singleton {
 
   /**
   * 동적으로 번역 id에 해당하는 메시지를 가져와 callback으로 반환한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {object} parameters
   * @param {function} callback @deprecated
@@ -107,7 +117,6 @@ export default class Lang extends Singleton {
 
   /**
   * id list로 번역리스트를 요청한다.
-  * @memberof module:Lang
   * @param {array} langKeys
   * @param {function} callback @deprecated
   * @return {Promise}
@@ -117,10 +126,10 @@ export default class Lang extends Singleton {
     const that = this
 
     return new Promise((resolve, reject) => {
-      that.XE.get(that.XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
+      that.XE.get(this.$$config.getters['router/origin'] + '/lang/lines/many', {keys: langKeys}).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
-            result[key] = $$.find(val, { 'locale': that.XE.defaultLocale }).value
+            result[key] = $$.find(val, { 'locale': config.getters['lang/current'].code }).value
             Translator.add(key, result[key])
           }
         })
@@ -135,7 +144,6 @@ export default class Lang extends Singleton {
 
   /**
   * number에 따라 번역을 선택하여 주어진 메시지를 전달한다.
-  * @memberof module:Lang
   * @param {string} id
   * @param {number} number
   * @param {object} parameters
@@ -144,6 +152,8 @@ export default class Lang extends Singleton {
     return Translator.transChoice(id, number, parameters)
   }
 }
+
+export default Lang
 
 const _items = {
   af: 'af-ZA',

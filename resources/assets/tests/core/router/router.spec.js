@@ -1,9 +1,18 @@
 import { expect } from 'chai'
 import { routerInstance } from 'xe/router'
+import { requestInstance } from 'xe/request'
 import Route from 'xe/router/route'
+import XE from 'xe'
+import { RouteNotFoundError } from 'xe/router/errors/route.error'
+
+/* global describe, it */
 
 describe('Router', function () {
-  routerInstance.boot({ $$on: () => {} })
+  requestInstance.boot(XE)
+  routerInstance.boot(XE)
+  requestInstance.$$emit('exposed', [
+    {"manage.dynamicField.index":{"uri":"settings\/dynamicField","methods":["GET","HEAD"],"params":[]}}
+  ])
 
   describe('setup(baseURL, fixed, settings)', function () {
     describe('fixed, settings는 지정하지 않아도 됨', function () {
@@ -35,6 +44,10 @@ describe('Router', function () {
 
     it('get()은 route instance를 반환', function () {
       expect(routerInstance.get('user.profile')).to.be.instanceof(Route)
+    })
+
+    it('RouteNotFoundError', function () {
+      expect(() => routerInstance.get('route.notfound')).to.be.throw(RouteNotFoundError)
     })
   })
 })

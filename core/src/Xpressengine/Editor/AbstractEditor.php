@@ -593,6 +593,13 @@ abstract class AbstractEditor implements ComponentInterface
         $content = $this->link($content);
         $content = $this->image($content);
 
+        $content = sprintf(
+            '<xe-content data-instance-id="%s" class="xe-content xe-content-%s">%s</xe-content>',
+            $this->getInstanceId(),
+            $this->getInstanceId(),
+            $content
+        );
+
         return $this->compileBody($content);
     }
 
@@ -652,7 +659,11 @@ abstract class AbstractEditor implements ComponentInterface
         $editorScript = '
         <script>
             jQuery(function($) {
-                XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
+                XE.app("Editor").then(function (Editor) {
+                    Editor.getEditor(\'%s\').then(function(editor) {
+                        editor.create(\'%s\', %s, %s, %s);
+                    })
+                })
             });
         </script>';
 
