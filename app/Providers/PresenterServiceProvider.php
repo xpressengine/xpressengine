@@ -135,7 +135,8 @@ class PresenterServiceProvider extends ServiceProvider
                 'route' => \Xpressengine\Presenter\Html\Tags\Route::class,
                 'rule' => \Xpressengine\Presenter\Html\Tags\Rule::class,
                 'translation' => \Xpressengine\Presenter\Html\Tags\Translation::class,
-                'package' => \Xpressengine\Presenter\Html\Tags\Package::class
+                'package' => \Xpressengine\Presenter\Html\Tags\Package::class,
+                'preload' => \Xpressengine\Presenter\Html\Tags\Preload::class
             ];
 
             $frontendHandler = $app['xe.interception']->proxy(FrontendHandler::class, 'XeFrontend');

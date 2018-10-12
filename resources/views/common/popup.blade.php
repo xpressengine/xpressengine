@@ -9,6 +9,7 @@
     <meta name="Generator" content="XpressEngine 3">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     {!! XeFrontend::output('meta') !!}
+    {!! XeFrontend::output('preload') !!}
 
     <!-- TITLE -->
     <title>{!! XeLang::trans(XeFrontend::output('title')) !!}</title>
