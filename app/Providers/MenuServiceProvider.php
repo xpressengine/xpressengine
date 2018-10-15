@@ -75,6 +75,11 @@ class MenuServiceProvider extends ServiceProvider
             if($image = $item->getRelationValue('basicImage')) {
                 $image = $item->isSelected() ? $item->getSelectedImage() : $image;
                 $hoverImage = $item->getHoverImage();
+                // preload
+                app('xe.frontend')->preload()
+                    ->href($hoverImage)
+                    ->as('image')
+                    ->load();
                 return new HtmlString(sprintf(
                     '<img src="%s" class="__xe_menu_image" data-hover="%s" alt="%s"/>',
                     $image,
