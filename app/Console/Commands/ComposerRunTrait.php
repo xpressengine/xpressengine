@@ -120,28 +120,7 @@ trait ComposerRunTrait
      */
     protected function runComposer($inputs, $updateMode = true)
     {
-        $memoryInBytes = function ($value) {
-            $unit = strtolower(substr($value, -1, 1));
-            $value = (int) $value;
-            switch ($unit) {
-                case 'g':
-                    $value *= 1024;
-                // no break (cumulative multiplier)
-                case 'm':
-                    $value *= 1024;
-                // no break (cumulative multiplier)
-                case 'k':
-                    $value *= 1024;
-            }
-
-            return $value;
-        };
-
-        $memoryLimit = trim(ini_get('memory_limit'));
-        // Increase memory_limit if it is lower than 1GB
-        if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1024) {
-            ini_set('memory_limit', '-1');
-        }
+        ini_set('memory_limit', '-1');
 
         if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
             define('__XE_PLUGIN_MODE__', true);
