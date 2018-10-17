@@ -48,9 +48,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     protected $keyGen;
 
     /**
-     * @var TransCachedDatabase
+     * @var Repository
      */
-    protected $cachedDb;
+    protected $repo;
 
     /**
      * @var LoaderInterface
@@ -78,23 +78,23 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     protected static $aliases = [];
 
     /**
-     * @param array               $config     설정
-     * @param Keygen              $keyGen     사용자 정의 다국어용 키 생성기
-     * @param TransCachedDatabase $cachedDb   다국어 캐시 디비
-     * @param LoaderInterface     $fileLoader 다국어 파일 로더
-     * @param LoaderInterface     $urlLoader  다국어 URL 로더
+     * @param array           $config     설정
+     * @param Keygen          $keyGen     사용자 정의 다국어용 키 생성기
+     * @param Repository      $repo       다국어 저장소
+     * @param LoaderInterface $fileLoader 다국어 파일 로더
+     * @param LoaderInterface $urlLoader  다국어 URL 로더
      */
     public function __construct(
         $config,
         Keygen $keyGen,
-        TransCachedDatabase $cachedDb,
+        Repository $repo,
         LoaderInterface $fileLoader,
         LoaderInterface $urlLoader
     ) {
         $this->setLocales($config['locales']);
         $this->setLocaleTexts($config['localeTexts']);
         $this->keyGen = $keyGen;
-        $this->cachedDb = $cachedDb;
+        $this->repo = $repo;
         $this->fileLoader = $fileLoader;
         $this->urlLoader = $urlLoader;
     }
@@ -185,10 +185,13 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      *
      * @param string $key 설정 키
      * @return void
+     *
+     * @deprecated
      */
     public function setCurrentCacheKey($key)
     {
-        $this->cachedDb->setCacheKey($key);
+        // noting to do
+//        $this->repo->setCacheKey($key);
     }
 
     /**
@@ -300,7 +303,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     public function getOriginalLine($key)
     {
         list($namespace, $item) = $this->parseKey($key);
-        return $this->cachedDb->getLine($namespace, $item, $this->getLocale());
+        return $this->repo->getLine($namespace, $item, $this->getLocale());
     }
 
     /**
@@ -313,7 +316,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     protected function getLine($namespace, $item, $locale, array $replace)
     {
         $namespace = $this->getOriginNamespace($namespace);
-        $line = $this->cachedDb->getLine($namespace, $item, $locale);
+        $line = $this->repo->getLine($namespace, $item, $locale);
 
         return $this->makeReplacements($line, $replace);
     }
@@ -391,7 +394,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      */
     public function putLangData($namespace, LangData $langData, $force = false)
     {
-        $this->cachedDb->putLangData($namespace, $langData, $force);
+        $this->repo->putLangData($namespace, $langData, $force);
     }
 
     /**
@@ -448,7 +451,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     {
         list($namespace, $item) = $this->parseKey($key);
 
-        $this->cachedDb->putLine($namespace, $item, $locale, $value, $multiLine, true);
+        $this->repo->putLine($namespace, $item, $locale, $value, $multiLine, true);
     }
 
     /**

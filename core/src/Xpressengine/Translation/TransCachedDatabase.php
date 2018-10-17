@@ -27,18 +27,15 @@ use Xpressengine\Database\VirtualConnectionInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class TransCachedDatabase
+class TransCachedDatabase implements Repository
 {
-    protected $transCache;
     protected $conn;
 
     /**
-     * @param TransCache                 $transCache 다국어용 캐시
-     * @param VirtualConnectionInterface $conn       다국어용 데이터베이스
+     * @param VirtualConnectionInterface $conn 다국어용 데이터베이스
      */
-    public function __construct(TransCache $transCache, VirtualConnectionInterface $conn)
+    public function __construct(VirtualConnectionInterface $conn)
     {
-        $this->transCache = $transCache;
         $this->conn = $conn;
     }
 
@@ -47,23 +44,27 @@ class TransCachedDatabase
      *
      * @param string $transCacheKey 캐시용 키
      * @return void
+     *
+     * @deprecated
      */
     public function setCacheKey($transCacheKey)
     {
-        $this->transCache->setCacheKey($transCacheKey);
+        // noting to do
     }
 
     /**
      * 전체 캐시를 비웁니다
      * @return void
+     *
+     * @deprecated
      */
     public function flush()
     {
-        $this->transCache->flush();
+        // noting to do
     }
 
     /**
-     * 전체 캐시를 비웁니다
+     * 다국어 데이터를 일괄 등록
      *
      * @param string   $namespace 네임스페이스
      * @param LangData $langData  추가하려는 LangData
@@ -118,8 +119,6 @@ class TransCachedDatabase
             $this->conn->table('translation')
                 ->insert($line);
         }
-
-        $this->flush();
     }
 
     /**
@@ -132,19 +131,28 @@ class TransCachedDatabase
      */
     public function getLine($namespace, $item, $locale)
     {
-        $value = $this->transCache->get($namespace, $item, $locale);
-        if (!$value) {
-            $value = $this->conn->table('translation')
-                ->where('namespace', $namespace)
-                ->where('item', $item)
-                ->where('locale', $locale)
-                ->first();
-            if ($value !== null) {
-                $value = $value->value;
-            }
+        $value = $this->conn->table('translation')
+            ->where('namespace', $namespace)
+            ->where('item', $item)
+            ->where('locale', $locale)
+            ->first();
 
-            $this->transCache->set($namespace, $item, $locale, $value);
+        if ($value !== null) {
+            $value = $value->value;
         }
+
         return $value;
+    }
+
+    /**
+     * Chunk the data of translation.
+     *
+     * @param callable $callback callable
+     * @param int      $count    count for chunking
+     * @return void
+     */
+    public function chunk(callable $callback, $count = 100)
+    {
+        $this->conn->table('translation')->orderBy('id')->chunk($count, $callback);
     }
 }

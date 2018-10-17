@@ -22,7 +22,7 @@ class TranslationTestCase extends TestCase
             $langData = $this->getLangData($data);
             $fileLoader->shouldReceive('load')->with($fileName)->andReturn($langData);
         }
-        return new Translator($config, $this->getKeyGen(), $this->getCachedDB(), $fileLoader, $this->getLoader());
+        return new Translator($config, $this->getKeyGen(), $this->getRepo(), $fileLoader, $this->getLoader());
     }
 
     protected function getKeyGen()
@@ -42,14 +42,9 @@ class TranslationTestCase extends TestCase
         return m::mock(\Xpressengine\Translation\Loaders\LoaderInterface::class);
     }
 
-    protected function getCachedDB()
+    protected function getRepo()
     {
-        return new TransCachedDatabaseMock($this->getCache(), $this->getConn());
-    }
-
-    protected function getCache()
-    {
-        return new TransCacheMock(m::mock(\Illuminate\Cache\Repository::class));
+        return new RepositoryMock;
     }
 
     protected function getConn()
@@ -60,7 +55,7 @@ class TranslationTestCase extends TestCase
     public function test() {}
 }
 
-class TransCachedDatabaseMock extends \Xpressengine\Translation\TransCachedDatabase
+class RepositoryMock implements \Xpressengine\Translation\Repository
 {
     private $cache = [];
     public function putLangData($namespace, LangData $langData, $force = false) {
@@ -78,24 +73,3 @@ class TransCachedDatabaseMock extends \Xpressengine\Translation\TransCachedDatab
         return null;
     }
 }
-
-class TransCacheMock extends \Xpressengine\Translation\TransCache
-{
-    private $cacheKey = '';
-    private $cache = [];
-    public function setCacheKey($transCacheKey) {
-        $this->cacheKey = $transCacheKey;
-    }
-    public function get($namespace, $item, $locale) {
-        if ( isset($this->cache[$this->cacheKey][$namespace][$item][$locale]) ) {
-            return $this->cache[$this->cacheKey][$namespace][$item][$locale];
-        }
-        return null;
-    }
-    public function set($namespace, $item, $locale, $value) {
-        $this->cache[$this->cacheKey][$namespace][$item][$locale] = $value;
-    }
-    public function flush() { $this->cache = []; }
-    private function load() {}
-};
-

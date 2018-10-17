@@ -31,11 +31,6 @@ class LangPreprocessor
         app()->setLocale($locale);
         app('cookie')->queue(cookie()->forever('locale', $locale, null, null, false, false));
 
-        app('router')->matched(function($route, $request) use ($locale) {
-            $key = self::class.'://'.$request->method().'/'.$route->getPath().'/'.$locale;
-            app('xe.translator')->setCurrentCacheKey($key);
-        });
-
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->prepare($request);
         }

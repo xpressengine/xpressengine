@@ -86,15 +86,12 @@ class TranslationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Translator::class, function ($app) {
-            $debug = $app['config']['app.debug'];
-            $keyGen = $app['xe.keygen'];
-            $cache = new TransCache($app['cache']->driver(), $debug);
-            $conn = $app['xe.db']->connection();
-            $db = new TransCachedDatabase($cache, $conn);
+            $db = new TransCachedDatabase($app['xe.db']->connection());
+            $cache = new TransCache($app['cache']->driver(), $db);
             $fileLoader = new LangFileLoader($app['files']);
             $urlLoader = new LangURLLoader();
 
-            return new Translator($app['config']['xe.lang'], $keyGen, $db, $fileLoader, $urlLoader);
+            return new Translator($app['config']['xe.lang'], $app['xe.keygen'], $cache, $fileLoader, $urlLoader);
         });
         $this->app->alias(Translator::class, 'xe.translator');
 

@@ -15,6 +15,7 @@
 namespace Xpressengine\Translation;
 
 use Illuminate\Cache\Repository as Cache;
+use Illuminate\Support\Arr;
 
 /**
  * 다국어용 캐시 클래스
@@ -26,22 +27,24 @@ use Illuminate\Cache\Repository as Cache;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class TransCache
+class TransCache implements Repository
 {
     private $cache;
-    private $transCacheKey = null;
+
+    private $repo;
+
+    private $transCacheKey = 'translator';
+
     private $cachedLines = null;
 
-    private $debug = false;
-
     /**
-     * @param Cache      $cache 라라벨 캐시
-     * @param bool|false $debug 디버그 모드 여부
+     * @param Cache               $cache 라라벨 캐시
+     * @param TransCachedDatabase $repo  저장소
      */
-    public function __construct(Cache $cache, $debug = false)
+    public function __construct(Cache $cache, TransCachedDatabase $repo)
     {
         $this->cache = $cache;
-        $this->debug = $debug;
+        $this->repo = $repo;
     }
 
     /**
@@ -51,18 +54,12 @@ class TransCache
      *
      * @param string $transCacheKey 캐시용 키
      * @return void
+     *
+     * @deprecated
      */
     public function setCacheKey($transCacheKey)
     {
-        $this->transCacheKey = $transCacheKey;
-        if ($this->debug) {
-            $cachedJsonString = $this->cache->get('_xe_transCacheKeys');
-            $transCacheKeys = json_decode($cachedJsonString, true);
-            $transCacheKeys = $transCacheKeys ?: [];
-            $transCacheKeys[$transCacheKey] = true;
-            $jsonString = json_enc($transCacheKeys);
-            $this->cache->forever('_xe_transCacheKeys', $jsonString);
-        }
+        // noting to do
     }
 
     /**
@@ -73,7 +70,7 @@ class TransCache
      * @param string $locale    로케일
      * @return string
      */
-    public function get($namespace, $item, $locale)
+    public function getLine($namespace, $item, $locale)
     {
         if (!$this->cachedLines) {
             $this->load();
@@ -82,6 +79,39 @@ class TransCache
         return isset($this->cachedLines[$namespace][$item][$locale])
             ? $this->cachedLines[$namespace][$item][$locale]
             : null;
+    }
+
+    /**
+     * 라인을 추가합니다
+     *
+     * @param string $namespace 네임스페이스
+     * @param string $item      아이템
+     * @param string $locale    로케일
+     * @param string $value     번역문
+     * @param bool   $multiLine 멀티라인 지원 여부
+     * @param bool   $force     force update
+     * @return void
+     */
+    public function putLine($namespace, $item, $locale, $value, $multiLine = false, $force = false)
+    {
+        $this->flush();
+
+        $this->repo->putLine($namespace, $item, $locale, $value, $multiLine, true);
+    }
+
+    /**
+     * 다국어 데이터를 일괄 등록
+     *
+     * @param string   $namespace 네임스페이스
+     * @param LangData $langData  추가하려는 LangData
+     * @param bool     $force     force update
+     * @return void
+     */
+    public function putLangData($namespace, LangData $langData, $force = false)
+    {
+        $this->flush();
+
+        $this->repo->putLangData($namespace, $langData, $force);
     }
 
     /**
@@ -95,13 +125,7 @@ class TransCache
      */
     public function set($namespace, $item, $locale, $value)
     {
-        if (!$this->cachedLines) {
-            $this->load();
-        }
-
-        $this->cachedLines[$namespace][$item][$locale] = $value;
-        $jsonString = json_enc($this->cachedLines);
-        $this->cache->forever($this->transCacheKey, $jsonString);
+        // nothing to do
     }
 
     /**
@@ -111,7 +135,8 @@ class TransCache
      */
     public function flush()
     {
-        $this->cache->getStore()->flush();
+        $this->cache->forget($this->transCacheKey);
+        $this->cachedLines = null;
     }
 
     /**
@@ -121,16 +146,18 @@ class TransCache
      */
     private function load()
     {
-        if (!$this->transCacheKey) {
-            $this->transCacheKey = '';
-        }
-
         $cachedJsonString = $this->cache->get($this->transCacheKey);
         if ($cachedJsonString === null) {
             $this->cachedLines = [];
-            return;
+            $this->repo->chunk(function ($lines) {
+                foreach ($lines as $line) {
+                    $keys = [$line->namespace, $line->item, $line->locale];
+                    Arr::set($this->cachedLines, implode('.', $keys), $line->value);
+                }
+            });
+            $this->cache->forever($this->transCacheKey, json_enc($this->cachedLines));
+        } else {
+            $this->cachedLines = json_decode($cachedJsonString, true);
         }
-
-        $this->cachedLines = json_decode($cachedJsonString, true);
     }
 }
