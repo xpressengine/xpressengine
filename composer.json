@@ -27,7 +27,7 @@
         "composer/composer": "1.7.1",
         "james-heinrich/getid3": "1.9.*",
         "ramsey/uuid": "~3.0",
-        "google/recaptcha": "~1.1",
+        "google/recaptcha": "^1.2",
         "intervention/image": "2.1.*",
         "jenssegers/agent": "~2.6",
         "ezyang/htmlpurifier": "~4.7",

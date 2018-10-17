@@ -107,7 +107,8 @@ class GoogleRecaptcha implements CaptchaInterface
         $this->create();
 
         if ($this->response === null) {
-            $this->response = $this->captcha->verify($this->request->get($this->input), $this->request->ip());
+            $this->response = $this->captcha->setExpectedHostname($this->request->getHost())
+                ->verify($this->request->get($this->input), $this->request->ip());
         }
 
         return $this->response->isSuccess();
