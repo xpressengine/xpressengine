@@ -44,9 +44,12 @@ class GoogleRecaptchaTest extends TestCase
 
         $request->shouldReceive('get')->once()->andReturn('val');
         $request->shouldReceive('ip')->once()->andReturn('0.0.0.0');
+        $request->shouldReceive('getHost')->once()->andReturn('localhost');
+
 
         $mockResponse = m::mock('ReCaptcha\Response');
         $mockResponse->shouldReceive('isSuccess')->andReturn(true);
+        static::$captcha->shouldReceive('setExpectedHostname')->once()->with('localhost')->andReturnSelf();
         static::$captcha->shouldReceive('verify')->once()->with('val', '0.0.0.0')->andReturn($mockResponse);
 
         $result = $instance->verify();
