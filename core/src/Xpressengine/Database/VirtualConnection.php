@@ -60,6 +60,13 @@ class VirtualConnection implements VirtualConnectionInterface
     protected $minutes = 60;
 
     /**
+     * The database table schemas
+     *
+     * @var array
+     */
+    private static $schemas = [];
+
+    /**
      * Create instance
      *
      * @param ConnectionInterface $connection connection instance
@@ -318,15 +325,17 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function getSchema($table)
     {
-        $cache = static::getCache();
+        if (!isset(static::$schemas[$table])) {
+            $cache = static::getCache();
 
-        if ($cache->has($table) === false) {
-            $this->setSchemaCache($table);
+            if ($cache->has($table) === false) {
+                $this->setSchemaCache($table);
+            }
+
+            static::$schemas[$table] = $cache->get($table);
         }
 
-        $schema = $cache->get($table);
-
-        return $schema;
+        return static::$schemas[$table];
     }
 
     /**
