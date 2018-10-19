@@ -53,24 +53,20 @@ const mutations = {
       payload.default = payload.locales[0].code
     }
 
+    if (!payload.current) {
+      payload.current = payload.default
+    }
+
     state.locales = payload.locales
     state.default = payload.default
-    state.current = existsLocale(payload.current) || payload.default
+    state.current = payload.current
   },
   [CHANGE_LOCALE]: (state, locale) => {
-    if (typeof existsLocale(locale) !== 'undefined') {
-      state.current = locale
-    }
+    state.current = locale
   },
   [STORE_TERMS]: (state, terms) => {
     state.terms = terms
   }
-}
-
-function existsLocale (locale) {
-  return state.locales.find(item => {
-    return item.code === locale
-  })
 }
 
 export const module = {
