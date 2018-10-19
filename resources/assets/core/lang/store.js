@@ -17,7 +17,7 @@ const getters = {
     return state.locales.find(el => el.code === state.default)
   },
   current: state => {
-    return state.locales.find(el => el.code === state.current)
+    return state.locales.find(el => el.code === state.current) || state.current
   },
   fallback: state => {
     return state.locales.splice(1)
