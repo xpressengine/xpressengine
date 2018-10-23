@@ -109,7 +109,7 @@ class XE {
       callback(app)
     }
 
-    return app.boot(this) // return promise
+    return app.boot(this, this.options) // return promise
   }
 
   registerApp (name, appInstance) {

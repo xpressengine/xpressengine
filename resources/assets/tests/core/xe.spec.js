@@ -36,15 +36,18 @@ describe('XE', function () {
     })
 
     describe('locale', function () {
-      XE.setup(xeLegacySetupOptions)
-
       describe('local/locales 속성을 가지고', function () {
-        it('값을 확인할 수 있어야 함', function () {
-          assert.equal(XE.locale, 'ko')
-          assert.equal(XE.getLocale(), 'ko') // @deprecated
+        it('값을 확인할 수 있어야 함', function (done) {
+          XE.$$once('setup', function () {
+            assert.equal(XE.locale, 'ko')
+            assert.equal(XE.getLocale(), 'ko') // @deprecated
 
-          assert.equal(XE.defaultLocale, 'en')
-          assert.equal(XE.getDefaultLocale(), 'en') // @deprecated
+            assert.equal(XE.defaultLocale, 'en')
+            assert.equal(XE.getDefaultLocale(), 'en') // @deprecated
+
+            done()
+          })
+          XE.setup(xeLegacySetupOptions)
         })
       })
     })
@@ -82,7 +85,7 @@ describe('XE', function () {
 
   describe('setup', function () {
     it('event emitting', function (done) {
-      XE.$$on('setup', function () {
+      XE.$$once('setup', function () {
         done()
       })
       XE.setup({
@@ -112,13 +115,20 @@ describe('XE', function () {
     })
 
     describe('isSameHost', function () {
-      it('slash 및 protocol 생략해도 true', function () {
-        assert.equal(XE.isSameHost('http://localhost'), true)
-        assert.equal(XE.isSameHost('http://localhost/'), true)
-        assert.equal(XE.isSameHost('http://localhost/public'), true)
-        assert.equal(XE.isSameHost('http://localhost//'), true)
-        assert.equal(XE.isSameHost('http://localhost//public'), true)
-        assert.equal(XE.isSameHost('//localhost/public'), true)
+      it('slash 및 protocol 생략해도 true', function (done) {
+
+        XE.$$once('setup', function () {
+          assert.equal(XE.isSameHost('http://localhost'), true)
+          assert.equal(XE.isSameHost('http://localhost/'), true)
+          assert.equal(XE.isSameHost('http://localhost/public'), true)
+          assert.equal(XE.isSameHost('http://localhost//'), true)
+          assert.equal(XE.isSameHost('http://localhost//public'), true)
+          assert.equal(XE.isSameHost('//localhost/public'), true)
+          done()
+        })
+        XE.setup({
+          baseURL: 'http://localhost'
+        })
       })
 
       it('폴더만 붙은 경우 true', function () {

@@ -17,19 +17,11 @@ describe('Request', function () {
 
   const baseURL = 'http://localhost'
 
-  XE.setup({
-    baseURL,
-    locale: 'ko',
-    defaultLocale: 'en',
-    translation: {
-      locales: [
-        { code: 'ko', nativeName: '한국어' },
-        { code: 'en', nativeName: 'English' }
-      ]
-    }
+  XE.$$once('setup', ({options}) => {
+    routerInstance.boot(XE, options)
+    requestInstance.boot(XE, options)
   })
-  routerInstance.boot(XE)
-  requestInstance.boot(XE)
+  XE.setup({ baseURL })
 
   beforeEach(function () {
     onFulfilled = sinon.spy()

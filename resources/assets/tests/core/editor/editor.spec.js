@@ -64,8 +64,15 @@ describe('Editor', function () {
       })
 
       describe('이름으로 정의된 에디터를 가져올 수 있음', function () {
-        it('getEditor()는 EditorDefine instance를 반환 함', function () {
-          expect(editorInstance.getEditor('MyEditor')).to.be.an.instanceof(EditorDefine)
+        it('getEditor()는 Promise를 반환 함', function () {
+          expect(editorInstance.getEditor('MyEditor')).to.be.an.instanceof(Promise)
+        })
+
+        it('getEditor() onFulfilled 시 EditorDefine instance를 argument로 전달 받음', function (done) {
+          editorInstance.getEditor('MyEditor').then((isEditorInstance) => {
+            expect(isEditorInstance).to.be.an.instanceof(EditorDefine)
+            done()
+          })
         })
       })
     })
