@@ -2,6 +2,7 @@ XpressEngine 3
 ==============
 
 [![License](http://img.shields.io/badge/license-GNU%20LGPL-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html) [![Build Status](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxpressengine%2Fxpressengine.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxpressengine%2Fxpressengine?ref=badge_shield)
 
 XpressEngine3(XE3) is a service friendly CMS based on a Laravel framework. It provides quick feedback and flexible expansion through various bundle systems. With XE3, you can create the future of the web. 
 
@@ -57,6 +58,9 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  usage
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxpressengine%2Fxpressengine.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxpressengine%2Fxpressengine?ref=badge_large)
 
 ## Powered By
 * Naver D2 : http://d2.naver.com/
