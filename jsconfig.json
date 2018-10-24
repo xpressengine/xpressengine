@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "resources/assets",
+    "paths": {
+        "xe": ["core"],
+        "xe/*": ["core/*"]
+    }
+  }
+}
