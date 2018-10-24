@@ -1,65 +1,75 @@
 import $ from 'jquery'
-import * as $$ from 'xe/utils'
+import App from 'xe/app'
+import FormEntity from 'xe/form/entity'
 
 const formElements = new WeakMap()
-
-function getForm (element) {
-  // jQuery instance
-  if (element instanceof $) {
-    element = element[0]
-  }
-
-  if (typeof element.name === 'string' && element.name !== 'form') {
-    element = $(element).closest('form')[0]
-  }
-
-  if (!formElements.has(element)) {
-    formElements.set(element, new Form(element))
-  }
-
-  return formElements.get(element)
-}
 
 /**
  * @class
  */
-class Form {
+class Form extends App {
+  constructor (element) {
+    super()
+  }
+
+  static appName () {
+    return 'Form'
+  }
+
+  boot (XE) {
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
+
+    return new Promise((resolve) => {
+      super.boot(XE)
+
+      resolve(this)
+    })
+  }
+
   /**
    * @param {DOM|jQuery} element
    */
-  constructor (element) {
-    $$.eventify(this)
+  get (element) {
+    // jQuery instance
+    if (element instanceof $) {
+      if (!element.length) return null
+      element = element[0]
+    }
 
-    const that = this
-
-    if (typeof element.name === 'string' && element.name !== 'form') {
+    if (element.tagName !== 'FORM') {
       element = $(element).closest('form')[0]
     }
 
-    this.$element = $(element)
-    formElements.set(element, this)
+    if (!formElements.has(element)) {
+      formElements.set(element, new FormEntity(element))
+    }
 
-    const emitFormSubmit = $$.debounce(function emitFormSubmit (element, event) {
-      return that.$$emit('submit', element, event)
-    }, 750, { leading: true, trailing: false })
-
-    this.$element.on('submit', function (event) {
-      event.preventDefault()
-
-      emitFormSubmit(element, event)
-        .then(() => {
-          if (event.isDefaultPrevented()) {
-            this.submit()
-          }
-        })
-        .catch(() => {
-        })
-    })
+    return formElements.get(element)
   }
 }
 
 export default Form
 
-export {
-  getForm
+/**
+ * @deprecated
+ * @param {DOM|jQuery} element
+ */
+export function getForm (element) {
+  // jQuery instance
+  if (element instanceof $) {
+    if (!element.length) return null
+    element = element[0]
+  }
+
+  if (element.tagName !== 'FORM') {
+    element = $(element).closest('form')[0]
+  }
+
+  if (!formElements.has(element)) {
+    formElements.set(element, new FormEntity(element))
+  }
+
+  return formElements.get(element)
 }

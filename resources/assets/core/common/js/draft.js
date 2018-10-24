@@ -1,5 +1,3 @@
-import { getForm } from 'xe/form'
-
 // @TODO 재작성. 사용되지 않음
 (function (XE, $) {
   'use strict'
@@ -94,9 +92,11 @@ import { getForm } from 'xe/form'
         })
       })
 
-      getForm($(_this.elem)).$$on('submit', () => {
-        return _this.deleteAuto(_this.autoDraftId) // Promise
-      }, { name: 'xe.draft' })
+      XE.app('Form').then(appForm => {
+        appForm.get(_this.elem).$$on('submit', (eventName, element, event, preventSubmit) => {
+          return _this.deleteAuto(_this.key) // Promise
+        }, { name: 'xe.draft' })
+      })
     },
 
     toggle: function (show) {
@@ -350,7 +350,7 @@ import { getForm } from 'xe/form'
         success: function (data) {
           data.forEach(function (obj, i) {
             if (obj.is_auto === 1) {
-              _this.autoDraftId = obj.id
+              _this.key = obj.id
             }
           })
 

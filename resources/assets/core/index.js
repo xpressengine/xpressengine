@@ -4,7 +4,6 @@ import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
-import Form from 'xe/form'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -16,6 +15,7 @@ import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
 import Router from 'xe/router'
 import Translator from 'xe/common/js/translator'
+import Form from 'xe/form'
 import Validator from 'xe/validator'
 import { STORE_URL, CHANGE_ORIGIN } from './router/store'
 import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
@@ -89,6 +89,7 @@ class XE {
     this.Lang = this.registerApp('Lang', new Lang())
     this.DynamicLoadManager = this.registerApp('DynamicLoadManager', new DynamicLoadManager())
     this.Validator = this.registerApp('Validator', new Validator())
+    this.Form = this.registerApp('Form', new Form())
     this.Component = this.registerApp('Component', new Component())
 
     // external libraries
@@ -161,7 +162,7 @@ class XE {
     $(() => {
       $('form').each((idx, form) => {
         /* eslint no-new:off */
-        new Form(form)
+        this.Form.get(form)
       })
 
       $('body').on('click', 'a[target]', (e) => {
@@ -193,6 +194,7 @@ class XE {
       this.Request.boot(this, this.options),
       this.Lang.boot(this, this.options),
       this.DynamicLoadManager.boot(this, this.options),
+      this.Form.boot(this, this.options),
       this.Validator.boot(this, this.options),
       this.Component.boot(this, this.options)
     ])
