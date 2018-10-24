@@ -1,3 +1,6 @@
+import isUndefined from 'lodash/isUndefined'
+import findIndex from 'lodash/findIndex'
+
 /**
  * @class
  * @property {object} eventMaps
@@ -65,7 +68,7 @@ class EventEmitter {
    * @param {function} listener
    * @param {object} [options]
    */
-  $$on (eventName, listener, options = {}) {
+  $$on (eventName, listener, options = { once: false }) {
     if (typeof eventName !== 'string') return
     if (typeof listener !== 'function') return
 
@@ -73,8 +76,6 @@ class EventEmitter {
     if (!(this.eventMaps[eventName] instanceof Map)) {
       this.eventMaps[eventName] = new Map()
     }
-
-    options.once = (typeof options.once === 'boolean') ? options.once : false
 
     // listener 등록
     const symbolKey = Symbol('EventEmitter Listener')
@@ -117,11 +118,18 @@ class EventEmitter {
 
     // listener 호출
     this.eventMaps[eventName].forEach((item, symbolKey) => {
+      if (isUndefined(item) && isUndefined(symbolKey)) return
+
       if (item.options.once) this.eventMaps[eventName].delete(symbolKey)
 
       let listenerArgs = (args.length) ? [eventName, ...args] : [eventName]
+      listenerChain = listenerChain.then((chainArgs = {stop: false}) => {
+        if (chainArgs.stop === true) {
+          return Promise.resolve(chainArgs)
+        }
 
-      listenerChain = listenerChain.then(() => item.listener.apply(this.target, listenerArgs))
+        return item.listener.apply(this.target, listenerArgs)
+      })
     })
 
     return listenerChain
@@ -157,24 +165,31 @@ class EventEmitter {
  * @returns {Array}
  */
 const sortListener = (arr) => {
-  const sortList = Array.from(arr)
-    .map(([symbol, listener]) => ({symbol, listener}))
-    .sort((a, b) => {
-      const name = b.listener.name
-      const before = a.listener.options.before
-
-      if (!name || !before) {
-        return 0
-      }
-
-      if (before === name) {
-        return -1
-      }
-
-      return 0
-    })
+  if (arr.size < 2) {
+    return arr
+  }
 
   const result = new Map()
+  let sortList = Array.from(arr).map(([symbol, listener]) => ({ symbol, listener, name: listener.name, before: listener.options.before }))
+  sortList.sort((a, b) => {
+    const targetIsA = sortList.indexOf(a) < sortList.indexOf(b)
+    let targetItem = a
+    let currentItem = b
+
+    if (!targetIsA) {
+      targetItem = b
+      currentItem = a
+    }
+
+    // before를 지정하지 않았으면 유지
+    if (isUndefined(currentItem.before)) return 0
+
+    // before로 지정한 대상이 앞에 있으면 재정렬
+    if (findIndex(sortList, { 'name': currentItem.before }) < sortList.indexOf(currentItem)) return (targetIsA) ? 1 : -1
+    if (targetItem.name === currentItem.before) return (targetIsA) ? 1 : -1
+
+    return 0
+  })
 
   sortList.forEach((item) => {
     result.set(item.symbol, item.listener)

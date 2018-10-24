@@ -102,6 +102,29 @@ describe('Utils', function () {
       eventifyObj.$$emit('eventify.data-multiple', 10, '20')
     })
 
+    it('$$on sort', function (done) {
+      const arr = []
+      eventifyObj.$$on('eventify.sort', function () { arr.push('eventify.sort.3rd') }, { name: 'eventify.sort.3rd' })
+      eventifyObj.$$on('eventify.sort', function () { arr.push('eventify.sort.1st') }, { name: 'eventify.sort.1st', before: 'eventify.sort.2nd' })
+      eventifyObj.$$on('eventify.sort', function () { arr.push('eventify.sort.2nd') }, { name: 'eventify.sort.2nd', before: 'eventify.sort.3rd' })
+      eventifyObj.$$on('eventify.sort', function () { arr.push('eventify.sort.4th') }, { name: 'eventify.sort.4th' })
+      eventifyObj.$$emit('eventify.sort').then(function () {
+        expect(arr).to.deep.equal(['eventify.sort.1st', 'eventify.sort.2nd', 'eventify.sort.3rd', 'eventify.sort.4th'])
+        done()
+      })
+    })
+
+    it('$$on stop', function (done) {
+      const arr = []
+      eventifyObj.$$on('eventify.stop', function () { arr.push('eventify.stop.1st') })
+      eventifyObj.$$on('eventify.stop', function () { arr.push('eventify.stop.2nd'); return Promise.resolve({stop: true}) })
+      eventifyObj.$$on('eventify.stop', function () { arr.push('eventify.stop.3rd') })
+      eventifyObj.$$emit('eventify.stop').then(function () {
+        expect(arr).to.deep.equal(['eventify.stop.1st', 'eventify.stop.2nd'])
+        done()
+      })
+    })
+
     it('$$once', function () {
       eventifyObj.$$once('eventify.once', function (eventName, data) {
         expect(data).to.be.equal(30)
