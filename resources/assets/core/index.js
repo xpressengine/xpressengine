@@ -167,6 +167,10 @@ class XE {
         this.Form.get(form)
       })
 
+      $('xe-content').each((idx, element) => {
+        this.$$emit('content.render', { element })
+      })
+
       $('body').on('click', 'a[target]', (e) => {
         const $this = $(e.target)
         const href = String($this.attr('href')).trim()
