@@ -157,6 +157,8 @@ class XE {
           }
         })
       }
+
+      return Promise.resolve()
     })
 
     $(() => {
@@ -243,9 +245,11 @@ class XE {
         // @FIXME 분리
         this.Request.$$on('start', (eventName, options) => {
           Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
+          return Promise.resolve()
         })
         this.Request.$$on('sucess', (eventName, options) => {
           Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
+          return Promise.resolve()
         })
         this.Request.$$on('error', (eventName, error) => {
           Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
@@ -269,6 +273,8 @@ class XE {
           }
 
           this.toastByStatus(error.status, errorMessage)
+
+          return Promise.resolve()
         })
       })
       .catch((e) => {
