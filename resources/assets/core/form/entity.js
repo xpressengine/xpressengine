@@ -38,7 +38,7 @@ class formEntity {
 
       emitFormSubmit(that.element, event)
         .then(() => {
-          if (that.preventedSubmit === false) {
+          if (that.preventedSubmit === false && !that.$element.is('[data-submit="xe-ajax"]')) {
             that.submit()
           }
         })
