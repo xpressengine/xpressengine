@@ -29,7 +29,6 @@ function ajaxSend ({ $element, element }) {
     method: $element.attr('method'),
     data: formData,
     dataType: 'json',
-    context: $element.closest('.panel-body'),
     contentType: false,
     processData: false
   }
