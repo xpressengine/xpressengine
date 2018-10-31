@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class DisplayNameAlreadyExistsException extends UserException
 {
-    protected $message = 'Display name already exists.';
+    protected $message = 'xe::displayNameAlreadyExists';
 }

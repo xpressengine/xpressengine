@@ -71,6 +71,9 @@ Route::group(
         Route::get('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@getRegisterAddInfo']);
         Route::post('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@postRegisterAddInfo']);
 
+        Route::post('register/check/email', ['as' => 'auth.register.check.email', 'uses' => 'Auth\RegisterController@validateEmail']);
+        Route::post('register/check/name', ['as' => 'auth.register.check.name', 'uses' => 'Auth\RegisterController@validateDisplayName']);
+
         // email confirm
         Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']); // confirm email
 

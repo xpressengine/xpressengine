@@ -2430,6 +2430,10 @@ return [
         'ko' => '이미 사용중인 회원 이름입니다.',
         'en' => 'Display name already exists.'
     ],
+    'usableEmailAddress' => [
+        'ko' => '사용 가능한 이메일 주소입니다.',
+        'en' => 'This is a usable Email.',
+    ],
     'invalidDisplayName' => [
         'ko' => '회원이름 형식이 잘못되었습니다.',
         'en' => 'The name format is invalid.',

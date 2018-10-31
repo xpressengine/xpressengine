@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeConfig;
 use XeDB;
@@ -14,6 +15,10 @@ use XeFrontend;
 use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBroker;
+use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidDisplayNameException;
+use Xpressengine\User\Exceptions\InvalidEmailException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
@@ -241,7 +246,7 @@ class RegisterController extends Controller
         $rules =$fields->map(function ($field) {
             return $field->getRules();
         })->collapse();
-        
+
         $inputs = $this->validate($request, $rules->all());
 
         $this->handler->update(auth()->user(), $inputs);
@@ -261,5 +266,101 @@ class RegisterController extends Controller
 
             return in_array('required', $rules);
         });
+    }
+
+    /**
+     * validate Email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
+    public function validateEmail(Request $request)
+    {
+        $email = $request->input('email');
+        $email = trim($email);
+        $exceptId = $request->input('except_id', null);
+
+        $valid = true;
+        $message = 'xe::usableEmailAddress';
+
+        try {
+            $this->validate($request, [ 'email' => 'email' ]);
+
+            // 인증 요청중인 이메일이 있는지 확인
+            $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
+            if ($useEmailConfirm) {
+                if ($request->user()->getPendingEmail() !== null) {
+                    throw new PendingEmailAlreadyExistsException();
+                }
+            }
+
+            // 존재하는 이메일이 있는지 확인
+            try {
+                $uniqueRule = Rule::unique('user', 'email');
+
+                if (isset($input['except_id'])) {
+                    $uniqueRule->ignore($exceptId);
+                }
+
+                $this->validate($request, [ 'email' => $uniqueRule ]);
+            } catch (\Exception $e) {
+                throw new EmailAlreadyExistsException();
+            }
+        } catch (EmailAlreadyExistsException $e) {
+            $valid = false;
+            $message = $e->getMessage();
+        } catch (PendingEmailAlreadyExistsException $e) {
+            $valid = false;
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $valid = false;
+            throw $e;
+        }
+
+        return XePresenter::makeApi(
+            ['type' => 'success', 'message' => xe_trans($message), 'email' => $email, 'valid' => $valid]
+        );
+    }
+
+    /**
+     * validate DisplayName
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
+    public function validateDisplayName(Request $request)
+    {
+        $displayName = $request->get('display_name');
+        $displayName = trim($displayName);
+        $message = 'xe::usableDisplayName';
+
+        $valid = true;
+        try {
+            $this->validate($request, [ 'display_name' => 'display_name' ]);
+
+            // 존재하는 display_name이 있는지 확인
+            try {
+                $this->validate($request, [ 'display_name' => Rule::unique('user', 'display_name') ]);
+            } catch (\Exception $e) {
+                throw new DisplayNameAlreadyExistsException();
+            }
+        } catch (DisplayNameAlreadyExistsException $e) {
+            $valid = false;
+            $message = $e->getMessage();
+        } catch (InvalidDisplayNameException $e) {
+            $valid = false;
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $valid = false;
+            throw $e;
+        }
+
+        return XePresenter::makeApi(
+            ['type' => 'success', 'message' => xe_trans($message), 'displayName' => $displayName, 'valid' => $valid]
+        );
     }
 }

@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class EmailAlreadyExistsException extends UserException
 {
-    protected $message = 'Email already exists';
+    protected $message = 'xe::emailAlreadyExists';
 }
