@@ -49,6 +49,10 @@ class EventEmitter {
       return emitter.$$offAll(eventName)
     }
 
+    target.$$hasListener = (eventName) => {
+      return emitter.$$hasListener(eventName)
+    }
+
     emitter.target = target
   }
 
@@ -156,6 +160,10 @@ class EventEmitter {
     if (typeof eventName !== 'string') return
 
     this.eventMaps[eventName] = new Map()
+  }
+
+  $$hasListener (eventName) {
+    return (this.eventMaps[eventName] instanceof Map && this.eventMaps[eventName].size)
   }
 }
 
