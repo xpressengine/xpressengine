@@ -30,7 +30,7 @@ class formEntity {
     const that = this
 
     const emitFormSubmit = $$.debounce(function emitFormSubmit (element, event) {
-      return that.$$emit('submit', element, event, that.preventSubmit.bind(that))
+      return that.$$emit('submit', { element, event, preventSubmit: that.preventSubmit.bind(that) })
     }, 750, { leading: true, trailing: false })
 
     this.$element.on('submit', function (event) {
