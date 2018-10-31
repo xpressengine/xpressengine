@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import * as $$ from 'xe/utils'
+import bindAjaxForm from './ajax'
 
 /**
 * @class
@@ -12,6 +13,7 @@ class formEntity {
     $$.eventify(this)
 
     this.preventedSubmit = false
+    this.initialized = false
 
     if (element.tagName !== 'FORM') {
       element = $(element).closest('form')[0]
@@ -19,6 +21,9 @@ class formEntity {
 
     this.element = element
     this.$element = $(element)
+    this.options = {
+      wait: 750
+    }
 
     this.init()
   }
@@ -27,25 +32,34 @@ class formEntity {
    * @private
    */
   init () {
+    if (this.initialized) return
+
     const that = this
+    this.initialized = true
 
     const emitFormSubmit = $$.debounce(function emitFormSubmit (element, event) {
       return that.$$emit('submit', { element, event, preventSubmit: that.preventSubmit.bind(that) })
-    }, 750, { leading: true, trailing: false })
+    }, this.options.wait, { leading: true, trailing: false })
 
     this.$element.on('submit', function (event) {
-      event.preventDefault()
+      if (that.$$hasListener('submit')) {
+        // 폼 전송 이벤트를 중단
+        event.preventDefault()
 
-      emitFormSubmit(that.element, event)
-        .then(() => {
-          if (that.preventedSubmit === false && !that.$element.is('[data-submit="xe-ajax"]')) {
-            that.submit()
-          }
-        })
-        .catch(() => {
-          event.preventDefault()
-        })
+        emitFormSubmit(that.element, event)
+          .then(() => {
+            // preventSubmit()으로 임의로 중단하지 않은 경우 폼 전송
+            if (!that.submitPrevented()) {
+              that.submit()
+            }
+          })
+          .catch(() => {
+          })
+      }
     })
+
+    // ajax 폼 전송
+    bindAjaxForm(this)
   }
 
   submit () {
@@ -54,6 +68,10 @@ class formEntity {
 
   preventSubmit () {
     this.preventedSubmit = true
+  }
+
+  submitPrevented () {
+    return this.preventedSubmit
   }
 }
 
