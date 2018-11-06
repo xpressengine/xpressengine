@@ -714,15 +714,21 @@ class Validator extends App {
     $form.data('valid-result', true)
 
     $.each(parts, function (index, part) {
-      let res = part.split(':')
-      let command = res[0].toLowerCase()
-      let parameters = res[1]
+      const [evaluatorName, options] = part.split(':')
 
-      if (typeof that.evaluator[command] === 'function') {
-        let $dst = $form.find('[name="' + name + '"]')
-
+      if (typeof that.evaluator[evaluatorName] === 'function') {
         that.errorClear($form)
-        if (that.evaluator[command]($dst, parameters) === false) {
+        const $field = $form.find(`[name="${name}"]`)
+        const result = that.evaluator[evaluatorName]($field, options)
+
+        if (result instanceof Promise) {
+          result.then(res => {
+            if (res === false) {
+              $form.data('valid-result', false)
+              throw ValidationError('Validation error.')
+            }
+          })
+        } else if (result === false) {
           $form.data('valid-result', false)
           throw ValidationError('Validation error.')
         }
