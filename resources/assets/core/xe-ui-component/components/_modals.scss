@@ -84,6 +84,7 @@
   @include clearfix;
 }
 // Close icon
+.xe-modal-header .xe-btn-close,
 .xe-modal-header .btn-close {
   float:right;
   background-color: transparent;
@@ -94,7 +95,7 @@
 }
 
 // Title text within header
-.xe-modal-title, 
+.xe-modal-title,
 .xe-modal-content-title{
   display: block;
   margin: 0;
@@ -106,7 +107,7 @@
 
 .xe-modal-content-title{
   margin-bottom:5px;
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 // Modal body
@@ -118,7 +119,7 @@
   line-height: $line-height-small;
   color: $gray-light;
   p{
-    margin:0;    
+    margin:0;
   }
 }
 
@@ -131,15 +132,18 @@
   @include clearfix; // clear it in case folks use .pull-* classes on buttons
 
   // Properly space out buttons
+  .xe-btn + .xe-btn,
   .btn + .btn {
     margin-left: 5px;
     margin-bottom: 0; // account for input[type="submit"] which gets the bottom margin like all other inputs
   }
   // but override that for button groups
+  .xe-btn-group .xe-btn + .xe-btn,
   .btn-group .btn + .btn {
     margin-left: -1px;
   }
   // and override it for block buttons as well
+  .xe-btn-block + .xe-btn-block,
   .btn-block + .btn-block {
     margin-left: 0;
   }
@@ -189,9 +193,9 @@
   }
   .list-inner-item {
     display: block;
-    overflow: hidden;    
+    overflow: hidden;
     padding: 14px 24px 14px 0;
-    border-bottom: 1px solid #e4e4e4;    
+    border-bottom: 1px solid #e4e4e4;
     .list-text {
       display: table-cell;
       vertical-align: middle;

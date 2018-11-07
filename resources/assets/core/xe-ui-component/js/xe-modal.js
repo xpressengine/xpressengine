@@ -82,7 +82,7 @@
         _this.$element[0].offsetWidth // force reflow
       }
 
-      _this.$element.addClass('in')
+      _this.$element.addClass('in show')
 
       _this.enforceFocus()
 
@@ -115,7 +115,7 @@
     $(document).off('focusin.xe.modal')
 
     this.$element
-      .removeClass('in')
+      .removeClass('in show')
       .off('click.dismiss.xe.modal')
       .off('mouseup.dismiss.xe.modal')
 
@@ -197,7 +197,7 @@
 
       if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
 
-      this.$backdrop.addClass('in')
+      this.$backdrop.addClass('in show')
 
       if (!callback) return
 
@@ -207,7 +207,7 @@
           .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION)
         : callback()
     } else if (!this.isShown && this.$backdrop) {
-      this.$backdrop.removeClass('in')
+      this.$backdrop.removeClass('in show')
 
       var callbackRemove = function () {
         _this.removeBackdrop()

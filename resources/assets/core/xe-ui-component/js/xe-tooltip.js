@@ -264,7 +264,7 @@
       }
     }, offset), 0)
 
-    $tip.addClass('in')
+    $tip.addClass('in show')
 
     // check to see if placing tip in new offset caused the tip to resize itself
     var actualWidth = $tip[0].offsetWidth
@@ -318,7 +318,7 @@
 
     if (e.isDefaultPrevented()) return
 
-    $tip.removeClass('in')
+    $tip.removeClass('in show')
 
     $.support.transition && $tip.hasClass('fade')
       ? $tip
