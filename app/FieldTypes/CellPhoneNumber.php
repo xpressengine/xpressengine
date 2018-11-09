@@ -107,6 +107,10 @@ class CellPhoneNumber extends AbstractType
     protected function registerValidator()
     {
         app('validator')->extend('cell_phone', function ($attribute, $value) {
+            if ($value == null) {
+                return true;
+            }
+
             $value = str_replace(['-', ' '], '', $value);
 
             if (is_numeric($value) === false) {
@@ -135,4 +139,3 @@ class CellPhoneNumber extends AbstractType
         }, xe_trans('xe::mngCellPhoneNumberValidate'));
     }
 }
-
