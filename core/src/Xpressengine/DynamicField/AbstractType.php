@@ -541,8 +541,13 @@ abstract class AbstractType implements ComponentInterface
             return null;
         }
 
-        $updateParam = [];
+        foreach ($args as $index => $arg) {
+            if ($arg == null) {
+                $args[$index] = '';
+            }
+        }
 
+        $updateParam = [];
         foreach ($this->getColumns() as $column) {
             $key = $config->get('id') . '_' . $column->name;
 
