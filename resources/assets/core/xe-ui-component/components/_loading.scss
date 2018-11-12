@@ -40,7 +40,7 @@
   height: 24px;
   background: transparent;
   &:before {
-    @include loadinglayout(type, 0, #eae7e4);
+    @include loadinglayout(type, 0s, #eae7e4);
     top: 0;
     right: 0;
   }
@@ -70,7 +70,7 @@
   height: 22px;
   background: transparent;
   &:before {
-    @include loadinglayout(type2, 0, #33ffcd);
+    @include loadinglayout(type2, 0s, #33ffcd);
     left: 0;
   }
   .xe-loading-inner {
