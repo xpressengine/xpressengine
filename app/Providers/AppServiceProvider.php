@@ -27,12 +27,14 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->resolving('auth', function ($auth, $app) {
             $app['events']->listen(Login::class, function ($event) use ($app) {
-                $app['db']->table('user_login_log')->insert([
-                    'user_id' => $event->user->getAuthIdentifier(),
-                    'user_agent' => $app['request']->userAgent(),
-                    'ip' => $app['request']->ip(),
-                    'created_at' => Carbon::now(),
-                ]);
+                if ($app['db']->connection()->getSchemaBuilder()->hasTable('user_login_log')) {
+                    $app['db']->table('user_login_log')->insert([
+                        'user_id' => $event->user->getAuthIdentifier(),
+                        'user_agent' => $app['request']->userAgent(),
+                        'ip' => $app['request']->ip(),
+                        'created_at' => Carbon::now(),
+                    ]);
+                }
             });
         });
     }
