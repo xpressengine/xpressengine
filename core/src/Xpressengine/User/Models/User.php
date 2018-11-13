@@ -67,8 +67,18 @@ class User extends DynamicModel implements
         'password_updated_at'
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    /**
+     * The attributes that should be visible in serialization.
+     *
+     * @var array
+     */
+    protected $visible = ['id', 'display_name', 'introduction',];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
     protected $appends = ['profileImage'];
 
     /**
