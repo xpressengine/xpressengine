@@ -274,6 +274,10 @@ class XE {
             errorMessage = JSON.parse(error.request.responseText).message
           } else {
             errorMessage = error.statusText
+
+            if (error.data && error.data.message) {
+              errorMessage = error.data.message
+            }
           }
 
           this.toastByStatus(error.status, errorMessage)
