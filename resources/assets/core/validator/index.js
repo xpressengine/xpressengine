@@ -529,7 +529,7 @@ class Validator extends App {
           }
           getForm(this).$$on('submit', function (eventName, formEl, jqEvent) {
             try {
-              that.check($(formEl))
+              that.check($(formEl.element))
             } catch (e) {
               jqEvent.preventDefault()
               return Promise.reject(e)
