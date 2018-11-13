@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
+use Illuminate\Validation\ValidationRuleParser;
+
 /**
  * Rule
  *
@@ -100,6 +102,23 @@ class Rule
         if (isset(self::$ruleList[$ruleName]) === true) {
             $rules = array_merge($rules, self::$ruleList[$ruleName]->getRules());
         }
+
+        $rules = validator([], $rules)->getRules();
+
+        array_walk($rules, function (&$rule, $key) {
+            foreach ($rule as &$item) {
+                list($method, $parameter) = ValidationRuleParser::parse($item);
+                $method = snake_case($method);
+                if (count($parameter)) {
+                    $parameter = implode($parameter, ':');
+                    $item = implode(compact('method', 'parameter'), ':');
+                } else {
+                    $item = $method;
+                }
+            }
+            $rule = implode($rule, '|');
+        });
+
         $this->ruleName = $ruleName;
         $this->rules = $rules;
         self::$ruleList[$ruleName] = $this;
