@@ -295,16 +295,10 @@ class EditorController extends Controller
         if (XeMedia::is($file) === true) {
             $media = XeMedia::make($file);
             $thumbnails = XeMedia::createThumbnails($media, EditorHandler::THUMBNAIL_TYPE);
-
-            $media = $media->toArray();
-
-            if (!empty($thumbnails)) {
-                $info['thumbnails'] = $thumbnails;
-            }
         }
 
         return XePresenter::makeApi([
-            'file' => $file->toArray(),
+            'file' => $file,
             'media' => $media,
             'thumbnails' => $thumbnails,
         ]);

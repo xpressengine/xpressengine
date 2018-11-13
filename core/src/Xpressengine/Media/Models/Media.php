@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Media\Models;
 
+use Xpressengine\Media\Models\Meta\Meta;
 use Xpressengine\Storage\File;
 use Xpressengine\Media\MimeTypeFilter;
 
@@ -123,6 +124,16 @@ abstract class Media extends File
     public function getUrlAttribute()
     {
         return $this->url();
+    }
+
+    /**
+     * Get the meta data.
+     *
+     * @return Meta|null
+     */
+    public function getMetaAttribute($value)
+    {
+        return $value;
     }
 
     /**
