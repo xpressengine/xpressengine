@@ -18,12 +18,14 @@
  * DynamicField는 이렇게 변경된 database table에
  * 데이터를 입/출력 할 수 있도록 도와주는 패키지 입니다.
  */
+
 namespace Xpressengine\DynamicField;
 
 use Illuminate\Support\Str;
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
 use Illuminate\View\Factory as ViewFactory;
+use Xpressengine\Plugin\PluginRegister;
 
 /**
  * DynamicFieldHandler
@@ -38,6 +40,11 @@ use Illuminate\View\Factory as ViewFactory;
 class DynamicFieldHandler
 {
     const CONFIG_NAME = 'DynamicField';
+
+    /**
+     * @var PluginRegister
+     */
+    protected $register;
 
     /**
      * database connection
@@ -64,21 +71,24 @@ class DynamicFieldHandler
     /**
      * create instance
      *
-     * @param VirtualConnectionInterface $connection      database connection
-     * @param ConfigHandler              $configHandler   config handler
-     * @param RegisterHandler            $registerHandler register handler
-     * @param ViewFactory                $viewFactory     view factory
+     * @param VirtualConnectionInterface $connection database connection
+     * @param ConfigHandler $configHandler config handler
+     * @param RegisterHandler $registerHandler register handler
+     * @param ViewFactory $viewFactory view factory
      */
     public function __construct(
         VirtualConnectionInterface $connection,
         ConfigHandler $configHandler,
         RegisterHandler $registerHandler,
-        ViewFactory $viewFactory
-    ) {
+        ViewFactory $viewFactory,
+        PluginRegister $pluginRegister
+    )
+    {
         $this->connection = $connection;
         $this->configHandler = $configHandler;
         $this->registerHandler = $registerHandler;
         $this->viewFactory = $viewFactory;
+        $this->register = $pluginRegister;
     }
 
     /**
@@ -100,6 +110,7 @@ class DynamicFieldHandler
     {
         return $this->registerHandler;
     }
+
     /**
      * get ViewFactory
      *
@@ -234,7 +245,7 @@ class DynamicFieldHandler
      * get dynamic field
      *
      * @param string $group config group name
-     * @param string $id    field type id
+     * @param string $id field type id
      * @return AbstractType
      */
     public function get($group, $id)
@@ -248,15 +259,32 @@ class DynamicFieldHandler
     }
 
     /**
+     * @param string $id field type id
+     * @return boolean
+     */
+    public function hasDynamicField($id)
+    {
+
+        $registerd = $this->register->get($id);
+
+        if ($registerd === null) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
      * has dynamic field
      *
      * @param string $group config group name
-     * @param string $id    field type id
+     * @param string $id field type id
      * @return bool
      */
     public function has($group, $id)
     {
-        return $this->configHandler->get($group, $id) === null? false : true;
+        return $this->configHandler->get($group, $id) === null ? false : true;
     }
 
     /**
@@ -279,7 +307,7 @@ class DynamicFieldHandler
      * get dynamic field without skin instance
      *
      * @param string $group config group name
-     * @param string $id    field type id
+     * @param string $id field type id
      * @return AbstractType
      */
     public function getType($group, $id)
@@ -310,7 +338,7 @@ class DynamicFieldHandler
         $rules = [];
         foreach ($type->getRules() as $columnName => $rule) {
             $id = snake_case($config->get('id'));
-            if (Str::startsWith($columnName, $id.'_')) {
+            if (Str::startsWith($columnName, $id . '_')) {
                 $key = $columnName;
             } else {
                 $key = snake_case($config->get('id')) . '_' . $columnName;
