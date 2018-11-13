@@ -140,6 +140,17 @@ class UserMigration extends Migration {
             $table->engine = "InnoDB";
         });
 
+        Schema::create('user_login_log', function (Blueprint $table) {
+            $table->engine = "InnoDB";
+
+            $table->bigIncrements('id')->comment('row id');
+            $table->string('user_id', 36)->comment('user ID');
+            $table->string('user_agent')->comment('user agent');
+            $table->string('ip', 15)->comment('ip');
+            $table->timestamp('created_at')->nullable()->comment('created date');
+
+            $table->index('user_id');
+        });
     }
 
     public function installed()
@@ -205,6 +216,11 @@ class UserMigration extends Migration {
 
         // ver.3.0.0-rc.1
         if (DB::table('user')->where('rating', 'member')->count() > 0) {
+            return false;
+        }
+
+        // ver.3.0.0-rc.7
+        if (!Schema::hasTable('user_login_log')) {
             return false;
         }
     }
@@ -294,7 +310,6 @@ class UserMigration extends Migration {
                 $table->engine = "InnoDB";
             });
 
-            // todo: schema 변경됨 수정 필요
             $commonConfig = app('xe.config')->get('user.common');
             $tos = $commonConfig->get('agreement');
             $tosTitleKey = 'user::'.app('xe.keygen')->generate();
@@ -343,6 +358,21 @@ class UserMigration extends Migration {
             }
 
             DB::table('user')->where('rating', 'member')->update(['rating' => 'user']);
+        }
+
+        // ver.3.0.0-rc.7
+        if (!Schema::hasTable('user_login_log')) {
+            Schema::create('user_login_log', function (Blueprint $table) {
+                $table->engine = "InnoDB";
+
+                $table->bigIncrements('id')->comment('row id');
+                $table->string('user_id', 36)->comment('user ID');
+                $table->string('user_agent')->comment('user agent');
+                $table->string('ip', 15)->comment('ip');
+                $table->timestamp('created_at')->nullable()->comment('created date');
+
+                $table->index('user_id');
+            });
         }
 
     }
