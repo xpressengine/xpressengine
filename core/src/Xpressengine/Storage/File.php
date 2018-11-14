@@ -64,11 +64,11 @@ class File extends DynamicModel
     protected $fillable = ['origin_id', 'user_id', 'disk', 'path', 'filename', 'clientname', 'mime', 'size'];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be visible for serialization.
      *
      * @var array
      */
-    protected $hidden = ['disk', 'path', 'filename', 'use_count'];
+    protected $visible = ['id', 'user_id', 'clientname', 'mime', 'size', 'download_count'];
 
     /**
      * Indicates if the IDs are auto-incrementing.

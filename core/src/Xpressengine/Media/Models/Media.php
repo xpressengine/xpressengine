@@ -44,6 +44,13 @@ abstract class Media extends File
     protected static $mimes = [];
 
     /**
+     * The attributes that should be visible for serialization.
+     *
+     * @var array
+     */
+    protected $visible = ['id', 'user_id', 'clientname', 'mime', 'size', 'download_count', 'url', 'meta'];
+
+    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -131,9 +138,9 @@ abstract class Media extends File
      *
      * @return Meta|null
      */
-    public function getMetaAttribute($value)
+    public function getMetaAttribute()
     {
-        return $value;
+        return $this->getRelationValue('meta');
     }
 
     /**
