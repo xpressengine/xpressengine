@@ -260,11 +260,6 @@
               $target.html(html)
           }
 
-          $('form', $target).each((idx, form) => {
-            /* eslint no-new:off */
-            XE.Form.get(form)
-          })
-
           if (callback) {
             callback(data)
           }
