@@ -242,6 +242,20 @@ class DynamicFieldHandler
     }
 
     /**
+     * get Dynamic field table attributes by group name
+     * @param string $group config group name
+     * @return array
+     */
+    public function getDynamicAttributes($group)
+    {
+        $fieldTypes = $this->gets($group);
+        $dynamicFieldsArrays = array_map(function (AbstractType $fieldType) {
+            return array_keys($fieldType->getRules());
+        }, $fieldTypes);
+        return array_flatten($dynamicFieldsArrays);
+    }
+
+    /**
      * get dynamic field
      *
      * @param string $group config group name
