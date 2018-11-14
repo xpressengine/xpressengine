@@ -2,7 +2,6 @@
 
 namespace DummyNamespace;
 
-
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
@@ -41,7 +40,7 @@ class DummyClass extends AbstractType
     public function getColumns()
     {
         return [
-            'column'=>new ColumnEntity('column',ColumnDataType::STRING)
+            'column'=>new ColumnEntity('column', ColumnDataType::STRING)
         ];
     }
 
@@ -64,6 +63,6 @@ class DummyClass extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        return view(self::$path.'/views/index');
+        return view('DummyPluginId::DummyFieldDirname/views/setting');
     }
 }
