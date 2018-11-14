@@ -116,7 +116,7 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * getSkinId
+     * getFieldId
      *
      * @return array|string
      * @throws \Exception
@@ -132,7 +132,7 @@ class DynamicFieldMake extends ComponentMakeCommand
             $id = $plugin->getId().'@'.strtolower($this->argument('name'));
         } else {
             if (strpos('fieldType/', $id) === 0) {
-                $id = substr($id, 5);
+                $id = substr($id, 10);
             }
 
             if (strpos($id, '@') === false) {
