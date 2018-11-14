@@ -75,6 +75,7 @@ class DynamicFieldHandler
      * @param ConfigHandler $configHandler config handler
      * @param RegisterHandler $registerHandler register handler
      * @param ViewFactory $viewFactory view factory
+     * @param PluginRegister $pluginRegister plugin register
      */
     public function __construct(
         VirtualConnectionInterface $connection,
