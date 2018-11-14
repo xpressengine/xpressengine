@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Media\Models;
 
+use Xpressengine\Media\Models\Meta\Meta;
 use Xpressengine\Storage\File;
 use Xpressengine\Media\MimeTypeFilter;
 
@@ -41,6 +42,20 @@ abstract class Media extends File
      * @var array
      */
     protected static $mimes = [];
+
+    /**
+     * The attributes that should be visible for serialization.
+     *
+     * @var array
+     */
+    protected $visible = ['id', 'user_id', 'clientname', 'mime', 'size', 'download_count', 'url', 'meta'];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['url', 'meta'];
 
     /**
      * Make media model
@@ -107,21 +122,25 @@ abstract class Media extends File
      */
     abstract public function getType();
 
+
     /**
-     * Get the instance as an array.
+     * Get the mutated url attribute.
      *
-     * @return array
+     * @return string
      */
-    public function toArray()
+    public function getUrlAttribute()
     {
-        $array = parent::toArray();
-        $array['url'] = $this->url();
+        return $this->url();
+    }
 
-        if (!isset($array['meta'])) {
-            $array['meta'] = $this->getRelationValue('meta');
-        }
-
-        return $array;
+    /**
+     * Get the meta data.
+     *
+     * @return Meta|null
+     */
+    public function getMetaAttribute()
+    {
+        return $this->getRelationValue('meta');
     }
 
     /**

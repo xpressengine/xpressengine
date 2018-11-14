@@ -329,7 +329,7 @@ class DynamicFieldHandler
      * @param ConfigEntity $config dynamic field config entity
      * @return array
      *
-     * @deprecated
+     * @deprecated instead `$type->getRules()`, 변경전 등록된 설정값 처리문제로 유지 됨. v3.1 에서 제거
      */
     public function getRules(ConfigEntity $config)
     {

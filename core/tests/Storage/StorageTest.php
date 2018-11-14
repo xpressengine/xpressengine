@@ -93,9 +93,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
         $uploaded->shouldReceive('isValid')->andReturn(true);
-        $uploaded->shouldReceive('getClientOriginalName')->andReturn('foo.jpg');
+        $uploaded->shouldReceive('getClientOriginalName')->andReturn('sample.sample');
         $uploaded->shouldReceive('getPathname')->andReturn(__DIR__ . '/sample.png');
         $uploaded->shouldReceive('getClientOriginalExtension')->andReturn('png');
+        $uploaded->shouldReceive('getMimeType')->andReturn('image/png');
 
         $keygen->shouldReceive('generate')->once()->andReturn('made-key');
 
