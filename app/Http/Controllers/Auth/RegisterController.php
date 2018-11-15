@@ -111,7 +111,7 @@ class RegisterController extends Controller
 
         $rules = $parts->map(function ($part) {
             return $part->rules();
-        })->collapse();
+        })->collapse()->all();
 
         XeFrontend::rule('join', $rules);
 
