@@ -395,12 +395,11 @@ class EditorHandler
     {
         $data = [];
         $files = $this->storage->fetchByFileable($targetId);
-        foreach ($files as $file) {
+        foreach ($files as &$file) {
             $thumbnails = null;
             if ($this->mediaManager->is($file)) {
                 $thumbnails = $this->mediaManager->image()
-                    ->getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
-                $file->url = $file->url();
+                    ->getThumbnails($file = $this->mediaManager->make($file), static::THUMBNAIL_TYPE);
             }
 
             $file->setRelation('thumbnails', $thumbnails);
