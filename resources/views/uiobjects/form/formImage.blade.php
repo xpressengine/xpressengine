@@ -39,7 +39,7 @@
             previewCanvas: false,
             autoUpload: false,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: 5000000, // 5 MB @FIXME
+            maxFileSize: {{array_get($args, 'maxSize', 5000000)}}, // 5 MB @FIXME
             replaceFileInput: false,
             disableImageResize: true,
             imageCrop: false
@@ -65,10 +65,10 @@
             }
         });
 
-        $('input.__xe_delete_file_{{ $seq }}').change(function(){
+        $('input.__xe_delete_file_{{ $seq }}').change(function () {
             var btn = $('.__xe_imagebox_{{ $seq }} .__xe_inputBtn');
             var file = $('.__xe_file_{{ $seq }}');
-            if(this.checked) {
+            if (this.checked) {
                 btn.attr('disabled', 'disabled');
                 file.attr('disabled', 'disabled')
                 $(this).attr('name', '{{ $name }}')
