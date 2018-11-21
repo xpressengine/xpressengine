@@ -131,7 +131,8 @@ class DynamicFieldServiceProvider extends ServiceProvider
                 $connection,
                 new ConfigHandler($connection, $app['xe.config']),
                 new RegisterHandler($this->app['xe.pluginRegister'], $this->app['events']),
-                $app['view']
+                $app['view'],
+                $app['xe.pluginRegister']
             );
         });
 

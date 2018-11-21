@@ -14,6 +14,7 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractSkin;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\DynamicFieldHandler;
+use Xpressengine\Plugin\PluginRegister;
 
 /**
  * Class DatabaseProxyTest
@@ -46,6 +47,11 @@ class DynamicFieldHandlerTest extends TestCase
     protected $view;
 
     /**
+     * @var PluginRegister
+     */
+    protected $register;
+
+    /**
      * tear down
      *
      * @return void
@@ -66,11 +72,13 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
         $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
         $view = m::mock('Illuminate\View\Factory');
+        $pluginRegister = m::mock('Xpressengine\Plugin\PluginRegister');
 
         $this->conn = $conn;
         $this->configHandler = $configHandler;
         $this->registerHandler = $registerHandler;
         $this->view = $view;
+        $this->register = $pluginRegister;
     }
 
     /**
@@ -94,8 +102,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $this->assertInstanceOf('Xpressengine\DynamicField\ConfigHandler', $handler->getConfigHandler());
         $this->assertInstanceOf('Xpressengine\DynamicField\RegisterHandler', $handler->getRegisterHandler());
@@ -114,8 +123,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $newConn = m::mock('NewConnector', 'Xpressengine\Database\VirtualConnectionInterface');
         $handler->setConnection($newConn);
@@ -134,8 +144,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('id')->andReturn('fieldId');
@@ -171,8 +182,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('id')->andReturn(null);
         $config->shouldReceive('get')->with('typeId')->andReturn('type');
@@ -193,8 +205,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('id')->andReturn('id');
         $config->shouldReceive('get')->with('typeId')->andReturn('type');
@@ -216,8 +229,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $config = $this->getConfigEntity();
         $configHandler->shouldReceive('put');
@@ -236,8 +250,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('typeId')->andReturn('type');
@@ -266,9 +281,10 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
-            $conn, $configHandler, $registerHandler, $view
+            $conn, $configHandler, $registerHandler, $view, $register
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $group = 'group';
@@ -304,9 +320,10 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
-            $conn, $configHandler, $registerHandler, $view
+            $conn, $configHandler, $registerHandler, $view, $register
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $group = 'group';
@@ -338,9 +355,10 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
-            $conn, $configHandler, $registerHandler, $view
+            $conn, $configHandler, $registerHandler, $view, $register
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $group = 'group';
@@ -372,8 +390,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('typeId')->andReturn('type');
@@ -405,8 +424,9 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
-        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view);
+        $handler = new DynamicFieldHandler($conn, $configHandler, $registerHandler, $view, $register);
 
         $group = 'group';
         $id = 'id';
@@ -440,9 +460,10 @@ class DynamicFieldHandlerTest extends TestCase
         $configHandler = $this->configHandler;
         $registerHandler = $this->registerHandler;
         $view = $this->view;
+        $register = $this->register;
 
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
-            $conn, $configHandler, $registerHandler, $view
+            $conn, $configHandler, $registerHandler, $view, $register
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $id = 'id';

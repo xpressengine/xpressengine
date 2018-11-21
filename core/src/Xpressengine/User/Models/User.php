@@ -118,6 +118,8 @@ class User extends DynamicModel implements
     public function __construct(array $attributes = [])
     {
         $this->setProxyOptions(['group' => 'user']);
+        $dynamicAttributes = app('xe.dynamicField')->getDynamicAttributes('user');
+        $this->makeVisible($dynamicAttributes);
         parent::__construct($attributes);
     }
 
