@@ -17,7 +17,7 @@
                 @foreach($files as $file)
                     <tr>
                         <td>{{ $file['clientname'] }}</td>
-                        <td>{{ $file['downloadCount'] }}</td>
+                        <td>{{ $file['download_count'] }}</td>
                     </tr>
                 @endforeach
                 </tbody>

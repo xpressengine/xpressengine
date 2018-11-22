@@ -181,6 +181,7 @@ class SiteHandler
 
         $this->config->setVal(sprintf("site.%s.homeInstance", $siteKey), $instanceId);
     }
+
     /**
      * getSiteConfigValue
      *
@@ -195,47 +196,6 @@ class SiteHandler
             $siteKey = $this->currentSite->site_key;
         }
         return $this->config->getVal(sprintf("site.%s.%s", $siteKey, $key));
-    }
-
-    /**
-     * add
-     *
-     * @param array $inputs input array
-     * @return Site
-     *
-     * @deprecated since beta.17. Use SiteRepository::create instead.
-     */
-    public function add(array $inputs)
-    {
-        return $this->repo->create($inputs);
-    }
-
-    /**
-     * put
-     *
-     * @param Site $site site object
-     *
-     * @return Site
-     *
-     * @deprecated since beta.17. Use SiteRepository::update instead.
-     */
-    public function put(Site $site)
-    {
-        return $this->repo->update($site, []);
-    }
-
-    /**
-     * remove
-     *
-     * @param string $host site host
-     *
-     * @return bool|int
-     *
-     * @deprecated since beta.17. Use SiteRepository::deleteByHost instead.
-     */
-    public function remove($host)
-    {
-        return $this->repo->deleteByHost($host);
     }
 
     /**

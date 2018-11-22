@@ -193,19 +193,6 @@ class MediaManager
     }
 
     /**
-     * 미디어 삭제
-     *
-     * @param Media $media media instance
-     * @return bool
-     *
-     * @deprecated since beta.17. Use delete instead.
-     */
-    public function remove(Media $media)
-    {
-        return $this->delete($media);
-    }
-
-    /**
      * Meta data 삭제
      *
      * @param Media $media media instance
@@ -216,19 +203,6 @@ class MediaManager
         if ($media->meta) {
             $media->meta->delete();
         }
-    }
-
-    /**
-     * Meta data 삭제
-     *
-     * @param Media $media media instance
-     * @return void
-     *
-     * @deprecated since beta.17. Use metaDelete instead.
-     */
-    public function metaRemove(Media $media)
-    {
-        $this->metaDelete($media);
     }
 
     /**

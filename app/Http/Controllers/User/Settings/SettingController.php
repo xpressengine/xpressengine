@@ -51,7 +51,7 @@ class SettingController extends Controller
      *
      * @param CaptchaManager $captcha
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function editCommon(CaptchaManager $captcha)
     {
@@ -89,7 +89,7 @@ class SettingController extends Controller
      *
      * @param CaptchaManager $captcha
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function editJoin(CaptchaManager $captcha, UserHandler $handler)
     {
@@ -138,7 +138,7 @@ class SettingController extends Controller
     /**
      * edit Skin setting
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function editSkin()
     {
@@ -157,7 +157,7 @@ class SettingController extends Controller
     /**
      * edit Field setting
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function editField()
     {
@@ -173,7 +173,7 @@ class SettingController extends Controller
     /**
      * edit ToggleMenu setting
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function editToggleMenu()
     {

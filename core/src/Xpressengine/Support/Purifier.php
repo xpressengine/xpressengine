@@ -17,9 +17,6 @@ namespace Xpressengine\Support;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Illuminate\Container\Container;
-use Xpressengine\Editor\PurifierModules\EditorContent;
-use Xpressengine\Support\PurifierModules;
-use Xpressengine\Widget\PurifierModules\Widget;
 
 /**
  * HTML 을 전달하는 에디터를 사용할 경우 사이트에서 사용하는 Purifier 와 다른
@@ -204,27 +201,6 @@ class Purifier
         $htmlDef = $this->config->getHTMLDefinition(true);
 
         foreach ($this->modules as $module) {
-            /* @deprecated 기존 코드처리를 위한 임시 코드 */
-            if (!class_exists($module)) {
-                $allowedModules = $this->config->get('HTML.AllowedModules');
-
-                if (array_key_exists('XeEditorContent', $allowedModules)) {
-                    $htmlDef->manager->addModule(new EditorContent());
-                }
-                if (array_key_exists('XeEditorTool', $allowedModules)) {
-                    $htmlDef->manager->addModule(new EditorContent());
-                }
-                if (array_key_exists('HTML5', $allowedModules)) {
-                    $htmlDef->manager->addModule(new PurifierModules\Html5());
-                }
-                if (array_key_exists('XeWidget', $allowedModules)) {
-                    $htmlDef->manager->addModule(new Widget());
-                }
-
-                continue;
-            }
-            /* @deprecated end */
-
             $htmlDef->manager->addModule(new $module());
         }
 
@@ -234,6 +210,11 @@ class Purifier
         return $purifier->purify($content);
     }
 
+    /**
+     * Return container instance
+     *
+     * @return Container
+     */
     protected function getContainer()
     {
         return Container::getInstance();

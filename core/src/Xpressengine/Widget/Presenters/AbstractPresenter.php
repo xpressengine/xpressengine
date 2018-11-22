@@ -171,7 +171,7 @@ abstract class AbstractPresenter implements PresenterInterface
         return call_user_func(
             static::$generator,
             Arr::get($raw, '@attributes.id'),
-            array_merge(Arr::except($raw,'@attributes'), array_combine($keys, $values))
+            array_merge(Arr::except($raw, '@attributes'), array_combine($keys, $values))
         );
     }
 

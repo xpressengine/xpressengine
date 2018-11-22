@@ -85,7 +85,7 @@ class AuthController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\RendererInterface
+     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function getConfirm(Request $request)
@@ -206,7 +206,7 @@ class AuthController extends Controller
      * @param UrlGenerator $urlGenerator
      * @param Request      $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getAdminAuth(ThemeHandler $themeHandler, UrlGenerator $urlGenerator, Request $request)
     {

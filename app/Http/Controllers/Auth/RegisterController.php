@@ -18,7 +18,7 @@ use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
-use Xpressengine\User\Exceptions\InvalidEmailException;
+use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
@@ -273,7 +273,7 @@ class RegisterController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function validateEmail(Request $request)
@@ -329,7 +329,7 @@ class RegisterController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function validateDisplayName(Request $request)

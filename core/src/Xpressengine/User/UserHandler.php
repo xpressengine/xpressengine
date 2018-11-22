@@ -16,19 +16,13 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
-use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
-use Xpressengine\User\Exceptions\InvalidDisplayNameException;
-use Xpressengine\User\Exceptions\InvalidPasswordException;
 use Xpressengine\User\Models\User;
-use Xpressengine\User\Parts\RegisterFormPart;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -420,25 +414,6 @@ class UserHandler
     }
 
     /**
-     * 비밀번호에 대한 유효성 검사를 한다.
-     *
-     * @param string $password 유효성 검사를 할 비밀번호
-     *
-     * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
-     *
-     * @deprecated since rc.3. Use validate(['password' => 'password']) instead.
-     */
-    public function validatePassword($password)
-    {
-        $this->validator->make(
-            ['password' => $password],
-            ['password' => ['password']]
-        )->validate();
-
-        return true;
-    }
-
-    /**
      * 회원의 정보를 업데이트할 때 필요한 유효성 검사를 한다.
      *
      * @param UserInterface $user user
@@ -612,30 +587,6 @@ class UserHandler
     public static function setSettingsSections($id, $value)
     {
         static::$container->push('user/settings/section', $id, $value);
-    }
-
-    /**
-     * 회원가입 인증도구 목록을 반환한다.
-     *
-     * @return array
-     *
-     * @deprecated
-     */
-    public function getRegisterGuards()
-    {
-        return [];
-    }
-
-    /**
-     * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
-     *
-     * @return mixed
-     *
-     * @deprecated
-     */
-    public function getRegisterForms()
-    {
-        return $this->getRegisterParts();
     }
 
     /**

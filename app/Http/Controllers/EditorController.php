@@ -9,10 +9,9 @@ use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
-use Xpressengine\Presenter\RendererInterface;
+use Xpressengine\Presenter\Presentable;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
-use XeConfig;
 use XeEditor;
 use XeMenu;
 use XeMedia;
@@ -243,7 +242,7 @@ class EditorController extends Controller
      *
      * @param Request       $request      request
      * @param string        $instanceId   instance id
-     * @return RendererInterface
+     * @return Presentable
      */
     public function fileUpload(Request $request, $instanceId)
     {
@@ -361,7 +360,7 @@ class EditorController extends Controller
      *
      * @param string  $instanceId
      * @param string  $id
-     * @return RendererInterface
+     * @return Presentable
      */
     public function fileDestroy($instanceId, $id)
     {

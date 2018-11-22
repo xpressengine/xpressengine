@@ -83,20 +83,6 @@ class PermissionHandler
     }
 
     /**
-     * Get a permission from repository
-     *
-     * @param string $name    permission name
-     * @param string $siteKey site key name
-     * @return Permission|null
-     *
-     * @deprecated since 3.0.0-beta.2
-     */
-    public function find($name, $siteKey = 'default')
-    {
-        return $this->get($name, $siteKey);
-    }
-
-    /**
      * Set permission's ancestor to permission
      *
      * @param Permission $permission permission instance
@@ -116,20 +102,6 @@ class PermissionHandler
         foreach ($ancestors as $ancestor) {
             $permission->addParent($ancestor);
         }
-    }
-
-    /**
-     * Get a permission from repository or generate when not exists
-     *
-     * @param string $name    permission name
-     * @param string $siteKey site key name
-     * @return Permission|null
-     *
-     * @deprecated since 3.0.0-beta.2
-     */
-    public function findOrNew($name, $siteKey = 'default')
-    {
-        return $this->getOrNew($name, $siteKey);
     }
 
     /**
@@ -182,20 +154,6 @@ class PermissionHandler
         if ($permission = $this->get($name, $siteKey)) {
             $this->repo->delete($permission);
         }
-    }
-
-    /**
-     * 특정 대상이 포함된 하위 권한 정보를 가져와 캐싱 함
-     *
-     * @param string $name    permission name
-     * @param string $siteKey site key name
-     * @return void
-     *
-     * @deprecated since 3.0.0-beta.2
-     */
-    public function loadBranch($name, $siteKey = 'default')
-    {
-        // it was legacy cache code
     }
 
     /**

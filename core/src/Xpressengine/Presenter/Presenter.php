@@ -225,18 +225,6 @@ class Presenter
      * get settings handler
      *
      * @return SettingsHandler
-     * @deprecated
-     */
-    public function getManageHandler()
-    {
-        return $this->getSettingsHandler();
-    }
-
-
-    /**
-     * get settings handler
-     *
-     * @return SettingsHandler
      */
     public function getSettingsHandler()
     {
@@ -287,22 +275,6 @@ class Presenter
     {
         $this->skinTargetId = $skinTargetId;
         $this->isSettings = true;
-    }
-
-    /**
-     * render 방식 설정
-     * $type [
-     *  'all' => theme, skin 처리
-     *  'content' => content 만 render
-     * ]
-     *
-     * @param string $type render type
-     * @return void
-     * @deprecated
-     */
-    public function renderType($type = self::RENDER_ALL)
-    {
-        $this->type = $type;
     }
 
     /**
@@ -373,7 +345,7 @@ class Presenter
      * @param array  $mergeData merge data
      * @param bool   $html      use html
      * @param bool   $api       use api
-     * @return RendererInterface
+     * @return Presentable
      */
     public function make($id, array $data = [], array $mergeData = [], $html = true, $api = false)
     {
@@ -381,7 +353,7 @@ class Presenter
         $this->data = array_merge($data, $mergeData);
         $this->id = $id;
 
-        /** @var RendererInterface $renderer */
+        /** @var Presentable $renderer */
         return $this->get();
     }
 
@@ -391,7 +363,7 @@ class Presenter
      *
      * @param array $data      data
      * @param array $mergeData merge data
-     * @return RendererInterface
+     * @return Presentable
      */
     public function makeApi(array $data = [], array $mergeData = [])
     {
@@ -404,7 +376,7 @@ class Presenter
      * @param string $id        skin output id
      * @param array  $data      data
      * @param array  $mergeData merge data
-     * @return RendererInterface
+     * @return Presentable
      */
     public function makeAll($id, array $data = [], array $mergeData = [])
     {
@@ -501,7 +473,7 @@ class Presenter
      * Presenter Package 는 JsonRenderer, HtmlRenderer 를 지원한다.
      * Xpressengine 은 Register Container 로 등록된 Renderer 를 사용한다.
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     protected function get()
     {
@@ -519,8 +491,7 @@ class Presenter
 
         $presenter = $this->getPresenter($format);
 
-        if (is_subclass_of($presenter, RendererInterface::class) === false &&
-            is_subclass_of($presenter, Presentable::class) === false) {
+        if (is_subclass_of($presenter, Presentable::class) === false) {
             throw new InvalidPresenterException(['name' => get_class($presenter)]);
         }
 
@@ -560,23 +531,6 @@ class Presenter
     private function setHtml($use = true)
     {
         $this->html = $use;
-    }
-
-    /**
-     * render 할 수 있도록 허용된 요청 format인가?
-     *
-     * @param string $format request format
-     * @return bool
-     */
-    private function isApproveFormat($format)
-    {
-        if ($this->html !== true && $format == 'html') {
-            return false;
-        } elseif ($this->api !== true && $format != 'html') {
-            return false;
-        }
-
-        return true;
     }
 
     /**

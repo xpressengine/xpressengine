@@ -14,8 +14,6 @@
 
 namespace Xpressengine\Category;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
@@ -68,19 +66,6 @@ class CategoryHandler
      *
      * @param array $attributes attributes
      * @return Category
-     *
-     * @deprecated since beta.17. use createCate instead.
-     */
-    public function create(array $attributes)
-    {
-        return $this->createCate($attributes);
-    }
-
-    /**
-     * Create category
-     *
-     * @param array $attributes attributes
-     * @return Category
      */
     public function createCate(array $attributes)
     {
@@ -93,37 +78,10 @@ class CategoryHandler
      * @param Category $category category instance
      * @param array    $data     attributes
      * @return Category
-     *
-     * @deprecated since beta.17. use updateCate instead.
-     */
-    public function put(Category $category, array $data = [])
-    {
-        return $this->updateCate($category, $data);
-    }
-
-    /**
-     * Update category
-     *
-     * @param Category $category category instance
-     * @param array    $data     attributes
-     * @return Category
      */
     public function updateCate(Category $category, array $data = [])
     {
         return $this->cates->update($category, $data);
-    }
-
-    /**
-     * Remove category
-     *
-     * @param Category $category category instance
-     * @return bool
-     *
-     * @deprecated since beta.17. use deleteCate instead.
-     */
-    public function remove(Category $category)
-    {
-        return $this->deleteCate($category);
     }
 
     /**
@@ -182,20 +140,6 @@ class CategoryHandler
      * @param CategoryItem $item item object
      * @param array        $data attribute data
      * @return CategoryItem
-     *
-     * @deprecated since beta.17. use updateItem instead.
-     */
-    public function putItem(CategoryItem $item, array $data = [])
-    {
-        return $this->updateItem($item, $data);
-    }
-
-    /**
-     * Modify item information
-     *
-     * @param CategoryItem $item item object
-     * @param array        $data attribute data
-     * @return CategoryItem
      */
     public function updateItem(CategoryItem $item, array $data = [])
     {
@@ -204,20 +148,6 @@ class CategoryHandler
         // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
         // 통해 처리되야 함
         return $this->items->update($item, array_merge($data, [$parentIdName => $item->getOriginal($parentIdName)]));
-    }
-
-    /**
-     * Remove single item or all descendant
-     *
-     * @param CategoryItem $item  item object
-     * @param bool         $force if true then remove all descendant
-     * @return bool
-     *
-     * @deprecated since beta.17. use deleteItem instead.
-     */
-    public function removeItem(CategoryItem $item, $force = true)
-    {
-        return $this->deleteItem($item, $force);
     }
 
     /**

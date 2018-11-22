@@ -36,13 +36,6 @@ class Rating
 
     /**
      * 일반 회원 등급
-     *
-     * @deprecated
-     */
-    const MEMBER = 'member';
-
-    /**
-     * 일반 회원 등급
      */
     const USER = 'user';
 

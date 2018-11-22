@@ -15,17 +15,12 @@ use Xpressengine\Http\Request;
 
 class FieldTypeController extends Controller
 {
-    public function __construct()
-    {
-
-    }
-
     public function storeCategory(Request $request, CategoryHandler $categoryHandler)
     {
         $input = [
             'name' => $request->get('categoryName'),
         ];
-        $category = $categoryHandler->create($input);
+        $category = $categoryHandler->createCate($input);
 
         return XePresenter::makeApi(
             $category->getAttributes()

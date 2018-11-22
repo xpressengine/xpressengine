@@ -54,49 +54,6 @@ class Image extends Media
     }
 
     /**
-     * Get a thumbnail image
-     *
-     * @param Media  $media       media instance
-     * @param string $type        thumbnail make type
-     * @param string $dimension   dimension code
-     * @param bool   $defaultSelf if set true, returns self when thumbnail not exists
-     * @return Image|null
-     *
-     * @deprecated since beta.17. Use ImageRepository::getThumbnail instead.
-     */
-    public static function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
-    {
-        $image = static::derives($media)
-            ->whereHas('meta', function ($query) use ($type, $dimension) {
-                $query->where('type', $type)->where('code', $dimension);
-            })->with('meta')->first();
-
-        return (!$image && $defaultSelf) ? $media : $image;
-    }
-
-    /**
-     * Get thumbnails
-     *
-     * @param Media       $media media instance
-     * @param null|string $type  thumbnail make type
-     * @return Image[]
-     *
-     * @deprecated since beta.17. Use ImageRepository::getThumbnails instead.
-     */
-    public static function getThumbnails(Media $media, $type = null)
-    {
-        $query = static::derives($media)->with('meta');
-
-        if ($type !== null) {
-            $query->whereHas('meta', function ($query) use ($type) {
-                $query->where('type', $type);
-            });
-        }
-
-        return $query->get();
-    }
-
-    /**
      * Rendered media
      *
      * @param array $option rendering option

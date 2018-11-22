@@ -135,16 +135,8 @@ class Grant extends Fluent
             }
         }
 
-        /**
-         * @deprecated
-         */
+
         $value = array_except($value, $unknown);
-        if (
-            isset($value[static::RATING_TYPE]) &&
-            $value[static::RATING_TYPE] === \Xpressengine\User\Rating::MEMBER
-        ) {
-            $value[static::RATING_TYPE] = \Xpressengine\User\Rating::USER;
-        }
 
         return $value;
     }

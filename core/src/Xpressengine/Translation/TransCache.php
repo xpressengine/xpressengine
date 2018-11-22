@@ -48,21 +48,6 @@ class TransCache implements Repository
     }
 
     /**
-     * 그룹단위 캐시의 키를 지정합니다
-     *
-     * 디버그 모드인 경우 캐시에 사용된 캐시 키 목록을 저장합니다
-     *
-     * @param string $transCacheKey 캐시용 키
-     * @return void
-     *
-     * @deprecated
-     */
-    public function setCacheKey($transCacheKey)
-    {
-        // noting to do
-    }
-
-    /**
      * 캐시된 라인을 얻습니다
      *
      * @param string $namespace 네임스페이스

@@ -127,47 +127,6 @@ class MenuHandler
     }
 
     /**
-     * Get menu
-     *
-     * @param string $id   menu identifier
-     * @param array  $with relation
-     * @return Menu
-     *
-     * @deprecated since beta.17. Use MenuRepository::findWith instead.
-     */
-    public function get($id, $with = [])
-    {
-        return $this->menus->findWith($id, $with);
-    }
-
-    /**
-     * Get all menu
-     *
-     * @param string $siteKey site key
-     * @param array  $with    relation
-     * @return Menu[]
-     *
-     * @deprecated since beta.17. Use MenuRepository::fetchBySiteKey instead.
-     */
-    public function getAll($siteKey, $with = [])
-    {
-        return $this->menus->fetchBySiteKey($siteKey, $with);
-    }
-
-    /**
-     * Create new menu
-     *
-     * @param array $attributes attributes
-     * @return Menu
-     *
-     * @deprecated since beta.17. Use createMenu instead.
-     */
-    public function create(array $attributes)
-    {
-        return $this->createMenu($attributes);
-    }
-
-    /**
      * Create new menu
      *
      * @param array $attributes attributes
@@ -176,20 +135,6 @@ class MenuHandler
     public function createMenu(array $attributes)
     {
         return $this->menus->create($attributes);
-    }
-
-    /**
-     * Update category
-     *
-     * @param Menu  $menu       menu instance
-     * @param array $attributes attributes
-     * @return Menu
-     *
-     * @deprecated since beta.17. Use updateMenu instead.
-     */
-    public function put(Menu $menu, array $attributes = [])
-    {
-        return $this->updateMenu($menu, $attributes);
     }
 
     /**
@@ -210,20 +155,6 @@ class MenuHandler
      * @param Menu $menu menu instance
      * @return bool
      * @throws CanNotDeleteMenuEntityHaveChildException
-     *
-     * @deprecated since beta.17. Use deleteMenu instead.
-     */
-    public function remove(Menu $menu)
-    {
-        return $this->deleteMenu($menu);
-    }
-
-    /**
-     * Delete menu
-     *
-     * @param Menu $menu menu instance
-     * @return bool
-     * @throws CanNotDeleteMenuEntityHaveChildException
      */
     public function deleteMenu(Menu $menu)
     {
@@ -234,34 +165,6 @@ class MenuHandler
         $this->deleteMenuTheme($menu);
 
         return $this->menus->delete($menu);
-    }
-
-    /**
-     * Get menu item
-     *
-     * @param string $id   menu item identifier
-     * @param array  $with relation
-     * @return MenuItem
-     *
-     * @deprecated since beta.17. Use MenuItemRepository::find instead.
-     */
-    public function getItem($id, $with = [])
-    {
-        return $this->items->find($id);
-    }
-
-    /**
-     * Get menu item list by identifiers
-     *
-     * @param array $ids  menu item identifier list
-     * @param array $with relation
-     * @return MenuItem[]
-     *
-     * @deprecated since beta.17. Use MenuItemRepository::fetchIn instead.
-     */
-    public function getItemIn($ids, $with = [])
-    {
-        return $this->items->fetchIn((array)$ids, $with);
     }
 
     /**
@@ -329,20 +232,6 @@ class MenuHandler
      * Update menu item
      *
      * @param MenuItem $item          item instance
-     * @param array    $menuTypeInput input for menu type module
-     * @return MenuItem
-     *
-     * @deprecated since beta.17. Use updateItem instead.
-     */
-    public function putItem(MenuItem $item, array $menuTypeInput = [])
-    {
-        return $this->updateItem($item, [], $menuTypeInput);
-    }
-
-    /**
-     * Update menu item
-     *
-     * @param MenuItem $item          item instance
      * @param array    $attributes    attributes
      * @param array    $menuTypeInput input for menu type module
      * @return MenuItem
@@ -381,20 +270,6 @@ class MenuHandler
 
             $this->routes->put($instanceRoute);
         }
-    }
-
-    /**
-     * Delete menu item
-     *
-     * @param MenuItem $item item instance
-     * @return bool|null
-     * @throws CanNotDeleteMenuItemHaveChildException
-     *
-     * @deprecated since beta.17. Use deleteItem instead.
-     */
-    public function removeItem(MenuItem $item)
-    {
-        return $this->deleteItem($item);
     }
 
     /**

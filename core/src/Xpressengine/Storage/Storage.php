@@ -268,19 +268,6 @@ class Storage
     }
 
     /**
-     * delete file. alias for delete
-     *
-     * @param File $file file instance
-     * @return bool
-     *
-     * @deprecated since beta.17. Use delete instead.
-     */
-    public function remove(File $file)
-    {
-        return $this->delete($file);
-    }
-
-    /**
      * set the target be have a file
      *
      * @param string $fileableId fileable identifier

@@ -36,7 +36,6 @@ class Kernel extends ConsoleKernel
         Commands\TrashClean::class,
         Commands\Schema::class,
         Commands\TranslationImport::class,
-        Commands\CacheClear::class,
         Commands\CacheClearPlus::class,
         Commands\StorageOptimize::class,
         Commands\Site::class,

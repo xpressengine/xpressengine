@@ -21,7 +21,6 @@ use Xpressengine\Presenter\Json\JsonPresenter;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Presenter\Redirector;
 use Xpressengine\Routing\InstanceConfig;
-use Xpressengine\Storage\File;
 
 /**
  * Presenter Service Provider
@@ -135,15 +134,11 @@ class PresenterServiceProvider extends ServiceProvider
                 'route' => \Xpressengine\Presenter\Html\Tags\Route::class,
                 'rule' => \Xpressengine\Presenter\Html\Tags\Rule::class,
                 'translation' => \Xpressengine\Presenter\Html\Tags\Translation::class,
-                'package' => \Xpressengine\Presenter\Html\Tags\Package::class,
                 'preload' => \Xpressengine\Presenter\Html\Tags\Preload::class
             ];
 
             $frontendHandler = $app['xe.interception']->proxy(FrontendHandler::class, 'XeFrontend');
             $frontendHandler = new $frontendHandler($tags);
-
-            // inject frontend handler to Package
-            \Xpressengine\Presenter\Html\Tags\Package::setHandler($frontendHandler);
 
             return $frontendHandler;
         });

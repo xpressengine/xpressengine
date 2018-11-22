@@ -758,17 +758,6 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
-     * 개발모드 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
-     *
-     * @return bool
-     * @deprecated use self::isSelfInstalled() instead
-     */
-    public function isDevelopMode()
-    {
-        return $this->isSelfInstalled();
-    }
-
-    /**
      * 직접 설치한 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
      *
      * @return bool

@@ -12,20 +12,16 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use XeDB;
 use XePresenter;
 use XeTheme;
-use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\InvalidPasswordException;
@@ -36,7 +32,6 @@ use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\UserHandler;
-use Xpressengine\User\UserInterface;
 
 class UserController extends Controller
 {
@@ -93,7 +88,7 @@ class UserController extends Controller
      * @param Request $request
      * @param string  $section
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function show(Request $request, $section = 'settings')
     {
@@ -124,7 +119,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function updateDisplayName(Request $request)
     {
@@ -152,7 +147,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function validateDisplayName(Request $request)
@@ -184,7 +179,7 @@ class UserController extends Controller
      *
      * @param Request $request request
      * @throws Exception
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function updatePassword(Request $request)
     {
@@ -235,7 +230,7 @@ class UserController extends Controller
      *
      * @param Request $request request
      * @throws Exception
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function validatePassword(Request $request)
     {
@@ -259,7 +254,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function updateMainMail(Request $request)
     {
@@ -316,7 +311,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function addMail(Request $request)
@@ -365,7 +360,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function confirmMail(Request $request)
@@ -398,7 +393,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function resendPendingMail(Request $request)
     {
@@ -418,7 +413,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function deleteMail(Request $request)
@@ -469,7 +464,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
     public function deletePendingMail(Request $request)

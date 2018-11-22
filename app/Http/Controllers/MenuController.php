@@ -15,7 +15,6 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Validator;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use XeDB;
@@ -31,7 +30,7 @@ use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\Exceptions\NotFoundModuleException;
 use Xpressengine\Permission\PermissionSupport;
-use Xpressengine\Presenter\RendererInterface;
+use Xpressengine\Presenter\Presentable;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
 /**
@@ -51,7 +50,7 @@ class MenuController extends Controller
     /**
      * index
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function index()
     {
@@ -80,7 +79,7 @@ class MenuController extends Controller
      * create
      * 새로운 메뉴를 생성하는 페이지
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function create()
     {
@@ -141,7 +140,7 @@ class MenuController extends Controller
      *
      * @param string      $menuId  string menu id
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function edit($menuId)
     {
@@ -200,7 +199,7 @@ class MenuController extends Controller
      *
      * @param string      $menuId  menu id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function permit($menuId)
     {
@@ -245,7 +244,7 @@ class MenuController extends Controller
      *
      * @param string      $menuId menu id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function editMenuPermission($menuId)
     {
@@ -293,7 +292,7 @@ class MenuController extends Controller
      * @param Request $request
      * @param string  $menuId menu id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function selectType(Request $request, $menuId)
     {
@@ -314,7 +313,7 @@ class MenuController extends Controller
      * @param Request       $request
      * @param string        $menuId        menu id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function createItem(Request $request, $menuId)
     {
@@ -420,7 +419,7 @@ class MenuController extends Controller
      * @param string        $menuId  menu id
      * @param string        $itemId  item id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function editItem($menuId, $itemId)
     {
@@ -567,7 +566,7 @@ class MenuController extends Controller
      * @param string $menuId menu id
      * @param string $itemId item id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function permitItem($menuId, $itemId)
     {
@@ -639,7 +638,7 @@ class MenuController extends Controller
      * @param string        $menuId  menu id
      * @param string        $itemId  item id
      *
-     * @return RendererInterface
+     * @return Presentable
      */
     public function editItemPermission($menuId, $itemId)
     {
@@ -712,7 +711,7 @@ class MenuController extends Controller
      * moveItem
      *
      * @param Request $request
-     * @return RendererInterface
+     * @return Presentable
      * @throws Exception
      */
     public function moveItem(Request $request)
@@ -782,7 +781,7 @@ class MenuController extends Controller
      * setHome
      *
      * @param Request $request
-     * @return RendererInterface
+     * @return Presentable
      *
      */
     public function setHome(Request $request)

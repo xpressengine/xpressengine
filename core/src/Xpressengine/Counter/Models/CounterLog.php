@@ -56,16 +56,4 @@ class CounterLog extends DynamicModel
     {
         return $this->hasOne('Xpressengine\User\Models\User', 'id', 'user_id');
     }
-
-    /**
-     * updatedAt column 없음
-     *
-     * @param mixed $value value
-     * @return $this
-     * @deprecated As of 3.0.0-beta6
-     */
-    public function setUpdatedAt($value)
-    {
-        return $this;
-    }
 }

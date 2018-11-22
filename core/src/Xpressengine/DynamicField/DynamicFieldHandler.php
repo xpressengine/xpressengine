@@ -71,11 +71,11 @@ class DynamicFieldHandler
     /**
      * create instance
      *
-     * @param VirtualConnectionInterface $connection database connection
-     * @param ConfigHandler $configHandler config handler
-     * @param RegisterHandler $registerHandler register handler
-     * @param ViewFactory $viewFactory view factory
-     * @param PluginRegister $pluginRegister plugin register
+     * @param VirtualConnectionInterface $connection      database connection
+     * @param ConfigHandler              $configHandler   config handler
+     * @param RegisterHandler            $registerHandler register handler
+     * @param ViewFactory                $viewFactory     view factory
+     * @param PluginRegister             $pluginRegister  plugin register
      */
     public function __construct(
         VirtualConnectionInterface $connection,
@@ -83,8 +83,7 @@ class DynamicFieldHandler
         RegisterHandler $registerHandler,
         ViewFactory $viewFactory,
         PluginRegister $pluginRegister
-    )
-    {
+    ) {
         $this->connection = $connection;
         $this->configHandler = $configHandler;
         $this->registerHandler = $registerHandler;
@@ -260,7 +259,7 @@ class DynamicFieldHandler
      * get dynamic field
      *
      * @param string $group config group name
-     * @param string $id field type id
+     * @param string $id    field type id
      * @return AbstractType
      */
     public function get($group, $id)
@@ -279,7 +278,6 @@ class DynamicFieldHandler
      */
     public function hasDynamicField($id)
     {
-
         $registerd = $this->register->get($id);
 
         if ($registerd === null) {
@@ -287,14 +285,13 @@ class DynamicFieldHandler
         }
 
         return true;
-
     }
 
     /**
      * has dynamic field
      *
      * @param string $group config group name
-     * @param string $id field type id
+     * @param string $id    field type id
      * @return bool
      */
     public function has($group, $id)
@@ -322,7 +319,7 @@ class DynamicFieldHandler
      * get dynamic field without skin instance
      *
      * @param string $group config group name
-     * @param string $id field type id
+     * @param string $id    field type id
      * @return AbstractType
      */
     public function getType($group, $id)

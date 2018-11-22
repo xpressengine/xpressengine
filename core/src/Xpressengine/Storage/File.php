@@ -168,26 +168,6 @@ class File extends DynamicModel
     }
 
     /**
-     * Get the files for fileable
-     *
-     * @param string $fileableId fileable identifier
-     * @return Collection|static[]
-     *
-     * @deprecated since beta.17. Use XeStorage::fetchByFileable instead.
-     */
-    public static function getByFileable($fileableId)
-    {
-        $model = new static;
-
-        return $model->newQuery()->rightJoin(
-            $model->getFileableTable(),
-            $model->getTable().'.id',
-            '=',
-            $model->getFileableTable().'.file_id'
-        )->where('fileable_id', $fileableId)->select([$model->getTable().'.*'])->get();
-    }
-
-    /**
      * Set the ContentReader instance
      *
      * @param callable $reader file content reader

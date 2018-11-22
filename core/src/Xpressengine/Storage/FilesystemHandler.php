@@ -25,7 +25,7 @@ use Illuminate\Filesystem\FilesystemManager;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class FilesystemHandler implements ContentReaderInterface
+class FilesystemHandler
 {
     /**
      * filesystem manager instance

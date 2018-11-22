@@ -53,21 +53,6 @@ class WidgetBox extends DynamicModel
     ];
 
     /**
-     * Get widget box content
-     *
-     * @return string
-     * @deprecated since beta.27. for old content
-     */
-    public function getContent()
-    {
-        if (!$data = $this->getAttributeValue('content')) {
-            return $this->getOriginal('content');
-        }
-
-        return $data;
-    }
-
-    /**
      * Get presenter class
      *
      * @return string

@@ -235,6 +235,11 @@ class SeoHandler
         $this->executable = false;
     }
 
+    /**
+     * Add meta for no-index
+     *
+     * @return void
+     */
     protected function noIndex()
     {
         $this->frontend->meta('robots')->name('robots')->content('noindex')->load();

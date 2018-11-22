@@ -31,23 +31,27 @@ class AsyncExpose
             $translations = \Xpressengine\Presenter\Html\Tags\Translation::getTransList();
 
             $assets = [];
-            if ($assetCss) $assets['css'] = $assetCss;
-            if ($assetJs) $assets['js'] = $assetJs;
+            if ($assetCss) {
+                $assets['css'] = $assetCss;
+            }
+            if ($assetJs) {
+                $assets['js'] = $assetJs;
+            }
 
-            if ($assets) $_XE_['assets'] = $assets;
-            if ($routes) $_XE_['routes'] = $routes;
-            if ($rules) $_XE_['rules'] = $rules;
-            if ($translations) $_XE_['translations'] = $translations;
+            if ($assets) {
+                $_XE_['assets'] = $assets;
+            }
+            if ($routes) {
+                $_XE_['routes'] = $routes;
+            }
+            if ($rules) {
+                $_XE_['rules'] = $rules;
+            }
+            if ($translations) {
+                $_XE_['translations'] = $translations;
+            }
 
-            /**
-             * @deprecated
-             */
-            $XE_ASSET_LOAD = [
-                'css' => $assetCss,
-                'js' => $assetJs
-            ];
-
-            $data = array_merge($content, compact('_XE_', 'XE_ASSET_LOAD'));
+            $data = array_merge($content, compact('_XE_'));
             $response = response()->json($data);
         }
 

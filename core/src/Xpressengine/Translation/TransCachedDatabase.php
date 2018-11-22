@@ -40,30 +40,6 @@ class TransCachedDatabase implements Repository
     }
 
     /**
-     * 그룹단위 캐시의 키를 지정합니다
-     *
-     * @param string $transCacheKey 캐시용 키
-     * @return void
-     *
-     * @deprecated
-     */
-    public function setCacheKey($transCacheKey)
-    {
-        // noting to do
-    }
-
-    /**
-     * 전체 캐시를 비웁니다
-     * @return void
-     *
-     * @deprecated
-     */
-    public function flush()
-    {
-        // noting to do
-    }
-
-    /**
      * 다국어 데이터를 일괄 등록
      *
      * @param string   $namespace 네임스페이스

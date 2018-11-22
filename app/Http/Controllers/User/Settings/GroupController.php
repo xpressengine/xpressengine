@@ -33,7 +33,7 @@ class GroupController extends Controller
     /**
      * show group list
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function index()
     {
@@ -48,7 +48,7 @@ class GroupController extends Controller
     /**
      * show group creation page
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function create()
     {
@@ -88,7 +88,7 @@ class GroupController extends Controller
      *
      * @param $id
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function edit($id)
     {
@@ -185,7 +185,7 @@ class GroupController extends Controller
      *
      * @param null $keyword
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function search($keyword = null)
     {

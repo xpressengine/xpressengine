@@ -26,7 +26,6 @@ namespace Xpressengine\Presenter\Html;
  * @method Tags\JSFile js($files) js 파일을 추가한다.
  * @method Tags\BodyClass bodyClass($class) body 태그에 class를 추가한다.
  * @method Tags\Html html($alias) custom html tag를 추가한다.
- * @method Tags\Package package($name) custom package tag를 추가한다.
  * @method Tags\Rule rule($ruleName, $rules) validation rule을 추가한다.
  * @method Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
  * @method Tags\Preload preload($keys) preload resources

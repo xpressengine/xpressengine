@@ -65,7 +65,7 @@ interface ComponentInterface
      * boot
      *
      * @return void
-     * @deprecated since beta.28
+     * @deprecated since beta.28, v3.1 에서 제거 예정
      */
     public static function boot();
 

@@ -64,7 +64,7 @@ class ConfigManager
     /**
      * constructor
      *
-     * @param ConfigRepository $repo      repository instance
+     * @param ConfigRepository $repo repository instance
      */
     public function __construct(ConfigRepository $repo)
     {

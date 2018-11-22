@@ -96,8 +96,6 @@ class UserGroup extends DynamicModel implements GroupInterface
      * get user count
      *
      * @return int
-     *
-     * @deprecated use getUserCountAttribute instead
      */
     public function getCountAttribute()
     {

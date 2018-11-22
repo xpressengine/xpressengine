@@ -10,16 +10,10 @@ namespace App\Http\Controllers;
 
 use App;
 use XePresenter;
-use Validator;
-use Hash;
-use Auth;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
-use Document;
 use App\Http\Sections\DynamicFieldSection;
 use XeDB;
-use XeLang;
-use XeDynamicField;
 use XeFrontend;
 use Xpressengine\Translation\Translator;
 
@@ -38,7 +32,7 @@ class DynamicFieldController extends Controller
     /**
      * index
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function index(Request $request)
     {
@@ -54,9 +48,6 @@ class DynamicFieldController extends Controller
          */
         foreach ($configs as $config) {
             $info = $config->getPureAll();
-            /**
-             * @var \Xpressengine\DynamicField\TypeInterface $fieldType
-             */
             $fieldType = $dynamicField->get($config->get('group'), $config->get('id'));
             $info['typeName'] = $fieldType->name();
             $info['skinName'] = $fieldType->getSkin()->name();
@@ -73,7 +64,7 @@ class DynamicFieldController extends Controller
     /**
      * get skin options
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getSkinOption(Request $request)
     {
@@ -117,7 +108,7 @@ class DynamicFieldController extends Controller
     /**
      * get additional configure
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getAdditionalConfigure(Request $request)
     {
@@ -148,7 +139,7 @@ class DynamicFieldController extends Controller
     /**
      * store dynamic field
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function store(Request $request, Translator $translator)
     {
@@ -199,7 +190,7 @@ class DynamicFieldController extends Controller
     /**
      * update dynamic field
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function update(Request $request, Translator $translator)
     {
@@ -248,7 +239,7 @@ class DynamicFieldController extends Controller
     /**
      * get edit information
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getEditInfo(Request $request)
     {
@@ -271,7 +262,7 @@ class DynamicFieldController extends Controller
     /**
      * destroy
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+         * @return \Xpressengine\Presenter\Presentable
      */
     public function destroy(Request $request)
     {

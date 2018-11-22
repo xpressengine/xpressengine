@@ -46,7 +46,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function index(Request $request)
     {
@@ -118,7 +118,7 @@ class UserController extends Controller
     /**
      * show user creation page
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function create()
     {
@@ -194,7 +194,7 @@ class UserController extends Controller
      *
      * @param $id
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function edit($id)
     {
@@ -323,7 +323,7 @@ class UserController extends Controller
     /**
      * response user's email list
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getMailList(Request $request)
     {
@@ -340,7 +340,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function postAddMail(Request $request)
     {
@@ -385,7 +385,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function postConfirmMail(Request $request)
     {
@@ -421,7 +421,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function postDeleteMail(Request $request)
     {
@@ -491,7 +491,7 @@ class UserController extends Controller
      *
      * @param null $keyword
      *
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function search($keyword = null)
     {

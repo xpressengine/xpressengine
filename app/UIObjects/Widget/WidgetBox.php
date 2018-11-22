@@ -35,16 +35,8 @@ class WidgetBox extends AbstractUIObject
         }
 
         if($widgetbox) {
-            if ($data = $widgetbox->getAttributeValue('content')) {
-                $class = $widgetbox->getPresenter();
-                $presenter = new $class($data, $widgetbox->options);
-            } else {
-                /**
-                 * @deprecated since beta.27
-                 */
-                $content = $widgetbox->getOriginal('content');
-                $presenter = new HTMLPresenter($content === '[]' ? '' : $content);
-            }
+            $class = $widgetbox->getPresenter();
+            $presenter = new $class($widgetbox->content, $widgetbox->options);
         } else {
             $presenter = new HTMLPresenter('');
         }

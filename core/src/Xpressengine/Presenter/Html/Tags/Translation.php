@@ -55,7 +55,7 @@ class Translation
         $locales = [];
         $terms = [];
 
-        foreach(XeLang::getLocales() as $code) {
+        foreach (XeLang::getLocales() as $code) {
             $locales[] = [
                 'code' => $code,
                 'nativeName' => XeLang::getLocaleText($code)

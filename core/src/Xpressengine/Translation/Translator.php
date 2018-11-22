@@ -179,22 +179,6 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     }
 
     /**
-     * 단위당 다국어 캐시를 그룹화 하기 위한 캐시 키를 지정
-     *
-     * 단위당 다국어 캐시(예를 들어, 한 웹 페이지)를 구룹화 하기 위한 캐시키를 지정.
-     *
-     * @param string $key 설정 키
-     * @return void
-     *
-     * @deprecated
-     */
-    public function setCurrentCacheKey($key)
-    {
-        // noting to do
-//        $this->repo->setCacheKey($key);
-    }
-
-    /**
      * 다국어를 번역합니다
      *
      * @param string $id         다국어 key

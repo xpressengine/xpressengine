@@ -130,11 +130,6 @@ class TranslatorTest extends TranslationTestCase
         $this->assertEquals(['en'], $this->t->getLocales());
     }
 
-    public function testCurrentCacheKey()
-    {
-        $this->t->setCurrentCacheKey('/current/key');
-    }
-
     public function testGetOriginalLine()
     {
         $this->t->setLocale('en');

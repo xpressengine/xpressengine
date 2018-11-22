@@ -135,18 +135,6 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     }
 
     /**
-     * @param array $config skin config
-     *
-     * @return string|Renderable
-     *
-     * @deprecated  use renderSetting instead
-     */
-    public function getSettingView($config = [])
-    {
-        return $this->renderSetting($config);
-    }
-
-    /**
      * 스킨 설정을 위한 화면에 출력될 html 반환
      *
      * @param array $args 설정 데이터
@@ -156,19 +144,6 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     public function renderSetting(array $args = [])
     {
         return null;
-    }
-
-
-    /**
-     * @param array $config 설정값
-     *
-     * @return array
-     *
-     * @deprecated use resolveSetting instead
-     */
-    public function updateSetting(array $config)
-    {
-        return $this->resolveSetting($config);
     }
 
     /**

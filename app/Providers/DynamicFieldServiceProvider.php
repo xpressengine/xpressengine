@@ -19,12 +19,10 @@ use App\FieldTypes\Textarea;
 use App\FieldTypes\Url;
 use Illuminate\Support\ServiceProvider;
 use App;
-use XeRegister;
 use Xpressengine\DynamicField\ConfigHandler;
 use Xpressengine\DynamicField\DatabaseProxy;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\DynamicField\RegisterHandler;
-use Xpressengine\DynamicField\RevisionManager;
 use App\FieldTypes\Category;
 use App\FieldTypes\Number;
 use App\FieldTypes\Text;
@@ -134,10 +132,6 @@ class DynamicFieldServiceProvider extends ServiceProvider
                 $app['view'],
                 $app['xe.pluginRegister']
             );
-        });
-
-        $this->app->singleton('xe.dynamicField.revision', function ($app) {
-            return new RevisionManager($app['xe.dynamicField']);
         });
     }
 }
