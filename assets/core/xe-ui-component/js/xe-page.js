@@ -230,7 +230,7 @@
 
     var pageOptions = $.extend(defaultOptions, {
       success: function (data) {
-        var exposed = data._XE_ || {}
+        var exposed = data._XE_ || { assets: [], js: [] }
         var css = exposed.assets.css || []
         var js = exposed.assets.js || []
         var html = data.result || ''
