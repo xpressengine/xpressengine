@@ -222,36 +222,6 @@ class PresenterTest extends TestCase
         $this->assertTrue($presenter->getIsSettings());
     }
 
-//    /**
-//     * test render type
-//     *
-//     * @return void
-//     */
-//    public function testRenderType()
-//    {
-//        $request = $this->request;
-//        $view = $this->view;
-//        $theme = $this->theme;
-//        $skin = $this->skin;
-//        $settings = $this->settings;
-//        $instanceConfig = $this->instanceConfig;
-//
-//        $presenter = new Presenter(
-//            $view, $request, $theme, $skin, $settings, $instanceConfig
-//        );
-//
-//        $type = 'type';
-//        $presenter->renderType($type);
-//
-//        $reflection = new \ReflectionClass(get_class($presenter));
-//        $property = $reflection->getProperty('type');
-//        $property->setAccessible(true);
-//        $result = $property->getValue($presenter);
-//
-//        $this->assertEquals($type, $result);
-//        $this->assertEquals($type, $presenter->getRenderType());
-//    }
-
     /**
      * test html render partial
      *
