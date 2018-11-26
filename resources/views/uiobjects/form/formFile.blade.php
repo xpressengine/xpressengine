@@ -35,6 +35,7 @@
         var fileInput = $('.__xe_filebox_{{ $seq }}');
         var options = {!! json_encode($args['fileuploadOptions']) !!};
         options['acceptFileTypes'] = new RegExp(options.acceptFileTypes, 'i');
+        options['dropZone'] = fileInput;
         fileInput.fileupload(options)
             .on('fileuploadadd', function (e, data) {
                 data.context = $('.__xe_file_preview_{{ $seq }}').empty();
