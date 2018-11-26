@@ -5,6 +5,8 @@ import moment from 'moment'
 import URI from 'urijs'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import lodash from 'lodash'
+import axios from 'axios'
 
 export {
   jQuery,
@@ -12,5 +14,7 @@ export {
   moment,
   URI,
   Vue,
-  Vuex
+  Vuex,
+  lodash,
+  axios
 }
