@@ -127,7 +127,7 @@
 @if($permission !== null)
     <div class="modal permission-modal fade" id="permission-modal">
         <div class="modal-dialog modal-lg">
-            <form id="__xe_widgetboxPermission" action="{{ route('widgetbox.permission', ['id'=>$widgetbox->id]) }}">
+            <form id="__xe_widgetboxPermission" method="post" data-submit="xe-ajax" data-callback="callbackWidgetboxPermission" action="{{ route('widgetbox.permission', ['id'=>$widgetbox->id]) }}">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -162,24 +162,9 @@
 
 @if($permission !== null)
     {!!  XeFrontend::html('widgetbox.permission')->content("<script>
-        $(function($) {
-            $('#__xe_widgetboxPermission').submit(function(){
-                var form = $(this);
-
-                XE.ajax({
-                    url: form.attr('action'),
-                    type: 'POST',
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (data) {
-                        XE.toast('success', data.message);
-                        $('#permission-modal').modal('hide');
-                    }
-                });
-
-            return false;
-        })
-
-        });
+        function callbackWidgetboxPermission(res) {
+            XE.toast('success', res.message);
+            $('#permission-modal').modal('hide');
+        }
     </script>")->load() !!}
 @endif
