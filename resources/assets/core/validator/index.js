@@ -4,9 +4,10 @@ import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
-import config from 'xe/config'
 import { getForm } from 'xe/form'
 import { ValidationError } from 'xe/validator/errors/validator.error.js'
+
+import PluginMarker from './marker'
 
 const originalRules = {}
 
@@ -539,6 +540,8 @@ class Validator extends App {
           }, { name: 'xe.validator' })
         })
       })
+
+      this.registerPlugin(new PluginMarker())
 
       resolve(this)
     })
