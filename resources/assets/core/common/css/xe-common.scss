@@ -477,3 +477,16 @@ html {
 .xe-invisible {
   visibility: hidden;
 }
+
+.xe-form__label--requried::after {
+  content: '*';
+  color: #ff2c55;
+}
+
+.xe-form__input--requried {
+  color: red;
+}
+.xe-form__input--requried::after {
+  content: '*';
+  color: #ff2c55;
+}
