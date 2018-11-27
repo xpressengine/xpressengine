@@ -23,7 +23,7 @@
             replaceFileInput: false,
             disableImageResize: true,
             imageCrop: false,
-            dropZone: dropZone: fileInput
+            dropZone: fileInput
         }).on('fileuploadadd', function (e, data) {
             context.empty();
 
