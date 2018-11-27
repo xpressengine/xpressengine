@@ -51,6 +51,16 @@ use Xpressengine\User\Models\User;
                         <div class="input-group search-group">
                             <form method="GET" action="{{ route('settings.user.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
                                 <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="xi-calendar-check"></i></button>
+                                </div>
+                                <div class="search-input-group">
+                                    <input type="text" name="startDate" class="form-control" value="{{ Request::get('startDate', date('Y-m-d', strtotime('-30 days', time()))) }}" placeholder="{{xe_trans('xe::enterStartDate')}}">
+                                    <input type="text" name="endDate" class="form-control" value="{{ Request::get('endDate', date('Y-m-d', time())) }}" placeholder="{{xe_trans('xe::enterEndDate')}}">
+                                </div>
+
+                                <p></p>
+
+                                <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
                                         @if(Request::get('keyfield')==='display_name')
@@ -74,7 +84,7 @@ use Xpressengine\User\Models\User;
                                         <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
-                                @foreach(Request::except(['keyfield','keyword','page']) as $name => $value)
+                                @foreach(Request::except(['keyfield','keyword','page','startDate', 'endDate']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
                                 <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Request::get('keyfield') }}">
