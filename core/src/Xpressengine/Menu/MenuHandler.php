@@ -25,6 +25,7 @@ use Xpressengine\Menu\Repositories\MenuRepository;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
+use Xpressengine\User\Rating;
 
 /**
  * Class MenuHandler
@@ -506,12 +507,12 @@ class MenuHandler
     {
         $grant = new Grant();
 
-        $grant->add(static::ACCESS, 'rating', 'guest');
+        $grant->add(static::ACCESS, 'rating', Rating::GUEST);
         $grant->add(static::ACCESS, 'group', []);
         $grant->add(static::ACCESS, 'user', []);
         $grant->add(static::ACCESS, 'except', []);
 
-        $grant->add(static::VISIBLE, 'rating', 'guest');
+        $grant->add(static::VISIBLE, 'rating', Rating::GUEST);
         $grant->add(static::VISIBLE, 'group', []);
         $grant->add(static::VISIBLE, 'user', []);
         $grant->add(static::VISIBLE, 'except', []);

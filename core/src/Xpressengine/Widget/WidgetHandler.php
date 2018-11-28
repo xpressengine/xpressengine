@@ -19,6 +19,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\User\Rating;
 use Xpressengine\Widget\Exceptions\NotFoundWidgetException;
 
 /**
@@ -37,7 +38,8 @@ class WidgetHandler
     /**
      * @var array $displayErrorRatings super and manager can error view on render widget exception occur
      */
-    public static $displayErrorRatings = ['super', 'manager'];
+    public static $displayErrorRatings = [Rating::SUPER, Rating::MANAGER];
+
     /**
      * @var PluginRegister plugin registry manager 등록된 Widget 조회하기 위하여 사용됨
      */

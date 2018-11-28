@@ -103,9 +103,9 @@ class UserController extends Controller
         // get all ratings
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'user' => xe_trans('xe::userRatingNormal'),
-            'manager' => xe_trans('xe::userRatingManager'),
-            'super' => xe_trans('xe::userRatingAdministrator'),
+            Rating::USER => xe_trans('xe::userRatingNormal'),
+            Rating::MANAGER => xe_trans('xe::userRatingManager'),
+            Rating::SUPER => xe_trans('xe::userRatingAdministrator'),
         ];
 
         foreach ($ratings as $key => $rating) {
@@ -131,9 +131,9 @@ class UserController extends Controller
     {
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'user' => xe_trans('xe::userRatingNormal'),
-            'manager' => xe_trans('xe::userRatingManager'),
-            'super' => xe_trans('xe::userRatingAdministrator'),
+            Rating::USER => xe_trans('xe::userRatingNormal'),
+            Rating::MANAGER => xe_trans('xe::userRatingManager'),
+            Rating::SUPER => xe_trans('xe::userRatingAdministrator'),
         ];
 
         foreach ($ratings as $key => $rating) {
@@ -215,9 +215,9 @@ class UserController extends Controller
 
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'user' => xe_trans('xe::userRatingNormal'),
-            'manager' => xe_trans('xe::userRatingManager'),
-            'super' => xe_trans('xe::userRatingAdministrator'),
+            Rating::USER => xe_trans('xe::userRatingNormal'),
+            Rating::MANAGER => xe_trans('xe::userRatingManager'),
+            Rating::SUPER => xe_trans('xe::userRatingAdministrator'),
         ];
         foreach ($ratings as $key => $rating) {
             $ratings[$key] = [

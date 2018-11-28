@@ -28,6 +28,7 @@ namespace Xpressengine\Tests\Widget {
     use PHPUnit\Framework\TestCase;
     use Mockery as m;
 
+    use Xpressengine\User\Rating;
     use Xpressengine\Widget\AbstractWidget;
     use Xpressengine\Widget\WidgetHandler;
 
@@ -41,7 +42,7 @@ namespace Xpressengine\Tests\Widget {
         /**
          * @var array
          */
-        public static $ratingWhiteList = ['super', 'manager', 'user'];
+        public static $ratingWhiteList = [Rating::SUPER, Rating::MANAGER, Rating::USER];
 
         /**
          * init
