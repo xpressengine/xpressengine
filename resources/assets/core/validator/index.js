@@ -724,16 +724,24 @@ class Validator extends App {
         const $field = $form.find(`[name="${name}"]`)
         const result = that.evaluator[evaluatorName]($field, options)
 
-        if (result instanceof Promise) {
-          result.then(res => {
-            if (res === false) {
-              $form.data('valid-result', false)
-              throw ValidationError('Validation error.')
-            }
-          })
-        } else if (result === false) {
-          $form.data('valid-result', false)
-          throw ValidationError('Validation error.')
+        try {
+          if (result instanceof Promise) {
+            result.then(res => {
+              if (res === false) {
+                $form.data('valid-result', false)
+                throw new ValidationError('Validation error.')
+              }
+            })
+          } else if (result === false) {
+            $form.data('valid-result', false)
+            throw new ValidationError('Validation error.')
+          }
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            const form = getForm($form)
+            form.$$emit('xe.validation.faield', { field: $field })
+            throw new ValidationError('Validation error.')
+          }
         }
       }
     })

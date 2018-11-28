@@ -24,14 +24,24 @@ export default class RequiredMarker extends Plugin {
             if (ruleList.includes('required') || ruleList.includes('lang_required')) {
               let container = form.$element
               let label
+              let field
+
               if (ruleList.includes('lang_required')) {
-                label = $(`[data-name=${k}]`, container).siblings('label')
+                field = $(`[data-name=${k}]`, container)
+                label = field.siblings('label')
               } else {
-                label = $(`[name=${k}]`, container).siblings('label')
+                field = $(`[name=${k}]`, container)
+                label = field.siblings('label')
+                if (!label.langth) {
+                  label = field.closest('.__xe-input-group, .form-group').find('label')
+                }
               }
 
               if (label.length === 1) {
                 label.addClass('xe-form__label--requried')
+                form.$$emit('xe.valitation.required-label', { field, label })
+              } else {
+                form.$$emit('xe.valitation.required-label.notfound', { field })
               }
             }
           })
