@@ -7,16 +7,16 @@ const symbolBooted = Symbol('booted')
 const instances = new Map()
 
 /**
- * @class
- * @property {Vuex.Store} $$config vuex store
- * @property {XE} [$$xe] App.boot 실행 후 생성됨
- * @borrows EventEmitter#$$emit
- * @borrows EventEmitter#$$on
- * @borrows EventEmitter#$$once
- * @borrows EventEmitter#$$off
- * @borrows EventEmitter#$$offAll
- * @borrows config as $$config
- */
+* @class
+* @property {Vuex.Store} $$config vuex store
+* @property {XE} [$$xe] App.boot 실행 후 생성됨
+* @borrows EventEmitter#$$emit
+* @borrows EventEmitter#$$on
+* @borrows EventEmitter#$$once
+* @borrows EventEmitter#$$off
+* @borrows EventEmitter#$$offAll
+* @borrows config as $$config
+*/
 class App {
   constructor () {
     if (instances.has(this.constructor.appName())) {
@@ -35,22 +35,32 @@ class App {
   }
 
   /**
-   * booting이 끝났는지 확인
-   */
+  * booting이 끝났는지 확인
+  */
   booted () {
     return this[symbolBooted]
   }
 
   /**
-   * @param {XE} XE
-   * @returns {Promise}
-   */
+  * @param {XE} XE
+  * @returns {Promise}
+  */
   boot (XE) {
     return new Promise((resolve) => {
       if (this[symbolBooted]) {
         resolve(this)
       } else {
         this.$$xe = XE
+
+        this[symbolPlugins].forEach((plugin, name) => {
+          try {
+            if (!plugin.booted) {
+              plugin.boot(this.$$xe, this)
+            }
+          } catch (e) {
+            console.debug('Error! Plugin boot failed')
+          }
+        })
 
         resolve(this)
         this[symbolBooted] = true
@@ -59,10 +69,10 @@ class App {
   }
 
   /**
-   *
-   * @param {string} pointcut
-   * @return {Aspect}
-   */
+  *
+  * @param {string} pointcut
+  * @return {Aspect}
+  */
   intercept (pointcut, name = null, advice = null) {
     const inst = Aspect.aspect(pointcut, this[pointcut])
 
@@ -73,6 +83,18 @@ class App {
     // }
 
     return inst
+  }
+
+  registerPlugin (plugin) {
+    this[symbolPlugins].set(plugin.name, plugin)
+
+    try {
+      if (this.booted && this.$$xe) {
+        plugin.boot(this.$$xe, this)
+      }
+    } catch (e) {
+      console.debug('Error! Plugin boot failed')
+    }
   }
 }
 

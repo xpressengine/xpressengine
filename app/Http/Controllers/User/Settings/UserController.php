@@ -44,7 +44,7 @@ class UserController extends Controller
     /**
      * index. show user list
      *
-     * @param Request $request
+     * @param Request $request request
      *
      * @return \Xpressengine\Presenter\Presentable
      */
@@ -52,6 +52,14 @@ class UserController extends Controller
     {
         $query = $this->handler->users()->query();
         $allUserCount = $query->count();
+
+        if ($startDate = $request->get('startDate', date('Y-m-d', strtotime('-30 days', time())))) {
+            $query = $query->where('created_at', '>=', $startDate . ' 00:00:00');
+        }
+
+        if ($endDate = $request->get('endDate', date('Y-m-d', time()))) {
+            $query = $query->where('created_at', '<=', $endDate . ' 23:59:59');
+        }
 
         // resolve group
         if ($group = $request->get('group')) {
@@ -76,7 +84,6 @@ class UserController extends Controller
         // resolve search keyword
         // keyfield가 지정되지 않을 경우 email, display_name를 대상으로 검색함
         $field = $request->get('keyfield') ?: 'email,display_name';
-
 
         if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(

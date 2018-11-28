@@ -103,7 +103,8 @@ class SettingsMiddleware
         }
 
         $route = $request->route();
-        if ($route->getName() === 'settings.dashboard' && $user->getRating() === Rating::MANAGER) {
+        if (($route->getName() === 'settings' || $route->getName() === 'settings.dashboard')
+                && $user->getRating() === Rating::MANAGER) {
             return;
         }
 

@@ -46,11 +46,11 @@ const config = [
   // common, vendor
   {
     entry: {
+      'common': [path.resolve(__dirname, './core/common.js')],
       'vendor': [
         'babel-polyfill',
         path.resolve(__dirname, './core/vendor.js')
-      ],
-      'common': [path.resolve(__dirname, './core/common.js')]
+      ]
     },
     output: {
       path: pathInfo.root,
@@ -65,7 +65,7 @@ const config = [
       }),
       new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/), // eslint-disable-line
       new webpack.optimize.CommonsChunkPlugin({
-        names: ['common', 'vendor']
+        names: 'vendor'
       })
     ],
     module: {

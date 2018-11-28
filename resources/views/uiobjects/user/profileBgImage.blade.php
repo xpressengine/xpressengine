@@ -18,7 +18,8 @@
             maxFileSize: 5000000, // 5 MB
             replaceFileInput: false,
             disableImageResize: true,
-            imageCrop: false
+            imageCrop: false,
+            dropZone: fileInput
         }).on('fileuploadadd', function (e, data) {
             data.context = $('.__xe_file_preview_{{ $seq }}').empty();
 

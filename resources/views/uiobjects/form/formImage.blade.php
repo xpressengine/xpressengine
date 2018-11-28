@@ -42,7 +42,8 @@
             maxFileSize: {{array_get($args, 'maxSize', 5000000)}}, // 5 MB @FIXME
             replaceFileInput: false,
             disableImageResize: true,
-            imageCrop: false
+            imageCrop: false,
+            dropZone: fileInput
         }).on('fileuploadadd', function (e, data) {
             $('.fileinput-button span', this).text('변경');
             context = $('.__xe_file_preview_{{ $seq }}');

@@ -54,6 +54,7 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args parameters
+     *
      * @return \Illuminate\View\View
      */
     public function create(array $args)
@@ -73,6 +74,7 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args parameters
+     *
      * @return \Illuminate\View\View
      */
     public function edit(array $args)
@@ -84,8 +86,8 @@ class DefaultSkin extends AbstractSkin
         $category = Category::find($this->config->get('category_id'));
 
         $item = null;
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -100,14 +102,15 @@ class DefaultSkin extends AbstractSkin
      * 조회할 때 사용 될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
+     *
      * @return \Illuminate\View\View
      */
     public function show(array $args)
     {
         $item = null;
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -121,7 +124,8 @@ class DefaultSkin extends AbstractSkin
      * 리스트에서 검색할 때 검색 form 에 사용될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
+     *
      * @return string
      */
     public function search(array $args)
@@ -134,8 +138,8 @@ class DefaultSkin extends AbstractSkin
 
         $item = null;
 
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -148,16 +152,15 @@ class DefaultSkin extends AbstractSkin
 
     /**
      * @param string $name
-     * @param array $args
+     * @param array  $args
      */
     public function output($name, array $args)
     {
-        $key = $name.'ItemId';
+        $key = $name . '_item_id';
         if (isset($args[$key]) === false || $args[$key] == '') {
             return null;
         }
 
-        return xe_trans(CategoryItem::itemFind($args[$key])->word);
+        return xe_trans(CategoryItem::find($args[$key])->word);
     }
-
 }
