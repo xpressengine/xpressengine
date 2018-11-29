@@ -37,7 +37,7 @@ return [
 	|
 	| This option using by Exception/Handler.
 	|  - if use file in the plugin : 'path' => 'plugin_name::view.path'
-	|  - with out theme : 'theme' => false
+	|  - without theme : 'theme' => false
 	|
 	*/
     'error' => [
