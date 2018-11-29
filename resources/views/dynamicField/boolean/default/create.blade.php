@@ -1,7 +1,7 @@
 <div class="xe-form-group xe-dynamicField">
     <div>
         @if($config->get('required'))
-            <div class="xe-form-inline">
+            <div class="xe-form-inline __xe-input-group">
                 <label class="xe-label">
                     <strong>{{ xe_trans($config->get('label')) }}</strong>
                 </label>
