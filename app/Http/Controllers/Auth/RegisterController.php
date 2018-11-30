@@ -235,7 +235,7 @@ class RegisterController extends Controller
 
         XeFrontend::rule('add-info', $fields->map(function ($field) {
             return $field->getRules();
-        })->collapse());
+        })->collapse()->all());
 
         return XePresenter::make('register.add-info', compact('fields'));
     }
