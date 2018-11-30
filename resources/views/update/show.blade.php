@@ -24,7 +24,8 @@
                     <script>
                         $(function($) {
                             var loadOperation = setInterval(function(){
-                                XE.page('".route('settings.coreupdate.operation')."', '.__xe_operation', {}, function(data){
+                                XE.page('".route('settings.coreupdate.operation')."', '.__xe_operation', {}, function(response){
+                                    var data = response.data;
                                     if(data.operation.status != 'running') {
                                         clearInterval(loadOperation);
                                         location.reload();
