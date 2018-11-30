@@ -237,7 +237,9 @@ class RegisterController extends Controller
             return $field->getRules();
         })->collapse()->all());
 
-        return XePresenter::make('register.add-info', compact('fields'));
+        $userData = array_merge(request()->all(), \Auth::user()->getAttributes());
+
+        return XePresenter::make('register.add-info', compact('fields', 'userData'));
     }
 
     public function postRegisterAddInfo(Request $request)
