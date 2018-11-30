@@ -91,6 +91,11 @@ class XeUpdate extends Command
         $writer->load();
         $writer->reset()->write();
 
+        if (0 !== $result = $this->call('cache:clear')) {
+            $this->error('cache clear fail.. check your system.'. PHP_EOL);
+            return;
+        }
+
         // composer update실행(composer update --no-dev)
         if (!$this->option('skip-composer')) {
             $this->output->section('Composer update command is running.. It may take up to a few minutes.');
@@ -101,9 +106,6 @@ class XeUpdate extends Command
         // migration
         $this->output->section('Running migration..');
         $this->migrateCore($installedVersion);
-
-        // clear proxy
-        $interceptionHandler->clearProxies();
 
         // mark installed
         $this->markInstalled();

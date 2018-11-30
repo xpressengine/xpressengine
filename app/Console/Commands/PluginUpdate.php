@@ -117,7 +117,6 @@ class PluginUpdate extends PluginCommand
                 );
             }
         }
-        $this->clear();
     }
 
     /**

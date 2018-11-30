@@ -143,8 +143,6 @@ class PluginUninstall extends PluginCommand
                 $this->output->success($info['name'].":".$info['version']." plugin is uninstalled");
             }
         }
-        $this->clear();
-
     }
 
     /**

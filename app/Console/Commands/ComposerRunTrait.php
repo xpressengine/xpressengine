@@ -131,7 +131,6 @@ trait ComposerRunTrait
         if ($siteToken) {
             Composer::setPackagistToken($siteToken);
         }
-        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
         $startTime = Carbon::now()->format('YmdHis');
         $logFileName = "logs/plugin-$startTime.log";

@@ -79,6 +79,10 @@ class PluginCommand extends Command
             set_time_limit($this->getTimeLimit());
         }
 
+        if (0 !== $result = $this->clear()) {
+            return $result;
+        }
+
         $inputs = [
             'command' => 'update',
             "--with-dependencies" => true,
@@ -93,8 +97,11 @@ class PluginCommand extends Command
 
     protected function clear()
     {
-        $this->handler->refreshPlugins();
-        $this->interceptionHandler->clearProxies();
+        $this->warn('Clears cache before Composer update runs.');
+        $result = $this->call('cache:clear');
+        $this->line(PHP_EOL);
+
+        return $result;
     }
 
     /**
