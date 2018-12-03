@@ -50,9 +50,6 @@ class PluginUpdate extends PluginCommand
      */
     public function handle()
     {
-        // 설치가능 환경인지 검사
-        $this->prepareComposer();
-
         $data = $this->getPluginData($this->argument('plugin'));
 
         // 플러그인 정보 출력
@@ -87,12 +84,10 @@ class PluginUpdate extends PluginCommand
         // composer 실행을 마쳤습니다
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        $result = $this->writeResult($result);
-
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        if ($result) {
+        if ($result === 0) {
             $updated = array_get($changed, 'updated', []);
             if (count($updated) < 1) {
                 $this->output->error(

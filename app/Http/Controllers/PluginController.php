@@ -138,7 +138,6 @@ class PluginController extends Controller
             }
         }
 
-        $this->prepareComposer();
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($pluginIds, $force) {
             Artisan::call('plugin:uninstall', [
@@ -277,7 +276,6 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
-        $this->prepareComposer();
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($plugins) {
             Artisan::call('plugin:update', [
@@ -310,14 +308,10 @@ class PluginController extends Controller
 
         // 자료실에서 플러그인 정보 조회
         $pluginsData = $provider->findAll($pluginIds);
-
         if ($pluginsData === null) {
-            throw new HttpException(
-                422, xe_trans('xe::notFoundPluginFromMarket')
-            );
+            throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        $this->prepareComposer();
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($pluginIds) {
             Artisan::call('plugin:install', [
@@ -330,66 +324,6 @@ class PluginController extends Controller
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::installingPlugin')]
         )->with('operation', 'running');
-    }
-
-    protected function prepareComposer(/*$timeLimit*/)
-    {
-
-        $files = [
-            storage_path('app/composer.plugins.json'),
-            base_path('composer.lock'),
-            base_path('plugins/'),
-            base_path('vendor/'),
-            base_path('vendor/composer/installed.json'),
-        ];
-
-        // file permission check
-        foreach ($files as $file) {
-            if (!is_writable($file)) {
-                throw new HttpException(500, xe_trans('xe::notHaveWritePermissionForInstallPlugin', ['file' => $file]));
-            }
-        }
-
-        // composer home check
-        $this->checkComposerHome();
-    }
-
-    /**
-     * checkComposerHome
-     *
-     * @return void
-     * @throws \Exception
-     */
-    protected function checkComposerHome()
-    {
-        $config = app('xe.config')->get('plugin');
-        $home = $config->get('composer_home');
-
-        if ($home) {
-            putenv("COMPOSER_HOME=$home");
-        } else {
-            $home = getenv('COMPOSER_HOME');
-        }
-
-        if (Platform::isWindows()) {
-            if (!getenv('APPDATA')) {
-                $this->throwComposerHomeEnv();
-            }
-        }
-
-        if (!$home) {
-            $home = getenv('HOME');
-            if (!$home) {
-                $this->throwComposerHomeEnv();
-            }
-        }
-    }
-
-    protected function throwComposerHomeEnv()
-    {
-        throw new HttpException(500, xe_trans('xe::composerEnvNotSet', [
-            'link' => sprintf('<a href="%s">%s</a>', route('settings.plugins.setting.show'), xe_trans('xe::pluginSettings'))
-        ]));
     }
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)

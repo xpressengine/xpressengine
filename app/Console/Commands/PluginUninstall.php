@@ -55,13 +55,6 @@ class PluginUninstall extends PluginCommand
     {
         $data = $this->getPluginData($this->argument('plugin'));
 
-        foreach ($data as $info) {
-            if (!$info['is_dev']) {
-                $this->prepareComposer();
-                break;
-            }
-        }
-
         // 플러그인 정보 출력
         // 삭제 플러그인 정보
         $this->warn(PHP_EOL." Information of the plugin that should be uninstalled:");
@@ -107,11 +100,9 @@ class PluginUninstall extends PluginCommand
             // composer 실행을 마쳤습니다.
             $this->warn('Composer update command is finished.'.PHP_EOL);
 
-            $result = $this->writeResult($result);
-
             $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-            if ($result) {
+            if ($result === 0) {
                 $uninstalled = array_get($changed, 'uninstalled', []);
                 if (count($uninstalled) < 1) {
                     $this->output->error(

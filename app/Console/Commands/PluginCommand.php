@@ -79,20 +79,39 @@ class PluginCommand extends Command
             set_time_limit($this->getTimeLimit());
         }
 
-        if (0 !== $result = $this->clear()) {
+        $startTime = Carbon::now()->format('YmdHis');
+        $this->setLogFile($logFile = "logs/plugin-{$startTime}.log");
+
+        try {
+            if (0 !== $this->clear()) {
+//            return $result;
+                throw new \Exception('cache clear fail.. check your system.');
+            }
+
+            $this->prepareComposer();
+
+            $inputs = [
+                'command' => 'update',
+                "--with-dependencies" => true,
+                //"--quiet" => true,
+                '--working-dir' => base_path(),
+                /*'--verbose' => '3',*/
+                'packages' => $packages
+            ];
+
+            $result = $this->runComposer($inputs, true, $logFile);
+            $this->writeResult($result);
+
             return $result;
+        } catch (\Exception $e) {
+            $fp = fopen(storage_path($logFile), 'a');
+            fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
+            fclose($fp);
+
+            $this->writeResult(1);
+
+            throw $e;
         }
-
-        $inputs = [
-            'command' => 'update',
-            "--with-dependencies" => true,
-            //"--quiet" => true,
-            '--working-dir' => base_path(),
-            /*'--verbose' => '3',*/
-            'packages' => $packages
-        ];
-
-        return $this->runComposer($inputs);
     }
 
     protected function clear()
@@ -102,6 +121,12 @@ class PluginCommand extends Command
         $this->line(PHP_EOL);
 
         return $result;
+    }
+
+    protected function setLogFile($logFile)
+    {
+        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
+        $this->writer->write();
     }
 
     /**
