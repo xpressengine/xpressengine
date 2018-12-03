@@ -43,14 +43,11 @@ class formEntity {
 
     this.$element.on('submit', function (event) {
       if (that.$$hasListener('submit')) {
-        // 폼 전송 이벤트를 중단
-        event.preventDefault()
-
         emitFormSubmit(that.element, event)
           .then(() => {
-            // preventSubmit()으로 임의로 중단하지 않은 경우 폼 전송
-            if (!that.submitPrevented()) {
-              that.submit()
+            // preventSubmit()으로 임의 중단한 경우 폼 전송 중지
+            if (that.submitPrevented()) {
+              event.preventDefault()
             }
           })
           .catch(() => {
