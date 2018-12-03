@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/test',function(){
-    return view('test');
-});
 Route::settings(
     '/',
     function () {
