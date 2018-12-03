@@ -118,7 +118,7 @@ trait ComposerRunTrait
      * @internal param $command
      *
      */
-    protected function runComposer($inputs, $updateMode = true)
+    protected function runComposer($inputs, $updateMode = true, $logFile = null)
     {
         ini_set('memory_limit', '-1');
 
@@ -132,11 +132,13 @@ trait ComposerRunTrait
             Composer::setPackagistToken($siteToken);
         }
 
-        $startTime = Carbon::now()->format('YmdHis');
-        $logFileName = "logs/plugin-$startTime.log";
+        if (!$logFile) {
+            $startTime = Carbon::now()->format('YmdHis');
+            $logFile = "logs/composer-$startTime.log";
+        }
 
         file_put_contents(
-            storage_path($logFileName),
+            $logFilePath = storage_path($logFile),
             JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
         );
 
@@ -145,7 +147,7 @@ trait ComposerRunTrait
 
         return $application->run(
             new ArrayInput($inputs),
-            new StreamOutput(fopen(storage_path($logFileName), 'a', false))
+            new StreamOutput(fopen($logFilePath, 'a'))
         );
     }
 }

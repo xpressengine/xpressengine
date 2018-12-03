@@ -1,8 +1,10 @@
 <?php
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
@@ -36,11 +38,17 @@ class XeUpdate extends Command
     protected $description = 'Update the XpressEngine';
 
     /**
+     * @var ComposerFileWriter
+     */
+    protected $writer;
+    /**
      * Create a new controller creator command instance.
      */
-    public function __construct()
+    public function __construct(ComposerFileWriter $writer)
     {
         parent::__construct();
+
+        $this->writer = $writer;
     }
 
     /**
@@ -51,31 +59,23 @@ class XeUpdate extends Command
      *
      * @return bool|null
      */
-    public function handle(ComposerFileWriter $writer, InterceptionHandler $interceptionHandler) {
-
-        // php artisan xe:update [version] [--skip-download]
-
-        // Xpressengine을 업데이트합니다.
+    public function handle()
+    {
         $this->output->block('Updating Xpressengine.');
-
-        if (!$this->option('skip-composer')) {
-            $this->output->section('Checking environment for Composer...');
-            $this->prepareComposer();
-        }
 
         // check option
         if (!$this->option('skip-download')) {
+            // @todo 다운로드 지원이 되기전까지 옵션이 지정되지 않더라도 처리하지 않음
             // 업데이트 파일의 다운로드는 아직 지원하지 않습니다. 아래의 안내대로 코어를 업데이트 하십시오.
-            $this->output->caution('Downloading update files does not yet supported. Follow the guide below for update.');
-            $this->printGuide();
-            return null;
+//            $this->output->caution('Downloading update files does not yet supported. Follow the guide below for update.');
+//            return null;
         }
 
         // version 안내
         $installedVersion = trim(file_get_contents(storage_path('app/installed')));
         //  업데이트 버전 정보:
         $this->warn(' Version information:');
-        $this->output->text("  $installedVersion -> ".__XE_VERSION__);
+        $this->line("  $installedVersion -> ".__XE_VERSION__);
 
         // confirm
         if ($this->input->isInteractive() && $this->confirm(
@@ -86,22 +86,37 @@ class XeUpdate extends Command
             return;
         }
 
-        // 플러그인 업데이트 잠금
-        unlink($writer->getPath());
-        $writer->load();
-        $writer->reset()->write();
 
-        if (0 !== $result = $this->call('cache:clear')) {
-            $this->error('cache clear fail.. check your system.'. PHP_EOL);
-            return;
+        $logFile = $this->ready();
+
+        try {
+            if (0 !== $this->call('cache:clear')) {
+                throw new \Exception('cache clear fail.. check your system.');
+            }
+
+            // composer update실행(composer update --no-dev)
+            if (!$this->option('skip-composer')) {
+
+                $this->output->section('Checking environment for Composer...');
+                $this->prepareComposer();
+
+                $this->output->section('Composer update command is running.. It may take up to a few minutes.');
+                $this->line(" composer update");
+                $result = $this->runComposer([
+                    'command' => 'update',
+                    '--working-dir' => base_path(),
+                ], false, $logFile);
+
+                $this->writeResult($result);
+            }
+        } catch (\Exception $e) {
+            $fp = fopen(storage_path($logFile), 'a');
+            fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
+            fclose($fp);
+            $this->writeResult(1);
+            throw $e;
         }
 
-        // composer update실행(composer update --no-dev)
-        if (!$this->option('skip-composer')) {
-            $this->output->section('Composer update command is running.. It may take up to a few minutes.');
-            $this->line(" composer update");
-            $result = $this->runComposer(['command' => 'update'], false);
-        }
 
         // migration
         $this->output->section('Running migration..');
@@ -151,25 +166,41 @@ class XeUpdate extends Command
         file_put_contents(base_path('storage/app/installed'), __XE_VERSION__);
     }
 
-    private function printGuide()
+    protected function ready()
     {
+        // 플러그인 업데이트 잠금
+        unlink($this->writer->getPath());
+        $this->writer->load();
+        $this->writer->reset();
 
-        $this->output->section('Method 1 - If you have installed the Xpressengine using Git');
-        $this->output->text(
-            [
-                '1. Run "git pull origin master".',
-                '2. Run "php artisan xe:update --skip-download".',
-            ]
-        );
+        $this->writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
+        $this->writer->set("xpressengine-plugin.operation.core_update", __XE_VERSION__);
 
-        $this->output->section('Method 2 - If you have installed the XpressEngine using the Installer');
-        $this->output->text(
-            [
-                '1. Download the latest release files from https://github.com/xpressengine/xpressengine/releases.',
-                '2. Unzip the downloaded file to the root directory.',
-                '3. Run "php artisan xe:update --skip-download".',
-            ]
-        );
-        $this->output->newLine();
+        $startTime = Carbon::now()->format('YmdHis');
+        $logFile = "logs/core-update-$startTime.log";
+        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
+
+        $this->writer->write();
+
+        return $logFile;
+    }
+
+    /**
+     * writeResult
+     *
+     * @param $result
+     * @return void
+     */
+    protected function writeResult($result)
+    {
+        // composer.plugins.json 파일을 다시 읽어들인다.
+        $this->writer->load();
+        if ($result !== 0) {
+            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+            $this->writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
+        } else {
+            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+        $this->writer->write();
     }
 }
