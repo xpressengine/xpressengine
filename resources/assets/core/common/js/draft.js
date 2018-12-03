@@ -93,7 +93,7 @@
       })
 
       XE.app('Form').then(appForm => {
-        appForm.get(_this.elem).$$on('submit', (eventName, element, event, preventSubmit) => {
+        appForm.get(_this.elem).$$on('submit', function () {
           return _this.deleteAuto(_this.key) // Promise
         }, { name: 'xe.draft' })
       })

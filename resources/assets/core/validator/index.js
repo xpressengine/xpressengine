@@ -528,11 +528,11 @@ class Validator extends App {
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }
-          getForm(this).$$on('submit', function (eventName, formEl, jqEvent) {
+          getForm(this).$$on('submit', function (eventName, { element, event }) {
             try {
-              that.check($(formEl.element))
+              that.check($(element))
             } catch (e) {
-              jqEvent.preventDefault()
+              event.preventDefault()
               return Promise.reject(e)
             }
 
