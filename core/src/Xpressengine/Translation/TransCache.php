@@ -136,8 +136,7 @@ class TransCache implements Repository
             $this->cachedLines = [];
             $this->repo->chunk(function ($lines) {
                 foreach ($lines as $line) {
-                    $keys = [$line->namespace, $line->item, $line->locale];
-                    Arr::set($this->cachedLines, implode('.', $keys), $line->value);
+                    $this->cachedLines[$line->namespace][$line->item][$line->locale] = $line->value;
                 }
             });
             $this->cache->forever($this->transCacheKey, json_enc($this->cachedLines));
