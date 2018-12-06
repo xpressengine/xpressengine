@@ -1,5 +1,11 @@
 <?php
 /**
+ * ProfileController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -16,14 +22,23 @@ use XePresenter;
 use XeTheme;
 use XeDB;
 use Xpressengine\User\Exceptions\UserNotFoundException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
-use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
-use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserInterface;
 use Xpressengine\Widget\WidgetBoxHandler;
 
+/**
+ * Class ProfileController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ProfileController extends Controller
 {
     /**
@@ -32,17 +47,8 @@ class ProfileController extends Controller
     protected $handler;
 
     /**
-     * @var UserGroupRepositoryInterface
+     * ProfileController constructor.
      */
-    protected $groups;
-
-    /**
-     * @var UserEmailRepositoryInterface
-     */
-    protected $mails;
-
-    protected $skin;
-
     public function __construct()
     {
         $this->handler = app('xe.user');
@@ -52,6 +58,14 @@ class ProfileController extends Controller
     }
 
     // 기본정보 보기
+
+    /**
+     * Show profile of user.
+     *
+     * @param string           $user    user id
+     * @param WidgetBoxHandler $handler WidgetBoxHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function index($user, WidgetBoxHandler $handler)
     {
         $user = $this->retrieveUser($user);
@@ -62,15 +76,17 @@ class ProfileController extends Controller
         return XePresenter::make('index', compact('user', 'grant', 'widgetbox'));
     }
 
+    /**
+     * Update user profile.
+     *
+     * @param string  $userId  user id
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function update($userId, Request $request)
     {
-        // basic validation
-        $this->validate(
-            $request,
-            [
-                'display_name' => 'required',
-            ]
-        );
+        $this->validate($request, ['display_name' => 'required']);
 
         // user validation
         /** @var UserInterface $user */
@@ -103,11 +119,10 @@ class ProfileController extends Controller
     }
 
     /**
-     * retrieveUser
+     * Retrieve user
      *
-     * @param $id
-     *
-     * @return mixed
+     * @param string $id user id
+     * @return User
      */
     protected function retrieveUser($id)
     {
@@ -125,13 +140,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * getGrant
+     * Get grant
      *
-     * @param $user
-     *
+     * @param User $user user
      * @return array
      */
-    protected function getGrant($user)
+    protected function getGrant(User $user)
     {
         $logged = Auth::user();
 

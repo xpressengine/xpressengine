@@ -39,6 +39,11 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
  */
 class MenuServiceProvider extends ServiceProvider
 {
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
     protected $policies = [
         MenuItem::class => MenuItemPolicy::class
     ];

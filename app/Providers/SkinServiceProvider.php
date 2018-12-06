@@ -38,11 +38,21 @@ class SkinServiceProvider extends ServiceProvider
         $this->app->alias(SkinHandler::class, 'xe.skin');
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->registerSkinListUIObject();
     }
 
+    /**
+     * Register the ui object of the skin selector.
+     *
+     * @return void
+     */
     private function registerSkinListUIObject()
     {
         /** @var \Xpressengine\Plugin\PluginRegister $registryManager */

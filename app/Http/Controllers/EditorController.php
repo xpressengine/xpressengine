@@ -1,4 +1,16 @@
 <?php
+/**
+ * EditorController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 namespace App\Http\Controllers;
 
 use Auth;
@@ -20,16 +32,30 @@ use XeUser;
 use XeStorage;
 use XeTag;
 
+/**
+ * Class EditorController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class EditorController extends Controller
 {
     use PermissionSupport;
-    
+
+    /**
+     * Redirect to setting page.
+     *
+     * @param Request $request    request
+     * @param string  $instanceId instance id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function setting(Request $request, $instanceId)
     {
         $editorId = $request->get('editorId');
-        if (empty($editorId)) {
-            $editorId = null;
-        }
 
         XeEditor::setInstance($instanceId, $editorId);
 
@@ -40,6 +66,12 @@ class EditorController extends Controller
         }
     }
 
+    /**
+     * Show the setting form for detail.
+     *
+     * @param string $instanceId instance id
+     * @return Presentable
+     */
     public function getDetailSetting($instanceId)
     {
         return XePresenter::make('editor.detail', [
@@ -48,6 +80,13 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the setting of detail.
+     *
+     * @param Request $request    request
+     * @param string  $instanceId instance id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postDetailSetting(Request $request, $instanceId)
     {
         $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
@@ -88,6 +127,12 @@ class EditorController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Show the setting form for permission.
+     *
+     * @param string $instanceId instance id
+     * @return Presentable
+     */
     public function getPermSetting($instanceId)
     {
         return XePresenter::make('editor.perm', [
@@ -99,6 +144,13 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the setting of detail.
+     *
+     * @param Request $request    request
+     * @param string  $instanceId instance id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postPermSetting(Request $request, $instanceId)
     {
         $this->permissionRegister($request, XeEditor::getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
@@ -106,6 +158,12 @@ class EditorController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Show the setting form for tools.
+     *
+     * @param string $instanceId instance id
+     * @return Presentable
+     */
     public function getToolSetting($instanceId)
     {
         $tools = XeEditor::getToolAll();
@@ -132,6 +190,13 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the setting of tools.
+     *
+     * @param Request $request    request
+     * @param string  $instanceId instance id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postToolSetting(Request $request, $instanceId)
     {
         if ($request->get('inherit')) {
@@ -143,11 +208,21 @@ class EditorController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Redirect to global setting.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function redirectGlobalSetting()
     {
         return redirect()->route('settings.editor.global.detail');
     }
 
+    /**
+     * Show the global setting form for detail.
+     *
+     * @return Presentable
+     */
     public function getGlobalDetailSetting()
     {
         return XePresenter::make('editor.global.detail', [
@@ -155,6 +230,12 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the global setting of detail.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postGlobalDetailSetting(Request $request)
     {
         $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
@@ -194,6 +275,11 @@ class EditorController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Show the global setting form for permission.
+     *
+     * @return Presentable
+     */
     public function getGlobalPermSetting()
     {
         return XePresenter::make('editor.global.perm', [
@@ -201,6 +287,12 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the global setting of permission.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postGlobalPermSetting(Request $request)
     {
         $this->permissionRegister($request, XeEditor::getPermKey(), ['html', 'tool', 'upload', 'download']);
@@ -208,6 +300,11 @@ class EditorController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Show the global setting form for tools.
+     *
+     * @return Presentable
+     */
     public function getGlobalToolSetting()
     {
         $tools = XeEditor::getToolAll();
@@ -230,6 +327,12 @@ class EditorController extends Controller
         ]);
     }
 
+    /**
+     * Store the global setting of tools.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postGlobalToolSetting(Request $request)
     {
         XeEditor::setGlobalTools($request->get('tools', []));
@@ -238,10 +341,10 @@ class EditorController extends Controller
     }
 
     /**
-     * file upload
+     * Upload a file
      *
-     * @param Request       $request      request
-     * @param string        $instanceId   instance id
+     * @param Request $request    request
+     * @param string  $instanceId instance id
      * @return Presentable
      */
     public function fileUpload(Request $request, $instanceId)
@@ -304,10 +407,10 @@ class EditorController extends Controller
     }
 
     /**
-     * get file source
+     * Get source of file.
      *
-     * @param string        $instanceId instance id
-     * @param string        $id         document id
+     * @param string $instanceId instance id
+     * @param string $id         identifier
      * @return void
      * @throws InvalidArgumentException
      */
@@ -336,10 +439,10 @@ class EditorController extends Controller
     }
 
     /**
-     * file download
+     * Download a file
      *
-     * @param string        $instanceId instance id
-     * @param string        $id
+     * @param string $instanceId instance id
+     * @param string $id         identifier
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function fileDownload($instanceId, $id)
@@ -356,10 +459,10 @@ class EditorController extends Controller
     }
 
     /**
-     * file destory
+     * Delete a file.
      *
-     * @param string  $instanceId
-     * @param string  $id
+     * @param string $instanceId instance id
+     * @param string $id         identifier
      * @return Presentable
      */
     public function fileDestroy($instanceId, $id)
@@ -384,10 +487,10 @@ class EditorController extends Controller
     }
 
     /**
-     * 해시태그 suggestion 리스트
+     * Show suggestion list of tags.
      *
-     * @param Request $request
-     * @return mixed
+     * @param Request $request request
+     * @return Presentable
      */
     public function hashTag(Request $request)
     {
@@ -405,10 +508,10 @@ class EditorController extends Controller
     }
 
     /**
-     * 멘션 suggestion 리스트
+     * Show suggestion list of mentions.
      *
-     * @param Request $request
-     * @return mixed
+     * @param Request $request request
+     * @return Presentable
      */
     public function mention(Request $request)
     {

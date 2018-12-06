@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * PluginCommand.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Commands
+ * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -22,7 +22,9 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
 /**
- * @category
+ * Class PluginCommand
+ *
+ * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -53,6 +55,14 @@ class PluginCommand extends Command
      */
     protected $writer;
 
+    /**
+     * Initialize
+     *
+     * @param PluginHandler       $handler             PluginHandler
+     * @param PluginProvider      $provider            PluginProvider
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler
+     */
     protected function init(
         PluginHandler $handler,
         PluginProvider $provider,
@@ -67,10 +77,11 @@ class PluginCommand extends Command
     }
 
     /**
-     * execute composer update
+     * Execute composer update.
      *
      * @param array $packages specific package name. no need version
      * @return int
+     * @throws \Exception
      */
     protected function composerUpdate(array $packages)
     {
@@ -84,7 +95,6 @@ class PluginCommand extends Command
 
         try {
             if (0 !== $this->clear()) {
-//            return $result;
                 throw new \Exception('cache clear fail.. check your system.');
             }
 
@@ -114,6 +124,11 @@ class PluginCommand extends Command
         }
     }
 
+    /**
+     * Run cache clear.
+     *
+     * @return int
+     */
     protected function clear()
     {
         $this->warn('Clears cache before Composer update runs.');
@@ -123,6 +138,12 @@ class PluginCommand extends Command
         return $result;
     }
 
+    /**
+     * Set a file for log.
+     *
+     * @param string $logFile log file path
+     * @return void
+     */
     protected function setLogFile($logFile)
     {
         $this->writer->set('xpressengine-plugin.operation.log', $logFile);
@@ -130,10 +151,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * activatePlugin
+     * Activate plugin.
      *
-     * @param $pluginId
-     *
+     * @param string $pluginId plugin id
      * @return void
      */
     protected function activatePlugin($pluginId)
@@ -146,10 +166,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * activatePlugin
+     * Update plugin.
      *
-     * @param $pluginId
-     *
+     * @param string $pluginId plugin id
      * @return void
      */
     protected function updatePlugin($pluginId)
@@ -159,9 +178,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * writeResult
+     * Write result.
      *
-     * @param $result
+     * @param int $result result code
      * @return bool
      */
     protected function writeResult($result)
@@ -181,7 +200,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * getChanged
+     * Get changed.
      *
      * @return array
      */
@@ -195,7 +214,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * getChanged
+     * Get failed.
      *
      * @return array
      */
@@ -210,10 +229,9 @@ class PluginCommand extends Command
 
 
     /**
-     * printChangedPlugins
+     * Print changed.
      *
-     * @param array $changed
-     *
+     * @param array $changed changed information
      * @return void
      */
     protected function printChangedPlugins(array $changed)
@@ -241,10 +259,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * printFailedPlugins
+     * Print failed.
      *
-     * @param array $failed
-     *
+     * @param array $failed failed information
      * @return void
      */
     protected function printFailedPlugins(array $failed)
@@ -276,9 +293,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * parse plugin string
+     * Parse plugin string.
      *
-     * @param string $string
+     * @param string $string name and version
      * @return array
      */
     protected function parse($string)
@@ -291,10 +308,10 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get plugin informatin
+     * Get plugin information.
      *
-     * @param string      $id
-     * @param string|null $version
+     * @param string      $id      plugin id
+     * @param string|null $version version
      * @return array
      * @throws \Exception
      */
@@ -321,7 +338,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get expired time
+     * Get expired time.
      *
      * @return int|string
      */
@@ -333,7 +350,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get time limit
+     * Get time limit.
      *
      * @return int
      */

@@ -41,6 +41,11 @@ class ThemeServiceProvider extends ServiceProvider
         $this->app->alias(ThemeHandler::class, 'xe.theme');
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         // TODO: move code to valid location!!!
@@ -58,7 +63,7 @@ class ThemeServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerInterceptForThemePreview
+     * Add event listener for preview theme.
      *
      * @return void
      */
@@ -84,7 +89,7 @@ class ThemeServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerBlankTheme
+     * Register the blank theme.
      *
      * @return void
      */
@@ -96,6 +101,11 @@ class ThemeServiceProvider extends ServiceProvider
         $registryManager->add($blankThemeClass);
     }
 
+    /**
+     * Register the ui object of theme selector.
+     *
+     * @return void
+     */
     private function registerThemeListUIObject()
     {
         /** @var PluginRegister $registryManager */
@@ -103,6 +113,11 @@ class ThemeServiceProvider extends ServiceProvider
         $registryManager->add(ThemeSelect::class);
     }
 
+    /**
+     * Register the mobile detector.
+     *
+     * @return void
+     */
     private function registerMobileResolver()
     {
         $this->app['xe.theme']->setMobileResolver(function(){
@@ -110,6 +125,11 @@ class ThemeServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Set handler to the theme.
+     *
+     * @return void
+     */
     private function setThemeHandlerForTheme()
     {
         AbstractTheme::setHandler($this->app->make('xe.theme'));

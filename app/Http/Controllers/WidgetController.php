@@ -1,5 +1,11 @@
 <?php
 /**
+ * WidgetController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -9,7 +15,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\WidgetSection;
-use View;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Skin\SkinHandler;
@@ -17,12 +22,22 @@ use Xpressengine\Support\JsonException;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
 
+/**
+ * Class WidgetController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class WidgetController extends Controller
 {
     /**
-     * index
+     * Show list of widget.
      *
-     * @return mixed
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function index()
     {
@@ -33,6 +48,13 @@ class WidgetController extends Controller
         ]);
     }
 
+    /**
+     * Generate custom markup code of the widget.
+     *
+     * @param Request       $request       request
+     * @param WidgetHandler $widgetHandler WidgetHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
         $inputs = $request->except('_token');
@@ -47,13 +69,11 @@ class WidgetController extends Controller
     }
 
     /**
-     * 주어진 위젯의 스킨 목록을 반환한다.
+     * Show the skins of the widget.
      *
-     * @param Request       $request
-     * @param WidgetHandler $widgetHandler
-     * @param SkinHandler   $skinHandler
-     *
-     * @return void
+     * @param Request       $request     request
+     * @param SkinHandler   $skinHandler SkinHandler instance
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function skin(Request $request, SkinHandler $skinHandler)
     {
@@ -71,12 +91,10 @@ class WidgetController extends Controller
     /**
      * 주어진 위젯과 스킨에 대한 설정 폼을 반환한다.
      *
-     * @param Request       $request
-     * @param WidgetHandler $widgetHandler
-     *
-     * @param SkinHandler   $skinHandler
-     *
-     * @return View
+     * @param Request       $request       request
+     * @param WidgetHandler $widgetHandler WidgetHandler instance
+     * @param SkinHandler   $skinHandler   SkinHandler instance
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function form(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
@@ -101,14 +119,13 @@ class WidgetController extends Controller
     }
 
     /**
-     * setup by code
+     * Show inputs for setup by given code.
      *
-     * @param Request       $request
-     * @param WidgetParser  $widgetParser
-     * @param WidgetHandler $widgetHandler
-     * @param SkinHandler   $skinHandler
-     *
-     * @return mixed
+     * @param Request       $request       request
+     * @param WidgetParser  $widgetParser  WidgetParser instance
+     * @param WidgetHandler $widgetHandler WidgetHandler instance
+     * @param SkinHandler   $skinHandler   SkinHandler instance
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function setup(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
@@ -149,11 +166,12 @@ class WidgetController extends Controller
     }
 
     /**
-     * render
+     * Render widget.
      *
-     * @param WidgetHandler $widgetHandler
-     *
-     * @return mixed
+     * @param Request       $request       request
+     * @param WidgetHandler $widgetHandler WidgetHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     * @throws \Exception
      */
     public function render(Request $request, WidgetHandler $widgetHandler)
     {
@@ -164,5 +182,4 @@ class WidgetController extends Controller
 
         return $render;
     }
-
 }

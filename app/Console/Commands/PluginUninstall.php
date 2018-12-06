@@ -1,4 +1,16 @@
 <?php
+/**
+ * PluginUninstall.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use File;
@@ -8,6 +20,16 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class PluginUninstall
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginUninstall extends PluginCommand
 {
     /**
@@ -29,10 +51,10 @@ class PluginUninstall extends PluginCommand
     /**
      * Create a new console command instance.
      *
-     * @param PluginHandler       $handler
-     * @param PluginProvider      $provider
-     * @param ComposerFileWriter  $writer
-     * @param InterceptionHandler $interceptionHandler
+     * @param PluginHandler       $handler             PluginHandler
+     * @param PluginProvider      $provider            PluginProvider
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler
      */
     public function __construct(
         PluginHandler $handler,
@@ -137,9 +159,9 @@ class PluginUninstall extends PluginCommand
     }
 
     /**
-     * Get plugins data
+     * Get plugins data.
      *
-     * @param array $plugins
+     * @param array $plugins plugins
      * @return array
      * @throws \Exception
      */
@@ -171,9 +193,9 @@ class PluginUninstall extends PluginCommand
     }
 
     /**
-     * Check activated
+     * Check activated.
      *
-     * @param array $data
+     * @param array $data data for plugins
      * @return void
      * @throws \Exception
      */
@@ -195,10 +217,11 @@ class PluginUninstall extends PluginCommand
     }
 
     /**
-     * The process before delete plugin file
+     * The process before delete plugin file.
      *
-     * @param array $data
+     * @param array $data data for plugins
      * @return void
+     * @throws \Exception
      */
     protected function processUninstall(array $data)
     {
@@ -210,7 +233,7 @@ class PluginUninstall extends PluginCommand
     /**
      * Write require to composer.plugins.json
      *
-     * @param array $data
+     * @param array $data data for plugins
      * @return void
      */
     protected function writeRequire($data)

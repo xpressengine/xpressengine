@@ -1,5 +1,11 @@
 <?php
 /**
+ * WidgetBoxController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -21,11 +27,28 @@ use Xpressengine\Widget\Exceptions\NotFoundWidgetBoxException;
 use Xpressengine\Widget\Models\WidgetBox;
 use Xpressengine\Widget\WidgetBoxHandler;
 
+/**
+ * Class WidgetBoxController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class WidgetBoxController extends Controller
 {
-
     use PermissionSupport;
 
+    /**
+     * Show the create form for the new widget box.
+     *
+     * @param Request          $request  request
+     * @param WidgetBoxHandler $handler  WidgetBoxHandler instance
+     * @param FrontendHandler  $frontend FrontendHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function create(Request $request, WidgetBoxHandler $handler, FrontendHandler $frontend)
     {
         $id = $request->get('id');
@@ -44,9 +67,15 @@ class WidgetBoxController extends Controller
         return api_render('widgetbox.create', compact('id'));
     }
 
+    /**
+     * Store the new widget box.
+     *
+     * @param Request          $request  request
+     * @param WidgetBoxHandler $handler  WidgetBoxHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function store(Request $request, WidgetBoxHandler $handler)
     {
-
         if (!$request->user()->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
@@ -68,6 +97,14 @@ class WidgetBoxController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
+    /**
+     * Show editable view for the widget box.
+     *
+     * @param Request          $request  request
+     * @param WidgetBoxHandler $handler  WidgetBoxHandler instance
+     * @param string           $id       identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function edit(Request $request, WidgetBoxHandler $handler, $id)
     {
         /** @var WidgetBox $widgetbox */
@@ -92,6 +129,15 @@ class WidgetBoxController extends Controller
         ]);
     }
 
+    /**
+     * Update contents of the widget box.
+     *
+     * @param Request          $request request
+     * @param WidgetBoxHandler $handler WidgetBoxHandler instance
+     * @param string           $id      identifier
+     * @return \Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function update(Request $request, WidgetBoxHandler $handler, $id)
     {
         if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
@@ -115,11 +161,10 @@ class WidgetBoxController extends Controller
     }
 
     /**
-     * 주어진 id의 widgetbox의 code(content)를 반환한다.
+     * Get the widget box information by given id
      *
-     * @param WidgetBoxHandler $handler
-     * @param string           $id
-     *
+     * @param WidgetBoxHandler $handler WidgetBoxHandler instance
+     * @param string           $id      identifier
      * @return \Xpressengine\Presenter\Presentable
      */
     public function code(WidgetBoxHandler $handler, $id)
@@ -144,12 +189,11 @@ class WidgetBoxController extends Controller
     }
 
     /**
-     * 주어진 위젯박스 code(content)를 파싱하여 반환한다.
+     * Preview the widget box by given id
      *
-     * @param Request      $request
-     * @param WidgetParser $parser
-     * @param string       $id
-     *
+     * @param Request      $request request
+     * @param WidgetParser $parser  WidgetParser instance
+     * @param string       $id      identifier
      * @return \Xpressengine\Presenter\Presentable
      */
     public function preview(Request $request, WidgetParser $parser, $id)
@@ -167,6 +211,13 @@ class WidgetBoxController extends Controller
         return XePresenter::makeApi(compact('content'));
     }
 
+    /**
+     * Save the permission information for the widget box.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function storePermission(Request $request, $id)
     {
         if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
@@ -174,6 +225,7 @@ class WidgetBoxController extends Controller
         }
 
         $this->permissionRegister($request, 'widgetbox.'.$id, ['edit']);
+
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 }

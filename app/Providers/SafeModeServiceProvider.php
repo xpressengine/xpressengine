@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 class SafeModeServiceProvider extends ServiceProvider
 {
-
     /**
      * Service Provider Boot
      *

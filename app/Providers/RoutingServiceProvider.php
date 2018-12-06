@@ -39,7 +39,7 @@ use Xpressengine\Routing\UriValidator;
 class RoutingServiceProvider extends ServiceProvider
 {
     /**
-     * 주요 역할은 ModuleValidator의 boot를 실행.
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -203,7 +203,6 @@ class RoutingServiceProvider extends ServiceProvider
      * 매크로 등록
      *
      * @param Router $router to register macro
-     *
      * @return void
      */
     protected function registerInstanceMacro(Router $router)
@@ -240,10 +239,9 @@ class RoutingServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerRouteCollection
+     * Register the route collection to the router.
      *
      * @param Router $router to register macro
-     *
      * @return void
      */
     protected function registerRouteCollection(Router $router)

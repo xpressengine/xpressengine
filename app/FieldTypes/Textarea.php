@@ -1,5 +1,11 @@
 <?php
 /**
+ * Textarea.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -12,9 +18,20 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\DynamicField\ColumnEntity;
-use App\FieldSkins\Text\DefaultSkin;
 use View;
 
+/**
+ * Class Textarea
+ *
+ * PHP version 7
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class Textarea extends AbstractType
 {
     protected static $id = 'fieldType/xpressengine@Textarea';
@@ -72,5 +89,4 @@ class Textarea extends AbstractType
     {
         return View::make('dynamicField/textarea/createType', ['config' => $config])->render();
     }
-
 }

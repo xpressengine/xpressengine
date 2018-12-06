@@ -120,6 +120,11 @@ class MediaServiceProvider extends ServiceProvider
         return new FFMpegExtension(FFMpeg::create($config['videoExtensions']['ffmpeg']), $this->app['xe.storage.temp']);
     }
 
+    /**
+     * Add event listener.
+     *
+     * @return void
+     */
     private function hooks()
     {
         intercept('XeStorage@delete', 'media.delete', function ($target, $file) {

@@ -1,4 +1,16 @@
 <?php
+/**
+ * PluginInstall.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Xpressengine\Interception\InterceptionHandler;
@@ -6,6 +18,18 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class PluginInstall
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginInstall extends PluginCommand
 {
     /**
@@ -118,9 +142,9 @@ class PluginInstall extends PluginCommand
     }
 
     /**
-     * Get plugins data
+     * Get plugins data.
      *
-     * @param array $plugins
+     * @param array $plugins plugins
      * @return array
      * @throws \Exception
      */
@@ -145,7 +169,7 @@ class PluginInstall extends PluginCommand
     /**
      * Write require to composer.plugins.json
      *
-     * @param array $data
+     * @param array $data require information
      * @return void
      */
     protected function writeRequire($data)
@@ -162,9 +186,9 @@ class PluginInstall extends PluginCommand
     }
 
     /**
-     * Activate plugins
+     * Activate plugins.
      *
-     * @param array $ids
+     * @param array $ids plugin ids
      * @return void
      */
     private function activate($ids)

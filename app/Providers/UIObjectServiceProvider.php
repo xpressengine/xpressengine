@@ -51,13 +51,18 @@ class UIObjectServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->registerBaseUIObject();
     }
 
     /**
-     * registerBaseUIObject
+     * Register UI Objects.
      *
      * @return void
      */

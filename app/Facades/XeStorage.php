@@ -1,6 +1,6 @@
 <?php
 /**
- * XeStorage
+ * XeStorage.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * storage 사용을 위한 facade 연결
+ * Class XeStorage
  *
  * @category    Storage
  * @package     Xpressengine\Storage

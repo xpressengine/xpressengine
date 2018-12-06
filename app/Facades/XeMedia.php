@@ -1,6 +1,6 @@
 <?php
 /**
- * XeMedia
+ * XeMedia.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * for facade
+ * Class XeMedia
  *
  * @category    Media
  * @package     Xpressengine\Media

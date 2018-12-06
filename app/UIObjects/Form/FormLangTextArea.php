@@ -1,5 +1,11 @@
 <?php
 /**
+ * FormLangTextArea.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -10,10 +16,30 @@ namespace App\UIObjects\Form;
 
 use Xpressengine\UIObject\AbstractUIObject;
 
+/**
+ * Class FormLangTextArea
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class FormLangTextArea extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@formLangTextArea';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $args = $this->arguments;

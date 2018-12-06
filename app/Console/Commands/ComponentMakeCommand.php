@@ -1,6 +1,6 @@
 <?php
 /**
- * MakeCommand.php
+ * ComponentMakeCommand.php
  *
  * PHP version 7
  *
@@ -19,6 +19,16 @@ use ReflectionClass;
 use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Plugin\PluginEntity;
 
+/**
+ * Abstract Class ComponentMakeCommand
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 abstract class ComponentMakeCommand extends MakeCommand
 {
     /**
@@ -34,7 +44,7 @@ abstract class ComponentMakeCommand extends MakeCommand
     /**
      * Create a new component creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files
+     * @param \Illuminate\Filesystem\Filesystem $files Filesystem instance
      */
     public function __construct(Filesystem $files)
     {
@@ -45,7 +55,7 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * getTargetPlugin
+     * GetTargetPlugin
      *
      * @return PluginEntity
      * @throws \Exception
@@ -60,16 +70,16 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get plugin name
+     * Get plugin name
      *
      * @return string
      */
     abstract protected function getPluginName();
 
     /**
-     * get path to be create
+     * Get path to be create
      *
-     * @param string $path
+     * @param string $path given path
      * @return string
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -87,14 +97,16 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get default path for component
+     * Get default path for component
      *
      * @return string
      */
     abstract protected function getDefaultPath();
 
     /**
-     * @param string|null $key
+     * Get original composer data
+     *
+     * @param string|null $key key for data
      * @return mixed|null
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Exception
@@ -110,9 +122,9 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get namespace
+     * Get namespace
      *
-     * @param string $path
+     * @param string $path given path
      * @return string
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
@@ -143,10 +155,10 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get class file
+     * Get class file
      *
-     * @param string $path
-     * @param string $className
+     * @param string $path      given path
+     * @param string $className class name
      * @return array|string
      * @throws \Exception
      */
@@ -160,7 +172,7 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get title
+     * Get title
      *
      * @return string
      */
@@ -170,14 +182,14 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * get component name
+     * Get component name
      *
      * @return string
      */
     abstract protected function getComponentName();
 
     /**
-     * get component description
+     * Get component description
      *
      * @return string
      * @throws \Exception
@@ -201,13 +213,13 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * register component
+     * Register component
      *
-     * @param PluginEntity $plugin
-     * @param string $id
-     * @param string $class
-     * @param string $file
-     * @param array $info
+     * @param PluginEntity $plugin plugin entity
+     * @param string       $id     component id
+     * @param string       $class  class name
+     * @param string       $file   class file path
+     * @param array        $info   component information
      * @return int
      * @throws \Exception
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -234,10 +246,10 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * determine if need to register autoload given class and file
+     * Determine if need to register autoload given class and file
      *
-     * @param string $class
-     * @param string $file
+     * @param string $class class name
+     * @param string $file  class file path
      * @return bool
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -254,9 +266,9 @@ abstract class ComponentMakeCommand extends MakeCommand
     }
 
     /**
-     * clean
+     * Clean
      *
-     * @param string $path
+     * @param string $path path in plugin
      * @return void
      * @throws \Exception
      */

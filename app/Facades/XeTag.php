@@ -1,6 +1,6 @@
 <?php
 /**
- * XeTag
+ * XeTag.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 사용을 위한 클래스
+ * Class XeTag
  *
  * @category    Tag
  * @package     Xpressengine\Tag

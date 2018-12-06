@@ -43,7 +43,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * boot
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -70,7 +70,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * register presenter
+     * Register the presenter
      *
      * @return void
      */
@@ -116,7 +116,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * register frontend
+     * Register the frontend handler
      *
      * @return void
      */
@@ -145,6 +145,11 @@ class PresenterServiceProvider extends ServiceProvider
         $this->app->alias(FrontendHandler::class, 'xe.frontend');
     }
 
+    /**
+     * Register the redirector.
+     *
+     * @return void
+     */
     private function registerRedirector()
     {
         $this->app->singleton('xe.redirect', function ($app) {
@@ -162,7 +167,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadDefaultFiles
+     * Load default assets.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -183,7 +188,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadTitle
+     * Load the title for the application.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -195,7 +200,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadIcon
+     * Load the icon for the application.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -209,5 +214,4 @@ class PresenterServiceProvider extends ServiceProvider
                 $frontendHandler->icon($icon)->load();
         }
     }
-
 }

@@ -1,5 +1,11 @@
 <?php
 /**
+ * SettingsTheme.php
+ *
+ * PHP version 7
+ *
+ * @category    Themes
+ * @package     App\Themes
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -12,11 +18,28 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Theme\AbstractTheme;
 use Xpressengine\User\Rating;
 
+/**
+ * Class SettingsTheme
+ *
+ * @category    Themes
+ * @package     App\Themes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SettingsTheme extends AbstractTheme
 {
-
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'settingsTheme/xpressengine@settings';
 
+    /**
+     * @var null|string
+     */
     public $content = null;
 
     /**
@@ -46,7 +69,7 @@ class SettingsTheme extends AbstractTheme
     }
 
     /**
-     * loadFrontend
+     * Load assets.
      *
      * @return void
      */
@@ -71,11 +94,9 @@ class SettingsTheme extends AbstractTheme
     }
 
     /**
-     * 테마 설정 페이지에 출력할 html 텍스트를 출력한다.
-     * 설정폼은 자동으로 생성되며 설정폼 내부에 출력할 html만 반환하면 된다.
+     * Get the view for the component setting.
      *
-     * @param ConfigEntity|null $config 기존에 설정된 설정값
-     *
+     * @param ConfigEntity|null $config config
      * @return string
      */
     public function getSettingView(ConfigEntity $config = null)

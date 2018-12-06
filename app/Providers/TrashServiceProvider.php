@@ -58,6 +58,11 @@ class TrashServiceProvider extends ServiceProvider
 //        ]);
     }
 
+    /**
+     * Add event listener.
+     *
+     * @return void
+     */
     private function hooks()
     {
         // manage menu 등록

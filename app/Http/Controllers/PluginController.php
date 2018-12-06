@@ -1,15 +1,19 @@
 <?php
 /**
+ * PluginController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers;
 
 use Artisan;
-use Composer\Util\Platform;
 use Illuminate\Auth\Access\AuthorizationException;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +26,16 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
 
+/**
+ * Class PluginController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class PluginController extends Controller
 {
 
@@ -40,13 +54,16 @@ class PluginController extends Controller
         }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
     }
 
-    protected function index(
-        Request $request,
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer
-    ) {
-
+    /**
+     * Show list of plugins.
+     *
+     * @param Request            $request request
+     * @param PluginHandler      $handler PluginHandler instance
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function index(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
+    {
         $installType = $request->get('install_type', 'fetched');
 
         // filter input
@@ -63,8 +80,6 @@ class PluginController extends Controller
         $filtered = $collection->fetch($field);
         $plugins = $collection->fetchByInstallType($installType, $filtered);
 
-        // $provider->sync($plugins);
-
         $componentTypes = $this->getComponentTypes();
 
         $unresolvedComponents = $handler->getUnresolvedComponents();
@@ -77,6 +92,13 @@ class PluginController extends Controller
         }
     }
 
+    /**
+     * Show current operation status.
+     *
+     * @param PluginHandler      $handler PluginHandler instance
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
         $term = 15;
@@ -95,12 +117,25 @@ class PluginController extends Controller
         return api_render('operation', compact('operation'), compact('operation'));
     }
 
+    /**
+     * Delete operation log.
+     *
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function deleteOperation(ComposerFileWriter $writer)
     {
         $writer->reset()->cleanOperation()->write();
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
+    /**
+     * Show confirm for delete the plugin.
+     *
+     * @param Request       $request request
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getDelete(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -112,6 +147,14 @@ class PluginController extends Controller
         return api_render('index.delete', compact('plugins'));
     }
 
+    /**
+     * Delete plugins.
+     *
+     * @param Request            $request request
+     * @param PluginHandler      $handler PluginHandler instance
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
@@ -153,6 +196,13 @@ class PluginController extends Controller
         )->with('operation', 'running');
     }
 
+    /**
+     * Show confirm for activate the plugin.
+     *
+     * @param Request       $request request
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getActivate(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -164,6 +214,15 @@ class PluginController extends Controller
         return api_render('index.activate', compact('plugins'));
     }
 
+    /**
+     * Activate plugins.
+     *
+     * @param Request             $request             request
+     * @param PluginHandler       $handler             PluginHandler instance
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         $handler->getAllPlugins(true);
@@ -192,9 +251,16 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
+    /**
+     * Show confirm for deactivate the plugin.
+     *
+     * @param Request       $request request
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getDeactivate(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -206,6 +272,15 @@ class PluginController extends Controller
         return api_render('index.deactivate', compact('plugins'));
     }
 
+    /**
+     * Deactivate plugins.
+     *
+     * @param Request             $request             request
+     * @param PluginHandler       $handler             PluginHandler instance
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         $handler->getAllPlugins(true);
@@ -234,9 +309,16 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
+    /**
+     * Show confirm for update the plugin.
+     *
+     * @param PluginHandler  $handler  PluginHandler instance
+     * @param PluginProvider $provider PluginProvider instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getDownload(PluginHandler $handler, PluginProvider $provider)
     {
         $collection = $handler->getAllPlugins(true);
@@ -257,6 +339,14 @@ class PluginController extends Controller
         return api_render('index.update', compact('plugins', 'available'));
     }
 
+    /**
+     * Update plugins.
+     *
+     * @param Request            $request request
+     * @param PluginHandler      $handler PluginHandler instance
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function download(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
@@ -290,6 +380,15 @@ class PluginController extends Controller
         )->with('operation', 'running');
     }
 
+    /**
+     * Install new plugin.
+     *
+     * @param Request            $request  request
+     * @param PluginHandler      $handler  PluginHandler instance
+     * @param PluginProvider     $provider PluginProvider instance
+     * @param ComposerFileWriter $writer   ComposerFileWriter instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function install(
         Request $request,
         PluginHandler $handler,
@@ -326,6 +425,14 @@ class PluginController extends Controller
         )->with('operation', 'running');
     }
 
+    /**
+     * Show information of the plugin.
+     *
+     * @param string         $pluginId plugin name
+     * @param PluginHandler  $handler  PluginHandler instance
+     * @param PluginProvider $provider PluginProvider instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         // refresh plugin cache
@@ -342,6 +449,15 @@ class PluginController extends Controller
         return XePresenter::make('show', compact('plugin', 'componentTypes', 'unresolvedComponents'));
     }
 
+    /**
+     * Activate plugin.
+     *
+     * @param string              $pluginId            plugin name
+     * @param PluginHandler       $handler             PluginHandler instance
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -353,9 +469,18 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
+    /**
+     * Deactivate plugin.
+     *
+     * @param string              $pluginId            plugin name
+     * @param PluginHandler       $handler             PluginHandler instance
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -367,9 +492,18 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
+    /**
+     * Update plugin.
+     *
+     * @param string              $pluginId            plugin name
+     * @param PluginHandler       $handler             PluginHandler instance
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -381,12 +515,12 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::appliedUpdatePlugin')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::appliedUpdatePlugin')]);
     }
 
 
     /**
-     * getComponentTypes
+     * Returns the list of component type.
      *
      * @return array
      */
@@ -408,11 +542,22 @@ class PluginController extends Controller
         return $componentTypes;
     }
 
+    /**
+     * Show the create form for the new plugin.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getMakePlugin()
     {
         return api_render('index.make-plugin', []);
     }
 
+    /**
+     * Make new plugin.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function makePlugin(Request $request)
     {
         $this->validate($request, [
@@ -437,6 +582,12 @@ class PluginController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
+    /**
+     * Show the create form for the new theme.
+     *
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getMakeTheme(PluginHandler $handler)
     {
         $collection = $handler->getAllPlugins(true);
@@ -445,6 +596,12 @@ class PluginController extends Controller
         return api_render('index.make-theme', ['plugins' => $plugins]);
     }
 
+    /**
+     * Make new theme.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function makeTheme(Request $request)
     {
         $this->validate($request, [
@@ -478,6 +635,12 @@ class PluginController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
+    /**
+     * Show the create form for the new skin.
+     *
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getMakeSkin(PluginHandler $handler)
     {
         $collection = $handler->getAllPlugins(true);
@@ -491,6 +654,12 @@ class PluginController extends Controller
         return api_render('index.make-skin', ['plugins' => $plugins, 'targets' => $targets]);
     }
 
+    /**
+     * Make new skin.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function makeSkin(Request $request)
     {
         if ($request->get('target') === '__direct') {

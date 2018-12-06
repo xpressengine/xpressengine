@@ -1,9 +1,15 @@
 <?php
 /**
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * StorageOptimize.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 
 namespace App\Console\Commands;
@@ -11,6 +17,16 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Xpressengine\Storage\Storage;
 
+/**
+ * Class StorageOptimize
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class StorageOptimize extends Command
 {
     /**
@@ -27,8 +43,18 @@ class StorageOptimize extends Command
      */
     protected $description = 'Delete the unused files';
 
+    /**
+     * Storage instance
+     *
+     * @var Storage
+     */
     protected $storage;
 
+    /**
+     * The memory bag.
+     *
+     * @var array
+     */
     protected $bag = [];
 
     /**
@@ -86,6 +112,11 @@ class StorageOptimize extends Command
 
     }
 
+    /**
+     * Register intercept event for log.
+     *
+     * @return void
+     */
     private function intercept()
     {
         intercept('XeStorage@delete', 'storage.optimize.log', function ($target, $file) {
@@ -96,6 +127,11 @@ class StorageOptimize extends Command
         });
     }
 
+    /**
+     * Print output.
+     *
+     * @return void
+     */
     private function output()
     {
         $verbosity = $this->getOutput()->getVerbosity();

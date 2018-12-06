@@ -1,6 +1,6 @@
 <?php
 /**
- * XeSite
+ * XeSite.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Class Site
+ * Class XeSite
  *
  * @category    Site
  * @package     Xpressengine\Site
@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Facade;
  * @link        https://xpressengine.io
  * @see         Xpressengine\Site\SiteHandler
  */
-
 class XeSite extends Facade
 {
 

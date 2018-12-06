@@ -1,5 +1,11 @@
 <?php
 /**
+ * SkinMake.php
+ *
+ * PHP version 7
+ *
+ * @category    Command
+ * @package     App\Console\Commands
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -10,8 +16,23 @@ namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
 
+/**
+ * Class SkinMake
+ *
+ * @category    Command
+ * @package     App\Console\Commands
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SkinMake extends ComponentMakeCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'make:skin
                         {plugin : The plugin where the skin will be located}
                         {name : The name of skin to create}
@@ -29,6 +50,8 @@ class SkinMake extends ComponentMakeCommand
     protected $description = 'Create a new skin of XpressEngine';
 
     /**
+     * The type of component
+     *
      * @var string
      */
     protected $componentType = 'skin';
@@ -93,7 +116,7 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get plugin name
+     * Get plugin name.
      *
      * @return string
      */
@@ -103,7 +126,7 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get default path for component
+     * Get default path for component.
      *
      * @return string
      */
@@ -113,6 +136,8 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
+     * Get class name.
+     *
      * @return string
      */
     protected function getClassName()
@@ -121,12 +146,10 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * getSkinId
+     * Get skin id.
      *
      * @return array|string
      * @throws \Exception
-     * @internal param $file
-     *
      */
     protected function getSkinId()
     {
@@ -155,7 +178,7 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get target
+     * Get target.
      *
      * @return string
      */
@@ -165,7 +188,7 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get component name
+     * Get component name.
      *
      * @return string
      */
@@ -175,8 +198,9 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * confirmInfo
+     * Confirm information
      *
+     * @param array $attr attributes
      * @return bool
      */
     protected function confirmInfo($attr)
@@ -214,9 +238,9 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * makeUsable
+     * Make file for plugin by stub.
      *
-     * @param \ArrayAccess|array $attr
+     * @param array $attr attributes
      * @return void
      * @throws \Exception
      */
@@ -232,8 +256,10 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * makeSkinClass
+     * Make skin class.
      *
+     * @param array $attr attributes
+     * @return void
      * @throws \Exception
      */
     protected function makeSkinClass($attr)
@@ -248,7 +274,7 @@ class SkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get stub path
+     * Get stub path.
      *
      * @return string
      */

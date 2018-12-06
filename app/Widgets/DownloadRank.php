@@ -4,8 +4,8 @@
  *
  * PHP version 7
  *
- * @category
- * @package
+ * @category    Widgets
+ * @package     App\Widgets
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,13 +17,27 @@ namespace App\Widgets;
 use XeStorage;
 use Xpressengine\Widget\AbstractWidget;
 
+/**
+ * Class DownloadRank
+ *
+ * @category    Widgets
+ * @package     App\Widgets
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DownloadRank extends AbstractWidget
 {
-
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'widget/xpressengine@downloadRank';
 
     /**
-     * 위젯의 이름을 반환한다.
+     * Returns the title of the widget.
      *
      * @return string
      */
@@ -53,11 +67,11 @@ class DownloadRank extends AbstractWidget
     }
 
     /**
-     * getCodeCreationForm
+     * Show the setting form for the widget.
      *
-     * @param array $args
-     *
-     * @return mixed
+     * @param array $args arguments
+     * @return string|\Xpressengine\UIObject\AbstractUIObject
+     * @throws \Exception
      */
     public function renderSetting(array $args = [])
     {

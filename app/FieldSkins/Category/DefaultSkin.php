@@ -1,5 +1,11 @@
 <?php
 /**
+ * DefaultSkin.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Category
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,9 +17,17 @@ namespace App\FieldSkins\Category;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\DynamicField\AbstractSkin;
-use Xpressengine\Config\ConfigEntity;
-use View;
 
+/**
+ * Class DefaultSkin
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Category
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DefaultSkin extends AbstractSkin
 {
     protected static $id = 'fieldType/xpressengine@Category/fieldSkin/xpressengine@default';
@@ -54,7 +68,6 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args parameters
-     *
      * @return \Illuminate\View\View
      */
     public function create(array $args)
@@ -74,7 +87,6 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args parameters
-     *
      * @return \Illuminate\View\View
      */
     public function edit(array $args)
@@ -103,7 +115,6 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args arguments
-     *
      * @return \Illuminate\View\View
      */
     public function show(array $args)
@@ -125,7 +136,6 @@ class DefaultSkin extends AbstractSkin
      * return html tag string
      *
      * @param array $args arguments
-     *
      * @return string
      */
     public function search(array $args)
@@ -151,8 +161,11 @@ class DefaultSkin extends AbstractSkin
     }
 
     /**
-     * @param string $name
-     * @param array  $args
+     * Returns output for field
+     *
+     * @param string $name field name
+     * @param array  $args arguments
+     * @return null|string
      */
     public function output($name, array $args)
     {

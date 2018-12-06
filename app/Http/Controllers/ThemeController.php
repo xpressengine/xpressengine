@@ -1,5 +1,11 @@
 <?php
 /**
+ * ThemeController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -15,8 +21,25 @@ use Xpressengine\Theme\Exceptions\NotSupportSettingException;
 use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
+/**
+ * Class ThemeController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ThemeController extends Controller
 {
+    /**
+     * Show the edit form for the theme.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, ['theme' => 'required']);
@@ -57,16 +80,20 @@ class ThemeController extends Controller
 
         $editFile['content'] = $fileContent;
 
-        return \XePresenter::make(
-            'theme.edit',
-            [
-                'theme' => $theme,
-                'files' => $files,
-                'editFile' => $editFile
-            ]
-        );
+        return \XePresenter::make('theme.edit', [
+            'theme' => $theme,
+            'files' => $files,
+            'editFile' => $editFile
+        ]);
     }
 
+    /**
+     * Update theme.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, ThemeHandler $themeHandler)
     {
         $themeId = $request->get('theme');
@@ -98,6 +125,13 @@ class ThemeController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Create new setting for the theme.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createSetting(Request $request, ThemeHandler $themeHandler)
     {
         $instanceId = $request->get('theme');
@@ -123,6 +157,13 @@ class ThemeController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
+    /**
+     * Show the edit form for the setting.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editSetting(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
@@ -141,6 +182,13 @@ class ThemeController extends Controller
         return \XePresenter::make('theme.config', compact('theme', 'config'));
     }
 
+    /**
+     * Update setting.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateSetting(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
@@ -179,7 +227,15 @@ class ThemeController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
-    public function deleteSetting(Request $request, ThemeHandler $themeHandler) {
+    /**
+     * Delete setting.
+     *
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteSetting(Request $request, ThemeHandler $themeHandler)
+    {
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
         $config = $theme->setting();
@@ -188,9 +244,7 @@ class ThemeController extends Controller
 
         $themeHandler->deleteThemeConfig($themeId);
 
-        return redirect()->route('settings.setting.theme')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
-
+        return redirect()->route('settings.setting.theme')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
-
 }
-

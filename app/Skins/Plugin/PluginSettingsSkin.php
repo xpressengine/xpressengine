@@ -1,10 +1,10 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * PluginSettingsSkin.php
  *
  * PHP version 7
  *
- * @category    Plugin
+ * @category    Skins
  * @package     App\Skins\Plugin
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
@@ -17,14 +17,30 @@ namespace App\Skins\Plugin;
 use Xpressengine\Skin\GenericSkin;
 
 /**
- * @category    Plugin
+ * Class PluginSettingsSkin
+ *
+ * @category    Skins
  * @package     App\Skins\Plugin
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class PluginSettingsSkin extends GenericSkin
 {
 
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'plugins/settingsSkin/xpressengine@default';
 
+    /**
+     * The information for the component
+     *
+     * @var array
+     */
     protected static $componentInfo = [
         'name' => '기본 플러그인 설정스킨',
         'description' => 'Xpressengine의 기본 플러그인 설정페이지 스킨입니다'
@@ -46,8 +62,7 @@ class PluginSettingsSkin extends GenericSkin
     protected static $viewDir = '';
 
     /**
-     * 스킨을 출력한다.
-     * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.
+     * Get the evaluated contents of the object.
      *
      * @return string
      */
@@ -57,18 +72,28 @@ class PluginSettingsSkin extends GenericSkin
         return parent::render();
     }
 
+    /**
+     * Call the view for fetched index.
+     *
+     * @return \Illuminate\View\View
+     */
     protected function indexFetched()
     {
         return $this->index();
     }
 
+    /**
+     * Call the view for self installed index.
+     *
+     * @return \Illuminate\View\View
+     */
     protected function indexSelfInstalled()
     {
         return $this->index();
     }
 
     /**
-     * listView
+     * Show the list.
      *
      * @return \Illuminate\View\View
      */
@@ -87,7 +112,7 @@ class PluginSettingsSkin extends GenericSkin
     }
 
     /**
-     * listView
+     * Show the setting view for plugin.
      *
      * @return \Illuminate\View\View
      */
@@ -103,6 +128,11 @@ class PluginSettingsSkin extends GenericSkin
         return $this->renderBlade();
     }
 
+    /**
+     * Show the view for install.
+     *
+     * @return \Illuminate\View\View|null
+     */
     protected function installIndex()
     {
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
@@ -116,6 +146,11 @@ class PluginSettingsSkin extends GenericSkin
         return $this->renderBlade();
     }
 
+    /**
+     * Load default for plugin setting.
+     *
+     * @return void
+     */
     protected function loadDefault()
     {
         app('xe.frontend')->html('plugins.loadTooltip')->content("<script>

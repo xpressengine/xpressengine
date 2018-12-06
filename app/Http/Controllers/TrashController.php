@@ -1,5 +1,11 @@
 <?php
 /**
+ * TrashController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -12,8 +18,23 @@ use XeTrash;
 use Request;
 use XePresenter;
 
+/**
+ * Class TrashController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class TrashController extends Controller
 {
+    /**
+     * Show the list.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function index()
     {
         $wastes = XeTrash::gets();
@@ -23,6 +44,11 @@ class TrashController extends Controller
         ]);
     }
 
+    /**
+     * Empty the trash
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function clean()
     {
         // id 는 배열로 넘어옴

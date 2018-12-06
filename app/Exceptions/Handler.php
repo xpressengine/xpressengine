@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * Handler.php
+ *
+ * PHP version 7
+ *
+ * @category    Exceptions
+ * @package     App\Exceptions
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Exceptions;
 
 use Exception;
@@ -22,6 +33,16 @@ use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 
+/**
+ * Class Handler
+ *
+ * @category    Exceptions
+ * @package     App\Exceptions
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class Handler extends ExceptionHandler
 {
     /**

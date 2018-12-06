@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * ComposerRunTrait.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Commands
+ * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -22,9 +22,18 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Xpressengine\Plugin\Composer\Composer;
 
+/**
+ * Trait ComposerRunTrait
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 trait ComposerRunTrait
 {
-
     /**
      * prepareComposer
      *
@@ -110,13 +119,11 @@ trait ComposerRunTrait
     /**
      * runComposer
      *
-     * @param      $inputs
-     * @param bool $updateMode
-     *
+     * @param array       $inputs
+     * @param bool        $updateMode
+     * @param string|null $logFile
      * @return int
-     * @internal param $path
-     * @internal param $command
-     *
+     * @throws \Exception
      */
     protected function runComposer($inputs, $updateMode = true, $logFile = null)
     {

@@ -1,21 +1,53 @@
 <?php
 /**
+ * Form.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
+
 namespace App\UIObjects\Form;
 
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\UIObject\Element;
 
+/**
+ * Class Form
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class Form extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@form';
 
+    /**
+     * List of the section
+     *
+     * @var array
+     */
     protected $sections = [];
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $args = $this->arguments;
@@ -45,6 +77,11 @@ class Form extends AbstractUIObject
         return parent::render();
     }
 
+    /**
+     * Get form element.
+     *
+     * @return Element
+     */
     protected function getForm()
     {
         $args = $this->arguments;
@@ -65,6 +102,15 @@ class Form extends AbstractUIObject
         return $form;
     }
 
+    /**
+     * Append field to the form.
+     *
+     * @param Element $form    form element
+     * @param array   $inputs  attributes
+     * @param array   $values  values
+     * @param array   $globals global arguments
+     * @throws \Exception
+     */
     private function appendFields($form, $inputs, $values, $globals = [])
     {
         // check array type(sequencial or associated)
@@ -112,6 +158,14 @@ class Form extends AbstractUIObject
         }
     }
 
+    /**
+     * Get the section element.
+     *
+     * @param Element      $form        form element
+     * @param array|string $sectionInfo section attributes
+     * @param string       $style       style for section
+     * @return Element
+     */
     private function getSection($form, $sectionInfo, $style = 'panel')
     {
         $sectionName = null;
@@ -152,6 +206,13 @@ class Form extends AbstractUIObject
         }
     }
 
+    /**
+     * Wrap the input.
+     *
+     * @param string                                  $name  name
+     * @param \Xpressengine\UIObject\AbstractUIObject $input input element
+     * @return string
+     */
     private function wrapInput($name, $input)
     {
         $classname = 'form-col-'.str_replace([' ', '.'], '-', $name);

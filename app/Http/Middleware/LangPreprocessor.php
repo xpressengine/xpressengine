@@ -1,5 +1,11 @@
 <?php
 /**
+ * LangPreprocessor.php
+ *
+ * PHP version 7
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -15,12 +21,46 @@ use Closure;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Rating;
 
+/**
+ * Class LangPreprocessor
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class LangPreprocessor
 {
+    /**
+     * Map for name
+     *
+     * @var array
+     */
     private $mapSeqName = [];
+
+    /**
+     * Map for key
+     *
+     * @var array
+     */
     private $mapSeqKey = [];
+
+    /**
+     * Map for multi line
+     *
+     * @var array
+     */
     private $mapSeqMultiLine = [];
 
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request request
+     * @param Closure $next    to be called next
+     * @return Response
+     */
     public function handle(Request $request, Closure $next)
     {
         // check locale at request & set locale
@@ -38,7 +78,6 @@ class LangPreprocessor
         /** @var Response $response */
         $response = $next($request);
 
-
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->conduct($request);
         }
@@ -46,11 +85,22 @@ class LangPreprocessor
         return $response;
     }
 
+    /**
+     * Indicate it is available.
+     *
+     * @return bool
+     */
     private function available()
     {
         return in_array(Auth::user()->getRating(), [Rating::SUPER, Rating::MANAGER]);
     }
 
+    /**
+     * Handle an request before dispatch router.
+     *
+     * @param Request $request request
+     * @return void
+     */
     private function prepare($request)
     {
         $fields = $request->all();
@@ -80,6 +130,12 @@ class LangPreprocessor
         }
     }
 
+    /**
+     * Handle an request after dispatch router.
+     *
+     * @param Request $request request
+     * @return void
+     */
     private function conduct($request)
     {
         $fields = $request->all();

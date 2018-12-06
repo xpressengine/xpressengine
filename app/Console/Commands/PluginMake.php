@@ -1,15 +1,31 @@
 <?php
 /**
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * PluginMake.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 
 namespace App\Console\Commands;
 
 use Xpressengine\Plugin\PluginHandler;
 
+/**
+ * Class PluginMake
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginMake extends MakeCommand
 {
     /**
@@ -34,7 +50,7 @@ class PluginMake extends MakeCommand
     /**
      * Execute the console command.
      *
-     * @return bool|null
+     * @return void
      * @throws \Exception
      */
     public function handle()
@@ -71,6 +87,14 @@ class PluginMake extends MakeCommand
         $this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
     }
 
+    /**
+     * Get namespace.
+     *
+     * @param string $name   plugin name
+     * @param string $vendor vendor name
+     * @return string
+     * @throws \Exception
+     */
     protected function getNamespace($name, $vendor)
     {
         if (!$namespace = $this->option('namespace')) {
@@ -86,8 +110,9 @@ class PluginMake extends MakeCommand
     }
 
     /**
-     * get title
+     * Get title.
      *
+     * @param string $name given name.
      * @return string
      */
     protected function getTitleInput($name)
@@ -96,7 +121,7 @@ class PluginMake extends MakeCommand
     }
 
     /**
-     * get stub path
+     * Get stub path.
      *
      * @return string
      */
@@ -105,6 +130,16 @@ class PluginMake extends MakeCommand
         return __DIR__ . '/stubs/plugin';
     }
 
+    /**
+     * Make file for plugin by stub.
+     *
+     * @param string $path      path for plugin
+     * @param string $name      name
+     * @param string $namespace namespace
+     * @param string $title     plugin title
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function makeUsable($path, $name, $namespace, $title)
     {
         // plugin.php 파일 생성
@@ -119,6 +154,15 @@ class PluginMake extends MakeCommand
         $this->files->move($path . '/views/index.blade.stub', $path . '/views/index.blade.php');
     }
 
+    /**
+     * Make plugin class.
+     *
+     * @param string $path      path for plugin
+     * @param string $name      name
+     * @param string $namespace namespace
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function makePluginClass($path, $name, $namespace)
     {
         $search = ['DummyNamespace', 'DummyPluginName'];
@@ -126,7 +170,17 @@ class PluginMake extends MakeCommand
 
         $this->buildFile($path.'/plugin.stub', $search, $replace, $path.'/plugin.php');
     }
-    
+
+    /**
+     * Make composer file.
+     *
+     * @param string $path      path for plugin
+     * @param string $name      name
+     * @param string $namespace namespace
+     * @param string $title     plugin title
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function makeComposerJson($path, $name, $namespace, $title)
     {
         $namespace = str_replace('\\', '\\\\', $namespace);
@@ -137,6 +191,16 @@ class PluginMake extends MakeCommand
         $this->buildFile($path.'/composer.json.stub', $search, $replace, $path.'/composer.json');
     }
 
+    /**
+     * Make controller class.
+     *
+     * @param string $path      path for plugin
+     * @param string $name      name
+     * @param string $namespace namespace
+     * @param string $title     plugin title
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function makeControllerClass($path, $name, $namespace, $title)
     {
         $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle'];
@@ -145,6 +209,12 @@ class PluginMake extends MakeCommand
         $this->buildFile($path.'/src/Controller.stub', $search, $replace, $path.'/src/Controller.php');
     }
 
+    /**
+     * Activate plugin.
+     *
+     * @param string $name plugin name
+     * @return void
+     */
     protected function activatePlugin($name)
     {
         /** @var PluginHandler $handler */

@@ -63,7 +63,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
     }
 
     /**
-     * register field type
+     * Register the dynamic field type.
      *
      * @return void
      */
@@ -82,6 +82,11 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Url::class);
     }
 
+    /**
+     * Register the dynamic field skin.
+     *
+     * @return void
+     */
     private function registerFieldDefaultSkin()
     {
         $registerHandler = app('xe.dynamicField')->getRegisterHandler();
@@ -99,6 +104,11 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(UrlDefault::class);
     }
 
+    /**
+     * Add validation rule.
+     *
+     * @return void
+     */
     private function addValidationRule()
     {
         $this->app['validator']->extend('df_id', function ($attribute, $value) {

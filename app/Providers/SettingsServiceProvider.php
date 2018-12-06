@@ -40,6 +40,11 @@ class SettingsServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         // register default manage theme.
@@ -54,13 +59,18 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerLoggers();
     }
 
+    /**
+     * Register the ui object of the permission.
+     *
+     * @return void
+     */
     private function registerPermissionUIObject()
     {
         $this->app['xe.pluginRegister']->add(SettingsPermission::class);
     }
 
     /**
-     * rgisterDefaultTheme
+     * Register the default theme.
      *
      * @return void
      */
@@ -70,6 +80,11 @@ class SettingsServiceProvider extends ServiceProvider
         SettingsTheme::boot();
     }
 
+    /**
+     * Register the setting menus.
+     *
+     * @return void
+     */
     private function registerSettingsMenus()
     {
         $menus = $this->app['config']->get('xe.settings.menus');
@@ -80,6 +95,11 @@ class SettingsServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Register the logger.
+     *
+     * @return void
+     */
     private function registerLoggers()
     {
         /** @var Container $register */

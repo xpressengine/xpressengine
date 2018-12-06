@@ -1,5 +1,11 @@
 <?php
 /**
+ * UpdateController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -24,24 +30,39 @@ use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
 
+/**
+ * Class UpdateController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class UpdateController extends Controller
 {
-
     /**
-     * PluginController constructor.
+     * Show core status.
+     *
+     * @param ComposerFileWriter $writer
+     * @return \Xpressengine\Presenter\Presentable
      */
-    public function __construct()
-    {
-    }
-
-    public function show(Request $request, ComposerFileWriter $writer)
+    public function show(ComposerFileWriter $writer)
     {
         $operation = $this->getOperation($writer);
-
         $installedVersion = file_get_contents(base_path('storage/app/installed'));
+
         return XePresenter::make('update.show', compact('installedVersion', 'operation'));
     }
 
+    /**
+     * Update core.
+     *
+     * @param Request            $request request
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, ComposerFileWriter $writer)
     {
         $skipComposer = $request->get('skip-composer');
@@ -75,6 +96,12 @@ class UpdateController extends Controller
         );
     }
 
+    /**
+     * Returns current status of operation.
+     *
+     * @param ComposerFileWriter $writer instance
+     * @return array|null
+     */
     protected function getOperation(ComposerFileWriter $writer)
     {
         $status = $writer->get('xpressengine-plugin.operation.status');
@@ -94,6 +121,12 @@ class UpdateController extends Controller
         return compact('status', 'updateVersion', 'log');
     }
 
+    /**
+     * Execute migrations.
+     *
+     * @param string $installedVersion installed version
+     * @return void
+     */
     protected function migrateCore($installedVersion)
     {
         $filesystem = app('files');
@@ -110,16 +143,28 @@ class UpdateController extends Controller
         }
 
     }
+
+    /**
+     * Show current status of operation.
+     *
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function showOperation(ComposerFileWriter $writer)
     {
         $operation = $this->getOperation($writer);
         return api_render('update.operation', compact('operation'), compact('operation'));
     }
 
+    /**
+     * Delete the log of operation.
+     *
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function deleteOperation(ComposerFileWriter $writer)
     {
         $writer->reset()->cleanOperation()->write();
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 }
-

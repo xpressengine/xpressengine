@@ -1,9 +1,15 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: seungman
- * Date: 2017. 4. 20.
- * Time: PM 4:42
+ * FormColorpicker.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\UIObjects\Form;
@@ -11,12 +17,37 @@ namespace App\UIObjects\Form;
 use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
+/**
+ * Class FormColorpicker
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class FormColorpicker extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@formColorpicker';
 
+    /**
+     * The view name
+     *
+     * @var string
+     */
     protected $view = 'uiobjects.form.formColorpicker';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $this->loadAssets();
@@ -26,27 +57,20 @@ class FormColorpicker extends AbstractUIObject
 
         $selector = array_get($args, 'name').$seq;
 
-//        dd($args);
-
         // render template
         $this->template = \View::make($this->view, ['args' => $args, 'selector' => $selector])->render();
 
         return parent::render();
     }
 
+    /**
+     * Load assets
+     *
+     * @return void
+     */
     protected function loadAssets()
     {
-
-        XeFrontend::js(
-            [
-                'assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js',
-            ]
-        )->load();
-
-        XeFrontend::css(
-            [
-                'assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css',
-            ]
-        )->load();
+        XeFrontend::js('assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')->load();
+        XeFrontend::css('assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')->load();
     }
 }

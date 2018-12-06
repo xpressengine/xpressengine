@@ -69,6 +69,11 @@ class LogServiceProvider extends ServiceProvider
         $register->push(LogHandler::ADMIN_LOGGER_KEY, AuthLogger::ID, AuthLogger::class);
     }
 
+    /**
+     * Set resolver for log content.
+     *
+     * @return void
+     */
     private function setDetailResolverForLog()
     {
         /** @var LogHandler $handler */

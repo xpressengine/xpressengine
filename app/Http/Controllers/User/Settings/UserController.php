@@ -1,10 +1,17 @@
 <?php
 /**
+ * UserController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
+
 namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
@@ -24,6 +31,16 @@ use Xpressengine\User\UserException;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
+/**
+ * Class UserController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class UserController extends Controller
 {
     /**
@@ -42,10 +59,9 @@ class UserController extends Controller
     }
 
     /**
-     * index. show user list
+     * Show user list
      *
      * @param Request $request request
-     *
      * @return \Xpressengine\Presenter\Presentable
      */
     public function index(Request $request)
@@ -123,7 +139,7 @@ class UserController extends Controller
     }
 
     /**
-     * show user creation page
+     * Show user creation page.
      *
      * @return \Xpressengine\Presenter\Presentable
      */
@@ -159,24 +175,20 @@ class UserController extends Controller
     }
 
     /**
-     * store user
+     * Store user.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
     public function store(Request $request)
     {
 
-        $this->validate(
-            $request,
-            [
-                'email' => 'email|required',
-                'display_name' => 'required',
-                'password' => 'required|password',
-            ]
-        );
+        $this->validate($request, [
+            'email' => 'email|required',
+            'display_name' => 'required',
+            'password' => 'required|password',
+        ]);
 
         $userData = $request->except('_token');
         $userData['emailConfirmed'] = 1;
@@ -197,10 +209,9 @@ class UserController extends Controller
     }
 
     /**
-     * show user editing page
+     * Show user editing page.
      *
-     * @param $id
-     *
+     * @param string $id identifier
      * @return \Xpressengine\Presenter\Presentable
      */
     public function edit($id)
@@ -264,14 +275,14 @@ class UserController extends Controller
     }
 
     /**
-     * update user
-     * @param         $id
-     * @param Request $request request
+     * Update user.
      *
+     * @param Request $request request
+     * @param string  $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function update($id, Request $request)
+    public function update(Request $request, $id)
     {
         /** @var UserInterface $user */
         $user = $this->handler->users()->with('groups', 'emails', 'accounts')->find($id);
@@ -283,15 +294,12 @@ class UserController extends Controller
         }
 
         // default validation
-        $this->validate(
-            $request,
-            [
-                'email' => 'email',
-                'display_name' => 'required',
-                'rating' => 'required',
-                'status' => 'required',
-            ]
-        );
+        $this->validate($request, [
+            'email' => 'email',
+            'display_name' => 'required',
+            'rating' => 'required',
+            'status' => 'required',
+        ]);
 
         if ($user->isAdmin() &&
             ($request->get('status') === User::STATUS_DENIED || $request->get('rating') !== Rating::SUPER)
@@ -328,7 +336,7 @@ class UserController extends Controller
     }
 
     /**
-     * response user's email list
+     * Response user's email list.
      *
      * @return \Xpressengine\Presenter\Presentable
      */
@@ -343,21 +351,18 @@ class UserController extends Controller
     }
 
     /**
-     * add email
+     * Add email.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function postAddMail(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'userId' => 'required',
-                'address' => 'required|email'
-            ]
-        );
+        $this->validate($request, [
+            'userId' => 'required',
+            'address' => 'required|email'
+        ]);
 
         $userId = $request->get('userId');
         $address = $request->get('address');
@@ -388,11 +393,11 @@ class UserController extends Controller
     }
 
     /**
-     * confirm email
+     * Confirm email
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function postConfirmMail(Request $request)
     {
@@ -424,21 +429,18 @@ class UserController extends Controller
     }
 
     /**
-     * postDeleteMail
+     * Delete a mail.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function postDeleteMail(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'userId' => 'required',
-                'address' => 'required'
-            ]
-        );
+        $this->validate($request, [
+            'userId' => 'required',
+            'address' => 'required'
+        ]);
 
         $address = $request->get('address');
 
@@ -460,6 +462,12 @@ class UserController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'address' => $address]);
     }
 
+    /**
+     * Show confirm for delete a user.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function deletePage(Request $request)
     {
         $userIds = $request->get('userIds');
@@ -472,8 +480,9 @@ class UserController extends Controller
     }
 
     /**
-     * delete user
+     * Delete a user.
      *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -494,10 +503,9 @@ class UserController extends Controller
     }
 
     /**
-     * search user
+     * Search user.
      *
-     * @param null $keyword
-     *
+     * @param string|null $keyword keyword
      * @return \Xpressengine\Presenter\Presentable
      */
     public function search($keyword = null)
@@ -509,18 +517,16 @@ class UserController extends Controller
             return XePresenter::makeApi([]);
         }
 
-        $matchedUserList = $users->query()->where('display_name', 'like', '%'.$keyword.'%')->paginate( null,
-            ['id', 'display_name', 'email']
-        )->items();
+        $matchedUserList = $users->query()->where('display_name', 'like', '%'.$keyword.'%')
+            ->paginate(null, ['id', 'display_name', 'email'])->items();
 
         return XePresenter::makeApi($matchedUserList);
     }
 
     /**
-     * getGroupInfo
+     * Get group information
      *
-     * @param $groupList
-     *
+     * @param \Xpressengine\User\Models\UserGroup[] $groupList groups
      * @return array
      */
     protected function getGroupInfo($groupList)

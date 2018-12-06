@@ -4,8 +4,8 @@
  *
  * PHP version 7
  *
- * @category
- * @package
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -21,8 +21,23 @@ use XeLang;
 use XePresenter;
 use Xpressengine\Http\Request;
 
+/**
+ * Class TermsController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class TermsController extends Controller
 {
+    /**
+     * Show list for registered terms.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function index()
     {
         $terms = app('xe.terms')->all();
@@ -30,6 +45,11 @@ class TermsController extends Controller
         return XePresenter::make('user.settings.setting.terms.index', compact('terms'));
     }
 
+    /**
+     * Show the term registration form.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function create()
     {
         return XePresenter::make('user.settings.setting.terms.create', [
@@ -37,6 +57,12 @@ class TermsController extends Controller
         ]);
     }
 
+    /**
+     * Create a term.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $this->validate($request, ['title' => 'langRequired']);
@@ -53,6 +79,12 @@ class TermsController extends Controller
         ]);
     }
 
+    /**
+     * Show edit form for the term
+     *
+     * @param string $id identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function edit($id)
     {
         $term = app('xe.terms')->find($id);
@@ -62,6 +94,13 @@ class TermsController extends Controller
         ]);
     }
 
+    /**
+     * Update a term.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         if (!$term = app('xe.terms')->find($id)) {
@@ -80,6 +119,12 @@ class TermsController extends Controller
         ]);
     }
 
+    /**
+     * Destroy terms.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroies(Request $request)
     {
         XeDB::transaction(function () use ($request) {
@@ -93,6 +138,12 @@ class TermsController extends Controller
         ]);
     }
 
+    /**
+     * Set enables terms.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function enable(Request $request)
     {
         XeDB::transaction(function () use ($request) {

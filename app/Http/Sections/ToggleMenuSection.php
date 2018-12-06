@@ -1,5 +1,11 @@
 <?php
 /**
+ * ToggleMenuSection.php
+ *
+ * PHP version 7
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -9,13 +15,39 @@
 namespace App\Http\Sections;
 
 use XeToggleMenu;
-use View;
 
+/**
+ * Class ToggleMenuSection
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ToggleMenuSection extends Section
 {
+    /**
+     * The type.
+     *
+     * @var string
+     */
     protected $type;
+
+    /**
+     * The instance id
+     *
+     * @var string|null
+     */
     protected $instanceId;
 
+    /**
+     * ToggleMenuSection constructor.
+     *
+     * @param string      $type       type
+     * @param string|null $instanceId instance id
+     */
     public function __construct($type, $instanceId = null)
     {
         $this->type = $type;

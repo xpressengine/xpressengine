@@ -1,6 +1,6 @@
 <?php
 /**
- * XeInterception
+ * XeInterception.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 로 이용 하기위해 선언되어진 클래스
+ * Class XeInterception
  *
  * @category    Interception
  * @package     Xpressengine\Interception

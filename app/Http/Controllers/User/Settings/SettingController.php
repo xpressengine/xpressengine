@@ -1,24 +1,22 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * SettingController.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
@@ -26,8 +24,10 @@ use Xpressengine\Http\Request;
 use Xpressengine\User\UserHandler;
 
 /**
- * @category
- * @package     App\Http\Controllers\User
+ * Class SettingController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -49,8 +49,7 @@ class SettingController extends Controller
     /**
      * get Common setting
      *
-     * @param CaptchaManager $captcha
-     *
+     * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function editCommon(CaptchaManager $captcha)
@@ -66,9 +65,8 @@ class SettingController extends Controller
     /**
      * update Common setting
      *
-     * @param Request        $request
-     * @param CaptchaManager $captcha
-     *
+     * @param Request        $request request
+     * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateCommon(Request $request, CaptchaManager $captcha)
@@ -87,8 +85,7 @@ class SettingController extends Controller
     /**
      * edit Join setting
      *
-     * @param CaptchaManager $captcha
-     *
+     * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function editJoin(CaptchaManager $captcha, UserHandler $handler)
@@ -113,8 +110,7 @@ class SettingController extends Controller
     /**
      * update Join setting
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateJoin(Request $request)

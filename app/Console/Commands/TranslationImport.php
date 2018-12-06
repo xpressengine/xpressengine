@@ -1,6 +1,6 @@
 <?php
 /**
- * Translation command class. This file is part of the Xpressengine package.
+ * TranslationImport.php
  *
  * PHP version 7
  *
@@ -23,12 +23,7 @@ use Xpressengine\Translation\LaravelLangData;
 use Xpressengine\Translation\Translator;
 
 /**
- * command
- *
- * ## 명령어 사용
- * ```
- * php artisan trans:import {pluginName}
- * ```
+ * Class TranslationImport
  *
  * @category    Commands
  * @package     App\Console\Commands
@@ -39,18 +34,23 @@ use Xpressengine\Translation\Translator;
  */
 class TranslationImport extends Command
 {
-
     /**
+     * The console command name.
+     *
      * @var string
      */
     protected $name = 'translation:import';
 
     /**
+     * The console command description.
+     *
      * @var string
      */
     protected $description = 'Translation data import to database';
 
     /**
+     * Translator instance
+     *
      * @var Translator
      */
     protected $translator;
@@ -115,9 +115,9 @@ class TranslationImport extends Command
     }
 
     /**
-     * Get the directory path where the language file
+     * Get the directory path where the language file.
      *
-     * @param string|null $name
+     * @param string $name name of target
      * @return string
      */
     protected function getLangsDir($name)

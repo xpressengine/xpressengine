@@ -38,6 +38,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerPluginHandler();
     }
 
+    /**
+     * Register the plugin register.
+     *
+     * @return void
+     */
     protected function registerPluginRegister()
     {
         $this->app->singleton(
@@ -57,6 +62,11 @@ class PluginServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Register the plugin scanner.
+     *
+     * @return void
+     */
     protected function registerPluginScanner()
     {
         $this->app->singleton(
@@ -73,7 +83,11 @@ class PluginServiceProvider extends ServiceProvider
         );
     }
 
-
+    /**
+     * Register the plugin handler.
+     *
+     * @return void
+     */
     protected function registerPluginHandler()
     {
         $this->app->singleton(PluginHandler::class, function ($app) {
@@ -109,6 +123,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->alias(PluginHandler::class, 'xe.plugin');
     }
 
+    /**
+     * Register the plugin provider.
+     *
+     * @return void
+     */
     protected function registerPluginProvider()
     {
         $this->app->singleton(PluginProvider::class, function ($app) {
@@ -120,6 +139,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->alias(PluginProvider::class, 'xe.plugin.provider');
     }
 
+    /**
+     * Register the composer writer.
+     *
+     * @return void
+     */
     protected function registerComposerWriter()
     {
         $this->app->singleton(ComposerFileWriter::class, function ($app) {
@@ -156,6 +180,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerSettingsPermissions();
     }
 
+    /**
+     * Register the settings permission.
+     *
+     * @return void
+     */
     private function registerSettingsPermissions()
     {
         $permissions = [

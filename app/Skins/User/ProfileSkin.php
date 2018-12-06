@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * ProfileSkin.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Skins
+ * @package     App\Skins\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,24 +17,55 @@ namespace App\Skins\User;
 use Xpressengine\Skin\GenericSkin;
 
 /**
- * @category
- * @package     ${NAMESPACE}
+ * Class ProfileSkin
+ *
+ * @category    Skins
+ * @package     App\Skins\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class ProfileSkin extends GenericSkin
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'user/profile/skin/xpressengine@default';
 
+    /**
+     * The information for the component
+     *
+     * @var array
+     */
     protected static $componentInfo = [
         'name' => '기본 프로필페이지 스킨',
         'description' => 'Xpressengine의 기본 프로필페이지 스킨입니다'
     ];
 
+    /**
+     * @var string
+     */
     protected static $path = 'user.skins.default.profile';
 
+    /**
+     * @var array
+     */
     protected static $info = [];
 
+    /**
+     * @var string
+     */
     protected static $viewDir = '';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function render()
     {
         $this->loadAssets();
@@ -66,6 +97,11 @@ class ProfileSkin extends GenericSkin
         return parent::render();
     }
 
+    /**
+     * Load assets
+     *
+     * @return void
+     */
     private function loadAssets()
     {
         $frontend = app('xe.frontend');
@@ -81,5 +117,4 @@ class ProfileSkin extends GenericSkin
             ]
         )->load();
     }
-
 }

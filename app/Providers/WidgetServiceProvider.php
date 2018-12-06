@@ -77,7 +77,7 @@ class WidgetServiceProvider extends ServiceProvider
     }
 
     /**
-     * boot
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -99,7 +99,7 @@ class WidgetServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerWidgets
+     * Register widgets.
      *
      * @return void
      */
@@ -113,6 +113,11 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(DownloadRank::class);
     }
 
+    /**
+     * Register widgets skins.
+     *
+     * @return void
+     */
     protected function registerWidgetSkins()
     {
         $register = $this->app['xe.pluginRegister'];
@@ -123,6 +128,11 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(DownloadRankSkin::class);
     }
 
+    /**
+     * Register UI objects.
+     *
+     * @return void
+     */
     protected function registerUIObject()
     {
         $registryManager = $this->app['xe.pluginRegister'];

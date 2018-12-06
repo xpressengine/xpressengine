@@ -4,10 +4,12 @@
  *
  * PHP version 7
  *
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 
 namespace App\Console\Commands;
@@ -15,6 +17,16 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
+/**
+ * Abstract Class MakeCommand
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 abstract class MakeCommand extends Command
 {
     use ComposerRunTrait;
@@ -29,7 +41,7 @@ abstract class MakeCommand extends Command
     /**
      * Create a new component creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files
+     * @param  \Illuminate\Filesystem\Filesystem $files instance
      */
     public function __construct(Filesystem $files)
     {
@@ -39,9 +51,9 @@ abstract class MakeCommand extends Command
     }
 
     /**
-     * copy stub directory to given path
+     * Copy stub directory to given path
      *
-     * @param string $path
+     * @param string $path given path
      * @return void
      * @throws \Exception
      */
@@ -63,12 +75,12 @@ abstract class MakeCommand extends Command
     abstract protected function getStubPath();
 
     /**
-     * build the file with given parameters
+     * Build the file with given parameters.
      *
-     * @param string $file
-     * @param array $search
-     * @param array $replace
-     * @param null $to
+     * @param string $file    file for build
+     * @param array  $search  searches
+     * @param array  $replace replaces
+     * @param null   $to      location to move
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function buildFile($file, array $search, array $replace, $to = null)
@@ -81,10 +93,11 @@ abstract class MakeCommand extends Command
     }
 
     /**
-     * run composer dump
+     * Run composer dump command.
      *
-     * @param string $path
+     * @param string $path working directory
      * @return int
+     * @throws \Exception
      */
     protected function runComposerDump($path)
     {

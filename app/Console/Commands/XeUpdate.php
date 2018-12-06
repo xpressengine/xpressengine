@@ -1,23 +1,39 @@
 <?php
+/**
+ * XeUpdate.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Xpressengine\Installer\XpressengineInstaller;
-use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
 
 
+/**
+ * Class XeUpdate
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class XeUpdate extends Command
 {
     use ComposerRunTrait;
-
-    /**
-     * @var
-     */
-    protected $migrations;
 
     /**
      * The console command name.
@@ -38,11 +54,16 @@ class XeUpdate extends Command
     protected $description = 'Update the XpressEngine';
 
     /**
+     * ComposerFileWriter instance
+     *
      * @var ComposerFileWriter
      */
     protected $writer;
+
     /**
      * Create a new controller creator command instance.
+     *
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
      */
     public function __construct(ComposerFileWriter $writer)
     {
@@ -54,10 +75,8 @@ class XeUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @param ComposerFileWriter  $writer
-     * @param InterceptionHandler $interceptionHandler
-     *
-     * @return bool|null
+     * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -130,7 +149,7 @@ class XeUpdate extends Command
     }
 
     /**
-     * migrateCore
+     * Execute migrations for XE core.
      *
      * @param $installedVersion
      */
@@ -157,7 +176,7 @@ class XeUpdate extends Command
     }
 
     /**
-     * markInstalled
+     * Mark installed.
      *
      * @return void
      */
@@ -166,6 +185,11 @@ class XeUpdate extends Command
         file_put_contents(base_path('storage/app/installed'), __XE_VERSION__);
     }
 
+    /**
+     * Set ready for update.
+     *
+     * @return string
+     */
     protected function ready()
     {
         // 플러그인 업데이트 잠금
@@ -186,9 +210,9 @@ class XeUpdate extends Command
     }
 
     /**
-     * writeResult
+     * Write result.
      *
-     * @param $result
+     * @param int $result result code
      * @return void
      */
     protected function writeResult($result)

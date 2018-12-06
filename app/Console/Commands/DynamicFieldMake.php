@@ -1,11 +1,37 @@
 <?php
-
+/**
+ * DynamicFieldMake.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
 
+/**
+ * Class DynamicFieldMake
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class DynamicFieldMake extends ComponentMakeCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'make:field
                         {plugin : The plugin where the skin will be located}
                         {name : The name of skin to create}
@@ -22,6 +48,8 @@ class DynamicFieldMake extends ComponentMakeCommand
     protected $description = 'Create a new DynamicField of XpressEngine';
 
     /**
+     * The type of component.
+     *
      * @var string
      */
     protected $componentType = 'fieldType';
@@ -88,7 +116,7 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * get plugin name
+     * Get plugin name.
      *
      * @return string
      */
@@ -98,7 +126,7 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * get default path for component
+     * Get default path for component.
      *
      * @return string
      */
@@ -108,6 +136,8 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
+     * Get class name.
+     *
      * @return string
      */
     protected function getClassName()
@@ -116,12 +146,10 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * getFieldId
+     * Get dynamic field id
      *
      * @return array|string
      * @throws \Exception
-     * @internal param $file
-     *
      */
     protected function getFieldId()
     {
@@ -148,8 +176,9 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * confirmInfo
+     * Confirm information
      *
+     * @param array $attr attributes
      * @return bool
      */
     protected function confirmInfo($attr)
@@ -187,6 +216,8 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
+     * Make file for plugin by stub.
+     *
      * @param Fluent|array $attr
      * @return void
      * @throws \Exception
@@ -203,9 +234,9 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * makeThemeClass
+     * Make dynamic field class.
      *
-     * @param Fluent|array $attr
+     * @param Fluent|array $attr attributes
      * @return void
      * @throws \Exception
      */
@@ -233,7 +264,7 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * get component name
+     * Get component name.
      *
      * @return string
      */
@@ -243,7 +274,7 @@ class DynamicFieldMake extends ComponentMakeCommand
     }
 
     /**
-     * get stub path
+     * Get stub path.
      *
      * @return string
      */

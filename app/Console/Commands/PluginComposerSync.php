@@ -1,10 +1,31 @@
 <?php
-
+/**
+ * PluginComposerSync.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 
+/**
+ * Class PluginComposerSync
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginComposerSync extends Command
 {
     /**
@@ -33,9 +54,8 @@ class PluginComposerSync extends Command
     /**
      * Execute the console command.
      *
-     * @param ComposerFileWriter $writer
-     *
-     * @return bool|null
+     * @param ComposerFileWriter $writer ComposerFileWriter
+     * @return void
      * @throws \Exception
      */
     public function handle(ComposerFileWriter $writer)

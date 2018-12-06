@@ -1,11 +1,32 @@
 <?php
-
+/**
+ * Kernel.php
+ *
+ * PHP version 7
+ *
+ * @category    Console
+ * @package     App\Console
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 namespace App\Console;
 
 use App\ResetProvidersTrait;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+/**
+ * Class Kernel
+ *
+ * @category    Console
+ * @package     App\Console
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class Kernel extends ConsoleKernel
 {
     use ResetProvidersTrait;
@@ -50,8 +71,18 @@ class Kernel extends ConsoleKernel
         Commands\DynamicFieldSkinMake::class
     ];
 
+    /**
+     * If true, except xe services.
+     *
+     * @var bool
+     */
     protected $skipXE = false;
 
+    /**
+     * The commands that need to off XE services.
+     *
+     * @var array
+     */
     protected $skipXECommands = [
         'view:clear',
         'down',
@@ -61,7 +92,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule Schedule instance
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -83,8 +114,8 @@ class Kernel extends ConsoleKernel
     /**
      * Run the console application.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface   $input  input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output output
      * @return int
      */
     public function handle($input, $output = null)
@@ -124,7 +155,7 @@ class Kernel extends ConsoleKernel
      */
     protected function isInstalled()
     {
-        return file_exists($this->app->storagePath() . '/app/installed');
+        return file_exists(storage_path('app/installed'));
     }
 
     /**

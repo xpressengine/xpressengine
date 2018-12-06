@@ -1,5 +1,11 @@
 <?php
 /**
+ * WidgetGenerator.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Widget
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -10,12 +16,37 @@ namespace App\UIObjects\Widget;
 
 use Xpressengine\UIObject\AbstractUIObject;
 
+/**
+ * Class WidgetGenerator
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Widget
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class WidgetGenerator extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@widgetGenerator';
 
+    /**
+     * The name of view
+     *
+     * @var string
+     */
     protected $view = 'uiobjects.widget.generator';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $args = $this->arguments;
@@ -32,16 +63,6 @@ class WidgetGenerator extends AbstractUIObject
             $widgets[$id] = $class::getTitle();
         }
 
-        //if (!isset($args['selectedWidget'])) {
-        //    reset($widgetList);
-        //    $selectedWidgetId = key($widgetList);
-        //} else {
-        //    $selectedWidgetId = array_get($args, 'selectedWidget');
-        //}
-
-        // except skin setting
-        // $form = $handler->setup($selectedWidgetId);
-
         $this->loadFiles();
 
         $id = array_get($args, 'id', 'widget-generator-'.static::seq());
@@ -52,18 +73,16 @@ class WidgetGenerator extends AbstractUIObject
     }
 
     /**
-     * loadFiles
+     * Load assets.
      *
      * @return void
      */
     protected function loadFiles()
     {
-        $frontend = \app('xe.frontend');
-        $frontend->js(
-            [
-                'assets/core/xe-ui-component/js/xe-page.js',
-                'assets/core/uiobject/widget/generator.js'
-            ]
-        )->load();
+        $frontend = app('xe.frontend');
+        $frontend->js([
+            'assets/core/xe-ui-component/js/xe-page.js',
+            'assets/core/uiobject/widget/generator.js'
+        ])->load();
     }
 }

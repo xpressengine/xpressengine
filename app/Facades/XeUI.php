@@ -1,6 +1,6 @@
 <?php
 /**
- * XeUI
+ * XeUI.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 사용을 위한 연결 클래스.
+ * Class XeUI
  *
  * @category    UIObject
  * @package     Xpressengine\UIObject

@@ -1,29 +1,36 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * Category.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\FieldTypes;
 
-use Xpressengine\Database\DynamicQuery;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
-use Illuminate\Database\Query\Builder;
 use Xpressengine\Category\Models\Category as CategoryModel;
-use App\FieldSkins\Category\AfterTitle;
-use App\FieldSkins\Category\BeforeTitle;
-use App\FieldSkins\Category\DefaultSkin;
 use XeFrontend;
 use View;
 
 /**
- * Class FieldType
- * @package App\FieldTypes\Category
+ * Class Category
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class Category extends AbstractType
 {

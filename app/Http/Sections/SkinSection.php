@@ -1,5 +1,11 @@
 <?php
 /**
+ * SkinSection.php
+ *
+ * PHP version 7
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,16 +17,37 @@ namespace App\Http\Sections;
 use View;
 use Xpressengine\Skin\SkinHandler;
 
+/**
+ * Class SkinSection
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SkinSection extends Section
 {
+    /**
+     * The target
+     *
+     * @var string
+     */
     protected $target;
+
+    /**
+     * The instance id
+     *
+     * @var null|string
+     */
     protected $instanceId;
 
     /**
      * SkinSection constructor.
      *
-     * @param string      $target
-     * @param string|null $instanceId
+     * @param string      $target     target
+     * @param string|null $instanceId instance id
      */
     public function __construct($target, $instanceId = null)
     {
@@ -29,10 +56,10 @@ class SkinSection extends Section
     }
 
     /**
-     * makeView
+     * Make a view.
      *
-     * @param $target
-     * @param $instanceId
+     * @param string $target     target
+     * @param string $instanceId instance id
      *
      * @return \Illuminate\Contracts\View\View
      */

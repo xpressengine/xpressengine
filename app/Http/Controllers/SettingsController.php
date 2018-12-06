@@ -1,5 +1,11 @@
 <?php
 /**
+ * SettingsController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -12,6 +18,7 @@ use Artisan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
@@ -22,21 +29,37 @@ use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
+/**
+ * Class SettingsController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SettingsController extends Controller
 {
-
+    /**
+     * Show the form for setting.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editSetting()
     {
         $config = app('xe.site')->getSiteConfig();
 
-        return \XePresenter::make(
-            'settings.setting',
-            compact(
-                'config'
-            )
-        );
+        return \XePresenter::make('settings.setting', compact('config'));
     }
 
+    /**
+     * Update setting.
+     *
+     * @param SiteHandler $siteHandler SiteHandler instance
+     * @param Request     $request     request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateSetting(SiteHandler $siteHandler, Request $request)
     {
         $inputs = $request->only(['site_title', 'favicon']);
@@ -59,16 +82,14 @@ class SettingsController extends Controller
     }
 
     /**
-     * setting 과정에서 upload되는 파일을 저장한다.
+     * Save uploaded file.
      *
-     * @param              $oldSetting
-     * @param string       $key  config field key
-     * @param UploadedFile $file file
-     * @param string       $path
-     * @param string       $disk
-     *
+     * @param ConfigEntity $oldSetting config for old
+     * @param string       $key        config field key
+     * @param UploadedFile $file       file
+     * @param string       $path       path
+     * @param string       $disk       disk name
      * @return array
-     * @internal param string $configId config id
      */
     protected function saveFile($oldSetting, $key, UploadedFile $file, $path, $disk = 'local')
     {
@@ -104,18 +125,26 @@ class SettingsController extends Controller
         return $saved;
     }
 
+    /**
+     * Show the edit form for the site theme.
+     *
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editTheme(ThemeHandler $themeHandler)
     {
         $selectedTheme = $themeHandler->getSiteThemeId();
 
-        return \XePresenter::make(
-            'settings.theme',
-            compact(
-                'selectedTheme'
-            )
-        );
+        return \XePresenter::make('settings.theme', compact('selectedTheme'));
     }
 
+    /**
+     * Update setting of the site theme.
+     *
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @param Request      $request      request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateTheme(ThemeHandler $themeHandler, Request $request)
     {
         // resolve theme
@@ -126,6 +155,12 @@ class SettingsController extends Controller
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Show the edit form for the site permission.
+     *
+     * @param PermissionHandler $permissionHandler PermissionHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editPermissions(PermissionHandler $permissionHandler)
     {
         /** @var SettingsHandler $settingsHandler */
@@ -146,32 +181,28 @@ class SettingsController extends Controller
         return \XePresenter::make('settings.permissions', compact('permissionGroups'));
     }
 
+    /**
+     * Update setting of the site permission.
+     *
+     * @param PermissionHandler $permissionHandler PermissionHandler instance
+     * @param Request           $request           request
+     * @param string            $permissionId      identifier
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePermission(PermissionHandler $permissionHandler, Request $request, $permissionId)
     {
-        $permissionHandler->register(
-            $permissionId,
-            $this->createAccessGrant(
-                $request->only(
-                    [
-                        'accessRating',
-                        'accessGroup',
-                        'accessUser',
-                        'accessExcept'
-                    ]
-                )
-            )
-        );
+        $permissionHandler->register($permissionId, $this->createAccessGrant(
+            $request->only(['accessRating', 'accessGroup', 'accessUser', 'accessExcept'])
+        ));
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
-     * createAccessGrant
+     * Create the grant of access
      *
      * @param array $inputs to create grant params array
-     *
      * @return Grant
-     *
      */
     protected function createAccessGrant(array $inputs)
     {
@@ -190,6 +221,12 @@ class SettingsController extends Controller
         return $grant;
     }
 
+    /**
+     * Parse the given parameter.
+     *
+     * @param string $param parameter
+     * @return array
+     */
     protected function innerParamParsing($param)
     {
         if (empty($param)) {
@@ -200,7 +237,14 @@ class SettingsController extends Controller
         return array_filter($ret);
     }
 
-    public function searchLog(Request $request, LogHandler $handler)
+    /**
+     * Build query for log.
+     *
+     * @param Request    $request request
+     * @param LogHandler $handler LogHandler instance
+     * @return \Illuminate\Database\Query\Builder
+     */
+    protected function searchLog(Request $request, LogHandler $handler)
     {
         $query = $handler->query()->with('user')->orderBy('created_at', 'desc');
 
@@ -239,6 +283,14 @@ class SettingsController extends Controller
         return $query;
     }
 
+    /**
+     * Show the list of logs.
+     *
+     * @param Request     $request request
+     * @param LogHandler  $handler LogHandler instance
+     * @param UserHandler $userHandler UserHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
     {
         $loggers = $handler->getLoggers();
@@ -250,7 +302,14 @@ class SettingsController extends Controller
         return \XePresenter::make('settings.logs.index', compact('loggers', 'logs', 'admins'));
     }
 
-    public function saveLog(Request $request, LogHandler $handler, UserHandler $userHandler)
+    /**
+     * Download logs to the client.
+     *
+     * @param Request    $request request
+     * @param LogHandler $handler LogHandler instance
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function saveLog(Request $request, LogHandler $handler)
     {
         $loggers = $handler->getLoggers();
         $query = self::searchLog($request, $handler);
@@ -313,12 +372,25 @@ class SettingsController extends Controller
         return Response::stream($callback, 200, $headers);
     }
 
+    /**
+     * Show log information by given id.
+     *
+     * @param LogHandler $handler LogHandler instance
+     * @param string     $id      identifier
+     * @return mixed
+     */
     public function showLog(LogHandler $handler, $id)
     {
         $log = $handler->find($id);
+
         return api_render('settings.logs.show', compact('log'));
     }
 
+    /**
+     * Cache clear.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function cacheClear()
     {
         Artisan::call('cache:clear');

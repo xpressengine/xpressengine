@@ -30,7 +30,7 @@ use XeDocument;
 class DocumentServiceProvider extends ServiceProvider
 {
     /**
-     * boot
+     * Bootstrap the application events.
      *
      * @return void
      */

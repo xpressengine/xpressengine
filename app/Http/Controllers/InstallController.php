@@ -1,5 +1,11 @@
 <?php
 /**
+ * InstallController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -15,8 +21,24 @@ use Lang;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
+/**
+ * Class InstallController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class InstallController extends Controller
 {
+    /**
+     * Show page for installation.
+     *
+     * @param Request $request request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         app()->setLocale($request->get('_l', app()->getLocale()));
@@ -25,6 +47,12 @@ class InstallController extends Controller
         return view('install.index');
     }
 
+    /**
+     * Check system environment.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function check(Request $request)
     {
         $result = false;
@@ -89,6 +117,14 @@ class InstallController extends Controller
         ]);
     }
 
+    /**
+     * Do install the application.
+     *
+     * @param Request     $request request
+     * @param JarContract $cookie  cookie
+     * @return \Illuminate\Http\RedirectResponse|string
+     * @throws \Exception
+     */
     public function install(Request $request, JarContract $cookie)
     {
         if ($this->isInstalled() === true) {
@@ -153,7 +189,7 @@ class InstallController extends Controller
     }
 
     /**
-     * Is installed
+     * Indicate if the application was installed
      *
      * @return bool
      */
@@ -166,7 +202,7 @@ class InstallController extends Controller
      * 설치시 세션 아이디가 고정되지 않아 input 이나 error 를 넘겨줄수 없어
      * 스크립트로 메시지를 표시하고 페이지를 되돌림
      *
-     * @param string|null $msg
+     * @param string|null $msg message
      * @return string
      */
     private function back($msg = null)
@@ -178,7 +214,7 @@ class InstallController extends Controller
     /**
      * 입력한 app 의 url 값에 프로토콜이 명시되지 않은 경우 http 로 지정
      *
-     * @param string $url
+     * @param string $url url with protocol
      * @return string
      */
     private function getUrl($url)

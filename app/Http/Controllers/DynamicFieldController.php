@@ -1,5 +1,11 @@
 <?php
 /**
+ * DynamicFieldController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,21 +23,22 @@ use XeDB;
 use XeFrontend;
 use Xpressengine\Translation\Translator;
 
+/**
+ * Class DynamicFieldController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DynamicFieldController extends Controller
 {
-    protected $targetName;
-
     /**
-     * create instance
-     */
-    public function __construct(Request $request)
-    {
-        $this->targetName = $request->get('targetName');
-    }
-
-    /**
-     * index
+     * Show list of dynamic field.
      *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function index(Request $request)
@@ -62,8 +69,9 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * get skin options
+     * Get skin options.
      *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function getSkinOption(Request $request)
@@ -91,9 +99,6 @@ class DynamicFieldController extends Controller
         $registerHandler = $dynamicField->getRegisterHandler();
 
         // fieldType 에 따른 Skin 리스트
-        /**
-         * @var \Generator $skins
-         */
         $skins = [];
         foreach ($registerHandler->getSkinsByType($dynamicField, $request->get('typeId')) as $skin) {
             $skins[$skin->getId()] = $skin->name();
@@ -106,8 +111,9 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * get additional configure
+     * Get additional configure.
      *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function getAdditionalConfigure(Request $request)
@@ -137,8 +143,10 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * store dynamic field
+     * Store dynamic field
      *
+     * @param Request    $request    request
+     * @param Translator $translator Translator instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function store(Request $request, Translator $translator)
@@ -188,8 +196,10 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * update dynamic field
+     * Update dynamic field.
      *
+     * @param Request    $request    request
+     * @param Translator $translator Translator instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function update(Request $request, Translator $translator)
@@ -237,8 +247,9 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * get edit information
+     * Get edit information
      *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function getEditInfo(Request $request)
@@ -260,9 +271,10 @@ class DynamicFieldController extends Controller
     }
 
     /**
-     * destroy
+     * Destroy a field.
      *
-         * @return \Xpressengine\Presenter\Presentable
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function destroy(Request $request)
     {

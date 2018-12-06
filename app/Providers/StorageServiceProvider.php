@@ -85,6 +85,11 @@ class StorageServiceProvider extends ServiceProvider
         $this->app->alias(UrlMaker::class, 'xe.storage.url');
     }
 
+    /**
+     * Add event listener.
+     *
+     * @return void
+     */
     private function hooks()
     {
         intercept(

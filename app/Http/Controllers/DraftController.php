@@ -1,11 +1,16 @@
 <?php
 /**
+ * DraftController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers;
 
 use Auth;
@@ -13,8 +18,24 @@ use XeDraft;
 use XePresenter;
 use Xpressengine\Http\Request;
 
+/**
+ * Class DraftController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DraftController extends Controller
 {
+    /**
+     * Show registered the draft data.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function index(Request $request)
     {
         if (Auth::guest() !== true) {
@@ -33,6 +54,13 @@ class DraftController extends Controller
         }
     }
 
+    /**
+     * Store a draft data.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function store(Request $request)
     {
         if (Auth::guest() !== true) {
@@ -51,6 +79,13 @@ class DraftController extends Controller
         return XePresenter::makeApi(['draftId' => null]);
     }
 
+    /**
+     * Update a draft data.
+     *
+     * @param Request $request request
+     * @param string  $draftId identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function update(Request $request, $draftId)
     {
         if (Auth::guest() !== true) {
@@ -65,6 +100,12 @@ class DraftController extends Controller
         return XePresenter::makeApi(['draftId' => null]);
     }
 
+    /**
+     * Delete a draft data.
+     *
+     * @param string $draftId identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function destroy($draftId)
     {
         if (Auth::guest() !== true) {
@@ -78,6 +119,12 @@ class DraftController extends Controller
         return XePresenter::makeApi(['result' => true]);
     }
 
+    /**
+     * Store a draft data by automatic request.
+     *
+     * @param Request $request request
+     * @return null
+     */
     public function setAuto(Request $request)
     {
         if (Auth::guest() === true) {
@@ -93,6 +140,12 @@ class DraftController extends Controller
         }
     }
 
+    /**
+     * Delete a draft data of automatic registered.
+     *
+     * @param Request $request request
+     * @return null
+     */
     public function destroyAuto(Request $request)
     {
         if (Auth::guest() === true) {

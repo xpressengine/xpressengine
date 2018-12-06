@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * AuthSkin.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Skins
+ * @package     App\Skins\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,26 +17,53 @@ namespace App\Skins\User;
 use Xpressengine\Skin\GenericSkin;
 
 /**
- * @category
- * @package     ${NAMESPACE}
+ * Class AuthSkin
+ *
+ * @category    Skins
+ * @package     App\Skins\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class AuthSkin extends GenericSkin
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'user/auth/skin/xpressengine@default';
 
+    /**
+     * The information for the component
+     *
+     * @var array
+     */
     protected static $componentInfo = [
         'name' => '기본 회원인증페이지 스킨',
         'description' => 'Xpressengine의 기본 회원인증페이지 스킨입니다'
     ];
 
+    /**
+     * @var string
+     */
     protected static $path = 'user.skins.default.auth';
 
+    /**
+     * @var array
+     */
     protected static $info = [];
 
+    /**
+     * @var string
+     */
     protected static $viewDir = '';
 
     /**
-     * @inheritdoc
+     * Get the evaluated contents of the object.
+     *
+     * @return string
      */
     public function render()
     {
@@ -45,6 +72,11 @@ class AuthSkin extends GenericSkin
         return parent::render();
     }
 
+    /**
+     * Show the confirm view for register.
+     *
+     * @return \Illuminate\View\View
+     */
     protected function registerIndex()
     {
         app('xe.frontend')->js(
@@ -55,6 +87,12 @@ class AuthSkin extends GenericSkin
         )->load();
         return $this->renderBlade('register.index');
     }
+
+    /**
+     * Show the view for register.
+     *
+     * @return \Illuminate\View\View
+     */
     protected function registerCreate()
     {
         app('xe.frontend')->js(
@@ -67,7 +105,7 @@ class AuthSkin extends GenericSkin
     }
 
     /**
-     * loadAssets
+     * Load assets.
      *
      * @return void
      */

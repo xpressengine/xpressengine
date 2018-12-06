@@ -46,7 +46,7 @@ class MobileServiceProvider extends ServiceProvider
     }
 
     /**
-     * extendBlade
+     * Add the directive for blade template.
      *
      * @return void
      */
@@ -78,6 +78,11 @@ class MobileServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Get the resolver for detect mobile device.
+     *
+     * @return \Closure
+     */
     protected function getMobileResolver()
     {
         return function (Request $request, $byUserAgent = false) {

@@ -1,5 +1,11 @@
 <?php
 /**
+ * AsyncExpose.php
+ *
+ * PHP version 7
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -8,16 +14,30 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
-use Illuminate\Http\Response;
 use Xpressengine\Http\Request;
 
+/**
+ * Class AsyncExpose
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class AsyncExpose
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request request
+     * @param Closure $next    to be called next
+     * @return mixed
+     */
     public function handle(Request $request, Closure $next)
     {
-        /** @var Response $response */
         $response = $next($request);
 
         if($request->wantsJson() && $request->hasHeader('X-XE-Async-Expose')) {
