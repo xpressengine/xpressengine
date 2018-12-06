@@ -6,13 +6,14 @@ import $ from 'jquery'
 /* global FormData */
 
 export default function bindAjaxForm (formEntity) {
-  formEntity.$$on('submit', (eventName, { element, preventSubmit }) => {
-    const $element = $(element)
-    if ($element.is('[data-submit=xe-ajax]')) {
+  if (formEntity.$element.is('[data-submit=xe-ajax]')) {
+    formEntity.$$on('submit', (eventName, { element, preventSubmit }) => {
+      const $element = $(element)
       preventSubmit()
       ajaxSend({ $element, element })
-    }
-  })
+      return Promise.resolve({stop: true})
+    }, {name: 'xe.form.ajax'})
+  }
 }
 
 function ajaxSend ({ $element, element }) {
