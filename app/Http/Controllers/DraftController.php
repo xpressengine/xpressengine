@@ -89,7 +89,7 @@ class DraftController extends Controller
     public function update(Request $request, $draftId)
     {
         if (Auth::guest() !== true) {
-            if (($old = XeDraft::getById($draftId)) && $old->userId == Auth::user()->getId()) {
+            if (($old = XeDraft::getById($draftId)) && $old->user_id == Auth::user()->getId()) {
                 $etc = $request->except(['_token', 'rep']);
                 $draft = XeDraft::put($draftId, $request->get($request->get('rep')), $etc);
 
