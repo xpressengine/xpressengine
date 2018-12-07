@@ -1,11 +1,28 @@
 <?php
-
+/**
+ * RouteServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 namespace App\Providers;
 
 use Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+/**
+ * Class RouteServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**

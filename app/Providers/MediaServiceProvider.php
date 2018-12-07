@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is Media service provider.
+ * MediaServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -34,10 +34,14 @@ use Xpressengine\Media\Repositories\VideoRepository;
 use Xpressengine\Media\Thumbnailer;
 
 /**
- * laravel 에서의 사용을 위한 service provider
+ * Class MediaServiceProvider
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class MediaServiceProvider extends ServiceProvider
 {

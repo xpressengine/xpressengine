@@ -6,10 +6,8 @@
  *
  * @category    Controllers
  * @package     App\Http\Controllers\Auth
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 namespace App\Http\Controllers\Auth;
 
@@ -29,10 +27,8 @@ use Xpressengine\User\UserHandler;
  *
  * @category    Controllers
  * @package     App\Http\Controllers\Auth
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 class PasswordController extends Controller {
 

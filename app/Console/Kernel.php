@@ -6,10 +6,8 @@
  *
  * @category    Console
  * @package     App\Console
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 namespace App\Console;
 
@@ -22,10 +20,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
  *
  * @category    Console
  * @package     App\Console
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 class Kernel extends ConsoleKernel
 {

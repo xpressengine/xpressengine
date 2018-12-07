@@ -1,11 +1,11 @@
 <?php
 /**
- * Config service provider class
+ * ConfigServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Config
- * @package     Xpressengine\Config
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -20,10 +20,14 @@ use Xpressengine\Config\Repositories\DatabaseRepository;
 use Xpressengine\Config\Repositories\CacheDecorator;
 
 /**
- * laravel 에서 사용을 위해 패키지를 등록하는 역할을 하는 클래스
+ * Class ConfigServiceProvider
  *
- * @category    Config
- * @package     Xpressengine\Config
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class ConfigServiceProvider extends ServiceProvider
 {

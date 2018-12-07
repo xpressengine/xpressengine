@@ -1,4 +1,13 @@
 <?php
+/**
+ * session.php
+ *
+ * PHP version 7
+ *
+ * @category    Config
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 return [
 

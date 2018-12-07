@@ -6,10 +6,8 @@
  *
  * @category    Middleware
  * @package     App\Http\Middleware
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 
 namespace App\Http\Middleware;
@@ -21,10 +19,8 @@ use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
  *
  * @category    Middleware
  * @package     App\Http\Middleware
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
  */
 class EncryptCookies extends Middleware
 {

@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is register this package for laravel
+ * UserServiceProvider.php
  *
  * PHP version 7
  *
- * @category    User
- * @package     Xpressengine\User
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -60,10 +60,14 @@ use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
 
 /**
- * laravel 에서 사용하기위해 등록처리를 하는 class
+ * Class UserServiceProvider
  *
- * @category    User
- * @package     Xpressengine\User
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class UserServiceProvider extends ServiceProvider
 {

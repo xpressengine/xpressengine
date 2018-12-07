@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * DocumentMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -15,10 +21,20 @@ use DB;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Support\Migration;
 
+/**
+ * Class DocumentMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DocumentMigration extends Migration
 {
     /**
-     * install
+     * Run when install the application.
      *
      * @return void
      */
@@ -27,6 +43,13 @@ class DocumentMigration extends Migration
         $this->create('documents', 'documents_revision');
     }
 
+    /**
+     * Create tables.
+     *
+     * @param string $table    table name
+     * @param string $revision table name for revision
+     * @return void
+     */
     public function create($table, $revision = '')
     {
         // create documents table
@@ -62,7 +85,11 @@ class DocumentMigration extends Migration
     }
 
     /**
+     * Create a table for division.
      *
+     * @param Builder $schema schema builder
+     * @param string  $table  table name
+     * @return void
      */
     public function createDivision(Builder $schema, $table)
     {
@@ -80,6 +107,8 @@ class DocumentMigration extends Migration
     }
 
     /**
+     * Set columns to given table.
+     *
      * @param Blueprint $table table
      * @return Blueprint
      */
@@ -130,7 +159,7 @@ class DocumentMigration extends Migration
     }
 
     /**
-     * seeding
+     * Determine if executed the migration when application install.
      *
      * @return void
      */

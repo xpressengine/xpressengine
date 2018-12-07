@@ -1,15 +1,15 @@
 <?php
 /**
- * Service provider
+ * RoutingServiceProvider.php
  *
  * PHP version 7
  *
- * @category  Routing
- * @package   Xpressengine\Routing
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\Providers;
@@ -31,10 +31,14 @@ use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\UriValidator;
 
 /**
- * Routing Service Provider
+ * Class RoutingServiceProvider
  *
- * @category Routing
- * @package  Xpressengine\Routing
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class RoutingServiceProvider extends ServiceProvider
 {

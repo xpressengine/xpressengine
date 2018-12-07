@@ -1,10 +1,31 @@
 <?php
+/**
+ * InstallTest.php
+ *
+ * PHP version 7
+ *
+ * @category    Tests
+ * @package     Tests\Browser
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
+
 namespace Tests\Browser;
+
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Browser\Pages\Install;
 use Tests\Browser\Pages\Login;
+
+/**
+ * Class InstallTest
+ *
+ * @category    Tests
+ * @package     Tests\Browser
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class InstallTest extends DuskTestCase
 {
     /**

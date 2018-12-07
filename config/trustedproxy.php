@@ -1,4 +1,13 @@
 <?php
+/**
+ * trustedproxy.php
+ *
+ * PHP version 7
+ *
+ * @category    Config
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://github.com/fideloper/TrustedProxy
+ */
 
 return [
 

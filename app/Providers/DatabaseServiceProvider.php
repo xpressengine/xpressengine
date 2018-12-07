@@ -1,6 +1,6 @@
 <?php
 /**
- * Service provider
+ * DatabaseServiceProvider.php
  *
  * PHP version 7
  *
@@ -24,10 +24,14 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Database\VirtualConnection;
 
 /**
- * laravel service provider
+ * Class DatabaseServiceProvider
  *
  * @category    Providers
  * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class DatabaseServiceProvider extends ServiceProvider
 {

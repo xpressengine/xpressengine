@@ -1,5 +1,11 @@
 <?php
 /**
+ * WidgetServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -33,8 +39,12 @@ use Xpressengine\Widget\WidgetParser;
 /**
  * Class WidgetServiceProvider
  *
- * @category    Widget
+ * @category    Providers
  * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class WidgetServiceProvider extends ServiceProvider
 {

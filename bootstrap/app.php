@@ -1,4 +1,13 @@
 <?php
+/**
+ * app.php
+ *
+ * PHP version 7
+ *
+ * @category    Bootstrap
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 use Xpressengine\Http\Request;
 

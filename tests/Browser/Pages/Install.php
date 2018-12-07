@@ -1,10 +1,28 @@
 <?php
+/**
+ * Install.php
+ *
+ * PHP version 7
+ *
+ * @category    Tests
+ * @package     Tests\Browser\Pages
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
+/**
+ * Class Install
+ *
+ * @category    Tests
+ * @package     Tests\Browser\Pages
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class Install extends BasePage
 {
     /**

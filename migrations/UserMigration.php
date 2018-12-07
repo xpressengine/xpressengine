@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * UserMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -13,8 +19,23 @@ use DB;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class UserMigration extends Migration {
-
+/**
+ * Class UserMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class UserMigration extends Migration
+{
+    /**
+     * Run when install the application.
+     *
+     * @return void
+     */
     public function install()
     {
         Schema::create('user', function (Blueprint $table) {
@@ -153,6 +174,11 @@ class UserMigration extends Migration {
         });
     }
 
+    /**
+     * Run after installation.
+     *
+     * @return void
+     */
     public function installed()
     {
         DB::table('config')->insert([
@@ -163,6 +189,11 @@ class UserMigration extends Migration {
         ]);
     }
 
+    /**
+     * Run after service activation.
+     *
+     * @return void
+     */
     public function init()
     {
         // add default user groups
@@ -188,11 +219,9 @@ class UserMigration extends Migration {
     }
 
     /**
-     * 서비스가 업데이트되었을 경우, update()메소드를 실행해야 하는지의 여부를 체크한다.
-     * update()메소드를 실행해야 한다면 false를 반환한다.
+     * Determine if executed the migration when application update.
      *
      * @param string $installedVersion current version
-     *
      * @return bool
      */
     public function checkUpdated($installedVersion = null)
@@ -226,11 +255,10 @@ class UserMigration extends Migration {
     }
 
     /**
-     * update 코드를 실행한다.
+     * Run when update the application.
      *
      * @param string $installedVersion current version
-     *
-     * @return mixed
+     * @return void
      */
     public function update($installedVersion = null)
     {
@@ -376,6 +404,4 @@ class UserMigration extends Migration {
         }
 
     }
-
-
 }

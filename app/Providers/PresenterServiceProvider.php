@@ -1,15 +1,15 @@
 <?php
 /**
- * Service provider
+ * PresenterServiceProvider.php
  *
  * PHP version 7
  *
- * @category  Providers
- * @package   App\Providers
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\Providers;
@@ -23,10 +23,14 @@ use Xpressengine\Presenter\Redirector;
 use Xpressengine\Routing\InstanceConfig;
 
 /**
- * Presenter Service Provider
+ * Class PresenterServiceProvider
  *
- * @category  Providers
- * @package   App\Providers
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class PresenterServiceProvider extends ServiceProvider
 {

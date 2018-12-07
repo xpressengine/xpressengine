@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is service register for laravel framework
+ * KeygenServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Keygen
- * @package     Xpressengine\Keygen
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -18,10 +18,14 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Keygen\Keygen;
 
 /**
- * laravel에서의 사용을 위한 등록 처리를 하는 class
+ * Class KeygenServiceProvider
  *
- * @category    Keygen
- * @package     Xpressengine\Keygen
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class KeygenServiceProvider extends ServiceProvider
 {

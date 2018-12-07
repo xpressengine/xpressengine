@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * ThemeMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -11,8 +17,23 @@ namespace Xpressengine\Migrations;
 use XeLang;
 use Xpressengine\Support\Migration;
 
+/**
+ * Class ThemeMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ThemeMigration extends Migration
 {
+    /**
+     * Run after installation.
+     *
+     * @return void
+     */
     public function installed()
     {
         // init config
@@ -25,6 +46,11 @@ class ThemeMigration extends Migration
         );
     }
 
+    /**
+     * Run after initialized.
+     *
+     * @return void
+     */
     public function initialized()
     {
         // set site default theme

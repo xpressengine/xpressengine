@@ -1,4 +1,15 @@
 <?php
+/**
+ * safe.php
+ *
+ * PHP version 7
+ *
+ * @category    Routes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 Route::get('/', ['as' => '__safe_mode.index', 'uses' => 'SafeModeController@auth']);
 Route::get('auth', ['as' => '__safe_mode.auth', 'uses' => 'SafeModeController@auth']);

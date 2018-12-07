@@ -1,4 +1,13 @@
 <?php
+/**
+ * console.php
+ *
+ * PHP version 7
+ *
+ * @category    Routes
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 use Illuminate\Foundation\Inspiring;
 

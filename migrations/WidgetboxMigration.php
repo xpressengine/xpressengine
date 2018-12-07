@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * WidgetboxMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -14,8 +20,23 @@ use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Support\Migration;
 
-class WidgetboxMigration extends Migration {
-
+/**
+ * Class WidgetboxMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class WidgetboxMigration extends Migration
+{
+    /**
+     * Run when install the application.
+     *
+     * @return void
+     */
     public function install()
     {
         // create table
@@ -37,6 +58,11 @@ class WidgetboxMigration extends Migration {
         }
     }
 
+    /**
+     * Run after service activation.
+     *
+     * @return void
+     */
     public function init()
     {
         // create widgetbox permission
@@ -65,7 +91,33 @@ class WidgetboxMigration extends Migration {
         }
     }
 
-    protected function check()
+    /**
+     * Run when update the application.
+     *
+     * @param string $installedVersion current version
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        $this->install();
+        $this->init();
+
+        // beta.27 later
+        if(!app('xe.widgetbox')->find('dashboard')->content) {
+            app('xe.widgetbox')->update('dashboard', [
+                'content'=> $this->getDefaultDashboard(),
+                'options' => ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class]
+            ]);
+        }
+    }
+
+    /**
+     * Determine if executed the migration when application update.
+     *
+     * @param string $installedVersion current version
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
     {
         // check table
         if(!Schema::hasTable('widgetbox')) {
@@ -95,25 +147,11 @@ class WidgetboxMigration extends Migration {
         return true;
     }
 
-    public function update($installedVersion = null)
-    {
-        $this->install();
-        $this->init();
-
-        // beta.27 later
-        if(!app('xe.widgetbox')->find('dashboard')->content) {
-            app('xe.widgetbox')->update('dashboard', [
-                'content'=> $this->getDefaultDashboard(),
-                'options' => ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class]
-            ]);
-        }
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
-        return $this->check();
-    }
-
+    /**
+     * Get the widget-box data for the dashboard.
+     *
+     * @return array
+     */
     private function getDefaultDashboard()
     {
         return json_decode('[[{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@systemInfo","title":"System Info","skin-id":"widget\/xpressengine@systemInfo\/skin\/xpressengine@default"},"skin":""}]},{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@storageSpace","title":"Storage \uc0ac\uc6a9\ub7c9","skin-id":"widget\/xpressengine@storageSpace\/skin\/xpressengine@default"},"limit":"5","skin":""}]}],[{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@contentInfo","title":"Content Info","skin-id":"widget\/xpressengine@contentInfo\/skin\/xpressengine@default"}}]},{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/news_client@news","title":"News","skin-id":"widget\/news_client@news\/skin\/news_client@default"}}]}]]', true);
