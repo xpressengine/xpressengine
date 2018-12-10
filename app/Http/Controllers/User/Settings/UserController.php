@@ -69,11 +69,11 @@ class UserController extends Controller
         $query = $this->handler->users()->query();
         $allUserCount = $query->count();
 
-        if ($startDate = $request->get('startDate', date('Y-m-d', strtotime('-30 days', time())))) {
+        if ($startDate = $request->get('startDate')) {
             $query = $query->where('created_at', '>=', $startDate . ' 00:00:00');
         }
 
-        if ($endDate = $request->get('endDate', date('Y-m-d', time()))) {
+        if ($endDate = $request->get('endDate')) {
             $query = $query->where('created_at', '<=', $endDate . ' 23:59:59');
         }
 

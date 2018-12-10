@@ -54,8 +54,8 @@ use Xpressengine\User\Models\User;
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="xi-calendar-check"></i></button>
                                 </div>
                                 <div class="search-input-group">
-                                    <input type="text" name="startDate" class="form-control" value="{{ Request::get('startDate', date('Y-m-d', strtotime('-30 days', time()))) }}" placeholder="{{xe_trans('xe::enterStartDate')}}">
-                                    <input type="text" name="endDate" class="form-control" value="{{ Request::get('endDate', date('Y-m-d', time())) }}" placeholder="{{xe_trans('xe::enterEndDate')}}">
+                                    <input type="text" name="startDate" class="form-control" value="{{ Request::get('startDate') }}" placeholder="{{xe_trans('xe::enterStartDate')}}">
+                                    <input type="text" name="endDate" class="form-control" value="{{ Request::get('endDate') }}" placeholder="{{xe_trans('xe::enterEndDate')}}">
                                 </div>
 
                                 <p></p>
