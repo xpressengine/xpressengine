@@ -20,6 +20,12 @@ class CSSFileTest extends \PHPUnit\Framework\TestCase {
     protected function tearDown()
     {
         \Mockery::close();
+        $prop = new \ReflectionProperty(CSSFile::class, 'sorted');
+
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        $prop->setAccessible(false);
+
         parent::tearDown();
     }
 
@@ -80,8 +86,9 @@ class CSSFileTest extends \PHPUnit\Framework\TestCase {
 '<!--[if gt IE 10]><!-->;<link href="path/to/file1.css" type="text/css" rel="stylesheet" media="all">
 <![endif]--><!--[if gt IE 10]><!-->;<link href="path/to/file2.css" type="text/css" rel="stylesheet" media="all">
 <![endif]--><!--[if gt IE 10]><!-->;<link href="path/to/file3.css" type="text/css" rel="stylesheet" media="all">
-<![endif]--><!--[if gt IE 10]><!-->;<link href="path/to/file4.css" type="text/css" rel="stylesheet" media="all">
-<![endif]--><link href="path/to/afterfile.css" type="text/css" rel="stylesheet" media="all">', trim($output));
+<![endif]--><link href="path/to/afterfile.css" type="text/css" rel="stylesheet" media="all">
+<!--[if gt IE 10]><!-->;<link href="path/to/file4.css" type="text/css" rel="stylesheet" media="all">
+<![endif]-->', trim($output));
     }
 
     public function testBefore2()
@@ -102,8 +109,8 @@ class CSSFileTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(
 '<link href="path/to/file1.css" type="text/css" rel="stylesheet" media="all">
 <link href="path/to/target.css" type="text/css" rel="stylesheet" media="all">
-<link href="path/to/file2.css" type="text/css" rel="stylesheet" media="all">
 <link href="path/to/file3.css" type="text/css" rel="stylesheet" media="all">
+<link href="path/to/file2.css" type="text/css" rel="stylesheet" media="all">
 <link href="path/to/file4.css" type="text/css" rel="stylesheet" media="all">', trim($output));
     }
 
