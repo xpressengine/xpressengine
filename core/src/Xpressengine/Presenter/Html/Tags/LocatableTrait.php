@@ -1,6 +1,6 @@
 <?php
 /**
- * LocatableTrait
+ * LocatableTrait.php
  *
  * PHP version 7
  *
@@ -15,7 +15,7 @@
 namespace Xpressengine\Presenter\Html\Tags;
 
 /**
- * LocatableTrait
+ * trait LocatableTrait
  *
  * @category    Frontend
  * @package     Xpressengine\Presenter
@@ -27,33 +27,53 @@ namespace Xpressengine\Presenter\Html\Tags;
 trait LocatableTrait
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $location = 'body.append';
+    protected $locations = [];
 
     /**
-     * append to
+     * Append to
      *
-     * @param string $location location
-     *
+     * @param string $location location prefix
      * @return $this
      */
     public function appendTo($location)
     {
-        $this->location = $location.'.append';
-        return $this;
+        return $this->location($location.'.append');
     }
 
     /**
-     * prepend to
+     * Prepend to
      *
-     * @param string $location location
-     *
+     * @param string $location location prefix
      * @return $this
      */
     public function prependTo($location)
     {
-        $this->location = $location.'.prepend';
+        return $this->location($location.'.prepend');
+    }
+
+    /**
+     * Add location for current object.
+     *
+     * @param string $location location
+     * @return $this
+     */
+    public function location($location)
+    {
+        $this->locations[] = $location;
+        $this->locations = array_filter(array_unique($this->locations));
+
         return $this;
+    }
+
+    /**
+     * Get registered locations for current object.
+     *
+     * @return array
+     */
+    public function getLocations()
+    {
+        return !empty($this->locations) ? $this->locations : ['body.append'];
     }
 }

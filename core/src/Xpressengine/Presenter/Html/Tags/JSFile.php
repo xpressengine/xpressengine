@@ -14,8 +14,6 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
-use Xpressengine\Support\Sorter;
-
 /**
  * JSFile
  *
@@ -37,24 +35,25 @@ class JSFile
     use ParameterTrait;
 
     /**
-     * @var JSFile[] $fileList 3차원 배열의 형태(location x position x filename)
+     * JSFile list
+     *
+     * @var JSFile[]
      */
     protected static $fileList = [];
 
     /**
-     * @var string[] filename list
+     * The filename list for unloads.
+     *
+     * @var string[]
      */
     protected static $unloaded = [];
 
     /**
-     * @var string[] 해당 인스턴스에 포함된 파일들의 파일명 목록
+     * The filename list of this object.
+     *
+     * @var string[]
      */
-    protected $files;
-
-    /**
-     * @var bool
-     */
-    protected $loaded = false;
+    protected $files = [];
 
     /**
      * 주어진 위치에 해당하는 로드된 JS파일 목록을 출력한다.
@@ -62,30 +61,25 @@ class JSFile
      * @param string $location 출력할 파일의 위치\n
      *                         (head.append|head.prepend|body.append|body.prepend)
      * @param bool   $minified minified 파일을 출력할지 결정한다.
-     *
      * @return string
      */
     public static function output($location = 'body.append', $minified = false)
     {
         $output = '';
 
-        if (static::$sorter === null) {
+        if (!$list = array_get(static::$fileList, $location)) {
             return $output;
         }
 
-        // get files by location
-        // $list is assoc array(filename => JSFile instance)
-        $list = array_get(static::$fileList, $location, []);
+        foreach (static::getSorted($location) as $name) {
+            if (in_array($name, static::$unloaded)) {
+                continue;
+            }
 
-        $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
+            $item = $list[$name] ?? new static([]);
 
-        array_map(
-            function ($file) use ($list, &$output, $minified) {
-                $fileObj = $list[$file];
-                $output .= $fileObj->render($file, $minified);
-            },
-            $sorted
-        );
+            $output .= $item->render($name, $minified);
+        }
 
         return $output;
     }
@@ -95,30 +89,25 @@ class JSFile
      *
      * @param string $location 파일 로드 위치
      * @param bool   $minified min 파일 반환 여부
-     *
      * @return array
      */
     public static function getFileList($location = 'async.append', $minified = false)
     {
         $output = [];
 
-        if (static::$sorter === null) {
+        if (!$list = array_get(static::$fileList, $location)) {
             return $output;
         }
 
-        // get files by location
-        // $list is assoc array(filename => JSFile instance)
-        $list = array_get(static::$fileList, $location, []);
+        foreach (static::getSorted($location) as $name) {
+            if (in_array($name, static::$unloaded)) {
+                continue;
+            }
 
-        $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
+            $item = $list[$name] ?? new static([]);
 
-        array_map(
-            function ($file) use ($list, &$output, $minified) {
-                $fileObj = $list[$file];
-                $output[] = $fileObj->getFile($file, $minified);
-            },
-            $sorted
-        );
+            $output[] = $item->getFile($name, $minified);
+        }
 
         return $output;
     }
@@ -128,29 +117,22 @@ class JSFile
      *
      * @param string $file     파일경로
      * @param bool   $minified true일 경우, min파일을 반환한다.
-     *
      * @return string
      */
     protected function getFile($file, $minified = false)
     {
-        if ($minified) {
-            return $this->minified;
-        }
-        return $file;
+        return $minified && $this->minified ? $this->minified : $file;
     }
 
     /**
      * init 전역 메소드이며, javascript 파일의 목록을 관리하기 위해 필요한 초기 작업으로
-     * sorter와 file list를 설정한다.
+     * file list를 설정한다.
      *
-     * @param array  $fileList js file의 목록
-     * @param Sorter $sorter   우선순위 정렬을 위한 sorter
-     *
+     * @param array $fileList js file의 목록
      * @return void
      */
-    public static function init($fileList = [], $sorter = null)
+    public static function init($fileList = [])
     {
-        static::$sorter = $sorter === null ? new Sorter() : $sorter;
         static::$fileList = $fileList;
     }
 
@@ -194,11 +176,12 @@ class JSFile
     /**
      * load this file to async list
      *
-     * @return CSSFile
+     * @return $this
      */
     public function loadAsync()
     {
-        $this->location = 'async.append';
+        $this->location('async.append');
+
         return $this->load();
     }
 
@@ -209,54 +192,16 @@ class JSFile
      */
     public function load()
     {
-        if ($this->loaded) {
-            return $this;
+        foreach ($this->getLocations() as $location) {
+            static::$fileList = array_add(static::$fileList, $location, []);
+
+            foreach ($this->files as $file) {
+                list($element, $position) = explode('.', $location);
+                static::$fileList[$element][$position][$file] = $this;
+            }
+
+            $this->sort($this->files, $location);
         }
-
-        if (static::$sorter === null || !static::$sorter instanceof Sorter) {
-            static::$sorter = new Sorter();
-        }
-
-        $prev = null;
-
-        foreach ((array) $this->files as $file) {
-            // add file to output list
-            static::$fileList = array_add(static::$fileList, $this->location, []);
-
-            list($element, $position) = explode('.', $this->location);
-            static::$fileList[$element][$position][$file] = $this;
-
-            $added = false;
-
-            // add before
-            if (!empty($this->befores)) {
-                $added = true;
-                static::$sorter->add($file, Sorter::BEFORE, $this->befores);
-            }
-
-            if ($prev !== null) {
-                static::$sorter->add($file, Sorter::BEFORE, $prev);
-            }
-            // remember prev file
-            $prev = $file;
-
-            // add after
-            if (!empty($this->afters)) {
-                $added = true;
-                static::$sorter->add($file, Sorter::AFTER, $this->afters);
-            }
-
-            // add file to sorter
-            if (!$added) {
-                static::$sorter->add($file);
-            }
-        }
-
-        // remove files from 'unloaded' list
-        static::$unloaded = array_diff(static::$unloaded, (array) $this->files);
-
-        // set loaded flag
-        $this->loaded = true;
 
         return $this;
     }
@@ -266,7 +211,6 @@ class JSFile
      *
      * @param string     $file     file path
      * @param bool|false $minified minified
-     *
      * @return string
      */
     public function render($file, $minified = false)
@@ -300,7 +244,6 @@ class JSFile
      * key resolver
      *
      * @param string $file file path
-     *
      * @return string
      */
     protected function resolveKey($file)
@@ -312,7 +255,6 @@ class JSFile
      * asset
      *
      * @param string $file file path
-     *
      * @return string
      */
     protected function asset($file)
