@@ -125,9 +125,14 @@ class XeUpdate extends Command
                     'command' => 'update',
                     '--working-dir' => base_path(),
                 ], false, $logFile);
-
-                $this->writeResult($result);
             }
+
+            // migration
+            $this->output->section('Running migration..');
+            $this->migrateCore($installedVersion);
+
+            $this->writeResult($result ?? 0);
+
         } catch (\Exception $e) {
             $fp = fopen(storage_path($logFile), 'a');
             fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
@@ -137,9 +142,7 @@ class XeUpdate extends Command
         }
 
 
-        // migration
-        $this->output->section('Running migration..');
-        $this->migrateCore($installedVersion);
+
 
         // mark installed
         $this->markInstalled();
