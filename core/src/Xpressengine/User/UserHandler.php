@@ -407,6 +407,7 @@ class UserHandler
                 'email',
                 'required',
                 Rule::unique('user', 'email'),
+                Rule::unique('user_account', 'email'),
             ]]
         )->validate();
 
