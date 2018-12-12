@@ -92,62 +92,6 @@ class WidgetboxMigration extends Migration
     }
 
     /**
-     * Run when update the application.
-     *
-     * @param string $installedVersion current version
-     * @return void
-     */
-    public function update($installedVersion = null)
-    {
-        $this->install();
-        $this->init();
-
-        // beta.27 later
-        if(!app('xe.widgetbox')->find('dashboard')->content) {
-            app('xe.widgetbox')->update('dashboard', [
-                'content'=> $this->getDefaultDashboard(),
-                'options' => ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class]
-            ]);
-        }
-    }
-
-    /**
-     * Determine if executed the migration when application update.
-     *
-     * @param string $installedVersion current version
-     * @return bool
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        // check table
-        if(!Schema::hasTable('widgetbox')) {
-            return false;
-        }
-
-        // check permission
-        if(app('xe.permission')->get('widgetbox') === null) {
-            return false;
-        }
-
-        // check dashboard widgetbox
-        if(app('xe.widgetbox')->find('dashboard') === null) {
-            return false;
-        }
-
-        // check user-profile widgetbox
-        if(app('xe.widgetbox')->find('user-profile') === null) {
-            return false;
-        }
-
-        // beta.27 later
-        if(!app('xe.widgetbox')->find('dashboard')->content) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get the widget-box data for the dashboard.
      *
      * @return array

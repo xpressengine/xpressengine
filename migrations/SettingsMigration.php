@@ -75,28 +75,4 @@ class SettingsMigration extends Migration
             $table->primary('id');
         });
     }
-
-    /**
-     * Determine if executed the migration when application update.
-     *
-     * @param string $installedVersion current version
-     * @return bool
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        return Schema::hasTable('admin_log');
-    }
-
-    /**
-     * Run when update the application.
-     *
-     * @param string $installedVersion current version
-     * @return void
-     */
-    public function update($installedVersion = null)
-    {
-        if (!Schema::hasTable('admin_log')) {
-            $this->install();
-        }
-    }
 }

@@ -51,34 +51,4 @@ class DraftMigration extends Migration
             $table->primary('id');
         });
     }
-
-    /**
-     * Run when update the application.
-     *
-     * @param string|null $installedVersion current version
-     * @return void
-     */
-    public function update($installedVersion = null)
-    {
-        // 3.0.0-beta.6
-        if (Schema::hasTable('temporary') && !Schema::hasTable('draft')) {
-            Schema::rename('temporary', 'draft');
-        }
-    }
-
-    /**
-     * Determine if executed the migration when application update.
-     *
-     * @param string|null $installedVersion current version
-     * @return bool
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        // 3.0.0-beta.6
-        if (Schema::hasTable('temporary') && !Schema::hasTable('draft')) {
-            return false;
-        }
-
-        return true;
-    }
 }
