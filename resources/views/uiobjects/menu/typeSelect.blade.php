@@ -1,32 +1,13 @@
-<div class="row">
- @foreach($types as $id => $menuType)
-  <div class="col-md-4 col-sm-12">
-   <!--[D] active 시 클래스 on 추가-->
-   <div class="menutype_con">
-
-    @if(empty($menuType['screenshot']) === true)
-     <div class="thumbnail-box" style="background: url({{asset('/assets/core/common/img/no_image_632x654.jpg')}}) ; height:228px; background-size: cover; " title="{{xe_trans('xe::noScreenshot')}}">
-     </div>
-    @else
-     <div class="thumbnail-box"
-          style="height:228px; background: url('{{ (empty($menuType['screenshot']) === false)?asset($menuType['screenshot'][0]):'' }}') no-repeat top center; background-size: cover; ">
-     </div>
-    @endif
-
-    <div class="menutype_tit">
-     <p class="txt_theme">{{ $menuType['title'] }}</p>
-     <p class="one_line">{{ $menuType['description'] }}</p>
-    </div>
-    <div class="menutype_active">
-     <p class="active">ACTIVE</p>
-
-     <label class="inpt_chk __xe_radio @if(short_module_id($selectedTypeId) === short_module_id($menuType['id'])) on @endif">
-      <input type="radio" class="inpt_hide" name="selectType" value="{{ short_module_id($menuType['id']) }}"
-             @if(short_module_id($selectedTypeId) === short_module_id($menuType['id'])) checked @endif>
-      <span>{{ $menuType['title'] }}</span>
-     </label>
-    </div>
-   </div>
-  </div>
- @endforeach
-</div>
+<ul class="list-group">
+    @foreach($types as $id => $menuType)
+        <li class="list-group-item">
+           <div class="radio" style="padding: 12px 15px;">
+               <label>
+                   <input type="radio" name="selectType" value="{{ short_module_id($menuType['id']) }}" @if(short_module_id($selectedTypeId) === short_module_id($menuType['id'])) checked @endif>
+                   <b>{{ $menuType['title'] }}</b>
+                   <small>{{ $menuType['description'] }}</small>
+               </label>
+           </div>
+        </li>
+    @endforeach
+</ul>
