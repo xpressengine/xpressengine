@@ -127,7 +127,7 @@ abstract class AbstractType implements ComponentInterface
             $rules[$key] = $required ? ltrim($rule . '|required', '|') : $rule;
         }
 
-        return array_filter($rules);
+        return $rules;
     }
 
     /**
