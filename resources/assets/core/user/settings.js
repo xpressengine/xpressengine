@@ -1,3 +1,6 @@
+/* ES5 */
+// @fixme
+
 window.jQuery(function ($) {
   var Setting = function (element, options) {
     this.options = null
@@ -120,12 +123,8 @@ window.jQuery(function ($) {
           messageText: $this.find('.__xe_message')
         }
 
-        this.ui.nameInput.keyup($.proxy(function (e) {
-          if (e.keyCode == 13) {
-            this.save()
-          } else {
-            this.check($.proxy(this.checked, this))
-          }
+        this.ui.nameInput.focusout($.proxy(function (e) {
+          this.check($.proxy(this.checked, this))
         }, this))
       },
 
@@ -143,10 +142,7 @@ window.jQuery(function ($) {
 
       save: function () {
         var input = this.ui.nameInput.val()
-        if (!this.validated || !this.beforeCheck()) {
-          return
-        }
-
+        this.check($.proxy(this.checked, this))
         var _this = this
 
         XE.ajax({
@@ -161,7 +157,7 @@ window.jQuery(function ($) {
 
           error: function (jqXHR, textStatus, errorThrown) {
           // save에 실패하면 오류 출력
-            _this.setStatus(false, jqXHR.responseJSON.message)
+            // _this.setStatus(false, jqXHR.responseJSON.message)
           }
         })
 
@@ -194,11 +190,11 @@ window.jQuery(function ($) {
         if (this.checkedName != input) {
           this.checkedName = input
         } else {
-          return
+          return false
         }
 
         if (!this.beforeCheck()) {
-          return
+          return false
         }
 
         var _this = this
