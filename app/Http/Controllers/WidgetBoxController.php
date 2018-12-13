@@ -202,9 +202,9 @@ class WidgetBoxController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $inputs = $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
-        $class = $inputs['presenter'];
-        $presenter = new $class(json_dec($inputs['data'], true), $request->get('options', []));
+        $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
+        $class = $request->get('presenter');
+        $presenter = new $class(json_dec($request->originInput('data'), true), $request->get('options', []));
 
         $content = $parser->parseXml($presenter->render());
 
