@@ -1,11 +1,28 @@
 <?php
-
+/**
+ * AppServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**

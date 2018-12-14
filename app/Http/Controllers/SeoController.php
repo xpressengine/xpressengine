@@ -1,11 +1,16 @@
 <?php
 /**
+ * SeoController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers;
 
 use XePresenter;
@@ -15,8 +20,23 @@ use XeFrontend;
 use XeSEO;
 use Xpressengine\Http\Request;
 
+/**
+ * Class SeoController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SeoController extends Controller
 {
+    /**
+     * Show setting page for SEO.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getSetting()
     {
         $ruleName = 'seoSetting';
@@ -29,6 +49,12 @@ class SeoController extends Controller
         ]);
     }
 
+    /**
+     * Save setting information.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postSetting(Request $request)
     {
         $this->validate($request, $this->getRules());
@@ -52,6 +78,11 @@ class SeoController extends Controller
         return redirect()->route('manage.seo.edit');
     }
 
+    /**
+     * Returns validation rules.
+     *
+     * @return array
+     */
     private function getRules()
     {
         return [

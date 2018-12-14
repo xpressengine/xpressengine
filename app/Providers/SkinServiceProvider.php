@@ -1,5 +1,11 @@
 <?php
 /**
+ * SkinServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -13,6 +19,16 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Skin\SkinInstanceStore;
 
+/**
+ * Class SkinServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SkinServiceProvider extends ServiceProvider
 {
     /**
@@ -38,11 +54,21 @@ class SkinServiceProvider extends ServiceProvider
         $this->app->alias(SkinHandler::class, 'xe.skin');
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->registerSkinListUIObject();
     }
 
+    /**
+     * Register the ui object of the skin selector.
+     *
+     * @return void
+     */
     private function registerSkinListUIObject()
     {
         /** @var \Xpressengine\Plugin\PluginRegister $registryManager */

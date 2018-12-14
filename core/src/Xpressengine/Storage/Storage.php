@@ -130,20 +130,8 @@ class Storage
         $disk = null,
         UserInterface $user = null
     ) {
-        if ($uploaded->isValid() === false) {
-            throw new InvalidFileException([
-                'name' => $uploaded->getClientOriginalName(),
-                'detail' => $uploaded->getErrorMessage()
-            ]);
-        }
 
-        $ext = strtolower($uploaded->getClientOriginalExtension());
-        if ($uploaded->getMimeType() !== static::getExtensionToMimeTypeMap()[$ext] ?? null) {
-            throw new InvalidFileException([
-                'name' => $uploaded->getClientOriginalName(),
-                'detail' => 'The extension seems to be wrong.'
-            ]);
-        }
+        $this->validateUploadedFile($uploaded);
 
         $id = $this->keygen->generate();
         if ($name === null) {
@@ -172,6 +160,31 @@ class Storage
             'mime' => $uploaded->getMimeType(),
             'size' => $uploaded->getSize(),
         ], $id);
+    }
+
+    /**
+     * Handle validate given file.
+     *
+     * @param UploadedFile $uploaded uploaded file
+     * @return void
+     */
+    protected function validateUploadedFile(UploadedFile $uploaded)
+    {
+        if ($uploaded->isValid() === false) {
+            throw new InvalidFileException([
+                'name' => $uploaded->getClientOriginalName(),
+                'detail' => $uploaded->getErrorMessage()
+            ]);
+        }
+
+        $ext = strtolower($uploaded->getClientOriginalExtension());
+        $map = static::getExtensionToMimeTypeMap()[$ext] ?? [];
+        if (!in_array($uploaded->getMimeType(), (array)$map)) {
+            throw new InvalidFileException([
+                'name' => $uploaded->getClientOriginalName(),
+                'detail' => 'The extension seems to be wrong.'
+            ]);
+        }
     }
 
     /**
@@ -557,7 +570,11 @@ class Storage
             'word'  => 'application/msword',
             'xl'    => 'application/excel',
             'eml'   => 'message/rfc822',
-            'json'  => 'application/json',
+            'json'  => [
+                'application/json',
+                'application/octet-stream',
+                'text/plain',
+            ],
             'pem'   => 'application/x-x509-user-cert',
             'p10'   => 'application/x-pkcs10',
             'p12'   => 'application/x-pkcs12',

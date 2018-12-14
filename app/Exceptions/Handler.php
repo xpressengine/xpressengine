@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * Handler.php
+ *
+ * PHP version 7
+ *
+ * @category    Exceptions
+ * @package     App\Exceptions
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 namespace App\Exceptions;
 
 use Exception;
@@ -22,6 +31,14 @@ use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 
+/**
+ * Class Handler
+ *
+ * @category    Exceptions
+ * @package     App\Exceptions
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -207,7 +224,10 @@ class Handler extends ExceptionHandler
             ])
             ->then(function ($request) use ($e) {
                 return $this->toIlluminateResponse(
-                    $this->isFatalError($e) ? $this->renderWithoutXE($e) : $this->renderWithTheme($e, $request), $e
+                    $this->isFatalError($e) || !$this->withTheme() ?
+                        $this->renderWithoutXE($e) :
+                        $this->renderWithTheme($e, $request),
+                    $e
                 );
             });
     }
@@ -221,7 +241,7 @@ class Handler extends ExceptionHandler
     protected function renderWithoutXE(HttpXpressengineException $e)
     {
         $status = $e->getStatusCode();
-        $path = config('view.error');
+        $path = $this->getPath();
         if (view()->exists("{$path}.{$status}") === false) {
             $status = 500;
         }
@@ -247,7 +267,7 @@ class Handler extends ExceptionHandler
             return response($view, $status);
         }
 
-        $path = config('view.error');
+        $path = $this->getPath();
         if (view()->exists("{$path}.{$status}") === false) {
             $status = 500;
         }
@@ -318,5 +338,25 @@ class Handler extends ExceptionHandler
         }
 
         return $arr;
+    }
+
+    /**
+     * Get view path for errors
+     *
+     * @return string
+     */
+    protected function getPath()
+    {
+        return config('view.error.path');
+    }
+
+    /**
+     * Determine if use theme with error view
+     *
+     * @return bool
+     */
+    protected function withTheme()
+    {
+        return config('view.error.theme', true);
     }
 }

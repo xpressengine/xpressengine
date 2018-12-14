@@ -107,7 +107,6 @@ class PasswordValidator
         $rules = explode('|', $rule);
         $fails = [];
         foreach ($rules as $rule) {
-
             list($rule, $parameter) = $this->parseRule($rule);
 
             $method = 'get' . $rule . 'Required';
@@ -149,11 +148,23 @@ class PasswordValidator
     {
         return new class($len) {
             protected $len;
+
+            /**
+             * constructor.
+             *
+             * @param int $len minimum length
+             */
             public function __construct($len)
             {
                 $this->len = $len;
             }
 
+            /**
+             * Handle validate.
+             *
+             * @param string $password password
+             * @return bool
+             */
             public function handle($password)
             {
                 return strlen($password) >= $this->len;
@@ -169,6 +180,12 @@ class PasswordValidator
     protected function getAlphaRequired()
     {
         return new class() {
+            /**
+             * Handle validate.
+             *
+             * @param string $password password
+             * @return bool
+             */
             public function handle($password)
             {
                 if (!preg_match_all('$\S*(?=\S*[a-zA-Z])\S*$', $password)) {
@@ -187,6 +204,12 @@ class PasswordValidator
     protected function getNumericRequired()
     {
         return new class() {
+            /**
+             * Handle validate.
+             *
+             * @param string $password password
+             * @return bool
+             */
             public function handle($password)
             {
                 if (!preg_match_all('$\S*(?=\S*[\d])\S*$', $password)) {
@@ -205,6 +228,12 @@ class PasswordValidator
     protected function getSpecialCharRequired()
     {
         return new class() {
+            /**
+             * Handle validate.
+             *
+             * @param string $password password
+             * @return bool
+             */
             public function handle($password)
             {
                 if (!preg_match_all('$\S*(?=\S*[\W])\S*$', $password)) {

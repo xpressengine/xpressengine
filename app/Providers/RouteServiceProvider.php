@@ -1,11 +1,28 @@
 <?php
-
+/**
+ * RouteServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 namespace App\Providers;
 
 use Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+/**
+ * Class RouteServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -24,9 +41,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
+
         $this->extendBlade();
     }
 
@@ -40,8 +56,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -74,7 +88,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * extendBlade
+     * Add the directive for blade template.
      *
      * @return void
      */

@@ -1,5 +1,11 @@
 <?php
 /**
+ * Purifying.php
+ *
+ * PHP version 7
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -10,6 +16,16 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+/**
+ * Class Purifying
+ *
+ * @category    Middleware
+ * @package     App\Http\Middleware
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class Purifying
 {
     /**
@@ -30,6 +46,12 @@ class Purifying
         return $next($request);
     }
 
+    /**
+     * Run the purifier for a given inputs.
+     *
+     * @param array $input inputs
+     * @return array
+     */
     protected function execute($input)
     {
         if (is_array($input) === true) {

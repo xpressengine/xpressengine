@@ -1,12 +1,11 @@
 <?php
-
 /**
  * ModeCheckTrait.php
  *
  * PHP version 7
  *
- * @category
- * @package
+ * @category    Bootstrap
+ * @package     App
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,10 +16,10 @@ namespace App;
 use Illuminate\Support\Str;
 
 /**
- * ModeCheckTrait
+ * Trait ModeCheckTrait
  *
- * @category
- * @package
+ * @category    Bootstrap
+ * @package     App
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -29,7 +28,7 @@ use Illuminate\Support\Str;
 trait ModeCheckTrait
 {
     /**
-     * checkSafeMode
+     * Add event listener if the application is safe mode.
      *
      * @return void
      */

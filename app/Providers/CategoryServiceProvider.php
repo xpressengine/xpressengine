@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is category service provier for laravel.
+ * CategoryServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Category
- * @package     Xpressengine\Category
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -23,10 +23,14 @@ use Xpressengine\Category\Repositories\CategoryItemRepository;
 use Xpressengine\Category\Repositories\CategoryRepository;
 
 /**
- * 라라벨에서의 사용을 위한 서비스 제공자.
+ * Class CategoryServiceProvider
  *
- * @category    Category
- * @package     Xpressengine\Category
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class CategoryServiceProvider extends ServiceProvider
 {

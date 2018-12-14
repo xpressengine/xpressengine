@@ -1,9 +1,30 @@
 <?php
+/**
+ * DuskTestCase.php
+ *
+ * PHP version 7
+ *
+ * @category    Tests
+ * @package     Tests
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
+
 namespace Tests;
+
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+
+/**
+ * Abstract Class DuskTestCase
+ *
+ * @category    Tests
+ * @package     Tests
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;

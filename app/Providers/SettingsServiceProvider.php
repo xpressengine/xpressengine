@@ -1,5 +1,11 @@
 <?php
 /**
+ * SettingsServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -18,6 +24,16 @@ use Xpressengine\Register\Container;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Settings\SettingsMenuPermission;
 
+/**
+ * Class SettingsServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SettingsServiceProvider extends ServiceProvider
 {
     /**
@@ -40,6 +56,11 @@ class SettingsServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         // register default manage theme.
@@ -54,13 +75,18 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerLoggers();
     }
 
+    /**
+     * Register the ui object of the permission.
+     *
+     * @return void
+     */
     private function registerPermissionUIObject()
     {
         $this->app['xe.pluginRegister']->add(SettingsPermission::class);
     }
 
     /**
-     * rgisterDefaultTheme
+     * Register the default theme.
      *
      * @return void
      */
@@ -70,6 +96,11 @@ class SettingsServiceProvider extends ServiceProvider
         SettingsTheme::boot();
     }
 
+    /**
+     * Register the setting menus.
+     *
+     * @return void
+     */
     private function registerSettingsMenus()
     {
         $menus = $this->app['config']->get('xe.settings.menus');
@@ -80,6 +111,11 @@ class SettingsServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Register the logger.
+     *
+     * @return void
+     */
     private function registerLoggers()
     {
         /** @var Container $register */

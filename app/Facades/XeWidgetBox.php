@@ -1,6 +1,6 @@
 <?php
 /**
- * XeWidgetBox
+ * XeWidgetBox.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 로 사용하기 위한 연결
+ * Class XeWidgetBox
  *
  * @category    WidgetBox
  * @package     Xpressengine\WidgetBox

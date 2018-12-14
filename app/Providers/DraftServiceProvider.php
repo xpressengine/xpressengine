@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is Draft package service provider.
+ * DraftServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Draft
- * @package     Xpressengine\Draft
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -19,10 +19,14 @@ use Xpressengine\Draft\DraftHandler;
 use Xpressengine\Draft\DraftRepository;
 
 /**
- * laravel 에서의 사용을 위한 등록 처리
+ * Class DraftServiceProvider
  *
- * @category    Draft
- * @package     Xpressengine\Draft
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class DraftServiceProvider extends ServiceProvider
 {

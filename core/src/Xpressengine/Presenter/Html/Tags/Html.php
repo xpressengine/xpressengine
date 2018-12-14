@@ -34,94 +34,84 @@ class Html
     use SortTrait;
 
     /**
-     * @var Html[] $htmlList 3차원 배열의 형태(location x position x filename)
+     * Html list
+     *
+     * @var Html[]
      */
     protected static $htmlList = [];
 
     /**
+     * The alias name list for unloads.
+     *
      * @var string[] alias list
      */
     protected static $unloaded = [];
 
     /**
+     * The number of sequence.
+     *
      * @var int
      */
     protected static $aliasSeq = 1;
 
     /**
-     * @var string 해당 인스턴스에 포함된 파일들의 파일명 목록
-     */
-    protected $html;
-
-    /**
-     * @var int|null
+     * The name of this object.
+     *
+     * @var int|string
      */
     protected $alias;
 
     /**
+     * The content of this object.
+     *
      * @var string|callable
      */
     protected $content;
 
     /**
-     * @var bool
-     */
-    protected $loaded = false;
-
-    /**
      * 주어진 위치에 해당하는 로드된 JS파일 목록을 출력한다.
      *
      * @param string $location 출력할 파일의 위치 (head.append|head.prepend|body.append|body.prepend)
-     *
      * @return string
      */
     public static function output($location)
     {
         $output = '';
 
-        if (static::$sorter === null) {
+        if (!$list = array_get(static::$htmlList, $location)) {
             return $output;
         }
 
-        // get files by location
-        // $list is assoc array(filename => Html instance)
-        $list = array_get(static::$htmlList, $location, []);
+        foreach (static::getSorted($location) as $name) {
+            if (in_array($name, static::$unloaded) || !isset($list[$name])) {
+                continue;
+            }
 
-        $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
-
-        array_map(
-            function ($alias) use ($list, &$output) {
-                $htmlObj = $list[$alias];
-                if (is_string($alias)) {
-                    $output .= "<!-- $alias -->".PHP_EOL;
-                }
-                $output .= $htmlObj->render();
-            },
-            $sorted
-        );
+            if (is_string($name)) {
+                $output .= "<!-- $name -->".PHP_EOL;
+            }
+            $output .= $list[$name]->render();
+        }
 
         return $output;
     }
 
     /**
      * init 전역 메소드이며, javascript 파일의 목록을 관리하기 위해 필요한 초기 작업으로
-     * sorter와 file list를 설정한다.
+     * html list를 설정한다.
      *
-     * @param array  $htmlList js file의 목록
-     * @param Sorter $sorter   우선순위 정렬을 위한 sorter
-     *
+     * @param array $htmlList html content 의 목록
      * @return void
      */
-    public static function init($htmlList = [], $sorter = null)
+    public static function init($htmlList = [])
     {
-        static::$sorter = $sorter === null ? new Sorter() : $sorter;
         static::$htmlList = $htmlList;
     }
 
     /**
      * 생성자. 태그 별칭을 전달받는다.
      *
-     * @param string|array|null $alias 파일경로
+     * @param string|null $alias 파일경로
      */
     public function __construct($alias = null)
     {
@@ -135,7 +125,6 @@ class Html
      * content
      *
      * @param string $content content
-     *
      * @return $this
      */
     public function content($content)
@@ -151,44 +140,13 @@ class Html
      */
     public function load()
     {
-        if ($this->loaded) {
-            return $this;
-        }
+        $location = $this->getLocations()[0];
+        static::$htmlList = array_add(static::$htmlList, $location, []);
 
-        if (static::$sorter === null || !static::$sorter instanceof Sorter) {
-            static::$sorter = new Sorter();
-        }
-
-        // add file to output list
-        static::$htmlList = array_add(static::$htmlList, $this->location, []);
-
-        list($element, $position) = explode('.', $this->location);
+        list($element, $position) = explode('.', $location);
         static::$htmlList[$element][$position][$this->alias] = $this;
 
-        $added = false;
-
-        // add before
-        if (!empty($this->befores)) {
-            $added = true;
-            static::$sorter->add($this->alias, Sorter::BEFORE, $this->befores);
-        }
-
-        // add after
-        if (!empty($this->afters)) {
-            $added = true;
-            static::$sorter->add($this->alias, Sorter::AFTER, $this->afters);
-        }
-
-        // add alias to sorter
-        if (!$added) {
-            static::$sorter->add($this->alias);
-        }
-
-        // remove alias from 'unloaded' list
-        unset(static::$unloaded[$this->alias]);
-
-        // set loaded flag
-        $this->loaded = true;
+        $this->sort($this->alias, $location);
 
         return $this;
     }
@@ -223,7 +181,6 @@ class Html
      * key resolver
      *
      * @param string $alias alias
-     *
      * @return string
      */
     protected function resolveKey($alias)

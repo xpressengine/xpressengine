@@ -1,6 +1,6 @@
 <?php
 /**
- * XeConfig
+ * XeConfig.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 로 이용 하기위해 선언되어진 클래스
+ * Class XeConfig
  *
  * @category    Config
  * @package     Xpressengine\Config

@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * SettingsMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -13,8 +19,23 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class SettingsMigration extends Migration {
-
+/**
+ * Class SettingsMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class SettingsMigration extends Migration
+{
+    /**
+     * Run after installation.
+     *
+     * @return void
+     */
     public function installed()
     {
         $now = Carbon::now()->format('Y-m-d H:i:s');
@@ -30,10 +51,9 @@ class SettingsMigration extends Migration {
     }
 
     /**
-     * 서비스에 필요한 자체 환경(타 서비스와 연관이 없는 환경)을 구축한다.
-     * 서비스의 db table 생성과 같은 migration 코드를 작성한다.
+     * Run when install the application.
      *
-     * @return mixed
+     * @return void
      */
     public function install()
     {
@@ -55,33 +75,4 @@ class SettingsMigration extends Migration {
             $table->primary('id');
         });
     }
-
-    /**
-     * 서비스가 업데이트되었을 경우, update()메소드를 실행해야 하는지의 여부를 체크한다.
-     * update()메소드를 실행해야 한다면 false를 반환한다.
-     *
-     * @param string $installedVersion current version
-     *
-     * @return bool
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        return Schema::hasTable('admin_log');
-    }
-
-    /**
-     * update 코드를 실행한다.
-     *
-     * @param string $installedVersion current version
-     *
-     * @return mixed
-     */
-    public function update($installedVersion = null)
-    {
-        if (!Schema::hasTable('admin_log')) {
-            $this->install();
-        }
-    }
-
-
 }

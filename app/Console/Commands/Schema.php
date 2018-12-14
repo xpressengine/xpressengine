@@ -1,6 +1,6 @@
 <?php
 /**
- * Database command class. This file is part of the Xpressengine package.
+ * Schema.php
  *
  * PHP version 7
  *
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Database\DatabaseHandler;
 
 /**
- * command
+ * Class Schema
  *
  * ## 명령어 사용
  * ```
@@ -37,13 +37,16 @@ use Xpressengine\Database\DatabaseHandler;
  */
 class Schema extends Command
 {
-
     /**
+     * The console command name.
+     *
      * @var string
      */
     protected $name = 'db:schema-cache';
 
     /**
+     * The console command description.
+     *
      * @var string
      */
     protected $description = 'Cache database table schema';

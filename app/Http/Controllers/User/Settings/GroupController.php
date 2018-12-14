@@ -1,5 +1,11 @@
 <?php
 /**
+ * GroupController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -15,6 +21,16 @@ use XeDB;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 
+/**
+ * Class GroupController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User\Settings
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class GroupController extends Controller
 {
     /**
@@ -31,7 +47,7 @@ class GroupController extends Controller
     }
 
     /**
-     * show group list
+     * Show group list
      *
      * @return \Xpressengine\Presenter\Presentable
      */
@@ -46,7 +62,7 @@ class GroupController extends Controller
     }
 
     /**
-     * show group creation page
+     * Show group creation page
      *
      * @return \Xpressengine\Presenter\Presentable
      */
@@ -56,10 +72,9 @@ class GroupController extends Controller
     }
 
     /**
-     * store group
+     * Store group
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -84,10 +99,9 @@ class GroupController extends Controller
     }
 
     /**
-     * show group editing page
+     * Show group editing page
      *
-     * @param $id
-     *
+     * @param string $id identifier
      * @return \Xpressengine\Presenter\Presentable
      */
     public function edit($id)
@@ -97,11 +111,10 @@ class GroupController extends Controller
     }
 
     /**
-     * postEdit
+     * Update group information.
      *
-     * @param Request $request
-     * @param         $id
-     *
+     * @param Request $request request
+     * @param string  $id      identifier
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -127,6 +140,12 @@ class GroupController extends Controller
         ]);
     }
 
+    /**
+     * Set the group to be registered when the user registered.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function updateJoinGroup(Request $request)
     {
         $this->validate($request, ['join_group' => 'required']);
@@ -146,10 +165,9 @@ class GroupController extends Controller
     }
 
     /**
-     * delete group
+     * Delete a group
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -181,10 +199,9 @@ class GroupController extends Controller
     }
 
     /**
-     * search Group
+     * Search group
      *
-     * @param null $keyword
-     *
+     * @param string|null $keyword keyword
      * @return \Xpressengine\Presenter\Presentable
      */
     public function search($keyword = null)

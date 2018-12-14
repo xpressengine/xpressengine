@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * TranslationMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -13,8 +19,23 @@ use Schema;
 use XeLang;
 use Xpressengine\Support\Migration;
 
-class TranslationMigration extends Migration {
-
+/**
+ * Class TranslationMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class TranslationMigration extends Migration
+{
+    /**
+     * Run when install the application.
+     *
+     * @return void
+     */
     public function install()
     {
         Schema::create('translation', function (Blueprint $table) {
@@ -31,6 +52,11 @@ class TranslationMigration extends Migration {
         });
     }
 
+    /**
+     * Run after service activation.
+     *
+     * @return void
+     */
     public function init()
     {
         // initialize
@@ -38,13 +64,26 @@ class TranslationMigration extends Migration {
         app('xe.translator')->importLaravel(app()->langPath());
     }
 
+    /**
+     * Run when update the application.
+     *
+     * @param string $installedVersion current version
+     * @return void
+     */
     public function update($installedVersion = null)
     {
         $this->init();
     }
 
+    /**
+     * Determine if executed the migration when application update.
+     *
+     * @param string $installedVersion current version
+     * @return bool
+     */
     public function checkUpdated($installedVersion = null)
     {
+        // update 시 항상 실행되도록 함.
         return false;
     }
 }

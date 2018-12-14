@@ -17,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Http\Request;
 use Xpressengine\Log\AbstractLogger;
 use Xpressengine\Log\Models\Log;
+use Xpressengine\User\Rating;
 
 /**
  * @category    Log
@@ -101,9 +102,9 @@ class UserLogger extends AbstractLogger
                     $request = request();
 
                     $ratingNames = [
-                        'user' => xe_trans('xe::userRatingNormal'),
-                        'manager' => xe_trans('xe::userRatingManager'),
-                        'super' => xe_trans('xe::userRatingAdministrator'),
+                        Rating::USER => xe_trans('xe::userRatingNormal'),
+                        Rating::MANAGER => xe_trans('xe::userRatingManager'),
+                        Rating::SUPER => xe_trans('xe::userRatingAdministrator'),
                     ];
 
                     $summary = '회원 권한 수정 (' . $updateUser['userDisplayName'] . ' : '

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Kernel.php
+ *
+ * PHP version 7
+ *
+ * @category    Http
+ * @package     App\Http
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 namespace App\Http;
 
@@ -6,6 +16,14 @@ use App\ModeCheckTrait;
 use App\ResetProvidersTrait;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
+/**
+ * Class Kernel
+ *
+ * @category    Http
+ * @package     App\Http
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class Kernel extends HttpKernel
 {
     use ResetProvidersTrait, ModeCheckTrait;

@@ -1,5 +1,11 @@
 <?php
 /**
+ * DefaultSkin.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Category
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,9 +17,17 @@ namespace App\FieldSkins\Category;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\DynamicField\AbstractSkin;
-use Xpressengine\Config\ConfigEntity;
-use View;
 
+/**
+ * Class DefaultSkin
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Category
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DefaultSkin extends AbstractSkin
 {
     protected static $id = 'fieldType/xpressengine@Category/fieldSkin/xpressengine@default';
@@ -84,8 +98,8 @@ class DefaultSkin extends AbstractSkin
         $category = Category::find($this->config->get('category_id'));
 
         $item = null;
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -100,14 +114,14 @@ class DefaultSkin extends AbstractSkin
      * 조회할 때 사용 될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return \Illuminate\View\View
      */
     public function show(array $args)
     {
         $item = null;
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -121,7 +135,7 @@ class DefaultSkin extends AbstractSkin
      * 리스트에서 검색할 때 검색 form 에 사용될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return string
      */
     public function search(array $args)
@@ -134,8 +148,8 @@ class DefaultSkin extends AbstractSkin
 
         $item = null;
 
-        if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
+        if (isset($args[$this->config->get('id') . '_item_id'])) {
+            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
         }
 
         $this->addMergeData([
@@ -147,17 +161,19 @@ class DefaultSkin extends AbstractSkin
     }
 
     /**
-     * @param string $name
-     * @param array $args
+     * Returns output for field
+     *
+     * @param string $name field name
+     * @param array  $args arguments
+     * @return null|string
      */
     public function output($name, array $args)
     {
-        $key = $name.'ItemId';
+        $key = $name . '_item_id';
         if (isset($args[$key]) === false || $args[$key] == '') {
             return null;
         }
 
-        return xe_trans(CategoryItem::itemFind($args[$key])->word);
+        return xe_trans(CategoryItem::find($args[$key])->word);
     }
-
 }

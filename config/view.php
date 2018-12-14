@@ -1,4 +1,13 @@
 <?php
+/**
+ * view.php
+ *
+ * PHP version 7
+ *
+ * @category    Config
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 return [
 
@@ -35,8 +44,13 @@ return [
 	| Error View Path
 	|--------------------------------------------------------------------------
 	|
-	| This option using by Exception/Handler
+	| This option using by Exception/Handler.
+	|  - if use file in the plugin : 'path' => 'plugin_name::view.path'
+	|  - without theme : 'theme' => false
 	|
 	*/
-	'error' => 'errors',
+    'error' => [
+        'path' => 'errors',
+        'theme' => true,
+    ],
 ];

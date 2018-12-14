@@ -1,4 +1,16 @@
 <?php
+/**
+ * PluginInstall.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Xpressengine\Interception\InterceptionHandler;
@@ -6,6 +18,18 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class PluginInstall
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginInstall extends PluginCommand
 {
     /**
@@ -51,9 +75,6 @@ class PluginInstall extends PluginCommand
      */
     public function handle()
     {
-        // 설치가능 환경인지 검사
-        $this->prepareComposer();
-
         $data = $this->getPluginData($this->argument('plugin'));
 
         // 플러그인 정보 출력
@@ -87,12 +108,10 @@ class PluginInstall extends PluginCommand
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        $result = $this->writeResult($result);
-
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        if($result) {
+        if($result === 0) {
             $installed = array_get($changed, 'installed', []);
             if (count($installed) < 1) {
                 $this->output->error(
@@ -120,13 +139,12 @@ class PluginInstall extends PluginCommand
             }
 
         }
-        $this->clear();
     }
 
     /**
-     * Get plugins data
+     * Get plugins data.
      *
-     * @param array $plugins
+     * @param array $plugins plugins
      * @return array
      * @throws \Exception
      */
@@ -151,7 +169,7 @@ class PluginInstall extends PluginCommand
     /**
      * Write require to composer.plugins.json
      *
-     * @param array $data
+     * @param array $data require information
      * @return void
      */
     protected function writeRequire($data)
@@ -168,9 +186,9 @@ class PluginInstall extends PluginCommand
     }
 
     /**
-     * Activate plugins
+     * Activate plugins.
      *
-     * @param array $ids
+     * @param array $ids plugin ids
      * @return void
      */
     private function activate($ids)

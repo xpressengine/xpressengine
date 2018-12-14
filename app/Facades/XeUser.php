@@ -1,6 +1,6 @@
 <?php
 /**
- * XeUser
+ * XeUser.php
  *
  * PHP version 7
  *
@@ -17,7 +17,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * 그룹처리기능을 facade를 이용하여 할 수 있게 하기 위함.
+ * Class XeUser
  *
  * @category    User
  * @package     Xpressengine\User

@@ -1,5 +1,11 @@
 <?php
 /**
+ * PluginServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -22,6 +28,16 @@ use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugin\PluginScanner;
 
+/**
+ * Class PluginServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class PluginServiceProvider extends ServiceProvider
 {
     /**
@@ -38,6 +54,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerPluginHandler();
     }
 
+    /**
+     * Register the plugin register.
+     *
+     * @return void
+     */
     protected function registerPluginRegister()
     {
         $this->app->singleton(
@@ -57,6 +78,11 @@ class PluginServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Register the plugin scanner.
+     *
+     * @return void
+     */
     protected function registerPluginScanner()
     {
         $this->app->singleton(
@@ -73,7 +99,11 @@ class PluginServiceProvider extends ServiceProvider
         );
     }
 
-
+    /**
+     * Register the plugin handler.
+     *
+     * @return void
+     */
     protected function registerPluginHandler()
     {
         $this->app->singleton(PluginHandler::class, function ($app) {
@@ -109,6 +139,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->alias(PluginHandler::class, 'xe.plugin');
     }
 
+    /**
+     * Register the plugin provider.
+     *
+     * @return void
+     */
     protected function registerPluginProvider()
     {
         $this->app->singleton(PluginProvider::class, function ($app) {
@@ -120,6 +155,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->alias(PluginProvider::class, 'xe.plugin.provider');
     }
 
+    /**
+     * Register the composer writer.
+     *
+     * @return void
+     */
     protected function registerComposerWriter()
     {
         $this->app->singleton(ComposerFileWriter::class, function ($app) {
@@ -156,6 +196,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerSettingsPermissions();
     }
 
+    /**
+     * Register the settings permission.
+     *
+     * @return void
+     */
     private function registerSettingsPermissions()
     {
         $permissions = [

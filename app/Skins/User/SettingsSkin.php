@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * SettingsSkin.php
  *
  * PHP version 7
  *
- * @category    User
- * @package     Xpressengine\User
+ * @category    Skins
+ * @package     App\Skins\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,30 +17,53 @@ namespace App\Skins\User;
 use Xpressengine\Skin\GenericSkin;
 
 /**
- * @category    User
- * @package     Xpressengine\User
+ * Class SettingsSkin
+ *
+ * @category    Skins
+ * @package     App\Skins\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class SettingsSkin extends GenericSkin
 {
-
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'user/settings/skin/xpressengine@default';
 
+    /**
+     * The information for the component
+     *
+     * @var array
+     */
     protected static $componentInfo = [
         'name' => '기본 마이페이지 스킨',
         'description' => 'Xpressengine의 기본 마이페이지 스킨입니다'
     ];
 
+    /**
+     * @var string
+     */
     protected static $path = 'user.skins.default.settings';
 
+    /**
+     * @var array
+     */
     protected static $info = [];
 
+    /**
+     * @var string
+     */
     protected static $viewDir = '';
 
     /**
-     * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.
-     * 동일한 이름의 메소드명이 존재하지 않으면, 동일한 이름의 blade 파일을 render한다.
+     * Get the evaluated contents of the object.
      *
-     * @return \Illuminate\View\View|string
+     * @return string
      */
     public function render()
     {
@@ -59,6 +82,12 @@ class SettingsSkin extends GenericSkin
         return parent::render();
     }
 
+    /**
+     * Show the view for setting.
+     *
+     * @param string $view view name
+     * @return \Illuminate\View\View
+     */
     public function edit($view)
     {
         $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
@@ -92,6 +121,4 @@ class SettingsSkin extends GenericSkin
 
         return $this->renderBlade($view);
     }
-
-
 }

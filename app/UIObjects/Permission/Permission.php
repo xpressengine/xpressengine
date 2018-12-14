@@ -1,5 +1,11 @@
 <?php
 /**
+ * Permission.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Permission
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -14,32 +20,31 @@ use Xpressengine\UIObject\AbstractUIObject;
 /**
  * Class Permission
  *
- * @package App\UIObjects\Permission
+ * @category    UIObjects
+ * @package     App\UIObjects\Permission
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class Permission extends AbstractUIObject
 {
     /**
+     * The component id
+     *
      * @var string
      */
     protected static $id = 'uiobject/xpressengine@permission';
-    /**
-     * @var
-     */
-    protected $maxShowItemDepth;
 
     /**
-     * render
+     * Get the evaluated contents of the object.
      *
      * @return string
      */
     public function render()
     {
-        XeFrontend::js([
-            '/assets/core/permission/permission.bundle.js'
-        ])->load();
-
+        XeFrontend::js('/assets/core/permission/permission.bundle.js')->load();
         XeFrontend::css('/assets/core/permission/permission.css')->load();
-
         XeFrontend::translation([
             'xe::inheritMode', 'xe::userRatingAdministrator', 'xe::userRatingManager',
             'xe::user', 'xe::guest', 'xe::userRating', 'xe::includeUserOrGroup', 'xe::excludeUser',
@@ -49,22 +54,25 @@ class Permission extends AbstractUIObject
         $htmlString = [];
         $args = $this->arguments;
 
-        $inheritMode = null;
-
         $grant = $args['grant'];
-         $title = $args['title'];
-        if (isset($args['mode'])) {
-            $inheritMode = $args['mode'];
-        }
+        $title = $args['title'];
+        $inheritMode = isset($args['mode']) ? $args['mode'] : null;
 
         $permissionJsonString = $this->getPermissionJsonString($grant, $inheritMode);
-        $htmlString[] = $this->loadReactComponent($title.'xe_permission', $title, $permissionJsonString);
+        $htmlString[] = $this->loadHtmlString($title, $permissionJsonString);
 
         $this->template = implode('', $htmlString);
 
         return parent::render();
     }
 
+    /**
+     * Convert the permission to json string.
+     *
+     * @param array       $grant       grant
+     * @param string|null $inheritMode use inherit
+     * @return string
+     */
     protected function getPermissionJsonString($grant, $inheritMode)
     {
         $permissionValueArray = [];
@@ -89,11 +97,14 @@ class Permission extends AbstractUIObject
         return json_encode($permissionValueArray);
     }
 
-    protected function permissionScript()
-    {
-    }
-
-    protected function loadReactComponent($container, $title, $jsonRet)
+    /**
+     * Load html by given data.
+     *
+     * @param string $title   title
+     * @param string $jsonRet json type string
+     * @return string
+     */
+    protected function loadHtmlString($title, $jsonRet)
     {
 
         $userSearchUrl = route('settings.user.search');

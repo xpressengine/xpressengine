@@ -68,6 +68,15 @@
                         @endforeach
                     @endforeach
                 @endif
+
+                @if($operation['log'] && $operation['status'] !== 'running')
+                    <p>
+                        <button type="button" class="xe-btn btn-link btn-sm" data-toggle="collapse" aria-expanded="false" data-target=".operation-log">콘솔보기</button>
+                        <div class="collapse operation-log">
+                            <div class="well">{!! nl2br(array_get($operation,'log')) !!}</div>
+                        </div>
+                    </p>
+                @endif
             @endif
         </div>
     </div>

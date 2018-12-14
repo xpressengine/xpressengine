@@ -1,4 +1,13 @@
 <?php
+/**
+ * app.php
+ *
+ * PHP version 7
+ *
+ * @category    Bootstrap
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 
 use Xpressengine\Http\Request;
 
@@ -6,7 +15,7 @@ use Xpressengine\Http\Request;
  * Define Xpressengine Version
  */
 if (!defined('__XE_VERSION__')) {
-    define('__XE_VERSION__', '3.0.0-rc.8');
+    define('__XE_VERSION__', '3.0.0');
 }
 
 

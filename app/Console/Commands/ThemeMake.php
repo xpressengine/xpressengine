@@ -1,17 +1,38 @@
 <?php
 /**
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * ThemeMake.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
 
+/**
+ * Class ThemeMake
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class ThemeMake extends ComponentMakeCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'make:theme
                         {plugin : The plugin where the theme will be located}
                         {name : The name of theme to create}
@@ -28,6 +49,8 @@ class ThemeMake extends ComponentMakeCommand
     protected $description = 'Create a new theme of XpressEngine';
 
     /**
+     * The type of component.
+     *
      * @var string
      */
     protected $componentType = 'theme';
@@ -35,7 +58,7 @@ class ThemeMake extends ComponentMakeCommand
     /**
      * Execute the console command.
      *
-     * @return bool|null
+     * @return void
      * @throws \Exception
      */
     public function handle()
@@ -90,7 +113,7 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * get plugin name
+     * Get plugin name.
      *
      * @return string
      */
@@ -100,7 +123,7 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * get default path for component
+     * Get default path for component.
      *
      * @return string
      */
@@ -110,6 +133,8 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
+     * Get class name.
+     *
      * @return string
      */
     protected function getClassName()
@@ -118,12 +143,10 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * getThemeId
+     * Get theme id.
      *
-     * @return array|string
+     * @return string
      * @throws \Exception
-     * @internal param $file
-     *
      */
     protected function getThemeId()
     {
@@ -152,7 +175,7 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * get component name
+     * Get component name.
      *
      * @return string
      */
@@ -162,9 +185,9 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * confirmInfo
+     * Confirm information.
      *
-     * @param Fluent|array $attr
+     * @param Fluent|array $attr attributes
      * @return bool|null
      */
     protected function confirmInfo($attr)
@@ -202,7 +225,9 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * @param Fluent|array $attr
+     * Make file for plugin by stub.
+     *
+     * @param Fluent|array $attr attributes
      * @return void
      * @throws \Exception
      */
@@ -219,9 +244,9 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * makeThemeClass
+     * Make theme class.
      *
-     * @param Fluent|array $attr
+     * @param Fluent|array $attr attributes
      * @return void
      * @throws \Exception
      */
@@ -237,7 +262,7 @@ class ThemeMake extends ComponentMakeCommand
     }
 
     /**
-     * get stub path
+     * Get stub path.
      *
      * @return string
      */

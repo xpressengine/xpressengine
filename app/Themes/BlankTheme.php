@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * BlankTheme.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Themes
+ * @package     App\Themes
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -18,38 +18,76 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Theme\AbstractTheme;
 
 /**
- * @category
+ * Class BlankTheme
+ *
+ * @category    Themes
  * @package     App\Themes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class BlankTheme extends AbstractTheme
 {
-
+    /**
+     * The component id
+     *
+     * @var string
+     */
     public static $id = 'theme/xpressengine@blankTheme';
 
+    /**
+     * @var bool
+     */
     protected static $supportDesktop = true;
+
+    /**
+     * @var bool
+     */
     protected static $supportMobile = true;
 
-    public static function hasSetting(){
+    /**
+     * Indicate if this component has the setting.
+     *
+     * @return bool
+     */
+    public static function hasSetting()
+    {
         return false;
     }
 
+    /**
+     * Returns the title for the component.
+     *
+     * @return string
+     */
     public static function getTitle()
     {
         return '테마 사용 안함';
     }
 
+    /**
+     * Returns the description for the component.
+     *
+     * @return string
+     */
     public static function getDescription()
     {
         return '테마를 출력하지 않습니다.';
     }
 
+    /**
+     * Returns the screenshot for the component.
+     *
+     * @return string
+     */
     public static function getScreenshot()
     {
         return 'assets/core/common/img/default_image_196x140.jpg';
     }
 
     /**
-     * boot
+     * Bootstrap the component.
      *
      * @return void
      */
@@ -77,11 +115,9 @@ class BlankTheme extends AbstractTheme
     }
 
     /**
-     * 테마 설정 페이지에 출력할 html 텍스트를 출력한다.
-     * 설정폼은 자동으로 생성되며 설정폼 내부에 출력할 html만 반환하면 된다.
+     * Get the view for the component setting.
      *
-     * @param ConfigEntity|null $config 기존에 설정된 설정값
-     *
+     * @param ConfigEntity|null $config config
      * @return string
      */
     public function getSettingView(ConfigEntity $config = null)

@@ -23,7 +23,7 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "wikimedia/composer-merge-plugin": "1.3.1",
-        "xpressengine/installer": "dev-develop",
+        "xpressengine/installer": "~1.1",
         "composer/composer": "1.7.1",
         "james-heinrich/getid3": "1.9.*",
         "ramsey/uuid": "~3.0",

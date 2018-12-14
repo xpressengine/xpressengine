@@ -1,12 +1,39 @@
 <?php
-
+/**
+ * DynamicFieldSkinMake.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
-
 
 use Illuminate\Support\Fluent;
 
+/**
+ * Class DynamicFieldSkinMake
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class DynamicFieldSkinMake extends ComponentMakeCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'make:fieldSkin
                         {plugin : The plugin where the skin will be located}
                         {name : The name of skin to create}
@@ -24,6 +51,8 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     protected $description = 'Create a new DynamicFieldSkin of XpressEngine';
 
     /**
+     * The type of component
+     *
      * @var string
      */
     protected $componentType = 'fieldSkin';
@@ -86,7 +115,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get plugin name
+     * Get plugin name.
      *
      * @return string
      */
@@ -96,7 +125,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get default path for component
+     * Get default path for component.
      *
      * @return string
      */
@@ -114,7 +143,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * getSkinId
+     * Get skin id.
      *
      * @return array|string
      * @throws \Exception
@@ -151,7 +180,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get target
+     * Get target.
      *
      * @return string
      */
@@ -161,7 +190,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * confirmInfo
+     * Confirm information.
      *
      * @return bool
      */
@@ -200,6 +229,8 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
+     * Make file for plugin by stub.
+     *
      * @param Fluent|array $attr
      * @return void
      * @throws \Exception
@@ -219,7 +250,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * makeThemeClass
+     * Make class file.
      *
      * @param Fluent|array $attr
      * @return void
@@ -250,7 +281,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get component name
+     * Get component name.
      *
      * @return string
      */
@@ -260,7 +291,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
     }
 
     /**
-     * get stub path
+     * Get stub path.
      *
      * @return string
      */

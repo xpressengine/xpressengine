@@ -18,6 +18,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Skin\AbstractSkin;
+use Xpressengine\User\Rating;
 
 /**
  * 이 클래스는 Xpressengine 에서 Widget 구현할 때 필요한 추상클래스이다.
@@ -38,7 +39,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     /**
      * @var array
      */
-    public static $ratingWhiteList = ['super', 'manager', 'user', 'guest'];
+    public static $ratingWhiteList = [Rating::SUPER, Rating::MANAGER, Rating::USER, Rating::GUEST];
 
     protected $config;
 

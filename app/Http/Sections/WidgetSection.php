@@ -1,5 +1,11 @@
 <?php
 /**
+ * WidgetSection.php
+ *
+ * PHP version 7
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -8,15 +14,33 @@
 
 namespace App\Http\Sections;
 
-use Comment;
-use Presenter;
 use View;
 use Xpressengine\Widget\WidgetHandler;
 
+/**
+ * Class WidgetSection
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class WidgetSection extends Section
 {
+    /**
+     * The target id
+     *
+     * @var string
+     */
     protected $targetId;
 
+    /**
+     * WidgetSection constructor.
+     *
+     * @param string $targetId target id
+     */
     public function __construct($targetId)
     {
         $this->targetId = $targetId;

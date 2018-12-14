@@ -1,11 +1,16 @@
 <?php
 /**
+ * TranslationServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 
 namespace App\Providers;
 
@@ -19,6 +24,16 @@ use Xpressengine\Translation\TransCache;
 use Xpressengine\Translation\TransCachedDatabase;
 use Xpressengine\Translation\Translator;
 
+/**
+ * Class TranslationServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class TranslationServiceProvider extends ServiceProvider
 {
     /**
@@ -83,6 +98,11 @@ class TranslationServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register()
     {
         $this->app->singleton(Translator::class, function ($app) {

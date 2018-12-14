@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is ToggleMenu package service provider.
+ * ToggleMenuServiceProvider.php
  *
  * PHP version 7
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -18,10 +18,14 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\ToggleMenu\ToggleMenuHandler;
 
 /**
- * laravel 에서의 사용을 위한 등록 처리
+ * Class ToggleMenuServiceProvider
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class ToggleMenuServiceProvider extends ServiceProvider
 {

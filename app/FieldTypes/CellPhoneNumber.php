@@ -1,10 +1,15 @@
 <?php
 /**
+ * CellPhoneNumber.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @see         https://ko.wikipedia.org/wiki/대한민국의_전화번호_체계
  */
 
 namespace App\FieldTypes;
@@ -13,9 +18,18 @@ use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
-use XeRegister;
 use View;
 
+/**
+ * Class CellPhoneNumber
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class CellPhoneNumber extends AbstractType
 {
     /**
@@ -102,7 +116,7 @@ class CellPhoneNumber extends AbstractType
     /**
      * register phone number validator
      *
-     * @return bool
+     * @return void
      */
     protected function registerValidator()
     {

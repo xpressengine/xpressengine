@@ -1,5 +1,11 @@
 <?php
 /**
+ * DefaultSkin.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Number
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -9,9 +15,17 @@
 namespace App\FieldSkins\Number;
 
 use Xpressengine\DynamicField\AbstractSkin;
-use Xpressengine\Config\ConfigEntity;
-use View;
 
+/**
+ * Class DefaultSkin
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Number
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class DefaultSkin extends AbstractSkin
 {
     protected static $id = 'fieldType/xpressengine@Number/fieldSkin/xpressengine@NumberDefault';

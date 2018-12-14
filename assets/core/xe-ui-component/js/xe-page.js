@@ -230,9 +230,9 @@
 
     var pageOptions = $.extend(defaultOptions, {
       success: function (data) {
-        var exposed = data._XE_ || { assets: [], js: [] }
-        var css = exposed.assets.css || []
-        var js = exposed.assets.js || []
+        var exposed = XE._.get(data, '_XE_', { })
+        var css = XE._.get(exposed, 'assets.css', [])
+        var js = XE._.get(exposed, 'assets.js', [])
         var html = data.result || ''
         var cssLen = css.length
         var jsLen = js.length

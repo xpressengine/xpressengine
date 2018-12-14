@@ -1,15 +1,15 @@
 <?php
 /**
- * Service provider
+ * PresenterServiceProvider.php
  *
  * PHP version 7
  *
- * @category  Providers
- * @package   App\Providers
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\Providers;
@@ -23,10 +23,14 @@ use Xpressengine\Presenter\Redirector;
 use Xpressengine\Routing\InstanceConfig;
 
 /**
- * Presenter Service Provider
+ * Class PresenterServiceProvider
  *
- * @category  Providers
- * @package   App\Providers
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class PresenterServiceProvider extends ServiceProvider
 {
@@ -43,7 +47,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * boot
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -70,7 +74,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * register presenter
+     * Register the presenter
      *
      * @return void
      */
@@ -116,7 +120,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * register frontend
+     * Register the frontend handler
      *
      * @return void
      */
@@ -145,6 +149,11 @@ class PresenterServiceProvider extends ServiceProvider
         $this->app->alias(FrontendHandler::class, 'xe.frontend');
     }
 
+    /**
+     * Register the redirector.
+     *
+     * @return void
+     */
     private function registerRedirector()
     {
         $this->app->singleton('xe.redirect', function ($app) {
@@ -162,7 +171,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadDefaultFiles
+     * Load default assets.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -183,7 +192,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadTitle
+     * Load the title for the application.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -195,7 +204,7 @@ class PresenterServiceProvider extends ServiceProvider
     }
 
     /**
-     * loadIcon
+     * Load the icon for the application.
      *
      * @param FrontendHandler $frontendHandler frontend handler
      * @return void
@@ -209,5 +218,4 @@ class PresenterServiceProvider extends ServiceProvider
                 $frontendHandler->icon($icon)->load();
         }
     }
-
 }

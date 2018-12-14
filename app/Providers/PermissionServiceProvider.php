@@ -1,11 +1,11 @@
 <?php
 /**
- * Class PermissionServiceProvider
+ * PermissionServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Permission
- * @package     Xpressengine\Permission
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -24,13 +24,23 @@ use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\InstancePolicy;
 
 /**
- * laravel 에서의 구동을 위해 현재 패키지를 등록
+ * Class PermissionServiceProvider
  *
- * @category    Permission
- * @package     Xpressengine\Permission
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
+
 class PermissionServiceProvider extends ServiceProvider
 {
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
     protected $policies = [
         Instance::class => InstancePolicy::class
     ];

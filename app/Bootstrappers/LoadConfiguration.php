@@ -1,18 +1,39 @@
 <?php
+/**
+ * LoadConfiguration.php
+ *
+ * PHP version 7
+ *
+ * @category    Bootstrappers
+ * @package     App\Bootstrappers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 namespace App\Bootstrappers;
 
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration as BaseLoadConfiguration;
 
+/**
+ * Class LoadConfiguration
+ *
+ * @category    Bootstrappers
+ * @package     App\Bootstrappers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class LoadConfiguration extends BaseLoadConfiguration
 {
     /**
      * Load the configuration items from all of the files.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application $app
-     * @param  \Illuminate\Contracts\Config\Repository      $repository
-     *
+     * @param \Illuminate\Contracts\Foundation\Application $app        Application instance
+     * @param \Illuminate\Contracts\Config\Repository      $repository Repository instance
      * @return void
      */
     protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
@@ -45,10 +66,9 @@ class LoadConfiguration extends BaseLoadConfiguration
     /**
      * Merge the items in the given files into the items.
      *
-     * @param RepositoryContract $repository
-     * @param string             $env
-     * @param array              $filesByEnv
-     *
+     * @param RepositoryContract $repository Repository instance
+     * @param string             $env        environment
+     * @param array              $filesByEnv the files matched by env
      * @return void
      */
     protected function mergeEnv(RepositoryContract $repository, $env, $filesByEnv)

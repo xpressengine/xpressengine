@@ -1,15 +1,15 @@
 <?php
 /**
- * Class MenuController
+ * MenuController.php
  *
  * PHP version 7
  *
- * @category  App\Http\Controllers
- * @package   App\Http\Controllers
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\Http\Controllers;
@@ -36,7 +36,7 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 /**
  * Class MenuController
  *
- * @category    App
+ * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
@@ -48,7 +48,7 @@ class MenuController extends Controller
     use PermissionSupport;
 
     /**
-     * index
+     * Show menu
      *
      * @return Presentable
      */
@@ -76,8 +76,7 @@ class MenuController extends Controller
     }
 
     /**
-     * create
-     * 새로운 메뉴를 생성하는 페이지
+     * Show the create form for the menu.
      *
      * @return Presentable
      */
@@ -92,12 +91,10 @@ class MenuController extends Controller
     }
 
     /**
-     * store
-     * 새로운 메뉴 생성을 처리하는 메소드
+     * Store new menu.
      *
-     * @param Request $request
-     * @return mixed
-     * @throws Exception
+     * @param Request $request request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
@@ -136,11 +133,10 @@ class MenuController extends Controller
     }
 
     /**
-     * edit
+     * Show the edit form for the menu.
      *
-     * @param string      $menuId  string menu id
-     *
-     * @return \Xpressengine\Presenter\Presentable
+     * @param string $menuId menu id
+     * @return Presentable
      */
     public function edit($menuId)
     {
@@ -151,13 +147,11 @@ class MenuController extends Controller
     }
 
     /**
-     * update
+     * Update a menu.
      *
-     * @param Request $request
-     * @param string  $menuId  to update menu entity object id
-     *
+     * @param Request $request request
+     * @param string  $menuId  menu id
      * @return RedirectResponse
-     * @throws Exception
      */
     public function update(Request $request, $menuId)
     {
@@ -195,28 +189,23 @@ class MenuController extends Controller
     }
 
     /**
-     * permit
+     * Show the permit form for the menu.
      *
-     * @param string      $menuId  menu id
-     *
+     * @param string $menuId menu id
      * @return Presentable
      */
     public function permit($menuId)
     {
         $menu = XeMenu::menus()->find($menuId);
 
-        return XePresenter::make(
-            'menu.delete',
-            ['menu' => $menu]
-        );
+        return XePresenter::make('menu.delete', ['menu' => $menu]);
     }
 
 
     /**
-     * destroy
+     * Delete a menu.
      *
-     * @param string      $menuId  to delete menu entity object id
-     *
+     * @param string $menuId menu id
      * @return RedirectResponse
      */
     public function destroy($menuId)
@@ -240,10 +229,9 @@ class MenuController extends Controller
     }
 
     /**
-     * editMenuPermission
+     * Show the edit form for the menu permission.
      *
-     * @param string      $menuId menu id
-     *
+     * @param string $menuId menu id
      * @return Presentable
      */
     public function editMenuPermission($menuId)
@@ -252,20 +240,15 @@ class MenuController extends Controller
 
         $permArgs = $this->getPermArguments($menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
 
-        return XePresenter::make(
-            'menu.permission',
-            array_merge(['menu' => $menu], $permArgs)
-        );
+        return XePresenter::make('menu.permission', array_merge(['menu' => $menu], $permArgs));
     }
 
     /**
-     * updateMenuPermission
+     * Update menu permission
      *
-     * @param Request     $request request
-     * @param string      $menuId  menu id
-     *
+     * @param Request $request request
+     * @param string  $menuId  menu id
      * @return RedirectResponse
-     * @throws Exception
      */
     public function updateMenuPermission(Request $request, $menuId)
     {
@@ -287,32 +270,27 @@ class MenuController extends Controller
     }
 
     /**
-     * selectType
+     * Show the type select form for the menu item.
      *
-     * @param Request $request
-     * @param string  $menuId menu id
-     *
+     * @param Request $request request
+     * @param string  $menuId  menu id
      * @return Presentable
      */
     public function selectType(Request $request, $menuId)
     {
         $parent = $request->get('parent', $menuId);
 
-        return XePresenter::make(
-            'menu.selectItemType',
-            [
-                'menuId' => $menuId,
-                'parent' => $parent
-            ]
-        );
+        return XePresenter::make('menu.selectItemType', [
+            'menuId' => $menuId,
+            'parent' => $parent
+        ]);
     }
 
     /**
-     * createItem
+     * Show the create from for the menu item.
      *
-     * @param Request       $request
-     * @param string        $menuId        menu id
-     *
+     * @param Request $request request
+     * @param string  $menuId  menu id
      * @return Presentable
      */
     public function createItem(Request $request, $menuId)
@@ -329,28 +307,23 @@ class MenuController extends Controller
         $menuTypeObj = XeMenu::getModuleHandler()->getModuleObject($selectedMenuType);
         $menuMaxDepth = config('xe.menu.maxDepth');
 
-        return XePresenter::make(
-            'menu.createItem',
-            [
-                'menu' => $menu,
-                'menuType' => $menuTypeObj,
-                'siteKey' => $siteKey,
-                'maxDepth' => $menuMaxDepth,
-                'parent' => $parent,
-                'selectedType' => $selectedMenuType,
-                'menuConfig' => $menuConfig
-            ]
-        );
+        return XePresenter::make('menu.createItem', [
+            'menu' => $menu,
+            'menuType' => $menuTypeObj,
+            'siteKey' => $siteKey,
+            'maxDepth' => $menuMaxDepth,
+            'parent' => $parent,
+            'selectedType' => $selectedMenuType,
+            'menuConfig' => $menuConfig
+        ]);
     }
 
     /**
-     * storeItem
+     * Store a new menu item.
      *
-     * @param Request $request
+     * @param Request $request request
      * @param string  $menuId  where to store
-     *
-     * @return $this|RedirectResponse
-     * @throws Exception
+     * @return RedirectResponse
      */
     public function storeItem(Request $request, $menuId)
     {
@@ -413,12 +386,10 @@ class MenuController extends Controller
     }
 
     /**
-     * editItem
-     * 선택된 메뉴의 아이템을 view & edit 페이지 구성
+     * Show the edit form for the menu item.
      *
-     * @param string        $menuId  menu id
-     * @param string        $itemId  item id
-     *
+     * @param string $menuId menu id
+     * @param string $itemId item id
      * @return Presentable
      */
     public function editItem($menuId, $itemId)
@@ -447,30 +418,24 @@ class MenuController extends Controller
         }
         $parentConfig = $itemConfig->getParent();
 
-        return XePresenter::make(
-            'menu.editItem',
-            [
-                'menu' => $menu,
-                'item' => $item,
-                'homeId' => $homeId,
-                'menuType' => $menuType,
-                'parentThemeMode' => $parentThemeMode,
-                'itemConfig' => $itemConfig,
-                'parentConfig' => $parentConfig
-            ]
-        );
+        return XePresenter::make('menu.editItem', [
+            'menu' => $menu,
+            'item' => $item,
+            'homeId' => $homeId,
+            'menuType' => $menuType,
+            'parentThemeMode' => $parentThemeMode,
+            'itemConfig' => $itemConfig,
+            'parentConfig' => $parentConfig
+        ]);
     }
 
     /**
-     * updateItem
-     * 메뉴 아이템 수정 처리 메소드
+     * Update a menu item.
      *
-     * @param Request $request
+     * @param Request $request request
      * @param string  $menuId  menu id
      * @param string  $itemId  item id
-     *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function updateItem(Request $request, $menuId, $itemId)
     {
@@ -531,11 +496,25 @@ class MenuController extends Controller
 
     }
 
+    /**
+     * Returns key string for the image of menu item.
+     *
+     * @param string $name image field name
+     * @return string
+     */
     protected function getItemImageKeyName($name)
     {
         return snake_case($name . 'Id');
     }
 
+    /**
+     * Register a image of menu item.
+     *
+     * @param Request  $request request
+     * @param MenuItem $item    menu item
+     * @param string   $name    image field name
+     * @return string|null
+     */
     protected function registerItemImage(Request $request, MenuItem $item, $name)
     {
         $columnKeyName = $this->getItemImageKeyName($name);
@@ -561,11 +540,10 @@ class MenuController extends Controller
     }
 
     /**
-     * permitItem
+     * Show the permit form for the menu item.
      *
      * @param string $menuId menu id
      * @param string $itemId item id
-     *
      * @return Presentable
      */
     public function permitItem($menuId, $itemId)
@@ -589,12 +567,10 @@ class MenuController extends Controller
     }
 
     /**
-     * destroyItem
-     * 메뉴 아이템 삭제 처리 메소드
+     * Delete a menu item.
      *
-     * @param string          $menuId  menu id
-     * @param string          $itemId  item id
-     *
+     * @param string $menuId  menu id
+     * @param string $itemId  item id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -632,12 +608,10 @@ class MenuController extends Controller
     }
 
     /**
-     * editItemPermission
-     * 선택된 메뉴의 아이템을 permission 을 수정하는 페이지 구성
+     * Show the edit form for the menu item permission.
      *
-     * @param string        $menuId  menu id
-     * @param string        $itemId  item id
-     *
+     * @param string $menuId menu id
+     * @param string $itemId item id
      * @return Presentable
      */
     public function editItemPermission($menuId, $itemId)
@@ -659,23 +633,19 @@ class MenuController extends Controller
             [MenuHandler::ACCESS, MenuHandler::VISIBLE]
         );
 
-        return XePresenter::make(
-            'menu.itemPermission',
-            array_merge([
-                'menu' => $menu,
-                'item' => $item,
-                'menuType' => $menuType,
-            ], $permArgs)
-        );
+        return XePresenter::make('menu.itemPermission', array_merge([
+            'menu' => $menu,
+            'item' => $item,
+            'menuType' => $menuType,
+        ], $permArgs));
     }
 
     /**
-     * updateItemPermission
+     * Update a menu item permission
      *
-     * @param Request     $request request
-     * @param string      $menuId  menu id
-     * @param string      $itemId  menu item id
-     *
+     * @param Request $request request
+     * @param string  $menuId  menu id
+     * @param string  $itemId  menu item id
      * @return RedirectResponse
      */
     public function updateItemPermission(Request $request, $menuId, $itemId)
@@ -708,9 +678,9 @@ class MenuController extends Controller
     }
 
     /**
-     * moveItem
+     * Move a menu item to another position.
      *
-     * @param Request $request
+     * @param Request $request request
      * @return Presentable
      * @throws Exception
      */
@@ -754,6 +724,12 @@ class MenuController extends Controller
         return XePresenter::makeApi($request->all());
     }
 
+    /**
+     * Classify given inputs.
+     *
+     * @param array $inputs inputs
+     * @return array
+     */
     protected function inputClassify(array $inputs)
     {
         $itemInputKeys = [
@@ -778,9 +754,9 @@ class MenuController extends Controller
     }
 
     /**
-     * setHome
+     * Set given menu item to home.
      *
-     * @param Request $request
+     * @param Request $request request
      * @return Presentable
      *
      */

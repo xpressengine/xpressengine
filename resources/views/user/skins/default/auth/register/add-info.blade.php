@@ -6,7 +6,7 @@
             <h4>{{ xe_trans('xe::descEnterAdditionalInfo') }}</h4>
 
             @foreach($fields as $field)
-                <div class="control-group">{!! $field->getSkin()->create(request()->all()) !!}</div>
+                <div class="control-group">{!! $field->getSkin()->edit($userData) !!}</div>
             @endforeach
 
             <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{xe_trans('xe::save')}}</button>

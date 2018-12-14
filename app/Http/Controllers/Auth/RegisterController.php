@@ -1,11 +1,21 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php
+/**
+ * RegisterController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeConfig;
@@ -23,6 +33,14 @@ use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
 
+/**
+ * Class RegisterController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class RegisterController extends Controller
 {
     use RedirectsUsers;
@@ -44,8 +62,16 @@ class RegisterController extends Controller
      */
     protected $emailBroker;
 
+    /**
+     * redirect path
+     *
+     * @var string
+     */
     protected $redirectTo = '/';
 
+    /**
+     * RegisterController constructor.
+     */
     public function __construct()
     {
         $this->auth = app('auth');
@@ -64,9 +90,8 @@ class RegisterController extends Controller
     /**
      * Show the application registration form.
      *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\Presentable
      */
     public function getRegister(Request $request)
     {
@@ -91,9 +116,8 @@ class RegisterController extends Controller
     /**
      * Show the application registration form.
      *
-     * @param Request $request
-     *
-     * @return Response
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
      */
     protected function getRegisterForm(Request $request)
     {
@@ -121,8 +145,8 @@ class RegisterController extends Controller
     /**
      * 회원가입시 이메일 인증 요청 처리
      *
-     * @param Request $request
-     *
+     * @param Request                 $request         request
+     * @param RegisterTokenRepository $tokenRepository RegisterTokenRepository instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -165,9 +189,9 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
      */
     public function postRegister(Request $request)
     {
@@ -220,7 +244,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * checkJoinable
+     * Indicate able to join
      *
      * @return boolean
      */
@@ -229,17 +253,30 @@ class RegisterController extends Controller
         return XeConfig::getVal('user.join.joinable') === true;
     }
 
+    /**
+     * Show additional form for user.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getRegisterAddInfo()
     {
         $fields = $this->getAdditionalField();
 
         XeFrontend::rule('add-info', $fields->map(function ($field) {
             return $field->getRules();
-        })->collapse());
+        })->collapse()->all());
 
-        return XePresenter::make('register.add-info', compact('fields'));
+        $userData = array_merge(request()->all(), \Auth::user()->getAttributes());
+
+        return XePresenter::make('register.add-info', compact('fields', 'userData'));
     }
 
+    /**
+     * Register additional information of user.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postRegisterAddInfo(Request $request)
     {
         $fields = $this->getAdditionalField();
@@ -254,6 +291,11 @@ class RegisterController extends Controller
         return redirect($this->redirectPath());
     }
 
+    /**
+     * Returns additional dynamic fields
+     *
+     * @return \Illuminate\Support\Collection
+     */
     protected function getAdditionalField()
     {
         return collect(XeDynamicField::gets('user'))->filter(function ($field) {
@@ -269,10 +311,9 @@ class RegisterController extends Controller
     }
 
     /**
-     * validate Email
+     * Validate Email
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -325,10 +366,9 @@ class RegisterController extends Controller
     }
 
     /**
-     * validate DisplayName
+     * Validate display name
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */

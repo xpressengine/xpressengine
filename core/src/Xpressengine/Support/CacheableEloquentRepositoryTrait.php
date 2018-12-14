@@ -47,7 +47,7 @@ trait CacheableEloquentRepositoryTrait
         $class = get_called_class();
         $hash = $this->makeHash($arguments);
         $cacheKey = $class.'@'.$method.'.'.$hash;
-        $cache = $this->resolveContainer('cache');
+        $cache = $this->cache();
 
         if (!$data = $cache->get($cacheKey)) {
             $data = $cache->remember($cacheKey, $this->getLifetime(), $closure);
@@ -70,7 +70,7 @@ trait CacheableEloquentRepositoryTrait
 
         if (!isset($cacheKeys[$class]) || !in_array($cacheKey, $cacheKeys[$class])) {
             $cacheKeys[$class][] = $cacheKey;
-            $this->resolveContainer('filesystem.disk')->put($this->getKeyfile(), json_encode($cacheKeys));
+            $this->cache()->forever($this->getKeyForMap(), $cacheKeys);
         }
     }
 
@@ -81,7 +81,7 @@ trait CacheableEloquentRepositoryTrait
      */
     protected function clearCache()
     {
-        $cache = $this->resolveContainer('cache');
+        $cache = $this->cache();
         $cacheKeys = $this->getCacheKeys();
 
         if ($this->getNamespace()) {
@@ -101,7 +101,7 @@ trait CacheableEloquentRepositoryTrait
             }
         }
 
-        $this->resolveContainer('filesystem.disk')->put($this->getKeyfile(), json_encode($cacheKeys));
+        $this->cache()->forever($this->getKeyForMap(), $cacheKeys);
     }
 
     /**
@@ -116,14 +116,13 @@ trait CacheableEloquentRepositoryTrait
     }
 
     /**
-     * Resolve a service instance
+     * Return cache service
      *
-     * @param string|null $service service name
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return \Illuminate\Cache\Repository;
      */
-    protected function resolveContainer($service = null)
+    protected function cache()
     {
-        return app($service);
+        return app('cache');
     }
 
     /**
@@ -133,24 +132,19 @@ trait CacheableEloquentRepositoryTrait
      */
     protected function getCacheKeys()
     {
-        $filesystem = $this->resolveContainer('filesystem.disk');
-        if (!$filesystem->exists($this->getKeyfile())) {
-            $filesystem->put($this->getKeyfile(), '');
-        }
-
-        return json_decode($filesystem->get($this->getKeyfile()), true) ?: [];
+        return $this->cache()->get($this->getKeyForMap()) ?: [];
     }
 
     /**
-     * Returns a file path for hash keys
+     * Returns a key for hash keys map
      *
      * @return string
      */
-    protected function getKeyfile()
+    protected function getKeyForMap()
     {
         $namespace = $this->getNamespace();
-        $filename = $namespace ? $namespace.'_keys' : 'keys';
-        return 'cachekeys/' . $filename;
+        $name = 'cache_key_map';
+        return $namespace ? $namespace.'_'.$name : $name;
     }
 
     /**

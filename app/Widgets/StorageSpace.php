@@ -1,5 +1,11 @@
 <?php
 /**
+ * StorageSpace.php
+ *
+ * PHP version 7
+ *
+ * @category    Widgets
+ * @package     App\Widgets
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,20 +17,28 @@ namespace App\Widgets;
 use Xpressengine\Widget\AbstractWidget;
 use Config;
 use XeStorage;
-use View;
 
 /**
- * Class StorageSpace
+ * StorageSpace
  *
  * @category    Widgets
- * @package     Xpressengine\Widgets
+ * @package     App\Widgets
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class StorageSpace extends AbstractWidget
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'widget/xpressengine@storageSpace';
 
     /**
-     * 위젯의 이름을 반환한다.
+     * Returns the title of the widget.
      *
      * @return string
      */
@@ -34,11 +48,9 @@ class StorageSpace extends AbstractWidget
     }
 
     /**
-     * render
+     * Get the evaluated contents of the object.
      *
      * @return string
-     * @internal param array $args
-     *
      */
     public function render()
     {
@@ -89,11 +101,11 @@ class StorageSpace extends AbstractWidget
     }
 
     /**
-     * getCodeCreationForm
+     * Show the setting form for the widget.
      *
-     * @param array $args
-     *
-     * @return mixed
+     * @param array $args arguments
+     * @return string|\Xpressengine\UIObject\AbstractUIObject
+     * @throws \Exception
      */
     public function renderSetting(array $args = [])
     {
@@ -109,5 +121,4 @@ class StorageSpace extends AbstractWidget
             'type' => 'fieldset'
         ]);
     }
-
 }

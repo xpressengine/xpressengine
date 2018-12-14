@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * ComposerRunTrait.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Commands
+ * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -22,9 +22,18 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Xpressengine\Plugin\Composer\Composer;
 
+/**
+ * Trait ComposerRunTrait
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 trait ComposerRunTrait
 {
-
     /**
      * prepareComposer
      *
@@ -110,15 +119,13 @@ trait ComposerRunTrait
     /**
      * runComposer
      *
-     * @param      $inputs
-     * @param bool $updateMode
-     *
+     * @param array       $inputs
+     * @param bool        $updateMode
+     * @param string|null $logFile
      * @return int
-     * @internal param $path
-     * @internal param $command
-     *
+     * @throws \Exception
      */
-    protected function runComposer($inputs, $updateMode = true)
+    protected function runComposer($inputs, $updateMode = true, $logFile = null)
     {
         ini_set('memory_limit', '-1');
 
@@ -131,13 +138,14 @@ trait ComposerRunTrait
         if ($siteToken) {
             Composer::setPackagistToken($siteToken);
         }
-        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
-        $startTime = Carbon::now()->format('YmdHis');
-        $logFileName = "logs/plugin-$startTime.log";
+        if (!$logFile) {
+            $startTime = Carbon::now()->format('YmdHis');
+            $logFile = "logs/composer-$startTime.log";
+        }
 
         file_put_contents(
-            storage_path($logFileName),
+            $logFilePath = storage_path($logFile),
             JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
         );
 
@@ -146,7 +154,7 @@ trait ComposerRunTrait
 
         return $application->run(
             new ArrayInput($inputs),
-            new StreamOutput(fopen(storage_path($logFileName), 'a', false))
+            new StreamOutput(fopen($logFilePath, 'a'))
         );
     }
 }

@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * UserMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -13,8 +19,23 @@ use DB;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class UserMigration extends Migration {
-
+/**
+ * Class UserMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class UserMigration extends Migration
+{
+    /**
+     * Run when install the application.
+     *
+     * @return void
+     */
     public function install()
     {
         Schema::create('user', function (Blueprint $table) {
@@ -153,6 +174,11 @@ class UserMigration extends Migration {
         });
     }
 
+    /**
+     * Run after installation.
+     *
+     * @return void
+     */
     public function installed()
     {
         DB::table('config')->insert([
@@ -163,6 +189,11 @@ class UserMigration extends Migration {
         ]);
     }
 
+    /**
+     * Run after service activation.
+     *
+     * @return void
+     */
     public function init()
     {
         // add default user groups
@@ -186,196 +217,4 @@ class UserMigration extends Migration {
         // set admin's group
         auth()->user()->joinGroups($joinGroup);
     }
-
-    /**
-     * 서비스가 업데이트되었을 경우, update()메소드를 실행해야 하는지의 여부를 체크한다.
-     * update()메소드를 실행해야 한다면 false를 반환한다.
-     *
-     * @param string $installedVersion current version
-     *
-     * @return bool
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        // ver.3.0.0-beta.18
-        if (!Schema::hasTable('user_register_token')) {
-            return false;
-        }
-
-        // ver.3.0.0-beta.24
-        $joinConfig = app('xe.config')->get('user.join');
-        $config = $joinConfig->getPureAll();
-        if (array_has($config, 'useEmailCertify') || array_has($config, 'useCaptcha')) {
-            return false;
-        }
-
-        // ver.3.0.0-beta.27
-        if (!Schema::hasTable('user_terms')) {
-            return false;
-        }
-
-        // ver.3.0.0-rc.1
-        if (DB::table('user')->where('rating', 'member')->count() > 0) {
-            return false;
-        }
-
-        // ver.3.0.0-rc.7
-        if (!Schema::hasTable('user_login_log')) {
-            return false;
-        }
-    }
-
-    /**
-     * update 코드를 실행한다.
-     *
-     * @param string $installedVersion current version
-     *
-     * @return mixed
-     */
-    public function update($installedVersion = null)
-    {
-        // ver.3.0.0-beta.6
-        if (Schema::hasColumn('user_group', 'count')) {
-            Schema::table('user_group', function ($table) {
-                $table->dropColumn('count');
-            });
-        }
-        if (!Schema::hasColumn('user_account', 'token_secret')) {
-            Schema::table('user_account', function ($table) {
-                $table->string('token_secret', 500);
-            });
-        }
-
-        // ver.3.0.0-beta.17
-        if (!Schema::hasColumn('user', 'login_at')) {
-            Schema::table('user', function ($table) {
-                $table->timestamp('login_at')->nullable();
-            });
-        }
-
-        // ver.3.0.0-beta.18
-        if (Schema::hasTable('password_resets')) {
-            Schema::rename('password_resets', 'user_password_resets');
-        }
-        if (Schema::hasColumn('user_account', 'data')) {
-            Schema::table('user_account', function ($table) {
-                $table->dropColumn('data');
-            });
-        }
-        if (!Schema::hasTable('user_register_token')) {
-            Schema::create('user_register_token', function (Blueprint $table) {
-                // find account password
-                $table->engine = "InnoDB";
-
-                $table->string('id', 36)->comment('user ID');
-                $table->string('guard', 100)->comment('the guard creating token');
-                $table->text('data')->comment('token data');
-                $table->timestamp('created_at')->nullable()->comment('created date');
-            });
-        }
-
-        // ver.3.0.0-beta.24
-        $joinConfig = app('xe.config')->get('user.join');
-
-        $use = $joinConfig->get('useEmailCertify');
-        if ($use !== null) {
-            $guards = $joinConfig->get('guards', []);
-            if ($use && !in_array('email', $guards)) {
-                array_unshift($guards, 'email');
-            }
-            $joinConfig->set('useEmailCertify', null);
-            $joinConfig->set('guard_forced', $use);
-            app('xe.config')->modify($joinConfig);
-        }
-        $use = $joinConfig->get('useCaptcha');
-        if ($use !== null) {
-            $guards = $joinConfig->get('guards', []);
-            if ($use && !in_array('captcha', $guards)) {
-                array_unshift($guards, 'captcha');
-            }
-            $joinConfig->set('useCaptcha', null);
-            app('xe.config')->modify($joinConfig);
-        }
-
-        // ver.3.0.0-beta.27
-        if (!Schema::hasTable('user_terms')) {
-            Schema::create('user_terms', function (Blueprint $table) {
-                $table->string('id', 36);
-                $table->string('title');
-                $table->string('content')->nullable();
-                $table->integer('order')->default(0);
-                $table->boolean('is_enabled')->default(false);
-
-                $table->primary('id');
-                $table->engine = "InnoDB";
-            });
-
-            $commonConfig = app('xe.config')->get('user.common');
-            $tos = $commonConfig->get('agreement');
-            $tosTitleKey = 'user::'.app('xe.keygen')->generate();
-            \XeLang::save($tosTitleKey, 'ko', '서비스 이용약관');
-            \XeLang::save($tosTitleKey, 'en', 'Terms of Service');
-            $tosContentKey = 'user::'.app('xe.keygen')->generate();
-            \XeLang::save($tosContentKey, 'ko', $tos);
-            app('xe.terms')->create([
-                'title' => $tosTitleKey,
-                'content' => $tosContentKey,
-                'order' => 0,
-                'is_enabled' => true,
-            ]);
-
-            $privacy = $commonConfig->get('privacy');
-            $privacyTitleKey = 'user::'.app('xe.keygen')->generate();
-            \XeLang::save($privacyTitleKey, 'ko', '개인정보 보호정책');
-            \XeLang::save($privacyTitleKey, 'en', 'Privacy Policy');
-            $privacyContentKey = 'user::'.app('xe.keygen')->generate();
-            \XeLang::save($privacyContentKey, 'ko', $privacy);
-            app('xe.terms')->create([
-                'title' => $privacyTitleKey,
-                'content' => $privacyContentKey,
-                'order' => 1,
-                'is_enabled' => true,
-            ]);
-        }
-
-        // ver.3.0.0-rc.1
-        if (DB::table('user')->where('rating', 'member')->count() > 0) {
-
-            $rows = DB::table('permissions')->get();
-            foreach ($rows as $row) {
-                $grants = json_decode($row->grants, true);
-                $update = false;
-                foreach ($grants as $action => $grant) {
-                    if (isset($grant['rating']) && $grant['rating'] === 'member') {
-                        $grant['rating'] = 'user';
-                        $update = true;
-                    }
-                    $grants[$action] = $grant;
-                }
-                if ($update) {
-                    DB::table('permissions')->where('id', $row->id)->update(['grants' => json_encode($grants)]);
-                }
-            }
-
-            DB::table('user')->where('rating', 'member')->update(['rating' => 'user']);
-        }
-
-        // ver.3.0.0-rc.7
-        if (!Schema::hasTable('user_login_log')) {
-            Schema::create('user_login_log', function (Blueprint $table) {
-                $table->engine = "InnoDB";
-
-                $table->bigIncrements('id')->comment('row id');
-                $table->string('user_id', 36)->comment('user ID');
-                $table->string('user_agent')->comment('user agent');
-                $table->string('ip', 15)->comment('ip');
-                $table->timestamp('created_at')->nullable()->comment('created date');
-
-                $table->index('user_id');
-            });
-        }
-
-    }
-
-
 }

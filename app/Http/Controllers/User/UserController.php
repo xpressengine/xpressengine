@@ -1,5 +1,11 @@
 <?php
 /**
+ * UserController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -33,6 +39,16 @@ use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\UserHandler;
 
+/**
+ * Class UserController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class UserController extends Controller
 {
     /**
@@ -83,11 +99,10 @@ class UserController extends Controller
     }
 
     /**
-     * show
+     * Show section for user setting.
      *
-     * @param Request $request
-     * @param string  $section
-     *
+     * @param Request $request request
+     * @param string  $section section
      * @return \Xpressengine\Presenter\Presentable
      */
     public function show(Request $request, $section = 'settings')
@@ -115,22 +130,20 @@ class UserController extends Controller
 
 
     /**
-     * update DisplayName
+     * Update display name of user.
      *
      * @param Request $request
-     *
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function updateDisplayName(Request $request)
     {
         $displayName = $request->get('name');
         $displayName = str_replace('  ', ' ', trim($displayName));
 
-        $user = $request->user();
-
         XeDB::beginTransaction();
         try {
-            $user = $this->handler->update($user, ['display_name' => $displayName]);
+            $this->handler->update($request->user(), ['display_name' => $displayName]);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -143,10 +156,9 @@ class UserController extends Controller
     }
 
     /**
-     * validate DisplayName
+     * Validate display name of user.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -175,7 +187,7 @@ class UserController extends Controller
     }
 
     /**
-     * update Password
+     * Update password of user.
      *
      * @param Request $request request
      * @throws Exception
@@ -183,10 +195,7 @@ class UserController extends Controller
      */
     public function updatePassword(Request $request)
     {
-        $this->validate(
-            $request,
-            ['password' => 'required|confirmed|password']
-        );
+        $this->validate($request, ['password' => 'required|confirmed|password']);
 
         $result = true;
         $message = 'success';
@@ -226,7 +235,7 @@ class UserController extends Controller
     }
 
     /**
-     * validate Password
+     * Validate password of user.
      *
      * @param Request $request request
      * @throws Exception
@@ -250,10 +259,9 @@ class UserController extends Controller
     }
 
     /**
-     * update user's main email address
+     * Update user's main email address.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function updateMainMail(Request $request)
@@ -294,6 +302,11 @@ class UserController extends Controller
         return XePresenter::makeApi(['message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * Get emails of current user.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getMailList()
     {
         $user = request()->user();
@@ -307,10 +320,9 @@ class UserController extends Controller
     }
 
     /**
-     * add email
+     * Add email to user.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -318,15 +330,7 @@ class UserController extends Controller
     {
         $input = $request->only('address');
 
-        // validation
-        $this->validate(
-            $request,
-            [
-                'address' => 'email|required'
-            ],
-            [],
-            ['address' => xe_trans('xe::email')]
-        );
+        $this->validate($request, ['address' => 'email|required'], [], ['address' => xe_trans('xe::email')]);
 
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
         $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
@@ -356,10 +360,9 @@ class UserController extends Controller
     }
 
     /**
-     * confirm email
+     * Confirm email by given code.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -389,10 +392,9 @@ class UserController extends Controller
     }
 
     /**
-     * resend pending email
+     * Resend pending email.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function resendPendingMail(Request $request)
@@ -409,10 +411,9 @@ class UserController extends Controller
     }
 
     /**
-     * delete email
+     * Delete a email.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -460,10 +461,9 @@ class UserController extends Controller
     }
 
     /**
-     * delete user's pending email
+     * Delete user's pending email
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -473,10 +473,9 @@ class UserController extends Controller
     }
 
     /**
-     * leave
+     * Leave the application.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -506,6 +505,12 @@ class UserController extends Controller
         return redirect()->to('/');
     }
 
+    /**
+     * Show additional field for user.
+     *
+     * @param string $field field id
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function showAdditionField($field)
     {
         $dynamicField = app('xe.dynamicField');
@@ -517,6 +522,12 @@ class UserController extends Controller
         return api_render('show-field', compact('user', 'fieldType', 'id'), compact('id'));
     }
 
+    /**
+     * Show edit form for additional field for user.
+     *
+     * @param string $field field id
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editAdditionField($field)
     {
         $dynamicField = app('xe.dynamicField');
@@ -528,11 +539,17 @@ class UserController extends Controller
         return api_render('edit-field', compact('user', 'fieldType', 'id'), ['id' => $id]);
     }
 
+    /**
+     * Update additional field for user.
+     *
+     * @param Request $request request
+     * @param string  $field   field id
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function updateAdditionField(Request $request, $field)
     {
         $inputs = $request->except('_token');
-        $user = $request->user();
-        $user = $this->handler->update($user, $inputs);
+        $this->handler->update($request->user(), $inputs);
         $showUrl = route('user.settings.additions.show', ['field' => $field]);
 
         return XePresenter::makeApi(

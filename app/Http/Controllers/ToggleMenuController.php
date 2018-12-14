@@ -1,5 +1,11 @@
 <?php
 /**
+ * ToggleMenuController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -9,13 +15,28 @@
 namespace App\Http\Controllers;
 
 use XeToggleMenu;
-use Input;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\ToggleMenu\AbstractToggleMenu;
 
+/**
+ * Class ToggleMenuController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ToggleMenuController extends Controller
 {
+    /**
+     * Provide the toggle menu items.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function get(Request $request)
     {
         $type = $request->get('type');
@@ -41,6 +62,12 @@ class ToggleMenuController extends Controller
         return XePresenter::makeApi($data);
     }
 
+    /**
+     * Show the toggle menu items.
+     *
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function getPage(Request $request)
     {
         $type = $request->get('type');
@@ -67,6 +94,12 @@ class ToggleMenuController extends Controller
         return api_render('toggleMenu.get', ['items' => $items]);
     }
 
+    /**
+     * Save the setting for toggle menu.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postSetting(Request $request)
     {
         $this->validate($request, ['type' => 'required']);

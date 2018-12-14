@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationRuleParser;
 
 /**
@@ -99,6 +100,10 @@ class Rule
      */
     public function __construct($ruleName, $rules)
     {
+        if ($rules instanceof Collection == true) {
+            $rules = $rules->toArray();
+        }
+
         if (isset(self::$ruleList[$ruleName]) === true) {
             $rules = array_merge($rules, self::$ruleList[$ruleName]->getRules());
         }

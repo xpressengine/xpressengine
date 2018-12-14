@@ -51,6 +51,8 @@ class Site extends Command
     protected $description = 'Update site host information';
 
     /**
+     * Create a new command instance.
+     *
      * @param SiteHandler $handler site handler
      */
     public function __construct(SiteHandler $handler)
@@ -109,10 +111,9 @@ class Site extends Command
     }
 
     /**
-     * validateHost
+     * Validate given host.
      *
      * @param string $host host
-     *
      * @return string
      */
     private function validateHost($host)

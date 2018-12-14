@@ -28,12 +28,6 @@ use Xpressengine\Support\Sorter;
  */
 trait SortTrait
 {
-
-    /**
-     * @var Sorter 우선순위 정렬을 위한 sorter
-     */
-    protected static $sorter;
-
     /**
      * @var array
      */
@@ -44,11 +38,16 @@ trait SortTrait
      */
     protected $afters = [];
 
+
+    /**
+     * @var array
+     */
+    protected static $sorted = [];
+
     /**
      * before
      *
      * @param string $befores befores
-     *
      * @return $this
      */
     public function before($befores)
@@ -68,7 +67,6 @@ trait SortTrait
      * after
      *
      * @param string $afters afters
-     *
      * @return $this
      */
     public function after($afters)
@@ -82,5 +80,56 @@ trait SortTrait
 
         $this->afters = array_merge($this->afters, (array) $afters);
         return $this;
+    }
+
+    /**
+     * Resolving by given key.
+     *
+     * @param string $key key string
+     * @return string
+     */
+    abstract protected function resolveKey($key);
+
+    /**
+     * Do sort.
+     *
+     * @param string|array $items items
+     * @param string       $group sort group
+     * @return void
+     */
+    protected function sort($items, $group = '*')
+    {
+        $items = is_array($items) ? $items : [$items];
+
+        $list = array_unique(array_merge(static::$sorted[$group] ?? [], $this->befores, $this->afters));
+
+        if (!empty($this->befores)) {
+            $list = array_values(array_diff($list, $items));
+            $indexes = array_keys(array_intersect($list, $this->befores));
+            $key = array_pop($indexes);
+            array_splice($list, $key+1, 0, $items);
+        } else {
+            $list = array_merge($list, $items);
+        }
+
+        if (!empty($this->afters)) {
+            $list = array_values(array_diff($list, $this->afters));
+            $indexes = array_keys(array_intersect($list, $items));
+            $key = array_pop($indexes);
+            array_splice($list, $key+1, 0, $this->afters);
+        }
+
+        static::$sorted[$group] = array_values(array_unique($list));
+    }
+
+    /**
+     * Get sorted list.
+     *
+     * @param string $group sort group
+     * @return array
+     */
+    public static function getSorted($group = '*')
+    {
+        return static::$sorted[$group] ?? [];
     }
 }

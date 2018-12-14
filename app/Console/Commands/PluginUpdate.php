@@ -1,4 +1,16 @@
 <?php
+/**
+ * PluginUpdate.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace App\Console\Commands;
 
 use Xpressengine\Interception\InterceptionHandler;
@@ -6,6 +18,16 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class PluginUpdate
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginUpdate extends PluginCommand
 {
     /**
@@ -26,10 +48,10 @@ class PluginUpdate extends PluginCommand
     /**
      * Create a new console command instance.
      *
-     * @param PluginHandler       $handler
-     * @param PluginProvider      $provider
-     * @param ComposerFileWriter  $writer
-     * @param InterceptionHandler $interceptionHandler
+     * @param PluginHandler       $handler             PluginHandler
+     * @param PluginProvider      $provider            PluginProvider
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler
      */
     public function __construct(
         PluginHandler $handler,
@@ -50,9 +72,6 @@ class PluginUpdate extends PluginCommand
      */
     public function handle()
     {
-        // 설치가능 환경인지 검사
-        $this->prepareComposer();
-
         $data = $this->getPluginData($this->argument('plugin'));
 
         // 플러그인 정보 출력
@@ -87,12 +106,10 @@ class PluginUpdate extends PluginCommand
         // composer 실행을 마쳤습니다
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        $result = $this->writeResult($result);
-
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        if ($result) {
+        if ($result === 0) {
             $updated = array_get($changed, 'updated', []);
             if (count($updated) < 1) {
                 $this->output->error(
@@ -117,13 +134,12 @@ class PluginUpdate extends PluginCommand
                 );
             }
         }
-        $this->clear();
     }
 
     /**
-     * Get plugins data
+     * Get plugins data.
      *
-     * @param array $plugins
+     * @param array $plugins plugins
      * @return array
      * @throws \Exception
      */
@@ -153,7 +169,7 @@ class PluginUpdate extends PluginCommand
     /**
      * Write require to composer.plugins.json
      *
-     * @param array $data
+     * @param array $data data for plugins
      * @return void
      */
     protected function writeRequire($data)

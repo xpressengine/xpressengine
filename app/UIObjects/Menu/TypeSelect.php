@@ -1,5 +1,11 @@
 <?php
 /**
+ * TypeSelect.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Menu
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,30 +17,40 @@ namespace App\UIObjects\Menu;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
- * TypeSelect
+ * Class TypeSelect
  *
  * @category    UIObjects
  * @package     App\UIObjects\Menu
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class TypeSelect extends AbstractUIObject
 {
     /**
-     * @var string uiobject id
+     * The component id
+     *
+     * @var string
      */
     protected static $id = 'uiobject/xpressengine@typeSelect';
 
     /**
-     * @var string directLink menu type id
+     * The menu type id
+     *
+     * @var string
      */
     public static $defaultSelectedId = "xpressengine@directLink";
 
     /**
-     * @var string uiobject view resource name
+     * The view name
+     *
+     * @var string
      */
     protected $view = 'uiobjects.menu.typeSelect';
 
     /**
-     * render
+     * Get the evaluated contents of the object.
      *
      * @return string
      */
@@ -48,14 +64,13 @@ class TypeSelect extends AbstractUIObject
 
         $this->template = view($this->view, compact('types', 'selectedTypeId'))->render();
 
-
         $this->loadFiles();
 
         return parent::render();
     }
 
     /**
-     * loadFiles
+     * Load assets
      *
      * @return void
      */

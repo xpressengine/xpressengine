@@ -1,5 +1,11 @@
 <?php
 /**
+ * CategoryController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -19,8 +25,24 @@ use Xpressengine\Http\Request;
 use Xpressengine\Support\Caster;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
+/**
+ * Class CategoryController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class CategoryController extends Controller
 {
+    /**
+     * Show category.
+     *
+     * @param string $id identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function show($id)
     {
         $category = XeCategory::cates()->find($id);
@@ -32,6 +54,14 @@ class CategoryController extends Controller
         return XePresenter::make('category.show', compact('category'));
     }
 
+    /**
+     * Store a item of the category.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
+     */
     public function storeItem(Request $request, $id)
     {
         /** @var Category $category */
@@ -55,6 +85,13 @@ class CategoryController extends Controller
         return XePresenter::makeApi($item->toArray());
     }
 
+    /**
+     * Update a item of the category.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function updateItem(Request $request, $id)
     {
         /** @var CategoryItem $item */
@@ -72,15 +109,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * 카테고리를 삭제
+     * Delete a item of the category.
      *
      * @param Request $request request
-     * @param integer $id      해당 게시판 id
+     * @param string  $id      identifier
      * @param bool    $force   하위카테고리 삭제 유무(true=>하위카테고리까지 삭제)
-     *
+     * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
-     *
-     * @return void
      */
     public function destroyItem(Request $request, $id, $force = false)
     {
@@ -104,6 +139,14 @@ class CategoryController extends Controller
         return XePresenter::makeApi([]);
     }
 
+    /**
+     * Move item to another position.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return void
+     * @throws Exception
+     */
     public function moveItem(Request $request, $id)
     {
         /** @var CategoryItem $item */
@@ -127,6 +170,13 @@ class CategoryController extends Controller
         DB::commit();
     }
 
+    /**
+     * Get children of a item.
+     *
+     * @param Request $request request
+     * @param string  $id      identifier
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function children(Request $request, $id)
     {
         if ($request->get('id') === null) {

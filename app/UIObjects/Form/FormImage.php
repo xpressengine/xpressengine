@@ -1,5 +1,11 @@
 <?php
 /**
+ * FormImage.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -11,12 +17,37 @@ namespace App\UIObjects\Form;
 use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
+/**
+ * Class FormImage
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class FormImage extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@formImage';
 
+    /**
+     * The view name
+     *
+     * @var string
+     */
     protected $view = 'uiobjects.form.formImage';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $this->loadAssets();
@@ -35,7 +66,7 @@ class FormImage extends AbstractUIObject
     }
 
     /**
-     * loadFiles
+     * Load assets
      *
      * @return void
      */
@@ -68,6 +99,5 @@ class FormImage extends AbstractUIObject
             XeFrontend::js($scripts)->load();
             XeFrontend::css($stylesheets)->load();
         }
-
     }
 }

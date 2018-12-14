@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is register this package for laravel
+ * UserServiceProvider.php
  *
  * PHP version 7
  *
- * @category    User
- * @package     Xpressengine\User
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -60,10 +60,14 @@ use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
 
 /**
- * laravel 에서 사용하기위해 등록처리를 하는 class
+ * Class UserServiceProvider
  *
- * @category    User
- * @package     Xpressengine\User
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class UserServiceProvider extends ServiceProvider
 {
@@ -165,6 +169,11 @@ class UserServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Register the image handler for the user.
+     *
+     * @return void
+     */
     private function registerImageHandler()
     {
         $this->app->singleton(
@@ -208,7 +217,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerToggleMenu
+     * Register the toggle menu.
      *
      * @return void
      */
@@ -219,7 +228,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerHandler
+     * Register the use handler.
      *
      * @return void
      */
@@ -243,6 +252,11 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(UserHandler::class, 'xe.user');
     }
 
+    /**
+     * Register the term handler.
+     *
+     * @return void
+     */
     private function registerTerms()
     {
         $this->app->singleton(TermsHandler::class, function ($app) {
@@ -251,6 +265,11 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(TermsHandler::class, 'xe.terms');
     }
 
+    /**
+     * Register the password validator.
+     *
+     * @return void
+     */
     private function registerPasswordValidator()
     {
         $this->app->singleton('xe.password.validator', function ($app) {
@@ -259,7 +278,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * register Repositories
+     * Register repositories.
      *
      * @return void
      */
@@ -274,6 +293,11 @@ class UserServiceProvider extends ServiceProvider
         $this->registerTermsRepository();
     }
 
+    /**
+     * Register the us repository.
+     *
+     * @return void
+     */
     protected function registerUserRepository()
     {
         $this->app->singleton(UserRepositoryInterface::class, function ($app) {
@@ -283,7 +307,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * register Accout Repository
+     * register the account repository.
      *
      * @return void
      */
@@ -296,7 +320,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * register Group Repository
+     * Register the group repository.
      *
      * @return void
      */
@@ -309,7 +333,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * register Virtual Group Repository
+     * Register the virtual group repository.
      *
      * @return void
      */
@@ -325,6 +349,11 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(VirtualGroupRepositoryInterface::class, 'xe.user.virtualGroups');
     }
 
+    /**
+     * Register the mail repository.
+     *
+     * @return void
+     */
     private function registerMailRepository()
     {
         $this->app->singleton(UserEmailRepositoryInterface::class, function ($app) {
@@ -338,6 +367,11 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
+    /**
+     * Register the term repository.
+     *
+     * @return void
+     */
     private function registerTermsRepository()
     {
         $this->app->singleton(TermsRepository::class, function ($app) {
@@ -345,6 +379,11 @@ class UserServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Set the model to the repository
+     *
+     * @return void
+     */
     private function setModels()
     {
         UserRepository::setModel(User::class);
@@ -356,7 +395,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * extendAuth
+     * Register a custom driver creator to Auth.
      *
      * @return void
      */
@@ -390,6 +429,11 @@ class UserServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Register a display name validation to config.
+     *
+     * @return void
+     */
     private function configValidation()
     {
         // set display name validation to config
@@ -425,7 +469,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * Is installed
+     * Determine if the application is installed.
      *
      * @return bool
      */
@@ -435,7 +479,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * extendEmailPrefixValidator
+     * Register validations for the user.
      *
      * @return void
      */
@@ -475,7 +519,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerDefaultSkins
+     * Register skins for the user.
      *
      * @return void
      */
@@ -487,6 +531,11 @@ class UserServiceProvider extends ServiceProvider
         $pluginRegister->add(\App\Skins\User\ProfileSkin::class);
     }
 
+    /**
+     * Register permissions for the user setting.
+     *
+     * @return void
+     */
     private function registerSettingsPermissions()
     {
         $permissions = [
@@ -505,6 +554,11 @@ class UserServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Set the profile image resolver to the user object.
+     *
+     * @return void
+     */
     private function setProfileImageResolverOfUser()
     {
         $default = $this->app['config']['xe.user.profileImage.default'];
@@ -531,6 +585,11 @@ class UserServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Add form parts to the user register.
+     *
+     * @return void
+     */
     protected function addRegisterFormParts()
     {
         RegisterFormPart::setSkinResolver($this->app['xe.skin']);
@@ -543,6 +602,11 @@ class UserServiceProvider extends ServiceProvider
         UserHandler::addRegisterPart(CaptchaPart::class);
     }
 
+    /**
+     * Set the section to the user setting.
+     *
+     * @return void
+     */
     protected function addUserSettingSection()
     {
         UserHandler::setSettingsSections('settings', [

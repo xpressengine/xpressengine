@@ -1,5 +1,11 @@
 <?php
 /**
+ * UrlSkin.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Text
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -8,10 +14,18 @@
 
 namespace App\FieldSkins\Text;
 
-use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractSkin;
-use View;
 
+/**
+ * Class UrlSkin
+ *
+ * @category    FieldSkins
+ * @package     App\FieldSkins\Text
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class UrlSkin extends AbstractSkin
 {
     protected static $id = 'fieldType/xpressengine@Text/fieldSkin/xpressengine@TextUrl';

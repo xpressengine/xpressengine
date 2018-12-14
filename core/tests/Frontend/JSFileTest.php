@@ -20,6 +20,12 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
     protected function tearDown()
     {
         \Mockery::close();
+        $prop = new \ReflectionProperty(JSFile::class, 'sorted');
+
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        $prop->setAccessible(false);
+
         parent::tearDown();
     }
 
@@ -114,8 +120,9 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
 '<!--[if gt IE 10]><!-->;<script src="path/to/file1.js"></script>
 <![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file2.js"></script>
 <![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file3.js"></script>
-<![endif]--><!--[if gt IE 10]><!-->;<script src="path/to/file4.js"></script>
-<![endif]--><script src="path/to/afterfile.js"></script>', trim($output));
+<![endif]--><script src="path/to/afterfile.js"></script>
+<!--[if gt IE 10]><!-->;<script src="path/to/file4.js"></script>
+<![endif]-->', trim($output));
     }
 
     public function testBefore2()
@@ -136,8 +143,8 @@ class JSFileTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(
 '<script src="path/to/file1.js"></script>
 <script src="path/to/target.js"></script>
-<script src="path/to/file2.js"></script>
 <script src="path/to/file3.js"></script>
+<script src="path/to/file2.js"></script>
 <script src="path/to/file4.js"></script>', trim($output));
     }
 

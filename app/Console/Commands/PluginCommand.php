@@ -1,11 +1,11 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * PluginCommand.php
  *
  * PHP version 7
  *
- * @category
- * @package     Xpressengine\
+ * @category    Commands
+ * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -22,7 +22,9 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
 /**
- * @category
+ * Class PluginCommand
+ *
+ * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -53,6 +55,14 @@ class PluginCommand extends Command
      */
     protected $writer;
 
+    /**
+     * Initialize
+     *
+     * @param PluginHandler       $handler             PluginHandler
+     * @param PluginProvider      $provider            PluginProvider
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler
+     */
     protected function init(
         PluginHandler $handler,
         PluginProvider $provider,
@@ -67,10 +77,11 @@ class PluginCommand extends Command
     }
 
     /**
-     * execute composer update
+     * Execute composer update.
      *
      * @param array $packages specific package name. no need version
      * @return int
+     * @throws \Exception
      */
     protected function composerUpdate(array $packages)
     {
@@ -79,29 +90,70 @@ class PluginCommand extends Command
             set_time_limit($this->getTimeLimit());
         }
 
-        $inputs = [
-            'command' => 'update',
-            "--with-dependencies" => true,
-            //"--quiet" => true,
-            '--working-dir' => base_path(),
-            /*'--verbose' => '3',*/
-            'packages' => $packages
-        ];
+        $startTime = Carbon::now()->format('YmdHis');
+        $this->setLogFile($logFile = "logs/plugin-{$startTime}.log");
 
-        return $this->runComposer($inputs);
-    }
+        try {
+            if (0 !== $this->clear()) {
+                throw new \Exception('cache clear fail.. check your system.');
+            }
 
-    protected function clear()
-    {
-        $this->handler->refreshPlugins();
-        $this->interceptionHandler->clearProxies();
+            $this->prepareComposer();
+
+            $inputs = [
+                'command' => 'update',
+                "--with-dependencies" => true,
+                //"--quiet" => true,
+                '--working-dir' => base_path(),
+                /*'--verbose' => '3',*/
+                'packages' => $packages
+            ];
+
+            $result = $this->runComposer($inputs, true, $logFile);
+            $this->writeResult($result);
+
+            return $result;
+        } catch (\Exception $e) {
+            $fp = fopen(storage_path($logFile), 'a');
+            fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
+            fclose($fp);
+
+            $this->writeResult(1);
+
+            throw $e;
+        }
     }
 
     /**
-     * activatePlugin
+     * Run cache clear.
      *
-     * @param $pluginId
+     * @return int
+     */
+    protected function clear()
+    {
+        $this->warn('Clears cache before Composer update runs.');
+        $result = $this->call('cache:clear');
+        $this->line(PHP_EOL);
+
+        return $result;
+    }
+
+    /**
+     * Set a file for log.
      *
+     * @param string $logFile log file path
+     * @return void
+     */
+    protected function setLogFile($logFile)
+    {
+        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
+        $this->writer->write();
+    }
+
+    /**
+     * Activate plugin.
+     *
+     * @param string $pluginId plugin id
      * @return void
      */
     protected function activatePlugin($pluginId)
@@ -114,10 +166,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * activatePlugin
+     * Update plugin.
      *
-     * @param $pluginId
-     *
+     * @param string $pluginId plugin id
      * @return void
      */
     protected function updatePlugin($pluginId)
@@ -127,9 +178,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * writeResult
+     * Write result.
      *
-     * @param $result
+     * @param int $result result code
      * @return bool
      */
     protected function writeResult($result)
@@ -149,7 +200,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * getChanged
+     * Get changed.
      *
      * @return array
      */
@@ -163,7 +214,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * getChanged
+     * Get failed.
      *
      * @return array
      */
@@ -178,10 +229,9 @@ class PluginCommand extends Command
 
 
     /**
-     * printChangedPlugins
+     * Print changed.
      *
-     * @param array $changed
-     *
+     * @param array $changed changed information
      * @return void
      */
     protected function printChangedPlugins(array $changed)
@@ -209,10 +259,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * printFailedPlugins
+     * Print failed.
      *
-     * @param array $failed
-     *
+     * @param array $failed failed information
      * @return void
      */
     protected function printFailedPlugins(array $failed)
@@ -244,9 +293,9 @@ class PluginCommand extends Command
     }
 
     /**
-     * parse plugin string
+     * Parse plugin string.
      *
-     * @param string $string
+     * @param string $string name and version
      * @return array
      */
     protected function parse($string)
@@ -259,10 +308,10 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get plugin informatin
+     * Get plugin information.
      *
-     * @param string      $id
-     * @param string|null $version
+     * @param string      $id      plugin id
+     * @param string|null $version version
      * @return array
      * @throws \Exception
      */
@@ -289,7 +338,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get expired time
+     * Get expired time.
      *
      * @return int|string
      */
@@ -301,7 +350,7 @@ class PluginCommand extends Command
     }
 
     /**
-     * Get time limit
+     * Get time limit.
      *
      * @return int
      */

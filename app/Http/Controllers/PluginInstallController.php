@@ -1,5 +1,11 @@
 <?php
 /**
+ * PluginInstallController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -18,9 +24,18 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class PluginInstallController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class PluginInstallController extends Controller
 {
-
     /**
      * PluginInstallController constructor.
      */
@@ -29,7 +44,15 @@ class PluginInstallController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request, PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
+    /**
+     * Show the list of installable plugins.
+     *
+     * @param PluginProvider     $provider PluginProvider instance
+     * @param PluginHandler      $handler  PluginHandler instance
+     * @param ComposerFileWriter $writer   ComposerFileWriter instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function index(PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $componentTypes = $this->getComponentTypes();
 
@@ -55,6 +78,14 @@ class PluginInstallController extends Controller
         );
     }
 
+    /**
+     * Show the list of plugins.
+     *
+     * @param Request        $request  request
+     * @param PluginProvider $provider PluginProvider instance
+     * @param PluginHandler  $handler  PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function items(Request $request, PluginProvider $provider, PluginHandler $handler)
     {
         $page = $request->get('page', 1);
@@ -118,7 +149,7 @@ class PluginInstallController extends Controller
     }
 
     /**
-     * getComponentTypes
+     * Returns the list of component type.
      *
      * @return array
      */
@@ -140,4 +171,3 @@ class PluginInstallController extends Controller
         return $componentTypes;
     }
 }
-

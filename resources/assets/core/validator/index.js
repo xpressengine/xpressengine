@@ -4,9 +4,10 @@ import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
-import config from 'xe/config'
 import { getForm } from 'xe/form'
 import { ValidationError } from 'xe/validator/errors/validator.error.js'
+
+import PluginMarker from './marker'
 
 const originalRules = {}
 
@@ -527,11 +528,11 @@ class Validator extends App {
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }
-          getForm(this).$$on('submit', function (eventName, formEl, jqEvent) {
+          getForm(this).$$on('submit', function (eventName, { element, event }) {
             try {
-              that.check($(formEl.element))
+              that.check($(element))
             } catch (e) {
-              jqEvent.preventDefault()
+              event.preventDefault()
               return Promise.reject(e)
             }
 
@@ -539,6 +540,8 @@ class Validator extends App {
           }, { name: 'xe.validator' })
         })
       })
+
+      this.registerPlugin(new PluginMarker())
 
       resolve(this)
     })
@@ -721,16 +724,24 @@ class Validator extends App {
         const $field = $form.find(`[name="${name}"]`)
         const result = that.evaluator[evaluatorName]($field, options)
 
-        if (result instanceof Promise) {
-          result.then(res => {
-            if (res === false) {
-              $form.data('valid-result', false)
-              throw ValidationError('Validation error.')
-            }
-          })
-        } else if (result === false) {
-          $form.data('valid-result', false)
-          throw ValidationError('Validation error.')
+        try {
+          if (result instanceof Promise) {
+            result.then(res => {
+              if (res === false) {
+                $form.data('valid-result', false)
+                throw new ValidationError('Validation error.')
+              }
+            })
+          } else if (result === false) {
+            $form.data('valid-result', false)
+            throw new ValidationError('Validation error.')
+          }
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            const form = getForm($form)
+            form.$$emit('xe.validation.faield', { field: $field })
+            throw new ValidationError('Validation error.')
+          }
         }
       }
     })

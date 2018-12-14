@@ -1,15 +1,15 @@
 <?php
 /**
- * Service provider
+ * RoutingServiceProvider.php
  *
  * PHP version 7
  *
- * @category  Routing
- * @package   Xpressengine\Routing
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace App\Providers;
@@ -31,15 +31,19 @@ use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\UriValidator;
 
 /**
- * Routing Service Provider
+ * Class RoutingServiceProvider
  *
- * @category Routing
- * @package  Xpressengine\Routing
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class RoutingServiceProvider extends ServiceProvider
 {
     /**
-     * 주요 역할은 ModuleValidator의 boot를 실행.
+     * Bootstrap the application events.
      *
      * @return void
      */
@@ -203,7 +207,6 @@ class RoutingServiceProvider extends ServiceProvider
      * 매크로 등록
      *
      * @param Router $router to register macro
-     *
      * @return void
      */
     protected function registerInstanceMacro(Router $router)
@@ -240,10 +243,9 @@ class RoutingServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerRouteCollection
+     * Register the route collection to the router.
      *
      * @param Router $router to register macro
-     *
      * @return void
      */
     protected function registerRouteCollection(Router $router)

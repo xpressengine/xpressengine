@@ -1,11 +1,11 @@
 <?php
 /**
- * Service provider
+ * DynamicFieldServiceProvider.php
  *
  * PHP version 7
  *
- * @category    DyanmicField
- * @package     Xpressengine\DyanmicField
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -42,10 +42,14 @@ use App\FieldSkins\Email\DefaultSkin as EmailDefault;
 use App\FieldSkins\Url\DefaultSkin as UrlDefault;
 
 /**
- * laravel service provider
+ * Class DynamicFieldServiceProvider
  *
- * @category    DynamicField
- * @package     Xpressengine\DynamicField
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class DynamicFieldServiceProvider extends ServiceProvider
 {
@@ -63,7 +67,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
     }
 
     /**
-     * register field type
+     * Register the dynamic field type.
      *
      * @return void
      */
@@ -82,6 +86,11 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Url::class);
     }
 
+    /**
+     * Register the dynamic field skin.
+     *
+     * @return void
+     */
     private function registerFieldDefaultSkin()
     {
         $registerHandler = app('xe.dynamicField')->getRegisterHandler();
@@ -99,6 +108,11 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(UrlDefault::class);
     }
 
+    /**
+     * Add validation rule.
+     *
+     * @return void
+     */
     private function addValidationRule()
     {
         $this->app['validator']->extend('df_id', function ($attribute, $value) {

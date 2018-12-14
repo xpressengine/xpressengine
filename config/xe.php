@@ -1,4 +1,15 @@
 <?php
+/**
+ * xe.php
+ *
+ * PHP version 7
+ *
+ * @category    Config
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 return [
     'routing' => [
@@ -389,9 +400,6 @@ return [
     'plugin' => [
         'api' => [
             'url' => 'https://store.xpressengine.io/api/1.2'
-        ],
-        'packagist' => [
-            'url' => 'https://store.xpressengine.io'
         ],
         'operation' => [
             'time_limit' => 1200

@@ -1,4 +1,16 @@
 <?php
+/**
+ * MobileServiceProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 namespace App\Providers;
 
@@ -8,6 +20,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
+/**
+ * Class MobileServiceProvider
+ *
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MobileServiceProvider extends ServiceProvider
 {
     /**
@@ -46,7 +68,7 @@ class MobileServiceProvider extends ServiceProvider
     }
 
     /**
-     * extendBlade
+     * Add the directive for blade template.
      *
      * @return void
      */
@@ -78,6 +100,11 @@ class MobileServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Get the resolver for detect mobile device.
+     *
+     * @return \Closure
+     */
     protected function getMobileResolver()
     {
         return function (Request $request, $byUserAgent = false) {

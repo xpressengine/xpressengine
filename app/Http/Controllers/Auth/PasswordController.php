@@ -1,18 +1,35 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php
+/**
+ * PasswordController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
+namespace App\Http\Controllers\Auth;
 
 use App\Events\PreResetUserPasswordEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use InvalidArgumentException;
 use XePresenter;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use XeTheme;
 use Xpressengine\User\UserHandler;
 
+/**
+ * Class PasswordController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class PasswordController extends Controller {
 
 	/*
@@ -25,7 +42,6 @@ class PasswordController extends Controller {
 	| explore this trait and override any methods you wish to tweak.
 	|
 	*/
-
 
     /**
      * The Guard implementation.
@@ -49,9 +65,8 @@ class PasswordController extends Controller {
     /**
      * Create a new password controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Guard          $auth
-     * @param  \Illuminate\Contracts\Auth\PasswordBroker $passwords
-     * @return void
+     * @param  \Illuminate\Contracts\Auth\Guard          $auth      Guard instance
+     * @param  \Illuminate\Contracts\Auth\PasswordBroker $passwords PasswordBroker instance
      */
     public function __construct(Guard $auth, PasswordBroker $passwords)
     {
@@ -68,7 +83,7 @@ class PasswordController extends Controller {
     /**
      * Display the form to request a password reset link.
      *
-     * @return Response
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getReset()
     {
@@ -80,18 +95,12 @@ class PasswordController extends Controller {
     /**
      * Send a reset link to the given user.
      *
-     * @param  Request  $request
-     * @return Response
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postReset(Request $request)
     {
-
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email',
-            ]
-        );
+        $this->validate($request, ['email' => 'required|email']);
 
         $result = $this->passwords->sendResetLink($request->only('email'));
 
@@ -113,15 +122,15 @@ class PasswordController extends Controller {
     /**
      * Display the password reset view for the given token.
      *
-     * @param  string  $token
-     * @return Response
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getPassword(Request $request)
     {
         $token = $request->get('token');
         $email = $request->get('email');
-        if (is_null($token))
-        {
+
+        if (is_null($token)) {
             throw new NotFoundHttpException;
         }
 
@@ -131,8 +140,8 @@ class PasswordController extends Controller {
     /**
      * Reset the given user's password.
      *
-     * @param  Request $request request
-     * @return Response
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postPassword(Request $request)
     {

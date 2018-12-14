@@ -5,6 +5,8 @@
  *
  * @package  Laravel
  * @author   Taylor Otwell <taylor@laravel.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @link     https://laravel.com
  */
 
 define('LARAVEL_START', microtime(true));

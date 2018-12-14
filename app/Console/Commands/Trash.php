@@ -1,6 +1,6 @@
 <?php
 /**
- * Trash
+ * Trash.php
  *
  * PHP version 7
  *
@@ -20,30 +20,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Trash\RecycleBinInterface;
 
 /**
- * Trash
- *
- * 등록된 휴지통(recycle bin)의 요약 정보를 확인합니다
- *
- * ## 명령어 사용
- *
- * ### 전체 휴지통 요약 정보
- * ```
- * $ php artisan trash
- * ```
- *
- * ### 게시판 휴지통 정보 보기
- * ```
- * $ php artisan trash board
- * ```
- *
- * ### 댓글, 게시판의 요약 정보
- * ```
- * $ php artisan trash board,comment
- * ```
+ * Class Trash
  *
  * @category    Commands
  * @package     App\Console\Commands
- * @see         Xpressengine\Trash\TrashManager manual
+ * @see         \Xpressengine\Trash\TrashManager
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -51,13 +32,16 @@ use Xpressengine\Trash\RecycleBinInterface;
  */
 class Trash extends Command
 {
-
     /**
+     * The console command name.
+     *
      * @var string
      */
     protected $name = 'trash';
 
     /**
+     * The console command description.
+     *
      * @var string
      */
     protected $description = 'Get summary about the recycle bin.';
@@ -73,7 +57,7 @@ class Trash extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {

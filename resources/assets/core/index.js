@@ -4,6 +4,7 @@ import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
+import lodash from 'lodash'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -93,6 +94,7 @@ class XE {
     this.Component = this.registerApp('Component', new Component())
 
     // external libraries
+    this._ = lodash
     this.moment = moment // @DEPRECATED
     this.Translator = Translator // @DEPRECATED
   }

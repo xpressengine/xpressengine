@@ -1,5 +1,11 @@
 <?php
 /**
+ * DynamicFieldSection.php
+ *
+ * PHP version 7
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -8,7 +14,6 @@
 
 namespace App\Http\Sections;
 
-use DynamicField;
 use XeFrontend;
 use View;
 use Xpressengine\Database\VirtualConnectionInterface;
@@ -17,7 +22,13 @@ use Xpressengine\Config\ConfigEntity;
 
 /**
  * Class DynamicFieldSection
- * @package App\Sections
+ *
+ * @category    Sections
+ * @package     App\Http\Sections
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class DynamicFieldSection extends Section
 {

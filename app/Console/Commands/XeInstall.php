@@ -1,9 +1,15 @@
 <?php
 /**
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * XeInstall.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 
 namespace App\Console\Commands;
@@ -20,6 +26,16 @@ use Xpressengine\User\UserHandler;
 use Illuminate\Support\Str;
 use Xpressengine\Cubrid\CubridConnection;
 
+/**
+ * Class XeInstall
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class XeInstall extends Command
 {
     /**
@@ -37,11 +53,8 @@ class XeInstall extends Command
     protected $description = 'Xpressengine installation';
 
     /**
-     * @var bool
-     */
-    protected $executed = false;
-
-    /**
+     * The plugins for activate after install.
+     *
      * @var array
      */
     protected $basePlugins = [
@@ -56,18 +69,22 @@ class XeInstall extends Command
     ];
 
     /**
-     * @var
+     * The list of class for migration.
+     *
+     * @var array
      */
-    protected $migrations;
+    protected $migrations = [];
 
+    /**
+     * The key for the application.
+     *
+     * @var string
+     */
     protected $appKey;
 
     /**
-     * @var null|string
-     */
-    private $configFile;
-
-    /**
+     * Default information.
+     *
      * @var array
      */
     protected $defaultInfos = [
@@ -93,6 +110,8 @@ class XeInstall extends Command
     ];
 
     /**
+     * Indicates if interaction is disabled.
+     *
      * @var bool
      */
     private $noInteraction = false;
@@ -110,7 +129,8 @@ class XeInstall extends Command
     /**
      * Execute the console command
      *
-     * @return mixed
+     * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -125,8 +145,7 @@ class XeInstall extends Command
         $configFile = $this->option('config');
 
         if ($configFile !== null && realpath($configFile) !== false) {
-            $this->configFile = realpath($configFile);
-            $config = Yaml::parse(file_get_contents($this->configFile));
+            $config = Yaml::parse(file_get_contents(realpath($configFile)));
             if ($config !== null) {
                 $this->defaultInfos = array_merge($this->defaultInfos, $config);
             }
@@ -154,9 +173,9 @@ class XeInstall extends Command
     /**
      * Prompt the user for input but hide the answer from the console.
      *
-     * @param string $question
-     * @param bool   $fallback
-     * @param string $default
+     * @param string $question question
+     * @param bool   $fallback fallback
+     * @param string $default  default answer
      * @return string
      */
     public function secretDefault($question, $fallback = true, $default = null)
@@ -171,9 +190,9 @@ class XeInstall extends Command
     /**
      * Prompt the user for input and validation the answer.
      *
-     * @param string   $question
-     * @param string   $default
-     * @param callable $validator
+     * @param string   $question  question
+     * @param string   $default   default answer
+     * @param callable $validator validator
      * @return string
      */
     public function askValidation($question, $default = null, callable $validator = null)
@@ -186,9 +205,10 @@ class XeInstall extends Command
     }
 
     /**
-     * process
+     * Do process.
      *
      * @return void
+     * @throws \Exception
      */
     protected function process()
     {
@@ -227,6 +247,12 @@ class XeInstall extends Command
         $this->markInstalled();
     }
 
+    /**
+     * Check requirement.
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected function stepRequirement()
     {
         if (!defined('PHP_VERSION_ID')) {
@@ -260,9 +286,10 @@ class XeInstall extends Command
     }
 
     /**
-     * stepDB
+     * Set database connect information.
      *
      * @return void
+     * @throws \Exception
      */
     protected function stepDB()
     {
@@ -284,7 +311,7 @@ class XeInstall extends Command
     }
 
     /**
-     * stepSiteInfo
+     * Set site information.
      *
      * @return void
      */
@@ -298,9 +325,10 @@ class XeInstall extends Command
     }
 
     /**
-     * stepAdmin
+     * Set administrator information.
      *
      * @return void
+     * @throws \Exception
      */
     protected function stepAdmin()
     {
@@ -319,7 +347,7 @@ class XeInstall extends Command
     }
 
     /**
-     * stepDirPermission
+     * Set permission to directory.
      *
      * @return void
      */
@@ -338,6 +366,11 @@ class XeInstall extends Command
         }
     }
 
+    /**
+     * Confirm collecting to environment and set.
+     *
+     * @return void
+     */
     protected function stepAgreeCollectEnv()
     {
         if ($this->noInteraction) {
@@ -364,7 +397,7 @@ class XeInstall extends Command
     }
 
     /**
-     * getDBInfo
+     * Get database connect information.
      *
      * @return void
      */
@@ -409,9 +442,9 @@ class XeInstall extends Command
     }
 
     /**
-     * validateDBInfo
-
-     * @param  array $dbInfo
+     * Validate database connect information.
+     *
+     * @param  array $dbInfo connect information
      * @return bool
      * @throws \Exception
      */
@@ -446,9 +479,9 @@ class XeInstall extends Command
     }
 
     /**
-     * setDBInfo
+     * Set database connect information.
      *
-     * @param array $dbInfo
+     * @param array $dbInfo connect information
      * @return void
      */
     private function setDBInfo($dbInfo)
@@ -487,10 +520,10 @@ class XeInstall extends Command
     }
 
     /**
-     * configFileGenerate
+     * Generate a config file.
      *
-     * @param string $key
-     * @param array $data
+     * @param string $key  key name
+     * @param array  $data data
      * @return void
      */
     private function configFileGenerate($key, array $data)
@@ -505,9 +538,9 @@ class XeInstall extends Command
     }
 
     /**
-     * makeDir
+     * Make directory.
      *
-     * @param string $dir
+     * @param string $dir directory path
      * @return bool
      */
     private function makeDir($dir)
@@ -522,10 +555,10 @@ class XeInstall extends Command
     }
 
     /**
-     * encodeArr2Str
+     * Encode array to string.
      *
-     * @param array $arr
-     * @param int $depth
+     * @param array $arr   array
+     * @param int   $depth depth
      * @return string
      */
     private function encodeArr2Str(array $arr, $depth = 0)
@@ -549,9 +582,9 @@ class XeInstall extends Command
     }
 
     /**
-     * getIndent
+     * Get indent.
      *
-     * @param int $depth
+     * @param int $depth depth
      * @return string
      */
     private function getIndent($depth)
@@ -565,7 +598,7 @@ class XeInstall extends Command
     }
 
     /**
-     * getSiteInfo
+     * Get site information.
      *
      * @return void
      */
@@ -613,11 +646,10 @@ class XeInstall extends Command
     }
 
     /**
-     * setSiteInfo
+     * Set site information.
      *
-     * @param $siteInfo
-     * @param $debug
-     *
+     * @param array $siteInfo information
+     * @param bool  $debug    set debug mode
      * @return void
      */
     private function setSiteInfo($siteInfo, $debug = true)
@@ -643,6 +675,11 @@ class XeInstall extends Command
         $this->configFileGenerate('xe', $info);
     }
 
+    /**
+     * Get application key for encryption.
+     *
+     * @return string
+     */
     private function getKey()
     {
         if (!$this->appKey) {
@@ -657,7 +694,7 @@ class XeInstall extends Command
      *
      * Illuminate\Foundation\Console\KeyGenerateCommand
      *
-     * @param  string  $cipher
+     * @param string $cipher cipher
      * @return string
      */
     private function getRandomKey($cipher)
@@ -670,9 +707,10 @@ class XeInstall extends Command
     }
 
     /**
-     * installFramework
+     * Install framework
      *
      * @return void
+     * @throws \Exception
      */
     protected function installFramework()
     {
@@ -701,10 +739,9 @@ class XeInstall extends Command
     }
 
     /**
-     * basePath
+     * Get the path to the base of the install.
      *
-     * @param null $path
-     *
+     * @param string|null $path the path under the base path
      * @return string
      */
     private function getBasePath($path = null)
@@ -713,10 +750,9 @@ class XeInstall extends Command
     }
 
     /**
-     * bootFramework
+     * Boot framework.
      *
-     * @param bool $withXE
-     *
+     * @param bool $withXE enable XE
      * @return mixed
      * @throws \Exception
      */
@@ -751,7 +787,7 @@ class XeInstall extends Command
     }
 
     /**
-     * migrateCore
+     * Execute migrations for XE core.
      *
      * @return void
      */
@@ -779,7 +815,7 @@ class XeInstall extends Command
     }
 
     /**
-     * installBasePlugins
+     * Install base plugins.
      *
      * @return void
      */
@@ -793,7 +829,7 @@ class XeInstall extends Command
     }
 
     /**
-     * getAdminInfo
+     * Get administrator information.
      *
      * @return void
      */
@@ -837,9 +873,9 @@ class XeInstall extends Command
     }
 
     /**
-     * getAdminPassword
+     * Get administrator password for authentication.
      *
-     * @param array $adminInfo
+     * @param array $adminInfo administrator information
      * @return string
      */
     private function getAdminPassword($adminInfo)
@@ -864,9 +900,9 @@ class XeInstall extends Command
     }
 
     /**
-     * createAdminAndLogin
+     * Create administrator account and login.
      *
-     * @param array $config
+     * @param array $config config for account
      * @return void
      * @throws \Exception
      */
@@ -913,7 +949,7 @@ class XeInstall extends Command
     }
 
     /**
-     * disableDebugMode
+     * Disable debug mode.
      *
      * @return void
      */
@@ -923,7 +959,7 @@ class XeInstall extends Command
     }
 
     /**
-     * initializeCore
+     * Initialize XE core.
      *
      * @return void
      */
@@ -943,7 +979,7 @@ class XeInstall extends Command
     }
 
     /**
-     * setStorageDirPermission
+     * Set storage directory permission.
      *
      * @return void
      */
@@ -970,7 +1006,7 @@ class XeInstall extends Command
     }
 
     /**
-     * setBootCacheDirPermission
+     * Set bootstrap cache directory permission.
      *
      * @return void
      */
@@ -997,7 +1033,7 @@ class XeInstall extends Command
     }
 
     /**
-     * markInstalled
+     * Mark installed.
      *
      * @return void
      */

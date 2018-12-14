@@ -1,20 +1,41 @@
 <?php
 /**
+ * SkinController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use XePresenter;
 use Xpressengine\Skin\SkinHandler;
 
+/**
+ * Class SkinController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class SkinController extends Controller
 {
-    // 기본정보 보기
+    /**
+     * Set the skin to the target instance
+     *
+     * @param Request     $request     request
+     * @param SkinHandler $skinHandler SkinHandler
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function putAssign(Request $request, SkinHandler $skinHandler)
     {
         $this->validate($request, [
@@ -34,6 +55,13 @@ class SkinController extends Controller
         );
     }
 
+    /**
+     * Show the setting form for the skin of instance.
+     *
+     * @param Request     $request     request
+     * @param SkinHandler $skinHandler SkinHandler instance
+     * @return mixed
+     */
     public function getSetting(Request $request, SkinHandler $skinHandler)
     {
         $this->validate($request, [
@@ -53,6 +81,13 @@ class SkinController extends Controller
         return api_render('skin.setting', compact('skinId', 'skinInstanceId', 'view'));
     }
 
+    /**
+     * Save the setting for the skin of instance.
+     *
+     * @param Request     $request     request
+     * @param SkinHandler $skinHandler SkinHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function postSetting(Request $request, SkinHandler $skinHandler)
     {
         $this->validate($request, [

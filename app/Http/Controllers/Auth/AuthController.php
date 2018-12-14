@@ -1,4 +1,15 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php
+/**
+ * AuthController.php
+ *
+ * PHP version 7
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -19,19 +30,16 @@ use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\UserHandler;
 
+/**
+ * Class AuthController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Auth
+ * @license     https://opensource.org/licenses/MIT MIT
+ * @link        https://laravel.com
+ */
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -58,6 +66,9 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
+    /**
+     * AuthController constructor.
+     */
     public function __construct()
     {
         $this->auth = app('auth');
@@ -71,6 +82,12 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
     }
 
+    /**
+     * Show terms
+     *
+     * @param string $id term id
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function terms($id)
     {
         if (!$term = app('xe.terms')->find($id)) {
@@ -83,21 +100,13 @@ class AuthController extends Controller
     /**
      * 이메일 인증 페이지. 사용자가 개인 설정에서 이메일을 추가했을 때, 전송되는 이메일의 링크를 통해 이 페이지에 접근한다.
      *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\Presentable
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
     public function getConfirm(Request $request)
     {
-        // validation
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email',
-                'code' => 'required',
-            ]
-        );
+        $this->validate($request, ['email' => 'required|email', 'code' => 'required']);
 
         $address = $request->get('email');
         $code = $request->get('code');
@@ -127,8 +136,8 @@ class AuthController extends Controller
     /**
      * Show the application login form.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request request
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getLogin(Request $request)
     {
@@ -155,9 +164,8 @@ class AuthController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request request
+     * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
     public function postLogin(Request $request)
@@ -187,8 +195,8 @@ class AuthController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function getLogout(Request $request)
     {
@@ -200,12 +208,11 @@ class AuthController extends Controller
     }
 
     /**
-     * getAdminAuth
+     * Get authenticate view for administrator
      *
-     * @param ThemeHandler $themeHandler
-     * @param UrlGenerator $urlGenerator
-     * @param Request      $request
-     *
+     * @param ThemeHandler $themeHandler ThemeHandler instance
+     * @param UrlGenerator $urlGenerator UrlGenerator instance
+     * @param Request      $request      request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function getAdminAuth(ThemeHandler $themeHandler, UrlGenerator $urlGenerator, Request $request)
@@ -217,6 +224,12 @@ class AuthController extends Controller
         return XePresenter::make('admin', compact('redirectUrl'));
     }
 
+    /**
+     * Attempt authenticate for administrator
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postAdminAuth(Request $request)
     {
         $this->validate($request, [
@@ -233,6 +246,11 @@ class AuthController extends Controller
         return redirect()->back()->with('alert', ['type' => 'failed', 'message' => xe_trans('xe::msgInvalidPassword')]);
     }
 
+    /**
+     * Check captcha
+     *
+     * @return void
+     */
     protected function checkCaptcha()
     {
         $config = app('xe.config')->get('user.common');

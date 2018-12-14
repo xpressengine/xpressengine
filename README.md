@@ -30,7 +30,7 @@ Laravel is one of the most modern PHP frameworks and the most popular among them
 To install XE3, refer to the following guide. [Install guide](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
 
 ## Maintainers
-@akasima @bnu @jhyeon1010 @woongbin
+@akasima @bnu @jhyeon1010 @kimyu711 @woongbin
 
 ## Documentation
 * Documentation Site (Korean) : https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/

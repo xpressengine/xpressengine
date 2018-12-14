@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is registered for use with this package at Laravel
+ * StorageServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -25,10 +25,14 @@ use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\UrlMaker;
 
 /**
- * laravel 프레임워크에서 이 패키지를 사용하기 위한 등록절차를 수행
+ * Class StorageServiceProvider
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class StorageServiceProvider extends ServiceProvider
 {
@@ -85,6 +89,11 @@ class StorageServiceProvider extends ServiceProvider
         $this->app->alias(UrlMaker::class, 'xe.storage.url');
     }
 
+    /**
+     * Add event listener.
+     *
+     * @return void
+     */
     private function hooks()
     {
         intercept(

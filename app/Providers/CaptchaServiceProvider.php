@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is register this package for laravel
+ * CaptchaServiceProvider.php
  *
  * PHP version 7
  *
- * @category    Captcha
- * @package     Xpressengine\Captcha
+ * @category    Providers
+ * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -19,10 +19,14 @@ use Xpressengine\Captcha\CaptchaManager;
 use App\UIObjects\Captcha\CaptchaUIObject;
 
 /**
- * laravel 에서 사용하기위해 등록처리를 하는 class
+ * Class CaptchaServiceProvider
  *
- * @category    Captcha
- * @package     Xpressengine\Captcha
+ * @category    Providers
+ * @package     App\Providers
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class CaptchaServiceProvider extends ServiceProvider
 {

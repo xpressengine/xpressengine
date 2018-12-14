@@ -1,6 +1,6 @@
 <?php
 /**
- * Trash command class. This file is part of the Xpressengine package.
+ * TrashClean.php
  *
  * PHP version 7
  *
@@ -18,30 +18,11 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * TrashClean
- *
- * 등록된 휴지통(recycle bin)을 비웁니다.
- *
- * ## 명령어 사용
- *
- * ### 전체 휴지통 비우기
- * ```
- * $ php artisan trash:clean
- * ```
- *
- * ### 게시판 휴지통 비우기
- * ```
- * $ php artisan trash:clean board
- * ```
- *
- * ### 댓글, 게시판 비우기
- * ```
- * $ php artisan trash:clean board,comment
- * ```
+ * Class TrashClean
  *
  * @category    Commands
  * @package     App\Console\Commands
- * @see         Xpressengine\Trash\TrashManager manual
+ * @see         \Xpressengine\Trash\TrashManager
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -49,13 +30,16 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class TrashClean extends Trash
 {
-
     /**
+     * The console command name.
+     *
      * @var string
      */
     protected $name = 'trash:clean';
 
     /**
+     * The console command description.
+     *
      * @var string
      */
     protected $description = 'Clean up the recycle bin.';
@@ -68,6 +52,11 @@ class TrashClean extends Trash
         parent::__construct();
     }
 
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
     public function handle()
     {
         $names = $this->input->getArgument('names');

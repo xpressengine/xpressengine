@@ -1,6 +1,6 @@
 <?php
 /**
- * XeEditor
+ * XeEditor.php
  *
  * PHP version 7
  *
@@ -16,7 +16,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 로 사용하기 위한 연결
+ * Class XeEditor
  *
  * @category    Editor
  * @package     Xpressengine\Editor

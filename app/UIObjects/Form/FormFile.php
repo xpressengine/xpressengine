@@ -1,5 +1,11 @@
 <?php
 /**
+ * FormFile.php
+ *
+ * PHP version 7
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -13,12 +19,37 @@ use XeStorage;
 use Xpressengine\Storage\File;
 use Xpressengine\UIObject\AbstractUIObject;
 
+/**
+ * Class FormFile
+ *
+ * @category    UIObjects
+ * @package     App\UIObjects\Form
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class FormFile extends AbstractUIObject
 {
+    /**
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@formFile';
 
+    /**
+     * The view name
+     *
+     * @var string
+     */
     protected $view = 'uiobjects.form.formFile';
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
         $this->loadFiles();
@@ -75,34 +106,29 @@ class FormFile extends AbstractUIObject
     }
 
     /**
-     * loadFiles
+     * Load assets
      *
      * @return void
      */
     protected function loadFiles()
     {
+        XeFrontend::js([
+            'assets/vendor/jQuery-File-Upload/js/canvas-to-blob.min.js',
+            'assets/vendor/jQuery-File-Upload/js/load-image.all.min.js',
+            'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-ui.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-process.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-image.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-audio.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-video.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-validate.js',
+        ])->load();
 
-        XeFrontend::js(
-            [
-                'assets/vendor/jQuery-File-Upload/js/canvas-to-blob.min.js',
-                'assets/vendor/jQuery-File-Upload/js/load-image.all.min.js',
-                'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-ui.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-process.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-image.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-audio.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-video.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-validate.js',
-            ]
-        )->load();
-
-        XeFrontend::css(
-            [
-                'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
-                'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',
-            ]
-        )->load();
+        XeFrontend::css([
+            'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
+            'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',
+        ])->load();
     }
 }

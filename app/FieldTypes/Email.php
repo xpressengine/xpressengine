@@ -1,20 +1,34 @@
 <?php
 /**
+ * Email.php
+ *
+ * PHP version 7
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\FieldTypes;
 
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\DynamicField\ColumnEntity;
-use App\FieldSkins\Text\DefaultSkin;
 use View;
 
+/**
+ * Class Email
+ *
+ * @category    FieldTypes
+ * @package     App\FieldTypes
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class Email extends AbstractType
 {
     protected static $id = 'fieldType/xpressengine@Email';
@@ -74,5 +88,4 @@ class Email extends AbstractType
     {
         return View::make('dynamicField/email/createType', ['config' => $config])->render();
     }
-
 }

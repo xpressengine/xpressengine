@@ -1,6 +1,6 @@
 <?php
 /**
- * Database command class. This file is part of the Xpressengine package.
+ * CacheClearPlus.php
  *
  * PHP version 7
  *
@@ -18,7 +18,7 @@ use Illuminate\Cache\Console\ClearCommand;
 use Xpressengine\Interception\InterceptionHandler;
 
 /**
- * laravel cache:clear 를 확장합니다.
+ * Class CacheClearPlus
  *
  * @category    Commands
  * @package     App\Console\Commands
@@ -69,6 +69,8 @@ class CacheClearPlus extends ClearCommand
 
     /**
      * this command basically flush few stores.
+     *
+     * @return void
      */
     protected function flushXeCaches()
     {

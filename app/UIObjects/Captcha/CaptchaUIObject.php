@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is captcha UI object.
+ * CaptchaUIObject.php
  *
  * PHP version 7
  *
- * @category    Captcha
- * @package     Xpressengine\Captcha
+ * @category    UIObjects
+ * @package     App\UIObjects\Captcha
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,22 +17,26 @@ namespace App\UIObjects\Captcha;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
- * client 에 표현되어질 ui 제공을 담당 함.
+ * Class CaptchaUIObject
  *
- * @category    Captcha
- * @package     Xpressengine\Captcha
+ * @category    UIObjects
+ * @package     App\UIObjects\Captcha
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class CaptchaUIObject extends AbstractUIObject
 {
     /**
-     * Component id
+     * The component id
      *
      * @var string
      */
     protected static $id = 'uiobject/xpressengine@captcha';
 
     /**
-     * Rendered current object
+     * Get the evaluated contents of the object.
      *
      * @return string
      */

@@ -1,9 +1,15 @@
 <?php
 /**
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link      https://xpressengine.io
+ * MenuMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Migrations;
@@ -19,8 +25,23 @@ use Xpressengine\Support\Migration;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\Config\ConfigManager;
 
-class MenuMigration extends Migration {
-
+/**
+ * Class MenuMigration
+ *
+ * @category    Migrations
+ * @package     Xpressengine\Migrations
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class MenuMigration extends Migration
+{
+    /**
+     * Run when install the application.
+     *
+     * @return void
+     */
     public function install()
     {
         Schema::create('menu', function (Blueprint $table) {
@@ -73,7 +94,11 @@ class MenuMigration extends Migration {
 
     }
 
-    // seeding.
+    /**
+     * Run after installation.
+     *
+     * @return void
+     */
     public function installed()
     {
         // 홈 메뉴 설정.
@@ -82,6 +107,11 @@ class MenuMigration extends Migration {
         \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]']);
     }
 
+    /**
+     * Run after initialized.
+     *
+     * @return void
+     */
     public function initialized()
     {
         // 기본 메뉴 추가 (main) 추가.
@@ -108,8 +138,8 @@ class MenuMigration extends Migration {
     /**
      * site default config setup
      *
-     * @param $mainMenu
-     * @param $homeId
+     * @param Menu   $mainMenu menu
+     * @param string $homeId   home instance id
      * @return void
      */
     public function siteDefaultConfig($mainMenu, $homeId)
