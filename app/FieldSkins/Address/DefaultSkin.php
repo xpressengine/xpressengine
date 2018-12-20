@@ -124,7 +124,7 @@ class DefaultSkin extends AbstractSkin
             $(\'#\'+fieldId+\'-daumPostcodeWrap\').show();
         }
     </script>
-            ')->appendTo('body.prepend')->load();
+            ')->location('body.prepend')->load();
     }
 
     /**
