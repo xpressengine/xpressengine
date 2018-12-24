@@ -112,7 +112,7 @@ class DefaultSkin extends AbstractSkin
      * 데이터 출력
      *
      * @param string $name dynamic field name
-     * @param array $args 데이터
+     * @param array  $args 데이터
      * @return mixed
      */
     public function output($name, array $args)
@@ -121,8 +121,8 @@ class DefaultSkin extends AbstractSkin
 
         return sprintf(
             '%s %s',
-            $args[$config->get('id') . 'Address1'],
-            $args[$config->get('id') . 'Address2']
+            $args[$config->get('id') . '_address1'],
+            $args[$config->get('id') . '_address2']
         );
     }
 }
