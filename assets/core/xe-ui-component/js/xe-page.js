@@ -259,7 +259,7 @@
               $target.html(html)
           }
 
-          $('form', $target).each((idx, form) => {
+          $('form', $target).each(function (idx, form) {
             /* eslint no-new:off */
             XE.Form.get(form)
           })
