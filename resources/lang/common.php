@@ -2938,4 +2938,12 @@ return [
         'ko' => '비밀번호는 [:requires]를 포함해야 합니다.',
         'en' => 'The Password must be contain [:requires]',
     ],
+    'descUploadMaxFilesize' => [
+        'ko' => ':fileMaxSize은(는) upload_max_filesize와 :attachMaxSize보다 클 수 없습니다.',
+        'en' => ':fileMaxSize can not be greater than upload_max_filesize and :attachMaxSize.'
+    ],
+    'descPostMaxSize' => [
+        'ko' => 'post_max_size가 upload_max_filesize보다 작을 경우 파일 업로드가 정상적으로 동작하지 않을 수 있습니다.',
+        'en' => 'If post_max_size is less than upload_max_filesize, file upload may not operate normally.'
+    ]
 ];

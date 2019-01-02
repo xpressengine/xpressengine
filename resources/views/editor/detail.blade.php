@@ -197,6 +197,29 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="clearfix">
+                                        <label>php.ini 설정 값</label>
+                                    </div>
+
+                                    <div class="clearfix">
+                                        <label>upload_max_filesize</label>
+                                        <small>{{ xe_trans('xe::descUploadMaxFilesize', ['fileMaxSize' => xe_trans('xe::maxFileSize'), 'attachMaxSize' => xe_trans('xe::attachMaxSize')]) }}</small>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="{{ $uploadMaxSize }}" disabled>
+                                            <span class="input-group-addon">MB</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix">
+                                        <label>post_max_size</label>
+                                        <small>{{ xe_trans('xe::descPostMaxSize') }}</small>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="{{ $postMaxSize }}" disabled>
+                                            <span class="input-group-addon">MB</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

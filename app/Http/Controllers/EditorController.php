@@ -74,9 +74,14 @@ class EditorController extends Controller
      */
     public function getDetailSetting($instanceId)
     {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+
         return XePresenter::make('editor.detail', [
             'instanceId' => $instanceId,
             'config' => XeEditor::getConfig($instanceId),
+            'uploadMaxSize' => $uploadMaxSize,
+            'postMaxSize' => $postMaxSize
         ]);
     }
 
@@ -89,29 +94,12 @@ class EditorController extends Controller
      */
     public function postDetailSetting(Request $request, $instanceId)
     {
-        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
-        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
-        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
+        $rules = $this->getFileSizeRules($request);
 
-        $defaultRule = [
-            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
-        ];
-
-        $attachMaxSizeRule = [];
-        if ($editAttachMaxSize = $request->get('attachMaxSize')) {
-            if ($editAttachMaxSize != 0) {
-                $editorConfig = XeEditor::getConfig($instanceId);
-                $fileMaxSize = $request->get('fileMaxSize', $editorConfig->get('fileMaxSize'));
-
-                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $fileMaxSize];
-            } else {
-                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
-            }
-        }
-
-        $rule = array_merge($defaultRule, $attachMaxSizeRule);
-
-        $this->validate($request, $rule);
+        $this->validate($request, $rules, [], [
+            'height' => xe_trans('xe::editorHeight'),
+            'fileMaxSize' => xe_trans('xe::maxFileSize')
+        ]);
 
         XeEditor::setConfig($instanceId, [
             'height' => $request->get('height'),
@@ -225,8 +213,13 @@ class EditorController extends Controller
      */
     public function getGlobalDetailSetting()
     {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+
         return XePresenter::make('editor.global.detail', [
             'config' => XeEditor::getGlobalConfig(),
+            'uploadMaxSize' => $uploadMaxSize,
+            'postMaxSize' => $postMaxSize
         ]);
     }
 
@@ -238,28 +231,19 @@ class EditorController extends Controller
      */
     public function postGlobalDetailSetting(Request $request)
     {
-        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
-        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
-        $phpFileMaxSize = min($uploadMaxSize, $postMaxSize);
+        $fileSizeRules = $this->getFileSizeRules($request);
 
         $defaultRule = [
             'height' => 'required|numeric',
             'fontSize' => 'required',
-            'fileMaxSize' => 'numeric|min:1|max:' . $phpFileMaxSize,
-            ];
+        ];
 
-        $attachMaxSizeRule = [];
-        if ($attachMaxSize = $request->get('attachMaxSize', 0)) {
-            if ($attachMaxSize != 0) {
-                $attachMaxSizeRule = ['attachMaxSize' => 'numeric|min:' . $request->get('fileMaxSize', 0)];
-            } else {
-                $attachMaxSizeRule = ['attachMaxSize' => 'numeric'];
-            }
-        }
+        $rules = array_merge($fileSizeRules, $defaultRule);
 
-        $rule = array_merge($defaultRule, $attachMaxSizeRule);
-
-        $this->validate($request, $rule);
+        $this->validate($request, $rules, [], [
+            'height' => xe_trans('xe::editorHeight'),
+            'fileMaxSize' => xe_trans('xe::maxFileSize')
+        ]);
 
         XeEditor::setGlobalConfig([
             'height' => $request->get('height'),
@@ -528,6 +512,36 @@ class EditorController extends Controller
         }
 
         return XePresenter::makeApi($suggestions);
+    }
+
+    /**
+     * get file size validation rules
+     *
+     * @param Request $request request
+     *
+     * @return array
+     */
+    private function getFileSizeRules(Request $request)
+    {
+        $uploadMaxSize = $this->getMegaSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->getMegaSize(ini_get('post_max_size'));
+
+        $phpIniMinSize = min($uploadMaxSize, $postMaxSize);
+
+        $fileSizeRules = [];
+        $attachMaxSize = $request->get('attachMaxSize', 0);
+        if ($attachMaxSize != 0) {
+            $fileSizeRules = [
+                'fileMaxSize' => 'bail|max:' . $attachMaxSize . '|numeric|min:1',
+                'attachMaxSize' => 'numeric|min:' . $request->get('fileMaxSize', 1)
+            ];
+        } else {
+            $fileSizeRules = [
+                'fileMaxSize' => 'numeric|min:1|max:' . $phpIniMinSize
+            ];
+        }
+
+        return $fileSizeRules;
     }
 
     /**
