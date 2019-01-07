@@ -2,6 +2,8 @@
 use Xpressengine\User\Models\User;
 ?>
 {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+{{ app('xe.frontend')->js('assets/vendor/jqueryui/jquery-ui.min.js')->load() }}
+{{ app('xe.frontend')->css('assets/vendor/jqueryui/jquery-ui.min.css')->load() }}
 
 <div class="row">
     <div class="col-sm-12">
@@ -49,40 +51,40 @@ use Xpressengine\User\Models\User;
                     </div>
                     <div class="pull-right">
                         <div class="input-group search-group">
-                            <form method="GET" action="{{ route('settings.user.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="xi-calendar-check"></i></button>
-                                </div>
-                                <div class="search-input-group">
-                                    <input type="text" name="startDate" class="form-control" value="{{ Request::get('startDate') }}" placeholder="{{xe_trans('xe::enterStartDate')}}">
-                                    <input type="text" name="endDate" class="form-control" value="{{ Request::get('endDate') }}" placeholder="{{xe_trans('xe::enterEndDate')}}">
+                            <form method="GET" action="{{ route('settings.user.index') }}" accept-charset="UTF-8" role="form" id="_search-form" class="form-inline">
+                                <div class="form-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="__xe_selectedKeyfield">
+                                            @if(Request::get('keyfield')==='display_name')
+                                                {{xe_trans('xe::name')}}
+                                            @elseif(Request::get('keyfield')==='email')
+                                                {{xe_trans('xe::email')}}
+                                            @else
+                                                {{xe_trans('xe::select')}}
+                                            @endif
+                                            </span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="search-input-group">
+                                        <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Request::get('keyword') }}">
+                                        <button type="submit" class="btn-link">
+                                            <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <p></p>
-
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <span class="__xe_selectedKeyfield">
-                                        @if(Request::get('keyfield')==='display_name')
-                                            {{xe_trans('xe::name')}}
-                                        @elseif(Request::get('keyfield')==='email')
-                                            {{xe_trans('xe::email')}}
-                                        @else
-                                            {{xe_trans('xe::select')}}
-                                        @endif
-                                        </span>
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
-                                    </ul>
-                                </div>
-                                <div class="search-input-group">
-                                    <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Request::get('keyword') }}">
-                                    <button type="submit" class="btn-link">
-                                        <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
-                                    </button>
+                                <div class="form-group input-group-btn">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{{xe_trans('xe::signUpDate')}}</span>
+                                        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="{{ Request::get('startDate') }}">
+                                        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="{{ Request::get('endDate') }}">
+                                    </div>
                                 </div>
                                 @foreach(Request::except(['keyfield','keyword','page','startDate', 'endDate']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -173,6 +175,47 @@ use Xpressengine\User\Models\User;
 </div>
 
 <script type="text/javascript">
+    $(function () {
+        $("#startDatePicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: 0,
+        });
+
+        $("#endDatePicker").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
+
+        $("#startDatePicker").change(function () {
+            setEndDatePickerSetDate($(this).datepicker('getDate'));
+            setEndDatePickerMinDate($(this).datepicker('getDate'));
+
+            $(this).closest('form').submit();
+        });
+
+        $("#endDatePicker").change(function () {
+            $(this).closest('form').submit();
+        });
+
+        initDatePicker();
+    });
+
+    function initDatePicker() {
+        var startDate = $("#startDatePicker").val();
+
+        if (startDate != '') {
+            setEndDatePickerMinDate($("#startDatePicker").datepicker('getDate'));
+        }
+    }
+
+    function setEndDatePickerSetDate(newDate) {
+        newDate.setMonth(newDate.getMonth() + 1);
+        $("#endDatePicker").datepicker("setDate", newDate);
+    }
+
+    function setEndDatePickerMinDate(minDate) {
+        minDate.setDate(minDate.getDate());
+        $("#endDatePicker").datepicker('option',{minDate:minDate});
+    }
 
     var UserList = (function() {
         var self;
