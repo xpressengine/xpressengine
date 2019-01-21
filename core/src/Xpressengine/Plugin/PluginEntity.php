@@ -774,7 +774,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function hasAutoload()
     {
-        return file_exists($this->getAutoload());
+        return file_exists($this->getAutoloadFile());
     }
 
     /**

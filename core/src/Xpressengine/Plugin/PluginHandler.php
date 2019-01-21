@@ -484,7 +484,7 @@ class PluginHandler
     public function registerAutoload(PluginEntity $entity)
     {
         if ($entity->hasAutoload()) {
-            $autoloadFile = $entity->getAutoload();
+            $autoloadFile = $entity->getAutoloadFile();
             require $autoloadFile;
         }
     }
