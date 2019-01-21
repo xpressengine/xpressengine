@@ -153,6 +153,9 @@ class PluginEntity implements Arrayable, Jsonable
             }
             require_once($this->pluginFile);
 
+            // reigster each plugin's autoload if autoload.php exist
+            $this->registerPluginAutoload();
+
             $this->object = new $this->class();
             return $this->object;
         }
@@ -744,8 +747,6 @@ class PluginEntity implements Arrayable, Jsonable
      * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
      * autoload 파일을 각 플러그인 디렉토리 내에 vendor/autoload.php 파일이다.
      *
-     * Deprecated 2019.01.21 getObject에서 사용했지만 PluginHandler로 옮기고 새로 생성한 hasAutoloadFile과 getAutoload를 사용함.
-     *
      * @return void
      */
     protected function registerPluginAutoload()
@@ -754,27 +755,6 @@ class PluginEntity implements Arrayable, Jsonable
         if (file_exists($autoloadFile)) {
             require $autoloadFile;
         }
-    }
-
-    /**
-     * 플러그인내의 autoloadFile의 디렉토리 경로를 반환한다. 존재유무는 아래 hasAutoload에서 판단한다.
-     * autoload 파일은 각 플러그인 디렉토리 내에 vendor/autoload.php 파일이다.
-     *
-     * @return string
-     */
-    public function getAutoloadFile()
-    {
-        return dirname($this->pluginFile).'/vendor/autoload.php';
-    }
-
-    /**
-     * 플러그인이 composer autoload 파일을 가지고 있는지 확인한다.
-     *
-     * @return boolean 해당 경로에 autoload 파일이 존재하는지 유무
-     */
-    public function hasAutoload()
-    {
-        return file_exists($this->getAutoload());
     }
 
     /**
