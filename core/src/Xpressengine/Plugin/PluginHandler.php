@@ -378,6 +378,10 @@ class PluginHandler
     public function bootPlugins()
     {
         foreach ($this->getActivatedPlugins() as $entity) {
+            $this->registerAutoload($entity);
+        }
+
+        foreach ($this->getActivatedPlugins() as $entity) {
             $this->registerPlugin($entity);
         }
 
@@ -470,6 +474,19 @@ class PluginHandler
     public function refreshPlugins()
     {
         $this->plugins->initialize(true);
+    }
+
+    /**
+     * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
+     *
+     * @return void
+     */
+    public function registerAutoload(PluginEntity $entity)
+    {
+        if ($entity->hasAutoload()) {
+            $autoloadFile = $entity->getAutoload();
+            require $autoloadFile;
+        }
     }
 
     /**
