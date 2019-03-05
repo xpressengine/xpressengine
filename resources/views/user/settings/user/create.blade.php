@@ -39,7 +39,7 @@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</button>
+                                <a href="{{ route('settings.user.index') }}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
                                 <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                             </div>
                         </div>
