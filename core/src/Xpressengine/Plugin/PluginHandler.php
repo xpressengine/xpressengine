@@ -460,6 +460,9 @@ class PluginHandler
                         $plugin->setInstalledVersion($sourceVersion);
                     }
                 }
+
+                // plugin 관리 기능을 위해 register 를 수행
+                $plugin->getObject()->register();
             }
         }
 
