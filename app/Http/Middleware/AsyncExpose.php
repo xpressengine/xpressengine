@@ -40,7 +40,7 @@ class AsyncExpose
     {
         $response = $next($request);
 
-        if($request->wantsJson() && $request->hasHeader('X-XE-Async-Expose')) {
+        if ($request->wantsJson() && $request->hasHeader('X-XE-Async-Expose')) {
             $content = json_decode($response->getContent(), true);
 
             // assets
@@ -51,6 +51,7 @@ class AsyncExpose
             $translations = \Xpressengine\Presenter\Html\Tags\Translation::getTransList();
 
             $assets = [];
+            $_XE_ = [];
             if ($assetCss) {
                 $assets['css'] = $assetCss;
             }
