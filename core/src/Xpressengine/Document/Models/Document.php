@@ -104,6 +104,7 @@ class Document extends DynamicModel
     const STATUS_PRIVATE = 20;
     const STATUS_PUBLIC = 30;
     const STATUS_NOTICE = 50;
+    const STATUS_TRASH_NOTICE = 55;
 
     // approved
     const APPROVED_REJECTED = 0;
@@ -138,6 +139,7 @@ class Document extends DynamicModel
         self::STATUS_PRIVATE,
         self::STATUS_TEMP,
         self::STATUS_TRASH,
+        self::STATUS_TRASH_NOTICE,
         self::STATUS_NOTICE,
     ];
 
@@ -535,8 +537,14 @@ class Document extends DynamicModel
      */
     public function setTrash()
     {
-        $this->setStatus(self::STATUS_TRASH);
-        $this->setDisplay(self::DISPLAY_HIDDEN);
+        if($this->status === self::STATUS_NOTICE){
+            $this->setStatus(self::STATUS_TRASH_NOTICE);
+        }else{
+            $this->setStatus(self::STATUS_TRASH);
+        }
+        if($this->display !== self::DISPLAY_SECRET){
+            $this->setDisplay(self::DISPLAY_HIDDEN);
+        }
         return $this;
     }
 
@@ -547,8 +555,14 @@ class Document extends DynamicModel
      */
     public function setRestore()
     {
-        $this->setStatus(self::STATUS_PUBLIC);
-        $this->setDisplay(self::DISPLAY_VISIBLE);
+        if($this->status === self::STATUS_TRASH_NOTICE){
+            $this->setStatus(self::STATUS_NOTICE);
+        }else{
+            $this->setStatus(self::STATUS_PUBLIC);
+        }
+        if($this->display !== self::DISPLAY_SECRET){
+            $this->setDisplay(self::DISPLAY_VISIBLE);
+        }
         return $this;
     }
 
