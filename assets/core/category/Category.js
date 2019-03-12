@@ -529,6 +529,10 @@ var Category = (function (XE, $, Tree) {
     remove: function (item) {
       var that = this
 
+      if (confirm(XE.Lang.trans('xe::confirmDelete')) == false) {
+        return;
+      }
+
       XE.ajax({
         url: _config.remove,
         type: 'post',
@@ -553,6 +557,10 @@ var Category = (function (XE, $, Tree) {
     */
     removeAll: function (item) {
       var that = this
+
+      if (confirm(XE.Lang.trans('xe::confirmDelete')) == false) {
+        return;
+      }
 
       XE.ajax({
         url: _config.removeAll,

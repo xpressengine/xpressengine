@@ -30,6 +30,7 @@
     'xe::delete',
     'xe::close',
     'xe::subCategoryDestroy',
+    'xe::confirmDelete',
 ]) }}
 
 @section('page_title')
