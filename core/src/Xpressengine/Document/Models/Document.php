@@ -472,7 +472,9 @@ class Document extends DynamicModel
     public function setApprove()
     {
         $this->setApproved(self::APPROVED_APPROVED);
-        $this->setDisplay(self::DISPLAY_VISIBLE);
+        if($this->display !== self::DISPLAY_SECRET){
+            $this->setDisplay(self::DISPLAY_VISIBLE);
+        }
         return $this;
     }
 
@@ -496,7 +498,9 @@ class Document extends DynamicModel
     public function setApproveWait()
     {
         $this->setApproved(self::APPROVED_WAITING);
-        $this->setDisplay(self::DISPLAY_HIDDEN);
+        if($this->display !== self::DISPLAY_SECRET){
+            $this->setDisplay(self::DISPLAY_HIDDEN);
+        }
         return $this;
     }
 
