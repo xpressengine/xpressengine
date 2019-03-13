@@ -889,6 +889,10 @@ return [
         'ko' => ':charCount 이상의 글자를 입력하세요.',
         'en' => 'Please enter at least :charCount character.|Please enter at least :charCount characters.',
     ],
+    'validatorBetween' => [
+        'ko' => ':attribute 는 :min ~ :max 사이로 입력해주세요.',
+        'en' => 'Please enter between :min and :max size :attribute.',
+    ],
     'validationDisplayName' => [
         'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
         'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
@@ -908,6 +912,10 @@ return [
     'required' => [
         'ko' => ':name 이(가) 필요합니다.',
         'en' => 'Require :name',
+    ],
+    'certify_key'=>[
+        'ko'=>'인증키',
+        'en'=>'Certify_key'
     ],
     'filename' => [
         'ko' => '파일명',

@@ -115,7 +115,7 @@ class Rule
                 list($method, $parameter) = ValidationRuleParser::parse($item);
                 $method = snake_case($method);
                 if (count($parameter)) {
-                    $parameter = implode($parameter, ':');
+                    $parameter = implode($parameter, ',');
                     $item = implode(compact('method', 'parameter'), ':');
                 } else {
                     $item = $method;
@@ -135,6 +135,7 @@ class Rule
                     'xe::validatorRequired',
                     'xe::validatorAlphanum',
                     'xe::validatorMin',
+                    'xe::validatorBetween'
                 ]
             );
         }

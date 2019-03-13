@@ -499,7 +499,11 @@ class Validator extends App {
 
           default:
             if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-              that.error($dst, that.$$xe.Lang.trans('xe::validatorBetween', { between: parameters }))
+              that.error($dst, that.$$xe.Lang.trans('xe::validatorBetween', {
+                attribute: $dst.data('valid-name') || $dst.attr('name'),
+                min: $$.addCommas(range[0]),
+                max: $$.addCommas(range[1])
+              }))
               return false
             }
         }
