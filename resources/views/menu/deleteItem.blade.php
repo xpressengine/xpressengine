@@ -23,6 +23,8 @@
                             {{$menuType->summary($item->getKey())}}
                             <br/>
                             {{xe_trans('xe::menuItemDeleteCaution')}}
+                            <br/>
+                            {{xe_trans('xe::menuItemDeleteSiteErrorCaution')}}
                         @endif
                     </div>
                 </div>

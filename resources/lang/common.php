@@ -2021,8 +2021,12 @@ return [
         'en' => 'This menu has :count different menu items. <br/>After you delete a menu item, and then try to delete it again.',
     ],
     'menuItemDeleteCaution' => [
-        'ko' => '메뉴 아이템을삭제하면 다시 복구할 수 없습니다.',
+        'ko' => '메뉴 아이템을 삭제하면 다시 복구할 수 없습니다.',
         'en' => 'When you remove the menu item can not be recovered.',
+    ],
+    'menuItemDeleteSiteErrorCaution' => [
+        'ko' => '메뉴를 삭제할 경우, 사이트가 정상적으로 작동하지 않을수도 있습니다.',
+        'en' => 'If you remove the menu, the site may not function properly.',
     ],
     'menuItemDeleteCautionHaveItems' => [
         'ko' => '이 메뉴 아이템 하위에 :count 개의 메뉴 아이템이 존재하고 있어 삭제할 수 없습니다.',
