@@ -95,7 +95,7 @@ class PluginScanner
                 continue;
             }
             $pluginInfo['id'] = $id;
-            $pluginInfo['path'] = $path;
+            $pluginInfo['path'] = str_replace($_SERVER['DOCUMENT_ROOT'].'/', '', $path);
             $pluginInfo['metaData'] = $this->metaFileReader->read($directory);
 
             $pluginInfos[$id] = $pluginInfo;
