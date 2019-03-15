@@ -22,10 +22,11 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
 
     public function testConstruct()
     {
+        $base = __DIR__;
         $dir    = __DIR__.'/plugins';
         $reader = $this->getReaderMock($dir);
 
-        $scanner = new PluginScanner($reader, $dir);
+        $scanner = new PluginScanner($reader, $dir, $base);
 
         $this->assertInstanceOf('Xpressengine\Plugin\PluginScanner', $scanner);
 
@@ -85,10 +86,11 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
 
     public function testScanDirectoryInvalidPluginFile()
     {
+        $base = __DIR__;
         $dir    = __DIR__.'/invalid_plugins';
         $reader = $this->getReaderMock($dir);
 
-        $scanner = new PluginScanner($reader, $dir);
+        $scanner = new PluginScanner($reader, $dir, $base);
 
         $pluginsInfos = $scanner->scanDirectory();
 

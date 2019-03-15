@@ -264,7 +264,7 @@ class Composer
     protected static function getWriter($path)
     {
         $reader = new MetaFileReader(static::$composerFile);
-        $scanner = new PluginScanner($reader, static::$pluginsDir);
+        $scanner = new PluginScanner($reader, static::$pluginsDir, '');
         $writer = new ComposerFileWriter($path, $scanner);
 
         return $writer;

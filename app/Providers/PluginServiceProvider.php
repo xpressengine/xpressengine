@@ -91,8 +91,10 @@ class PluginServiceProvider extends ServiceProvider
 
                 $pluginDir = base_path('plugins');
 
+                $basePath = base_path();
+
                 $metaFileReader = new MetaFileReader('composer.json');
-                $scanner = new PluginScanner($metaFileReader, $pluginDir);
+                $scanner = new PluginScanner($metaFileReader, $pluginDir, $basePath);
 
                 return $scanner;
             }

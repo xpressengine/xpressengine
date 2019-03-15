@@ -38,15 +38,21 @@ class PluginScanner
     protected $pluginDirectory;
 
     /**
+     * @var string
+     */
+    protected $basePath;
+
+    /**
      * PluginScanner constructor.
      *
      * @param MetaFileReader $metaFileReader  metafile reader
      * @param string         $pluginDirectory plugin root directory
      */
-    public function __construct(MetaFileReader $metaFileReader, $pluginDirectory)
+    public function __construct(MetaFileReader $metaFileReader, $pluginDirectory, $basePath)
     {
         $this->metaFileReader = $metaFileReader;
         $this->pluginDirectory = $pluginDirectory;
+        $this->basePath = $basePath.'/';
     }
 
     /**
@@ -95,7 +101,7 @@ class PluginScanner
                 continue;
             }
             $pluginInfo['id'] = $id;
-            $basePath = str_replace('plugins', '', $this->getPluginDirectory());
+            $basePath = $this->basePath;
             $pluginInfo['path'] = str_replace($basePath, '', $path);
             $pluginInfo['metaData'] = $this->metaFileReader->read($directory);
 
