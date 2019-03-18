@@ -45,7 +45,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://store.xpressengine.io"
+            "url": "https://store.xehub.io"
         }
     ],
     "autoload": {

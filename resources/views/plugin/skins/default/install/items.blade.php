@@ -1,33 +1,90 @@
-<div class="panel">
-    <div class="panel-heading">
-        <div class="panel-heading-search">
-            <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
-                <input type="text" class="xe-form-control" placeholder="{{ xe_trans('xe::enterKeyword') }}" name="q" value="{{ $q or ''}}">
-                <button class="panel-heading-search-btn" type="button"><i class="xi-search"></i><span class="xe-sr-only">검색</span></button>
-            </form>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel admin-tab">
+            <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
+            <ul class="admin-tab-list __xe-tab-list">
+                <li class=" @if($filter === 'extension')on @endif extension"><a href="{{ route('settings.plugins.install.items', ['filter' => 'extension']) }}" data-toggle="xe-page" data-target=".__xe_plugin_items" >{{ xe_trans('xe::extension') }}</a></li>
+                <li class=" @if($filter === 'theme')on @endif theme"><a href="{{ route('settings.plugins.install.items', ['filter' => 'theme']) }}" data-toggle="xe-page" data-target=".__xe_plugin_items">{{ xe_trans('xe::theme') }}</a></li>
+                <li class=" @if($filter === 'purchased')on @endif purchased"><a href="{{ route('settings.plugins.install.items', ['filter' => 'purchased']) }}" data-toggle="xe-page" data-target=".__xe_plugin_items" >{{ xe_trans('xe::mySitePlugins') }}</a></li>
+            </ul>
+            <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
+            <div class="admin-tab-search">
+                <div class="input-group search-group">
+                    <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="selected-type">키워드</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#" data-target="q"><span>키워드</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="author"><span>창작자명</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tag"><span>태그</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="search-input-group">
+                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                            <button class="btn-link">
+                                <i class="xi-close"></i><span class="sr-only">검색</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    {{-- plugin list --}}
-    @if($plugins->count())
-        <ul class="list-group list-install">
-            @foreach($plugins as $plugin)
-                @include($_skin::view('install.item'))
-            @endforeach
-        </ul>
-    @else
-        <div class="panel-body">
-            <p>{{ xe_trans('xe::noPlugins') }}</p>
-        </div>
-    @endif
-
-    @if($filter !== 'purchased' && $plugins->hasPages())
-    <div class="panel-footer">
-        <div class="pull-left">
+@if(isset($operation))
+    <div class="__xe_operation" style="margin-bottom: 10px;">
+        @include($_skin::view('operation'))
+    </div>
+@endif
+<div class="row">
+    <div class="col-sm-12">
+        <p>XE Store에 등록된 내 사이트에 추가한 플러그인을 쉬운설치할 수 있습니다.</p>
+        <div class="pull-right">
             <nav class="__xe_plugin_items_link" data-url="">
                 {!! $plugins->render() !!}
             </nav>
         </div>
+        <div class="pull-right" style="line-height: 33px">
+            <p>
+                {{$plugins->total()}}개의 플러그인
+            </p>
+        </div>
     </div>
-    @endif
 </div>
+{{-- plugin list --}}
+@if($plugins->count())
+    <div class="row">
+
+        @foreach($plugins as $plugin)
+            @include($_skin::view('install.item'))
+        @endforeach
+    </div>
+@else
+    <p>{{ xe_trans('xe::noPlugins') }}</p>
+@endif
+<style>
+    .panel.admin-tab{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .admin-tab-search{
+        margin-right: 10px;
+    }
+    @media(max-width: 768px){
+        .panel.admin-tab{
+            display: block;
+        }
+    }
+</style>

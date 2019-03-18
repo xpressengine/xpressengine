@@ -1,35 +1,37 @@
-<li>
-    <img src="{{ data_get($plugin, 'icon') }}" alt="">
-    <div class="list-install-caption">
-        <label class="xe-label" style="display: inline">
-            <input type="checkbox" @if($handler->getPlugin(data_get($plugin, 'plugin_id'))) disabled @else value="{{ data_get($plugin, 'plugin_id') }}" class="__xe_checkbox"
-                data-title="{{ data_get($plugin, 'title') }}" data-id="{{ data_get($plugin, 'plugin_id') }}" @endif
-               @if(!data_get($plugin, 'is_free') && !data_get($plugin, 'is_purchased')) data-need-purchase="true" @endif
-            >
-            <span class="xe-input-helper"></span>
-        </label>
-        <a href="{{ data_get($plugin, 'link') }}" target="_blank"><span class="xe-label-text">{{ data_get($plugin, 'title') }}</span></a>
-        <div class="list-install-caption-bottom">
-            <p class="list-install-text">Version {{ data_get($plugin, 'latest_release.version') }}</p>
-            <p class="list-install-text">
-                @if(data_get($plugin, 'is_free'))
-                    Free
-                @else
-                    ￦{{ number_format(data_get($plugin, 'price')) }}
-                @endif
-            <p class="list-install-text">
-                @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
-                    {{ xe_trans('xe::installed') }}
-                @else
-                    {{ xe_trans('xe::notInstalledYet') }}
-                @endif
-
-                @if(data_get($plugin, 'is_purchased'))
-                    ({{ xe_trans('xe::purchasedPlugins') }})
-                @elseif(data_get($plugin, 'is_free') === false)
-                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link" target="_blank">{{ xe_trans('xe::goToBuy') }}</a>
-                @endif
-            </p>
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" src="{{$plugin->icon}}" alt="..." width="120" height="120">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div style="display: flex; justify-content: space-between">
+                        <h4 class="media-heading text-primary">{{$plugin->title}}</h4>
+                        <span>
+                        @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
+                                <span class="text-muted">{{ xe_trans('xe::installed') }}</span>
+                            @else
+                                @if(data_get($plugin, 'is_purchased'))
+                                    <button class="xe-btn xe-btn-secondary text-primary plugin-install" data-target="{{$plugin->plugin_id}}">{{ xe_trans('xe::installNow') }}</button>
+                                @elseif(data_get($plugin, 'is_free') === false)
+                                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link" target="_blank">{{ xe_trans('xe::goToBuy') }}</a>
+                                @else
+                                    <button class="xe-btn xe-btn-secondary text-primary plugin-install" data-target="{{$plugin->plugin_id}}">{{ xe_trans('xe::installNow') }}</button>
+                                @endif
+                            @endif
+                        </span>
+                    </div>
+                    <small class="text-muted">{{$plugin->author}}</small>
+                    <p>{{$plugin->latest_release->description}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" style="padding:15px;font: -apple-system-body;">
+            ⬇️️ {{$plugin->downloadeds}}
+            <span class="text-muted" style="margin-left:20px; color: ">{{implode(', ', $plugin->category_titles)}}</span>
         </div>
     </div>
-</li>
+</div>

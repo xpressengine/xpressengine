@@ -184,7 +184,7 @@ return [
                 'ordering' => 100
             ],
             'plugin.list' => [
-                'title' => 'xe::pluginList',
+                'title' => 'xe::pluginInstalled',
                 'display' => true,
                 'description' => '',
                 'ordering' => 200
@@ -399,7 +399,7 @@ return [
 
     'plugin' => [
         'api' => [
-            'url' => 'https://store.xpressengine.io/api/1.2'
+            'url' => 'http://store.xehub.io/api/1.3'
         ],
         'operation' => [
             'time_limit' => 1200

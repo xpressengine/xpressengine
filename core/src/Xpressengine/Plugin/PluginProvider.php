@@ -69,6 +69,12 @@ class PluginProvider
         $query = array_get($filters, 'query');
         $q = implode(',', (array) $query);
 
+        $authors_query = array_get($filters, 'authors');
+        $tags_query = array_get($filters, 'tags');
+
+        $authors = implode(',', (array) $authors_query);
+        $tags = implode(',', (array) $tags_query);
+
         $collection = array_get($filters, 'collection');
 
         $order = array_get($filters, 'order');
@@ -79,7 +85,7 @@ class PluginProvider
         try {
             $response = $this->request(
                 $url,
-                compact('q', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
+                compact('q', 'authors', 'tags', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
             );
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {

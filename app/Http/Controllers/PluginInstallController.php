@@ -56,11 +56,11 @@ class PluginInstallController extends Controller
     {
         $componentTypes = $this->getComponentTypes();
 
-        $filter = 'top';
+        $filter = 'extension';
 
         $available = ini_get('allow_url_fopen') ? true : false;
 
-        $packages = $provider->search(['collection' => $filter], 1, 10);
+        $packages = $provider->search(['collection' => $filter], 1, 6);
 
         $handler->getAllPlugins(true);
 
@@ -69,6 +69,8 @@ class PluginInstallController extends Controller
         $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
 
         $plugins->setPath(route('settings.plugins.install.items'));
+
+        $plugins->appends('filter', $filter);
 
         $operation = $handler->getOperation($writer);
 
@@ -86,21 +88,29 @@ class PluginInstallController extends Controller
      * @param PluginHandler  $handler  PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function items(Request $request, PluginProvider $provider, PluginHandler $handler)
+    public function items(Request $request, PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $page = $request->get('page', 1);
         $q = $query = $request->get('q');
+        $authors = $request->get('author');
+        $tags = $request->get('tag');
         $filter = $request->get('filter');
         $plugins = null;
-
         $config = app('xe.config')->get('plugin');
         $site_token = $config->get('site_token');
-
         if ($query) {
             $query = explode(' ', $query);
             $filter = null;
-            $packages = $provider->search(compact('query', 'site_token'), $page, 10);
-        } elseif ($filter === 'purchased') {
+            $packages = $provider->search(compact('query', 'site_token'), $page, 6);
+        } elseif ($authors) {
+            $authors = explode(' ', $authors);
+            $filter = null;
+            $packages = $provider->search(compact('authors', 'site_token'), $page, 6);
+        } elseif ($tags) {
+            $tags = explode(' ', $tags);
+            $filter = null;
+            $packages = $provider->search(compact('tags', 'site_token'), $page, 6);
+        }elseif ($filter === 'purchased') {
             if (!$site_token) {
                 $link = route('settings.plugins.setting.show');
                 throw new HttpException(
@@ -118,18 +128,11 @@ class PluginInstallController extends Controller
                     xe_trans('xe::InvalidSiteTokenInformation')
                 );
             }
-            $plugins = new Collection($packages);
         } else {
-            if ($filter === 'top') {
-                $collection = $filter;
-            } elseif ($filter === 'popular') {
-                $order = 'downloadeds';
-                $order_type = 'desc';
-            }
+            $collection = $filter;
             $filters = compact('collection', 'order', 'order_type', 'site_token');
-            $packages = $provider->search($filters, $page, 10);
+            $packages = $provider->search($filters, $page, 6);
         }
-
         if (!$plugins) {
             $items = new Collection($packages->data);
             $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
@@ -141,11 +144,12 @@ class PluginInstallController extends Controller
         if($query) {
             $filter = 'search';
         }
-
         $handler->getAllPlugins(true);
         $componentTypes = $this->getComponentTypes();
 
-        return api_render('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
+        $operation = $handler->getOperation($writer);
+
+        return api_render('install.items', compact('plugins', 'operation', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
     }
 
     /**

@@ -15,7 +15,7 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
-                            {{ uio('formText', ['name'=>'site_token', 'value'=>old('site_token', $config->get('site_token')), 'label' => xe_trans('xe::siteToken'), 'description' => xe_trans('xe::descSiteToken')]) }}
+                            {{ uio('formText', ['name'=>'site_token', 'value'=>old('site_token', $config->get('site_token')), 'label' => xe_trans('xe::siteToken'), 'description' => xe_trans('xe::descSiteXehubToken')]) }}
                             @if(!getenv('COMPOSER_HOME') && !getenv('HOME'))
                             {{ uio('formText', ['name'=>'composer_home', 'value'=>old('composer_home', $config->get('composer_home')), 'label' => xe_trans('xe::composerHomeDir'), 'description'=> xe_trans('xe::descComposerHomeDir')]) }}
                             @endif

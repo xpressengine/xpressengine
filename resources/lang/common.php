@@ -1636,6 +1636,10 @@ return [
         'ko' => '플러그인 목록',
         'en' => 'Plugin list',
     ],
+    'pluginInstalled' => [
+        'ko' => '설치된 플러그인',
+        'en' => 'Installed Plugins',
+    ],
     'fetchedPlugin' => [
         'ko' => '자료실 플러그인',
         'en' => 'Fetched plugins from Market',
@@ -2763,6 +2767,10 @@ return [
     'descSiteToken' => [
         'ko' => '<a href="https://store.xpressengine.io" target="_blank">XE3 공식 자료실</a>에 등록하신 사이트의 토큰을 입력하세요. 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.',
         'en' => 'Please enter the token of the site registered in the <a href="https://store.xpressengine.io" target="_blank">XE3 official store</a>. Required when installing paid plugins purchased from the store.',
+    ],
+    'descSiteXehubToken' => [
+        'ko' => '<a href="https://store.xehub.io" target="_blank">XE3 공식 자료실</a>에 등록하신 사이트의 토큰을 입력하세요. 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.',
+        'en' => 'Please enter the token of the site registered in the <a href="https://store.xehub.io" target="_blank">XE3 official store</a>. Required when installing paid plugins purchased from the store.',
     ],
     'descStorageSpaceLimit' => [
         'ko' => '파일수가 많은 파일형식(확장자) 순으로 출력됩니다. 출력할 파일형식의 목록수를 지정하십시오.',
