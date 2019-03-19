@@ -52,7 +52,7 @@
         <p>XE Store에 등록된 내 사이트에 추가한 플러그인을 쉬운설치할 수 있습니다.</p>
         <div class="pull-right">
             <nav class="__xe_plugin_items_link" data-url="">
-                {!! $plugins->render() !!}
+                {!! $plugins->links($_skin::view('install.pagination')) !!}
             </nav>
         </div>
         <div class="pull-right" style="line-height: 33px">
@@ -64,7 +64,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <div class="pull-right">
+        <div class="">
             <div class="admin-tab-search mobile">
                 <div class="input-group search-group">
                     <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
@@ -115,17 +115,28 @@
         justify-content: space-between;
         align-items: center;
     }
+    .media-heading{
+        word-break: break-all;
+    }
     .admin-tab-search{
         margin-right: 10px;
     }
     .admin-tab-search.mobile{
         display: none;
     }
+    .media-heading-box{
+        display: flex;
+        justify-content: space-between;
+    }
     @media(max-width: 768px){
         .admin-tab-search.desktop{
             display: none;
         }
         .admin-tab-search.mobile{
+            display: block;
+            margin: 0 0 10px -8px;
+        }
+        .media-heading-box{
             display: block;
         }
     }

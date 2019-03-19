@@ -8,7 +8,7 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <div style="display: flex; justify-content: space-between">
+                    <div class="media-heading-box">
                         <h4 class="media-heading text-primary">{{$plugin->title}}</h4>
                         <span>
                         @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
