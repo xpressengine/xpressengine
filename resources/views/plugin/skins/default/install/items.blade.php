@@ -8,7 +8,7 @@
                 <li class=" @if($filter === 'purchased')on @endif purchased"><a href="{{ route('settings.plugins.install.items', ['filter' => 'purchased']) }}" data-toggle="xe-page" data-target=".__xe_plugin_items" >{{ xe_trans('xe::mySitePlugins') }}</a></li>
             </ul>
             <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
-            <div class="admin-tab-search">
+            <div class="admin-tab-search desktop">
                 <div class="input-group search-group">
                     <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
 
@@ -62,6 +62,42 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="pull-right">
+            <div class="admin-tab-search mobile">
+                <div class="input-group search-group">
+                    <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="selected-type">키워드</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#" data-target="q"><span>키워드</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="author"><span>창작자명</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tag"><span>태그</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="search-input-group">
+                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                            <button class="btn-link">
+                                <i class="xi-close"></i><span class="sr-only">검색</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {{-- plugin list --}}
 @if($plugins->count())
     <div class="row">
@@ -82,8 +118,14 @@
     .admin-tab-search{
         margin-right: 10px;
     }
+    .admin-tab-search.mobile{
+        display: none;
+    }
     @media(max-width: 768px){
-        .panel.admin-tab{
+        .admin-tab-search.desktop{
+            display: none;
+        }
+        .admin-tab-search.mobile{
             display: block;
         }
     }
