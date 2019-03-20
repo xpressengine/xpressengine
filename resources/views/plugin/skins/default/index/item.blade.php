@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="left-group">
-        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="plugin-title">{{ $plugin->getTitle() }}</a>
+        <span class="plugin-title">{{ $plugin->getTitle() }}</span>
         <dl>
             <dt class="sr-only">version</dt>
             <dd>Version {{ $plugin->getVersion() }}</dd>
@@ -21,18 +21,10 @@
             </dd>
             <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
             <dd>plugins/{{ $plugin->getId() }}</dd>
+            <dt class="sr-only">{{ xe_trans('xe::pluginDetails') }}</dt>
+            <dd><a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}">상세보기</a></dd>
         </dl>
         <p class="ellipsis">{{ $plugin->getDescription() }}</p>
-        {{-- component list --}}
-        @foreach($componentTypes as $type => $typeText)
-            @if(!empty($group = $plugin->getComponentList($type)))
-                <span class="label label-{{ $color[$type] }}" data-html="true" title="
-                @foreach($group as $key => $component)
-                    {!! $loop->index > 0 ? '<br>' : '' !!}{{ $component['name'] }}
-                @endforeach
-                " data-toggle="tooltip">{{ $type }}</span>
-            @endif
-        @endforeach
 
         @if(array_has($unresolvedComponents, $plugin->getId()))
             <hr>
@@ -59,10 +51,19 @@
             </form>
         @endif
     </div>
-    <div class="btn-right">
+    <div class="btn-right form-inline">
+        @if ($plugin->isActivated() == true)
+            <button type="button" class="xe-btn __xe_self_deactivate_plugin">비활성화</button>
+        @else
+            <form method="post" action="{{ route('settings.plugins.manage.activate') }}" class="form-inline">
+                {!! csrf_field() !!}
+                <input type="hidden" name="pluginId" value="{{ $plugin->getId() }}">
+                <button type="submit" class="xe-btn xe-btn-positive-outline">활성화</button>
+            </form>
+        @endif
+
         @if($plugin->isActivated() && ($plugin->getSettingsURI() !== null) )
-            <a class="btn-link"
-               href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
+            <a class="xe-btn xe-btn-positive-outline" href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
         @endif
     </div>
 </li>

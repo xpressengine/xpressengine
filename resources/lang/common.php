@@ -762,8 +762,12 @@ return [
         'en' => 'Plugin',
     ],
     'pluginAndUpdate' => [
-        'ko' => '플러그인 & 업데이트',
-        'en' => 'Plugin & Update',
+        'ko' => '플러그인',
+        'en' => 'Plugin',
+    ],
+    'siteToken' => [
+        'ko' => '사이트 토큰',
+        'en' => 'Site token'
     ],
     'coreUpdate' => [
         'ko' => 'XE3 업데이트',
@@ -1633,16 +1637,16 @@ return [
         'en' => 'Contents',
     ],
     'pluginList' => [
-        'ko' => '플러그인 목록',
-        'en' => 'Plugin list',
+        'ko' => '설치된 플러그인',
+        'en' => 'Installed plugin',
     ],
     'pluginInstalled' => [
         'ko' => '설치된 플러그인',
         'en' => 'Installed Plugins',
     ],
     'fetchedPlugin' => [
-        'ko' => '자료실 플러그인',
-        'en' => 'Fetched plugins from Market',
+        'ko' => '스토어 플러그인',
+        'en' => 'Fetched plugins from Store',
     ],
     'selfInstalledPlugin' => [
         'ko' => '직접 설치한 플러그인',
@@ -2347,8 +2351,8 @@ return [
         'en' => 'Install new Plugin',
     ],
     'installPlugin' => [
-        'ko' => '플러그인 설치',
-        'en' => 'Install Plugin',
+        'ko' => '플러그인 추가',
+        'en' => 'Add Plugin',
     ],
     'inputNewPluginId' => [
         'ko' => '새로 설치할 플러그인의 아이디를 입력하세요.',
