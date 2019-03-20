@@ -214,7 +214,7 @@ return [
                 'ordering' => 200
             ],
             'plugin.setting' => [
-                'title' => 'xe::settings',
+                'title' => 'xe::siteToken',
                 'display' => true,
                 'description' => '',
                 'ordering' => 300

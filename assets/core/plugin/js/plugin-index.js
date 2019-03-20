@@ -22,6 +22,8 @@ window.jQuery(function ($) {
         self.$makePlugin = $('.__xe_make_plugin')
         self.$makeTheme = $('.__xe_make_theme')
         self.$makeSkin = $('.__xe_make_skin')
+
+        self.$selfDeactive = $('.__xe_self_deactivate_plugin')
       },
       bindEvents: function () {
         self.$checkAll.on('click', self.checkAll)
@@ -34,6 +36,8 @@ window.jQuery(function ($) {
         self.$makePlugin.on('click', self.makePlugin)
         self.$makeTheme.on('click', self.makeTheme)
         self.$makeSkin.on('click', self.makeSkin)
+
+        self.$selfDeactive.on('click', self.selfDeactive)
       },
       reset: function () {
         var $checked = $('.__xe_checkbox:checked')
@@ -128,6 +132,25 @@ window.jQuery(function ($) {
       makeSkin: function () {
         var url = self.$makeSkin.attr('href')
         XE.pageModal(url)
+
+        return false
+      },
+      selfDeactive: function () {
+        $('.__xe_checkbox').prop('checked', false)
+        // $(this).parents('li').children('.list-group-item-checkbox').children('.xe-label').children('.__xe_checkbox').prop('checked', true)
+        $(this).parents('li').children('.list-group-item-checkbox').find('.__xe_checkbox').prop('checked', true)
+
+        var pluginIds = self.checkedList()
+        if (pluginIds.length === 0) {
+          return false
+        }
+        var options = {
+          'data': {
+            'pluginId': pluginIds.join()
+          }
+        }
+        var url = self.$deactivate.attr('href')
+        XE.pageModal(url, options)
 
         return false
       }
