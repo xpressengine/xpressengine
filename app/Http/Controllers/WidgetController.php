@@ -129,6 +129,9 @@ class WidgetController extends Controller
      */
     public function setup(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
+        $widgetSelector = null;
+        $skinSelector = null;
+
         $this->validate($request, ['code' => 'required']);
 
         $code = $request->get('code');
