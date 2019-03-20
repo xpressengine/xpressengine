@@ -344,8 +344,6 @@ class MenuMigration extends Migration
         $menuHandler->setMenuItemTheme($boardItem, null, null);
         $menuHandler->setMenuItemTheme($galleryItem, null, null);
 
-
-
         app('xe.permission')->register($menuHandler->permKeyString($noticeItem), new Grant);
         app('xe.permission')->register($menuHandler->permKeyString($blogItem), new Grant);
         app('xe.permission')->register($menuHandler->permKeyString($boardItem), new Grant);
@@ -356,11 +354,11 @@ class MenuMigration extends Migration
 
         $blogSkin = $skinHandler->get(BlogSkin::getId());
         $skinHandler->assign('module/board@board:' . $blogItem->id, $blogSkin, 'desktop');
-        $skinHandler->assign('module/board@board:' . $blogItem->id, $blogSkin, 'desktop');
+        $skinHandler->assign('module/board@board:' . $blogItem->id, $blogSkin, 'mobile');
 
         $gallerySkin = $skinHandler->get(GallerySkin::getId());
         $skinHandler->assign('module/board@board:' . $galleryItem->id, $gallerySkin, 'desktop');
-        $skinHandler->assign('module/board@board:' . $galleryItem->id, $gallerySkin, 'desktop');
+        $skinHandler->assign('module/board@board:' . $galleryItem->id, $gallerySkin, 'mobile');
     }
 
     protected function setThemeConfig($mainMenu)
