@@ -377,9 +377,6 @@ class PluginHandler
      */
     public function bootPlugins()
     {
-        foreach ($this->getActivatedPlugins() as $entity) {
-            $this->registerAutoload($entity);
-        }
 
         foreach ($this->getActivatedPlugins() as $entity) {
             $this->registerPlugin($entity);

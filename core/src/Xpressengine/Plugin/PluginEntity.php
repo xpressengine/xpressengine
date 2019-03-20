@@ -153,6 +153,9 @@ class PluginEntity implements Arrayable, Jsonable
             }
             require_once($this->pluginFile);
 
+            // reigster each plugin's autoload if autoload.php exist
+            $this->registerPluginAutoload();
+
             $this->object = new $this->class();
             return $this->object;
         }
@@ -745,6 +748,7 @@ class PluginEntity implements Arrayable, Jsonable
      * autoload 파일을 각 플러그인 디렉토리 내에 vendor/autoload.php 파일이다.
      *
      * Deprecated 2019.01.21 getObject에서 사용했지만 PluginHandler로 옮기고 새로 생성한 hasAutoloadFile과 getAutoload를 사용함.
+     * 2019.03.20 설계상 이유로 1/21해당 코드를 다시 롤백함.
      *
      * @return void
      */
