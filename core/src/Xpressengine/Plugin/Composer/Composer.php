@@ -49,7 +49,7 @@ class Composer
     protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '*',
+        'xpressengine-plugin/together' => '*',
         'xpressengine-plugin/board' => '*',
         'xpressengine-plugin/ckeditor' => '*',
         'xpressengine-plugin/claim' => '*',

@@ -58,14 +58,15 @@ class XeInstall extends Command
      * @var array
      */
     protected $basePlugins = [
-        'alice',
         'board',
+        'together',
         'claim',
         'ckeditor',
         'comment',
         'page',
         'news_client',
         'widget_page',
+        'banner'
     ];
 
     /**
