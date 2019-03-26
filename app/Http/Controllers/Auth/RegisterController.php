@@ -139,7 +139,7 @@ class RegisterController extends Controller
 
         XeFrontend::rule('join', $rules);
 
-        return \XePresenter::make('register.create', compact('config', 'parts', 'register_token'));
+        return \XePresenter::make('register.create', compact('config', 'parts'));
     }
 
     /**
