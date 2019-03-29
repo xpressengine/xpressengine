@@ -41,7 +41,7 @@ class Text extends AbstractType
      */
     public function name()
     {
-        return 'Text';
+        return 'Text - 문자';
     }
 
     /**

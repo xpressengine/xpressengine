@@ -46,7 +46,7 @@ class Number extends AbstractType
      */
     public function name()
     {
-        return 'Number';
+        return 'Number - 숫자';
     }
 
     /**
