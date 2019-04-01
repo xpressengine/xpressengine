@@ -60,6 +60,7 @@ class ConfigHandler
         'group' => null,
         'id' => null,
         'label' => null,
+        'labelDescription' => null,
         'typeId' => null,
         'typeName' => null,
         'skinId' => null,

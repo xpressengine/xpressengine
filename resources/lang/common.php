@@ -2538,6 +2538,14 @@ return [
         'ko' => '라벨',
         'en' => 'Label',
     ],
+    'dynamicFieldLabelDetailTitle' => [
+        'ko' => '라벨상세설명',
+        'en' => 'Label detail description'
+    ],
+    'dynamicFieldLabelDetailDescription' => [
+        'ko' => '입력 폼 안에 노출되는 내용입니다.',
+        'en' => 'This is the content that is exposed in the input form.'
+    ],
     'dynamicFieldIdDescription' => [
         'ko' => '아이디는 데이터 사용 및 저장의 키워드로 사용 됩니다.  2~20자 영문, 숫자로 입력합니다.',
         'en' => 'IDs are used as keywords for data usage and storage. Enter 2 to 20 alphanumeric characters.',

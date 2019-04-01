@@ -85,6 +85,11 @@
                 <div class="dynamic-lang-editor-box" data-name="label" data-lang-key="" data-valid-name="Label"></div>
             </div>
             <div class="form-group">
+                <label for="">{{xe_trans('xe::dynamicFieldLabelDetailTitle')}}</label>
+                <small>{{xe_trans('xe::dynamicFieldLabelDetailDescription')}}</small>
+                <div class="dynamic-lang-editor-box" data-name="placeholder" data-lang-key="" data-valid-name="placeholder"></div>
+            </div>
+            <div class="form-group">
                 <input type="hidden" name="use" value="true" />
                 <input type="hidden" name="required" value="true" />
                 <input type="hidden" name="sortable" value="true" />
