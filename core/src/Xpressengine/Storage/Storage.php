@@ -630,6 +630,10 @@ class Storage
             'odb'   => 'application/vnd.oasis.opendocument.database',
             'ott'   => 'application/vnd.oasis.opendocument.text-template',
             'hwp'   => 'application/x-hwp',
+            'ico'   => [
+                'image/x-icon',
+                'image/vnd.microsoft.icon',
+            ],
         ];
     }
 }
