@@ -133,7 +133,19 @@
                 </div>
                 @show
             </div>
+
+
+
             <div class="container-fluid">
+                @if($errors = session('bootfail'))
+                    @foreach($errors as $plugin => $e)
+                        <div class="alert alert-danger" role="alert">
+                            <strong>{{ xe_trans('xe::pluginWasDeactivated', ['name' => $plugin]) }} !!</strong>
+                            {{ $e->getMessage() }} ({{ str_replace(base_path(), '', $e->getFile()) }}:{{ $e->getLine() }})
+                        </div>
+                    @endforeach
+                @endif
+
                 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
                 {!! $content !!}
             </div>

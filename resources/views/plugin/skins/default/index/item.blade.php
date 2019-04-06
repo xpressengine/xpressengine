@@ -40,7 +40,7 @@
 
         {{-- status info --}}
         {{-- 업데이트가 다운로드 돼 있는 상태 --}}
-        @if($plugin->needUpdateInstall() && $plugin->isActivated())
+        @if($plugin->isActivated() && $plugin->needUpdateInstall())
             <form id="update" method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
                 {!! csrf_field() !!}
                 {!! method_field('PUT') !!}

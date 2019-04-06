@@ -2969,5 +2969,9 @@ return [
     'descPostMaxSize' => [
         'ko' => 'post_max_size가 upload_max_filesize보다 작을 경우 파일 업로드가 정상적으로 동작하지 않을 수 있습니다.',
         'en' => 'If post_max_size is less than upload_max_filesize, file upload may not operate normally.'
-    ]
+    ],
+    'pluginWasDeactivated' => [
+        'ko' => '[:name] 플러그인이 비활성화 되었습니다.',
+        'en' => 'Plugin [:name] was deactivated.',
+    ],
 ];

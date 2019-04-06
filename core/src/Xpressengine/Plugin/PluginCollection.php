@@ -20,6 +20,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use IteratorAggregate;
 use Traversable;
+use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Cache\PluginCache;
 
 /**
@@ -56,6 +57,11 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     protected $cache;
 
     /**
+     * @var ConfigManager
+     */
+    protected $configManager;
+
+    /**
      * @var String
      */
     protected $entityClass;
@@ -65,21 +71,19 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
      *
      * @param PluginScanner $pluginScanner Plugin Scanner
      * @param PluginCache   $pluginCache   Plugin Cache
+     * @param ConfigManager $configManager Config Manager
      * @param string        $entityClass   PluginEntity class name
-     * @param array         $pluginStatus  plugin status info list
      */
     public function __construct(
         PluginScanner $pluginScanner,
         PluginCache $pluginCache,
-        $entityClass,
-        $pluginStatus = []
+        ConfigManager $configManager,
+        $entityClass
     ) {
         $this->scanner = $pluginScanner;
         $this->cache = $pluginCache;
+        $this->configManager = $configManager;
         $this->entityClass = $entityClass;
-
-        // set pluginStatus
-        $this->statusList = $pluginStatus;
 
         /** @var PluginEntity $entityClass */
         $entityClass::setCollection($this);
@@ -106,13 +110,22 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
         }
 
         // set status of plugins
-        foreach ($this->statusList as $id => $info) {
+        foreach ($this->getStatusList() as $id => $info) {
             if (array_has($this->plugins, $id)) {
                 $plugin = $this->get($id);
                 $plugin->setStatus($info['status']);
                 $plugin->setInstalledVersion($info['version']);
             }
         }
+    }
+
+    protected function getStatusList()
+    {
+        if (!$this->statusList) {
+            $this->statusList = $this->configManager->getVal('plugin.list', []);
+        }
+
+        return $this->statusList;
     }
 
     /**
@@ -125,6 +138,7 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
         $pluginData = $this->scanner->scanDirectory();
         $this->plugins = $this->resolvePlugins($pluginData);
         $this->cache->setPluginsToCache($this->toArray());
+        $this->statusList = null;
     }
 
     /**
