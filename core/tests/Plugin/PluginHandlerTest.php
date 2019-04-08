@@ -117,7 +117,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
 
 
         $entity = $this->makeEntity();
-        $entity->shouldReceive('getStatus')->twice()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
+        $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
         $entity->shouldReceive('setStatus')->once()->withArgs(['activated'])->andReturnNull();
         $entity->shouldReceive('setInstalledVersion')->once()->with('1.0')->andReturnNull();
         $entity->shouldReceive('getObject')->withNoArgs()->andReturn($plugin);
