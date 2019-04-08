@@ -26,9 +26,6 @@
   background-color: #fff;
 }
 
-li {
-  list-style: none;
-}
 .setting-wrap .xe-container .cont {
   padding: 0;
 }
@@ -216,6 +213,7 @@ li {
   padding-left: 15px;
   font-size: 13px;
   color: #434a53;
+  list-style: none;
 }
 .setting-card .acount-list li:before {
   position: absolute;
