@@ -119,6 +119,11 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
         }
     }
 
+    /**
+     * 플러그인 상태 정보 반환
+     *
+     * @return array
+     */
     protected function getStatusList()
     {
         if (!$this->statusList) {

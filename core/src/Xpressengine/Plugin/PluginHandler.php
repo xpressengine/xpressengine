@@ -454,6 +454,13 @@ class PluginHandler
         }
     }
 
+    /**
+     * Handle errors for boot plugins.
+     *
+     * @param PluginEntity $entity plugin
+     * @param \Exception   $e      exception
+     * @return void
+     */
     protected function handleError(PluginEntity $entity, \Exception $e)
     {
         $this->errors[$entity->getId()] = $e;
@@ -463,6 +470,11 @@ class PluginHandler
         }
     }
 
+    /**
+     * Returns errors for boot plugins.
+     *
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;
@@ -518,6 +530,7 @@ class PluginHandler
     /**
      * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
      *
+     * @param PluginEntity $entity plugin
      * @return void
      */
     public function registerAutoload(PluginEntity $entity)
