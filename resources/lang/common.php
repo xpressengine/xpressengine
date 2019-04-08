@@ -2974,4 +2974,12 @@ return [
         'ko' => '[:name] 플러그인이 비활성화 되었습니다.',
         'en' => 'Plugin [:name] was deactivated.',
     ],
+    'pluginRequiredVerHigherThanCurrentCore' => [
+        'ko' => '플러그인의 요구 버전이 현재 코어버전보다 높습니다.',
+        'en' => 'The required version of the plugin is higher than the current core version.',
+    ],
+    'viewDetails' => [
+        'ko' => '상세보기',
+        'en' => 'View Details',
+    ],
 ];

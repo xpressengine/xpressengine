@@ -794,4 +794,12 @@ class PluginEntity implements Arrayable, Jsonable
         }
         return false;
     }
+
+    public function isAllowVersion()
+    {
+        return \Composer\Semver\Semver::satisfies(
+            __XE_VERSION__,
+            $this->getMetaData('require.xpressengine/xpressengine') ?: __XE_VERSION__
+        );
+    }
 }
