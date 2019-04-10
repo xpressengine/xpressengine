@@ -188,7 +188,11 @@ class DynamicFieldHandler
         $this->configHandler->add($config);
         $type = $this->registerHandler->getType($this, $config->get('typeId'));
         $type->setConfig($config);
-        $type->create($column);
+
+        if ($type->checkExistTypeTables() == false) {
+            $type->createTypeTable();
+        }
+
         $this->connection->commit();
     }
 
@@ -212,10 +216,13 @@ class DynamicFieldHandler
     public function drop(ConfigEntity $config)
     {
         $this->connection->beginTransaction();
+
         $this->configHandler->remove($config);
         $type = $this->registerHandler->getType($this, $config->get('typeId'));
+
         $type->setConfig($config);
-        $type->drop();
+        $type->dropData();
+
         $this->connection->commit();
     }
 

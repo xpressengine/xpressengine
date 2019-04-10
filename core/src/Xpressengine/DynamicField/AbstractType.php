@@ -211,10 +211,135 @@ abstract class AbstractType implements ComponentInterface
     }
 
     /**
+     * get dynamic field table name
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'field_' . $this->getPureTableName();
+    }
+
+    /**
+     * get dynamic field revision table name
+     *
+     * @return string
+     */
+    public function getRevisionTableName()
+    {
+        return 'field_revision_' . $this->getPureTableName();
+    }
+
+    /**
+     * get dynamic field type table name
+     *
+     * @return string
+     */
+    private function getPureTableName()
+    {
+        $tableName = $this->getId();
+        $tableName = str_replace(RegisterHandler::FIELD_TYPE . '/', '', $tableName);
+        $tableName = snake_case($tableName);
+        $tableName = str_replace('@_', '@', $tableName);
+        $tableName = str_replace('@', '_', $tableName);
+
+        return $tableName;
+    }
+
+    /**
+     * check exist dynamic field table and dynamic field revision table
+     *
+     * @return bool
+     */
+    public function checkExistTypeTables()
+    {
+        return $this->checkExistTable($this->getTableName()) && $this->checkExistTable($this->getRevisionTableName());
+    }
+
+    /**
+     * check exist table by table name
+     *
+     * @param string $tableName check table name
+     *
+     * @return mixed
+     */
+    private function checkExistTable($tableName)
+    {
+        return $this->handler->connection()->getSchemaBuilder()->hasTable($tableName);
+    }
+
+    /**
+     * create dynamic field tables
+     *
+     * @return void
+     */
+    public function createTypeTable()
+    {
+        $self = $this;
+
+        //일반 테이블 생성
+        if ($this->checkExistTable($this->getTableName()) == false) {
+            $this->handler->connection()->getSchemaBuilder()->create(
+                $this->getTableName(),
+                function (Blueprint $table) use ($self) {
+                    $table->string('field_id', 36);
+                    $table->string('target_id', 36);
+                    $table->string('group');
+
+                    foreach ($self->getColumns() as $column) {
+                        $column->add($table, '');
+                    }
+
+                    $table->index(['field_id', 'target_id', 'group'], 'index');
+                }
+            );
+        }
+
+        //revision 테이블 생성
+        if ($this->checkExistTable($this->getRevisionTableName()) == false) {
+            $this->handler->connection()->getSchemaBuilder()->create(
+                $this->getRevisionTableName(),
+                function (Blueprint $table) use ($self) {
+                    $table->string('revision_id', 255);
+                    $table->integer('revision_no')->default(0);
+                    $table->string('field_id', 36);
+                    $table->string('target_id', 36);
+                    $table->string('group');
+
+                    foreach ($self->getColumns() as $column) {
+                        $column->add($table, '');
+                    }
+
+                    $table->primary(array('revision_id', 'field_id'), 'primaryKey');
+                    $table->index(['field_id', 'target_id', 'group'], 'index');
+                }
+            );
+        }
+    }
+
+    /**
+     * delete dynamic field all data
+     *
+     * @return void
+     */
+    public function dropData()
+    {
+        $where  = [
+            ['field_id', $this->config->get('id', '')],
+            ['group', $this->config->get('group', '')]
+        ];
+
+        $this->handler->connection()->table($this->getTableName())
+            ->where($where)->delete();
+    }
+
+    /**
      * Dynamic Field 생성 시 처리해야 할 사항들
      *
      * @param ColumnEntity $column join column entity
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->createTypeTable()
      */
     public function create(ColumnEntity $column)
     {
@@ -232,6 +357,8 @@ abstract class AbstractType implements ComponentInterface
      *
      * @param ColumnEntity $column join column entity
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->createTypeTable()
      */
     protected function createTable(ColumnEntity $column)
     {
@@ -257,6 +384,8 @@ abstract class AbstractType implements ComponentInterface
      *
      * @param ColumnEntity $column join column entity
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->createTypeTable()
      */
     protected function createRevisionTable(ColumnEntity $column)
     {
@@ -293,6 +422,8 @@ abstract class AbstractType implements ComponentInterface
      * 이 기능을 사용하면서 방생하는 문제는 사용자 책임
      *
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->createTypeTable()
      */
     protected function createField()
     {
@@ -329,6 +460,8 @@ abstract class AbstractType implements ComponentInterface
      * 이 기능을 사용하면서 방생하는 문제는 사용자 책임
      *
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->createTypeTable()
      */
     protected function createFieldRevision()
     {
@@ -364,6 +497,8 @@ abstract class AbstractType implements ComponentInterface
      * Dynamic Field 삭제 시 처리해야 할 사항들
      *
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->dropData()
      */
     public function drop()
     {
@@ -378,6 +513,8 @@ abstract class AbstractType implements ComponentInterface
      * Dynamic Field 삭제 시 테이블 삭제
      *
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->dropData()
      */
     protected function dropTable()
     {
@@ -405,6 +542,8 @@ abstract class AbstractType implements ComponentInterface
      * Dynamic Field 삭제 시 alter table 로 처리
      *
      * @return void
+     *
+     * @deprecated since version 3.0.1 instead $type->dropData()
      */
     protected function dropField()
     {
@@ -473,12 +612,15 @@ abstract class AbstractType implements ComponentInterface
         }
 
         $insertParam = [];
-        $insertParam['dynamic_field_target_id'] = $args[$config->get('joinColumnName')];
+        $insertParam['field_id'] = $config->get('id');
+        $insertParam['target_id'] = $args[$config->get('joinColumnName')];
+        $insertParam['group'] = $config->get('group');
+
         foreach ($this->getColumns() as $column) {
             $key = $config->get('id') . '_' . $column->name;
 
-            if (isset($args[$key])) {
-                $insertParam[$key] = $args[$key];
+            if (isset($args[$key]) == true) {
+                $insertParam[$column->name] = $args[$key];
             }
         }
 
@@ -488,8 +630,7 @@ abstract class AbstractType implements ComponentInterface
         );
 
         if (count($insertParam) > 1) {
-            $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
-                ->insert($insertParam);
+            $this->handler->connection()->table($this->getTableName())->insert($insertParam);
         }
 
         // event fire
@@ -503,6 +644,8 @@ abstract class AbstractType implements ComponentInterface
      *
      * @param array $wheres \Illuminate\Database\Query\Builder's wheres attribute
      * @return array
+     *
+     * @deprecated since version 3.0.1 instead $type->getWhere()
      */
     protected function parseWhere(array $wheres)
     {
@@ -525,6 +668,42 @@ abstract class AbstractType implements ComponentInterface
     }
 
     /**
+     * get where
+     *
+     * @param array        $wheres wheres
+     * @param ConfigEntity $config config entity
+     *
+     * @return array
+     */
+    public function getWhere($wheres, ConfigEntity $config)
+    {
+        $where = [];
+        foreach ($wheres as $arr) {
+            // check alias
+            $columnInfo = explode('.', $arr['column']);
+            if (count($columnInfo) === 1) {
+                $column = $columnInfo[0];
+            } else {
+                $column = $columnInfo[1];
+            }
+
+            if ($column == 'id' && $arr['operator'] == '=') {
+                $where['target_id'] = $arr['value'];
+            }
+        }
+
+        if ($group = $config->get('group', null)) {
+            $where['group'] = $group;
+        }
+
+        if ($fieldId = $config->get('id', null)) {
+            $where['field_id'] = $fieldId;
+        }
+
+        return $where;
+    }
+
+    /**
      * 생성된 Dynamic Field 테이블에 데이터 수정
      *
      * @param array $args   parameters
@@ -534,10 +713,11 @@ abstract class AbstractType implements ComponentInterface
     public function update(array $args, array $wheres)
     {
         $config = $this->config;
+        $type = $this->handler->getRegisterHandler()->getType($this->handler, $config->get('typeId'));
 
-        $where = $this->parseWhere($wheres);
+        $where = $this->getWhere($wheres, $config);
 
-        if (isset($where[$config->get('joinColumnName')]) === false) {
+        if (isset($where['target_id']) === false) {
             return null;
         }
 
@@ -552,7 +732,7 @@ abstract class AbstractType implements ComponentInterface
             $key = $config->get('id') . '_' . $column->name;
 
             if (isset($args[$key])) {
-                $updateParam[$key] = $args[$key];
+                $updateParam[$column->name] = $args[$key];
             }
         }
 
@@ -562,15 +742,15 @@ abstract class AbstractType implements ComponentInterface
         );
 
         if (count($updateParam) > 0) {
-            if ($this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
-                    ->where('dynamic_field_target_id', '=', $where['id'])->first() != null
+            if ($this->handler->connection()->table($type->getTableName())
+                    ->where($where)->first() != null
             ) {
-                $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
-                    ->where('dynamic_field_target_id', '=', $where['id'])->update($updateParam);
+                $this->handler->connection()->table($type->getTableName())
+                    ->where($where)->update($updateParam);
             } else {
                 $insertParam = $updateParam;
-                $insertParam['dynamic_field_target_id'] = $where['id'];
-                $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
+                $insertParam['target_id'] = $where['target_id'];
+                $this->handler->connection()->table($type->getTableName())
                     ->insert($insertParam);
             }
         }
@@ -590,9 +770,10 @@ abstract class AbstractType implements ComponentInterface
     public function delete(array $wheres)
     {
         $config = $this->config;
-        $where = $this->parseWhere($wheres);
+        $type = $this->handler->getRegisterHandler()->getType($this->handler, $config->get('typeId'));
+        $where = $this->getWhere($wheres, $config);
 
-        if (isset($where[$config->get('joinColumnName')]) === false) {
+        if (isset($where['target_id']) === false) {
             throw new Exceptions\RequiredDynamicFieldException;
         }
 
@@ -601,8 +782,7 @@ abstract class AbstractType implements ComponentInterface
             sprintf('dynamicField.%s.%s.before_delete', $config->get('group'), $config->get('id'))
         );
 
-        $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
-            ->where('dynamic_field_target_id', '=', $where['id'])->delete();
+        $this->handler->connection()->table($type->getTableName())->where($where)->delete();
 
         // event fire
         $this->handler->getRegisterHandler()->fireEvent(
@@ -655,19 +835,33 @@ abstract class AbstractType implements ComponentInterface
         }
 
         $baseTable = $query->from;
-        $createTableName = $this->handler->getConfigHandler()->getTableName($config);
-        if ($query->hasDynamicTable($createTableName) === true) {
+
+        $type = $this->handler->getRegisterHandler()->getType($this->handler, $config->get('typeId'));
+
+        $createTableName = $type->getTableName();
+        if ($query->hasDynamicTable($config->get('group') . '_' . $config->get('id')) === true) {
             return $query;
         }
 
-        $query->leftJoin($createTableName, function (JoinClause $join) use ($createTableName, $config, $baseTable) {
-            $join->on(
-                sprintf('%s.%s', $baseTable, $config->get('joinColumnName')),
-                '=',
-                sprintf('%s.dynamic_field_target_id', $createTableName)
-            );
-        });
-        $query->setDynamicTable($createTableName);
+        $rawString = sprintf('%s.*', \DB::getTablePrefix() . $baseTable);
+        foreach ($type->getColumns() as $column) {
+            $key = $config->get('id') . '_' . $column->name;
+
+            $rawString .= sprintf(', %s.%s as %s', \DB::getTablePrefix() . $config->get('id'), $column->name, $key);
+        }
+
+        $query->leftJoin(
+            sprintf('%s as %s', $createTableName, $config->get('id')),
+            function (JoinClause $join) use ($createTableName, $config, $baseTable) {
+                $join->on(
+                    sprintf('%s.%s', $baseTable, $config->get('joinColumnName')),
+                    '=',
+                    sprintf('%s.target_id', $config->get('id'))
+                )->where($config->get('id') . '.field_id', $config->get('id'));
+            }
+        )->selectRaw($rawString);
+
+        $query->setDynamicTable($config->get('group') . '_' . $config->get('id'));
 
         return $query;
     }
@@ -731,20 +925,21 @@ abstract class AbstractType implements ComponentInterface
         }
 
         $insertParam = [];
-        $insertParam['dynamic_field_target_id'] = $args['id'];
+        $insertParam['target_id'] = $args['id'];
+        $insertParam['group'] = $this->config->get('group');
+        $insertParam['field_id'] = $this->config->get('id');
         $insertParam['revision_id'] = $args['revision_id'];
         $insertParam['revision_no'] = $args['revision_no'];
+
         foreach ($this->getColumns() as $column) {
             $key = $this->config->get('id') . '_' . $column->name;
 
             if (isset($args[$key])) {
-                $insertParam[$key] = $args[$key];
+                $insertParam[$column->name] = $args[$key];
             }
         }
 
-        $this->handler->connection()->table(
-            $this->handler->getConfigHandler()->getRevisionTableName($this->config)
-        )->insert($insertParam);
+        $this->handler->connection()->table($this->getRevisionTableName())->insert($insertParam);
     }
 
     /**
@@ -757,8 +952,9 @@ abstract class AbstractType implements ComponentInterface
     {
         $config = $this->config;
         $tableName = $query->from;
-        $table = $this->handler->getConfigHandler()->getRevisionTableName($config);
-        if ($query->hasDynamicTable($table)) {
+
+        $table = $this->getRevisionTableName();
+        if ($query->hasDynamicTable($config->get('group') . '_' . $config->get('id')) == true) {
             return $query;
         }
 
@@ -766,14 +962,14 @@ abstract class AbstractType implements ComponentInterface
             $join->on(
                 sprintf('%s.%s', $tableName, $config->get('joinColumnName')),
                 '=',
-                sprintf('%s.dynamic_field_target_id', $table)
+                sprintf('%s.target_id', $table)
             )->on(
                 sprintf('%s.revision_id', $tableName),
                 '=',
                 sprintf('%s.revision_id', $table)
-            );
+            )->on(sprintf('%s.group', $table), '=', $config->get('group'));
         });
-        $query->setDynamicTable($table);
+        $query->setDynamicTable($config->get('group') . '_' . $config->get('id'));
 
         return $query;
     }
