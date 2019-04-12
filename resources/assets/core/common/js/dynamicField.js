@@ -43,9 +43,11 @@ var DynamicField = function () {
       that.$container.$modal.xeModal('show')
 
       var $langBox = that.$container.$modal.find('.dynamic-lang-editor-box')
-
       $langBox.addClass('lang-editor-box')
-      window.langEditorBoxRender($langBox) // @FIXME
+
+      $langBox.each(function (idx, element) {
+        window.langEditorBoxRender($(element)) // FIXME
+      })
     })
 
     this.$container.on('click', '.__xe_btn_submit', function () {
@@ -210,9 +212,12 @@ var DynamicField = function () {
         })
 
         var $langBox = form.find('.dynamic-lang-editor-box')
-        $langBox.data('lang-key', response.config.label)
         $langBox.addClass('lang-editor-box')
-        window.langEditorBoxRender($langBox) // FIXME
+
+        $langBox.each(function (idx, element) {
+          $(element).data('lang-key', response.config[$(element).data('name')])
+          window.langEditorBoxRender($(element)) // FIXME
+        })
 
         // @FIXME
         form.find('[name="use"]').val(that.checkBox(response.config.use) ? 'true' : 'false')

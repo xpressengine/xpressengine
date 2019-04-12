@@ -80,6 +80,10 @@ class SettingsMiddleware
         // apply theme
         $this->applySettingsTheme();
 
+        if (!empty($errors = $this->app['xe.plugin']->getErrors())) {
+            $request->session()->flash('bootfail', $errors);
+        }
+
         return $next($request);
     }
 

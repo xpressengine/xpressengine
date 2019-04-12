@@ -49,13 +49,14 @@ class Composer
     protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
-        'xpressengine-plugin/together' => '*',
         'xpressengine-plugin/board' => '*',
         'xpressengine-plugin/ckeditor' => '*',
         'xpressengine-plugin/claim' => '*',
         'xpressengine-plugin/comment' => '*',
+        'xpressengine-plugin/demo_import' => '*',
         'xpressengine-plugin/news_client' => '*',
         'xpressengine-plugin/page' => '*',
+        'xpressengine-plugin/together' => '*',
         'xpressengine-plugin/widget_page' => '*'
     ];
 

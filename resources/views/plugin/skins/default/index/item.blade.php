@@ -22,7 +22,7 @@
             <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
             <dd>plugins/{{ $plugin->getId() }}</dd>
             <dt class="sr-only">{{ xe_trans('xe::pluginDetails') }}</dt>
-            <dd><a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}">상세보기</a></dd>
+            <dd><a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}">{{ xe_trans('xe::viewDetails') }}</a></dd>
         </dl>
         <p class="ellipsis">{{ $plugin->getDescription() }}</p>
 
@@ -38,9 +38,16 @@
             </div>
         @endif
 
+        @if(!$plugin->isAllowVersion())
+            <hr>
+            <div class="alert alert-warning" role="alert" style="margin-top:10px;">
+                <p><i class="xi-info-o txt_red"></i> {{ xe_trans('xe::pluginRequiredVerHigherThanCurrentCore') }}</p>
+            </div>
+        @endif
+
         {{-- status info --}}
         {{-- 업데이트가 다운로드 돼 있는 상태 --}}
-        @if($plugin->needUpdateInstall() && $plugin->isActivated())
+        @if($plugin->isActivated() && $plugin->needUpdateInstall())
             <form id="update" method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
                 {!! csrf_field() !!}
                 {!! method_field('PUT') !!}
@@ -53,12 +60,12 @@
     </div>
     <div class="btn-right form-inline">
         @if ($plugin->isActivated() == true)
-            <button type="button" class="xe-btn __xe_self_deactivate_plugin">비활성화</button>
+            <button type="button" class="xe-btn __xe_self_deactivate_plugin">{{ xe_trans('xe::deactivation') }}</button>
         @else
             <form method="post" action="{{ route('settings.plugins.manage.activate') }}" class="form-inline">
                 {!! csrf_field() !!}
                 <input type="hidden" name="pluginId" value="{{ $plugin->getId() }}">
-                <button type="submit" class="xe-btn xe-btn-positive-outline">활성화</button>
+                <button type="submit" class="xe-btn xe-btn-positive-outline">{{ xe_trans('xe::activation') }}</button>
             </form>
         @endif
 

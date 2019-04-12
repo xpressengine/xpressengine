@@ -185,8 +185,8 @@ class PluginMake extends MakeCommand
     {
         $namespace = str_replace('\\', '\\\\', $namespace);
         
-        $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle'];
-        $replace = [$namespace, $name, $title];
+        $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle', 'DummyCoreVer'];
+        $replace = [$namespace, $name, $title, '~'.__XE_VERSION__];
 
         $this->buildFile($path.'/composer.json.stub', $search, $replace, $path.'/composer.json');
     }
