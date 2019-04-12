@@ -23,6 +23,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
+use Xpressengine\Presenter\Presentable;
 
 /**
  * Class PluginInstallController
@@ -50,7 +51,8 @@ class PluginInstallController extends Controller
      * @param PluginProvider     $provider PluginProvider instance
      * @param PluginHandler      $handler  PluginHandler instance
      * @param ComposerFileWriter $writer   ComposerFileWriter instance
-     * @return \Xpressengine\Presenter\Presentable
+     *
+     * @return Presentable
      */
     public function index(PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
     {
@@ -83,10 +85,12 @@ class PluginInstallController extends Controller
     /**
      * Show the list of plugins.
      *
-     * @param Request        $request  request
-     * @param PluginProvider $provider PluginProvider instance
-     * @param PluginHandler  $handler  PluginHandler instance
-     * @return \Xpressengine\Presenter\Presentable
+     * @param Request            $request  request
+     * @param PluginProvider     $provider PluginProvider instance
+     * @param PluginHandler      $handler  PluginHandler instance
+     * @param ComposerFileWriter $writer   CopmoserFileWriter instance
+     *
+     * @return Presentable
      */
     public function items(Request $request, PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
     {
@@ -97,7 +101,10 @@ class PluginInstallController extends Controller
         $filter = $request->get('filter');
         $plugins = null;
         $config = app('xe.config')->get('plugin');
+        $order = null;
+        $order_type = null;
         $site_token = $config->get('site_token');
+
         if ($query) {
             $query = explode(' ', $query);
             $filter = null;
@@ -110,7 +117,7 @@ class PluginInstallController extends Controller
             $tags = explode(' ', $tags);
             $filter = null;
             $packages = $provider->search(compact('tags', 'site_token'), $page, 6);
-        }elseif ($filter === 'purchased') {
+        } elseif ($filter === 'purchased') {
             if (!$site_token) {
                 $link = route('settings.plugins.setting.show');
                 throw new HttpException(
@@ -133,6 +140,7 @@ class PluginInstallController extends Controller
             $filters = compact('collection', 'order', 'order_type', 'site_token');
             $packages = $provider->search($filters, $page, 6);
         }
+
         if (!$plugins) {
             $items = new Collection($packages->data);
             $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
@@ -141,7 +149,7 @@ class PluginInstallController extends Controller
             $plugins->appends('q', $q);
         }
 
-        if($query) {
+        if ($query) {
             $filter = 'search';
         }
         $handler->getAllPlugins(true);
