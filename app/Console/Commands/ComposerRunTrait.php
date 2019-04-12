@@ -143,18 +143,24 @@ trait ComposerRunTrait
             $startTime = Carbon::now()->format('YmdHis');
             $logFile = "logs/composer-$startTime.log";
         }
+        if (is_string($logFile)) {
+            $output = new StreamOutput(fopen(storage_path($logFile), 'a'));
+        } else {
+            $output = $logFile;
+        }
 
-        file_put_contents(
-            $logFilePath = storage_path($logFile),
-            JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
-        );
+//        file_put_contents(
+//            $logFilePath = storage_path($logFile),
+//            JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
+//        );
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
 
         return $application->run(
             new ArrayInput($inputs),
-            new StreamOutput(fopen($logFilePath, 'a'))
+            $output
+//            new StreamOutput(fopen($logFilePath, 'a'))
         );
     }
 }

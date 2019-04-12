@@ -175,10 +175,6 @@ class Composer
      */
     public static function postInstall(Event $event)
     {
-        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
-
-        static::wrapUp();
-        static::clearCompiled();
     }
 
     /**
@@ -189,10 +185,6 @@ class Composer
      */
     public static function postUpdate(Event $event)
     {
-        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
-
-        static::wrapUp();
-        static::clearCompiled();
     }
 
     /**
@@ -200,25 +192,11 @@ class Composer
      * composer.plugins.json 파일을 현재 XE 상태에 맞춰 갱신한다.
      *
      * @return void
+     *
+     * @deprecated since 3.0.1
      */
     protected static function wrapUp()
     {
-        $path = static::$pluginComposerFile;
-
-        $writer = self::getWriter($path);
-
-        if (!file_exists(static::$installedFlagPath)) {
-            $writer->cleanOperation();
-        } else {
-            $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
-        }
-        $writer->reset()->write();
-
-        // interception proxy 갱신
-        static::deleteDirectory(static::$interceptionProxyDirectory, true);
-
-        // plugin cache 갱신
-        static::deleteDirectory(static::$pluginCacheDirectory, true);
     }
 
     /**
@@ -301,25 +279,11 @@ class Composer
      * @param bool   $preserve  preserve
      *
      * @return bool
+     *
+     * @deprecated since 3.0.1
      */
     protected static function deleteDirectory($directory, $preserve = false)
     {
-        if (!is_dir($directory)) {
-            return false;
-        }
-        $items = new FilesystemIterator($directory);
-        foreach ($items as $item) {
-            if ($item->isDir() && !$item->isLink()) {
-                static::deleteDirectory($item->getPathname());
-            } else {
-                if (strpos($item->getFilename(), '.') !== 0) {
-                    @unlink($item->getPathname());
-                }
-            }
-        }
-        if (!$preserve) {
-            @rmdir($directory);
-        }
         return true;
     }
 }
