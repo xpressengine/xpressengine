@@ -1636,6 +1636,18 @@ return [
         'ko' => '컨텐츠',
         'en' => 'Contents',
     ],
+    'mySitePlugins' => [
+        'ko' => '내 사이트에 추가한',
+        'en' => 'Plugins in My site',
+    ],
+    'extension' => [
+        'ko' => '익스텐션',
+        'en' => 'extension',
+    ],
+    'installNow' => [
+        'ko' => '지금 설치',
+        'en' => 'Install Now',
+    ],
     'pluginList' => [
         'ko' => '설치된 플러그인',
         'en' => 'Installed plugin',
