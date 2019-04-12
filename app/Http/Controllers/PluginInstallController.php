@@ -47,9 +47,9 @@ class PluginInstallController extends Controller
     /**
      * Show the list of installable plugins.
      *
-     * @param PluginProvider     $provider PluginProvider instance
-     * @param PluginHandler      $handler  PluginHandler instance
-     * @param ComposerFileWriter $writer   ComposerFileWriter instance
+     * @param PluginProvider $provider PluginProvider instance
+     * @param PluginHandler $handler PluginHandler instance
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function index(PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
@@ -83,9 +83,9 @@ class PluginInstallController extends Controller
     /**
      * Show the list of plugins.
      *
-     * @param Request        $request  request
+     * @param Request $request request
      * @param PluginProvider $provider PluginProvider instance
-     * @param PluginHandler  $handler  PluginHandler instance
+     * @param PluginHandler $handler PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
      */
     public function items(Request $request, PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
@@ -110,15 +110,15 @@ class PluginInstallController extends Controller
             $tags = explode(' ', $tags);
             $filter = null;
             $packages = $provider->search(compact('tags', 'site_token'), $page, 6);
-        }elseif ($filter === 'purchased') {
+        } elseif ($filter === 'purchased') {
             if (!$site_token) {
                 $link = route('settings.plugins.setting.show');
-                throw new HttpException(
-                    Response::HTTP_BAD_REQUEST,
+                $plugins = new LengthAwarePaginator(collect(), 0, 1, '');
+                $site_error =
                     xe_trans('xe::needSiteTokenToViewListOfPurchased', [
                         'link' => sprintf('<a href="%s">%s</a>', $link, xe_trans('xe::moveToSetting'))
-                    ])
-                );
+                    ]);
+                return api_render('install.items', compact('plugins', 'filter', 'site_error'), compact('filter'));
             }
             try {
                 $packages = $provider->purchased($site_token);
@@ -141,7 +141,7 @@ class PluginInstallController extends Controller
             $plugins->appends('q', $q);
         }
 
-        if($query) {
+        if ($query) {
             $filter = 'search';
         }
         $handler->getAllPlugins(true);

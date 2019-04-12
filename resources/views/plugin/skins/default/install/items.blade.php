@@ -41,7 +41,11 @@
         </div>
     </div>
 </div>
-
+@if(isset($site_error))
+    <div class="well">
+        {!! $site_error !!}
+    </div>
+    @else
 @if(isset($operation))
     <div class="__xe_operation" style="margin-bottom: 10px;">
         @include($_skin::view('operation'))
@@ -108,6 +112,7 @@
     </div>
 @else
     <p>{{ xe_trans('xe::noPlugins') }}</p>
+@endif
 @endif
 <style>
     .panel.admin-tab{
