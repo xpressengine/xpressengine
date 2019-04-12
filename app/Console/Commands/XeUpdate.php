@@ -216,7 +216,6 @@ class XeUpdate extends Command
             $this->output->section('Running migration..');
             $this->migrateCore($installedVersion);
 
-            $this->writeResult(0);
         } catch (\Exception $e) {
             $this->writeResult(1);
             throw $e;
@@ -228,6 +227,8 @@ class XeUpdate extends Command
 
         // mark installed
         $this->markInstalled($updateVersion);
+
+        $this->writeResult(0);
 
         $this->output->success("Update the Xpressengine to ver.{$updateVersion}.");
     }
