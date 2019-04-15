@@ -14,22 +14,13 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use Composer\Console\Application;
-use Composer\Util\Platform;
 use Illuminate\Support\Facades\Artisan;
-use Log;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Foundation\ReleaseProvider;
 use Xpressengine\Http\Request;
-use Xpressengine\Installer\XpressengineInstaller;
-use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Support\Migration;
 
 /**
  * Class UpdateController
@@ -88,12 +79,16 @@ class UpdateController extends Controller
 
         // 명령은 terminate 에서 호출되므로 response 가 상태값이 변경되기전에 반환 됨.
         // 그래서 사전에 running 상태로 만들어 줌
-        $writer->load();
         $writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
-        $writer->set("xpressengine-plugin.operation.core_update", $latestVersion);
+        $writer->set("xpressengine-plugin.operation.core_update", $version);
+
+        $startTime = now()->format('YmdHis');
+        $logFile = "logs/core-update-$startTime.log";
+        $writer->set('xpressengine-plugin.operation.log', $logFile);
+
         $writer->write();
 
-        app()->terminating(function () use ($version, $skipComposer, $skipDownload) {
+        app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
             ignore_user_abort(true);
             set_time_limit(config('xe.plugin.operation.time_limit'));
 
@@ -102,7 +97,7 @@ class UpdateController extends Controller
                 '--skip-download' => $skipDownload,
                 '--skip-composer' => $skipComposer,
                 '--no-interaction' => true,
-            ]);
+            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
         return redirect()->back()->with(

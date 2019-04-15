@@ -13,7 +13,6 @@
  */
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
 use FilesystemIterator;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -70,14 +69,19 @@ class XeUpdate extends Command
      */
     protected $filesystem;
 
+    /**
+     * ReleaseProvider instance
+     *
+     * @var ReleaseProvider
+     */
     protected $releaseProvider;
 
     /**
      * Create a new controller creator command instance.
      *
-     * @param ComposerFileWriter $writer     ComposerFileWriter instance
-     * @param ReleaseProvider    $releaseProvider
-     * @param Filesystem         $filesystem Filesystem instance
+     * @param ComposerFileWriter $writer          ComposerFileWriter instance
+     * @param ReleaseProvider    $releaseProvider ReleaseProvider instance
+     * @param Filesystem         $filesystem      Filesystem instance
      */
     public function __construct(ComposerFileWriter $writer, ReleaseProvider $releaseProvider, Filesystem $filesystem)
     {
@@ -93,6 +97,7 @@ class XeUpdate extends Command
      *
      * @return void
      * @throws \Exception
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -100,33 +105,47 @@ class XeUpdate extends Command
         $this->output->block('Updating Xpressengine.');
         $this->line('///////////////////////////////////');
 
+        if ($this->isLocked()) {
+            throw new \Exception('The command is locked. Make sure that another process is running.');
+        }
+
+        $this->lock();
+
         $updateVersion = $this->argument('version') ?: $this->releaseProvider->getLatestCoreVersion();
         $skipDownload = $this->option('skip-download');
         $skipComposer = $this->option('skip-composer');
 
-        if (!in_array($updateVersion, $this->releaseProvider->coreVersions())) {
-            throw new \Exception("Unknown version [$updateVersion]");
+        try {
+            if (!in_array($updateVersion, $this->releaseProvider->coreVersions())) {
+                throw new \Exception("Unknown version [$updateVersion]");
+            }
+
+            // 현재 파일이 업데이트할 버전보다 낮지 않다면 다운로드 하지 않음.
+            if (version_compare(__XE_VERSION__, $updateVersion) !== -1) {
+                $skipDownload = true;
+            }
+
+            if ($skipDownload) {
+                $updateVersion = __XE_VERSION__;
+            }
+
+            // version 안내
+            $installedVersion = trim(file_get_contents(storage_path('app/installed')));
+            //  업데이트 버전 정보:
+            $this->warn('Version information:');
+            $this->line(" $installedVersion -> $updateVersion");
+
+            if (version_compare($installedVersion, $updateVersion) !== -1) {
+                throw new \Exception("Version [$updateVersion] is already installed.");
+            }
+        } catch (\Exception $e) {
+            $this->setFailed();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed();
+            throw $e;
         }
 
-        // 현재 파일이 업데이트할 버전보다 낮지 않다면 다운로드 하지 않음.
-        if (version_compare(__XE_VERSION__, $updateVersion) !== -1) {
-            $skipDownload = true;
-        }
-
-        if ($skipDownload) {
-            $updateVersion = __XE_VERSION__;
-        }
-
-        // version 안내
-        $installedVersion = trim(file_get_contents(storage_path('app/installed')));
-        //  업데이트 버전 정보:
-        $this->warn('Version information:');
-        $this->line(" $installedVersion -> $updateVersion");
-
-        if (version_compare($installedVersion, $updateVersion) !== -1) {
-            $this->info("Version [$updateVersion] is already installed.");
-            return;
-        }
 
         // confirm
         if ($this->input->isInteractive() && $this->confirm(
@@ -134,11 +153,11 @@ class XeUpdate extends Command
                 "The Xpressengine ver.".$updateVersion." will be updated. It may take up to a few minutes. \r\nDo you want to update?"
             ) === false
         ) {
+            $this->unlock();
             return;
         }
 
-        $logFile = $this->ready($updateVersion);
-        \Log::useFiles(storage_path($logFile));
+        $this->ready($updateVersion);
 
         try {
             if (0 !== $this->call('cache:clear')) {
@@ -217,7 +236,10 @@ class XeUpdate extends Command
             $this->migrateCore($installedVersion);
 
         } catch (\Exception $e) {
-            $this->writeResult(1);
+            $this->setFailed();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed();
             throw $e;
         }
 
@@ -228,11 +250,18 @@ class XeUpdate extends Command
         // mark installed
         $this->markInstalled($updateVersion);
 
-        $this->writeResult(0);
+        $this->setSuccessed();
 
         $this->output->success("Update the Xpressengine to ver.{$updateVersion}.");
     }
 
+    /**
+     * Clone project for update
+     *
+     * @param string $destination destination dir
+     * @return void
+     * @throws \Exception
+     */
     private function cloneProject($destination)
     {
         if ($this->filesystem->isDirectory($destination)) {
@@ -269,9 +298,12 @@ class XeUpdate extends Command
     }
 
     /**
-     * @param $directory
-     * @param $destination
-     * @param null $options
+     * Copy a directory from one location to another.
+     *
+     * @param string   $directory
+     * @param string   $destination
+     * @param array    $excepts
+     * @param int|null $options
      * @return bool
      *
      * @see \Illuminate\Filesystem\Filesystem::copyDirectory
@@ -323,6 +355,14 @@ class XeUpdate extends Command
         return true;
     }
 
+    /**
+     * Download release file
+     *
+     * @param string $ver         version
+     * @param string $destination destination dir
+     * @return void
+     * @throws \Exception
+     */
     private function download($ver, $destination)
     {
         $updatesPath = storage_path('app/updates');
@@ -376,6 +416,38 @@ class XeUpdate extends Command
     }
 
     /**
+     * Determine if operation is locked.
+     *
+     * @return bool
+     */
+    private function isLocked()
+    {
+        return $this->writer->get('xpressengine-plugin.operation.lock', false);
+    }
+
+    /**
+     * Locks a operation.
+     *
+     * @return void
+     */
+    private function lock()
+    {
+        $this->writer->set('xpressengine-plugin.operation.lock', true);
+        $this->writer->write();
+    }
+
+    /**
+     * Unlocks a operation.
+     *
+     * @return void
+     */
+    private function unlock()
+    {
+        $this->writer->set('xpressengine-plugin.operation.lock', false);
+        $this->writer->write();
+    }
+
+    /**
      * Mark installed.
      *
      * @param string $ver version
@@ -390,25 +462,39 @@ class XeUpdate extends Command
      * Set ready for update.
      *
      * @param string $ver version
-     * @return string
+     * @return void
      */
-    protected function ready($ver)
+    private function ready($ver)
     {
-        // 플러그인 업데이트 잠금
-        unlink($this->writer->getPath());
         $this->writer->load();
         $this->writer->reset();
 
         $this->writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
         $this->writer->set("xpressengine-plugin.operation.core_update", $ver);
 
-        $startTime = Carbon::now()->format('YmdHis');
-        $logFile = "logs/core-update-$startTime.log";
-        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
-
         $this->writer->write();
+    }
 
-        return $logFile;
+    /**
+     * Set operation successed.
+     *
+     * @return void
+     */
+    private function setSuccessed()
+    {
+        $this->writeResult(0);
+        $this->unlock();
+    }
+
+    /**
+     * Set operation failed.
+     *
+     * @return void
+     */
+    private function setFailed()
+    {
+        $this->writeResult(1);
+        $this->unlock();
     }
 
     /**
@@ -417,7 +503,7 @@ class XeUpdate extends Command
      * @param int $result result code
      * @return void
      */
-    protected function writeResult($result)
+    private function writeResult($result)
     {
         // composer.plugins.json 파일을 다시 읽어들인다.
         $this->writer->load();

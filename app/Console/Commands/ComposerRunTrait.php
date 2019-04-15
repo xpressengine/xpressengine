@@ -16,9 +16,9 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Composer\Console\Application;
-use Composer\Json\JsonFormatter;
 use Composer\Util\Platform;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Xpressengine\Plugin\Composer\Composer;
 
@@ -119,13 +119,13 @@ trait ComposerRunTrait
     /**
      * runComposer
      *
-     * @param array       $inputs
-     * @param bool        $updateMode
-     * @param string|null $logFile
+     * @param array                       $inputs
+     * @param bool                        $updateMode
+     * @param OutputInterface|string|null $output
      * @return int
      * @throws \Exception
      */
-    protected function runComposer($inputs, $updateMode = true, $logFile = null)
+    protected function runComposer($inputs, $updateMode = true, $output = null)
     {
         ini_set('memory_limit', '-1');
 
@@ -139,28 +139,18 @@ trait ComposerRunTrait
             Composer::setPackagistToken($siteToken);
         }
 
-        if (!$logFile) {
+        if (!$output) {
             $startTime = Carbon::now()->format('YmdHis');
-            $logFile = "logs/composer-$startTime.log";
-        }
-        if (is_string($logFile)) {
-            $output = new StreamOutput(fopen(storage_path($logFile), 'a'));
-        } else {
-            $output = $logFile;
+            $output = "logs/composer-$startTime.log";
         }
 
-//        file_put_contents(
-//            $logFilePath = storage_path($logFile),
-//            JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
-//        );
+        if (is_string($output)) {
+            $output = new StreamOutput(fopen(storage_path($output), 'a'));
+        }
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
 
-        return $application->run(
-            new ArrayInput($inputs),
-            $output
-//            new StreamOutput(fopen($logFilePath, 'a'))
-        );
+        return $application->run(new ArrayInput($inputs), $output);
     }
 }
