@@ -4,8 +4,8 @@
  *
  * PHP version 7
  *
- * @category
- * @package
+ * @category    Foundation
+ * @package     Xpressengine\Foundation
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,17 +17,48 @@ namespace Xpressengine\Foundation;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
+/**
+ * Class ReleaseProvider
+ *
+ * @category    Foundation
+ * @package     Xpressengine\Foundation
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ReleaseProvider
 {
+    /**
+     * Filesystem instance
+     *
+     * @var Filesystem
+     */
     protected $filesystem;
 
+    /**
+     * Released core versions
+     *
+     * @var array
+     */
     protected $coreVersions;
 
+    /**
+     * ReleaseProvider constructor.
+     *
+     * @param Filesystem $filesystem Filesystem instance
+     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * Get latest version.
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function getLatestCoreVersion()
     {
         $versions = $this->coreVersions();
@@ -35,6 +66,12 @@ class ReleaseProvider
         return end($versions);
     }
 
+    /**
+     * Get released core versions.
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException|\Exception
+     */
     public function coreVersions()
     {
         if (!$this->coreVersions) {
@@ -56,6 +93,12 @@ class ReleaseProvider
         return $this->coreVersions;
     }
 
+    /**
+     * Get updatable versions.
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getUpdatableVersions()
     {
         return Collection::make($this->coreVersions())
@@ -64,6 +107,14 @@ class ReleaseProvider
             })->first()->values()->all();
     }
 
+    /**
+     * Download release
+     *
+     * @param string $ver version
+     * @param string $dir directory for file save
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function download($ver, $dir)
     {
         if (!$this->filesystem->isDirectory($dir)) {
@@ -85,11 +136,22 @@ class ReleaseProvider
         return $filepath;
     }
 
+    /**
+     * Get release file name.
+     *
+     * @param string $ver version
+     * @return string
+     */
     protected function getFileName($ver)
     {
         return 'changed.'. $ver . '.zip';
     }
 
+    /**
+     * Get http client.
+     *
+     * @return \GuzzleHttp\Client
+     */
     protected function getHttpClient()
     {
         return new \GuzzleHttp\Client();
