@@ -227,6 +227,7 @@ var DynamicField = function () {
 
         form.find('[data-name="use"]').prop('checked', that.checkBox(response.config.use))
         form.find('[data-name="required"]').prop('checked', that.checkBox(response.config.required))
+        form.find('[data-name="searchable"]').prop('checked', that.checkBox(response.config.searchable))
 
         that.getSkinOption(form)
       }
