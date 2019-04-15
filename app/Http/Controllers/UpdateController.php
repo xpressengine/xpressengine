@@ -14,21 +14,13 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use Composer\Console\Application;
-use Composer\Util\Platform;
 use Illuminate\Support\Facades\Artisan;
-use Log;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
+use Xpressengine\Foundation\ReleaseProvider;
 use Xpressengine\Http\Request;
-use Xpressengine\Installer\XpressengineInstaller;
-use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Support\Migration;
 
 /**
  * Class UpdateController
@@ -45,49 +37,67 @@ class UpdateController extends Controller
     /**
      * Show core status.
      *
-     * @param ComposerFileWriter $writer
+     * @param ComposerFileWriter $writer          ComposerFileWriter
+     * @param ReleaseProvider    $releaseProvider ReleaseProvider
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function show(ComposerFileWriter $writer)
+    public function show(ComposerFileWriter $writer, ReleaseProvider $releaseProvider)
     {
-        $operation = $this->getOperation($writer);
         $installedVersion = file_get_contents(base_path('storage/app/installed'));
+        $latest = $releaseProvider->getLatestCoreVersion();
+        $updatables = $releaseProvider->getUpdatableVersions();
 
-        return XePresenter::make('update.show', compact('installedVersion', 'operation'));
+        $operation = $this->getOperation($writer);
+
+        return XePresenter::make('update.show', compact('installedVersion', 'latest', 'updatables', 'operation'));
     }
 
     /**
      * Update core.
      *
-     * @param Request            $request request
-     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @param Request            $request         request
+     * @param ComposerFileWriter $writer          ComposerFileWriter instance
+     * @param ReleaseProvider    $releaseProvider ReleaseProvider
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, ComposerFileWriter $writer)
+    public function update(Request $request, ComposerFileWriter $writer, ReleaseProvider $releaseProvider)
     {
-        $skipComposer = $request->get('skip-composer');
-
         $operation = $this->getOperation($writer);
         if($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
+        $version = $request->get('version') ?: __XE_VERSION__;
+        $latestVersion = $releaseProvider->getLatestCoreVersion();
+        $skipDownload = version_compare(__XE_VERSION__, $latestVersion) === 0
+            || $request->get('skip-download') === 'Y';
+        $skipComposer = $request->get('skip-composer') === 'Y';
+
+        if (!$skipDownload) {
+            $skipComposer = false;
+        }
+
         // 명령은 terminate 에서 호출되므로 response 가 상태값이 변경되기전에 반환 됨.
         // 그래서 사전에 running 상태로 만들어 줌
-        $writer->load();
         $writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
-        $writer->set("xpressengine-plugin.operation.core_update", __XE_VERSION__);
+        $writer->set("xpressengine-plugin.operation.core_update", $version);
+
+        $startTime = now()->format('YmdHis');
+        $logFile = "logs/core-update-$startTime.log";
+        $writer->set('xpressengine-plugin.operation.log', $logFile);
+
         $writer->write();
 
-        app()->terminating(function () use ($skipComposer) {
+        app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
             ignore_user_abort(true);
             set_time_limit(config('xe.plugin.operation.time_limit'));
 
             Artisan::call('xe:update', [
-                '--skip-download' => true,
-                '--skip-composer' => $skipComposer === 'Y',
+                'version' => $version,
+                '--skip-download' => $skipDownload,
+                '--skip-composer' => $skipComposer,
                 '--no-interaction' => true,
-            ]);
+            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
         return redirect()->back()->with(
@@ -119,29 +129,6 @@ class UpdateController extends Controller
         }
 
         return compact('status', 'updateVersion', 'log');
-    }
-
-    /**
-     * Execute migrations.
-     *
-     * @param string $installedVersion installed version
-     * @return void
-     */
-    protected function migrateCore($installedVersion)
-    {
-        $filesystem = app('files');
-        $files = $filesystem->files(base_path('migrations'));
-
-        foreach ($files as $file) {
-            $class = "\\Xpressengine\\Migrations\\".basename($file, '.php');
-            $migration = new $class();
-
-            /** @var Migration $migration */
-            if($migration->checkUpdated($installedVersion) === false) {
-                $migration->update($installedVersion);
-            }
-        }
-
     }
 
     /**
