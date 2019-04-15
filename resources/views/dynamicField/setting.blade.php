@@ -103,6 +103,13 @@
                     </label>
                     <small>{{xe_trans('xe::dynamicFieldRequiredDescription')}}</small>
                 </div>
+                <div class="checkbox mg-reset mg-bottom">
+                    <label>
+                        <input type="checkbox" class="__xe_checkbox-config" data-name="searchable" checked="checked"/>
+                        {{xe_trans('xe::searchable')}}
+                    </label>
+                    <small>{{xe_trans('xe::dynamicFieldSearchableDescription')}}</small>
+                </div>
             </div>
             <div class="form-group">
                 <label for="">Skin</label>

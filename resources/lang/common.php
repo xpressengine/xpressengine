@@ -2566,6 +2566,14 @@ return [
         'ko' => '사용자 필수 입력을 해야할 경우 체크합니다.',
         'en' => 'Check if user input is required.',
     ],
+    'dynamicFieldSearchableDescription' => [
+        'ko' => '다이나믹 필드의 값으로 검색이 가능하도록 할 경우 체크합니다.',
+        'en' => 'Check this to enable searching by dynamic field value.'
+    ],
+    'searchable' => [
+        'ko' => '검색 가능',
+        'en' => 'Searchable'
+    ],
     'inputRequired' => [
         'ko' => '입력 필수',
         'en' => 'Input required',
