@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Log;
 
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Log\Models\Log;
 use Xpressengine\Log\Repositories\LogRepository;
 use Xpressengine\Register\Container;

@@ -55,7 +55,7 @@ class CaptchaManagerTest extends TestCase
     private function getMocks()
     {
         return [
-            m::mock('Illuminate\Foundation\Application'),
+            m::mock('Xpressengine\Foundation\Application'),
             new DummyConfig([
                 'captcha.driver' => 'google',
                 'captcha.apis' => [

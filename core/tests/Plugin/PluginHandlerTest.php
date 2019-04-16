@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Plugin;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Mockery;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginHandler;
@@ -40,7 +40,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $plugins->shouldReceive('initialize')->with(true)->once()->andReturnNull();
         $plugins->shouldReceive('getList')->withNoArgs()->once()->andReturn([]);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
         $this->assertInstanceOf(PluginCollection::class, $handler->getAllPlugins(true));
 
     }
@@ -52,7 +52,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $plugins = $this->makeCollection();
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturnNull();
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
         $this->assertFalse($handler->isActivated($pluginId));
 
         /** @var Mockery\MockInterface $plugins */
@@ -62,7 +62,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $plugins = $this->makeCollection();
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
         $this->assertTrue($handler->isActivated($pluginId));
 
     }
@@ -78,7 +78,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $plugins = $this->makeCollection();
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturnNull();
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
 
         $handler->activatePlugin($pluginId);
     }
@@ -98,7 +98,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
 
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
 
         $handler->activatePlugin($pluginId);
     }
@@ -130,7 +130,10 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
 
         $plugins->shouldReceive('get')->with($pluginId)->andReturn($entity);
 
-        $handler = $this->getHandler(null, $plugins, null, null, null);
+        $app = Mockery::mock('\Xpressengine\Foundation\Application');
+        $app->shouldReceive('offsetGet')->with('path.plugins')->andReturn(__DIR__.'/plugins');
+        $app->shouldReceive('instance')->andReturnNull();
+        $handler = $this->getHandler($plugins, null, null, null, $app);
         $config = $this->setConfig($handler);
         $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn([
            $pluginId => []
@@ -155,7 +158,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
 
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
 
         $handler->deactivatePlugin($pluginId);
     }
@@ -183,7 +186,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
         $plugins->shouldReceive('fetchByStatus')->with(PluginHandler::STATUS_ACTIVATED)->once()->andReturn([$entity]);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler($plugins);
         $config = $this->setConfig($handler);
         $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn(
             [
@@ -233,7 +236,7 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private function makeApp()
     {
-        return Mockery::mock('\Illuminate\Foundation\Application', [
+        return Mockery::mock('\Xpressengine\Foundation\Application', [
             'singleton' => null,
             'instance' => null,
         ]);
@@ -256,14 +259,13 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         return $config;
     }
 
-    private function getHandler($dir = null, $plugins = null, $provider = null, $factory = null, $register = null, $app = null)
+    private function getHandler($plugins = null, $provider = null, $factory = null, $register = null, $app = null)
     {
-        if($dir === null) $dir = __DIR__.'/plugins';
         if($plugins === null) $plugins = $this->makeCollection();
         if($provider === null) $provider = $this->makeProvider();
         if($factory === null) $factory = $this->makeViewFactory();
         if($register === null) $register = $this->makeRegister();
         if($app === null) $app = $this->makeApp();
-        return new PluginHandler($dir, $plugins, $provider, $factory, $register, $app);
+        return new PluginHandler($plugins, $provider, $factory, $register, $app);
     }
 }

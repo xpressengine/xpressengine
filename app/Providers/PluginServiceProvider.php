@@ -109,9 +109,7 @@ class PluginServiceProvider extends ServiceProvider
     protected function registerPluginHandler()
     {
         $this->app->singleton(PluginHandler::class, function ($app) {
-            $pluginDir = base_path('plugins');
-
-            $app['view']->addLocation($pluginDir);
+            $app['view']->addLocation($app['path.plugins']);
 
             $cachePath = $app['config']->get('cache.stores.plugins.path');
             if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
@@ -134,7 +132,7 @@ class PluginServiceProvider extends ServiceProvider
             $interception = $app['xe.interception'];
             $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
             $pluginHandler = new $pluginHandler(
-                $pluginDir, $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
+                $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
             );
 
             $pluginHandler->setConfig($app['xe.config']);
