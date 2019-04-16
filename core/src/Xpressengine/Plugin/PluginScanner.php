@@ -47,6 +47,7 @@ class PluginScanner
      *
      * @param MetaFileReader $metaFileReader  metafile reader
      * @param string         $pluginDirectory plugin root directory
+     * @param string         $basePath        application base path
      */
     public function __construct(MetaFileReader $metaFileReader, $pluginDirectory, $basePath)
     {

@@ -1,6 +1,7 @@
 {
     "name": "xpressengine/xpressengine",
     "description": "XpressEngine (XE)",
+    "version": "3.0.1",
     "keywords": [
         "xpressengine",
         "xe",
@@ -41,6 +42,9 @@
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~6.0",
         "barryvdh/laravel-debugbar": "~3.0"
+    },
+    "replace": {
+        "xpressengine/xpressengine": "self.version"
     },
     "repositories": [
         {

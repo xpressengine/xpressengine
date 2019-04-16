@@ -1636,6 +1636,18 @@ return [
         'ko' => '컨텐츠',
         'en' => 'Contents',
     ],
+    'mySitePlugins' => [
+        'ko' => '내 사이트에 추가한',
+        'en' => 'Plugins in My site',
+    ],
+    'extension' => [
+        'ko' => '익스텐션',
+        'en' => 'extension',
+    ],
+    'installNow' => [
+        'ko' => '지금 설치',
+        'en' => 'Install Now',
+    ],
     'pluginList' => [
         'ko' => '설치된 플러그인',
         'en' => 'Installed plugin',
@@ -2562,6 +2574,14 @@ return [
         'ko' => '사용자 필수 입력을 해야할 경우 체크합니다.',
         'en' => 'Check if user input is required.',
     ],
+    'dynamicFieldSearchableDescription' => [
+        'ko' => '다이나믹 필드의 값으로 검색이 가능하도록 할 경우 체크합니다.',
+        'en' => 'Check this to enable searching by dynamic field value.'
+    ],
+    'searchable' => [
+        'ko' => '검색 가능',
+        'en' => 'Searchable'
+    ],
     'inputRequired' => [
         'ko' => '입력 필수',
         'en' => 'Input required',
@@ -2977,5 +2997,17 @@ return [
     'descPostMaxSize' => [
         'ko' => 'post_max_size가 upload_max_filesize보다 작을 경우 파일 업로드가 정상적으로 동작하지 않을 수 있습니다.',
         'en' => 'If post_max_size is less than upload_max_filesize, file upload may not operate normally.'
-    ]
+    ],
+    'pluginWasDeactivated' => [
+        'ko' => '[:name] 플러그인이 비활성화 되었습니다.',
+        'en' => 'Plugin [:name] was deactivated.',
+    ],
+    'pluginRequiredVerHigherThanCurrentCore' => [
+        'ko' => '플러그인의 요구 버전이 현재 코어버전보다 높습니다.',
+        'en' => 'The required version of the plugin is higher than the current core version.',
+    ],
+    'viewDetails' => [
+        'ko' => '상세보기',
+        'en' => 'View Details',
+    ],
 ];

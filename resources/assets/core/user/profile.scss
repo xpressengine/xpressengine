@@ -14,7 +14,7 @@
   font-style: normal;
 }
 
-.profile-wrap{  
+.profile-wrap{
   font-family: '나눔고딕',NanumGothic,'맑은 고딕','Malgun Gothic','돋움',Dotum,'애플 SD 산돌고딕 Neo','Apple SD Gothic Neo',AppleGothic,Helvetica,sans-serif;
   font-size: 13px;
 }
@@ -44,10 +44,11 @@
   max-width: 560px;
   margin: 0 auto 40px;
   padding: 0 5%;
-  text-align: center;  
+  text-align: center;
 }
 .xe-profile .profile-img img,
 .xe-profile .profile-img canvas {
+  display: inline-block;
   border-radius: 50%;
 }
 .xe-profile .input-nick {
@@ -123,8 +124,8 @@
 .profile-wrap .profile-btn-area {
   margin-top: 32px;
 }
-.profile-wrap .profile-btn-area button {  
-  border-radius: 20px;  
+.profile-wrap .profile-btn-area button {
+  border-radius: 20px;
 }
 // .profile-wrap .profile-btn-area button:first-child {
 //   margin-left: 0;
@@ -161,8 +162,8 @@
 }
 .xe-profile .btn-file {
   position: absolute;
-  width: 120px;  
-  height: 100%;
+  width: 120px;
+  height: 120px;
   top: 0;
   left: 50%;
   margin-left: -60px;

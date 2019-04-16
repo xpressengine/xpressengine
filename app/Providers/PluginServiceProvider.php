@@ -113,8 +113,6 @@ class PluginServiceProvider extends ServiceProvider
 
             $app['view']->addLocation($pluginDir);
 
-            $pluginStatus = $app['xe.config']->getVal('plugin.list', []);
-
             $cachePath = $app['config']->get('cache.stores.plugins.path');
             if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
                 $cache = new ArrayPluginCache();
@@ -125,7 +123,12 @@ class PluginServiceProvider extends ServiceProvider
                 $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
             }
 
-            $pluginCollection = new PluginCollection($app[PluginScanner::class], $cache, PluginEntity::class, $pluginStatus);
+            $pluginCollection = new PluginCollection(
+                $app[PluginScanner::class],
+                $cache,
+                $app['xe.config'],
+                PluginEntity::class
+            );
 
             /** @var \Xpressengine\Interception\InterceptionHandler $interception */
             $interception = $app['xe.interception'];

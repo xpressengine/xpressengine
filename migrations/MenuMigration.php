@@ -111,7 +111,7 @@ class MenuMigration extends Migration
     }
 
     /**
-     * Run after initialized.
+     * Run after service initialized.
      *
      * @return void
      */

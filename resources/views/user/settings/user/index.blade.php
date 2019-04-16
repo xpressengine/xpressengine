@@ -224,8 +224,10 @@ use Xpressengine\User\Models\User;
             init: function() {
                 self = this;
 
-                self.cache();
-                self.bindEvents();
+                $(function () {
+                    self.cache();
+                    self.bindEvents();
+                });
 
                 return this;
             },

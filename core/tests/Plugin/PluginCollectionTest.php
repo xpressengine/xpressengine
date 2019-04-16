@@ -33,7 +33,10 @@ class PluginCollectionTest extends \PHPUnit\Framework\TestCase
         $cache->shouldReceive('hasCachedPlugins')->andReturnNull();
         $cache->shouldReceive('setPluginsToCache')->andReturnNull();
 
-        $collection = new PluginCollection($scanner, $cache, PluginEntityStub::class, []);
+        $configs = \Mockery::mock('Xpressengine\Config\ConfigManager');
+        $configs->shouldReceive('getVal')->andReturn([]);
+
+        $collection = new PluginCollection($scanner, $cache, $configs, PluginEntityStub::class);
 
         $this->assertInstanceOf('\Xpressengine\Plugin\PluginCollection', $collection);
 
@@ -55,7 +58,10 @@ class PluginCollectionTest extends \PHPUnit\Framework\TestCase
         $cache->shouldReceive('getPluginsFromCache')->once()->andReturn($this->getPluginInfos());
         $cache->shouldReceive('setPluginsToCache')->once()->andReturnNull();
 
-        $collection = new PluginCollection($scanner, $cache, PluginEntityStub::class, []);
+        $configs = \Mockery::mock('Xpressengine\Config\ConfigManager');
+        $configs->shouldReceive('getVal')->andReturn([]);
+
+        $collection = new PluginCollection($scanner, $cache, $configs, PluginEntityStub::class);
 
         $collection->initialize(false);
 

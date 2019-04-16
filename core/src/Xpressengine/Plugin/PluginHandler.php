@@ -17,6 +17,7 @@ namespace Xpressengine\Plugin;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
@@ -313,9 +314,9 @@ class PluginHandler
         }
 
         // 플러그인이 이미 활성화되어있지 않다면 register
-        if ($entity->getStatus() !== static::STATUS_ACTIVATED) {
+//        if ($entity->getStatus() !== static::STATUS_ACTIVATED) {
             $this->registerPlugin($entity);
-        }
+//        }
 
         // 기존에 설치(활성화)된 적이 있다면 설치된 버전을 조사한다.
         $installedVersion = $entity->getInstalledVersion();
@@ -369,6 +370,11 @@ class PluginHandler
         $this->setPluginsStatus($configs);
     }
 
+    protected $registered = [];
+
+    protected $booted = [];
+
+    protected $errors = [];
     /**
      * 활성화 된 플러그인을 부팅한다. 이 메소드는 모든 요청에서 항상 호출되며, 활성화 된 모든 플러그인의 boot()메소드를 호출한다.
      * 각 플러그인은 모든 요청에서 항상 작동되어야 할 작업을 boot() 메소드로 작성해 놓아야 한다.
@@ -396,20 +402,30 @@ class PluginHandler
      *
      * @return void
      */
-    public function registerPlugin(PluginEntity $entity)
+    protected function registerPlugin(PluginEntity $entity)
     {
-        $pluginObj = $entity->getObject();
+        try {
+            if (!isset($this->registered[$entity->getId()]) && !isset($this->errors[$entity->getId()])) {
+                $pluginObj = $entity->getObject();
 
-        // register plugin's components
-        $this->register->addByEntity($entity);
+                // register plugin's components
+                $this->register->addByEntity($entity);
 
-        // bind plugin to application
-        $this->app->instance(get_class($pluginObj), $pluginObj);
+                // bind plugin to application
+                $this->app->instance(get_class($pluginObj), $pluginObj);
 
-        // boot plugin
-        $pluginObj->register();
+                // boot plugin
+                $pluginObj->register();
 
-        $this->registerViewNamespace($entity);
+                $this->registerViewNamespace($entity);
+
+                $this->registered[$entity->getId()] = true;
+            }
+        } catch (\Exception $e) {
+            $this->handleError($entity, $e);
+        } catch (\Throwable $e) {
+            $this->handleError($entity, new FatalThrowableError($e));
+        }
     }
 
     /**
@@ -419,15 +435,49 @@ class PluginHandler
      *
      * @return void
      */
-    public function bootPlugin(PluginEntity $entity)
+    protected function bootPlugin(PluginEntity $entity)
     {
-        $pluginObj = $entity->getObject();
+        try {
+            if (!isset($this->booted[$entity->getId()]) && !isset($this->errors[$entity->getId()])) {
+                // boot plugin
+                $entity->getObject()->boot();
 
-        // boot plugin's components
-        $entity->bootComponents($this->register);
+                // boot plugin's components
+                $entity->bootComponents($this->register);
 
-        // boot plugin
-        $pluginObj->boot();
+                $this->booted[$entity->getId()] = true;
+            }
+        } catch (\Exception $e) {
+            $this->handleError($entity, $e);
+        } catch (\Throwable $e) {
+            $this->handleError($entity, new FatalThrowableError($e));
+        }
+    }
+
+    /**
+     * Handle errors for boot plugins.
+     *
+     * @param PluginEntity $entity plugin
+     * @param \Exception   $e      exception
+     * @return void
+     */
+    protected function handleError(PluginEntity $entity, \Exception $e)
+    {
+        $this->errors[$entity->getId()] = $e;
+
+        if ($entity->isActivated()) {
+            $this->deactivatePlugin($entity->getId());
+        }
+    }
+
+    /**
+     * Returns errors for boot plugins.
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
     }
 
     /**
@@ -459,7 +509,8 @@ class PluginHandler
                 }
 
                 // plugin 관리 기능을 위해 register 를 수행
-                $plugin->getObject()->register();
+//                $plugin->getObject()->register();
+                $this->registerPlugin($plugin);
             }
         }
 
@@ -479,6 +530,7 @@ class PluginHandler
     /**
      * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
      *
+     * @param PluginEntity $entity plugin
      * @return void
      */
     public function registerAutoload(PluginEntity $entity)
