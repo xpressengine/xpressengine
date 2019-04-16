@@ -119,6 +119,27 @@ class PluginHandler
     private $app;
 
     /**
+     * Registered plugins
+     *
+     * @var array
+     */
+    protected $registered = [];
+
+    /**
+     * Booted plugins
+     *
+     * @var array
+     */
+    protected $booted = [];
+
+    /**
+     * An error occurred plugins
+     *
+     * @var array
+     */
+    protected $errors = [];
+
+    /**
      * 생성자. 플러그인 관리에 필요한 요소들을 주입받는다.
      *
      * @param string           $pluginsDir  플러그인 디렉토리
@@ -370,11 +391,6 @@ class PluginHandler
         $this->setPluginsStatus($configs);
     }
 
-    protected $registered = [];
-
-    protected $booted = [];
-
-    protected $errors = [];
     /**
      * 활성화 된 플러그인을 부팅한다. 이 메소드는 모든 요청에서 항상 호출되며, 활성화 된 모든 플러그인의 boot()메소드를 호출한다.
      * 각 플러그인은 모든 요청에서 항상 작동되어야 할 작업을 boot() 메소드로 작성해 놓아야 한다.
@@ -463,7 +479,10 @@ class PluginHandler
      */
     protected function handleError(PluginEntity $entity, \Exception $e)
     {
-        $this->errors[$entity->getId()] = $e;
+        $this->errors[$entity->getId()] = [
+            'entity' => $entity,
+            'exception' => $e
+        ];
 
         if ($entity->isActivated()) {
             $this->deactivatePlugin($entity->getId());

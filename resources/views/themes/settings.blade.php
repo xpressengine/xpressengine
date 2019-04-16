@@ -138,12 +138,21 @@
 
             <div class="container-fluid">
                 @if($errors = session('bootfail'))
-                    @foreach($errors as $plugin => $e)
-                        <div class="alert alert-danger" role="alert">
-                            <strong>{{ xe_trans('xe::pluginWasDeactivated', ['name' => $plugin]) }} !!</strong>
-                            {{ $e->getMessage() }} ({{ str_replace(base_path(), '', $e->getFile()) }}:{{ $e->getLine() }})
-                        </div>
+                    <ul class="list-group list-plugin">
+                    @foreach($errors as $name => $info)
+                        <li class="list-group-item" style="border-left: 2px solid #a94442;">
+                            <div class="left-group">
+                                <span class="plugin-title" style="color:#434a53;">{{ $info['entity']->getTitle() }} {{ xe_trans('xe::pluginError') }}</span>
+                                <p>
+                                    {{ xe_trans('xe::errorPluginWasDeactivated', ['name' => $info['entity']->getTitle()]) }}
+                                </p>
+                                <p class="ellipsis">
+                                    {{ $info['exception']->getMessage() }} ({{ str_replace(base_path(), '', $info['exception']->getFile()) }}:{{ $info['exception']->getLine() }})
+                                </p>
+                            </div>
+                        </li>
                     @endforeach
+                    </ul>
                 @endif
 
                 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
