@@ -799,6 +799,10 @@ abstract class AbstractType implements ComponentInterface
      */
     public function get(DynamicQuery $query)
     {
+        if ($this->checkExistTypeTables() == false) {
+            $this->createTypeTable();
+        }
+
         $config = $this->config;
         if ($config->get('sortable') === false && $config->get('searchable') === false) {
             return $query;
