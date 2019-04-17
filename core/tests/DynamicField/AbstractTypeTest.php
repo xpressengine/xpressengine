@@ -484,6 +484,11 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
         $connection = m::mock('Xpressengine\Database\VirtualConnectionInterface');
         $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
+        $builder = m::mock('\Illuminate\Database\Schema\Builder');
+
+        $connection->shouldReceive('getSchemaBuilder')->andReturn($builder);
+        $builder->shouldReceive('hasTable');
+        $builder->shouldReceive('create');
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
