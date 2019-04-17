@@ -166,33 +166,35 @@ class DynamicFieldMigration extends Migration
                 }
 
                 //revision 데이터 추가
-                $originalRevisionTable = $this->dynamicFieldHandler->connection()->table(
-                    $this->getOriginalRevisionTableName($fieldConfig)
-                );
-                $newRevisionTable = $this->dynamicFieldHandler->connection()->table($type->getRevisionTableName());
+                if ($fieldConfig->get('revision', false) == true) {
+                    $originalRevisionTable = $this->dynamicFieldHandler->connection()->table(
+                        $this->getOriginalRevisionTableName($fieldConfig)
+                    );
+                    $newRevisionTable = $this->dynamicFieldHandler->connection()->table($type->getRevisionTableName());
 
-                $fieldId = $fieldConfig->get('id');
-                $group = $fieldConfig->get('group');
+                    $fieldId = $fieldConfig->get('id');
+                    $group = $fieldConfig->get('group');
 
-                //기존 Table에 있던 데이터를 새로운 Table에 저장
-                $originData = $originalRevisionTable->get();
-                foreach ($originData as $data) {
-                    $insertParam = [];
-                    $insertParam['revision_id'] = $data->{'revision_id'};
-                    $insertParam['revision_no'] = $data->{'revision_no'};
-                    $insertParam['field_id'] = $fieldId;
-                    $insertParam['group'] = $group;
-                    $insertParam['target_id'] = $data->{'dynamic_field_target_' . $fieldConfig->get('joinColumnName', 'id')};
+                    //기존 Table에 있던 데이터를 새로운 Table에 저장
+                    $originData = $originalRevisionTable->get();
+                    foreach ($originData as $data) {
+                        $insertParam = [];
+                        $insertParam['revision_id'] = $data->{'revision_id'};
+                        $insertParam['revision_no'] = $data->{'revision_no'};
+                        $insertParam['field_id'] = $fieldId;
+                        $insertParam['group'] = $group;
+                        $insertParam['target_id'] = $data->{'dynamic_field_target_' . $fieldConfig->get('joinColumnName', 'id')};
 
-                    foreach ($type->getColumns() as $column) {
-                        $key = $fieldConfig->get('id') . '_' . $column->name;
+                        foreach ($type->getColumns() as $column) {
+                            $key = $fieldConfig->get('id') . '_' . $column->name;
 
-                        if (isset($data->{$key}) == true) {
-                            $insertParam[$column->name] = $data->{$key};
+                            if (isset($data->{$key}) == true) {
+                                $insertParam[$column->name] = $data->{$key};
+                            }
                         }
-                    }
 
-                    $newRevisionTable->insert($insertParam);
+                        $newRevisionTable->insert($insertParam);
+                    }
                 }
             }
         }
