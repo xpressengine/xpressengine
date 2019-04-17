@@ -146,9 +146,7 @@ class DynamicFieldMigration extends Migration
         foreach ($dynamicFieldConfigs as $config) {
             //실제 Dynamic Field를 가지고 있는 config를 대상으로 확인
             foreach ($this->configManager->children($config) as $fieldConfig) {
-                $type = $this->dynamicFieldHandler->getType($fieldConfig->get('group'), $fieldConfig->get('id'));
-
-                if ($type->checkExistTypeTables() == false) {
+                if ($fieldConfig->get('migration', false) == false) {
                     return true;
                 }
             }
@@ -174,6 +172,10 @@ class DynamicFieldMigration extends Migration
                 //해당 Type의 Table이 있는지 확인해서 생성
                 if ($type->checkExistTypeTables() == false) {
                     $type->createTypeTable();
+                }
+
+                if ($fieldConfig->get('migration', false) == true) {
+                    continue;
                 }
 
                 //일반 데이터 추가
@@ -235,6 +237,9 @@ class DynamicFieldMigration extends Migration
                         $newRevisionTable->insert($insertParam);
                     }
                 }
+
+                $fieldConfig->set('migration', true);
+                $this->configHandler->put($fieldConfig);
             }
         }
     }
