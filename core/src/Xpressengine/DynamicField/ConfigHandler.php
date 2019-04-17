@@ -71,6 +71,7 @@ class ConfigHandler
         'use' => true,
         'revision' => false,
         'tableMethod' => self::CREATE_TABLE_METHOD,
+        'migration' => true
     ];
 
     /**
