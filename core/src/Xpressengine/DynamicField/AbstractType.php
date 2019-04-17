@@ -122,8 +122,9 @@ abstract class AbstractType implements ComponentInterface
         $names = array_map(function () {
             return '';
         }, $this->getColumns());
+
         foreach (array_merge($names, $this->rules) as $name => $rule) {
-            $key = Str::snake($this->config->get('id')) . '_' . $name;
+            $key = $this->config->get('id') . '_' . $name;
             $rules[$key] = $required ? ltrim($rule . '|required', '|') : $rule;
         }
 
@@ -884,7 +885,9 @@ abstract class AbstractType implements ComponentInterface
                 if (is_array($params[$key])) {
                     list($value, $operator) = $params[$key];
                 }
-                $query = $query->where($key, $operator, $value);
+
+                $columnName = $config->get('id') . '.' . $column->name;
+                $query = $query->where($columnName, $operator, $value);
             }
         }
 
