@@ -701,7 +701,7 @@ if (function_exists('plugins_path') === false) {
     function plugins_path($path = '')
     {
         $path = trim($path, DIRECTORY_SEPARATOR);
-        return rtrim(XePlugin::getPluginsDir(), DIRECTORY_SEPARATOR).($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app('path.plugins').($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
 

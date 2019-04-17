@@ -62,7 +62,13 @@ window.jQuery(function ($) {
         }).get()
       },
       remove: function () {
-        var pluginIds = self.checkedList()
+        var pluginIds = [];
+        if ($(this).data('plugin-id')) {
+          pluginIds = [$(this).data('plugin-id')]
+        } else {
+          pluginIds = self.checkedList()
+        }
+
         if (pluginIds.length === 0) {
           return false
         }
@@ -77,7 +83,13 @@ window.jQuery(function ($) {
         return false
       },
       activate: function () {
-        var pluginIds = self.checkedList()
+        var pluginIds = [];
+        if ($(this).data('plugin-id')) {
+          pluginIds = [$(this).data('plugin-id')]
+        } else {
+          pluginIds = self.checkedList()
+        }
+
         if (pluginIds.length === 0) {
           return false
         }
@@ -92,7 +104,13 @@ window.jQuery(function ($) {
         return false
       },
       deactivate: function () {
-        var pluginIds = self.checkedList()
+        var pluginIds = [];
+        if ($(this).data('plugin-id')) {
+          pluginIds = [$(this).data('plugin-id')]
+        } else {
+          pluginIds = self.checkedList()
+        }
+
         if (pluginIds.length === 0) {
           return false
         }

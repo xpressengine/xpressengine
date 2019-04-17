@@ -16,9 +16,7 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
-use FilesystemIterator;
-use Illuminate\Foundation\Application;
-use Xpressengine\Installer\XpressengineInstaller;
+use Xpressengine\Foundation\Application;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
 

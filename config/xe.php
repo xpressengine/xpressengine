@@ -399,7 +399,7 @@ return [
 
     'plugin' => [
         'api' => [
-            'url' => 'http://store.xehub.io/api/1.3'
+            'url' => 'https://store.xehub.io/api/1.3'
         ],
         'operation' => [
             'time_limit' => 1200

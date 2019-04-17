@@ -14,7 +14,7 @@
 
 namespace Xpressengine\User;
 
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 

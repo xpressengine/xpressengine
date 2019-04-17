@@ -796,15 +796,22 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * 플러그인이 요구하는 코어 버전
+     *
+     * @return string
+     */
+    public function requireCoreVersion()
+    {
+        return $this->getMetaData('require.xpressengine/xpressengine') ?: __XE_VERSION__;
+    }
+
+    /**
      * 플러그인이 필요로하는 코어버전이 맞는지 확인
      *
      * @return bool
      */
     public function isAllowVersion()
     {
-        return \Composer\Semver\Semver::satisfies(
-            __XE_VERSION__,
-            $this->getMetaData('require.xpressengine/xpressengine') ?: __XE_VERSION__
-        );
+        return \Composer\Semver\Semver::satisfies(__XE_VERSION__, $this->requireCoreVersion());
     }
 }
