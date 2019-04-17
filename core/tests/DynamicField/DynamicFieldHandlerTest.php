@@ -164,7 +164,8 @@ class DynamicFieldHandlerTest extends TestCase
 
         $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('setConfig');
-        $type->shouldReceive('create');
+        $type->shouldReceive('checkExistTypeTables')->andReturn(false);
+        $type->shouldReceive('createTypeTable');
         $registerHandler->shouldReceive('getType')->andReturn($type);
 
         $handler->create($config);
@@ -264,7 +265,7 @@ class DynamicFieldHandlerTest extends TestCase
 
         $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('setConfig');
-        $type->shouldReceive('drop');
+        $type->shouldReceive('dropData');
         $registerHandler->shouldReceive('getType')->andReturn($type);
 
         $handler->drop($config);

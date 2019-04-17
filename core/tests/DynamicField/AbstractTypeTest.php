@@ -15,6 +15,7 @@
 
 namespace Xpressengine\Tests\DynamicField;
 
+use Illuminate\Support\Facades\DB;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\ConfigEntity;
@@ -41,6 +42,11 @@ class AbstractTypeTest extends TestCase
     protected $handler;
 
     /**
+     * @var m\MockInterface|\Xpressengine\DynamicField\RegisterHandler
+     */
+    protected $registerHandler;
+
+    /**
      * tear down
      *
      * @return void
@@ -59,6 +65,8 @@ class AbstractTypeTest extends TestCase
     {
         $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
         $registerHandler->shouldReceive('fireEvent');
+
+        $this->registerHandler = $registerHandler;
 
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
         $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
@@ -377,24 +385,23 @@ class AbstractTypeTest extends TestCase
      */
     public function testUpdate()
     {
-//        $handler = $this->handler;
-//
-//        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-//            ->shouldAllowMockingProtectedMethods()->makePartial();
-
+        $registerHandler = $this->registerHandler;
         $handler = $this->handler;
         $typeInstance = new TestType($handler);
+        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
+        $config->shouldReceive('get')->with('typeId')->andReturn('typeId');
+        $config->shouldReceive('get')->with('group', null)->andReturn('group');
+        $config->shouldReceive('get')->with('id', null)->andReturn('id');
+
+        $registerHandler->shouldReceive('getType')->andReturn($typeInstance);
 
         $typeInstance->setConfig($config);
-
-        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-        $configHandler->shouldReceive('getTableName')->andReturn('tableName');
 
         $query = m::mock('Illuminate\Database\Query\Builder');
         $query->shouldReceive('where')->andReturnSelf();
@@ -431,6 +438,7 @@ class AbstractTypeTest extends TestCase
     public function testDelete()
     {
         $handler = $this->handler;
+        $registerHandler = $this->registerHandler;
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
@@ -438,8 +446,13 @@ class AbstractTypeTest extends TestCase
         $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
+        $config->shouldReceive('get')->with('typeId')->andReturn('typeId');
+        $config->shouldReceive('get')->with('group', null)->andReturn('group');
+        $config->shouldReceive('get')->with('id', null)->andReturn('id');
 
         $typeInstance->setConfig($config);
+
+        $registerHandler->shouldReceive('getType')->andReturn($typeInstance);
 
         $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
         $configHandler->shouldReceive('getTableName')->andReturn('tableName');
@@ -467,7 +480,10 @@ class AbstractTypeTest extends TestCase
     public function testGet()
     {
         $handler = $this->handler;
+        $registerHandler = $this->registerHandler;
         $typeInstance = new TestType($handler);
+        $connection = m::mock('Xpressengine\Database\VirtualConnectionInterface');
+        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
@@ -475,13 +491,19 @@ class AbstractTypeTest extends TestCase
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('sortable')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
+        $config->shouldReceive('get')->with('group')->andReturn('group');
+        $config->shouldReceive('get')->with('typeId')->andReturn('typeId');
+        $config->shouldReceive('get')->with('group', null)->andReturn('group');
+        $config->shouldReceive('get')->with('id', null)->andReturn('id');
 
         $typeInstance->setConfig($config);
 
-        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-        $configHandler->shouldReceive('getTableName')->andReturn('tableName');
+        $registerHandler->shouldReceive('getType')->andReturn($typeInstance);
 
         $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
+        $handler->shouldReceive('connection')->andReturn($connection);
+
+        $connection->shouldReceive('getTablePrefix')->andReturn('tablePrefix');
 
         $query = m::mock('Xpressengine\Database\DynamicQuery');
         $query->shouldReceive('hasDynamicTable')->andReturn(false);
@@ -490,11 +512,8 @@ class AbstractTypeTest extends TestCase
         $join = m::mock('Illuminate\Database\Query\JoinClause');
         $join->shouldReceive('on');
 
-        $query->shouldReceive('leftJoin')->with('tableName', m::on(function ($closure) use ($join) {
-            call_user_func($closure, $join);
-
-            return true;
-        }));
+        $query->shouldReceive('leftJoin')->andReturnSelf();
+        $query->shouldReceive('selectRaw');
 
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->get($query));
 
@@ -568,6 +587,7 @@ class AbstractTypeTest extends TestCase
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
+        $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
         $typeInstance->setConfig($config);
@@ -608,6 +628,7 @@ class AbstractTypeTest extends TestCase
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('sortable')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
+        $config->shouldReceive('get')->with('group')->andReturn('group');
 
         $typeInstance->setConfig($config);
 
@@ -623,11 +644,7 @@ class AbstractTypeTest extends TestCase
         $join = m::mock('Illuminate\Database\Query\JoinClause');
         $join->shouldReceive('on')->andReturnSelf();
 
-        $query->shouldReceive('leftJoin')->with('revisionTableName', m::on(function ($closure) use ($join) {
-            call_user_func($closure, $join);
-
-            return true;
-        }));
+        $query->shouldReceive('leftJoin');
 
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->joinRevision($query));
     }
