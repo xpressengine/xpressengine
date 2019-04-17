@@ -838,17 +838,18 @@ abstract class AbstractType implements ComponentInterface
         $baseTable = $query->from;
 
         $type = $this->handler->getRegisterHandler()->getType($this->handler, $config->get('typeId'));
+        $tablePrefix = $this->handler->connection()->getTablePrefix();
 
         $createTableName = $type->getTableName();
         if ($query->hasDynamicTable($config->get('group') . '_' . $config->get('id')) === true) {
             return $query;
         }
 
-        $rawString = sprintf('%s.*', \DB::getTablePrefix() . $baseTable);
+        $rawString = sprintf('%s.*', $tablePrefix . $baseTable);
         foreach ($type->getColumns() as $column) {
             $key = $config->get('id') . '_' . $column->name;
 
-            $rawString .= sprintf(', %s.%s as %s', \DB::getTablePrefix() . $config->get('id'), $column->name, $key);
+            $rawString .= sprintf(', %s.%s as %s', $tablePrefix . $config->get('id'), $column->name, $key);
         }
 
         $query->leftJoin(
