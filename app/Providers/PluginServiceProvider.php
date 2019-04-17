@@ -85,20 +85,12 @@ class PluginServiceProvider extends ServiceProvider
      */
     protected function registerPluginScanner()
     {
-        $this->app->singleton(
-            PluginScanner::class,
-            function ($app) {
+        $this->app->singleton(PluginScanner::class, function ($app) {
+            $metaFileReader = new MetaFileReader('composer.json');
+            $scanner = new PluginScanner($metaFileReader, $app['path.plugins'], $app['path.base']);
 
-                $pluginDir = base_path('plugins');
-
-                $basePath = base_path();
-
-                $metaFileReader = new MetaFileReader('composer.json');
-                $scanner = new PluginScanner($metaFileReader, $pluginDir, $basePath);
-
-                return $scanner;
-            }
-        );
+            return $scanner;
+        });
     }
 
     /**
