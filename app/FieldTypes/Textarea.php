@@ -43,7 +43,7 @@ class Textarea extends AbstractType
      */
     public function name()
     {
-        return 'Textarea';
+        return 'Textarea - 긴 문자';
     }
 
     /**

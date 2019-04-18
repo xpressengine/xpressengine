@@ -40,7 +40,7 @@ class UrlSkin extends AbstractSkin
      */
     public function name()
     {
-        return 'Text default';
+        return 'Text url';
     }
 
     /**

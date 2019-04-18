@@ -42,7 +42,7 @@ class Email extends AbstractType
      */
     public function name()
     {
-        return 'Email';
+        return 'Email - 이메일 주소';
     }
 
     /**

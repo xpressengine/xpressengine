@@ -43,7 +43,7 @@ class Url extends AbstractType
      */
     public function name()
     {
-        return 'Url';
+        return 'Url - 도메인 주소';
     }
 
     /**

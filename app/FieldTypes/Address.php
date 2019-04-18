@@ -45,7 +45,7 @@ class Address extends AbstractType
      */
     public function name()
     {
-        return 'Address';
+        return 'Address - 주소';
     }
 
     /**

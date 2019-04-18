@@ -51,7 +51,7 @@ class CellPhoneNumber extends AbstractType
      */
     public function name()
     {
-        return 'Cell phone number';
+        return 'Cell phone number - 휴대폰 번호';
     }
 
     /**
