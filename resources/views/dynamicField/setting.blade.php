@@ -6,7 +6,7 @@
     </div>
 
     <table class="table">
-        <caption>DynamicField Manager</caption>
+        <caption>{{xe_trans('xe::dynamicFieldManager')}}</caption>
         <thead>
         <tr>
             <th>#</th>
