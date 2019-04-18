@@ -181,7 +181,6 @@ class PluginController extends Controller
             }
         }
 
-        /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($pluginIds, $force) {
             Artisan::call('plugin:uninstall', [
                 'plugin' => $pluginIds,
@@ -366,7 +365,6 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
-        /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($plugins) {
             Artisan::call('plugin:update', [
                 'plugin' => $plugins,
@@ -411,7 +409,6 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(function () use ($pluginIds) {
             Artisan::call('plugin:install', [
                 'plugin' => $pluginIds,

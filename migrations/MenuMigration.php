@@ -111,11 +111,11 @@ class MenuMigration extends Migration
     }
 
     /**
-     * Run after service activation.
+     * Run after service initialized.
      *
      * @return void
      */
-    public function init()
+    public function initialized()
     {
         // 기본 메뉴 추가 (main) 추가.
         /** @var MenuHandler $menuHandler */

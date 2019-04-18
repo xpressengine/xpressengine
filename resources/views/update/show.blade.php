@@ -59,7 +59,9 @@
                 </div>
 
                 <div class="panel-body">
-                    @if($installedVersion === __XE_VERSION__)
+                    @if(version_compare($latest, __XE_VERSION__) === -1 || version_compare(__XE_VERSION__, $installedVersion) === -1)
+                        <p>코어 버전정보가 정상적이지 않습니다. 임의로 버전정보가 변경된 경우 정상적으로 동작하지 않을 수 있습니다.</p>
+                    @elseif($latest === __XE_VERSION__ && $installedVersion === __XE_VERSION__)
                         <p>{{ xe_trans('xe::msgCoreInstalled', ['version' => __XE_VERSION__]) }}</p>
                     @else
                         @if($operation && $operation['updateVersion'] && $operation['status'] === 'running')
@@ -71,27 +73,84 @@
                             <form action="{{ route('settings.coreupdate.update') }}" method="POST" id="updateForm">
                                 {{ csrf_field() }}
                                 {{ method_field('put') }}
-                                <p>
-                                    {{ xe_trans('xe::newCoreDownloaded') }} <br>
-                                    {{ xe_trans('xe::alertUpdateCore', ['version' => __XE_VERSION__]) }} {{ xe_trans('xe::confirmUpdate') }}
-                                </p>
-                                <br>
-                                <div class="well">
+                                @if(version_compare(__XE_VERSION__, $latest) === 0)
                                     <p>
-                                        {{ xe_trans('xe::currentInstalledVersion') }}: {{ $installedVersion }}
+                                        {{ xe_trans('xe::newCoreDownloaded') }} <br>
+                                        {{ xe_trans('xe::alertUpdateCore', ['version' => __XE_VERSION__]) }} {{ xe_trans('xe::confirmUpdate') }}
                                     </p>
-                                    <p>
-                                        {{ xe_trans('xe::downloadedVersion') }}: {{ __XE_VERSION__ }}
-                                    </p>
-                                </div>
+                                    <br>
+                                    <div class="well">
+                                        <p>
+                                            {{ xe_trans('xe::currentInstalledVersion') }}: {{ $installedVersion }}
+                                        </p>
+                                        <p>
+                                            {{ xe_trans('xe::downloadedVersion') }}: {{ __XE_VERSION__ }}
+                                        </p>
+                                    </div>
 
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="skip-composer" value="Y"> <code>composer
-                                            update</code> {{ xe_trans('xe::doNotRun') }}
-                                    </label>
-                                    <p class="help-block">- {{ xe_trans('xe::checkIfAlreadyRunComposer') }}</p>
-                                </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="skip-composer" value="Y">
+                                            <code>composer update</code> {{ xe_trans('xe::doNotRun') }}
+                                        </label>
+                                        <p class="help-block">- {{ xe_trans('xe::checkIfAlreadyRunComposer') }}</p>
+                                    </div>
+
+                                @else
+
+                                    <p>
+                                        새로운 버전의 XE가 있습니다. <br>
+                                        {{ xe_trans('xe::alertUpdateCore', ['version' => $latest]) }} {{ xe_trans('xe::confirmUpdate') }}
+                                    </p>
+                                    <br>
+                                    <div class="well">
+                                        <p>
+                                            {{ xe_trans('xe::currentInstalledVersion') }}: {{ $installedVersion }}
+                                        </p>
+                                        <p>
+                                            업데이트 버전:
+                                            <select name="version">
+                                                @foreach(array_reverse($updatables) as $updatable)
+                                                    <option value="{{ $updatable }}">{{ $updatable }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if($downloaded = version_compare(__XE_VERSION__, $installedVersion) === 1)
+                                                <span>({{ xe_trans('xe::downloadedVersion') }}: {{ __XE_VERSION__ }})</span>
+                                            @endif
+                                        </p>
+                                    </div>
+
+                                    @if($downloaded)
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="skip-download" value="Y" onclick="$('#__chkbox-composer').slideDown();">
+                                            다운로드 {{ xe_trans('xe::doNotRun') }}
+                                        </label>
+                                        <p class="help-block">- 이미 다운로드된 버전으로 업데이트를 마무리하는 경우 체크하십시오.</p>
+                                    </div>
+                                        <div class="checkbox" id="__chkbox-composer" style="display: none;">
+                                            <label>
+                                                <input type="checkbox" name="skip-composer" value="Y">
+                                                <code>composer update</code> {{ xe_trans('xe::doNotRun') }}
+                                            </label>
+                                            <p class="help-block">- {{ xe_trans('xe::checkIfAlreadyRunComposer') }}</p>
+                                        </div>
+                                        <script>
+                                            jQuery(function($) {
+                                              $('input[name="skip-download"]').change(function () {
+                                                if ($(this).is(':checked')) {
+                                                  $('#__chkbox-composer').slideDown();
+                                                  $('select[name="version"]').prop('disabled', true);
+                                                } else {
+                                                  $('#__chkbox-composer').slideUp();
+                                                  $('select[name="version"]').prop('disabled', false);
+                                                }
+                                              }).triggerHandler('change');
+                                            });
+                                        </script>
+                                    @endif
+                                @endif
+
                             </form>
                             @section('submit_button')
                                 <div class="panel-footer">

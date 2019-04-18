@@ -1,3 +1,4 @@
+@inject('handler', 'xe.plugin')
 <li class="list-group-item @if( ! $plugin->isActivated() )off @endif">
     <div class="list-group-item-checkbox">
         <label class="xe-label">
@@ -41,7 +42,9 @@
         @if(!$plugin->isAllowVersion())
             <hr>
             <div class="alert alert-warning" role="alert" style="margin-top:10px;">
-                <p><i class="xi-info-o txt_red"></i> {{ xe_trans('xe::pluginRequiredVerHigherThanCurrentCore') }}</p>
+                <p>
+                    {!! xe_trans('xe::pluginRequiredVerHigherThanCurrentCore', ['ver' => preg_replace('/[^0-9\.]/', '', $plugin->requireCoreVersion()), 'action' => '<a href="https://github.com/xpressengine/xpressengine/releases" target="_blank">'.xe_trans('xe::coreUpdate').'</a>']) !!}
+                </p>
             </div>
         @endif
 
@@ -59,18 +62,14 @@
         @endif
     </div>
     <div class="btn-right form-inline">
-        @if ($plugin->isActivated() == true)
-            <button type="button" class="xe-btn __xe_self_deactivate_plugin">{{ xe_trans('xe::deactivation') }}</button>
+        @if ($plugin->isActivated())
+            <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xe-btn __xe_deactivate_plugin" data-plugin-id="{{ $plugin->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
+            @if($plugin->getSettingsURI() !== null)
+                <a class="xe-btn xe-btn-positive-outline" href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
+            @endif
         @else
-            <form method="post" action="{{ route('settings.plugins.manage.activate') }}" class="form-inline">
-                {!! csrf_field() !!}
-                <input type="hidden" name="pluginId" value="{{ $plugin->getId() }}">
-                <button type="submit" class="xe-btn xe-btn-positive-outline">{{ xe_trans('xe::activation') }}</button>
-            </form>
-        @endif
-
-        @if($plugin->isActivated() && ($plugin->getSettingsURI() !== null) )
-            <a class="xe-btn xe-btn-positive-outline" href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
+            <a href="{{ route('settings.plugins.manage.activate') }}" class="xe-btn xe-btn-positive-outline __xe_activate_plugin" data-plugin-id="{{ $plugin->getId() }}" {{ array_key_exists($plugin->getId(), $handler->getErrors()) ? 'disabled' : '' }}>{{ xe_trans('xe::activation') }}</a>
+            <a href="{{ route('settings.plugins.manage.delete') }}" class="xe-btn xe-btn-danger-outline __xe_remove_plugin" data-plugin-id="{{ $plugin->getId() }}">{{ xe_trans('xe::delete') }}</a>
         @endif
     </div>
 </li>

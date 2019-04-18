@@ -2566,6 +2566,14 @@ return [
         'ko' => '사용자 필수 입력을 해야할 경우 체크합니다.',
         'en' => 'Check if user input is required.',
     ],
+    'dynamicFieldSearchableDescription' => [
+        'ko' => '다이나믹 필드의 값으로 검색이 가능하도록 할 경우 체크합니다.',
+        'en' => 'Check this to enable searching by dynamic field value.'
+    ],
+    'searchable' => [
+        'ko' => '검색 가능',
+        'en' => 'Searchable'
+    ],
     'inputRequired' => [
         'ko' => '입력 필수',
         'en' => 'Input required',
@@ -2982,13 +2990,17 @@ return [
         'ko' => 'post_max_size가 upload_max_filesize보다 작을 경우 파일 업로드가 정상적으로 동작하지 않을 수 있습니다.',
         'en' => 'If post_max_size is less than upload_max_filesize, file upload may not operate normally.'
     ],
-    'pluginWasDeactivated' => [
-        'ko' => '[:name] 플러그인이 비활성화 되었습니다.',
-        'en' => 'Plugin [:name] was deactivated.',
+    'pluginError' => [
+        'ko' => '플러그인 오류',
+        'en' => 'Plugin error',
+    ],
+    'errorPluginWasDeactivated' => [
+        'ko' => '오류가 발생하여 :name 플러그인이 비활성화 되었습니다.',
+        'en' => 'An error occurred and the :name plugin was disabled.',
     ],
     'pluginRequiredVerHigherThanCurrentCore' => [
-        'ko' => '플러그인의 요구 버전이 현재 코어버전보다 높습니다.',
-        'en' => 'The required version of the plugin is higher than the current core version.',
+        'ko' => '플러그인의 요구버전(:ver 이상)이 설치된 XE버전보다 높습니다. 정상적으로 사용하려면 :action를 하세요.',
+        'en' => 'The required version of the plugin (:ver or higher) is higher than the installed version of XE. :action for normal use.',
     ],
     'viewDetails' => [
         'ko' => '상세보기',

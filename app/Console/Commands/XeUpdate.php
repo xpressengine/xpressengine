@@ -13,9 +13,11 @@
  */
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
+use FilesystemIterator;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
+use Xpressengine\Foundation\ReleaseProvider;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
@@ -61,15 +63,33 @@ class XeUpdate extends Command
     protected $writer;
 
     /**
+     * Filesystem instance
+     *
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * ReleaseProvider instance
+     *
+     * @var ReleaseProvider
+     */
+    protected $releaseProvider;
+
+    /**
      * Create a new controller creator command instance.
      *
-     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @param ComposerFileWriter $writer          ComposerFileWriter instance
+     * @param ReleaseProvider    $releaseProvider ReleaseProvider instance
+     * @param Filesystem         $filesystem      Filesystem instance
      */
-    public function __construct(ComposerFileWriter $writer)
+    public function __construct(ComposerFileWriter $writer, ReleaseProvider $releaseProvider, Filesystem $filesystem)
     {
         parent::__construct();
 
         $this->writer = $writer;
+        $this->filesystem = $filesystem;
+        $this->releaseProvider = $releaseProvider;
     }
 
     /**
@@ -77,78 +97,297 @@ class XeUpdate extends Command
      *
      * @return void
      * @throws \Exception
+     * @throws \Throwable
      */
     public function handle()
     {
+        $this->line('///////////////////////////////////');
         $this->output->block('Updating Xpressengine.');
+        $this->line('///////////////////////////////////');
 
-        // check option
-        if (!$this->option('skip-download')) {
-            // @todo 다운로드 지원이 되기전까지 옵션이 지정되지 않더라도 처리하지 않음
-            // 업데이트 파일의 다운로드는 아직 지원하지 않습니다. 아래의 안내대로 코어를 업데이트 하십시오.
-//            $this->output->caution('Downloading update files does not yet supported. Follow the guide below for update.');
-//            return null;
+        if ($this->isLocked()) {
+            throw new \Exception('The command is locked. Make sure that another process is running.');
         }
 
-        // version 안내
-        $installedVersion = trim(file_get_contents(storage_path('app/installed')));
-        //  업데이트 버전 정보:
-        $this->warn(' Version information:');
-        $this->line("  $installedVersion -> ".__XE_VERSION__);
+        $this->lock();
+
+        $updateVersion = $this->argument('version') ?: $this->releaseProvider->getLatestCoreVersion();
+        $skipDownload = $this->option('skip-download');
+        $skipComposer = $this->option('skip-composer');
+
+        try {
+            if (!in_array($updateVersion, $this->releaseProvider->coreVersions())) {
+                throw new \Exception("Unknown version [$updateVersion]");
+            }
+
+            // 현재 파일이 업데이트할 버전보다 낮지 않다면 다운로드 하지 않음.
+            if (version_compare(__XE_VERSION__, $updateVersion) !== -1) {
+                $skipDownload = true;
+            }
+
+            if ($skipDownload) {
+                $updateVersion = __XE_VERSION__;
+            }
+
+            // version 안내
+            $installedVersion = trim(file_get_contents(storage_path('app/installed')));
+            //  업데이트 버전 정보:
+            $this->warn('Version information:');
+            $this->line(" $installedVersion -> $updateVersion");
+
+            if (version_compare($installedVersion, $updateVersion) !== -1) {
+                throw new \Exception("Version [$updateVersion] is already installed.");
+            }
+        } catch (\Exception $e) {
+            $this->setFailed();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed();
+            throw $e;
+        }
+
 
         // confirm
         if ($this->input->isInteractive() && $this->confirm(
-                // Xpressengine ver.".__XE_VERSION__."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?
-                "The Xpressengine ver.".__XE_VERSION__." will be updated. It may take up to a few minutes. \r\nDo you want to update?"
+                // Xpressengine ver.".$updateVersion."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?
+                "The Xpressengine ver.".$updateVersion." will be updated. It may take up to a few minutes. \r\nDo you want to update?"
             ) === false
         ) {
+            $this->unlock();
             return;
         }
 
-
-        $logFile = $this->ready();
+        $this->ready($updateVersion);
 
         try {
             if (0 !== $this->call('cache:clear')) {
                 throw new \Exception('cache clear fail.. check your system.');
             }
 
-            // composer update실행(composer update --no-dev)
-            if (!$this->option('skip-composer')) {
+            $tempPath = storage_path('app/temp');
+            // download
+            if (!$skipDownload) {
+                if (!$this->filesystem->isWritable(base_path())) {
+                    throw new \Exception('Could not write to project root.');
+                }
 
-                $this->output->section('Checking environment for Composer...');
+                $this->output->section('Clone project.');
+                $this->output->write(' cloning ... ');
+
+                $this->cloneProject($tempPath);
+
+                $this->info('done');
+
+                $this->output->section('Download.');
+                $this->download($updateVersion, $tempPath);
+
+                // download 를 수행하는 경우 반드시 composer 를 실행함.
+                $skipComposer = false;
+                $workDir = $tempPath;
+            } else {
+                $workDir = base_path();
+            }
+
+            // composer update실행(composer update --no-dev)
+            if (!$skipComposer) {
+                $this->output->section('Checking environment for Composer.');
                 $this->prepareComposer();
 
                 $this->output->section('Composer update command is running.. It may take up to a few minutes.');
-                $this->line(" composer update");
+                $this->line('> composer update');
                 $result = $this->runComposer([
                     'command' => 'update',
+                    '--working-dir' => $workDir,
+                    '--no-autoloader' => true,
+                ], false, $this->output);
+
+                if (0 !== $result) {
+                    throw new \Exception('Failed to composer update.');
+                }
+            }
+
+            if (!$skipDownload) {
+                $this->output->section('Copy file to project.');
+                $this->output->write(' copying ... ');
+
+                $this->filesystem->moveDirectory(base_path('vendor'), base_path('vendor-old'), true);
+
+                $this->filesystem->copyDirectory($tempPath, base_path());
+                $this->filesystem->deleteDirectory($tempPath);
+
+                $this->info('done');
+            }
+
+            if (!$skipComposer) {
+                $this->output->section('Dump autoload.');
+                $this->line('> composer dump-autoload');
+                $result = $this->runComposer([
+                    'command' => 'dump-autoload',
                     '--working-dir' => base_path(),
-                ], false, $logFile);
+                ], false, $this->output);
+
+                if (0 !== $result) {
+                    throw new \Exception('Failed to composer dump.');
+                }
             }
 
             // migration
             $this->output->section('Running migration..');
             $this->migrateCore($installedVersion);
 
-            $this->writeResult($result ?? 0);
-
         } catch (\Exception $e) {
-            $fp = fopen(storage_path($logFile), 'a');
-            fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
-            fclose($fp);
-            $this->writeResult(1);
+            $this->setFailed();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed();
             throw $e;
         }
 
-
-
+        if ($this->filesystem->isDirectory(base_path('vendor-old'))) {
+            $this->filesystem->deleteDirectory(base_path('vendor-old'));
+        }
 
         // mark installed
-        $this->markInstalled();
+        $this->markInstalled($updateVersion);
 
-        $this->output->success("Update the Xpressengine to ver.".__XE_VERSION__.".");
+        $this->setSuccessed();
 
+        $this->output->success("Update the Xpressengine to ver.{$updateVersion}.");
+    }
+
+    /**
+     * Clone project for update
+     *
+     * @param string $destination destination dir
+     * @return void
+     * @throws \Exception
+     */
+    private function cloneProject($destination)
+    {
+        if ($this->filesystem->isDirectory($destination)) {
+            if (!$this->filesystem->deleteDirectory($destination)) {
+                throw new \Exception('Failed to empty directory.');
+            }
+        }
+
+        $composerJson = 'composer.plugins.json';
+        $info = json_decode(file_get_contents($from = storage_path('app/'.$composerJson)), true);
+        $plugins = collect(array_get($info, 'require', []))->keys()->map(function ($require) {
+            return str_replace('xpressengine-plugin/', '', $require);
+        })->all();
+
+        $excepts = collect($this->filesystem->directories(base_path('plugins')))->map(function ($item) {
+            return basename($item);
+        })->filter(function ($name) use ($plugins) {
+            return !in_array($name, $plugins);
+        })->map(function ($except) {
+            return 'plugins/' . $except;
+        })->all();
+
+        $this->copyDirectory(base_path(), $destination, array_merge([
+            'storage',
+            'node_modules',
+        ], $excepts));
+
+        $storageAppPath = 'storage/app';
+        if (!$this->filesystem->isDirectory($dir = $destination.'/'.$storageAppPath)) {
+            $this->filesystem->makeDirectory($dir, 0777, true);
+        }
+        $this->filesystem->copy($from, $dir.'/'.$composerJson);
+        $this->filesystem->copy($from, $dir.'/installed');
+    }
+
+    /**
+     * Copy a directory from one location to another.
+     *
+     * @param string   $directory
+     * @param string   $destination
+     * @param array    $excepts
+     * @param int|null $options
+     * @return bool
+     *
+     * @see \Illuminate\Filesystem\Filesystem::copyDirectory
+     */
+    protected function copyDirectory($directory, $destination, $excepts = [], $options = null)
+    {
+        if (! $this->filesystem->isDirectory($directory)) {
+            return false;
+        }
+
+        $options = $options ?: FilesystemIterator::SKIP_DOTS;
+
+        if (! $this->filesystem->isDirectory($destination)) {
+            $this->filesystem->makeDirectory($destination, 0777, true);
+        }
+
+        $items = new FilesystemIterator($directory, $options);
+
+        foreach ($items as $item) {
+            $target = $destination.'/'.$item->getBasename();
+
+            if ($item->isDir()) {
+                $path = $item->getPathname();
+
+                if (in_array($item->getBasename(), $excepts) || Str::startsWith($item->getBasename(), '.')) {
+                    continue;
+                }
+
+                $ignores = collect($excepts)->filter(function ($except) use ($item) {
+                    return Str::startsWith($except, $item->getBasename().'/');
+                })->map(function ($except) use ($item) {
+                    return substr($except, strlen($item->getBasename().'/'));
+                })->all();
+
+                if (!$this->copyDirectory($path, $target, $ignores, $options)) {
+                    return false;
+                }
+            } else {
+                if (in_array($item->getBasename(), $excepts) || Str::startsWith($item->getBasename(), '.')) {
+                    continue;
+                }
+
+                if (!$this->filesystem->copy($item->getPathname(), $target)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Download release file
+     *
+     * @param string $ver         version
+     * @param string $destination destination dir
+     * @return void
+     * @throws \Exception
+     */
+    private function download($ver, $destination)
+    {
+        $updatesPath = storage_path('app/updates');
+        $versions = $this->releaseProvider->getUpdatableVersions();
+        foreach ($versions as $version) {
+            if (version_compare($ver, $version) === -1) {
+                break;
+            }
+
+            $this->output->write(" Download v{$version} - ");
+            $filepath = $this->releaseProvider->download($version, $updatesPath);
+            $zip = new \ZipArchive;
+            if ($zip->open($filepath) !== true) {
+                throw new \Exception("fail to open zip file [$filepath]");
+            }
+
+            $zip->extractTo($destination);
+            $zip->close();
+
+            $this->filesystem->delete($filepath);
+
+            $this->info('done');
+        }
+
+        $this->filesystem->deleteDirectory($updatesPath);
     }
 
     /**
@@ -158,9 +397,7 @@ class XeUpdate extends Command
      */
     private function migrateCore($installedVersion)
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = app('files');
-        $files = $filesystem->files(base_path('migrations'));
+        $files = $this->filesystem->files(base_path('migrations'));
 
         foreach ($files as $file) {
             $name = lcfirst(str_replace('Migration', '', basename($file, '.php')));
@@ -179,37 +416,85 @@ class XeUpdate extends Command
     }
 
     /**
-     * Mark installed.
+     * Determine if operation is locked.
+     *
+     * @return bool
+     */
+    private function isLocked()
+    {
+        return $this->writer->get('xpressengine-plugin.operation.lock', false);
+    }
+
+    /**
+     * Locks a operation.
      *
      * @return void
      */
-    private function markInstalled()
+    private function lock()
     {
-        file_put_contents(base_path('storage/app/installed'), __XE_VERSION__);
+        $this->writer->set('xpressengine-plugin.operation.lock', true);
+        $this->writer->write();
+    }
+
+    /**
+     * Unlocks a operation.
+     *
+     * @return void
+     */
+    private function unlock()
+    {
+        $this->writer->set('xpressengine-plugin.operation.lock', false);
+        $this->writer->write();
+    }
+
+    /**
+     * Mark installed.
+     *
+     * @param string $ver version
+     * @return void
+     */
+    private function markInstalled($ver)
+    {
+        file_put_contents(base_path('storage/app/installed'), $ver);
     }
 
     /**
      * Set ready for update.
      *
-     * @return string
+     * @param string $ver version
+     * @return void
      */
-    protected function ready()
+    private function ready($ver)
     {
-        // 플러그인 업데이트 잠금
-        unlink($this->writer->getPath());
         $this->writer->load();
         $this->writer->reset();
 
         $this->writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
-        $this->writer->set("xpressengine-plugin.operation.core_update", __XE_VERSION__);
-
-        $startTime = Carbon::now()->format('YmdHis');
-        $logFile = "logs/core-update-$startTime.log";
-        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
+        $this->writer->set("xpressengine-plugin.operation.core_update", $ver);
 
         $this->writer->write();
+    }
 
-        return $logFile;
+    /**
+     * Set operation successed.
+     *
+     * @return void
+     */
+    private function setSuccessed()
+    {
+        $this->writeResult(0);
+        $this->unlock();
+    }
+
+    /**
+     * Set operation failed.
+     *
+     * @return void
+     */
+    private function setFailed()
+    {
+        $this->writeResult(1);
+        $this->unlock();
     }
 
     /**
@@ -218,7 +503,7 @@ class XeUpdate extends Command
      * @param int $result result code
      * @return void
      */
-    protected function writeResult($result)
+    private function writeResult($result)
     {
         // composer.plugins.json 파일을 다시 읽어들인다.
         $this->writer->load();

@@ -16,7 +16,7 @@ namespace Xpressengine\Plugin;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -55,14 +55,6 @@ class PluginHandler
      * 플러그인이 package name에 지정해야 하는 vendor
      */
     const PLUGIN_VENDOR_NAME = 'xpressengine-plugin';
-
-    /**
-     * the path of directory that all plugins is located
-     * 플러그인이 등록돼 있는 디렉토리 경로. 모든 플러그인은 이 디렉토리 안에 존재한다.
-     *
-     * @var string
-     */
-    protected $pluginsDir;
 
     /**
      * 등록된 플러그인을 목록
@@ -119,9 +111,29 @@ class PluginHandler
     private $app;
 
     /**
+     * Registered plugins
+     *
+     * @var array
+     */
+    protected $registered = [];
+
+    /**
+     * Booted plugins
+     *
+     * @var array
+     */
+    protected $booted = [];
+
+    /**
+     * An error occurred plugins
+     *
+     * @var array
+     */
+    protected $errors = [];
+
+    /**
      * 생성자. 플러그인 관리에 필요한 요소들을 주입받는다.
      *
-     * @param string           $pluginsDir  플러그인 디렉토리
      * @param PluginCollection $plugins     플러그인 목록
      * @param PluginProvider   $provider    플러그인 프로바이더
      * @param Factory          $viewFactory View
@@ -129,7 +141,6 @@ class PluginHandler
      * @param Application      $app         application
      */
     public function __construct(
-        $pluginsDir,
         PluginCollection $plugins,
         PluginProvider $provider,
         Factory $viewFactory,
@@ -137,7 +148,6 @@ class PluginHandler
         Application $app
     ) {
         $this->plugins = $plugins;
-        $this->pluginsDir = $pluginsDir;
         $this->provider = $provider;
         $this->viewFactory = $viewFactory;
         $this->register = $register;
@@ -163,7 +173,7 @@ class PluginHandler
      */
     public function getPluginsDir()
     {
-        return $this->pluginsDir;
+        return $this->app['path.plugins'];
     }
 
     /**
@@ -172,10 +182,12 @@ class PluginHandler
      * @param string $path 지정할 디렉토리 경로
      *
      * @return void
+     *
+     * @deprecated since 3.0.1
      */
     public function setPluginsDir($path)
     {
-        $this->pluginsDir = $path;
+        // nothing
     }
 
     /**
@@ -370,11 +382,6 @@ class PluginHandler
         $this->setPluginsStatus($configs);
     }
 
-    protected $registered = [];
-
-    protected $booted = [];
-
-    protected $errors = [];
     /**
      * 활성화 된 플러그인을 부팅한다. 이 메소드는 모든 요청에서 항상 호출되며, 활성화 된 모든 플러그인의 boot()메소드를 호출한다.
      * 각 플러그인은 모든 요청에서 항상 작동되어야 할 작업을 boot() 메소드로 작성해 놓아야 한다.
@@ -463,7 +470,10 @@ class PluginHandler
      */
     protected function handleError(PluginEntity $entity, \Exception $e)
     {
-        $this->errors[$entity->getId()] = $e;
+        $this->errors[$entity->getId()] = [
+            'entity' => $entity,
+            'exception' => $e
+        ];
 
         if ($entity->isActivated()) {
             $this->deactivatePlugin($entity->getId());
@@ -638,7 +648,7 @@ class PluginHandler
      */
     private function registerViewNamespace(PluginEntity $entity)
     {
-        $this->viewFactory->addNamespace($entity->getId(), $this->pluginsDir.'/'.$entity->getId());
+        $this->viewFactory->addNamespace($entity->getId(), $this->getPluginsDir().'/'.$entity->getId());
     }
 
     /**

@@ -15,6 +15,8 @@
 namespace App\Http\Middleware;
 
 use Auth;
+use Illuminate\Contracts\Cookie\Factory as CookieFactory;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
 use XeLang;
 use Closure;
@@ -33,6 +35,13 @@ use Xpressengine\User\Rating;
  */
 class LangPreprocessor
 {
+    /**
+     * Application instance
+     *
+     * @var Application
+     */
+    private $app;
+
     /**
      * Map for name
      *
@@ -55,6 +64,16 @@ class LangPreprocessor
     private $mapSeqMultiLine = [];
 
     /**
+     * LangPreprocessor constructor.
+     *
+     * @param Application $app Application instance
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
      * Handle an incoming request.
      *
      * @param Request $request request
@@ -66,10 +85,12 @@ class LangPreprocessor
         // check locale at request & set locale
         $locale = $request->get('_l');
         if(!$locale) {
-            $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
+            $locale = $request->cookie('locale') ?: $this->app['xe.translator']->getLocale();
         }
-        app()->setLocale($locale);
-        app('cookie')->queue(cookie()->forever('locale', $locale, null, null, false, false));
+        $this->app->setLocale($locale);
+        $this->app['cookie']->queue(
+            $this->app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
+        );
 
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->prepare($request);
@@ -92,7 +113,7 @@ class LangPreprocessor
      */
     private function available()
     {
-        return in_array(Auth::user()->getRating(), [Rating::SUPER, Rating::MANAGER]);
+        return in_array($this->app['auth']->user()->getRating(), [Rating::SUPER, Rating::MANAGER]);
     }
 
     /**
@@ -105,7 +126,7 @@ class LangPreprocessor
     {
         $fields = $request->all();
         foreach ($fields as $key => $value) {
-            if ($params = XeLang::parsePreprocessor($key)) {
+            if ($params = $this->app['xe.translator']->parsePreprocessor($key)) {
                 list($kSeq, $seq, $command) = $params;
                 switch ( $command ) {
                     case 'name':
@@ -113,7 +134,7 @@ class LangPreprocessor
                         break;
 
                     case 'key':
-                        $this->mapSeqKey[$seq] = $value ?: XeLang::genUserKey();
+                        $this->mapSeqKey[$seq] = $value ?: $this->app['xe.translator']->genUserKey();
                         break;
 
                     case 'multiline':
@@ -140,13 +161,13 @@ class LangPreprocessor
     {
         $fields = $request->all();
         foreach ($fields as $key => $value) {
-            if ($params = XeLang::parsePreprocessor($key)) {
+            if ($params = $this->app['xe.translator']->parsePreprocessor($key)) {
                 list($kSeq, $seq, $command) = $params;
                 if ($command == 'locale') {
                     list($kSeq, $seq, $kLocale, $locale) = $params;
                     $key = $this->mapSeqKey[$seq];
                     $multiLine = isset($mapSeqMultiLine[$seq]);
-                    XeLang::save($key, $locale, $value, $multiLine);
+                    $this->app['xe.translator']->save($key, $locale, $value, $multiLine);
                 }
             }
         }

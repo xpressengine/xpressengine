@@ -798,6 +798,10 @@ class XeInstall extends Command
         $filesystem = app('files');
         $files = $filesystem->files(base_path('migrations'));
 
+        usort($files, function ($pre, $post) {
+            return $pre->getFileName() > $post->getFileName();
+        });
+
         $config = app('config');
         $config['database.default'] = $this->defaultInfos['database']['driver'];
 
