@@ -751,6 +751,9 @@ abstract class AbstractType implements ComponentInterface
             } else {
                 $insertParam = $updateParam;
                 $insertParam['target_id'] = $where['target_id'];
+                $insertParam['field_id'] = $config->get('id');
+                $insertParam['group'] = $config->get('group');
+
                 $this->handler->connection()->table($type->getTableName())
                     ->insert($insertParam);
             }
