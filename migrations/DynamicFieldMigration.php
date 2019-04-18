@@ -60,7 +60,7 @@ class DynamicFieldMigration extends Migration
     {
         \DB::table('config')->insert([
             'name' => 'dynamicField',
-            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false,"migration":true}'
+            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false}'
         ]);
     }
 
@@ -91,47 +91,11 @@ class DynamicFieldMigration extends Migration
      */
     public function update($installedVersion = null)
     {
-        if ($this->checkNeedUpdateDynamicFieldDefaultConfig() == true) {
-            $this->updateDynamicFieldDefaultConfig();
-        }
-
         if ($this->checkNeedTableMerge() == true) {
             $this->tableMerge();
         }
 
         parent::update($installedVersion);
-    }
-
-    /**
-     * check need update dynamic field default config
-     *
-     * @return bool
-     */
-    private function checkNeedUpdateDynamicFieldDefaultConfig()
-    {
-        $defaultConfig = $this->configHandler->getDefault();
-
-        if ($defaultConfig->get('migration') == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * update dynamic field default config
-     *
-     * @return void
-     */
-    private function updateDynamicFieldDefaultConfig()
-    {
-        $defaultConfig = $this->configHandler->getDefault();
-
-        if ($defaultConfig->get('migration') == null) {
-            $defaultConfig->set('migration', true);
-
-            $this->configManager->put(ConfigHandler::CONFIG_NAME, $defaultConfig->getPureAll());
-        }
     }
 
     /**

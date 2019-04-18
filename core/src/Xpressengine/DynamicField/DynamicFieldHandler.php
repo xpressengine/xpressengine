@@ -182,7 +182,9 @@ class DynamicFieldHandler
         if ($column === null) {
             $column = $this->getDefaultJoinColumn();
         }
+
         $config->set('joinColumnName', $column->name);
+        $config->set('migration', true);
 
         $this->connection->beginTransaction();
         $this->configHandler->add($config);
