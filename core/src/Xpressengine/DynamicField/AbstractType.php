@@ -125,7 +125,12 @@ abstract class AbstractType implements ComponentInterface
 
         foreach (array_merge($names, $this->rules) as $name => $rule) {
             $key = $this->config->get('id') . '_' . $name;
-            $rules[$key] = $required ? ltrim($rule . '|required', '|') : $rule;
+
+            if ($required == true) {
+                $rules[$key] = ltrim($rule . '|required', '|');
+            } else {
+                $rules[$key] = 'nullable|' . $rule;
+            }
         }
 
         return $rules;
