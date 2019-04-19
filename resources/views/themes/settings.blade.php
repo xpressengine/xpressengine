@@ -134,25 +134,28 @@
                 @show
             </div>
 
-
-
             <div class="container-fluid">
                 @if($errors = session('bootfail'))
-                    <ul class="list-group list-plugin">
                     @foreach($errors as $name => $info)
-                        <li class="list-group-item" style="border-left: 2px solid #a94442;">
-                            <div class="left-group">
-                                <span class="plugin-title" style="color:#434a53;">{{ $info['entity']->getTitle() }} {{ xe_trans('xe::pluginError') }}</span>
-                                <p>
-                                    {{ xe_trans('xe::errorPluginWasDeactivated', ['name' => $info['entity']->getTitle()]) }}
-                                </p>
-                                <p class="ellipsis">
-                                    {{ $info['exception']->getMessage() }} ({{ str_replace(base_path(), '', $info['exception']->getFile()) }}:{{ $info['exception']->getLine() }})
-                                </p>
-                            </div>
-                        </li>
+                        <!--[D] notice 데이터 알림 관련해서 구조 새롭게 추가 -->
+                        <!--[D] notice 는 기본, 상황에 맞춰 앞에 바 컬러 노출, 배경색 노출, 닫기 버튼 노출 -->
+                        <!--[D] is-dissmiss (X 닫기버튼 노출 유무, 공통), 해당 클래스들은 원하는 기능만큼 중복으로 적용해주면 됩니다.
+                            빨간색 : notice-danger (왼쪽바), notice-danger-bg (박스 배경색)
+                            노란색 : notice-warning (왼쪽바), notice-warning-bg (박스 배경색)
+                            녹색 : notice-success (왼쪽바), notice-success-bg (박스 배경색)
+                        -->
+                        <!-- [D] 메시지 하단 구조는 제목은 h4, 내용은 p 태그로 적용해주면 됩니다. -->
+                        <div class="notice notice-danger is-dissmiss">
+                            <h4>{{ $info['entity']->getTitle() }} {{ xe_trans('xe::pluginError') }}</h4>
+                            <p>
+                                {{ xe_trans('xe::errorPluginWasDeactivated', ['name' => $info['entity']->getTitle()]) }}
+                            </p>
+                            <p>
+                                {{ $info['exception']->getMessage() }} ({{ str_replace(base_path(), '', $info['exception']->getFile()) }}:{{ $info['exception']->getLine() }})
+                            </p>
+                            <button type="button" class="notice__button-close"><i class="xi-close-thin"></i><span class="sr-only">notice 닫기</span></button>
+                        </div>
                     @endforeach
-                    </ul>
                 @endif
 
                 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->

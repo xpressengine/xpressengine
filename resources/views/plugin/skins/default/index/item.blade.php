@@ -41,10 +41,19 @@
 
         @if(!$plugin->isAllowVersion())
             <hr>
-            <div class="alert alert-warning" role="alert" style="margin-top:10px;">
+            <!--[D] notice 데이터 알림 관련해서 구조 새롭게 추가 -->
+            <!--[D] notice 는 기본, 상황에 맞춰 앞에 바 컬러 노출, 배경색 노출, 닫기 버튼 노출 -->
+            <!--[D] is-dissmiss (X 닫기버튼 노출 유무, 공통), 해당 클래스들은 원하는 기능만큼 중복으로 적용해주면 됩니다.
+                빨간색 : notice-danger (왼쪽바), notice-danger-bg (박스 배경색)
+                노란색 : notice-warning (왼쪽바), notice-warning-bg (박스 배경색)
+                녹색 : notice-success (왼쪽바), notice-success-bg (박스 배경색)
+            -->
+            <!-- [D] 메시지 하단 구조는 제목은 h4, 내용은 p 태그로 적용해주면 됩니다. -->
+            <div class="notice notice-warning notice-warning-bg" role="alert">
                 <p>
                     {!! xe_trans('xe::pluginRequiredVerHigherThanCurrentCore', ['ver' => preg_replace('/[^0-9\.]/', '', $plugin->requireCoreVersion()), 'action' => '<a href="https://github.com/xpressengine/xpressengine/releases" target="_blank">'.xe_trans('xe::coreUpdate').'</a>']) !!}
                 </p>
+                <button type="button" class="notice__button-close"><i class="xi-close-thin"></i><span class="sr-only">notice 닫기</span></button>
             </div>
         @endif
 
