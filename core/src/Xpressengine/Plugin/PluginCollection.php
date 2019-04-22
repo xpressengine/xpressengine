@@ -18,10 +18,10 @@ use ArrayIterator;
 use Countable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use IteratorAggregate;
 use Traversable;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Plugin\Cache\PluginCache;
 
 /**
  * 설치된 플러그인들의 정보를 저장하는 저장소
@@ -47,46 +47,18 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     protected $statusList;
 
     /**
-     * @var PluginScanner
-     */
-    protected $scanner;
-
-    /**
-     * @var PluginCache
-     */
-    protected $cache;
-
-    /**
      * @var ConfigManager
      */
-    protected $configManager;
+    protected static $configManager;
 
     /**
-     * @var String
-     */
-    protected $entityClass;
-
-    /**
-     *  Constructor
+     * Constructor
      *
-     * @param PluginScanner $pluginScanner Plugin Scanner
-     * @param PluginCache   $pluginCache   Plugin Cache
-     * @param ConfigManager $configManager Config Manager
-     * @param string        $entityClass   PluginEntity class name
+     * @param array $plugins PluginEntity items
      */
-    public function __construct(
-        PluginScanner $pluginScanner,
-        PluginCache $pluginCache,
-        ConfigManager $configManager,
-        $entityClass
-    ) {
-        $this->scanner = $pluginScanner;
-        $this->cache = $pluginCache;
-        $this->configManager = $configManager;
-        $this->entityClass = $entityClass;
-
-        /** @var PluginEntity $entityClass */
-        $entityClass::setCollection($this);
+    public function __construct(array $plugins)
+    {
+        $this->plugins = $plugins;
 
         $this->initialize();
     }
@@ -95,20 +67,12 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
      * 설치된 플러그인들의 정보를 초기화 한다. 만약 cache에 저장된 정보가 있을 경우 cache로부터 저장된 정보를 가져오며,
      * 캐싱된 정보가 없거나 refresh가 설정돼 있을 경우 다시 플러그인 디렉토리를 스캔하여 정보를 생성한다.
      *
-     * @param bool $refresh true일 경우, 캐싱된 데이터를 삭제하고 플러그인 정보를 새로 생성한다.
-     *
      * @return void
+     *
+     * @todo 가시성 변경
      */
-    public function initialize($refresh = false)
+    public function initialize()
     {
-        // get plugins
-        if ($this->cache->hasCachedPlugins() && $refresh === false) {
-            $pluginData = $this->cache->getPluginsFromCache();
-            $this->plugins = $this->resolvePlugins($pluginData);
-        } else {
-            $this->refresh();
-        }
-
         // set status of plugins
         foreach ($this->getStatusList() as $id => $info) {
             if (array_has($this->plugins, $id)) {
@@ -127,23 +91,34 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     protected function getStatusList()
     {
         if (!$this->statusList) {
-            $this->statusList = $this->configManager->getVal('plugin.list', []);
+            $this->statusList = static::$configManager->getVal('plugin.list', []);
         }
 
         return $this->statusList;
     }
 
     /**
-     * 플러그인 디렉토리를 스캔하여 플러그인 정보를 새로 갱신한다.
+     * config manager를 설정한다.
+     *
+     * @param ConfigManager $config config manager
      *
      * @return void
      */
+    public static function setConfig($config)
+    {
+        static::$configManager = $config;
+    }
+
+    /**
+     * 플러그인 디렉토리를 스캔하여 플러그인 정보를 새로 갱신한다.
+     *
+     * @return void
+     *
+     * @deprecated since 3.0.1
+     */
     protected function refresh()
     {
-        $pluginData = $this->scanner->scanDirectory();
-        $this->plugins = $this->resolvePlugins($pluginData);
-        $this->cache->setPluginsToCache($this->toArray());
-        $this->statusList = null;
+        //
     }
 
     /**
@@ -170,7 +145,7 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
         if ($ids === null) {
             return $this->plugins;
         }
-        return array_only($this->plugins, (array) $ids);
+        return Arr::only($this->plugins, (array) $ids);
     }
 
     /**
@@ -387,21 +362,11 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
      * @param array $pluginData 플러그인 정보
      *
      * @return PluginEntity[]
+     *
+     * @deprecated since 3.0.1
      */
     protected function resolvePlugins(array $pluginData)
     {
-        $plugins = [];
-        foreach ($pluginData as $id => $info) {
-            if (isset($this->plugins[$id])) {
-                $entity = $this->plugins[$id];
-                $entity->setMetaData($info['metaData']);
-            } else {
-                $entity = new $this->entityClass($id, $info['path'], $info['class'], $info['metaData']);
-            }
-
-            $plugins[$id] = $entity;
-        }
-
-        return $plugins;
+        //
     }
 }

@@ -49,25 +49,6 @@ class PluginUninstall extends PluginCommand
     protected $description = 'Uninstall plugin of XpressEngine';
 
     /**
-     * Create a new console command instance.
-     *
-     * @param PluginHandler       $handler             PluginHandler
-     * @param PluginProvider      $provider            PluginProvider
-     * @param ComposerFileWriter  $writer              ComposerFileWriter
-     * @param InterceptionHandler $interceptionHandler InterceptionHandler
-     */
-    public function __construct(
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer,
-        InterceptionHandler $interceptionHandler
-    ) {
-        parent::__construct();
-
-        $this->init($handler, $provider, $writer, $interceptionHandler);
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -79,7 +60,7 @@ class PluginUninstall extends PluginCommand
 
         // 플러그인 정보 출력
         // 삭제 플러그인 정보
-        $this->warn(PHP_EOL." Information of the plugin that should be uninstalled:");
+        $this->warn(PHP_EOL."Information of the plugin that should be uninstalled:");
         foreach ($data as $info) {
             $this->line('  '. $info['title'] .' - '. $info['name'].':'.$info['version'].PHP_EOL);
         }

@@ -64,6 +64,11 @@ class PluginHandler
     protected $plugins;
 
     /**
+     * @var PluginRepository
+     */
+    protected $repo;
+
+    /**
      * @var PluginProvider
      */
     protected $provider;
@@ -134,20 +139,20 @@ class PluginHandler
     /**
      * 생성자. 플러그인 관리에 필요한 요소들을 주입받는다.
      *
-     * @param PluginCollection $plugins     플러그인 목록
-     * @param PluginProvider   $provider    플러그인 프로바이더
+     * @param PluginRepository $repo        plugin repository
+     * @param PluginProvider   $provider    plugin provider
      * @param Factory          $viewFactory View
      * @param PluginRegister   $register    plugin register
      * @param Application      $app         application
      */
     public function __construct(
-        PluginCollection $plugins,
+        PluginRepository $repo,
         PluginProvider $provider,
         Factory $viewFactory,
         PluginRegister $register,
         Application $app
     ) {
-        $this->plugins = $plugins;
+        $this->repo = $repo;
         $this->provider = $provider;
         $this->viewFactory = $viewFactory;
         $this->register = $register;
@@ -248,13 +253,10 @@ class PluginHandler
         $entity->setInstalledVersion($entity->getVersion());
 
         // 활성화 된 플러그인의 정보를 config에 기록한다.
-        $this->setPluginStatus(
-            $pluginId,
-            [
-                'status' => static::STATUS_ACTIVATED,
-                'version' => $entity->getVersion()
-            ]
-        );
+        $this->setPluginStatus($pluginId, [
+            'status' => static::STATUS_ACTIVATED,
+            'version' => $entity->getVersion()
+        ]);
     }
 
     /**
@@ -278,7 +280,7 @@ class PluginHandler
         // 만약 의존하는 플러그인이 있다면, 비활성화시키지 않고 예외 처리한다.
         $activateds = $this->getActivatedPlugins();
         foreach ($activateds as $activated) {
-            $dependencies = $activated->getDependencies();
+            $dependencies = $this->getDependencies($activated);
             if (in_array($pluginId, $dependencies)) {
                 throw new PluginDependencyException();
             }
@@ -299,13 +301,36 @@ class PluginHandler
         $entity->setStatus(static::STATUS_DEACTIVATED);
 
         // 비활성화된 플러그인 정보를 config에 기록한다.
-        $this->setPluginStatus(
-            $pluginId,
-            [
-                'status' => static::STATUS_DEACTIVATED,
-                'version' => $entity->getInstalledVersion()
-            ]
-        );
+        $this->setPluginStatus($pluginId, [
+            'status' => static::STATUS_DEACTIVATED,
+            'version' => $entity->getInstalledVersion()
+        ]);
+    }
+
+    /**
+     * 의존성 자료 정보를 반환함.
+     *
+     * @param PluginEntity $entity plugin entity
+     * @return array
+     */
+    public function getDependencies(PluginEntity $entity)
+    {
+        // 이미 dependency 자료는 모두 composer를 통해 설치돼 있다고 가정한다.
+        $dependencies = $entity->getMetaData('require');
+        if ($dependencies === null) {
+            $dependencies = [];
+        }
+
+        $collection = $this->getPlugins();
+        $dependencyPlugins = [];
+        foreach ($dependencies as $dependency => $version) {
+            list($venacdor, $id) = explode('/', $dependency);
+            $entity = $collection->get($id);
+            if ($entity !== null && $entity->getName() === $dependency) {
+                $dependencyPlugins[$id] = $entity;
+            }
+        }
+        return $dependencyPlugins;
     }
 
     /**
@@ -325,10 +350,7 @@ class PluginHandler
             throw new PluginNotFoundException(['pluginName' => $pluginId]);
         }
 
-        // 플러그인이 이미 활성화되어있지 않다면 register
-//        if ($entity->getStatus() !== static::STATUS_ACTIVATED) {
-            $this->registerPlugin($entity);
-//        }
+        $this->registerPlugin($entity);
 
         // 기존에 설치(활성화)된 적이 있다면 설치된 버전을 조사한다.
         $installedVersion = $entity->getInstalledVersion();
@@ -345,13 +367,10 @@ class PluginHandler
 
         if ($updateStatus) {
             // 플러그인의 정보를 config에 기록한다.
-            $this->setPluginStatus(
-                $pluginId,
-                [
-                    'status' => $entity->getStatus(),
-                    'version' => $entity->getVersion()
-                ]
-            );
+            $this->setPluginStatus($pluginId, [
+                'status' => $entity->getStatus(),
+                'version' => $entity->getVersion()
+            ]);
         }
     }
 
@@ -390,7 +409,6 @@ class PluginHandler
      */
     public function bootPlugins()
     {
-
         foreach ($this->getActivatedPlugins() as $entity) {
             $this->registerPlugin($entity);
         }
@@ -500,28 +518,40 @@ class PluginHandler
     public function getAllPlugins($refresh = false)
     {
         if ($refresh === true) {
-            $this->refreshPlugins();
+            $this->plugins = $this->refreshPlugins();
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
-            foreach ($this->plugins->getList() as $plugin) {
+            foreach ($this->plugins as $plugin) {
                 /** @var PluginEntity $plugin */
                 $installedVersion = $plugin->getInstalledVersion();
                 $sourceVersion = $plugin->getVersion();
 
-                if ($plugin->getStatus() == static::STATUS_ACTIVATED && $sourceVersion !== $installedVersion) {
+                if ($plugin->isActivated() && $sourceVersion !== $installedVersion) {
                     if ($plugin->checkInstalled() && $plugin->checkUpdated()) {
-                        $this->setPluginStatus(
-                            $plugin->getId(),
-                            ['version' => $sourceVersion, 'status' => $plugin->getStatus()]
-                        );
+                        $this->setPluginStatus($plugin->getId(), [
+                            'version' => $sourceVersion, 'status' => $plugin->getStatus()
+                        ]);
                         $plugin->setInstalledVersion($sourceVersion);
                     }
                 }
 
                 // plugin 관리 기능을 위해 register 를 수행
-//                $plugin->getObject()->register();
                 $this->registerPlugin($plugin);
             }
+        }
+
+        return $this->getPlugins();
+    }
+
+    /**
+     * 등록된 플러그인의 목록을 반환한다.
+     *
+     * @return PluginCollection
+     */
+    public function getPlugins()
+    {
+        if (!$this->plugins) {
+            $this->plugins = $this->createCollection($this->repo->load());
         }
 
         return $this->plugins;
@@ -530,11 +560,22 @@ class PluginHandler
     /**
      * 설치된 플러그인 목록 캐시를 갱신한다.
      *
-     * @return void
+     * @return PluginCollection
      */
     public function refreshPlugins()
     {
-        $this->plugins->initialize(true);
+        return $this->createCollection($this->repo->load(true));
+    }
+
+    /**
+     * Create a new instance of the plugin collection.
+     *
+     * @param array $items plugins
+     * @return PluginCollection
+     */
+    protected function createCollection($items)
+    {
+        return new PluginCollection($items);
     }
 
     /**
@@ -558,7 +599,7 @@ class PluginHandler
      */
     public function getActivatedPlugins()
     {
-        return $this->plugins->fetchByStatus(static::STATUS_ACTIVATED);
+        return $this->getPlugins()->fetchByStatus(static::STATUS_ACTIVATED);
     }
 
     /**
@@ -570,7 +611,7 @@ class PluginHandler
      */
     public function getPlugin($pluginId)
     {
-        return $this->plugins->get($pluginId);
+        return $this->getPlugins()->get($pluginId);
     }
 
     /**
@@ -683,7 +724,7 @@ class PluginHandler
         }
 
         $targets = [];
-        $installs = $writer->get("xpressengine-plugin.operation.install", []);
+        $installs = $writer->get("xpressengine-plugin.operation.todo.install", []);
         foreach ($installs as $p => $v) {
             $targets[$p] = [
                 'version' => $v,
@@ -691,7 +732,7 @@ class PluginHandler
                 'id' => explode('/', $p)[1]
             ];
         }
-        $updates = $writer->get("xpressengine-plugin.operation.update", []);
+        $updates = $writer->get("xpressengine-plugin.operation.todo.update", []);
         foreach ($updates as $p => $v) {
             $targets[$p] = [
                 'version' => $v,
@@ -699,20 +740,13 @@ class PluginHandler
                 'id' => explode('/', $p)[1]
             ];
         }
-        $uninstalls = $writer->get("xpressengine-plugin.operation.uninstall", []);
+        $uninstalls = $writer->get("xpressengine-plugin.operation.todo.uninstall", []);
         foreach ($uninstalls as $p) {
             $targets[$p] = [
                 'operation' => 'uninstall',
                 'id' => explode('/', $p)[1]
             ];
         }
-
-        // operation이 없을 경우, return void
-        if (empty($targets)) {
-            return null;
-        }
-
-        // operation이 있다.
 
         // expired 조사
         $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
@@ -764,7 +798,9 @@ class PluginHandler
             $log = null;
         }
 
-        return compact('targets', 'status', 'expired', 'changed', 'failed', 'infos', 'log');
+        $locked = $writer->get('xpressengine-plugin.operation.lock', false);
+
+        return compact('targets', 'status', 'expired', 'changed', 'failed', 'infos', 'log', 'locked');
     }
 
     /**

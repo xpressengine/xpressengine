@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Str;
 use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Plugin\PluginHandler as Plugin;
 
@@ -417,7 +418,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getTitle()
     {
-        return $this->getMetaData('extra.xpressengine.title');
+        return $this->getMetaData('extra.xpressengine.title') ?? Str::title($this->getId());
     }
 
     /**
@@ -593,25 +594,12 @@ class PluginEntity implements Arrayable, Jsonable
      * 플러그인의 의존성정보를 조회한다.
      *
      * @return string[]
+     *
+     * @deprecated since 3.0.1, use PluginHandler::getDependencies
      */
     public function getDependencies()
     {
-        // 이미 dependency 자료는 모두 composer를 통해 설치돼 있다고 가정한다.
-        $dependencies = $this->getMetaData('require');
-        if ($dependencies === null) {
-            $dependencies = [];
-        }
-
-        $collection = $this->getCollection();
-        $dependencyPlugins = [];
-        foreach ($dependencies as $dependency => $version) {
-            list($venacdor, $id) = explode('/', $dependency);
-            $entity = $collection->get($id);
-            if ($entity !== null && $entity->getName() === $dependency) {
-                $dependencyPlugins[$id] = $entity;
-            }
-        }
-        return $dependencyPlugins;
+        return app('xe.plugin')->getDependencies($this);
     }
 
     /**
@@ -725,10 +713,12 @@ class PluginEntity implements Arrayable, Jsonable
      * getCollection
      *
      * @return PluginCollection
+     *
+     * @deprecated since 3.0.1
      */
     public static function getCollection()
     {
-        return static::$collection;
+        return app('xe.plugin')->getPlugins();
     }
 
     /**
@@ -737,10 +727,12 @@ class PluginEntity implements Arrayable, Jsonable
      * @param PluginCollection $collection plugin collection
      *
      * @return void
+     *
+     * @deprecated since 3.0.1
      */
     public static function setCollection($collection)
     {
-        static::$collection = $collection;
+        //
     }
 
     /**

@@ -15,6 +15,8 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -56,12 +58,43 @@ class PluginCommand extends Command
     protected $writer;
 
     /**
+     * Constructor.
+     *
+     * @param PluginHandler       $handler             PluginHandler
+     * @param PluginProvider      $provider            PluginProvider
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
+     * @param InterceptionHandler $interceptionHandler InterceptionHandler
+     */
+    public function __construct(
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer,
+        InterceptionHandler $interceptionHandler
+    ) {
+        parent::__construct();
+
+        $this->handler = $handler;
+        $this->provider = $provider;
+        $this->writer = $writer;
+        $this->interceptionHandler = $interceptionHandler;
+    }
+
+    public function run(InputInterface $input, OutputInterface $output)
+    {
+        $this->handler->getAllPlugins(true);
+
+        return parent::run($input, $output);
+    }
+
+    /**
      * Initialize
      *
      * @param PluginHandler       $handler             PluginHandler
      * @param PluginProvider      $provider            PluginProvider
      * @param ComposerFileWriter  $writer              ComposerFileWriter
      * @param InterceptionHandler $interceptionHandler InterceptionHandler
+     *
+     * @deprecated since 3.0.1
      */
     protected function init(
         PluginHandler $handler,
@@ -69,11 +102,7 @@ class PluginCommand extends Command
         ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
-        $this->handler = $handler;
-        $this->handler->getAllPlugins(true);
-        $this->provider = $provider;
-        $this->writer = $writer;
-        $this->interceptionHandler = $interceptionHandler;
+        //
     }
 
     /**
@@ -85,13 +114,16 @@ class PluginCommand extends Command
      */
     protected function composerUpdate(array $packages)
     {
+        if ($this->isLocked()) {
+            throw new \Exception('The command is locked. Make sure that another process is running.');
+        }
+
+        $this->lock();
+
         if (!$this->laravel->runningInConsole()) {
             ignore_user_abort(true);
             set_time_limit($this->getTimeLimit());
         }
-
-        $startTime = Carbon::now()->format('YmdHis');
-        $this->setLogFile($logFile = "logs/plugin-{$startTime}.log");
 
         try {
             if (0 !== $this->clear()) {
@@ -109,18 +141,15 @@ class PluginCommand extends Command
                 'packages' => $packages
             ];
 
-            $result = $this->runComposer($inputs, true, $logFile);
-            $this->writeResult($result);
+            $this->writeResult($result = $this->runComposer($inputs, true, $this->output));
 
             return $result;
         } catch (\Exception $e) {
-            $fp = fopen(storage_path($logFile), 'a');
-            fwrite($fp, sprintf('%s [file: %s, line: %s]', $e->getMessage(), $e->getFile(), $e->getLine()). PHP_EOL);
-            fclose($fp);
-
-            $this->writeResult(1);
+            $this->writeResult($e->getCode());
 
             throw $e;
+        } finally {
+            $this->unlock();
         }
     }
 
@@ -132,7 +161,7 @@ class PluginCommand extends Command
     protected function clear()
     {
         $this->warn('Clears cache before Composer update runs.');
-        $result = $this->call('cache:clear');
+        $result = $this->call('cache:clear', ['--no-proxy' => true]);
         $this->line(PHP_EOL);
 
         return $result;
@@ -143,11 +172,11 @@ class PluginCommand extends Command
      *
      * @param string $logFile log file path
      * @return void
+     *
+     * @deprecated
      */
     protected function setLogFile($logFile)
     {
-        $this->writer->set('xpressengine-plugin.operation.log', $logFile);
-        $this->writer->write();
     }
 
     /**
@@ -181,22 +210,19 @@ class PluginCommand extends Command
      * Write result.
      *
      * @param int $result result code
-     * @return bool
+     * @return void
      */
     protected function writeResult($result)
     {
         // composer.plugins.json 파일을 다시 읽어들인다.
         $this->writer->load();
-        if (!isset($result) || $result !== 0) {
-            $result = false;
+        if ($result !== 0) {
             $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
             $this->writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
         } else {
-            $result = true;
             $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
         }
         $this->writer->write();
-        return $result;
     }
 
     /**
@@ -357,5 +383,38 @@ class PluginCommand extends Command
     protected function getTimeLimit()
     {
         return config('xe.plugin.operation.time_limit');
+    }
+
+    /**
+     * Determine if operation is locked.
+     *
+     * @return bool
+     */
+    protected function isLocked()
+    {
+        $this->writer->load();
+        return $this->writer->get('xpressengine-plugin.operation.lock', false);
+    }
+
+    /**
+     * Locks a operation.
+     *
+     * @return void
+     */
+    protected function lock()
+    {
+        $this->writer->set('xpressengine-plugin.operation.lock', true);
+        $this->writer->write();
+    }
+
+    /**
+     * Unlocks a operation.
+     *
+     * @return void
+     */
+    protected function unlock()
+    {
+        $this->writer->set('xpressengine-plugin.operation.lock', false);
+        $this->writer->write();
     }
 }

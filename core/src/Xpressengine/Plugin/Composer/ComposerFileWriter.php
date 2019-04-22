@@ -27,6 +27,7 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class ComposerFileWriter
 {
+    const STATUS_READY     = 'ready';
     const STATUS_RUNNING   = 'running';
     const STATUS_SUCCESSED = 'successed';
     const STATUS_FAILED    = 'failed';
@@ -77,17 +78,19 @@ class ComposerFileWriter
     public function load()
     {
         if (!is_file($this->path)) {
-            $this->makeFile();
+            $this->data = [];
+        } else {
+            $str = file_get_contents($this->path);
+            $this->data = json_decode($str, true);
         }
-
-        $str = file_get_contents($this->path);
-        $this->data = json_decode($str, true);
     }
 
     /**
      * generate plugin composer file
      *
      * @return void
+     *
+     * @deprecated since 3.0.1
      */
     public function makeFile()
     {
@@ -96,7 +99,6 @@ class ComposerFileWriter
         $data['require'] = [];
 
         $data['xpressengine-plugin'] = [
-            "path" => "storage/app/composer.plugins.json",
             "operation" => [],
         ];
 
@@ -111,12 +113,10 @@ class ComposerFileWriter
      */
     public function reset()
     {
-        // initialize
         $requires = [];
         $replace = [];
 
         $dir = $this->scanner->getPluginDirectory();
-        $operation = '>=';
 
         foreach ($this->scanner->scanDirectory() as $plugin) {
             $name = array_get($plugin, 'metaData.name');
@@ -124,8 +124,10 @@ class ComposerFileWriter
             if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
                 $replace[$name] = '*';
                 continue;
+//            } elseif (is_link($dir.DIRECTORY_SEPARATOR.$plugin['id'])) {
+//                continue;
             }
-            $requires[$name] = $operation.$version;
+            $requires[$name] = $version;
         }
         array_set($this->data, 'require', $requires);
         array_set($this->data, 'replace', $replace);
@@ -139,11 +141,42 @@ class ComposerFileWriter
     /**
      * 현재 실행중인 작업에 대한 정보를 초기화 한다.
      *
+     * @param bool $force clean all information
      * @return $this
      */
-    public function cleanOperation()
+    public function cleanOperation($force = false)
     {
-        array_set($this->data, 'xpressengine-plugin.operation', []);
+        if ($force) {
+            array_set($this->data, 'xpressengine-plugin.operation', []);
+        } else {
+            $this->cleanTodo();
+            $this->cleanResult();
+            array_forget($this->data, 'xpressengine-plugin.operation.expiration_time');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clean the operation todo
+     *
+     * @return $this
+     */
+    public function cleanTodo()
+    {
+        array_set($this->data, 'xpressengine-plugin.operation.todo', []);
+        return $this;
+    }
+
+    /**
+     * Clean the operation result
+     *
+     * @return $this
+     */
+    public function cleanResult()
+    {
+        array_set($this->data, 'xpressengine-plugin.operation.changed', []);
+        array_set($this->data, 'xpressengine-plugin.operation.failed', []);
         return $this;
     }
 
@@ -160,7 +193,6 @@ class ComposerFileWriter
             $requires[$package] = str_replace($operation, '', $version);
         }
         array_set($this->data, 'require', $requires);
-        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
     }
 
     /**
@@ -175,14 +207,13 @@ class ComposerFileWriter
         $operation = '>=';
         $requires = [];
         foreach (array_get($this->data, 'require', []) as $package => $version) {
-            if (in_array($package, $fixedList)) {
+            if (empty($fixedList) || in_array($package, $fixedList)) {
                 $requires[$package] = str_replace($operation, '', $version);
             } else {
                 $requires[$package] = $operation.str_replace($operation, '', $version);
             }
         }
         array_set($this->data, 'require', $requires);
-        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
         array_set($this->data, "xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
     }
 
@@ -222,14 +253,10 @@ class ComposerFileWriter
      *
      * @return $this
      */
-    public function install($name, $version, $expiredTime)
+    public function install($name, $version, $expiredTime = null)
     {
-        array_set($this->data, "xpressengine-plugin.operation.install.$name", $version);
-        if ($expiredTime) {
-            array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
-        } else {
-            array_set($this->data, "xpressengine-plugin.operation.expiration_time", null);
-        }
+        array_set($this->data, "xpressengine-plugin.operation.todo.install.$name", $version);
+        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
 
         return $this;
     }
@@ -245,7 +272,7 @@ class ComposerFileWriter
      */
     public function update($name, $version, $expiredTime)
     {
-        array_set($this->data, "xpressengine-plugin.operation.update.$name", $version);
+        array_set($this->data, "xpressengine-plugin.operation.todo.update.$name", $version);
         array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
 
         return $this;
@@ -261,11 +288,11 @@ class ComposerFileWriter
      */
     public function uninstall($name, $expiredTime)
     {
-        $uninstall = array_get($this->data, "xpressengine-plugin.operation.uninstall", []);
+        $uninstall = array_get($this->data, "xpressengine-plugin.operation.todo.uninstall", []);
         if (!in_array($name, $uninstall)) {
             $uninstall[] = $name;
         }
-        array_set($this->data, "xpressengine-plugin.operation.uninstall", $uninstall);
+        array_set($this->data, "xpressengine-plugin.operation.todo.uninstall", $uninstall);
         array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
 
         return $this;

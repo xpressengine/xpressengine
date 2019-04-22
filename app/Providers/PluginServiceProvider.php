@@ -16,16 +16,13 @@ namespace App\Providers;
 
 use App\Skins\Plugin\PluginSettingsSkin;
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Plugin\Cache\ArrayPluginCache;
-use Xpressengine\Plugin\Cache\FilePluginCache;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\Exceptions\ComponentNotFoundException;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginCollection;
-use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\Plugin\PluginRepository;
 use Xpressengine\Plugin\PluginScanner;
 
 /**
@@ -40,6 +37,32 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class PluginServiceProvider extends ServiceProvider
 {
+    /**
+     * Boot the service provider.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        PluginCollection::setConfig($this->app['xe.config']);
+
+        // boot plugins
+        $this->app->booted(function ($app) {
+            $pluginHandler = $app['xe.plugin'];
+
+            $app['events']->fire('booting.plugins', [$pluginHandler]);
+
+            $pluginHandler->bootPlugins();
+
+            $app['events']->fire('booted.plugins', [$pluginHandler]);
+        });
+
+        // register skin for Plugin settings page
+        $this->app->make('xe.pluginRegister')->add(PluginSettingsSkin::class);
+
+        $this->registerSettingsPermissions();
+    }
+
     /**
      * Register the service provider.
      *
@@ -103,28 +126,17 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->singleton(PluginHandler::class, function ($app) {
             $app['view']->addLocation($app['path.plugins']);
 
-            $cachePath = $app['config']->get('cache.stores.plugins.path');
-            if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
-                $cache = new ArrayPluginCache();
-                $app->terminating(function () use ($app) {
-                    $app['cache']->driver('plugins')->forget('list');
-                });
-            } else {
-                $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
-            }
-
-            $pluginCollection = new PluginCollection(
+            $repo = new PluginRepository(
+                $app['files'],
                 $app[PluginScanner::class],
-                $cache,
-                $app['xe.config'],
-                PluginEntity::class
+                $app->getCachedPluginsPath()
             );
 
             /** @var \Xpressengine\Interception\InterceptionHandler $interception */
             $interception = $app['xe.interception'];
             $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
             $pluginHandler = new $pluginHandler(
-                $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
+                $repo, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
             );
 
             $pluginHandler->setConfig($app['xe.config']);
@@ -162,33 +174,6 @@ class PluginServiceProvider extends ServiceProvider
             return $writer;
         });
         $this->app->alias(ComposerFileWriter::class, 'xe.plugin.writer');
-    }
-
-    /**
-     * Boot the service provider.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        // boot plugins
-        $this->app->booted(
-            function () {
-                /** @var PluginHandler $pluginHandler */
-                $pluginHandler = $this->app['xe.plugin'];
-
-                $this->app['events']->fire('booting.plugins', [$pluginHandler]);
-
-                $pluginHandler->bootPlugins();
-
-                $this->app['events']->fire('booted.plugins', [$pluginHandler]);
-            }
-        );
-
-        // register skin for Plugin settings page
-        $this->app->make('xe.pluginRegister')->add(PluginSettingsSkin::class);
-
-        $this->registerSettingsPermissions();
     }
 
     /**

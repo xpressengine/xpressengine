@@ -30,41 +30,24 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\Xpressengine\Plugin\PluginHandler', $handler);
     }
 
-    public function testGetAllPlugins()
-    {
-        $handler = $this->getHandler();
-        $this->assertInstanceOf(PluginCollection::class, $handler->getAllPlugins());
-
-        /** @var Mockery\MockInterface $plugins */
-        $plugins = $this->makeCollection();
-        $plugins->shouldReceive('initialize')->with(true)->once()->andReturnNull();
-        $plugins->shouldReceive('getList')->withNoArgs()->once()->andReturn([]);
-
-        $handler = $this->getHandler($plugins);
-        $this->assertInstanceOf(PluginCollection::class, $handler->getAllPlugins(true));
-
-    }
-
     public function testIsActivated()
     {
         $pluginId = 'plugin_sample';
-        /** @var Mockery\MockInterface $plugins */
-        $plugins = $this->makeCollection();
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturnNull();
 
-        $handler = $this->getHandler($plugins);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn([]);
+
+        $handler = $this->getHandler($repo);
         $this->assertFalse($handler->isActivated($pluginId));
 
-        /** @var Mockery\MockInterface $plugins */
         $entity = $this->makeEntity();
         $entity->shouldReceive('isActivated')->once()->withNoArgs()->andReturn(true);
 
-        $plugins = $this->makeCollection();
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn(['plugin_sample' => $entity]);
 
-        $handler = $this->getHandler($plugins);
+        $handler = $this->getHandler($repo);
         $this->assertTrue($handler->isActivated($pluginId));
-
     }
 
     /**
@@ -75,10 +58,11 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
     public function testActivatePluginFailIfNoEntityFound()
     {
         $pluginId = 'plugin_sample';
-        $plugins = $this->makeCollection();
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturnNull();
 
-        $handler = $this->getHandler($plugins);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn([]);
+
+        $handler = $this->getHandler($repo);
 
         $handler->activatePlugin($pluginId);
     }
@@ -91,14 +75,14 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
     public function testActivatePluginFailIfEntityWasActivated()
     {
         $pluginId = 'plugin_sample';
-        $plugins = $this->makeCollection();
 
         $entity = $this->makeEntity();
         $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_ACTIVATED);
 
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn(['plugin_sample' => $entity]);
 
-        $handler = $this->getHandler($plugins);
+        $handler = $this->getHandler($repo);
 
         $handler->activatePlugin($pluginId);
     }
@@ -110,7 +94,6 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
     public function testActivatePluginSuccess()
     {
         $pluginId = 'plugin_sample';
-        $plugins = $this->makeCollection();
 
         $plugin = Mockery::mock('\Xpressengine\Plugin\AbstractPlugin');
         $plugin->shouldReceive('register')->withNoArgs()->andReturnNull();
@@ -128,12 +111,14 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         $entity->shouldReceive('activate')->with('0.9')->andReturn(true);
         $entity->shouldReceive('getId')->withNoArgs()->andReturn($pluginId);
 
-        $plugins->shouldReceive('get')->with($pluginId)->andReturn($entity);
+
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn([$pluginId => $entity]);
 
         $app = Mockery::mock('\Xpressengine\Foundation\Application');
         $app->shouldReceive('offsetGet')->with('path.plugins')->andReturn(__DIR__.'/plugins');
         $app->shouldReceive('instance')->andReturnNull();
-        $handler = $this->getHandler($plugins, null, null, null, $app);
+        $handler = $this->getHandler($repo, null, null, null, $app);
         $config = $this->setConfig($handler);
         $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn([
            $pluginId => []
@@ -151,14 +136,14 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
     public function testDeactivatePluginFailIfEntityWasNotActivated()
     {
         $pluginId = 'plugin_sample';
-        $plugins = $this->makeCollection();
 
         $entity = $this->makeEntity();
         $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
 
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn(['plugin_sample' => $entity]);
 
-        $handler = $this->getHandler($plugins);
+        $handler = $this->getHandler($repo);
 
         $handler->deactivatePlugin($pluginId);
     }
@@ -170,23 +155,22 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
     public function testDeactivatePluginSuccess()
     {
         $pluginId = 'plugin_sample';
-        $plugins = $this->makeCollection();
 
         $plugin = Mockery::mock('\Xpressengine\Plugin\AbstractPlugin');
         $plugin->shouldReceive('deactivate')->once()->andReturnNull();
 
         $entity = $this->makeEntity();
-        $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_ACTIVATED);
+        $entity->shouldReceive('getStatus')->withNoArgs()->andReturn(PluginHandler::STATUS_ACTIVATED);
         $entity->shouldReceive('setStatus')->once()->withArgs(['deactivated'])->andReturn();
-        $entity->shouldReceive('getDependencies')->once()->withNoArgs()->andReturn([]);
+        $entity->shouldReceive('getMetaData')->once()->with('require')->andReturn([]);
         $entity->shouldReceive('getObject')->once()->withNoArgs()->andReturn($plugin);
         $entity->shouldReceive('getInstalledVersion')->withNoArgs()->andReturn('0.9');
 
 
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
-        $plugins->shouldReceive('fetchByStatus')->with(PluginHandler::STATUS_ACTIVATED)->once()->andReturn([$entity]);
+        $repo = $this->makeRepository();
+        $repo->shouldReceive('load')->once()->andReturn([$pluginId => $entity]);
 
-        $handler = $this->getHandler($plugins);
+        $handler = $this->getHandler($repo);
         $config = $this->setConfig($handler);
         $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn(
             [
@@ -203,9 +187,9 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @return PluginCollection
      */
-    private function makeCollection()
+    private function makeRepository()
     {
-        return Mockery::mock('\Xpressengine\Plugin\PluginCollection');
+        return Mockery::mock('\Xpressengine\Plugin\PluginRepository');
     }
 
     /**
@@ -259,13 +243,13 @@ class PluginHandlerTest extends \PHPUnit\Framework\TestCase
         return $config;
     }
 
-    private function getHandler($plugins = null, $provider = null, $factory = null, $register = null, $app = null)
+    private function getHandler($repo = null, $provider = null, $factory = null, $register = null, $app = null)
     {
-        if($plugins === null) $plugins = $this->makeCollection();
+        if($repo === null) $repo = $this->makeRepository();
         if($provider === null) $provider = $this->makeProvider();
         if($factory === null) $factory = $this->makeViewFactory();
         if($register === null) $register = $this->makeRegister();
         if($app === null) $app = $this->makeApp();
-        return new PluginHandler($plugins, $provider, $factory, $register, $app);
+        return new PluginHandler($repo, $provider, $factory, $register, $app);
     }
 }

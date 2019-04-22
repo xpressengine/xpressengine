@@ -82,10 +82,6 @@ return [
             'connection' => 'default',
         ],
 
-        'plugins' => [
-            'driver' => 'file',
-            'path'   => storage_path('framework/plugins'),
-        ],
         'schema' => [
             'driver' => 'file',
             'path'   => storage_path('framework/schemas'),

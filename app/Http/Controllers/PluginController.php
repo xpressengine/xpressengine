@@ -15,7 +15,7 @@ namespace App\Http\Controllers;
 
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
-use Redirect;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -104,12 +104,20 @@ class PluginController extends Controller
         $term = 15;
         $sleep = 2;
         $begin = time();
+        $status = null;
         while (true) {
             $current = time();
             $operation = $handler->getOperation($writer);
-            if ($operation['status'] !== ComposerFileWriter::STATUS_RUNNING || $current - $begin > $term) {
+
+            if (
+                !in_array($operation['status'], [ComposerFileWriter::STATUS_RUNNING, ComposerFileWriter::STATUS_READY])
+                || $current - $begin > $term
+                || $status && $status !== $operation['status']
+            ) {
                 break;
             }
+
+            $status = $operation['status'];
 
             sleep($sleep);
         }
@@ -125,7 +133,7 @@ class PluginController extends Controller
      */
     public function deleteOperation(ComposerFileWriter $writer)
     {
-        $writer->reset()->cleanOperation()->write();
+        $writer->reset()->cleanOperation(true)->write();
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
@@ -158,7 +166,7 @@ class PluginController extends Controller
     public function delete(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
-        if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
+        if ($operation['locked']) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
@@ -181,18 +189,20 @@ class PluginController extends Controller
             }
         }
 
-        app()->terminating(function () use ($pluginIds, $force) {
+        $logFile = $this->prepareOperation($writer);
+
+        app()->terminating(function () use ($pluginIds, $force, $logFile) {
             Artisan::call('plugin:uninstall', [
                 'plugin' => $pluginIds,
                 '--force' => !!$force,
                 '--no-interaction' => true,
-            ]);
+            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
         return redirect()->route('settings.plugins')->with(
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::deletingPlugin')]
-        )->with('operation', 'running');
+        );
     }
 
     /**
@@ -349,7 +359,7 @@ class PluginController extends Controller
     public function download(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
-        if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
+        if ($operation['locked']) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
@@ -365,17 +375,19 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
-        app()->terminating(function () use ($plugins) {
+        $logFile = $this->prepareOperation($writer);
+
+        app()->terminating(function () use ($plugins, $logFile) {
             Artisan::call('plugin:update', [
                 'plugin' => $plugins,
                 '--no-interaction' => true,
-            ]);
+            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
         return redirect()->route('settings.plugins')->with(
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::downloadingNewVersionPlugin')]
-        )->with('operation', 'running');
+        );
     }
 
     /**
@@ -395,7 +407,7 @@ class PluginController extends Controller
     ) {
         $operation = $handler->getOperation($writer);
 
-        if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
+        if ($operation['locked']) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
@@ -409,17 +421,38 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        app()->terminating(function () use ($pluginIds) {
+        $logFile = $this->prepareOperation($writer);
+
+        app()->terminating(function () use ($pluginIds, $logFile) {
             Artisan::call('plugin:install', [
                 'plugin' => $pluginIds,
                 '--no-interaction' => true,
-            ]);
+            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
         return redirect()->back()->with(
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::installingPlugin')]
-        )->with('operation', 'running');
+        );
+    }
+
+    /**
+     * Prepare before the operation.
+     *
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @return string
+     */
+    protected function prepareOperation(ComposerFileWriter $writer)
+    {
+        $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_READY);
+
+        $startTime = now()->format('YmdHis');
+        $logFile = "logs/plugin-$startTime.log";
+        $writer->set('xpressengine-plugin.operation.log', $logFile);
+
+        $writer->write();
+
+        return $logFile;
     }
 
     /**

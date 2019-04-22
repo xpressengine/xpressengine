@@ -46,25 +46,6 @@ class PluginUpdate extends PluginCommand
     protected $description = 'Update a plugin of XpressEngine';
 
     /**
-     * Create a new console command instance.
-     *
-     * @param PluginHandler       $handler             PluginHandler
-     * @param PluginProvider      $provider            PluginProvider
-     * @param ComposerFileWriter  $writer              ComposerFileWriter
-     * @param InterceptionHandler $interceptionHandler InterceptionHandler
-     */
-    public function __construct(
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer,
-        InterceptionHandler $interceptionHandler
-    ) {
-        parent::__construct();
-
-        $this->init($handler, $provider, $writer, $interceptionHandler);
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -76,7 +57,7 @@ class PluginUpdate extends PluginCommand
 
         // 플러그인 정보 출력
         // 업데이트 플러그인 정보
-        $this->warn(PHP_EOL." Information of the plugin that should be updated:");
+        $this->warn(PHP_EOL."Information of the plugin that should be updated:");
         foreach ($data as $info) {
             $this->line('  '. $info['title'] .' - '. $info['name'].': '.$info['plugin']->getVersion().' -> '.$info['version'].PHP_EOL);
         }
@@ -98,7 +79,7 @@ class PluginUpdate extends PluginCommand
 
         $packages = array_pluck($data, 'name');
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
-        $this->warn(' Composer update command is running.. It may take up to a few minutes.');
+        $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --with-dependencies ". implode(' ', $packages));
 
         $result = $this->composerUpdate($packages);

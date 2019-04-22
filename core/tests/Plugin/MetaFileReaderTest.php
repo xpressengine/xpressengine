@@ -25,8 +25,8 @@ class MetaFileReaderTest extends \PHPUnit\Framework\TestCase
 
         $data = $reader->read('anything.file');
 
-        $this->assertEquals('khongchi/plugin_a', $data['name']);
-        $this->assertEquals('khongchi', $data['authors'][0]['name']);
+        $this->assertEquals('xe/plugin_a', $data['name']);
+        $this->assertEquals('xe', $data['authors'][0]['name']);
     }
 }
 
@@ -36,8 +36,8 @@ class MetaFileReaderStub extends MetaFileReader
     protected function getFileContents($fileName)
     {
         return '{
-  "name": "khongchi/plugin_a",
-  "description": "khongchi 플러그인입니다.",
+  "name": "xe/plugin_a",
+  "description": "xe 플러그인입니다.",
   "keywords": [
     "xpressengine",
     "board"
@@ -52,7 +52,7 @@ class MetaFileReaderStub extends MetaFileReader
   },
   "authors": [
     {
-      "name": "khongchi",
+      "name": "xe",
       "email": "sungbum00@gmail.com",
       "homepage": "https://xpressengine.io",
       "role": "Developer"
@@ -64,42 +64,42 @@ class MetaFileReaderStub extends MetaFileReader
     "xpressengine": {
       "components": {
         "module|board": {
-          "class": "Khongchi\\\PluginA\\\Modules\\\Board",
+          "class": "XE\\\PluginA\\\Modules\\\Board",
           "name": "게시판",
           "description": "게시판입니다."
         },
         "module|board|sortingType|default": {
-          "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\SortType\\\",
+          "class": "XE\\\PluginA\\\Modules\\\Board\\\SortType\\\",
           "name": "게시판 기본정렬타입",
           "description": "게시판의 기본 정렬타입입니다."
         },
         "module|board|skin|default": {
-          "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
+          "class": "XE\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
           "name": "게시판 기본스킨",
           "description": "게시판 기본스킨입니다."
         },
-        "module|khongchi_forum": {
-          "class": "Khongchi\\\PluginA\\\Modules\\\Forum",
+        "module|xe_forum": {
+          "class": "XE\\\PluginA\\\Modules\\\Forum",
           "name": "포럼",
           "description": "포럼입니다."
         },
         "module|forum|skin|sketchbook": {
-          "class": "Khongchi\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
+          "class": "XE\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
           "name": "포럼용 스캐치북스킨",
           "description": "포럼용 스캐치북스킨입니다."
         },
         "uiobject|phone": {
-          "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+          "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
           "name": "전화번호 UI오브젝트",
           "description": "게시판정보 UI오브젝트입니다."
         },
         "fieldType|phone": {
-          "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+          "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
           "name": "전화번호 UI오브젝트",
           "description": "게시판정보 UI오브젝트입니다."
         },
         "widget|content|skin|sketchbookDefault": {
-          "class": "Khongchi\\\PluginA\\\Widgets\\\Kboard",
+          "class": "XE\\\PluginA\\\Widgets\\\Kboard",
           "name": "kboard",
           "description": "kboard 게시판 모듈"
         }
@@ -108,7 +108,7 @@ class MetaFileReaderStub extends MetaFileReader
   },
   "autoload": {
     "psr-4": {
-      "Khongchi\\\Kboard\\\": "plugins/kboard"
+      "XE\\\Kboard\\\": "plugins/kboard"
     },
     "files": [
       "core/src/Xpressengine/Interception/helpers.php"

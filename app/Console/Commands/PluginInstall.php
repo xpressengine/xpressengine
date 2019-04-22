@@ -49,25 +49,6 @@ class PluginInstall extends PluginCommand
     protected $description = 'Install new plugin of XpressEngine';
 
     /**
-     * Create a new console command instance.
-     *
-     * @param PluginHandler       $handler
-     * @param PluginProvider      $provider
-     * @param ComposerFileWriter  $writer
-     * @param InterceptionHandler $interceptionHandler
-     */
-    public function __construct(
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer,
-        InterceptionHandler $interceptionHandler
-    ) {
-        parent::__construct();
-
-        $this->init($handler, $provider, $writer, $interceptionHandler);
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -79,7 +60,7 @@ class PluginInstall extends PluginCommand
 
         // 플러그인 정보 출력
         // 설치 플러그인 정보
-        $this->warn(PHP_EOL." Information of the plugin that should be installed:");
+        $this->warn(PHP_EOL."Information of the plugin that should be installed:");
         foreach ($data as $info) {
             $this->line('  '. $info['title'] .' - '. $info['name'].':'.$info['version'].PHP_EOL);
         }
@@ -100,7 +81,7 @@ class PluginInstall extends PluginCommand
 
         $packages = array_pluck($data, 'name');
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
-        $this->warn(' Composer update command is running.. It may take up to a few minutes.');
+        $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --with-dependencies " . implode(' ', $packages));
 
         $result = $this->composerUpdate($packages);

@@ -61,13 +61,23 @@ class Application extends BaseApplication
     }
 
     /**
-     * Get the path to the plugins / web directory.
+     * Get the path to the plugins directory.
      *
      * @return string
      */
     public function pluginsPath()
     {
         return $this->basePath.DIRECTORY_SEPARATOR.'plugins';
+    }
+
+    /**
+     * Get the path to the proxies directory.
+     *
+     * @return string
+     */
+    public function proxiesPath()
+    {
+        return $this->storagePath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'interception';
     }
 
     /**
@@ -80,6 +90,17 @@ class Application extends BaseApplication
         parent::bindPathsInContainer();
 
         $this->instance('path.plugins', $this->pluginsPath());
+        $this->instance('path.proxies', $this->proxiesPath());
+    }
+
+    /**
+     * Get the path to the cached plugins.php file.
+     *
+     * @return string
+     */
+    public function getCachedPluginsPath()
+    {
+        return $this->bootstrapPath().'/cache/plugins.php';
     }
 
     /**

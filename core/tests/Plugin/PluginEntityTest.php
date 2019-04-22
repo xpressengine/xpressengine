@@ -136,29 +136,15 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
      *
      * @param \Xpressengine\Plugin\PluginEntity $entity
      */
-    public function testGetDependencies($entity)
-    {
-        $collection = Mockery::mock('\Xpressengine\Plugin\PluginCollection');
-        $collection->shouldReceive('get')->withArgs(['ncenter'])->once()->andReturnNull();
-
-        $entity->setCollection($collection);
-        $this->assertEmpty($entity->getDependencies());
-    }
-
-    /**
-     * @depends testConstruct
-     *
-     * @param \Xpressengine\Plugin\PluginEntity $entity
-     */
     public function testGetters($entity)
     {
         $this->assertEquals('title',$entity->getTitle());
         $this->assertEquals(__DIR__.'/plugins/plugin_sample',$entity->getPath());
-        $this->assertEquals('khongchi plugin.', $entity->getDescription());
+        $this->assertEquals('sample plugin.', $entity->getDescription());
         $this->assertCount(6, $entity->getSupport());
-        $this->assertEquals('khongchi/plugin_sample', $entity->getName());
+        $this->assertEquals('xe/plugin_sample', $entity->getName());
         $this->assertEquals(['xpressengine', 'board'], $entity->getKeywords());
-        $this->assertEquals('khongchi',$entity->getAuthors()[0]['name']);
+        $this->assertEquals('xe',$entity->getAuthors()[0]['name']);
         $this->assertEquals('LGPL-2.0',$entity->getLicense());
     }
 
@@ -166,15 +152,15 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
     {
         return json_decode(
             '{
-                      "name": "khongchi/plugin_sample",
-                      "description": "khongchi plugin.",
+                      "name": "xe/plugin_sample",
+                      "description": "sample plugin.",
                       "keywords": [
                         "xpressengine",
                         "board"
                       ],
                       "version": "2.0.1",
                       "support": {
-                        "email": "sungbum00@gmail.com",
+                        "email": "contact@xpressengine.com",
                         "issues": "http://myproject.com/issues",
                         "forum": "http://myproject.com/forum",
                         "wiki": "http://myproject.com/wiki",
@@ -183,8 +169,8 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
                       },
                       "authors": [
                         {
-                          "name": "khongchi",
-                          "email": "sungbum00@gmail.com",
+                          "name": "xe",
+                          "email": "contact@xpressengine.com",
                           "homepage": "https://xpressengine.io",
                           "role": "Developer"
                         }
@@ -196,42 +182,42 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
                           "title": "title",
                           "component": {
                             "module/board": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board",
+                              "class": "XE\\\PluginA\\\Modules\\\Board",
                               "name": "게시판",
                               "description": "게시판입니다."
                             },
                             "module/board/sortingType/default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\SortType",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\SortType",
                               "name": "게시판 기본정렬타입",
                               "description": "게시판의 기본 정렬타입입니다."
                             },
                             "module/board/skin/default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\Skins\\\Base",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\Skins\\\Base",
                               "name": "게시판 기본스킨",
                               "description": "게시판 기본스킨입니다."
                             },
-                            "module/khongchi_forum": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum",
+                            "module/xe_forum": {
+                              "class": "XE\\\PluginA\\\Modules\\\Forum",
                               "name": "포럼",
                               "description": "포럼입니다."
                             },
                             "module/forum/skin/sketchbook": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
+                              "class": "XE\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
                               "name": "포럼용 스캐치북스킨",
                               "description": "포럼용 스캐치북스킨입니다."
                             },
                             "uiobject/phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "fieldType/phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "widget/content/skin/sketchbookBase": {
-                              "class": "Khongchi\\\PluginA\\\Widgets\\\Kboard",
+                              "class": "XE\\\PluginA\\\Widgets\\\Kboard",
                               "name": "kboard",
                               "description": "kboard 게시판 모듈"
                             }
@@ -240,7 +226,7 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
                       },
                       "autoload": {
                         "psr-4": {
-                          "Khongchi\\\Kboard\\\": "plugins/kboard"
+                          "XE\\\Kboard\\\": "plugins/kboard"
                         },
                         "files": [
                           "core/src/Xpressengine/Interception/helpers.php"

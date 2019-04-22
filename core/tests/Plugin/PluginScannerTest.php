@@ -46,12 +46,12 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('Xpressengine\Tests\Plugin\Sample\PluginSample', $pluginsInfos['plugin_sample']['class']);
         $this->assertEquals(
-            'khongchi/plugin_sample',
+            'xe/plugin_sample',
             $pluginsInfos['plugin_sample']['metaData']['name']
         );
         $this->assertEquals('Xpressengine\Tests\Plugin\Sample\PluginSample2', $pluginsInfos['plugin_sample2']['class']);
         $this->assertEquals(
-            'khongchi/plugin_sample2',
+            'xe/plugin_sample2',
             $pluginsInfos['plugin_sample2']['metaData']['name']
         );
     }
@@ -69,7 +69,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('Xpressengine\Tests\Plugin\Sample\PluginSample2', $pluginsInfos['plugin_sample2']['class']);
         $this->assertEquals(
-            'khongchi/plugin_sample2',
+            'xe/plugin_sample2',
             $pluginsInfos['plugin_sample2']['metaData']['name']
         );
     }
@@ -110,14 +110,14 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
             ->andReturn(
                 json_decode(
                 '{
-                      "name": "khongchi/plugin_sample",
-                      "description": "khongchi 플러그인입니다.",
+                      "name": "xe/plugin_sample",
+                      "description": "xe 플러그인입니다.",
                       "keywords": [
                         "xpressengine",
                         "board"
                       ],
                       "support": {
-                        "email": "sungbum00@gmail.com",
+                        "email": "contact@xpressengine.com",
                         "issues": "http://myproject.com/issues",
                         "forum": "http://myproject.com/forum",
                         "wiki": "http://myproject.com/wiki",
@@ -126,8 +126,8 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "authors": [
                         {
-                          "name": "khongchi",
-                          "email": "sungbum00@gmail.com",
+                          "name": "xe",
+                          "email": "contact@xpressengine.com",
                           "homepage": "https://xpressengine.io",
                           "role": "Developer"
                         }
@@ -138,42 +138,42 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                         "xpressengine": {
                           "components": {
                             "module|board": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board",
+                              "class": "XE\\\PluginA\\\Modules\\\Board",
                               "name": "게시판",
                               "description": "게시판입니다."
                             },
                             "module|board|sortingType|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\SortType\\\",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\SortType\\\",
                               "name": "게시판 기본정렬타입",
                               "description": "게시판의 기본 정렬타입입니다."
                             },
                             "module|board|skin|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
                               "name": "게시판 기본스킨",
                               "description": "게시판 기본스킨입니다."
                             },
-                            "module|khongchi_forum": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum",
+                            "module|xe_forum": {
+                              "class": "XE\\\PluginA\\\Modules\\\Forum",
                               "name": "포럼",
                               "description": "포럼입니다."
                             },
                             "module|forum|skin|sketchbook": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
+                              "class": "XE\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
                               "name": "포럼용 스캐치북스킨",
                               "description": "포럼용 스캐치북스킨입니다."
                             },
                             "uiobject|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "fieldType|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "widget|content|skin|sketchbookDefault": {
-                              "class": "Khongchi\\\PluginA\\\Widgets\\\Kboard",
+                              "class": "XE\\\PluginA\\\Widgets\\\Kboard",
                               "name": "kboard",
                               "description": "kboard 게시판 모듈"
                             }
@@ -182,7 +182,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "autoload": {
                         "psr-4": {
-                          "Khongchi\\\Kboard\\\": "plugins/kboard"
+                          "XE\\\Kboard\\\": "plugins/kboard"
                         },
                         "files": [
                           "core/src/Xpressengine/Interception/helpers.php"
@@ -207,14 +207,14 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
             ->andReturn(
                 json_decode(
                 '{
-                      "name": "khongchi/plugin_sample2",
-                      "description": "khongchi 플러그인입니다.",
+                      "name": "xe/plugin_sample2",
+                      "description": "xe 플러그인입니다.",
                       "keywords": [
                         "xpressengine",
                         "board"
                       ],
                       "support": {
-                        "email": "sungbum00@gmail.com",
+                        "email": "contact@xpressengine.com",
                         "issues": "http://myproject.com/issues",
                         "forum": "http://myproject.com/forum",
                         "wiki": "http://myproject.com/wiki",
@@ -223,8 +223,8 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "authors": [
                         {
-                          "name": "khongchi",
-                          "email": "sungbum00@gmail.com",
+                          "name": "xe",
+                          "email": "contact@xpressengine.com",
                           "homepage": "https://xpressengine.io",
                           "role": "Developer"
                         }
@@ -235,42 +235,42 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                         "xpressengine": {
                           "components": {
                             "module|board": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board",
+                              "class": "XE\\\PluginA\\\Modules\\\Board",
                               "name": "게시판",
                               "description": "게시판입니다."
                             },
                             "module|board|sortingType|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\SortType\\\",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\SortType\\\",
                               "name": "게시판 기본정렬타입",
                               "description": "게시판의 기본 정렬타입입니다."
                             },
                             "module|board|skin|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
                               "name": "게시판 기본스킨",
                               "description": "게시판 기본스킨입니다."
                             },
-                            "module|khongchi_forum": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum",
+                            "module|xe_forum": {
+                              "class": "XE\\\PluginA\\\Modules\\\Forum",
                               "name": "포럼",
                               "description": "포럼입니다."
                             },
                             "module|forum|skin|sketchbook": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
+                              "class": "XE\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
                               "name": "포럼용 스캐치북스킨",
                               "description": "포럼용 스캐치북스킨입니다."
                             },
                             "uiobject|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "fieldType|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "widget|content|skin|sketchbookDefault": {
-                              "class": "Khongchi\\\PluginA\\\Widgets\\\Kboard",
+                              "class": "XE\\\PluginA\\\Widgets\\\Kboard",
                               "name": "kboard",
                               "description": "kboard 게시판 모듈"
                             }
@@ -279,7 +279,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "autoload": {
                         "psr-4": {
-                          "Khongchi\\\Kboard\\\": "plugins/kboard"
+                          "XE\\\Kboard\\\": "plugins/kboard"
                         },
                         "files": [
                           "core/src/Xpressengine/Interception/helpers.php"
@@ -301,18 +301,18 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
 
 
         $reader->shouldReceive('read')
-            ->withArgs(['/home/DOMAINS/LOCALHOST/khongchi/xe3-core/core/tests/Plugin/invalid_plugins/plugin_sample2'])
+            ->withArgs(['/home/DOMAINS/LOCALHOST/xe/xe3-core/core/tests/Plugin/invalid_plugins/plugin_sample2'])
             ->andReturn(
                 json_decode(
                 '{
-                      "name": "khongchi/plugin_sample2",
-                      "description": "khongchi 플러그인입니다.",
+                      "name": "xe/plugin_sample2",
+                      "description": "xe 플러그인입니다.",
                       "keywords": [
                         "xpressengine",
                         "board"
                       ],
                       "support": {
-                        "email": "sungbum00@gmail.com",
+                        "email": "contact@xpressengine.com",
                         "issues": "http://myproject.com/issues",
                         "forum": "http://myproject.com/forum",
                         "wiki": "http://myproject.com/wiki",
@@ -321,8 +321,8 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "authors": [
                         {
-                          "name": "khongchi",
-                          "email": "sungbum00@gmail.com",
+                          "name": "xe",
+                          "email": "contact@xpressengine.com",
                           "homepage": "https://xpressengine.io",
                           "role": "Developer"
                         }
@@ -333,42 +333,42 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                         "xpressengine": {
                           "components": {
                             "module|board": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board",
+                              "class": "XE\\\PluginA\\\Modules\\\Board",
                               "name": "게시판",
                               "description": "게시판입니다."
                             },
                             "module|board|sortingType|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\SortType\\\",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\SortType\\\",
                               "name": "게시판 기본정렬타입",
                               "description": "게시판의 기본 정렬타입입니다."
                             },
                             "module|board|skin|default": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
+                              "class": "XE\\\PluginA\\\Modules\\\Board\\\Skins\\\Default",
                               "name": "게시판 기본스킨",
                               "description": "게시판 기본스킨입니다."
                             },
-                            "module|khongchi_forum": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum",
+                            "module|xe_forum": {
+                              "class": "XE\\\PluginA\\\Modules\\\Forum",
                               "name": "포럼",
                               "description": "포럼입니다."
                             },
                             "module|forum|skin|sketchbook": {
-                              "class": "Khongchi\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
+                              "class": "XE\\\PluginA\\\Modules\\\Forum\\\Skins\\\Sketchbook",
                               "name": "포럼용 스캐치북스킨",
                               "description": "포럼용 스캐치북스킨입니다."
                             },
                             "uiobject|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "fieldType|phone": {
-                              "class": "Khongchi\\\PluginA\\\UIObjects\\\BoardInfo",
+                              "class": "XE\\\PluginA\\\UIObjects\\\BoardInfo",
                               "name": "전화번호 UI오브젝트",
                               "description": "게시판정보 UI오브젝트입니다."
                             },
                             "widget|content|skin|sketchbookDefault": {
-                              "class": "Khongchi\\\PluginA\\\Widgets\\\Kboard",
+                              "class": "XE\\\PluginA\\\Widgets\\\Kboard",
                               "name": "kboard",
                               "description": "kboard 게시판 모듈"
                             }
@@ -377,7 +377,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
                       },
                       "autoload": {
                         "psr-4": {
-                          "Khongchi\\\Kboard\\\": "plugins/kboard"
+                          "XE\\\Kboard\\\": "plugins/kboard"
                         },
                         "files": [
                           "core/src/Xpressengine/Interception/helpers.php"

@@ -1,10 +1,7 @@
-@php
-    $operations = ['install' => xe_trans('xe::install'), 'update' => xe_trans('xe::updates')];
-@endphp
 
     <div class="panel">
         <div class="panel-body">
-            @if ($operation['status'] !== 'running' && Session::get('operation') === 'running')
+            @if($operation['status'] === 'ready')
                 <strong>{{ xe_trans('xe::loadingForStatus') }}</strong>
             @else
                 <strong>{{ xe_trans('xe::recentOperation') }}</strong>
@@ -17,25 +14,18 @@
                     </div>
                 @endif
                 <hr>
+                @if(!empty($operation['targets']))
                 <label for="">{{ xe_trans('xe::operation') }}</label>
-                    @forelse($operation['targets'] as $name => $package)
-
-                        @if($package['operation'] === 'uninstall')
-                            @if(data_get($operation['infos'], $name))
-                            <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) {{ xe_trans('xe::destroy') }}</p>
-                            @else
-                            <p>{{ $name }} {{ xe_trans('xe::destroy') }}</p>
+                    @foreach($operation['targets'] as $name => $package)
+                        <p>
+                            {{ $name }}
+                            @if($package['operation'] !== 'uninstall')
+                            ver.{{ $package['version'] }}
                             @endif
-                        @else
-                            @if(data_get($operation['infos'], $name))
-                                <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) ver.{{ $package['version'] }} {{ array_get($operations, $package['operation']) }}</p>
-                            @else
-                                <p>{{ $name }} ver.{{ $package['version'] }} {{ array_get($operations, $package['operation']) }}</p>
-                            @endif
-                        @endif
-                    @empty
-                        <p></p>
-                    @endforelse
+                            {{ $package['operation'] }}
+                        </p>
+                    @endforeach
+                @endif
 
                 <label for="">{{ xe_trans('xe::status') }}</label>
                 <p>
@@ -83,14 +73,14 @@
 
 
 
-    @if($operation['status'] === 'running' || Session::get('operation') === 'running')
+    @if(in_array($operation['status'], ['running', 'ready']))
         {!! app('xe.frontend')->html('plugin.get-operation')->content("
         <script>
             $(function($) {
                 var loadOperation = function () {
                     XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(response){
                         var data = response.data;
-                        if(data.operation.status != 'running') {
+                        if(data.operation.status !== 'running' && data.operation.status !== 'ready') {
                             //clearInterval(loadOperation);
                             location.reload();
                         } else {

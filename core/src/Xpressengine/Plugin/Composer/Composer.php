@@ -16,7 +16,9 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use FilesystemIterator;
 use Xpressengine\Foundation\Application;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
 
@@ -30,6 +32,8 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class Composer
 {
+    protected static $writer;
+
     protected static $composerFile = 'composer.json';
 
     protected static $pluginsDir = 'plugins';
@@ -39,12 +43,6 @@ class Composer
     protected static $packagistToken = null;
 
     protected static $pluginComposerFile = 'storage/app/composer.plugins.json';
-
-    protected static $installedFlagPath = 'storage/app/installed';
-
-    protected static $interceptionProxyDirectory = 'storage/app/interception';
-
-    protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
         'xpressengine-plugin/board' => '*',
@@ -95,46 +93,27 @@ class Composer
             return;
         }
 
-        $path = static::$pluginComposerFile;
-        $writer = self::getWriter($path);
-        $writer->reset();
+        $writer = self::getWriter();
 
-        // XE가 설치돼 있지 않을 경우, base plugin require에 추가
-        if (!file_exists(static::$installedFlagPath)) {
-            if (!defined('__XE_PLUGIN_MODE__')) {
-                define('__XE_PLUGIN_MODE__', true);
-            }
+        if (!file_exists(static::$pluginComposerFile)) {
             foreach (static::$basePlugins as $plugin => $version) {
-                if ($writer->get('replace.'.$plugin) === null) {
-                    $writer->install($plugin, $version, date("Y-m-d H:i:s"));
-                } else {
-                    $event->getOutput()->writeln(
-                        "xpressengine-installer: skip installation of existing plugin: $plugin"
-                    );
-                }
-            }
-            static::applyRequire($writer);
-            $event->getOutput()->writeln("xpressengine-installer: running in initialize mode");
-        } else {
-            // 플러그인 명령을 실행한 경우
-            if (defined('__XE_PLUGIN_MODE__')) {
-                static::applyRequire($writer);
-
-                $installs = $writer->get('xpressengine-plugin.operation.install', []);
-                $updates = $writer->get('xpressengine-plugin.operation.update', []);
-                $fixes = array_keys($installs) + array_keys($updates);
-
-                $writer->setUpdateMode($fixes);
-                $event->getOutput()->writeln("xpressengine-installer: running in update mode");
-            // composer를 직접 실행한 경우
-            } else {
-                $writer->setFixMode();
-                $event->getOutput()->writeln("xpressengine-installer: running in fix mode");
+                $writer->install($plugin, $version);
             }
         }
+
+        static::applyRequire($writer);
+
+        $installs = $writer->get('xpressengine-plugin.operation.todo.install', []);
+        $updates = $writer->get('xpressengine-plugin.operation.todo.update', []);
+        $fixes = array_keys($installs) + array_keys($updates);
+
+        $writer->setUpdateMode($fixes);
+
         $writer->write();
 
-        $event->getOutput()->writeln("xpressengine-installer: Plugin composer file[$path] is written");
+        $event->getOutput()->writeln(
+            'xpressengine-installer: Plugin composer file['.$writer->getPath().'] is written'
+        );
     }
 
     /**
@@ -173,6 +152,7 @@ class Composer
      */
     public static function postInstall(Event $event)
     {
+        static::postUpdateOrInstall($event);
     }
 
     /**
@@ -183,6 +163,23 @@ class Composer
      */
     public static function postUpdate(Event $event)
     {
+        static::postUpdateOrInstall($event);
+    }
+
+    /**
+     * Handle the post-update or post-install Composer event.
+     *
+     * @param Event $event composer event object
+     * @return void
+     */
+    public static function postUpdateOrInstall(Event $event)
+    {
+        $writer = self::getWriter();
+        $writer->reset()->cleanTodo();
+
+        $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
+
+        $writer->write();
     }
 
     /**
@@ -211,40 +208,50 @@ class Composer
     }
 
     /**
-     * Clear the cached Laravel bootstrapping files.
+     * Clear the cached bootstrapping files.
      *
      * @return void
      */
     protected static function clearCompiled()
     {
-        if (!$laravel = Application::getInstance()) {
-            $laravel = new Application(getcwd());
-        }
+        $application = new Application(getcwd());
 
-        if (file_exists($packagesPath = $laravel->getCachedPackagesPath())) {
+        if (file_exists($packagesPath = $application->getCachedPackagesPath())) {
             @unlink($packagesPath);
         }
 
-        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
+        if (file_exists($servicesPath = $application->getCachedServicesPath())) {
             @unlink($servicesPath);
+        }
+
+        if (file_exists($pluginsPath = $application->getCachedPluginsPath())) {
+            @unlink($pluginsPath);
+        }
+
+        if (is_dir($proxiesPath = $application->proxiesPath())) {
+            $items = new FilesystemIterator($proxiesPath, FilesystemIterator::SKIP_DOTS);
+            foreach ($items as $item) {
+                if ($item->isFile()) {
+                    @unlink($item->getPathname());
+                }
+            }
         }
     }
 
     /**
      * ComposerFileWriter 인스턴스를 생성한다.
      *
-     * @param string $path plugin용 composer 파일 경로
-     *
      * @return ComposerFileWriter
-     * @throws \Exception
      */
-    protected static function getWriter($path)
+    protected static function getWriter()
     {
-        $reader = new MetaFileReader(static::$composerFile);
-        $scanner = new PluginScanner($reader, static::$pluginsDir, '');
-        $writer = new ComposerFileWriter($path, $scanner);
+        if (!static::$writer) {
+            $reader = new MetaFileReader(static::$composerFile);
+            $scanner = new PluginScanner($reader, static::$pluginsDir, '');
+            static::$writer = new ComposerFileWriter(static::$pluginComposerFile, $scanner);
+        }
 
-        return $writer;
+        return static::$writer;
     }
 
     /**
@@ -256,15 +263,15 @@ class Composer
      */
     private static function applyRequire(ComposerFileWriter $writer)
     {
-        $installs = $writer->get('xpressengine-plugin.operation.install', []);
+        $installs = $writer->get('xpressengine-plugin.operation.todo.install', []);
         foreach ($installs as $name => $version) {
             $writer->addRequire($name, $version);
         }
-        $updates = $writer->get('xpressengine-plugin.operation.update', []);
+        $updates = $writer->get('xpressengine-plugin.operation.todo.update', []);
         foreach ($updates as $name => $version) {
             $writer->addRequire($name, $version);
         }
-        $uninstalls = $writer->get('xpressengine-plugin.operation.uninstall', []);
+        $uninstalls = $writer->get('xpressengine-plugin.operation.todo.uninstall', []);
         foreach ($uninstalls as $name) {
             $writer->removeRequire($name);
         }

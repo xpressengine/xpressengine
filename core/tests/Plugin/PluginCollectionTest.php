@@ -13,57 +13,19 @@ use Xpressengine\Plugin\PluginHandler as Plugin;
 
 class PluginCollectionTest extends \PHPUnit\Framework\TestCase
 {
-
     protected function tearDown()
     {
         \Mockery::close();
         parent::tearDown();
     }
 
-    public function testConstruct()
-    {
-        $scanner = \Mockery::mock(
-            '\Xpressengine\Plugin\PluginScanner',
-            [
-                'scanDirectory' => $this->getPluginInfos()
-            ]
-        );
-
-        $cache = \Mockery::mock('Xpressengine\Plugin\Cache\PluginCache');
-        $cache->shouldReceive('hasCachedPlugins')->andReturnNull();
-        $cache->shouldReceive('setPluginsToCache')->andReturnNull();
-
-        $configs = \Mockery::mock('Xpressengine\Config\ConfigManager');
-        $configs->shouldReceive('getVal')->andReturn([]);
-
-        $collection = new PluginCollection($scanner, $cache, $configs, PluginEntityStub::class);
-
-        $this->assertInstanceOf('\Xpressengine\Plugin\PluginCollection', $collection);
-
-        return $collection;
-    }
-
     public function testInitializeWithRefresh()
     {
-        $scanner = \Mockery::mock(
-            '\Xpressengine\Plugin\PluginScanner',
-            [
-                'scanDirectory' => $this->getPluginInfos()
-            ]
-        );
-
-        $cache = \Mockery::mock('Xpressengine\Plugin\Cache\PluginCache');
-        $cache->shouldReceive('hasCachedPlugins')->once()->andReturnNull();
-        $cache->shouldReceive('hasCachedPlugins')->once()->andReturn(true);
-        $cache->shouldReceive('getPluginsFromCache')->once()->andReturn($this->getPluginInfos());
-        $cache->shouldReceive('setPluginsToCache')->once()->andReturnNull();
-
         $configs = \Mockery::mock('Xpressengine\Config\ConfigManager');
         $configs->shouldReceive('getVal')->andReturn([]);
+        PluginCollection::setConfig($configs);
 
-        $collection = new PluginCollection($scanner, $cache, $configs, PluginEntityStub::class);
-
-        $collection->initialize(false);
+        $collection = new PluginCollection($this->getPluginInfos());
 
         $this->assertCount(2, $this->getPropertyValue($collection, 'plugins'));
 
@@ -84,7 +46,7 @@ class PluginCollectionTest extends \PHPUnit\Framework\TestCase
         $data = $collection->fetch(['keyword' => 'sample2']);
         $this->assertCount(1, $data);
 
-        $data = $collection->fetch(['keyword' => 'khongchi']);
+        $data = $collection->fetch(['keyword' => 'xe']);
         $this->assertCount(0, $data);
 
         $data = $collection->fetch(['keyword' => 'sample_author']);

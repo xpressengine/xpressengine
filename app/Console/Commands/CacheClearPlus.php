@@ -15,6 +15,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Cache\Console\ClearCommand;
+use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Interception\InterceptionHandler;
 
 /**
@@ -77,11 +78,7 @@ class CacheClearPlus extends ClearCommand
         /**
          * default flush stores
          */
-        $stores = [
-            'file',
-            'plugins',
-            'schema',
-        ];
+        $stores = ['file', 'schema',];
 
         $storeName = $this->argument('store');
 
@@ -97,7 +94,21 @@ class CacheClearPlus extends ClearCommand
             $this->laravel['events']->fire('cache:cleared', [$storeName, $this->tags()]);
         }
 
-        /** flush interception proxy store */
-        app(InterceptionHandler::class)->clearProxies();
+        if (!$this->option('no-proxy')) {
+            /** flush interception proxy store */
+            app(InterceptionHandler::class)->clearProxies();
+        }
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array_merge(parent::getOptions(), [
+            ['no-proxy', null, InputOption::VALUE_NONE, 'The interception proxy is except.'],
+        ]);
     }
 }
