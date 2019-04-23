@@ -120,17 +120,17 @@ trait ComposerRunTrait
      * runComposer
      *
      * @param array                       $inputs
-     * @param bool                        $updateMode
+     * @param bool                        $skipPlugin
      * @param OutputInterface|string|null $output
      * @return int
      * @throws \Exception
      */
-    protected function runComposer($inputs, $updateMode = true, $output = null)
+    protected function runComposer($inputs, $skipPlugin = false, $output = null)
     {
         ini_set('memory_limit', '-1');
 
-        if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
-            define('__XE_PLUGIN_MODE__', true);
+        if ($skipPlugin) {
+            define('__XE_PLUGIN_SKIP__', true);
         }
 
         $config = app('xe.config')->get('plugin');

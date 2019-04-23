@@ -18,7 +18,7 @@
                 </script>
                 ")->load() !!}
 
-                @if($operation['status'] === 'running')
+                @if(in_array($operation['status'], ['running', 'ready']))
                     {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
                     {{ app('xe.frontend')->html('core-update.get-operation')->content("
                     <script>
@@ -26,7 +26,7 @@
                             var loadOperation = setInterval(function(){
                                 XE.page('".route('settings.coreupdate.operation')."', '.__xe_operation', {}, function(response){
                                     var data = response.data;
-                                    if(data.operation.status != 'running') {
+                                    if(data.operation.status !== 'running' && data.operation.status !== 'ready') {
                                         clearInterval(loadOperation);
                                         location.reload();
                                     }

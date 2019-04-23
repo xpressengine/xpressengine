@@ -787,7 +787,10 @@ class PluginHandler
         }
 
         if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
-            $status = 'expired';
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_EXPIRED);
+            $writer->set('xpressengine-plugin.lock', false);
+            $writer->write();
+            $status = ComposerFileWriter::STATUS_EXPIRED;
         }
 
         $logFile = $writer->get('xpressengine-plugin.operation.log');
@@ -798,7 +801,7 @@ class PluginHandler
             $log = null;
         }
 
-        $locked = $writer->get('xpressengine-plugin.operation.lock', false);
+        $locked = $writer->get('xpressengine-plugin.lock', false);
 
         return compact('targets', 'status', 'expired', 'changed', 'failed', 'infos', 'log', 'locked');
     }

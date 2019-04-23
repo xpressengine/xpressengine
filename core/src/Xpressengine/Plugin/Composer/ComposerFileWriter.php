@@ -214,7 +214,6 @@ class ComposerFileWriter
             }
         }
         array_set($this->data, 'require', $requires);
-        array_set($this->data, "xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
     }
 
     /**
@@ -249,14 +248,13 @@ class ComposerFileWriter
      *
      * @param string $name        package name of plugin
      * @param string $version     plugin version
-     * @param string $expiredTime deadline
+     * @param string $expiredTime deadline (deprecated since 3.0.1)
      *
      * @return $this
      */
     public function install($name, $version, $expiredTime = null)
     {
         array_set($this->data, "xpressengine-plugin.operation.todo.install.$name", $version);
-        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
 
         return $this;
     }
@@ -266,14 +264,13 @@ class ComposerFileWriter
      *
      * @param string $name        package name of plugin
      * @param string $version     plugin version
-     * @param string $expiredTime deadline
+     * @param string $expiredTime deadline (deprecated since 3.0.1)
      *
      * @return $this
      */
-    public function update($name, $version, $expiredTime)
+    public function update($name, $version, $expiredTime = null)
     {
         array_set($this->data, "xpressengine-plugin.operation.todo.update.$name", $version);
-        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
 
         return $this;
     }
@@ -282,18 +279,50 @@ class ComposerFileWriter
      * register plugin to uninstall list
      *
      * @param string $name        package name of plugin
-     * @param string $expiredTime deadline*
+     * @param string $expiredTime deadline (deprecated since 3.0.1)
      *
      * @return $this
      */
-    public function uninstall($name, $expiredTime)
+    public function uninstall($name, $expiredTime = null)
     {
         $uninstall = array_get($this->data, "xpressengine-plugin.operation.todo.uninstall", []);
         if (!in_array($name, $uninstall)) {
             $uninstall[] = $name;
         }
         array_set($this->data, "xpressengine-plugin.operation.todo.uninstall", $uninstall);
-        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
+
+        return $this;
+    }
+
+    /**
+     * @param string|int|null $datetime datetime string or null or '0'
+     * @return $this
+     */
+    public function setExpiresAt($datetime)
+    {
+        $this->set('xpressengine-plugin.operation.expiration_time', $datetime);
+
+        return $this;
+    }
+
+    /**
+     * Determine if the operation is running.
+     *
+     * @return bool
+     */
+    public function isRunning()
+    {
+        return $this->get('xpressengine-plugin.operation.status') === ComposerFileWriter::STATUS_RUNNING;
+    }
+
+    /**
+     * Set the operation is running.
+     *
+     * @return $this
+     */
+    public function setRunning()
+    {
+        $this->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_RUNNING);
 
         return $this;
     }

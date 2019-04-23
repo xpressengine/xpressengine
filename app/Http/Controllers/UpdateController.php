@@ -63,7 +63,7 @@ class UpdateController extends Controller
     public function update(Request $request, ComposerFileWriter $writer, ReleaseProvider $releaseProvider)
     {
         $operation = $this->getOperation($writer);
-        if($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
+        if($operation['locked']) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
@@ -77,9 +77,7 @@ class UpdateController extends Controller
             $skipComposer = false;
         }
 
-        // 명령은 terminate 에서 호출되므로 response 가 상태값이 변경되기전에 반환 됨.
-        // 그래서 사전에 running 상태로 만들어 줌
-        $writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
+        $writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_READY);
         $writer->set("xpressengine-plugin.operation.core_update", $version);
 
         $startTime = now()->format('YmdHis');
@@ -131,7 +129,9 @@ class UpdateController extends Controller
             $log = 'Running in console.';
         }
 
-        return compact('status', 'updateVersion', 'log');
+        $locked = $writer->get('xpressengine-plugin.lock', false);
+
+        return compact('status', 'updateVersion', 'log', 'locked');
     }
 
     /**
@@ -154,7 +154,7 @@ class UpdateController extends Controller
      */
     public function deleteOperation(ComposerFileWriter $writer)
     {
-        $writer->reset()->cleanOperation()->write();
+        $writer->reset()->cleanOperation(true)->write();
         return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 }

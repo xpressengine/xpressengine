@@ -13,11 +13,8 @@
  */
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
@@ -33,10 +30,8 @@ use Xpressengine\Plugin\PluginProvider;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PluginCommand extends Command
+class PluginCommand extends ShouldOperation
 {
-    use ComposerRunTrait;
-
     /**
      * @var PluginHandler
      */
@@ -53,32 +48,33 @@ class PluginCommand extends Command
     protected $interceptionHandler;
 
     /**
-     * @var ComposerFileWriter
-     */
-    protected $writer;
-
-    /**
      * Constructor.
      *
+     * @param ComposerFileWriter  $writer              ComposerFileWriter
      * @param PluginHandler       $handler             PluginHandler
      * @param PluginProvider      $provider            PluginProvider
-     * @param ComposerFileWriter  $writer              ComposerFileWriter
      * @param InterceptionHandler $interceptionHandler InterceptionHandler
      */
     public function __construct(
+        ComposerFileWriter $writer,
         PluginHandler $handler,
         PluginProvider $provider,
-        ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
-        parent::__construct();
+        parent::__construct($writer);
 
         $this->handler = $handler;
         $this->provider = $provider;
-        $this->writer = $writer;
         $this->interceptionHandler = $interceptionHandler;
     }
 
+    /**
+     * Run the console command.
+     *
+     * @param InputInterface  $input  input
+     * @param OutputInterface $output output
+     * @return int
+     */
     public function run(InputInterface $input, OutputInterface $output)
     {
         $this->handler->getAllPlugins(true);
@@ -111,6 +107,7 @@ class PluginCommand extends Command
      * @param array $packages specific package name. no need version
      * @return int
      * @throws \Exception
+     * @throws \Throwable
      */
     protected function composerUpdate(array $packages)
     {
@@ -120,13 +117,8 @@ class PluginCommand extends Command
 
         $this->lock();
 
-        if (!$this->laravel->runningInConsole()) {
-            ignore_user_abort(true);
-            set_time_limit($this->getTimeLimit());
-        }
-
         try {
-            if (0 !== $this->clear()) {
+            if (0 !== $this->clearCache(true)) {
                 throw new \Exception('cache clear fail.. check your system.');
             }
 
@@ -141,12 +133,14 @@ class PluginCommand extends Command
                 'packages' => $packages
             ];
 
-            $this->writeResult($result = $this->runComposer($inputs, true, $this->output));
+            $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
 
             return $result;
         } catch (\Exception $e) {
-            $this->writeResult($e->getCode());
-
+            $this->setFailed($e->getCode());
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed($e->getCode());
             throw $e;
         } finally {
             $this->unlock();
@@ -157,14 +151,12 @@ class PluginCommand extends Command
      * Run cache clear.
      *
      * @return int
+     *
+     * @deprecated since 3.0.1
      */
     protected function clear()
     {
-        $this->warn('Clears cache before Composer update runs.');
-        $result = $this->call('cache:clear', ['--no-proxy' => true]);
-        $this->line(PHP_EOL);
-
-        return $result;
+        return 0;
     }
 
     /**
@@ -204,25 +196,6 @@ class PluginCommand extends Command
     {
         $this->handler->getAllPlugins(true);
         $this->handler->updatePlugin($pluginId);
-    }
-
-    /**
-     * Write result.
-     *
-     * @param int $result result code
-     * @return void
-     */
-    protected function writeResult($result)
-    {
-        // composer.plugins.json 파일을 다시 읽어들인다.
-        $this->writer->load();
-        if ($result !== 0) {
-            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
-            $this->writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
-        } else {
-            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-        }
-        $this->writer->write();
     }
 
     /**
@@ -361,60 +334,5 @@ class PluginCommand extends Command
         $version = $version ?: $info->latest_release->version;  // todo: 버전이 제공 되지 않았을땐 마지막 버전이 아니라 "*" 으로 ?
 
         return compact('id', 'name', 'version', 'title');
-    }
-
-    /**
-     * Get expired time.
-     *
-     * @return int|string
-     */
-    protected function getExpiredTime()
-    {
-        $datetime = Carbon::now()->addSeconds($this->getTimeLimit())->toDateTimeString();
-
-        return $this->laravel->runningInConsole() ? 0 : $datetime;
-    }
-
-    /**
-     * Get time limit.
-     *
-     * @return int
-     */
-    protected function getTimeLimit()
-    {
-        return config('xe.plugin.operation.time_limit');
-    }
-
-    /**
-     * Determine if operation is locked.
-     *
-     * @return bool
-     */
-    protected function isLocked()
-    {
-        $this->writer->load();
-        return $this->writer->get('xpressengine-plugin.operation.lock', false);
-    }
-
-    /**
-     * Locks a operation.
-     *
-     * @return void
-     */
-    protected function lock()
-    {
-        $this->writer->set('xpressengine-plugin.operation.lock', true);
-        $this->writer->write();
-    }
-
-    /**
-     * Unlocks a operation.
-     *
-     * @return void
-     */
-    protected function unlock()
-    {
-        $this->writer->set('xpressengine-plugin.operation.lock', false);
-        $this->writer->write();
     }
 }

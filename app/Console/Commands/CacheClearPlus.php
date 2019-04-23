@@ -94,7 +94,7 @@ class CacheClearPlus extends ClearCommand
             $this->laravel['events']->fire('cache:cleared', [$storeName, $this->tags()]);
         }
 
-        if (!$this->option('no-proxy')) {
+        if (!$this->option('except-proxy')) {
             /** flush interception proxy store */
             app(InterceptionHandler::class)->clearProxies();
         }
@@ -108,7 +108,7 @@ class CacheClearPlus extends ClearCommand
     protected function getOptions()
     {
         return array_merge(parent::getOptions(), [
-            ['no-proxy', null, InputOption::VALUE_NONE, 'The interception proxy is except.'],
+            ['except-proxy', null, InputOption::VALUE_NONE, 'The interception proxy is except.'],
         ]);
     }
 }

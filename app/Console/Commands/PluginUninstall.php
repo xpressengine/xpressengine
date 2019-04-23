@@ -224,9 +224,7 @@ class PluginUninstall extends PluginCommand
 
         foreach ($data as $info) {
             // composer.plugins.json 업데이트
-            // - require에 설치할 플러그인 추가
-
-            $this->writer->uninstall($info['name'], $this->getExpiredTime());
+            $this->writer->uninstall($info['name']);
         }
         $this->writer->write();
     }

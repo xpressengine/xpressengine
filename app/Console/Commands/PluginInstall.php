@@ -13,6 +13,8 @@
  */
 namespace App\Console\Commands;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
@@ -161,7 +163,7 @@ class PluginInstall extends PluginCommand
         foreach ($data as $info) {
             // composer.plugins.json 업데이트
             // - require에 설치할 플러그인 추가
-            $this->writer->install($info['name'], $info['version'], $this->getExpiredTime());
+            $this->writer->install($info['name'], $info['version']);
         }
         $this->writer->write();
     }

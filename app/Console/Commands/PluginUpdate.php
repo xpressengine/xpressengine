@@ -161,7 +161,7 @@ class PluginUpdate extends PluginCommand
         foreach ($data as $info) {
             // composer.plugins.json 업데이트
             // - require에 설치할 플러그인 추가
-            $this->writer->update($info['name'], $info['version'], $this->getExpiredTime());
+            $this->writer->update($info['name'], $info['version']);
         }
         $this->writer->write();
     }
