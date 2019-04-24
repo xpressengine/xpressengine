@@ -39,14 +39,14 @@ class HtmlPresenter implements Presentable
      *
      * @var string
      */
-    static protected $commonHtmlWrapper = '';
+    protected static $commonHtmlWrapper = '';
 
     /**
      * 팝업 형식으로 출력할 때 사용할 wrapper
      *
      * @var string
      */
-    static protected $popupHtmlWrapper = '';
+    protected static $popupHtmlWrapper = '';
 
     /**
      * @var Presenter
