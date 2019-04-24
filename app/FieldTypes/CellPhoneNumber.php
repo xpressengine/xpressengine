@@ -51,7 +51,7 @@ class CellPhoneNumber extends AbstractType
      */
     public function name()
     {
-        return 'Cell phone number';
+        return 'Cell phone number - 휴대폰 번호';
     }
 
     /**
@@ -72,7 +72,7 @@ class CellPhoneNumber extends AbstractType
     public function getColumns()
     {
         return [
-            'cell_phone_number' => (new ColumnEntity('cell_phone_number', ColumnDataType::STRING, 30)),
+            'cell_phone_number' => (new ColumnEntity('cell_phone_number', ColumnDataType::STRING)),
         ];
     }
 
@@ -121,10 +121,6 @@ class CellPhoneNumber extends AbstractType
     protected function registerValidator()
     {
         app('validator')->extend('cell_phone', function ($attribute, $value) {
-            if ($value == null) {
-                return true;
-            }
-
             $value = str_replace(['-', ' '], '', $value);
 
             if (is_numeric($value) === false) {

@@ -6,7 +6,7 @@
     </div>
 
     <table class="table">
-        <caption>DynamicField Manager</caption>
+        <caption>{{xe_trans('xe::dynamicFieldManager')}}</caption>
         <thead>
         <tr>
             <th>#</th>
@@ -83,6 +83,11 @@
                 <label for="">{{xe_trans('xe::label')}}</label>
                 <small>{{xe_trans('xe::dynamicFieldLabelDescription')}}</small>
                 <div class="dynamic-lang-editor-box" data-name="label" data-lang-key="" data-valid-name="Label"></div>
+            </div>
+            <div class="form-group">
+                <label for="">{{xe_trans('xe::dynamicFieldLabelDetailTitle')}}</label>
+                <small>{{xe_trans('xe::dynamicFieldLabelDetailDescription')}}</small>
+                <div class="dynamic-lang-editor-box" data-name="placeholder" data-lang-key="" data-valid-name="placeholder"></div>
             </div>
             <div class="form-group">
                 <input type="hidden" name="use" value="true" />

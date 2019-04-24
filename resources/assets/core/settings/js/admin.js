@@ -71,4 +71,9 @@ $(document).ready(function () {
 
     return false
   })
+
+  /* notice 닫기 버튼 */
+  $('.notice__button-close').click(function () {
+    $(this).parent('.notice').remove();
+  });
 })

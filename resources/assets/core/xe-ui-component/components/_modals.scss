@@ -72,7 +72,7 @@
   background-color: $modal-backdrop-bg;
   // Fade for backdrop
   &.fade { @include opacity(0); }
-  &.in { @include opacity($modal-backdrop-opacity); }
+  &.fade.in { @include opacity($modal-backdrop-opacity); }
 }
 
 // Modal header

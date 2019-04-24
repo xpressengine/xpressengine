@@ -749,12 +749,8 @@ return [
         'ko' => 'UI오브젝트',
         'en' => 'UI Object',
     ],
-    'dynamicField' => [
-        'ko' => '다이나믹필드',
-        'en' => 'Dynamic Field',
-    ],
     'dynamicFieldSkin' => [
-        'ko' => '다이나믹필드스킨',
+        'ko' => '확장 필드 스킨',
         'en' => 'Dynamic Field Skin',
     ],
     'plugin' => [
@@ -1849,7 +1845,7 @@ return [
         'en' => 'Site Privacy Policy',
     ],
     'userDynamicFieldDescription' => [
-        'ko' => '회원정보에 추가할 필드를 설정합니다.',
+        'ko' => '회원정보에 추가할 확장 필드를 설정합니다.',
         'en' => 'Set dynamic field for user information.',
     ],
     'useEmailConfirm' => [
@@ -2550,6 +2546,14 @@ return [
         'ko' => '라벨',
         'en' => 'Label',
     ],
+    'dynamicFieldLabelDetailTitle' => [
+        'ko' => '라벨상세설명',
+        'en' => 'Label detail description'
+    ],
+    'dynamicFieldLabelDetailDescription' => [
+        'ko' => '입력 폼 안에 노출되는 내용입니다.',
+        'en' => 'This is the content that is exposed in the input form.'
+    ],
     'dynamicFieldIdDescription' => [
         'ko' => '아이디는 데이터 사용 및 저장의 키워드로 사용 됩니다.  2~20자 영문, 숫자로 입력합니다.',
         'en' => 'IDs are used as keywords for data usage and storage. Enter 2 to 20 alphanumeric characters.',
@@ -2567,7 +2571,7 @@ return [
         'en' => 'Check if user input is required.',
     ],
     'dynamicFieldSearchableDescription' => [
-        'ko' => '다이나믹 필드의 값으로 검색이 가능하도록 할 경우 체크합니다.',
+        'ko' => '확장 필드의 값으로 검색이 가능하도록 할 경우 체크합니다.',
         'en' => 'Check this to enable searching by dynamic field value.'
     ],
     'searchable' => [

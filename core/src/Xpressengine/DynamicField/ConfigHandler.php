@@ -30,7 +30,6 @@ use Xpressengine\Database\VirtualConnectionInterface;
  */
 class ConfigHandler
 {
-
     const CONFIG_NAME = 'dynamicField';
     const CREATE_TABLE_METHOD = false;
     const ALTER_TABLE_METHOD = true;
@@ -60,6 +59,7 @@ class ConfigHandler
         'group' => null,
         'id' => null,
         'label' => null,
+        'labelDescription' => null,
         'typeId' => null,
         'typeName' => null,
         'skinId' => null,
@@ -226,6 +226,8 @@ class ConfigHandler
      *
      * @param ConfigEntity $config config entity
      * @return string
+     *
+     * @deprecated
      */
     public function getTableName(ConfigEntity $config)
     {
@@ -242,6 +244,8 @@ class ConfigHandler
      *
      * @param ConfigEntity $config config entity
      * @return string
+     *
+     * @deprecated
      */
     public function getRevisionTableName(ConfigEntity $config)
     {

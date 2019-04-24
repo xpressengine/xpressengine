@@ -41,7 +41,7 @@ class Boolean extends AbstractType
      */
     public function name()
     {
-        return 'Boolean';
+        return 'Boolean - 예/아니오';
     }
 
     /**

@@ -46,7 +46,7 @@ class Category extends AbstractType
      */
     public function name()
     {
-        return 'Category';
+        return 'Category - 카테고리';
     }
 
     /**

@@ -157,6 +157,10 @@ aside {
 
 .ct {
   padding: 64px 0 47px;
+
+  .notice {
+    margin-bottom: 10px;
+  }
 }
 
 .footer {
@@ -1314,6 +1318,86 @@ aside {
   }
 }
 
+// notice 영역 (앞에 border 노출, 클래스에 따라 배경화면 적용, X 버튼 추가 (공통))
+.notice {
+  padding: 10px 20px;
+  border: 1px solid #e0e0e0;
+  border-top: 0px none;
+  border-bottom: 0px none;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 7px;
+    line-height: 1.5em;
+    word-break: break-all;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.5em;
+    word-break: break-all;
+  }
+}
+
+.notice-warning {
+  border-left: 4px solid #b58105;
+}
+
+.notice-danger {
+  border-left: 4px solid #db2828;
+}
+
+.notice-success {
+  border-left: 4px solid #1ebc30;
+}
+
+.notice-warning-bg {
+  border-top: 0 none;
+  border-bottom: 0 none;
+  border-right: 0 none;
+  box-shadow: none;
+  background-color: #fff8db;
+}
+
+.notice-danger-bg {
+  border-top: 0 none;
+  border-bottom: 0 none;
+  border-right: 0 none;
+  box-shadow: none;
+  background-color: #ffe8e6;
+}
+
+.notice-success-bg {
+  border-top: 0 none;
+  border-bottom: 0 none;
+  border-right: 0 none;
+  box-shadow: none;
+  background-color: #e5f9e7;
+}
+
+.is-dissmiss {
+  position: relative;
+  padding-right: 40px;
+  
+  .notice__button-close {
+    display: block;
+  }
+}
+
+.notice__button-close {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0 none;
+  font-size: 18px;
+  background-color: transparent;
+  display: none;
+}
 
 
 @media (max-width: 767px) {

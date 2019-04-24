@@ -179,7 +179,7 @@ abstract class AbstractSkin implements ComponentInterface
         $data = [];
         $key = [];
         foreach ($this->getType()->getColumns() as $columnName => $columns) {
-            $dataName = snake_case($this->config->get('id') . '_' . $columnName);
+            $dataName = $this->config->get('id') . '_' . $columnName;
             $key[$columnName] = $dataName;
             if (isset($args[$dataName])) {
                 $data[$columnName] = $args[$dataName];

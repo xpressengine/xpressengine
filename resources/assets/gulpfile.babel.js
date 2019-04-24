@@ -40,3 +40,7 @@ gulp.task('jsdoc', () => {
   )
   return merged
 })
+
+gulp.task('watch', function () {
+  gulp.watch('./core/**/*.scss', ['assets-sass'])
+})
