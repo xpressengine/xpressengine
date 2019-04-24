@@ -8,6 +8,7 @@ composer.user.json
 *.iml
 .DS_Store
 /plugins
+/privates
 node_modules
 /resources/jsdoc
 *.map

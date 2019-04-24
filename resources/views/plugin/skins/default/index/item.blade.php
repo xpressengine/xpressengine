@@ -71,5 +71,12 @@
             <a href="{{ route('settings.plugins.manage.activate') }}" class="xe-btn xe-btn-positive-outline __xe_activate_plugin" data-plugin-id="{{ $plugin->getId() }}" {{ array_key_exists($plugin->getId(), $handler->getErrors()) ? 'disabled' : '' }}>{{ xe_trans('xe::activation') }}</a>
             <a href="{{ route('settings.plugins.manage.delete') }}" class="xe-btn xe-btn-danger-outline __xe_remove_plugin" data-plugin-id="{{ $plugin->getId() }}">{{ xe_trans('xe::delete') }}</a>
         @endif
+        @if($plugin->isPrivate())
+            <form id="update" method="POST" action="{{ route('settings.plugins.renew', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
+                {{ csrf_field() }}
+                {{ method_field('PUT') }}
+                <button type="submit" class="xe-btn xe-btn-warning-outline">의존성 갱신</button>
+            </form>
+        @endif
     </div>
 </li>

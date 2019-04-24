@@ -130,7 +130,6 @@ class SafeModeController extends Controller
     public function doCacheClear(CacheManager $cache)
     {
         $cache->store('file')->flush();
-        $cache->store('plugins')->flush();
         $cache->store('schema')->flush();
 
         File::cleanDirectory(storage_path('app/interception'));

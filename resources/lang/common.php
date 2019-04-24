@@ -3006,4 +3006,20 @@ return [
         'ko' => '상세보기',
         'en' => 'View Details',
     ],
+    'dependencies' => [
+        'ko' => '의존성',
+        'en' => 'Dependencies',
+    ],
+    'renew' => [
+        'ko' => '갱신',
+        'en' => 'Renew',
+    ],
+    'pluginUnableToDependenciesRenew' => [
+        'ko' => ':name 플러그인은 의존성 갱신을 할 수 없습니다.',
+        'en' => 'The :name plugin unable to update dependencies.',
+    ],
+    'startingOperation' => [
+        'ko' => '작업이 시작되었습니다.',
+        'en' => 'Starting operation.',
+    ],
 ];

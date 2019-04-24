@@ -50,6 +50,10 @@
         {
             "type": "composer",
             "url": "https://store.xehub.io"
+        },
+        {
+            "type": "path",
+            "url": "./privates/*"
         }
     ],
     "autoload": {

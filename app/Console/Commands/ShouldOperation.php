@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 
@@ -79,6 +80,71 @@ abstract class ShouldOperation extends Command
         }
 
         return parent::run($input, $output);
+    }
+
+    /**
+     * Execute composer update.
+     *
+     * @param array $packages specific package name. no need version
+     * @return int
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    protected function composerUpdate(array $packages)
+    {
+        if ($this->isLocked()) {
+            throw new \Exception('The command is locked. Make sure that another process is running.');
+        }
+
+        $this->lock();
+
+        try {
+            if (0 !== $this->clearCache(true)) {
+                throw new \Exception('cache clear fail.. check your system.');
+            }
+
+            $this->prepareComposer();
+
+            $inputs = [
+                'command' => 'update',
+                "--with-dependencies" => true,
+                //"--quiet" => true,
+                '--working-dir' => base_path(),
+                /*'--verbose' => '3',*/
+                'packages' => $packages
+            ];
+
+            $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
+
+            return $result;
+        } catch (\Exception $e) {
+            $this->setFailed($e->getCode());
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->setFailed($e->getCode());
+            throw new FatalThrowableError($e);
+        } finally {
+            $this->unlock();
+        }
+    }
+
+    /**
+     * Run composer dump command.
+     *
+     * @param string $path working directory
+     * @return int
+     * @throws \Exception
+     */
+    protected function composerDump($path)
+    {
+        $inputs = [
+            'command' => 'dump-autoload',
+            '--working-dir' => $path,
+        ];
+
+        $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
+
+        return $result;
     }
 
     /**

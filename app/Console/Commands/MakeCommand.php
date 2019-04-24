@@ -14,8 +14,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 
 /**
  * Abstract Class MakeCommand
@@ -27,10 +27,8 @@ use Illuminate\Filesystem\Filesystem;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-abstract class MakeCommand extends Command
+abstract class MakeCommand extends ShouldOperation
 {
-    use ComposerRunTrait;
-
     /**
      * The filesystem instance.
      *
@@ -41,11 +39,12 @@ abstract class MakeCommand extends Command
     /**
      * Create a new component creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files instance
+     * @param Filesystem         $files  Filesystem instance
+     * @param ComposerFileWriter $writer ComposerFileWriter instance
      */
-    public function __construct(Filesystem $files)
+    public function __construct(Filesystem $files, ComposerFileWriter $writer)
     {
-        parent::__construct();
+        parent::__construct($writer);
 
         $this->files = $files;
     }
@@ -101,11 +100,6 @@ abstract class MakeCommand extends Command
      */
     protected function runComposerDump($path)
     {
-        $inputs = [
-            'command' => 'dump-autoload',
-            '--working-dir' => $path,
-        ];
-
-        return $this->runComposer($inputs, false);
+        return $this->composerDump($path);
     }
 }

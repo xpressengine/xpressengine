@@ -588,7 +588,7 @@ class PluginController extends Controller
      * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function makePlugin(Request $request)
+    public function makePlugin(Request $request, ComposerFileWriter $writer)
     {
         $this->validate($request, [
             'name' => 'required|alpha_dash',
@@ -607,9 +607,50 @@ class PluginController extends Controller
             $parameters['--title'] = $title;
         }
 
-        Artisan::call('make:plugin', $parameters);
+        $logFile = $this->prepareOperation($writer);
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
+        app()->terminating(function () use ($parameters, $logFile) {
+            Artisan::call('make:plugin', $parameters, new StreamOutput(fopen(storage_path($logFile), 'a')));
+        });
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
+    }
+
+    /**
+     * Renew the plugin
+     *
+     * @param PluginHandler      $handler  plugin handler instance
+     * @param ComposerFileWriter $writer   composer writer instance
+     * @param string             $pluginId plugin name
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function renewPlugin(PluginHandler $handler, ComposerFileWriter $writer, $pluginId)
+    {
+        if (!$plugin = $handler->getPlugin($pluginId)) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::pluginNotFound', ['plugin' => $pluginId])
+            ]);
+        }
+
+        if (!$plugin->isPrivate()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::pluginUnableToDependenciesRenew', ['name' => $pluginId])
+            ]);
+        }
+
+        $logFile = $this->prepareOperation($writer);
+
+        app()->terminating(function () use ($pluginId, $logFile) {
+            Artisan::call(
+                'private:update',
+                ['name' => $pluginId],
+                new StreamOutput(fopen(storage_path($logFile), 'a'))
+            );
+        });
+
+        return back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
     }
 
     /**

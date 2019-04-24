@@ -2,11 +2,8 @@
 namespace DummyNamespace;
 
 use Xpressengine\Skin\GenericSkin;
-use Xpressengine\Plugin\SupportInfoTrait;
 
 class DummyClass extends GenericSkin
 {
-    use SupportInfoTrait;
-
     protected static $path = 'DummyPluginId/DummySkinDirname';
 }

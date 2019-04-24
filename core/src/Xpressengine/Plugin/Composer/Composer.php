@@ -214,7 +214,7 @@ class Composer
      */
     protected static function clearCompiled()
     {
-        $application = new Application(getcwd());
+        $application = defined('__RUN_IN_ARTISAN__') ? Application::getInstance() : new Application(getcwd());
 
         if (file_exists($packagesPath = $application->getCachedPackagesPath())) {
             @unlink($packagesPath);

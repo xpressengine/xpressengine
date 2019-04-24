@@ -14,6 +14,8 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Filesystem\Filesystem;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 
 /**
@@ -48,6 +50,27 @@ class PluginMake extends MakeCommand
     protected $description = 'Create a new plugin of XpressEngine';
 
     /**
+     * PluginHandler instance.
+     *
+     * @var PluginHandler
+     */
+    protected $handler;
+
+    /**
+     * PluginMake constructor.
+     *
+     * @param Filesystem         $files   Filesystem instance
+     * @param ComposerFileWriter $writer  ComposerFileWriter instance
+     * @param PluginHandler      $handler PluginHandler instance
+     */
+    public function __construct(Filesystem $files, ComposerFileWriter $writer, PluginHandler $handler)
+    {
+        parent::__construct($files, $writer);
+
+        $this->handler = $handler;
+    }
+
+    /**
      * Execute the console command.
      *
      * @return void
@@ -60,14 +83,23 @@ class PluginMake extends MakeCommand
 
         $title = $this->getTitleInput($name);
 
-        $this->copyStubDirectory($path = plugins_path($name));
-
         try {
-
+            $this->copyStubDirectory($path = app('path.privates').DIRECTORY_SEPARATOR.$name);
             $this->makeUsable($path, $name, $namespace, $title);
+            $this->info('Generate the plugin');
 
-            // composer update
-            $this->runComposerDump($path);
+            $this->writer->reset()->cleanOperation();
+            $this->writer->install($packageName = 'xpressengine-plugin/'.$name, '*');
+            $this->writer->write();
+
+            $this->info('Run composer update command');
+            $this->line('> composer update');
+
+            $result = $this->composerUpdate([$packageName]);
+
+            if (0 !== $result) {
+                throw new \Exception('Fail to run composer update');
+            }
 
             // plugin activate
             $this->activatePlugin($name);
@@ -77,13 +109,8 @@ class PluginMake extends MakeCommand
             throw $e;
         }
 
-        // print info
-        $url = trim(config('app.url'), '/').'/'.config('xe.routing.fixedPrefix').'/'.$name;
-
         $this->info("Plugin is created and activated successfully.");
-
-        $this->info("See ./plugins/$name directory. And open $url in your browser.");
-
+        $this->info("See ./plugins/$name directory.");
         $this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
     }
 
@@ -217,12 +244,10 @@ class PluginMake extends MakeCommand
      */
     protected function activatePlugin($name)
     {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
+        $this->handler->getAllPlugins(true);
 
-        if ($handler->isActivated($name) === false) {
-            $handler->activatePlugin($name);
+        if (!$this->handler->isActivated($name)) {
+            $this->handler->activatePlugin($name);
         }
     }
 

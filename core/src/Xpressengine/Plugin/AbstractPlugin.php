@@ -173,8 +173,7 @@ abstract class AbstractPlugin
      */
     public static function path($path = '')
     {
-        $reflector = new ReflectionClass(static::class);
-        return dirname($reflector->getFileName()).($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return plugins_path(static::getId().($path ? DIRECTORY_SEPARATOR.$path : $path));
     }
 
     /**
@@ -187,7 +186,8 @@ abstract class AbstractPlugin
      */
     public static function asset($path, $secure = null)
     {
-        $path = 'plugins/'.static::getId().'/'.trim($path, '/');
+        $path = str_replace(base_path().DIRECTORY_SEPARATOR, '', static::path(trim($path, '/')));
+
         return asset($path, $secure);
     }
 

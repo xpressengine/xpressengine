@@ -71,6 +71,16 @@ class Application extends BaseApplication
     }
 
     /**
+     * Get the path to the private plugins directory.
+     *
+     * @return string
+     */
+    public function privatesPath()
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'privates';
+    }
+
+    /**
      * Get the path to the proxies directory.
      *
      * @return string
@@ -90,6 +100,7 @@ class Application extends BaseApplication
         parent::bindPathsInContainer();
 
         $this->instance('path.plugins', $this->pluginsPath());
+        $this->instance('path.privates', $this->privatesPath());
         $this->instance('path.proxies', $this->proxiesPath());
     }
 

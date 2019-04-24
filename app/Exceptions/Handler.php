@@ -84,13 +84,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof PluginFileNotFoundException) {
-            $cache = app('cache');
-            Event::fire('cache:clearing', ['plugins']);
-            $cache->store('plugins')->flush();
-            Event::fire('cache:cleared', ['plugins']);
-        }
-
         if (method_exists($e, 'render') && $response = $e->render($request)) {
             return Router::toResponse($request, $response);
         } elseif ($e instanceof Responsable) {

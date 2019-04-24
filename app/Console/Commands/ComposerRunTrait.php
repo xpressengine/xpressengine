@@ -127,6 +127,8 @@ trait ComposerRunTrait
      */
     protected function runComposer($inputs, $skipPlugin = false, $output = null)
     {
+        define('__RUN_IN_ARTISAN__', true);
+
         ini_set('memory_limit', '-1');
 
         if ($skipPlugin) {

@@ -800,6 +800,13 @@ Route::settings(
                                 'uses' => 'PluginController@putUpdatePlugin'
                             ]
                         );
+                        Route::put(
+                            'renew',
+                            [
+                                'as' => 'settings.plugins.renew',
+                                'uses' => 'PluginController@renewPlugin'
+                            ]
+                        );
                         //Route::put(
                         //    'download',
                         //    [

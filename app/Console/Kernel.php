@@ -61,6 +61,7 @@ class Kernel extends ConsoleKernel
         Commands\PluginUpdate::class,
         Commands\PluginUninstall::class,
         Commands\PluginComposerSync::class,
+        Commands\PrivateUpdateCommand::class,
         Commands\ThemeMake::class,
         Commands\SkinMake::class,
         Commands\DynamicFieldMake::class,

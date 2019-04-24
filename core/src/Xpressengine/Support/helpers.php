@@ -692,7 +692,7 @@ if (function_exists('df_edit') === false) {
 
 if (function_exists('plugins_path') === false) {
     /**
-     * @package Xpressengine\Interception
+     * @package Xpressengine\Plugin
      *
      * @param string $path path
      *

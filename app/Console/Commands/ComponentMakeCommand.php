@@ -17,7 +17,9 @@ namespace App\Console\Commands;
 use Illuminate\Filesystem\Filesystem;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputOption;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginEntity;
+use Xpressengine\Plugin\PluginHandler;
 
 /**
  * Abstract Class ComponentMakeCommand
@@ -42,13 +44,21 @@ abstract class ComponentMakeCommand extends MakeCommand
     protected $componentType;
 
     /**
+     * @var PluginHandler instance
+     */
+    protected $handler;
+
+    /**
      * Create a new component creator command instance.
      *
-     * @param \Illuminate\Filesystem\Filesystem $files Filesystem instance
+     * @param \Illuminate\Filesystem\Filesystem $files   Filesystem instance
+     * @param PluginHandler                     $handler PluginHandler instance
      */
-    public function __construct(Filesystem $files)
+    public function __construct(Filesystem $files, ComposerFileWriter $writer, PluginHandler $handler)
     {
-        parent::__construct($files);
+        parent::__construct($files, $writer);
+
+        $this->handler = $handler;
 
         $this->addOption('--title', '', InputOption::VALUE_OPTIONAL, 'The title of component');
         $this->addOption('--description', '', InputOption::VALUE_OPTIONAL, 'The description of component');
@@ -62,7 +72,7 @@ abstract class ComponentMakeCommand extends MakeCommand
      */
     protected function getPlugin()
     {
-        if(!$plugin = app('xe.plugin')->getPlugin($name = $this->getPluginName())) {
+        if(!$plugin = $this->handler->getPlugin($name = $this->getPluginName())) {
             throw new \Exception("Unable to find a plugin to locate the skin file. plugin[$name] is not found.");
         }
 
@@ -263,6 +273,27 @@ abstract class ComponentMakeCommand extends MakeCommand
         }
 
         return in_array($file, (array)($autoload->classmap ?? []));
+    }
+
+    /**
+     * Refresh the given plugin
+     *
+     * @param PluginEntity $plugin plugin entity
+     * @return int
+     * @throws \Exception
+     */
+    protected function refresh(PluginEntity $plugin)
+    {
+        $this->writer->reset()->cleanOperation();
+        $this->writer->write();
+
+        $result = $this->composerDump($plugin->hasVendor() ? $plugin->getPath() : base_path());
+
+        if (0 !== $result) {
+            throw new \Exception('Fail to run composer dump');
+        }
+
+        return $result;
     }
 
     /**

@@ -96,6 +96,7 @@ class DynamicFieldMake extends ComponentMakeCommand
 
         try {
             $this->makeUsable($attr);
+            $this->info('Generate the dynamic field');
 
             $class = $namespace.'\\'.$className;
 
@@ -106,7 +107,7 @@ class DynamicFieldMake extends ComponentMakeCommand
                 throw new \Exception('Writing to composer.json file was failed.');
             }
 
-            $this->runComposerDump($plugin->getPath());
+            $this->refresh($plugin);
         } catch (\Exception $e) {
             $this->clean($path);
             throw $e;

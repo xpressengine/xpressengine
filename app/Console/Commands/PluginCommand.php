@@ -102,52 +102,6 @@ class PluginCommand extends ShouldOperation
     }
 
     /**
-     * Execute composer update.
-     *
-     * @param array $packages specific package name. no need version
-     * @return int
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    protected function composerUpdate(array $packages)
-    {
-        if ($this->isLocked()) {
-            throw new \Exception('The command is locked. Make sure that another process is running.');
-        }
-
-        $this->lock();
-
-        try {
-            if (0 !== $this->clearCache(true)) {
-                throw new \Exception('cache clear fail.. check your system.');
-            }
-
-            $this->prepareComposer();
-
-            $inputs = [
-                'command' => 'update',
-                "--with-dependencies" => true,
-                //"--quiet" => true,
-                '--working-dir' => base_path(),
-                /*'--verbose' => '3',*/
-                'packages' => $packages
-            ];
-
-            $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
-
-            return $result;
-        } catch (\Exception $e) {
-            $this->setFailed($e->getCode());
-            throw $e;
-        } catch (\Throwable $e) {
-            $this->setFailed($e->getCode());
-            throw $e;
-        } finally {
-            $this->unlock();
-        }
-    }
-
-    /**
      * Run cache clear.
      *
      * @return int

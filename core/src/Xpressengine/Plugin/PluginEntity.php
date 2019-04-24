@@ -736,6 +736,18 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * vendor 디렉토리를 가지고 있는지 판단한다.
+     *
+     * @return bool
+     */
+    public function hasVendor()
+    {
+        $vendorDir = dirname($this->pluginFile).'/vendor';
+
+        return file_exists($vendorDir) && is_dir($vendorDir);
+    }
+
+    /**
      * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
      * autoload 파일을 각 플러그인 디렉토리 내에 vendor/autoload.php 파일이다.
      *
@@ -774,17 +786,23 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
-     * 직접 설치한 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
+     * private 으로 설치되었는지 확인.
+     *
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return is_link(dirname($this->pluginFile));
+    }
+
+    /**
+     * 직접 설치한 플러그인인지 검사한다.
      *
      * @return bool
      */
     public function isSelfInstalled()
     {
-        $vendorDir = dirname($this->pluginFile).'/vendor';
-        if (file_exists($vendorDir)) {
-            return true;
-        }
-        return false;
+        return $this->hasVendor() || $this->isPrivate();
     }
 
     /**

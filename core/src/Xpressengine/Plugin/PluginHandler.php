@@ -758,33 +758,8 @@ class PluginHandler
             }
         }
 
-        $ids = array_pluck($targets, 'id');
-
         $changed = $writer->get('xpressengine-plugin.operation.changed', []);
-        foreach ($changed as $type) {
-            foreach ($type as $package => $version) {
-                list(, $id) = explode('/', $package);
-                if (!in_array($id, $ids)) {
-                    $ids[] = $id;
-                }
-            }
-        }
-
         $failed = $writer->get('xpressengine-plugin.operation.failed', []);
-        foreach ($failed as $type) {
-            foreach ($type as $package => $version) {
-                list(, $id) = explode('/', $package);
-                if (!in_array($id, $ids)) {
-                    $ids[] = $id;
-                }
-            }
-        }
-
-        $found = $this->provider->findAll($ids);
-        $infos = [];
-        foreach ($found as $info) {
-            $infos[$info->name] = $info;
-        }
 
         if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_EXPIRED);
@@ -803,7 +778,7 @@ class PluginHandler
 
         $locked = $writer->get('xpressengine-plugin.lock', false);
 
-        return compact('targets', 'status', 'expired', 'changed', 'failed', 'infos', 'log', 'locked');
+        return compact('targets', 'status', 'expired', 'changed', 'failed', 'log', 'locked');
     }
 
     /**

@@ -31,11 +31,6 @@ use Xpressengine\Plugin\SupportInfoTrait;
  */
 abstract class GenericSkin extends AbstractSkin
 {
-    /**
-     * @deprecated not here, use it in the component in the plugin.
-     * @todo trait 은 plugin 들을 위한 요소 이나 core에서도 사용되었음.
-     * 클래스간 역할의 정의, 분리가 적절하게 처리되지 못해 개선이 필요.
-     */
     use SupportInfoTrait;
 
     /**

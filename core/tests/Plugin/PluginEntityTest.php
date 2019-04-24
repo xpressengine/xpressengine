@@ -139,7 +139,6 @@ class PluginEntityTest extends \PHPUnit\Framework\TestCase
     public function testGetters($entity)
     {
         $this->assertEquals('title',$entity->getTitle());
-        $this->assertEquals(__DIR__.'/plugins/plugin_sample',$entity->getPath());
         $this->assertEquals('sample plugin.', $entity->getDescription());
         $this->assertCount(6, $entity->getSupport());
         $this->assertEquals('xe/plugin_sample', $entity->getName());

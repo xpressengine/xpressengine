@@ -50,13 +50,6 @@ class XeUpdate extends ShouldOperation
      */
     protected $description = 'Update the XpressEngine';
 
-//    /**
-//     * ComposerFileWriter instance
-//     *
-//     * @var ComposerFileWriter
-//     */
-//    protected $writer;
-
     /**
      * Filesystem instance
      *
@@ -82,7 +75,6 @@ class XeUpdate extends ShouldOperation
     {
         parent::__construct($writer);
 
-//        $this->writer = $writer;
         $this->filesystem = $filesystem;
         $this->releaseProvider = $releaseProvider;
     }
