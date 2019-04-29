@@ -66,7 +66,7 @@ trait ComposerRunTrait
             if (!is_writable($file)) {
                 // [$file] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
                 throw new \Exception(
-                    "You have been denied permission to acccess [$file] $type. To install the plugin, you must have write permission to access this this $type."
+                    "You have been denied permission to access [$file] $type. To install the plugin, you must have write permission to access this this $type."
                 );
             } else {
                 $this->info("passed");
