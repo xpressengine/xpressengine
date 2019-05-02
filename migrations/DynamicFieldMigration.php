@@ -15,9 +15,6 @@
 namespace Xpressengine\Migrations;
 
 use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Config\ConfigManager;
-use Xpressengine\DynamicField\ConfigHandler;
-use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\Support\Migration;
 
 /**
@@ -32,25 +29,6 @@ use Xpressengine\Support\Migration;
  */
 class DynamicFieldMigration extends Migration
 {
-    /** @var DynamicFieldHandler $dynamicFieldHandler */
-    protected $dynamicFieldHandler;
-
-    /** @var ConfigHandler $configHandler */
-    protected $configHandler;
-
-    /** @var ConfigManager $configManager */
-    protected $configManager;
-
-    /**
-     * DynamicFieldMigration constructor.
-     */
-    public function __construct()
-    {
-        $this->dynamicFieldHandler = app('xe.dynamicField');
-        $this->configHandler = $this->dynamicFieldHandler->getConfigHandler();
-        $this->configManager = app('xe.config');
-    }
-
     /**
      * Run after installation.
      *
@@ -105,11 +83,15 @@ class DynamicFieldMigration extends Migration
      */
     private function checkNeedTableMerge()
     {
+        $dynamicFieldHandler = app('xe.dynamicField');
+        $configHandler = $dynamicFieldHandler->getConfigHandler();
+        $configManager = app('xe.config');
+
         //Dynamic Field를 가질 수 있는 config 목록
-        $dynamicFieldConfigs = $this->configManager->children($this->configHandler->getDefault());
+        $dynamicFieldConfigs = $configManager->children($configHandler->getDefault());
         foreach ($dynamicFieldConfigs as $config) {
             //실제 Dynamic Field를 가지고 있는 config를 대상으로 확인
-            foreach ($this->configManager->children($config) as $fieldConfig) {
+            foreach ($configManager->children($config) as $fieldConfig) {
                 if ($fieldConfig->get('migration', false) == false) {
                     return true;
                 }
@@ -126,12 +108,16 @@ class DynamicFieldMigration extends Migration
      */
     private function tableMerge()
     {
+        $dynamicFieldHandler = app('xe.dynamicField');
+        $configHandler = $dynamicFieldHandler->getConfigHandler();
+        $configManager = app('xe.config');
+
         //Dynamic Field를 가질 수 있는 config 목록
-        $dynamicFieldConfigs = $this->configManager->children($this->configHandler->getDefault());
+        $dynamicFieldConfigs = $configManager->children($configHandler->getDefault());
         foreach ($dynamicFieldConfigs as $config) {
             //실제 Dynamic Field를 가지고 있는 config를 대상으로 확인
-            foreach ($this->configManager->children($config) as $fieldConfig) {
-                $type = $this->dynamicFieldHandler->getType($fieldConfig->get('group'), $fieldConfig->get('id'));
+            foreach ($configManager->children($config) as $fieldConfig) {
+                $type = $dynamicFieldHandler->getType($fieldConfig->get('group'), $fieldConfig->get('id'));
 
                 //해당 Type의 Table이 있는지 확인해서 생성
                 if ($type->checkExistTypeTables() == false) {
@@ -143,10 +129,10 @@ class DynamicFieldMigration extends Migration
                 }
 
                 //일반 데이터 추가
-                $originalTable = $this->dynamicFieldHandler->connection()->table(
+                $originalTable = $dynamicFieldHandler->connection()->table(
                     $this->getOriginalTableName($fieldConfig)
                 );
-                $newTable = $this->dynamicFieldHandler->connection()->table($type->getTableName());
+                $newTable = $dynamicFieldHandler->connection()->table($type->getTableName());
 
                 $fieldId = $fieldConfig->get('id');
                 $group = $fieldConfig->get('group');
@@ -172,10 +158,10 @@ class DynamicFieldMigration extends Migration
 
                 //revision 데이터 추가
                 if ($fieldConfig->get('revision', false) == true) {
-                    $originalRevisionTable = $this->dynamicFieldHandler->connection()->table(
+                    $originalRevisionTable = $dynamicFieldHandler->connection()->table(
                         $this->getOriginalRevisionTableName($fieldConfig)
                     );
-                    $newRevisionTable = $this->dynamicFieldHandler->connection()->table($type->getRevisionTableName());
+                    $newRevisionTable = $dynamicFieldHandler->connection()->table($type->getRevisionTableName());
 
                     $fieldId = $fieldConfig->get('id');
                     $group = $fieldConfig->get('group');
@@ -203,7 +189,7 @@ class DynamicFieldMigration extends Migration
                 }
 
                 $fieldConfig->set('migration', true);
-                $this->configHandler->put($fieldConfig);
+                $configHandler->put($fieldConfig);
             }
         }
     }
