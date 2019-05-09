@@ -254,7 +254,12 @@ class SkinHandler
 
         $skinId = $this->store->getSelectedSkin($storeKey, $mode);
 
-        // 지정된 스킨이 없을 경우, 해당 타겟에 지정된 기본 스킨을 선택한다.
+        // 지정된 스킨이 없을 경우, 해당 인스턴스를 제외하고 타겟에만 지정된 스킨을 선택한다.
+        if ($skinId === null) {
+            $skinId = $this->store->getSelectedSkin($target, $mode);
+        }
+
+        // 타켓에 지정된 스킨이 없을 경우, 해당 타겟에 지정된 기본 스킨을 선택한다.
         if ($skinId === null || !$this->has($skinId)) {
             $skinId = $target ? array_get($this->defaultSkins, $target) : null;
         }
