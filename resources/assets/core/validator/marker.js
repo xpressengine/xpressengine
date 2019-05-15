@@ -32,7 +32,7 @@ export default class RequiredMarker extends Plugin {
               } else {
                 field = $(`[name=${k}]`, container)
                 label = field.siblings('label')
-                if (!label.langth) {
+                if (!label.length) {
                   label = field.closest('.__xe-input-group, .form-group').find('label').eq(0)
                 }
               }
