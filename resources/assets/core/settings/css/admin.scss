@@ -416,6 +416,15 @@ aside {
   }
 }
 
+.panel-body {
+  label {
+    + small {
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
 .title-area {
   position: relative;
   margin-bottom: 22px;
@@ -1399,6 +1408,167 @@ aside {
   display: none;
 }
 
+// === 기본설정 미리보기 기능 스타일 ===
+.basic-setting-preview {
+  height: 100%;
+
+  /* google  */
+  .basic-setting-preview-google {
+    display: table-cell;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    vertical-align: middle;
+  }
+
+  .basic-setting-preview-google__title {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.33;
+    color: #1a0dab;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .basic-setting-preview-google__url {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.43;
+    color: #006621;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .basic-setting-preview-google__description {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // === //google ===
+
+  // === facebook ===
+  .basic-setting-preview-facebook {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .basic-setting-preview-facebook__image {
+    border: 1px solid #d1d1d1;
+    border-bottom: 0 none;
+    padding-top: 52.5%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-color: #eee;
+  }
+
+  .basic-setting-preview-facebook__alert-text {
+    // margin: -90px 0 0 0;
+    text-align: center;
+  }
+  
+  .basic-setting-preview-facebook__content {
+    padding: 10px 12px;
+    border: 1px solid #d1d1d1;
+    background-color: #e9ebee;
+  }
+  
+  .basic-setting-preview-facebook__title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    margin: 3px 0 0;
+    padding-top: 2px;
+    color: #1d2129;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .basic-setting-preview-facebook__url {
+    margin: 0;
+    padding: 0;
+    font-size: 12;
+    line-height: 16px;
+    color: #606770;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .basic-setting-preview-facebook__description {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #606770;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // === //facebook ===
+}
+
+.basic-setting-preview-inner {
+  padding: 20px 0 30px;
+}
+
+.basic-setting-preview-google-inner {
+    display: table;
+    margin: 0 auto;
+    height: 300px;
+    vertical-align: middle;
+}
+
+.basic-setting-preview__title {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+// === //기본설정 미리보기 기능 스타일 ===
+
+// === 기본설정 파비콘 미리보기 기능 스타일 ===
+.basic-setting-preview-favicon {
+  position: relative;
+  width: 300px;
+  height: 128px;
+  margin: 20px auto;
+
+  // 파비콘 이미지 배경 이미지 영역
+  &__background-image {
+    width: 100%;
+    height: 100%;
+    background: url(../img/bg-favicon.jpg) 50% 50% no-repeat;
+    background-size: cover;
+  }
+
+  // 파비콘 이미지
+  &__image {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+
+    &--thumbnail {
+      top: 29px;
+      left: 31px;
+    }
+  }
+}
+// === //기본설정 파비콘 미리보기 기능 스타일 ===
 
 @media (max-width: 767px) {
   .panel-group {

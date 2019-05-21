@@ -28,14 +28,6 @@
                             </div>
                         @endif
                     </div>
-                    <div class="form-group">
-                        <label for="webmasterName">{{xe_trans('xe::webmasterName')}}</label>
-                        <input id="webmasterName" type="text" name="webmasterName" class="form-control" placeholder="Webmaster name" value="{{ $config->get('webmasterName') }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="webmasterEmail">{{xe_trans('xe::webmasterEmail')}}</label>
-                        <input id="webmasterEmail" type="email" name="webmasterEmail" class="form-control" placeholder="Webmaster email" value="{{ $config->get('webmasterEmail') }}">
-                    </div>
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
