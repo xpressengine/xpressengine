@@ -31,7 +31,7 @@
         </div>
         <div class="panel-footer" style="padding:15px;font: -apple-system-body;">
             ⬇️️ {{$plugin->downloadeds}}
-            <span class="text-muted" style="margin-left:20px; color: ">{{implode(', ', $plugin->category_titles)}}</span>
+            <span class="text-muted" style="margin-left:20px;">{{implode(', ', $plugin->category_titles)}}</span>
         </div>
     </div>
 </div>
