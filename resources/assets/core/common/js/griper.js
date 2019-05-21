@@ -278,17 +278,21 @@ import $ from 'jquery'
             .addClass(this.options.classes.message.join(' '))
             .text(message)
         )
+        $group.addClass('xe-form-group--invalid')
       } else if ($group.length == 0) {
         $element.after(
           $('<' + this.options.tags.message + '>')
             .addClass(this.options.classes.message.join(' '))
             .text(message)
         )
+        $element.addClass('xe-form-control--invalid')
       }
     },
 
     clear: function ($form) {
       $form.find(this.options.tags.message + this.options.selectors.errorText).remove()
+      $form.find('.xe-form-group--invalid').removeClass('xe-form-group--invalid')
+      $form.find('.xe-form-control--invalid').removeClass('xe-form-control--invalid')
     }
   }
 
@@ -296,7 +300,7 @@ import $ from 'jquery'
     if ($element instanceof $) {
       $('body').animate({
         scrollTop: $element.offset().top - (window.innerHeight / 3)
-      }, 1000)
+      }, 800)
     }
   }
 }))

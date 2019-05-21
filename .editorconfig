@@ -11,7 +11,7 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 
-[*.{css,scss,sass,less,js,jsx,json,yml}]
+[*.{css,scss,sass,less,js,jsx,vue,json,yml}]
 indent_size = 2
 
 [.{babelrc}]
