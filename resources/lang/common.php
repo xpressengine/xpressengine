@@ -41,6 +41,10 @@ return [
         'ko' => '추가 설정',
         'en' => 'Additional Setup',
     ],
+    'detail' => [
+        'ko' => '상세',
+        'en' => 'Detail'
+    ],
     'option' => [
         'ko' => '옵션',
         'en' => 'Option',
@@ -612,6 +616,10 @@ return [
     'title' => [
         'ko' => '제목',
         'en' => 'Title',
+    ],
+    'subTitle' => [
+        'ko' => '부제목',
+        'en' => 'Sub title'
     ],
     'newTitle' => [
         'ko' => '새 제목',
@@ -1828,6 +1836,10 @@ return [
         'ko' => '회원 가입 시 CAPTCHA 사용',
         'en' => 'Sign up CAPTCHA activate',
     ],
+    'webmaster' => [
+        'ko' => '웹마스터',
+        'en' => 'Webmaster'
+    ],
     'webmasterName' => [
         'ko' => '웹마스터 이름',
         'en' => 'Webmaster name',
@@ -2976,12 +2988,10 @@ return [
         'ko' => '특수문자',
         'en' => 'special characters',
     ],
-
     'lenMin' => [
         'ko' => '최소 :len자',
         'en' => 'least :len characters',
     ],
-
     'passwordMustBe' => [
         'ko' => '비밀번호는 [:requires]를 포함해야 합니다.',
         'en' => 'The Password must be contain [:requires]',
@@ -3026,4 +3036,80 @@ return [
         'ko' => '작업이 시작되었습니다.',
         'en' => 'Starting operation.',
     ],
+    'siteDefaultSettingsDescription' => [
+        'ko' => 'XE3의 기본적인 SEO설정과 웹마스터 설정을 할 수 있습니다. <br/> XE Store에서 할당받은 Token과 Composer 홈 디렉토리를 입력해, 플러그인을 쉽게 설치할 수 있게 도와줍니다.',
+        'en' => 'You can do basic SEO settings and webmaster setup of XE3. <br/> Enter the Token and Composer home directories assigned by the XE Store to help you install plug-ins easily.'
+    ],
+    'siteSettingDefaultSettingDescription' => [
+        'ko' => '사이트의 이름, 주소, 파비콘과 같은 기본적인 설정을 할 수 있습니다.',
+        'en' => 'You can make basic settings like site name, address, and favicon.'
+    ],
+    'siteSettingDetailSettingDescription' => [
+        'ko' => '기본 설정 외의 검색 관련 SEO 설정을 할 수 있으며, 미리보기를 통해 결과를 예측할 수 있습니다. <br/>입력하지 않은 공간은 빈 공간으로 노출될 수 있습니다.',
+        'en' => 'You can set search-related SEO settings other than the default settings, and you can preview the results by previewing them. <br/>Unused spaces can be exposed as empty spaces.'
+    ],
+    'inputSiteNameDescription' => [
+        'ko' => '사이트의 이름을 입력해주세요, 메일 폼 등에서 사이트의 이름으로 출력됩니다.',
+        'en' => 'Please enter the name of the site, the name of the site in the mail form will be output.'
+    ],
+    'siteAddressDescription' => [
+        'ko' => 'http:// 또는 https:// 를 제외한 사이트 주소(도메인)을 입력해주세요.',
+        'en' => 'Please enter the site address (domain) excluding http:// or https://.'
+    ],
+    'siteSettingFaviconDescription' => [
+        'ko' => '16*16 또는 32*32 와 같은 정사각형의 .ico 파일을 업로드해주세요. (png/jpg 지원)',
+        'en' => 'Please upload a square .ico file such as 16 * 16 or 32 * 32. (png / jpg support)'
+    ],
+    'siteSettingBrowserTitleDescription' => [
+        'ko' => '메타 태그의 title 항목에 입력될 브라우저 제목을 입력해주세요. (제목 - 부제목) 형태로 나타납니다.',
+        'en' => 'Please enter the title of the browser to be entered in the title field of the meta tag. (Title - subtitle).'
+    ],
+    'siteSettingBrowserSubTitleDescription' => [
+        'ko' => '메타 태그의 title 항목에 입력될 브라우저 부제목을 입력해주세요. (제목 - 부제목) 형태로 나타납니다.',
+        'en' => 'Please enter the browser subtitle to be entered in the title of the meta tag. (Title - subtitle).'
+    ],
+    'siteSettingSiteDescription' => [
+        'ko' => '메타 태그의 Description 항목에 입력될 사이트 설명을 입력해주세요.',
+        'en' => 'Please enter a description of the site to be entered in the Description field of the meta tag.'
+    ],
+    'siteSettingImageDescription' => [
+        'ko' => 'SNS 또는 외부 페이지에 링크시 보여질 대표 이미지를 업로드해주세요. (1200*630, 600*315, 200*200)',
+        'en' => 'Please upload a representative image to be displayed when linking to SNS or an external page. (1200 * 630, 600 * 315, 200 * 200)'
+    ],
+    'siteSettingWebmasterNameDescription' => [
+        'ko' => '웹사이트에서 발신하는 이메일의 발신자 이름입니다.',
+        'en' => 'The sender\'s name of the email from your website.'
+    ],
+    'siteSettingWebmasterEmailAddressDescription' => [
+        'ko' => '웹사이트에서 발신하는 이메일의 발신 주소입니다.',
+        'en' => 'The From address of emails from websites.'
+    ],
+    'pluginInstallSetting' => [
+        'ko' => '플러그인 설치 설정',
+        'en' => 'Plugin installation settings'
+    ],
+    'siteSettingInputTokenDescription' => [
+        'ko' => 'XE Store에서 발급받은 사이트의 토큰을 입력하세요, 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.',
+        'en' => 'Enter the token of the site you have received from the XE Store, required to install the paid plugin purchased from the archive.'
+    ],
+    'siteSettingSEOPreview' => [
+        'ko' => 'SEO 설정 미리보기 (검색 엔진)',
+        'en' => 'SEO settings preview (Search engine)'
+    ],
+    'siteSettingSNSPreview' => [
+        'ko' => 'SNS 미리보기',
+        'en' => 'SNS preview'
+    ],
+    'siteSettingBrowserNotSupport' => [
+        'ko' => '현재 브라우저는 대표 사진 변경 시 <br>이미지 미리보기를 지원하지 않습니다.',
+        'en' => 'Currently, browsers do not support previewing images when changing a representative picture.'
+    ],
+    'siteSettingSEOInputDescription' => [
+        'ko' => '사이트 설명을 입력해주세요.',
+        'en' => 'Please enter a description of the site.'
+    ],
+    'siteSettingFaviconPreviewDescription' => [
+        'ko' => '등록되어 있는 파비콘을 보여주거나, 새로 등록할 파비콘을 미리 볼 수 있습니다.',
+        'en' => 'You can show the registered favicon or preview the new favicon to register.'
+    ]
 ];

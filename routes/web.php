@@ -711,26 +711,6 @@ Route::settings(
 
             });
 
-            // plugins/setting
-            Route::group(['prefix'=>'setting'], function(){
-                Route::get(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.setting.show',
-                        'uses' => 'PluginSettingsController@show',
-                        'settings_menu' => 'plugin.setting'
-                    ]
-                );
-                Route::put(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.setting.update',
-                        'uses' => 'PluginSettingsController@update'
-                    ]
-                );
-
-            });
-
             // ANY: plugins/operation
             Route::group(['prefix'=>'operation'], function() {
                 Route::get(
@@ -984,27 +964,6 @@ Route::settings(
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
         Route::put('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@putAssign']);
-    }
-);
-
-Route::settings(
-    'seo',
-    function () {
-        Route::get(
-            'setting',
-            [
-                'as' => 'manage.seo.edit',
-                'uses' => 'SeoController@getSetting',
-                'settings_menu' => ['setting.seo'],
-            ]
-        );
-        Route::post(
-            'setting',
-            [
-                'as' => 'manage.seo.update',
-                'uses' => 'SeoController@postSetting'
-            ]
-        );
     }
 );
 
