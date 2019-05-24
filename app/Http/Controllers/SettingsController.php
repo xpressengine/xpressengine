@@ -16,6 +16,7 @@ namespace App\Http\Controllers;
 
 use Artisan;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use XeMedia;
@@ -536,5 +537,43 @@ class SettingsController extends Controller
 
         return redirect()->route('settings.setting.edit')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasRecreateCache')]);
+    }
+
+    /**
+     * Get authenticate view for administrator
+     *
+     * @param Request      $request      request
+     * @param UrlGenerator $urlGenerator UrlGenerator instance
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function getAdminAuth(Request $request, UrlGenerator $urlGenerator)
+    {
+        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
+
+        return \XePresenter::make('settings.admin', compact('redirectUrl'));
+    }
+
+    /**
+     * Attempt authenticate for administrator
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postAdminAuth(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only('password');
+
+        if (app('auth')->attemptAdminAuth($credentials)) {
+            $redirectUrl = $request->get('redirectUrl');
+            return redirect()->intended($redirectUrl);
+        }
+
+        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => xe_trans('xe::msgInvalidPassword')]);
     }
 }

@@ -58,7 +58,6 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-
         if (!$this->auth->check()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
@@ -71,7 +70,11 @@ class Admin
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->route('auth.admin', ['redirectUrl' => $request->fullUrl()]);
+                if ($request->isManageRequest() == true) {
+                    return redirect()->route('settings.auth.admin', ['redirectUrl' => $request->fullUrl()]);
+                } else {
+                    return redirect()->route('auth.admin', ['redirectUrl' => $request->fullUrl()]);
+                }
             }
         }
 
