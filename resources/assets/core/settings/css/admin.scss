@@ -31,6 +31,14 @@
 @import "modal-plugin";
 
 /*reset, helper class*/
+legend {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+}
 
 .logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .tit_bottom ul, .normal-list, .item-container{
   margin: 0;
@@ -1569,6 +1577,42 @@ aside {
   }
 }
 // === //기본설정 파비콘 미리보기 기능 스타일 ===
+
+// === 관리자 인증 스타일 ===
+.section-user-auth {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px 0;
+
+  .section-user-auth__title {
+    margin: 0 0 24px;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: normal;
+  }
+}
+
+.section-user-auth-info {
+  margin-bottom: 16px;
+
+  .section-user-auth-info__info-title {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .section-user-auth-info__info-text {
+    margin: 0 0 24px;
+    color: #696e7a;
+  }
+}
+
+.section-user-auth-group {
+  position: relative;
+  margin-bottom: 8px;
+}
+// === //관리자 인증 스타일 ===
 
 @media (max-width: 767px) {
   .panel-group {

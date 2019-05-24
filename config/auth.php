@@ -122,6 +122,7 @@ return [
     'admin' => [
         'session' => 'auth.admin',
         'expire' => 0,
-        'password' => ''
+        'password' => '',
+        'without_theme' => true
     ]
 ];

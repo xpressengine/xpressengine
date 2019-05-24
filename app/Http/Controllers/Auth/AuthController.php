@@ -217,7 +217,9 @@ class AuthController extends Controller
      */
     public function getAdminAuth(ThemeHandler $themeHandler, UrlGenerator $urlGenerator, Request $request)
     {
-        $themeHandler->selectBlankTheme();
+        if (config('auth.admin.without_theme', true) == true) {
+            $themeHandler->selectBlankTheme();
+        }
 
         $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
 

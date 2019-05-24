@@ -524,6 +524,16 @@ Route::settings('setting', function () {
         'uses' => 'SettingsController@cacheClear',
         'middleware' => 'admin'
     ]);
+
+    Route::get('/admin', [
+        'as' => 'settings.auth.admin',
+        'uses' => 'SettingsController@getAdminAuth',
+    ]);
+
+    Route::post('/admin', [
+        'as' => 'settings.auth.admin',
+        'uses' => 'SettingsController@postAdminAuth'
+    ]);
 });
 
 Route::settings(
