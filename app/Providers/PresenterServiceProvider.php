@@ -15,6 +15,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\Presenter\Html\HtmlPresenter;
 use Xpressengine\Presenter\Json\JsonPresenter;
@@ -212,10 +213,13 @@ class PresenterServiceProvider extends ServiceProvider
     protected function loadIcon(FrontendHandler $frontendHandler)
     {
         $siteConfig = app('xe.site')->getSiteConfig();
-
-        $icon = $siteConfig->get('favicon.path');
-        if ($icon !== null) {
+        $imageId = $siteConfig->get('favicon.id');
+        if ($imageId) {
+            $image = Image::find($imageId);
+            if (!is_null($image)) {
+                $icon = $image->url();
                 $frontendHandler->icon($icon)->load();
+            }
         }
     }
 }
