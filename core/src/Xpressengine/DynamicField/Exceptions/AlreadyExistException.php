@@ -28,4 +28,5 @@ use Xpressengine\DynamicField\DynamicFieldException;
  */
 class AlreadyExistException extends DynamicFieldException
 {
+    protected $message = 'An ID already exists for that type.';
 }

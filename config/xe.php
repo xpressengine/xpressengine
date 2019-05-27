@@ -213,12 +213,6 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
-            'plugin.setting' => [
-                'title' => 'xe::siteToken',
-                'display' => true,
-                'description' => '',
-                'ordering' => 300
-            ],
             'setting' => [
                 'title' => 'xe::settings',
                 'display' => true,
@@ -261,12 +255,6 @@ return [
                 'description' => '',
                 'ordering' => 500
             ],
-            'setting.seo' => [
-                'title' => 'xe::SEOSettings',
-                'display' => true,
-                'description' => 'SEO를 설정합니다',
-                'ordering' => 8000
-            ],
             'lang' => [
                 'title' => 'xe::multiLang',
                 'display' => true,
@@ -280,7 +268,6 @@ return [
                 'ordering' => 100
             ],
         ]
-
     ],
     'uid' => [
         'version' => 4,

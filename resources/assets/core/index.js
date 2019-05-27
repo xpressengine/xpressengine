@@ -164,6 +164,8 @@ class XE {
     })
 
     $(() => {
+      const isChrome = window.navigator.userAgent.indexOf('Chrome/') > -1
+
       $('form').each((idx, form) => {
         /* eslint no-new:off */
         this.Form.get(form)
@@ -176,10 +178,10 @@ class XE {
       $('body').on('click', 'a[target]', (e) => {
         const $this = $(e.target)
         const href = String($this.attr('href')).trim()
-        const target = String($this.attr('target'))
+        const target = String($this.attr('target')).trim()
 
         if (!href) return
-        if (target === '_top' || target === '_self' || target === '_parent') return
+        if (!target || target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
         if (this.isSameHost(href)) return
         if ($this.closest('.xe-content-editable').length) return
@@ -192,8 +194,13 @@ class XE {
           $this.attr('rel', 'noopener')
         }
 
-        blankshield.open(href)
+        // https://github.com/xpressengine/xpressengine/issues/980
+        if (isChrome) {
+          return
+        }
+
         e.preventDefault()
+        blankshield.open(href)
       })
     })
 

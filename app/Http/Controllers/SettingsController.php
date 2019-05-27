@@ -16,8 +16,13 @@ namespace App\Http\Controllers;
 
 use Artisan;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use XeMedia;
+use XeSEO;
+use XeStorage;
+use XeSite;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
@@ -49,20 +54,69 @@ class SettingsController extends Controller
     public function editSetting()
     {
         $config = app('xe.site')->getSiteConfig();
+        $seoSetting = XeSEO::getSetting();
+        $userConfig = app('xe.config')->get('user.common');
+        $pluginConfig = app('xe.config')->get('plugin');
+        $currentSite = \XeSite::getCurrentSite();
 
-        return \XePresenter::make('settings.setting', compact('config'));
+        expose_trans('xe::browserTitle');
+        expose_trans('xe::browserSubTitle');
+        expose_trans('xe::siteSettingSEOInputDescription');
+
+        $langs['mainTitle'] = xe_trans($seoSetting->get('mainTitle', ''));
+        $langs['subTitle'] = xe_trans($seoSetting->get('subTitle', ''));
+        $langs['description'] = xe_trans($seoSetting->get('description', ''));
+
+        return \XePresenter::make('settings.setting', compact(
+            'config',
+            'seoSetting',
+            'userConfig',
+            'pluginConfig',
+            'currentSite',
+            'langs'
+        ));
     }
 
     /**
      * Update setting.
      *
-     * @param SiteHandler $siteHandler SiteHandler instance
-     * @param Request     $request     request
+     * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateSetting(SiteHandler $siteHandler, Request $request)
+    public function updateSetting(Request $request)
     {
-        $inputs = $request->only(['site_title', 'favicon']);
+        $this->validate($request, $this->getUpdateSettingRules());
+
+        $defaultSettingInputs = $request->only(['site_title', 'favicon']);
+        $this->updateDefaultSetting($defaultSettingInputs);
+
+        $siteInputs = $request->only(['site_address']);
+        $this->updateSite($siteInputs);
+
+        $seoSettingInputs = $request->only(['mainTitle', 'subTitle', 'description', 'siteImage']);
+        $this->updateSEOSetting($seoSettingInputs);
+
+        $webmasterInputs = $request->only(['webmasterName', 'webmasterEmail']);
+        $this->updateWebmasterSetting($webmasterInputs);
+
+        $pluginInstallInputs = $request->only(['site_token', 'composer_home']);
+        $this->updatePluginInstallSetting($pluginInstallInputs);
+
+        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    /**
+     * Default Setting Update
+     *
+     * @param array $inputs default setting inputs
+     *
+     * @return void
+     */
+    protected function updateDefaultSetting($inputs)
+    {
+        /** @var SiteHandler $siteHandler */
+        $siteHandler = app('xe.site');
+
         $oldConfig = $siteHandler->getSiteConfig();
 
         /* resolve site_title */
@@ -77,8 +131,94 @@ class SettingsController extends Controller
         }
 
         $siteHandler->putSiteConfig($oldConfig);
+    }
 
-        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    /**
+     * Site Setting Update
+     *
+     * @param array $inputs site setting input
+     *
+     * @return void
+     */
+    protected function updateSite($inputs)
+    {
+        $site = XeSite::getCurrentSite();
+
+        if (isset($inputs['site_address']) == true) {
+            $site['host'] = $inputs['site_address'];
+            $site->save();
+        }
+
+        XeSite::setCurrentSite($site);
+    }
+
+    /**
+     * SEO Setting Update
+     *
+     * @param array $inputs SEO setting inputs
+     *
+     * @return void
+     */
+    protected function updateSEOSetting($inputs)
+    {
+        $setting = XeSEO::getSetting();
+        $setting->set($inputs);
+
+        if (array_key_exists('siteImage', $inputs) === true &&  $inputs['siteImage'] !== null) {
+            $file = XeStorage::upload($inputs['siteImage'], 'public/seo');
+            $image = XeMedia::make($file);
+            $setting->setSiteImage($image);
+        }
+    }
+
+    /**
+     * Webmaster Setting Update
+     *
+     * @param array $inputs Webmaster setting inputs
+     *
+     * @return void
+     */
+    protected function updateWebmasterSetting($inputs)
+    {
+        app('xe.config')->put('user.common', $inputs);
+    }
+
+    /**
+     * Plugin Install Setting Update
+     *
+     * @param array $inputs plugin install inputs
+     *
+     * @return void
+     */
+    protected function updatePluginInstallSetting($inputs)
+    {
+        foreach ($inputs as $idx => $value) {
+            if ($value == null) {
+                $inputs[$idx] = '';
+            }
+        }
+
+        $config = app('xe.config')->get('plugin');
+
+        $siteToken = $inputs['site_token'];
+        $config->set('site_token', $siteToken);
+
+        if (isset($inputs['composer_home']) == true) {
+            $config->set('composer_home', $inputs['composer_home']);
+        }
+        app('xe.config')->modify($config);
+    }
+
+    /**
+     * Returns validation rules.
+     *
+     * @return array
+     */
+    private function getUpdateSettingRules()
+    {
+        return [
+            'site_address' => 'required',
+        ];
     }
 
     /**
@@ -394,8 +534,46 @@ class SettingsController extends Controller
     public function cacheClear()
     {
         Artisan::call('cache:clear');
-        
+
         return redirect()->route('settings.setting.edit')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasRecreateCache')]);
+    }
+
+    /**
+     * Get authenticate view for administrator
+     *
+     * @param Request      $request      request
+     * @param UrlGenerator $urlGenerator UrlGenerator instance
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function getAdminAuth(Request $request, UrlGenerator $urlGenerator)
+    {
+        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
+
+        return \XePresenter::make('settings.admin', compact('redirectUrl'));
+    }
+
+    /**
+     * Attempt authenticate for administrator
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postAdminAuth(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only('password');
+
+        if (app('auth')->attemptAdminAuth($credentials)) {
+            $redirectUrl = $request->get('redirectUrl');
+            return redirect()->intended($redirectUrl);
+        }
+
+        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => xe_trans('xe::msgInvalidPassword')]);
     }
 }

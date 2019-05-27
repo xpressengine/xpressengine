@@ -71,11 +71,14 @@ class SettingController extends Controller
      */
     public function updateCommon(Request $request, CaptchaManager $captcha)
     {
-        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
+        $inputs = $request->only(['useCaptcha']);
 
         if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
             throw new ConfigurationNotExistsException();
         }
+
+        $oldConfig = app('xe.config')->get('user.common')->getPureAll();
+        $inputs = array_merge($oldConfig, $inputs);
 
         app('xe.config')->put('user.common', $inputs);
 
