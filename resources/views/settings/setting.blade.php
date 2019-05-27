@@ -116,7 +116,7 @@
                                 <div class="basic-setting-preview-inner">
                                     <div class="basic-setting-preview-facebook">
                                         <p class="basic-setting-preview-facebook__alert-text __basic-setting-preview-facebook__alert-text" style="display: none">{{ xe_trans('xe::siteSettingBrowserNotSupport') }}</p>
-                                        <div class="basic-setting-preview-facebook__image __basic-setting-preview-facebook__image" style="background-image: url( {{ $seoSetting->getSiteImage()->url() }} )"></div>
+                                        <div class="basic-setting-preview-facebook__image __basic-setting-preview-facebook__image" @if ($seoSetting->getSiteImage() !== null) style="background-image: url( {{ $seoSetting->getSiteImage()->url() }} )" @endif></div>
                                         <div class="basic-setting-preview-facebook__content">
                                             <p class="basic-setting-preview-facebook__url __basic-setting-preview__url"></p>
                                             <p class="basic-setting-preview-facebook__title"><span class="__basic-setting-preview__title--site-main"></span> - <span class="__basic-setting-preview__title--site-sub"></span></p>
