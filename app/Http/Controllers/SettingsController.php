@@ -63,9 +63,9 @@ class SettingsController extends Controller
         expose_trans('xe::browserSubTitle');
         expose_trans('xe::siteSettingSEOInputDescription');
 
-        $langs['mainTitle'] = xe_trans($seoSetting->get('mainTitle'));
-        $langs['subTitle'] = xe_trans($seoSetting->get('subTitle'));
-        $langs['description'] = xe_trans($seoSetting->get('description'));
+        $langs['mainTitle'] = xe_trans($seoSetting->get('mainTitle', ''));
+        $langs['subTitle'] = xe_trans($seoSetting->get('subTitle', ''));
+        $langs['description'] = xe_trans($seoSetting->get('description', ''));
 
         return \XePresenter::make('settings.setting', compact(
             'config',
