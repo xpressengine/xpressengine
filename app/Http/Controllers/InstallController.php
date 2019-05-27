@@ -95,7 +95,10 @@ class InstallController extends Controller
                 break;
 
             case "gd" :
-                $result = extension_loaded('gd');
+                $result = extension_loaded('gd') &&
+                    function_exists('imagejpeg') &&
+                    function_exists('imagepng') &&
+                    function_exists('imagegif');
                 break;
 
             case "mbstring" :
