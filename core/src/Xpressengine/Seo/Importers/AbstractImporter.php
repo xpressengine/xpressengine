@@ -137,17 +137,18 @@ abstract class AbstractImporter
      *
      * @param string       $key      item key
      * @param string|array $contents meta content
+     * @param int     $sequence sequence number
      * @return void
      */
-    protected function addMeta($key, $contents)
+    protected function addMeta($key, $contents, $sequence = 0)
     {
         $contents = (array) $contents;
 
         foreach ($contents as $content) {
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
             $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
-
-            $this->frontend->meta($this->metaItems[$key])
+            $alias = $sequence ? $this->metaItems[$key] . $sequence : $this->metaItems[$key];
+            $this->frontend->meta($alias)
                 ->property($this->metaItems[$key])
                 ->content($content)
                 ->load();
