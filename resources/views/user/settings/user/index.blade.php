@@ -179,10 +179,18 @@ use Xpressengine\User\Models\User;
         $("#startDatePicker").datepicker({
             dateFormat: "yy-mm-dd",
             maxDate: 0,
+            prevText: '{{xe_trans('xe::prev')}}',
+            nextText: '{{xe_trans('xe::next')}}',
+            monthNames: ['{{xe_trans('xe::january')}}', '{{xe_trans("xe::february")}}', '{{xe_trans('xe::march')}}', '{{xe_trans('xe::april')}}', '{{xe_trans('xe::may')}}', '{{xe_trans('xe::june')}}',
+                '{{xe_trans('xe::july')}}', '{{xe_trans('xe::august')}}', '{{xe_trans('xe::september')}}', '{{xe_trans('xe::october')}}', '{{xe_trans('xe::november')}}', '{{xe_trans('xe::december')}}'],
+            dayNamesMin: ['{{xe_trans('xe::sun')}}', '{{xe_trans('xe::mon')}}', '{{xe_trans('xe::tue')}}', '{{xe_trans('xe::wed')}}', '{{xe_trans('xe::thu')}}', '{{xe_trans('xe::fri')}}', '{{xe_trans('xe::sat')}}'],
         });
 
         $("#endDatePicker").datepicker({
             dateFormat: "yy-mm-dd",
+            monthNames: ['{{xe_trans('xe::january')}}', '{{xe_trans("xe::february")}}', '{{xe_trans('xe::march')}}', '{{xe_trans('xe::april')}}', '{{xe_trans('xe::may')}}', '{{xe_trans('xe::june')}}',
+                '{{xe_trans('xe::july')}}', '{{xe_trans('xe::august')}}', '{{xe_trans('xe::september')}}', '{{xe_trans('xe::october')}}', '{{xe_trans('xe::november')}}', '{{xe_trans('xe::december')}}'],
+            dayNamesMin: ['{{xe_trans('xe::sun')}}', '{{xe_trans('xe::mon')}}', '{{xe_trans('xe::tue')}}', '{{xe_trans('xe::wed')}}', '{{xe_trans('xe::thu')}}', '{{xe_trans('xe::fri')}}', '{{xe_trans('xe::sat')}}'],
         });
 
         $("#startDatePicker").change(function () {
