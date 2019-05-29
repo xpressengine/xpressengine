@@ -43,12 +43,12 @@ import $ from 'jquery'
       expireTimes: {
         'xe-danger': 0,
         'xe-positive': 5,
-        'xe-warning': 10,
+        'xe-warning': 0,
         'xe-success': 2,
         'xe-fail': 5
       },
       status: { 500: 'xe-danger', 401: 'xe-warning' },
-      template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
+      template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i><span class="text" style="display:none;"> 닫기</span></button>' +
       '<span class="message"></span></div>'
     },
     form: {
@@ -101,6 +101,9 @@ import $ from 'jquery'
     },
 
     add: function (type, message, pos) {
+      if (type === 'danger' || type === 'warning') {
+        pos = 'center'
+      }
       exports.toast.fn.create(type, message, pos)
       return this
     },
@@ -108,6 +111,11 @@ import $ from 'jquery'
     create: function (type, message, pos) {
       var expireTime = 0
       var type = this.options.classSet[type] || 'xe-danger'
+
+      if (type === 'danger' || type === 'warning') {
+        pos = 'center'
+        exports.toast.fn.container(pos).addClass('xe-toast-container--center').show()
+      }
 
       if (this.options.expireTimes[type] != 0) {
         expireTime = parseInt(new Date().getTime() / 1000) + this.options.expireTimes[type]
@@ -120,19 +128,28 @@ import $ from 'jquery'
       if (pos && pos.indexOf('top') != -1) {
         exports.toast.fn.container(pos).prepend($alert)
       } else {
-        exports.toast.fn.container(pos).append($alert)
+        exports.toast.fn.container(pos).append($alert).show()
       }
 
-      this.show($alert)
+      if (pos !== 'center') {
+        this.show($alert)
+      } else {
+        $('.xe-toast-container--center').show()
+      }
     },
 
     show: function (alert) {
-      alert.slideDown('slow')
+      alert.slideDown()
     },
 
     destroy: function (alert) {
-      alert.slideUp('slow', function () {
+      alert.slideUp(function () {
         alert.remove()
+        if ($('.xe-toast-container--center').length) {
+          if (!$('.xe-toast-container--center .xe-alert').length) {
+            $('.xe-toast-container--center').hide()
+          }
+        }
       })
     },
 
@@ -214,6 +231,10 @@ import $ from 'jquery'
       $toastBox = $(exports.options.toastContainer.boxTemplate)
 
       var container = $(exports.options.toastContainer.template).append($toastBox).css(cssJSON)
+
+      if (pos === 'center') {
+        container.addClass('xe-toast-container--center').show()
+      }
 
       toastBoxMap[pos] = $toastBox
 
