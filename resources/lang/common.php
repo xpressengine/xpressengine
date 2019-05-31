@@ -3111,5 +3111,17 @@ return [
     'siteSettingFaviconPreviewDescription' => [
         'ko' => '등록되어 있는 파비콘을 보여주거나, 새로 등록할 파비콘을 미리 볼 수 있습니다.',
         'en' => 'You can show the registered favicon or preview the new favicon to register.'
+    ],
+    'siteSettingMailingDefaultSetting' => [
+        'ko' => '메일링 기본 설정',
+        'en' => 'Mailing preferences'
+    ],
+    'mailSenderName' => [
+        'ko' => '메일 발신자 이름',
+        'en' => 'Name of mail sender'
+    ],
+    'mailSenderAddress' => [
+        'ko' => '발신 이메일 주소',
+        'en' => 'From email address'
     ]
 ];

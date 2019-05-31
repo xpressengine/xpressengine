@@ -135,7 +135,7 @@
         <div class="panel">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::webmaster') }} {{ xe_trans('xe::defaultSettings') }}</h3>
+                    <h3 class="panel-title">{{ xe_trans('xe::siteSettingMailingDefaultSetting') }}</h3>
                 </div>
             </div>
 
@@ -145,14 +145,14 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label>{{xe_trans('xe::webmasterName')}}</label> <small>{{ xe_trans('xe::siteSettingWebmasterNameDescription') }}</small>
+                                    <label>{{xe_trans('xe::mailSenderName')}}</label> <small>{{ xe_trans('xe::siteSettingWebmasterNameDescription') }}</small>
                                     <input type="text" name="webmasterName" class="form-control" value="{{ $userConfig->get('webmasterName') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{xe_trans('xe::webmasterEmail')}} {{ xe_trans('xe::address') }}</label> <small>{{ xe_trans('xe::siteSettingWebmasterEmailAddressDescription') }}</small>
+                                <label>{{xe_trans('xe::mailSenderAddress')}}</label> <small>{{ xe_trans('xe::siteSettingWebmasterEmailAddressDescription') }}</small>
                                 <input type="email" name="webmasterEmail" class="form-control" value="{{ $userConfig->get('webmasterEmail') }}">
                             </div>
                         </div>
