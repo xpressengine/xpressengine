@@ -74,11 +74,9 @@ class PluginInstallController extends Controller
 
         $plugins->appends('filter', $filter);
 
-        $operation = $handler->getOperation($writer);
-
         return XePresenter::make(
             'install.index',
-            compact('plugins', 'componentTypes', 'handler', 'filter', 'operation', 'available')
+            compact('plugins', 'componentTypes', 'handler', 'filter', 'available')
         );
     }
 
@@ -119,7 +117,7 @@ class PluginInstallController extends Controller
             $packages = $provider->search(compact('tags', 'site_token'), $page, 6);
         } elseif ($filter === 'purchased') {
             if (!$site_token) {
-                $link = route('settings.plugins.setting.show');
+                $link = route('settings.setting.edit');
                 $plugins = new LengthAwarePaginator(collect(), 0, 1, '');
                 $site_error =
                     xe_trans('xe::needSiteTokenToViewListOfPurchased', [
@@ -154,8 +152,6 @@ class PluginInstallController extends Controller
         }
         $handler->getAllPlugins(true);
         $componentTypes = $this->getComponentTypes();
-
-        $operation = $handler->getOperation($writer);
 
         return api_render('install.items', compact('plugins', 'operation', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
     }

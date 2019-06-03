@@ -70,7 +70,7 @@ abstract class Operation
      */
     public function isReady()
     {
-        return $this->data['status'] === static::STATUS_READY;
+        return $this->getStatus() === static::STATUS_READY;
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class Operation
      */
     public function isRunning()
     {
-        return $this->data['status'] === static::STATUS_RUNNING;
+        return $this->getStatus() === static::STATUS_RUNNING;
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class Operation
      */
     public function isSucceed()
     {
-        return $this->data['status'] === static::STATUS_SUCCEED;
+        return $this->getStatus() === static::STATUS_SUCCEED;
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class Operation
      */
     public function isFailed()
     {
-        return $this->data['status'] === static::STATUS_FAILED;
+        return $this->getStatus() === static::STATUS_FAILED;
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class Operation
      */
     public function isExpired()
     {
-        return $this->data['status'] === static::STATUS_EXPIRED;
+        return $this->getStatus() === static::STATUS_EXPIRED;
     }
 
     /**

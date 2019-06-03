@@ -345,6 +345,9 @@ class Operator
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array([$this->getOperation(), $name], $arguments);
+        if (!$type = $this->getType()) {
+            return null;
+        }
+        return call_user_func_array([$this->getOperation($type), $name], $arguments);
     }
 }
