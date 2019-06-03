@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
 
 /**
@@ -65,18 +66,31 @@ class XeUpdate extends ShouldOperation
     protected $releaseProvider;
 
     /**
+     * ComposerFileWriter instance
+     *
+     * @var ComposerFileWriter
+     */
+    protected $writer;
+
+    /**
      * Create a new controller creator command instance.
      *
-     * @param Operator        $operator        Operator instance
-     * @param ReleaseProvider $releaseProvider ReleaseProvider instance
-     * @param Filesystem      $filesystem      Filesystem instance
+     * @param Operator           $operator        Operator instance
+     * @param ReleaseProvider    $releaseProvider ReleaseProvider instance
+     * @param Filesystem         $filesystem      Filesystem instance
+     * @param ComposerFileWriter $writer          ComposerFileWriter instance
      */
-    public function __construct(Operator $operator, ReleaseProvider $releaseProvider, Filesystem $filesystem)
-    {
+    public function __construct(
+        Operator $operator,
+        ReleaseProvider $releaseProvider,
+        Filesystem $filesystem,
+        ComposerFileWriter $writer
+    ) {
         parent::__construct($operator);
 
         $this->filesystem = $filesystem;
         $this->releaseProvider = $releaseProvider;
+        $this->writer = $writer;
     }
 
     /**
@@ -137,6 +151,8 @@ class XeUpdate extends ShouldOperation
             if (0 !== $this->clearCache(true)) {
                 throw new \Exception('cache clear fail.. check your system.');
             }
+
+            $this->writer->reset()->write(true);
 
             $tempPath = storage_path('app/temp');
             // download
