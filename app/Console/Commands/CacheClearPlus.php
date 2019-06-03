@@ -65,7 +65,10 @@ class CacheClearPlus extends ClearCommand
             'cache:cleared', [$this->argument('store'), $this->tags()]
         );
 
-        opcache_reset();
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
         clearstatcache();
 
         $this->info('Cache cleared successfully. XE cache has also been cleared.');
