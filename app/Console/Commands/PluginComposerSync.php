@@ -60,10 +60,7 @@ class PluginComposerSync extends Command
      */
     public function handle(ComposerFileWriter $writer)
     {
-        // php artisan plugin:sync-composer
-
-        // sync
-        $writer->resolvePlugins()->setFixMode()->write();
+        $writer->reset()->write();
 
         $this->output->success("The installation information of the plug-in was synchronized with the composer file(".$writer->getPath().").");
     }

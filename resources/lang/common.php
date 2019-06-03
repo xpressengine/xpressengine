@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'home' => [
+        'ko' => '홈',
+        'en' => 'Home',
+    ],
     'yes' => [
         'ko' => '예',
         'en' => 'Yes',
@@ -3111,5 +3115,5 @@ return [
     'siteSettingFaviconPreviewDescription' => [
         'ko' => '등록되어 있는 파비콘을 보여주거나, 새로 등록할 파비콘을 미리 볼 수 있습니다.',
         'en' => 'You can show the registered favicon or preview the new favicon to register.'
-    ]
+    ],
 ];

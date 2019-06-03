@@ -36,6 +36,13 @@ class Application extends BaseApplication
     protected $publicPath;
 
     /**
+     * The installed version of XE.
+     *
+     * @var string
+     */
+    protected $installedVersion;
+
+    /**
      * Get the path to the public / web directory.
      *
      * @return string
@@ -206,5 +213,33 @@ class Application extends BaseApplication
                 $this->alias($key, $alias);
             }
         }
+    }
+
+    /**
+     * Returns the installed version of XE.
+     *
+     * @return null|string
+     */
+    public function getInstalledVersion()
+    {
+        if (!$this->installedVersion) {
+            if (!file_exists($path = $this->getInstalledPath())) {
+                return null;
+            }
+
+            $this->installedVersion = trim(file_get_contents($path));
+        }
+
+        return $this->installedVersion;
+    }
+
+    /**
+     * Returns the file path for determine if installed.
+     *
+     * @return string
+     */
+    public function getInstalledPath()
+    {
+        return $this->storagePath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'installed';
     }
 }

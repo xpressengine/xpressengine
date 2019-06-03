@@ -14,12 +14,6 @@
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
 
-            @if($operation)
-                <div class="__xe_operation" style="margin-bottom: 10px;">
-                @include($_skin::view('operation'))
-                </div>
-            @endif
-
             <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading" style="padding-top: 17px; padding-bottom: 17px;">
@@ -27,7 +21,6 @@
                     <div class="pull-right">
                         <div class="search-btn-group">
                             <a href="{{ route('settings.plugins.install') }}" class="xe-btn xe-btn-install"><i class="xi-plus"></i> {{ xe_trans('xe::installNewPlugin') }}</a>
-                            <a href="{{ route('settings.plugins.manage.update') }}" class="xe-btn __xe_update_plugin"><span>{{ xe_trans('xe::updates') }} {{ xe_trans('xe::check') }}</span></a>
                         </div>
                         <div class="input-group search-group">
                             <form>

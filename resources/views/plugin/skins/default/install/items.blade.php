@@ -46,11 +46,11 @@
         {!! $site_error !!}
     </div>
     @else
-@if(isset($operation))
-    <div class="__xe_operation" style="margin-bottom: 10px;">
-        @include($_skin::view('operation'))
-    </div>
-@endif
+{{--@if(isset($operation))--}}
+    {{--<div class="__xe_operation" style="margin-bottom: 10px;">--}}
+        {{--@include($_skin::view('operation'))--}}
+    {{--</div>--}}
+{{--@endif--}}
 <div class="row">
     <div class="col-sm-12">
         <p>XE Store에 등록된 내 사이트에 추가한 플러그인을 쉬운설치할 수 있습니다.</p>

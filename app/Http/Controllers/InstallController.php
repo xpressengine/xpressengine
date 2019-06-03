@@ -195,7 +195,7 @@ class InstallController extends Controller
      */
     protected function isInstalled()
     {
-        return file_exists(storage_path() . '/app/installed');
+        return file_exists(app()->getInstalledPath());
     }
 
     /**

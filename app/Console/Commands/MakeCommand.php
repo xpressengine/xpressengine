@@ -15,7 +15,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Filesystem\Filesystem;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
+use Xpressengine\Foundation\Operator;
+use Xpressengine\Installer\XpressengineInstaller;
 
 /**
  * Abstract Class MakeCommand
@@ -29,6 +30,8 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
  */
 abstract class MakeCommand extends ShouldOperation
 {
+    use PluginApplyRequireTrait;
+
     /**
      * The filesystem instance.
      *
@@ -39,12 +42,12 @@ abstract class MakeCommand extends ShouldOperation
     /**
      * Create a new component creator command instance.
      *
-     * @param Filesystem         $files  Filesystem instance
-     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @param Filesystem         $files    Filesystem instance
+     * @param Operator           $operator Operator instance
      */
-    public function __construct(Filesystem $files, ComposerFileWriter $writer)
+    public function __construct(Filesystem $files, Operator $operator)
     {
-        parent::__construct($writer);
+        parent::__construct($operator);
 
         $this->files = $files;
     }
@@ -92,11 +95,39 @@ abstract class MakeCommand extends ShouldOperation
     }
 
     /**
+     * Execute composer update.
+     *
+     * !! 같은 코드가 PluginCommand 에도 정의되어 있음.
+     *
+     * @param array $packages specific package name. no need version
+     * @return int
+     * @throws \Throwable
+     */
+    protected function composerUpdate(array $packages)
+    {
+        $this->applyRequire($this->operator->getOperation());
+
+        try {
+            $result = parent::composerUpdate($packages);
+        } catch (\Exception $e) {
+            $this->rollbackRequire();
+            throw $e;
+        }
+
+        $this->operator->setResult(XpressengineInstaller::$changed, XpressengineInstaller::$failed);
+        $this->operator->write();
+
+        return $result;
+    }
+
+    /**
      * Run composer dump command.
      *
      * @param string $path working directory
      * @return int
      * @throws \Exception
+     *
+     * @deprecated since 3.0.1
      */
     protected function runComposerDump($path)
     {

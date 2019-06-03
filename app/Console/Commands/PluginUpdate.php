@@ -13,11 +13,6 @@
  */
 namespace App\Console\Commands;
 
-use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\PluginHandler;
-use Xpressengine\Plugin\PluginProvider;
-
 /**
  * Class PluginUpdate
  *
@@ -75,7 +70,8 @@ class PluginUpdate extends PluginCommand
             return;
         }
 
-        $this->writeRequire($data);
+        $this->operator->lock();
+        $this->writeRequire('update', $data);
 
         $packages = array_pluck($data, 'name');
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
@@ -145,24 +141,5 @@ class PluginUpdate extends PluginCommand
         }
 
         return $data;
-    }
-
-    /**
-     * Write require to composer.plugins.json
-     *
-     * @param array $data data for plugins
-     * @return void
-     */
-    protected function writeRequire($data)
-    {
-        // - plugins require info 갱신
-        $this->writer->reset()->cleanOperation();
-
-        foreach ($data as $info) {
-            // composer.plugins.json 업데이트
-            // - require에 설치할 플러그인 추가
-            $this->writer->update($info['name'], $info['version']);
-        }
-        $this->writer->write();
     }
 }

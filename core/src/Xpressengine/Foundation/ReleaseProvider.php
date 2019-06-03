@@ -74,6 +74,7 @@ class ReleaseProvider
      */
     public function coreVersions()
     {
+        return ['3.0.0','3.0.1','3.0.2'];
         if (!$this->coreVersions) {
             $response = $this->getHttpClient()->request(
                 'GET',
@@ -144,7 +145,8 @@ class ReleaseProvider
      */
     protected function getFileName($ver)
     {
-        return 'changed.'. $ver . '.zip';
+        return 'changed.test.zip';
+//        return 'changed.'. $ver . '.zip';
     }
 
     /**

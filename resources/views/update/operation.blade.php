@@ -1,45 +1,55 @@
-    <div class="panel">
-        <div class="panel-body">
-            @if($operation['status'] === 'ready')
-                <strong>{{ xe_trans('xe::loadingForStatus') }}</strong>
-            @else
-                <strong>{{ xe_trans('xe::recentOperation') }}</strong>
-
-                @if($operation['status'] !== 'running')
-                    <div class="pull-right">
-                        <form action="{{ route('settings.coreupdate.operation.delete') }}" method="delete" data-submit="xe-ajax" data-callback="deletePluginOperation">
-                            <button class="btn-link" type="submit">{{ xe_trans('xe::deleteHistory') }}</button>
-                        </form>
-                    </div>
-                @endif
-                <hr>
-                <label for="">{{ xe_trans('xe::operation') }}</label>
-                <p>Update ver.{{ $operation['updateVersion'] }}</p>
-                <label for="">{{ xe_trans('xe::status') }}</label>
-                <p>
-                    @if($operation['status'] === 'successed')
-                        {{ xe_trans('xe::success') }}
-                    @elseif($operation['status'] === 'failed')
-                        {{ xe_trans('xe::fail') }}
-                    @elseif($operation['status'] === 'expired')
-                        {{ xe_trans('xe::fail') }}({{ xe_trans('xe::timeoutExceeded') }})
-                    @else
-                        {{ xe_trans('xe::inProgress') }}
-                    @endif
-
-                    @if($operation['log'])
-                    <button type="button" class="xe-btn btn-link" data-toggle="collapse" aria-expanded="false" data-target=".operation-log">{{ xe_trans('xe::showDetails') }}</button>
-                    @endif
-                </p>
-
-                @if($operation['log'])
-                <div class="collapse operation-log @if($operation['status'] == 'running') in @endif ">
-                    <div class="well">
-                        {!! nl2br(array_get($operation,'log')) !!}
-                    </div>
-                </div>
-                @endif
-            @endif
-        </div>
+{{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+@section('page_title')
+    <h2>업데이트</h2>
+@endsection
+<h3>
+    @if($operator->isCore())
+        XE 업데이트
+    @elseif($operator->isPlugin())
+        플러그인 업데이트
+    @elseif($operator->isPrivate())
+        커스텀 플러그인
+    @endif
+</h3>
+<div class="panel">
+    <div class="panel-body">
+        <p class="help-block">
+            작업이 진행중입니다. 최대 수분이 소요될 수 있습니다.<br>
+            사이트가 업데이트되는 동안 유지관리 모드가 됩니다.
+        </p>
     </div>
+    <ul class="list-group list-plugin __xe_operation">
+        <li class="list-group-item">
+            <div class="left-group">
+                <p style="color: #303030;font-size: 14px;"> 로딩 중...</p>
+            </div>
+        </li>
+    </ul>
+</div>
 
+<script>
+    jQuery(function ($) {
+      var loadOperation = setInterval(function(){
+        var url = "{{ route('settings.operation.progress') }}";
+        XE.page(url, '.__xe_operation', {}, function(response){
+          var data = response.data;
+          if(data.in_progress !== true) {
+            clearInterval(loadOperation);
+            location.reload();
+          }
+        });
+      }, 3000);
+
+      {{--var loadOperation = function(url) {--}}
+        {{--XE.page(url, '.__xe_operation', {}, function(response){--}}
+          {{--var data = response.data;--}}
+          {{--if(data.in_progress !== true) {--}}
+            {{--location.reload();--}}
+          {{--} else {--}}
+            {{--loadOperation("{{ route('settings.operation.progress') }}");--}}
+          {{--}--}}
+        {{--});--}}
+      {{--};--}}
+      {{--loadOperation("{{ route('settings.operation.progress', ['s' => 1]) }}");--}}
+    })
+</script>

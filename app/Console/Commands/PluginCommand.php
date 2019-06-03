@@ -15,6 +15,8 @@ namespace App\Console\Commands;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Xpressengine\Foundation\Operator;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
@@ -32,6 +34,8 @@ use Xpressengine\Plugin\PluginProvider;
  */
 class PluginCommand extends ShouldOperation
 {
+    use PluginApplyRequireTrait;
+
     /**
      * @var PluginHandler
      */
@@ -43,29 +47,18 @@ class PluginCommand extends ShouldOperation
     protected $provider;
 
     /**
-     * @var InterceptionHandler
-     */
-    protected $interceptionHandler;
-
-    /**
      * Constructor.
      *
-     * @param ComposerFileWriter  $writer              ComposerFileWriter
-     * @param PluginHandler       $handler             PluginHandler
-     * @param PluginProvider      $provider            PluginProvider
-     * @param InterceptionHandler $interceptionHandler InterceptionHandler
+     * @param Operator       $operator Operator
+     * @param PluginHandler  $handler  PluginHandler
+     * @param PluginProvider $provider PluginProvider
      */
-    public function __construct(
-        ComposerFileWriter $writer,
-        PluginHandler $handler,
-        PluginProvider $provider,
-        InterceptionHandler $interceptionHandler
-    ) {
-        parent::__construct($writer);
+    public function __construct(Operator $operator, PluginHandler $handler, PluginProvider $provider)
+    {
+        parent::__construct($operator);
 
         $this->handler = $handler;
         $this->provider = $provider;
-        $this->interceptionHandler = $interceptionHandler;
     }
 
     /**
@@ -126,6 +119,48 @@ class PluginCommand extends ShouldOperation
     }
 
     /**
+     * Write require to composer.plugins.json
+     *
+     * @param string $action keyword for action (install, update, uninstall)
+     * @param array  $data   data for plugins
+     * @return void
+     */
+    protected function writeRequire($action, $data)
+    {
+        $this->operator->setPluginMode();
+        foreach ($data as $info) {
+            $this->operator->{$action}($info['name'], $info['version']);
+        }
+        $this->operator->write();
+    }
+
+    /**
+     * Execute composer update.
+     *
+     * !! 같은 코드가 MakeCommand 에도 정의되어 있음.
+     *
+     * @param array $packages specific package name. no need version
+     * @return int
+     * @throws \Throwable
+     */
+    protected function composerUpdate(array $packages)
+    {
+        $this->applyRequire($this->operator->getOperation());
+
+        try {
+            $result = parent::composerUpdate($packages);
+        } catch (\Exception $e) {
+            $this->rollbackRequire();
+            throw $e;
+        }
+
+        $this->operator->setResult(XpressengineInstaller::$changed, XpressengineInstaller::$failed);
+        $this->operator->write();
+
+        return $result;
+    }
+
+    /**
      * Activate plugin.
      *
      * @param string $pluginId plugin id
@@ -136,7 +171,6 @@ class PluginCommand extends ShouldOperation
         $this->handler->getAllPlugins(true);
         if ($this->handler->isActivated($pluginId) === false) {
             $this->handler->activatePlugin($pluginId);
-
         }
     }
 
@@ -159,11 +193,7 @@ class PluginCommand extends ShouldOperation
      */
     protected function getChangedPlugins()
     {
-        $changed = [];
-        $changed['installed'] = $this->writer->get('xpressengine-plugin.operation.changed.installed', []);
-        $changed['updated'] = $this->writer->get('xpressengine-plugin.operation.changed.updated', []);
-        $changed['uninstalled'] = $this->writer->get('xpressengine-plugin.operation.changed.uninstalled', []);
-        return $changed;
+        return array_merge(['installed' => [], 'updated' => [], 'uninstalled' => []], $this->operator->getChanged());
     }
 
     /**
@@ -173,13 +203,8 @@ class PluginCommand extends ShouldOperation
      */
     protected function getFailedPlugins()
     {
-        $failed = [];
-        $failed['install'] = $this->writer->get('xpressengine-plugin.operation.failed.install', []);
-        $failed['update'] = $this->writer->get('xpressengine-plugin.operation.failed.update', []);
-        $failed['uninstall'] = $this->writer->get('xpressengine-plugin.operation.failed.uninstall', []);
-        return $failed;
+        return array_merge(['installed' => [], 'updated' => [], 'uninstalled' => []], $this->operator->getFailed());
     }
-
 
     /**
      * Print changed.
@@ -226,14 +251,14 @@ class PluginCommand extends ShouldOperation
         if (count($failed['install'])) {
             $this->warn('Install failed plugins:');
             foreach ($failed['install'] as $p => $c) {
-                $this->line("  $p: ".$codes[$c]);
+                $this->line("  $p: ".($codes[$c] ?? $c));
             }
         }
 
         if (count($failed['update'])) {
             $this->warn('Update failed plugins:');
             foreach ($failed['update'] as $p => $c) {
-                $this->line("  $p: ".$codes[$c]);
+                $this->line("  $p: ".($codes[$c] ?? $c));
             }
         }
 

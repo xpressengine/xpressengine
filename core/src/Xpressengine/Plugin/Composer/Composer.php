@@ -18,7 +18,6 @@ use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
 use FilesystemIterator;
 use Xpressengine\Foundation\Application;
-use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
 
@@ -93,27 +92,17 @@ class Composer
             return;
         }
 
-        $writer = self::getWriter();
-
         if (!file_exists(static::$pluginComposerFile)) {
-            foreach (static::$basePlugins as $plugin => $version) {
-                $writer->install($plugin, $version);
+            $writer = static::getWriter();
+            foreach (static::$basePlugins as $name => $version) {
+                $writer->addRequire($name, $version);
             }
+            $writer->write();
+
+            $event->getOutput()->writeln(
+                'xpressengine : The bundle plugin is added to <info>composer require</info>'
+            );
         }
-
-        static::applyRequire($writer);
-
-        $installs = $writer->get('xpressengine-plugin.operation.todo.install', []);
-        $updates = $writer->get('xpressengine-plugin.operation.todo.update', []);
-        $fixes = array_keys($installs) + array_keys($updates);
-
-        $writer->setUpdateMode($fixes);
-
-        $writer->write();
-
-        $event->getOutput()->writeln(
-            'xpressengine-installer: Plugin composer file['.$writer->getPath().'] is written'
-        );
     }
 
     /**
@@ -174,12 +163,7 @@ class Composer
      */
     public static function postUpdateOrInstall(Event $event)
     {
-        $writer = self::getWriter();
-        $writer->reset()->cleanTodo();
-
-        $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
-
-        $writer->write();
+        static::getWriter()->reset()->write(true);
     }
 
     /**
@@ -252,29 +236,6 @@ class Composer
         }
 
         return static::$writer;
-    }
-
-    /**
-     * plugin composer 파일에 등록된 플러그인 제어정보를 require에 적용한다.
-     *
-     * @param ComposerFileWriter $writer composer file writer
-     *
-     * @return void
-     */
-    private static function applyRequire(ComposerFileWriter $writer)
-    {
-        $installs = $writer->get('xpressengine-plugin.operation.todo.install', []);
-        foreach ($installs as $name => $version) {
-            $writer->addRequire($name, $version);
-        }
-        $updates = $writer->get('xpressengine-plugin.operation.todo.update', []);
-        foreach ($updates as $name => $version) {
-            $writer->addRequire($name, $version);
-        }
-        $uninstalls = $writer->get('xpressengine-plugin.operation.todo.uninstall', []);
-        foreach ($uninstalls as $name) {
-            $writer->removeRequire($name);
-        }
     }
 
     /**

@@ -475,7 +475,7 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function isInstalled()
     {
-        return file_exists($this->app->storagePath() . '/app/installed');
+        return file_exists(app()->getInstalledPath());
     }
 
     /**

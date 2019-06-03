@@ -17,6 +17,7 @@ namespace App\Console\Commands;
 use Illuminate\Filesystem\Filesystem;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputOption;
+use Xpressengine\Foundation\Operator;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
@@ -51,12 +52,13 @@ abstract class ComponentMakeCommand extends MakeCommand
     /**
      * Create a new component creator command instance.
      *
-     * @param \Illuminate\Filesystem\Filesystem $files   Filesystem instance
-     * @param PluginHandler                     $handler PluginHandler instance
+     * @param Filesystem         $files    Filesystem instance
+     * @param Operator           $operator Operator instance
+     * @param PluginHandler      $handler  PluginHandler instance
      */
-    public function __construct(Filesystem $files, ComposerFileWriter $writer, PluginHandler $handler)
+    public function __construct(Filesystem $files, Operator $operator, PluginHandler $handler)
     {
-        parent::__construct($files, $writer);
+        parent::__construct($files, $operator);
 
         $this->handler = $handler;
 
@@ -284,9 +286,6 @@ abstract class ComponentMakeCommand extends MakeCommand
      */
     protected function refresh(PluginEntity $plugin)
     {
-        $this->writer->reset()->cleanOperation();
-        $this->writer->write();
-
         $result = $this->composerDump($plugin->hasVendor() ? $plugin->getPath() : base_path());
 
         if (0 !== $result) {

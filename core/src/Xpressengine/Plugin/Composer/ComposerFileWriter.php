@@ -27,6 +27,9 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class ComposerFileWriter
 {
+    /**
+     * @deprecated since 3.0.1, use \Xpressengine\Foundation\Operations\Operation
+     */
     const STATUS_READY     = 'ready';
     const STATUS_RUNNING   = 'running';
     const STATUS_SUCCESSED = 'successed';
@@ -42,6 +45,11 @@ class ComposerFileWriter
      * @var array
      */
     protected $data;
+
+    /**
+     * @var array
+     */
+    protected $original;
 
     /**
      * @var PluginScanner
@@ -67,15 +75,16 @@ class ComposerFileWriter
         require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
-        $this->load();
+        $this->load(true);
     }
 
     /**
      * json 파일의 내용을 메모리에 읽어온다.
      *
+     * @param bool $sync sync to original if given value is true
      * @return void
      */
-    public function load()
+    public function load($sync = false)
     {
         if (!is_file($this->path)) {
             $this->data = [];
@@ -83,6 +92,34 @@ class ComposerFileWriter
             $str = file_get_contents($this->path);
             $this->data = json_decode($str, true);
         }
+
+        if ($sync) {
+            $this->sync();
+        }
+    }
+
+    /**
+     * Sync the original data with the current.
+     *
+     * @return $this
+     */
+    public function sync()
+    {
+        $this->original = $this->data;
+
+        return $this;
+    }
+
+    /**
+     * Rollback the data from the original.
+     *
+     * @return void
+     */
+    public function rollback()
+    {
+        $this->data = $this->original;
+
+        $this->write();
     }
 
     /**
@@ -141,42 +178,11 @@ class ComposerFileWriter
     /**
      * 현재 실행중인 작업에 대한 정보를 초기화 한다.
      *
-     * @param bool $force clean all information
      * @return $this
+     * @deprecated since 3.0.1
      */
-    public function cleanOperation($force = false)
+    public function cleanOperation()
     {
-        if ($force) {
-            array_set($this->data, 'xpressengine-plugin.operation', []);
-        } else {
-            $this->cleanTodo();
-            $this->cleanResult();
-            array_forget($this->data, 'xpressengine-plugin.operation.expiration_time');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clean the operation todo
-     *
-     * @return $this
-     */
-    public function cleanTodo()
-    {
-        array_set($this->data, 'xpressengine-plugin.operation.todo', []);
-        return $this;
-    }
-
-    /**
-     * Clean the operation result
-     *
-     * @return $this
-     */
-    public function cleanResult()
-    {
-        array_set($this->data, 'xpressengine-plugin.operation.changed', []);
-        array_set($this->data, 'xpressengine-plugin.operation.failed', []);
         return $this;
     }
 
@@ -248,14 +254,13 @@ class ComposerFileWriter
      *
      * @param string $name        package name of plugin
      * @param string $version     plugin version
-     * @param string $expiredTime deadline (deprecated since 3.0.1)
+     * @param string $expiredTime deadline
      *
      * @return $this
+     * @deprecated since 3.0.1
      */
     public function install($name, $version, $expiredTime = null)
     {
-        array_set($this->data, "xpressengine-plugin.operation.todo.install.$name", $version);
-
         return $this;
     }
 
@@ -264,14 +269,13 @@ class ComposerFileWriter
      *
      * @param string $name        package name of plugin
      * @param string $version     plugin version
-     * @param string $expiredTime deadline (deprecated since 3.0.1)
+     * @param string $expiredTime deadline
      *
      * @return $this
+     * @deprecated since 3.0.1
      */
     public function update($name, $version, $expiredTime = null)
     {
-        array_set($this->data, "xpressengine-plugin.operation.todo.update.$name", $version);
-
         return $this;
     }
 
@@ -282,57 +286,20 @@ class ComposerFileWriter
      * @param string $expiredTime deadline (deprecated since 3.0.1)
      *
      * @return $this
+     * @eprecated since 3.0.1
      */
     public function uninstall($name, $expiredTime = null)
     {
-        $uninstall = array_get($this->data, "xpressengine-plugin.operation.todo.uninstall", []);
-        if (!in_array($name, $uninstall)) {
-            $uninstall[] = $name;
-        }
-        array_set($this->data, "xpressengine-plugin.operation.todo.uninstall", $uninstall);
-
-        return $this;
-    }
-
-    /**
-     * @param string|int|null $datetime datetime string or null or '0'
-     * @return $this
-     */
-    public function setExpiresAt($datetime)
-    {
-        $this->set('xpressengine-plugin.operation.expiration_time', $datetime);
-
-        return $this;
-    }
-
-    /**
-     * Determine if the operation is running.
-     *
-     * @return bool
-     */
-    public function isRunning()
-    {
-        return $this->get('xpressengine-plugin.operation.status') === ComposerFileWriter::STATUS_RUNNING;
-    }
-
-    /**
-     * Set the operation is running.
-     *
-     * @return $this
-     */
-    public function setRunning()
-    {
-        $this->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_RUNNING);
-
         return $this;
     }
 
     /**
      * save loaded data to plugin composer file
      *
+     * @param bool $sync sync to original if given value is true
      * @return void
      */
-    public function write()
+    public function write($sync = false)
     {
         $json = json_encode($this->data);
         if (function_exists('json_format')) {
@@ -341,6 +308,10 @@ class ComposerFileWriter
             $json = \Composer\Json\JsonFormatter::format($json, true, true);
         }
         file_put_contents($this->path, $json);
+
+        if ($sync) {
+            $this->sync();
+        }
     }
 
     /**

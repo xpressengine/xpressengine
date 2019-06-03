@@ -22,8 +22,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Xpressengine\Installer\XpressengineInstaller;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
+use Xpressengine\Foundation\Operator;
 
 /**
  * Class ShouldOperation
@@ -42,22 +41,22 @@ abstract class ShouldOperation extends Command
     }
 
     /**
-     * ComposerFileWriter instance
+     * Operator instance
      *
-     * @var ComposerFileWriter
+     * @var Operator
      */
-    protected $writer;
+    protected $operator;
 
     /**
      * ShouldOperation constructor.
      *
-     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @param Operator $operator Operator instance
      */
-    public function __construct(ComposerFileWriter $writer)
+    public function __construct(Operator $operator)
     {
         parent::__construct();
 
-        $this->writer = $writer;
+        $this->operator = $operator;
     }
 
     /**
@@ -75,8 +74,12 @@ abstract class ShouldOperation extends Command
 
             $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
 
-            $this->writer->set('xpressengine-plugin.operation.log', $logFile);
-            $this->writer->write();
+            $this->operator->log($logFile);
+            $this->operator->write();
+        }
+
+        if ($file = $this->operator->getLogFile()) {
+            \Log::useFiles($this->laravel->storagePath().DIRECTORY_SEPARATOR.$file);
         }
 
         return parent::run($input, $output);
@@ -92,11 +95,11 @@ abstract class ShouldOperation extends Command
      */
     protected function composerUpdate(array $packages)
     {
-        if ($this->isLocked()) {
-            throw new \Exception('The command is locked. Make sure that another process is running.');
+        if (!$this->operator->isLocked()) {
+            $this->operator->lock();
         }
 
-        $this->lock();
+        $this->setExpires();
 
         try {
             if (0 !== $this->clearCache(true)) {
@@ -108,9 +111,7 @@ abstract class ShouldOperation extends Command
             $inputs = [
                 'command' => 'update',
                 "--with-dependencies" => true,
-                //"--quiet" => true,
                 '--working-dir' => base_path(),
-                /*'--verbose' => '3',*/
                 'packages' => $packages
             ];
 
@@ -124,7 +125,7 @@ abstract class ShouldOperation extends Command
             $this->setFailed($e->getCode());
             throw new FatalThrowableError($e);
         } finally {
-            $this->unlock();
+            $this->operator->unlock();
         }
     }
 
@@ -160,17 +161,8 @@ abstract class ShouldOperation extends Command
     {
         if (!$this->laravel->runningInConsole()) {
             ignore_user_abort(true);
-            set_time_limit($time = $this->getExpiredTime());
-            $this->writer->setExpiresAt(Carbon::now()->addSeconds($time)->toDateTimeString());
-        } else {
-            $this->writer->setExpiresAt(null);
+            set_time_limit($this->getExpiredTime());
         }
-
-        if (!$this->writer->isRunning()) {
-            $this->writer->setRunning();
-        }
-
-        $this->writer->write();
 
         return $this->doRunComposer($inputs, $skipPlugin, $output);
     }
@@ -188,6 +180,20 @@ abstract class ShouldOperation extends Command
         $this->line(PHP_EOL);
 
         return $result;
+    }
+
+    /**
+     * Set the operation expires.
+     *
+     * @return void
+     */
+    protected function setExpires()
+    {
+        $expiresAt = !$this->laravel->runningInConsole() ?
+            Carbon::now()->addSeconds($this->getExpiredTime())->toDateTimeString() : null;
+
+        $this->operator->expiresAt($expiresAt);
+        $this->operator->write();
     }
 
     /**
@@ -211,44 +217,11 @@ abstract class ShouldOperation extends Command
     }
 
     /**
-     * Determine if operation is locked.
-     *
-     * @return bool
-     */
-    protected function isLocked()
-    {
-        $this->writer->load();
-        return $this->writer->get('xpressengine-plugin.lock', false);
-    }
-
-    /**
-     * Locks a operation.
+     * Set operation succeed.
      *
      * @return void
      */
-    protected function lock()
-    {
-        $this->writer->set('xpressengine-plugin.lock', true);
-        $this->writer->write();
-    }
-
-    /**
-     * Unlocks a operation.
-     *
-     * @return void
-     */
-    protected function unlock()
-    {
-        $this->writer->set('xpressengine-plugin.lock', false);
-        $this->writer->write();
-    }
-
-    /**
-     * Set operation successed.
-     *
-     * @return void
-     */
-    protected function setSuccessed()
+    protected function setSucceed()
     {
         $this->writeResult(0);
     }
@@ -272,14 +245,13 @@ abstract class ShouldOperation extends Command
      */
     protected function writeResult($result)
     {
-        // composer.plugins.json 파일을 다시 읽어들인다.
-        $this->writer->load();
-        if ($result !== 0) {
-            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
-            $this->writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
-        } else {
-            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-        }
-        $this->writer->write();
+        // composer 동작이 완료되는 시점에서 쓰기 작업을 수행하므로
+        // 결과를 기록하기 전에 파일을 다시 읽어들인다.
+        // @todo : Composer::postUpdateOrInstall 실행시 operation 작성코드가 제거됨. 다시 load 필요한지 확인.
+        $this->operator->load();
+
+        $operation = $this->operator->getOperation();
+        $result !== 0 ? $operation->failed() : $operation->succeed();
+        $this->operator->write();
     }
 }

@@ -70,6 +70,24 @@ return [
                 'description' => '',
                 'ordering' => 1000
             ],
+            'dashboard.home' => [
+                'title' => 'xe::home',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
+            ],
+            'dashboard.updates' => [
+                'title' => 'xe::updates',
+                'display' => true,
+                'description' => '',
+                'ordering' => 200
+            ],
+            'dashboard.operation' => [
+                'title' => 'xe::operation',
+                'display' => false,
+                'description' => '',
+                'ordering' => 200
+            ],
             'sitemap' => [
                 'title' => 'xe::siteMap',
                 'display' => true,
@@ -176,12 +194,6 @@ return [
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
-            ],
-            'plugin.core-update' => [
-                'title' => 'xe::coreUpdate',
-                'display' => true,
-                'description' => '',
-                'ordering' => 100
             ],
             'plugin.list' => [
                 'title' => 'xe::pluginInstalled',

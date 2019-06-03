@@ -68,9 +68,9 @@ class PrivateUpdateCommand extends ShouldOperation
         unlink($plugin->getPath());
         $this->info('done');
 
-        $this->writer->reset()->cleanOperation();
-        $this->writer->install($packageName = 'xpressengine-plugin/'.$name, '*');
-        $this->writer->write();
+        $this->operator->setPrivateMode();
+        $this->operator->install($packageName = 'xpressengine-plugin/'.$name, '*');
+        $this->operator->write();
 
         $this->info('Run composer update command');
         $this->line('> composer update');

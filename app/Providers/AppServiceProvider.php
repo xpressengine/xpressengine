@@ -14,6 +14,7 @@ namespace App\Providers;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Foundation\Operator;
 
 /**
  * Class AppServiceProvider
@@ -53,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
                     ]);
                 }
             });
+        });
+
+        $this->app->singleton(Operator::class, function () {
+            return new Operator(storage_path('app/operations.json'));
         });
     }
 }

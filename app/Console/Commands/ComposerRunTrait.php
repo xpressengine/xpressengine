@@ -50,6 +50,7 @@ trait ComposerRunTrait
 
         $files = [
             storage_path('app/composer.plugins.json'),
+            storage_path('app/operations.json'),
             base_path('composer.lock'),
             base_path('plugins/'),
             base_path('vendor/'),
@@ -127,7 +128,9 @@ trait ComposerRunTrait
      */
     protected function runComposer($inputs, $skipPlugin = false, $output = null)
     {
-        define('__RUN_IN_ARTISAN__', true);
+        if (!defined('__RUN_IN_ARTISAN__')) {
+            define('__RUN_IN_ARTISAN__', true);
+        }
 
         ini_set('memory_limit', '-1');
 
@@ -149,6 +152,8 @@ trait ComposerRunTrait
         if (is_string($output)) {
             $output = new StreamOutput(fopen(storage_path($output), 'a'));
         }
+
+        gc_collect_cycles();
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script

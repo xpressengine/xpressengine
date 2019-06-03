@@ -32,7 +32,7 @@ Route::settings(
     function () {
         Route::get(
             '/',
-            ['as' => 'settings.dashboard', 'uses' => 'DashboardController@index', 'settings_menu' => ['dashboard']]
+            ['as' => 'settings.dashboard', 'uses' => 'DashboardController@index', 'settings_menu' => ['dashboard.home']]
         );
     }
 );
@@ -650,27 +650,30 @@ Route::settings(
     }
 );
 
-/* core update */
+/* update */
 Route::settings('update', function(){
 
     Route::get('/', [
         'as' => 'settings.coreupdate.show',
         'uses' => 'UpdateController@show',
-        'settings_menu' => 'plugin.core-update'
+        'settings_menu' => 'dashboard.updates'
     ]);
     Route::put('/', [
         'as' => 'settings.coreupdate.update',
         'uses' => 'UpdateController@update'
     ]);
+});
 
-    Route::get('operation', [
-        'as' => 'settings.coreupdate.operation',
-        'uses' => 'UpdateController@showOperation'
+Route::settings('operation', function(){
+    Route::get('/', [
+        'as' => 'settings.operation.index',
+        'uses' => 'UpdateController@showOperation',
+        'settings_menu' => 'dashboard.operation'
     ]);
 
-    Route::delete('operation', [
-        'as' => 'settings.coreupdate.operation.delete',
-        'uses' => 'UpdateController@deleteOperation'
+    Route::get('progress', [
+        'as' => 'settings.operation.progress',
+        'uses' => 'UpdateController@progress'
     ]);
 });
 
@@ -721,24 +724,6 @@ Route::settings(
 
             });
 
-            // ANY: plugins/operation
-            Route::group(['prefix'=>'operation'], function() {
-                Route::get(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.operation',
-                        'uses' => 'PluginController@getOperation'
-                    ]
-                );
-                Route::delete(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.operation.delete',
-                        'uses' => 'PluginController@deleteOperation'
-                    ]
-                );
-            });
-
             // GET: plugins/installed index page
             Route::group(['prefix'=>'installed'], function() {
                 Route::get(
@@ -762,13 +747,6 @@ Route::settings(
                                 'settings_menu' => ['plugin.list.detail']
                             ]
                         );
-                        //Route::delete(
-                        //    '/',
-                        //    [
-                        //        'as' => 'settings.plugins.delete',
-                        //        'uses' => 'PluginController@delete'
-                        //    ]
-                        //);
                         Route::put(
                             'activate',
                             [
@@ -797,14 +775,6 @@ Route::settings(
                                 'uses' => 'PluginController@renewPlugin'
                             ]
                         );
-                        //Route::put(
-                        //    'download',
-                        //    [
-                        //        'as' => 'settings.plugins.download',
-                        //        'uses' => 'PluginController@putDownloadPlugin'
-                        //    ]
-                        //);
-
                     });
 
             });
@@ -821,12 +791,6 @@ Route::settings(
                 Route::post('delete', [
                     'as' => 'settings.plugins.manage.delete',
                     'uses' => 'PluginController@delete'
-                ]);
-
-                // GET: plugins/manage/update
-                Route::get('update', [
-                    'as' => 'settings.plugins.manage.update',
-                    'uses' => 'PluginController@getDownload'
                 ]);
 
                 // POST: plugins/manage/update

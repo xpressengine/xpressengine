@@ -14,8 +14,7 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Filesystem\Filesystem;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Plugin\PluginHandler;
 
 /**
@@ -50,47 +49,29 @@ class PluginMake extends MakeCommand
     protected $description = 'Create a new plugin of XpressEngine';
 
     /**
-     * PluginHandler instance.
-     *
-     * @var PluginHandler
-     */
-    protected $handler;
-
-    /**
-     * PluginMake constructor.
-     *
-     * @param Filesystem         $files   Filesystem instance
-     * @param ComposerFileWriter $writer  ComposerFileWriter instance
-     * @param PluginHandler      $handler PluginHandler instance
-     */
-    public function __construct(Filesystem $files, ComposerFileWriter $writer, PluginHandler $handler)
-    {
-        parent::__construct($files, $writer);
-
-        $this->handler = $handler;
-    }
-
-    /**
      * Execute the console command.
      *
+     * @param PluginHandler $handler PluginHandler
      * @return void
      * @throws \Exception
      */
-    public function handle()
+    public function handle(PluginHandler $handler)
     {
         $name = $this->argument('name');
         $namespace = $this->getNamespace($name, $this->argument('vendor'));
 
         $title = $this->getTitleInput($name);
 
+        $this->operator->lock();
+
         try {
             $this->copyStubDirectory($path = app('path.privates').DIRECTORY_SEPARATOR.$name);
             $this->makeUsable($path, $name, $namespace, $title);
             $this->info('Generate the plugin');
 
-            $this->writer->reset()->cleanOperation();
-            $this->writer->install($packageName = 'xpressengine-plugin/'.$name, '*');
-            $this->writer->write();
+            $this->operator->setPrivateMode();
+            $this->operator->install($packageName = 'xpressengine-plugin/'.$name, '*');
+            $this->operator->write();
 
             $this->info('Run composer update command');
             $this->line('> composer update');
@@ -102,11 +83,18 @@ class PluginMake extends MakeCommand
             }
 
             // plugin activate
-            $this->activatePlugin($name);
+            $this->activatePlugin($handler, $name);
 
         } catch (\Exception $e) {
             $this->files->deleteDirectory($path);
             throw $e;
+        } catch (\Throwable $e) {
+            $this->files->deleteDirectory($path);
+            throw new FatalThrowableError($e);
+        } finally {
+            if ($this->operator->isLocked()) {
+                $this->operator->unlock();
+            }
         }
 
         $this->info("Plugin is created and activated successfully.");
@@ -239,16 +227,16 @@ class PluginMake extends MakeCommand
     /**
      * Activate plugin.
      *
-     * @param string $name plugin name
+     * @param PluginHandler $handler PluginHandler
+     * @param string        $name    plugin name
      * @return void
      */
-    protected function activatePlugin($name)
+    protected function activatePlugin(PluginHandler $handler, $name)
     {
-        $this->handler->getAllPlugins(true);
+        $handler->getAllPlugins(true);
 
-        if (!$this->handler->isActivated($name)) {
-            $this->handler->activatePlugin($name);
+        if (!$handler->isActivated($name)) {
+            $handler->activatePlugin($name);
         }
     }
-
 }

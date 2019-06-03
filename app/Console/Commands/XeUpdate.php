@@ -16,10 +16,10 @@ namespace App\Console\Commands;
 use FilesystemIterator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
-
 
 /**
  * Class XeUpdate
@@ -67,13 +67,13 @@ class XeUpdate extends ShouldOperation
     /**
      * Create a new controller creator command instance.
      *
-     * @param ComposerFileWriter $writer          ComposerFileWriter instance
-     * @param ReleaseProvider    $releaseProvider ReleaseProvider instance
-     * @param Filesystem         $filesystem      Filesystem instance
+     * @param Operator        $operator        Operator instance
+     * @param ReleaseProvider $releaseProvider ReleaseProvider instance
+     * @param Filesystem      $filesystem      Filesystem instance
      */
-    public function __construct(ComposerFileWriter $writer, ReleaseProvider $releaseProvider, Filesystem $filesystem)
+    public function __construct(Operator $operator, ReleaseProvider $releaseProvider, Filesystem $filesystem)
     {
-        parent::__construct($writer);
+        parent::__construct($operator);
 
         $this->filesystem = $filesystem;
         $this->releaseProvider = $releaseProvider;
@@ -110,7 +110,7 @@ class XeUpdate extends ShouldOperation
         }
 
         // version 안내
-        $installedVersion = trim(file_get_contents(storage_path('app/installed')));
+        $installedVersion = app()->getInstalledVersion();
         //  업데이트 버전 정보:
         $this->warn('Version information:');
         $this->line(" $installedVersion -> $updateVersion");
@@ -128,13 +128,10 @@ class XeUpdate extends ShouldOperation
             return;
         }
 
-        if ($this->isLocked()) {
-            throw new \Exception('The command is locked. Make sure that another process is running.');
-        }
+        $this->operator->lock();
 
-        $this->lock();
-
-        $this->ready($updateVersion);
+        $this->operator->setCoreMode($updateVersion);
+        $this->setExpires();
 
         try {
             if (0 !== $this->clearCache(true)) {
@@ -186,14 +183,7 @@ class XeUpdate extends ShouldOperation
 
             if (!$skipDownload) {
                 $this->output->section('Copy file to project.');
-                $this->output->write(' copying ... ');
-
-                $this->filesystem->moveDirectory(base_path('vendor'), base_path('vendor-old'), true);
-
-                $this->filesystem->copyDirectory($tempPath, base_path());
-                $this->filesystem->deleteDirectory($tempPath);
-
-                $this->info('done');
+                $this->copyToProject($tempPath);
             }
 
             if (!$skipComposer) {
@@ -218,19 +208,15 @@ class XeUpdate extends ShouldOperation
             throw $e;
         } catch (\Throwable $e) {
             $this->setFailed($e->getCode());
-            throw $e;
+            throw new FatalThrowableError($e);
         } finally {
-            $this->unlock();
+            $this->operator->unlock();
         }
 
         // mark installed
         $this->markInstalled($updateVersion);
 
-        $this->setSuccessed();
-
-        if ($this->filesystem->isDirectory(base_path('vendor-old'))) {
-            $this->filesystem->deleteDirectory(base_path('vendor-old'));
-        }
+        $this->setSucceed();
 
         $this->output->success("Update the Xpressengine to ver.{$updateVersion}.");
     }
@@ -274,7 +260,7 @@ class XeUpdate extends ShouldOperation
             $this->filesystem->makeDirectory($dir, 0777, true);
         }
         $this->filesystem->copy($from, $dir.'/'.$composerJson);
-        $this->filesystem->copy($from, $dir.'/installed');
+        $this->filesystem->copy(storage_path('app/installed'), $dir.'/installed');
     }
 
     /**
@@ -352,7 +338,7 @@ class XeUpdate extends ShouldOperation
                 break;
             }
 
-            $this->output->write(" Download v{$version} - ");
+            $this->output->write(" Download v{$version} ... ");
             $filepath = $this->releaseProvider->download($version, $updatesPath);
             $zip = new \ZipArchive;
             if ($zip->open($filepath) !== true) {
@@ -371,9 +357,37 @@ class XeUpdate extends ShouldOperation
     }
 
     /**
+     * Copy updated files to the project.
+     *
+     * @param string $source the path for updated
+     * @return void
+     */
+    private function copyToProject($source)
+    {
+        $this->output->write(' - Copying vendor ... ');
+        $this->copyDirectory($source.'/vendor', base_path('vendor-new'));
+        $this->info('done');
+
+        $this->output->write(' - Copying core ... ');
+        $this->copyDirectory($source, base_path(), ['vendor']);
+        $this->info('done');
+
+        $this->output->write(' - Changing vendor ... ');
+        $this->filesystem->moveDirectory(base_path('vendor'), base_path('vendor-old'), true);
+        $this->filesystem->moveDirectory(base_path('vendor-new'), base_path('vendor'), true);
+        $this->info('done');
+
+        $this->output->write(' - Deleting Unnecessary files ... ');
+        $this->filesystem->deleteDirectory($source);
+        $this->filesystem->deleteDirectory(base_path('vendor-old'));
+        $this->info('done');
+    }
+
+    /**
      * Execute migrations for XE core.
      *
-     * @param $installedVersion
+     * @param string $installedVersion installed version
+     * @return void
      */
     private function migrateCore($installedVersion)
     {
@@ -403,22 +417,6 @@ class XeUpdate extends ShouldOperation
      */
     private function markInstalled($ver)
     {
-        file_put_contents(base_path('storage/app/installed'), $ver);
-    }
-
-    /**
-     * Set ready for update.
-     *
-     * @param string $ver version
-     * @return void
-     */
-    private function ready($ver)
-    {
-        $this->writer->reset()->cleanOperation();
-
-        $this->writer->setRunning();
-        $this->writer->set('xpressengine-plugin.operation.core_update', $ver);
-
-        $this->writer->write();
+        file_put_contents(app()->getInstalledPath(), $ver);
     }
 }

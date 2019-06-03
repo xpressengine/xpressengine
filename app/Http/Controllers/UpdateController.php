@@ -18,9 +18,11 @@ use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
+use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
 use Xpressengine\Http\Request;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
+use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 
 /**
  * Class UpdateController
@@ -37,33 +39,52 @@ class UpdateController extends Controller
     /**
      * Show core status.
      *
-     * @param ComposerFileWriter $writer          ComposerFileWriter
-     * @param ReleaseProvider    $releaseProvider ReleaseProvider
+     * @param Operator        $operator          Operator
+     * @param ReleaseProvider $releaseProvider ReleaseProvider
+     * @param PluginHandler   $handler         PluginHandler
+     * @param PluginProvider  $provider        PluginProvider
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function show(ComposerFileWriter $writer, ReleaseProvider $releaseProvider)
+    public function show(Operator $operator, ReleaseProvider $releaseProvider, PluginHandler $handler, PluginProvider $provider)
     {
-        $installedVersion = file_get_contents(base_path('storage/app/installed'));
+        if ($operator->isInProgress()) {
+            return redirect()->route('settings.operation.index');
+        }
+
+        $installedVersion = app()->getInstalledVersion();
         $latest = $releaseProvider->getLatestCoreVersion();
         $updatables = $releaseProvider->getUpdatableVersions();
 
-        $operation = $this->getOperation($writer);
 
-        return XePresenter::make('update.show', compact('installedVersion', 'latest', 'updatables', 'operation'));
+        $collection = $handler->getAllPlugins(true);
+        $fetched = $collection->fetchByInstallType('fetched');
+
+        $provider->sync($fetched);
+
+        $plugins = array_where($fetched, function ($plugin) {
+            return $plugin->hasUpdate();
+        });
+        $available = ini_get('allow_url_fopen') ? true : false;
+
+        $operation = $operator->getOperation(Operator::TYPE_CORE);
+
+        return XePresenter::make(
+            'update.show',
+            compact('installedVersion', 'latest', 'updatables', 'plugins', 'available', 'operation')
+        );
     }
 
     /**
      * Update core.
      *
-     * @param Request            $request         request
-     * @param ComposerFileWriter $writer          ComposerFileWriter instance
-     * @param ReleaseProvider    $releaseProvider ReleaseProvider
+     * @param Request         $request         request
+     * @param Operator        $operator        Operator instance
+     * @param ReleaseProvider $releaseProvider ReleaseProvider
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, ComposerFileWriter $writer, ReleaseProvider $releaseProvider)
+    public function update(Request $request, Operator $operator, ReleaseProvider $releaseProvider)
     {
-        $operation = $this->getOperation($writer);
-        if($operation['locked']) {
+        if($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
@@ -77,14 +98,10 @@ class UpdateController extends Controller
             $skipComposer = false;
         }
 
-        $writer->set("xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_READY);
-        $writer->set("xpressengine-plugin.operation.core_update", $version);
-
         $startTime = now()->format('YmdHis');
         $logFile = "logs/core-update-$startTime.log";
-        $writer->set('xpressengine-plugin.operation.log', $logFile);
 
-        $writer->write();
+        $operator->setCoreMode($version, $logFile, false);
 
         app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
             ignore_user_abort(true);
@@ -98,63 +115,50 @@ class UpdateController extends Controller
             ], new StreamOutput(fopen(storage_path($logFile), 'a')));
         });
 
-        return redirect()->back()->with(
+        return redirect()->route('settings.operation.index')->with(
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::startUpdate')]
         );
     }
 
     /**
-     * Returns current status of operation.
-     *
-     * @param ComposerFileWriter $writer instance
-     * @return array|null
-     */
-    protected function getOperation(ComposerFileWriter $writer)
-    {
-        $status = $writer->get('xpressengine-plugin.operation.status');
-        $updateVersion = $writer->get('xpressengine-plugin.operation.core_update');
-
-        if($updateVersion === null) {
-            return null;
-        }
-
-        if ($log = $writer->get('xpressengine-plugin.operation.log')) {
-            if (file_exists(storage_path($log))) {
-                $log = file_get_contents(storage_path($log));
-            } else {
-                $log = sprintf('"%s" file not founded.', storage_path($log));
-            }
-        } else {
-            $log = 'Running in console.';
-        }
-
-        $locked = $writer->get('xpressengine-plugin.lock', false);
-
-        return compact('status', 'updateVersion', 'log', 'locked');
-    }
-
-    /**
      * Show current status of operation.
      *
-     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @param $operator $operator Operator instance
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function showOperation(ComposerFileWriter $writer)
+    public function showOperation(Operator $operator)
     {
-        $operation = $this->getOperation($writer);
-        return api_render('update.operation', compact('operation'), compact('operation'));
+        if (!$operator->isInProgress()) {
+            if ($operator->isPrivate()) {
+                return redirect()->route('settings.plugins', ['install_type' => 'self-installed']);
+            }
+
+            return redirect()->route('settings.coreupdate.show');
+        }
+
+        return XePresenter::make('update.operation', compact('operator'));
     }
 
     /**
-     * Delete the log of operation.
+     * Show the operation progress.
      *
-     * @param ComposerFileWriter $writer ComposerFileWriter instance
+     * @param Operator $operator Operator instance
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function deleteOperation(ComposerFileWriter $writer)
+    public function progress(Operator $operator)
     {
-        $writer->reset()->cleanOperation(true)->write();
-        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
+        $inProgress = $operator->isInProgress();
+
+        if ($inProgress && $operator->timeover()) {
+            $operator->expired();
+            $operator->unlock();
+
+            $inProgress = false;
+        }
+
+        return api_render('update.progress', compact('operator'), [
+            'in_progress' => $inProgress
+        ]);
     }
 }

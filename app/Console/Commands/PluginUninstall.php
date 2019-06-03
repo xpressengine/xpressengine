@@ -15,10 +15,6 @@ namespace App\Console\Commands;
 
 use File;
 use Illuminate\Support\Collection;
-use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\PluginHandler;
-use Xpressengine\Plugin\PluginProvider;
 
 /**
  * Class PluginUninstall
@@ -91,7 +87,8 @@ class PluginUninstall extends PluginCommand
         $develops = $plugins->last();
 
         if ($stables && count($stables) > 0) {
-            $this->writeRequire($stables);
+            $this->operator->lock();
+            $this->writeRequire('uninstall', $stables);
 
             $packages = array_pluck($stables, 'name');
             // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
@@ -209,23 +206,5 @@ class PluginUninstall extends PluginCommand
         foreach ($data as $info) {
             $this->handler->uninstallPlugin($info['id']);
         }
-    }
-
-    /**
-     * Write require to composer.plugins.json
-     *
-     * @param array $data data for plugins
-     * @return void
-     */
-    protected function writeRequire($data)
-    {
-        // - plugins require info 갱신
-        $this->writer->reset()->cleanOperation();
-
-        foreach ($data as $info) {
-            // composer.plugins.json 업데이트
-            $this->writer->uninstall($info['name']);
-        }
-        $this->writer->write();
     }
 }

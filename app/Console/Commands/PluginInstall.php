@@ -13,13 +13,6 @@
  */
 namespace App\Console\Commands;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\PluginHandler;
-use Xpressengine\Plugin\PluginProvider;
-
 /**
  * Class PluginInstall
  *
@@ -79,7 +72,8 @@ class PluginInstall extends PluginCommand
             return;
         }
 
-        $this->writeRequire($data);
+        $this->operator->lock();
+        $this->writeRequire('install', $data);
 
         $packages = array_pluck($data, 'name');
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
@@ -147,25 +141,6 @@ class PluginInstall extends PluginCommand
         }
 
         return $data;
-    }
-
-    /**
-     * Write require to composer.plugins.json
-     *
-     * @param array $data require information
-     * @return void
-     */
-    protected function writeRequire($data)
-    {
-        // - plugins require info 갱신
-        $this->writer->reset()->cleanOperation();
-
-        foreach ($data as $info) {
-            // composer.plugins.json 업데이트
-            // - require에 설치할 플러그인 추가
-            $this->writer->install($info['name'], $info['version']);
-        }
-        $this->writer->write();
     }
 
     /**

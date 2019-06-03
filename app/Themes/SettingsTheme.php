@@ -57,7 +57,7 @@ class SettingsTheme extends AbstractTheme
         $siteTitle = $siteTitle !== null ? xe_trans($siteTitle) : 'XpressEngine';
         $selectedMenu = \XeSettings::getSelectedMenu($isSuper);
 
-        $installedVersion = file_get_contents(base_path('storage/app/installed'));
+        $installedVersion = app()->getInstalledVersion();
         if(__XE_VERSION__ !== $installedVersion) {
             app('xe.frontend')->js([
                 'assets/core/xe-ui-component/js/xe-page.js',

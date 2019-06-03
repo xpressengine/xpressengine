@@ -111,7 +111,7 @@ class SafeModeController extends Controller
 
         // check core version
         $sourceVer = __XE_VERSION__;
-        $installedVer =  File::get(storage_path('/app/installed'));
+        $installedVer =  app()->getInstalledVersion();
 
         return view('safeMode.dashboard', [
             'activatedPluginList' => $activatedPluginList,
