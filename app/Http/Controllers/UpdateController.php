@@ -154,8 +154,13 @@ class UpdateController extends Controller
             $inProgress = false;
         }
 
+        $log = null;
+        if ($operator->getLogFile() && file_exists($path = storage_path($operator->getLogFile()))) {
+            $log = nl2br(file_get_contents($path));
+        }
         return api_render('update.progress', compact('operator'), [
-            'in_progress' => $inProgress
+            'in_progress' => $inProgress,
+            'log' => $log
         ]);
     }
 }

@@ -25,6 +25,15 @@
             </div>
         </li>
     </ul>
+    <div id="__xe-operation-log" style="display: none;padding:15px 10px;">
+        <div class="well" style="overflow-y:auto; max-height: 150px;"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="__xe-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 0; margin: auto; top: 50%;">
+        <i class="xi-spinner-5 xi-spin xi-5x"></i>
+    </div>
 </div>
 
 <script>
@@ -34,22 +43,19 @@
         XE.page(url, '.__xe_operation', {}, function(response){
           var data = response.data;
           if(data.in_progress !== true) {
+            $('#__xe-dialog').modal('hide');
             clearInterval(loadOperation);
             location.reload();
+          } else {
+            $('#__xe-dialog').modal({backdrop:'static'});
+            if (data.log) {
+              $('#__xe-operation-log').show();
+              var $well = $('#__xe-operation-log>.well');
+              $well.html(data.log);
+              $well.animate({ scrollTop: $well.prop('scrollHeight')}, 100);
+            }
           }
         });
       }, 3000);
-
-      {{--var loadOperation = function(url) {--}}
-        {{--XE.page(url, '.__xe_operation', {}, function(response){--}}
-          {{--var data = response.data;--}}
-          {{--if(data.in_progress !== true) {--}}
-            {{--location.reload();--}}
-          {{--} else {--}}
-            {{--loadOperation("{{ route('settings.operation.progress') }}");--}}
-          {{--}--}}
-        {{--});--}}
-      {{--};--}}
-      {{--loadOperation("{{ route('settings.operation.progress', ['s' => 1]) }}");--}}
     })
 </script>
