@@ -104,9 +104,6 @@ class UpdateController extends Controller
         $operator->setCoreMode($version, $logFile, false);
 
         app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
-            ignore_user_abort(true);
-            set_time_limit(config('xe.plugin.operation.time_limit'));
-
             Artisan::call('xe:update', [
                 'version' => $version,
                 '--skip-download' => $skipDownload,

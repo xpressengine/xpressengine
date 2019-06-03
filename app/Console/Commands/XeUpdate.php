@@ -236,31 +236,25 @@ class XeUpdate extends ShouldOperation
             }
         }
 
-        $composerJson = 'composer.plugins.json';
-        $info = json_decode(file_get_contents($from = storage_path('app/'.$composerJson)), true);
-        $plugins = collect(array_get($info, 'require', []))->keys()->map(function ($require) {
-            return str_replace('xpressengine-plugin/', '', $require);
-        })->all();
-
-        $excepts = collect($this->filesystem->directories(base_path('plugins')))->map(function ($item) {
-            return basename($item);
-        })->filter(function ($name) use ($plugins) {
-            return !in_array($name, $plugins);
-        })->map(function ($except) {
-            return 'plugins/' . $except;
-        })->all();
-
-        $this->copyDirectory(base_path(), $destination, array_merge([
-            'storage',
-            'node_modules',
-        ], $excepts));
-
-        $storageAppPath = 'storage/app';
-        if (!$this->filesystem->isDirectory($dir = $destination.'/'.$storageAppPath)) {
-            $this->filesystem->makeDirectory($dir, 0777, true);
+        $sources = ['composer.json', 'composer.lock', 'storage/app/composer.plugins.json', 'vendor', 'plugins'];
+        foreach (['composer.user.json', 'privates'] as $item) {
+            if (file_exists(base_path($item))) {
+                $sources[] = $item;
+            }
         }
-        $this->filesystem->copy($from, $dir.'/'.$composerJson);
-        $this->filesystem->copy(storage_path('app/installed'), $dir.'/installed');
+
+        foreach ($sources as $item) {
+            $source = base_path($item);
+            $target = $destination.'/'.$item;
+            if (is_dir($source)) {
+                $this->filesystem->copyDirectory($source, $target);
+            } else {
+                if (!$this->filesystem->isDirectory($dir = dirname($target))) {
+                    $this->filesystem->makeDirectory($dir, 0777, true);
+                }
+                $this->filesystem->copy($source, $target);
+            }
+        }
     }
 
     /**
@@ -365,11 +359,16 @@ class XeUpdate extends ShouldOperation
     private function copyToProject($source)
     {
         $this->output->write(' - Copying vendor ... ');
-        $this->copyDirectory($source.'/vendor', base_path('vendor-new'));
+        if ($this->filesystem->isDirectory($newVendorPath = base_path('vendor-new'))) {
+            if (!$this->filesystem->deleteDirectory($newVendorPath)) {
+                throw new \Exception("Failed to empty directory [$newVendorPath].");
+            }
+        }
+        $this->filesystem->moveDirectory($source.'/vendor', $newVendorPath);
         $this->info('done');
 
         $this->output->write(' - Copying core ... ');
-        $this->copyDirectory($source, base_path(), ['vendor']);
+        $this->copyDirectory($source, base_path(), ['vendor', 'plugins', 'privates', 'storage']);
         $this->info('done');
 
         $this->output->write(' - Changing vendor ... ');

@@ -153,11 +153,17 @@ trait ComposerRunTrait
             $output = new StreamOutput(fopen(storage_path($output), 'a'));
         }
 
-        gc_collect_cycles();
+        $cnt = gc_collect_cycles();
+        $this->info('GC collected cycles: '. $cnt);
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
 
-        return $application->run(new ArrayInput($inputs), $output);
+        $result = $application->run(new ArrayInput($inputs), $output);
+
+        $cnt = gc_collect_cycles();
+        $this->info('GC collected cycles: '. $cnt);
+
+        return $result;
     }
 }
