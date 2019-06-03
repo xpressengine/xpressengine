@@ -81,6 +81,7 @@ class ImageHandler extends AbstractHandler
      * @param null|string      $disk     storage disk
      * @param null|string      $path     saved path
      * @param null|string      $originId origin file id
+     * @param mixed            $option   disk option (ex. aws s3 'visibility: public')
      * @return Image
      */
     public function createThumbnails(
@@ -89,7 +90,8 @@ class ImageHandler extends AbstractHandler
         $code = null,
         $disk = null,
         $path = null,
-        $originId = null
+        $originId = null,
+        $option = []
     ) {
         $thumbnailer = $this->makeThumbnailer();
         $content = $thumbnailer->setOrigin($origin)->addCommand($command)->generate();
@@ -112,7 +114,9 @@ class ImageHandler extends AbstractHandler
             $path ?: '',
             $name,
             $disk,
-            $originId
+            $originId,
+            null,
+            $option
         );
 
         $image = $this->makeModel($file);
