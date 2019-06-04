@@ -72,11 +72,12 @@ class FilesystemHandler
      * @param string $content  file content
      * @param string $pathname be saved path and file name
      * @param string $disk     be saved disk name
+     * @param mixed  $option   disk option (ex. aws s3 'visibility: public')
      * @return bool
      */
-    public function store($content, $pathname, $disk)
+    public function store($content, $pathname, $disk, $option = [])
     {
-        return $this->getDisk($disk)->put($pathname, $content);
+        return $this->getDisk($disk)->put($pathname, $content, $option);
     }
 
     /**

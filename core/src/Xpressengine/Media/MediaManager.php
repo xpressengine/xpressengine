@@ -211,11 +211,16 @@ class MediaManager
      * @param Media       $media      media instance
      * @param string|null $type       섬네일 생성 방식
      * @param array|null  $dimensions 섬네일 크기
+     * @param null        $path
+     * @param string|null $disk
+     * @param mixed       $option     disk option (ex. aws s3 'visibility: public')
      * @return Collection|Image[]
      */
-    public function createThumbnails(Media $media, $type = null, array $dimensions = null)
+    public function createThumbnails(Media $media, $type = null, array $dimensions = null, $path = null, $disk = null, $option = [])
     {
         $type = strtolower($type ?: $this->config['type']);
+        $path = $path ?: $this->config['path'];
+        $disk = $disk ?: $this->config['disk'];
         $dimensions = $dimensions ?: $this->config['dimensions'];
         $handler = $this->getHandlerByMedia($media);
 
@@ -233,9 +238,10 @@ class MediaManager
                     $content,
                     $command,
                     $code,
-                    $this->config['disk'],
-                    $this->config['path'],
-                    $media->getOriginKey()
+                    $disk,
+                    $path,
+                    $media->getOriginKey(),
+                    $option
                 );
         }
 
