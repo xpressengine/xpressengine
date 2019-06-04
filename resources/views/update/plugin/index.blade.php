@@ -1,9 +1,9 @@
-<h3>플러그인 업데이트</h3>
+<h3>{{ xe_trans('xe::updatePlugin') }}</h3>
 @if(count($plugins) < 1)
 <div class="panel">
     <div class="panel-body">
-        <p class="help-block">업데이트할 플러그인이 없습니다.</p>
-        <a href="{{ route('settings.plugins.install.index') }}" >새로운 플러그인 설치하기</a>
+        <p class="help-block">{{ xe_trans('xe::noPluginsToUpdate') }}</p>
+        <a href="{{ route('settings.plugins.install.index') }}" >{{ xe_trans('xe::installNewPlugin') }}</a>
     </div>
 </div>
 @else
@@ -13,16 +13,16 @@
 
         <div class="panel-body">
             <p class="help-block">
-                아래 플러그인의 새버전이 있습니다. 업데이트를 할 플러그인을 확인하시고 "플러그인 업데이트"를 누르세요.
+                {{ xe_trans('xe::selectPluginToUpdateAndClick') }}
             </p>
-            <button type="submit" class="xe-btn xe-btn-positive-outlin xe-btn-lg">플러그인 업데이트</button>
+            <button type="submit" class="xe-btn xe-btn-positive-outlin xe-btn-lg">{{ xe_trans('xe::updatePlugin') }}</button>
         </div>
 
         <div style="padding: 14px 20px;">
             <label class="xe-label">
                 <input type="checkbox" class="__xe_chk-all">
                 <span class="xe-input-helper"></span>
-                <span class="xe-label-text">전체선택</span>
+                <span class="xe-label-text">{{ xe_trans('xe::selectAll') }}</span>
             </label>
         </div>
 

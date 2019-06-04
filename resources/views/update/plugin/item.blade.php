@@ -26,7 +26,7 @@
 
         <hr>
         <p>
-            업데이트 버전:
+            {{ xe_trans('xe::updateVersion') }}:
             <select name="plugin[{{ $plugin->getId() }}][version]">
                 @foreach(array_reverse($plugin->getVersions()) as $release)
                     <option value="{{$release->version}}">ver.{{ $release->version }}</option>

@@ -2378,6 +2378,10 @@ return [
         'ko' => '플러그인 추가',
         'en' => 'Add Plugin',
     ],
+    'updatePlugin' => [
+        'ko' => '플러그인 업데이트',
+        'en' => 'Update Plugin',
+    ],
     'inputNewPluginId' => [
         'ko' => '새로 설치할 플러그인의 아이디를 입력하세요.',
         'en' => 'Enter the ID of the plugin to be newly installed.',
@@ -2840,9 +2844,9 @@ return [
         'ko' => ':option 설정이 꺼져있습니다.',
         'en' => 'The :option setting is off.',
     ],
-    'turnOnIniOptionForPluginUpdate' => [
-        'ko' => '플러그인을 업데이트하려면 php.ini 파일에서 :option 설정을 켜야 합니다.',
-        'en' => 'To update the plugin, you must turn on the :option setting in the php.ini file.',
+    'turnOnIniOptionForUpdate' => [
+        'ko' => '업데이트하려면 php.ini 파일에서 :option 설정을 켜야 합니다.',
+        'en' => 'To update, you must turn on the :option setting in the php.ini file.',
     ],
     'descUpdatePlugins' => [
         'ko' => '플러그인을 업데이트합니다. 업데이트하는 플러그인에서 의존하는 다른 플러그인이 같이 설치될 수 있습니다. 업데이트 과정은 수분이상 소요될 수 있습니다.',
@@ -3115,5 +3119,69 @@ return [
     'siteSettingFaviconPreviewDescription' => [
         'ko' => '등록되어 있는 파비콘을 보여주거나, 새로 등록할 파비콘을 미리 볼 수 있습니다.',
         'en' => 'You can show the registered favicon or preview the new favicon to register.'
+    ],
+    'custom' => [
+        'ko' => '커스텀',
+        'en' => 'Custom',
+    ],
+    'beMaintenanceModeWhileUpdating' => [
+        'ko' => '업데이트되는 동안 유지관리 모드가 됩니다.',
+        'en' => 'While in the updating, it is in maintenance mode.',
+    ],
+    'returnToNormalWhenUpdateComplete' => [
+        'ko' => '업데이트가 완료되는대로 사이트가 정상으로 돌아올 것 입니다.',
+        'en' => 'Once the update is complete, the site will return to normal.',
+    ],
+    'installing' => [
+        'ko' => '설치 중',
+        'en' => 'Installing',
+    ],
+    'updating' => [
+        'ko' => '업데이트 중',
+        'en' => '',
+    ],
+    'removing' => [
+        'ko' => '삭제 중',
+        'en' => 'Removing',
+    ],
+    'availableUpdatedCoreVersion' => [
+        'ko' => '업데이트된 버전의 XE를 사용할 수 있습니다.',
+        'en' => 'An updated version of XE is available.',
+    ],
+    'takeUpSeveralMinutes' => [
+        'ko' => '최대 수분이 소요될 수 있습니다.',
+        'en' => 'It may take up to several minutes.',
+    ],
+    'updateNow' => [
+        'ko' => '지금 업데이트',
+        'en' => 'Update now',
+    ],
+    'checkIfFinalizingUpdateToDownloadedVersion' => [
+        'ko' => '이미 다운로드된 버전으로 업데이트를 마무리하는 경우 체크하십시오.',
+        'en' => 'Check this if you are finalizing the update to a previously downloaded version.',
+    ],
+    'coreVersionNotCorrect' => [
+        'ko' => '코어 버전정보가 정상적이지 않습니다.',
+        'en' => 'Core version is not correct.',
+    ],
+    'notWorkNormallyIfVersionChangedRandomly' => [
+        'ko' => '임의로 버전정보가 변경된 경우 정상적으로 동작하지 않을 수 있습니다.',
+        'en' => 'If the version is changed randomly, it may not work normally.',
+    ],
+    'latestVersionOfCoreInstalled' => [
+        'ko' => '현재 최신버전의 XE가 설치되어 있습니다.',
+        'en' => 'You have a latest version of XE installed.',
+    ],
+    'recentUpdate' => [
+        'ko' => '최근 업데이트',
+        'en' => 'Recent update',
+    ],
+    'selectPluginToUpdateAndClick' => [
+        'ko' => '아래 플러그인의 새버전이 있습니다. 업데이트를 할 플러그인을 확인하시고 "플러그인 업데이트"를 누르세요.',
+        'en' => 'There is a new version of the plugin below. Check the plugin to update and click "Update Plugin".',
+    ],
+    'updateVersion' => [
+        'ko' => '업데이트 버전',
+        'en' => 'Update version',
     ],
 ];

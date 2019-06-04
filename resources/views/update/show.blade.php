@@ -1,12 +1,13 @@
 @section('page_title')
-    <h2>업데이트</h2>
+    <h2>{{ xe_trans('xe::updates') }}</h2>
 @endsection
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
             @if(!$available)
             <div class="alert alert-danger" role="alert">
-                <code>allow_url_fopen</code> 옵션이 꺼져 있습니다. 옵션을 켜야 업데이트가 정상적으로 동작합니다.
+                {!! xe_trans('xe::iniOptionOff', ['option' => '<code>allow_url_fopen</code>']) !!}
+                {!! xe_trans('xe::turnOnIniOptionForUpdate', ['option' => '<code>allow_url_fopen</code>']) !!}
             </div>
             @endif
 

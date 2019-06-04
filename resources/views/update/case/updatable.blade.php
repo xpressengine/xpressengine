@@ -1,4 +1,11 @@
-<h3>업데이트된 버전의 XE를 사용할 수 있습니다.</h3>
+@section('updateDescription')
+    <p class="help-block">
+        {{ xe_trans('xe::availableUpdatedCoreVersion') }}<br>
+        {{ xe_trans('xe::takeUpSeveralMinutes') }} {{ xe_trans('xe::beMaintenanceModeWhileUpdating') }}<br>
+        {{ xe_trans('xe::returnToNormalWhenUpdateComplete') }}<br>
+    </p>
+@endsection
+<h3>{{ xe_trans('xe::availableUpdatedCoreVersion') }}</h3>
 <div class="panel">
     <div class="panel-body">
         <form action="{{ route('settings.coreupdate.update') }}" method="POST">
@@ -11,15 +18,8 @@
                     <strong>{{ xe_trans('xe::downloadedVersion') }}: {{ __XE_VERSION__ }}</strong>
                 </p>
 
-                <p class="help-block">
-                    지금 업데이트된 버전의 XE를 사용할 수 있습니다.<br>
-                    최대 수분이 소요될 수 있습니다. 사이트가 업데이트되는 동안 유지관리 모드가 됩니다.<br>
-                    업데이트가 완료되는대로 사이트가 정상으로 돌아올 것 입니다.<br>
-                </p>
-                {{--<p>--}}
-                    {{--{{ xe_trans('xe::newCoreDownloaded') }} <br>--}}
-                    {{--{{ xe_trans('xe::alertUpdateCore', ['version' => __XE_VERSION__]) }} {{ xe_trans('xe::confirmUpdate') }}--}}
-                {{--</p>--}}
+
+                @yield('updateDescription')
 
                 <div class="checkbox">
                     <label>
@@ -33,7 +33,7 @@
                     <strong>{{ xe_trans('xe::currentInstalledVersion') }} : {{ $installedVersion }}</strong>
                     <br>
                     <strong>
-                        업데이트 버전 :
+                        {{ xe_trans('xe::updateVersion') }} :
                         <select name="version">
                             @foreach(array_reverse($updatables) as $updatable)
                                 <option value="{{ $updatable }}">{{ $updatable }}</option>
@@ -44,22 +44,15 @@
                         @endif
                     </strong>
                 </p>
-                <p class="help-block">
-                    지금 업데이트된 버전의 XE를 사용할 수 있습니다.<br>
-                    최대 수분이 소요될 수 있습니다. 사이트가 업데이트되는 동안 유지관리 모드가 됩니다.<br>
-                    업데이트가 완료되는대로 사이트가 정상으로 돌아올 것 입니다.<br>
-                </p>
-                {{--<p>--}}
-                {{--새로운 버전의 XE가 있습니다. <br>--}}
-                {{--{{ xe_trans('xe::alertUpdateCore', ['version' => $latest]) }} {{ xe_trans('xe::confirmUpdate') }}--}}
-                {{--</p>--}}
+
+                @yield('updateDescription')
 
                 @if($downloaded)
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" name="skip-download" value="Y" onclick="$('#__chkbox-composer').slideDown();">
-                            다운로드 {{ xe_trans('xe::doNotRun') }}
-                            <small>- 이미 다운로드된 버전으로 업데이트를 마무리하는 경우 체크하십시오.</small>
+                            {{ xe_trans('xe::download') }} {{ xe_trans('xe::doNotRun') }}
+                            <small>- {{ xe_trans('xe::checkIfFinalizingUpdateToDownloadedVersion') }}</small>
                         </label>
                     </div>
                     <div class="checkbox" id="__chkbox-composer" style="display: none;">
@@ -85,12 +78,12 @@
                 @endif
             @endif
 
-            <button type="submit" class="xe-btn xe-btn-primary xe-btn-lg">지금 업데이트</button>
+            <button type="submit" class="xe-btn xe-btn-primary xe-btn-lg">{{ xe_trans('xe::updateNow') }}</button>
         </form>
         @if($operation->isFailed() || $operation->isExpired())
             <hr>
             <p>
-                최근 기록:
+                {{ xe_trans('xe::recentOperation') }}:
                 @if($operation->isFailed())
                     <span class="label label-danger">{{ xe_trans('xe::fail') }}</span>
                 @else
