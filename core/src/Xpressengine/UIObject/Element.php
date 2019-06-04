@@ -34,7 +34,7 @@ class Element
 
     protected $empty = false;
 
-    static protected $emptyElements = [
+    protected static $emptyElements = [
         'area',
         'base',
         'br',

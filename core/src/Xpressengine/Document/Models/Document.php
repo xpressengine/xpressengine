@@ -474,7 +474,7 @@ class Document extends DynamicModel
     public function setApprove()
     {
         $this->setApproved(self::APPROVED_APPROVED);
-        if($this->display !== self::DISPLAY_SECRET){
+        if ($this->display !== self::DISPLAY_SECRET) {
             $this->setDisplay(self::DISPLAY_VISIBLE);
         }
         return $this;
@@ -500,7 +500,7 @@ class Document extends DynamicModel
     public function setApproveWait()
     {
         $this->setApproved(self::APPROVED_WAITING);
-        if($this->display !== self::DISPLAY_SECRET){
+        if ($this->display !== self::DISPLAY_SECRET) {
             $this->setDisplay(self::DISPLAY_HIDDEN);
         }
         return $this;
@@ -537,12 +537,12 @@ class Document extends DynamicModel
      */
     public function setTrash()
     {
-        if($this->status === self::STATUS_NOTICE){
+        if ($this->status === self::STATUS_NOTICE) {
             $this->setStatus(self::STATUS_TRASH_NOTICE);
-        }else{
+        } else {
             $this->setStatus(self::STATUS_TRASH);
         }
-        if($this->display !== self::DISPLAY_SECRET){
+        if ($this->display !== self::DISPLAY_SECRET) {
             $this->setDisplay(self::DISPLAY_HIDDEN);
         }
         return $this;
@@ -555,12 +555,12 @@ class Document extends DynamicModel
      */
     public function setRestore()
     {
-        if($this->status === self::STATUS_TRASH_NOTICE){
+        if ($this->status === self::STATUS_TRASH_NOTICE) {
             $this->setStatus(self::STATUS_NOTICE);
-        }else{
+        } else {
             $this->setStatus(self::STATUS_PUBLIC);
         }
-        if($this->display !== self::DISPLAY_SECRET){
+        if ($this->display !== self::DISPLAY_SECRET) {
             $this->setDisplay(self::DISPLAY_VISIBLE);
         }
         return $this;
