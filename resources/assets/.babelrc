@@ -1,14 +1,24 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "browsers": ["last 3 versions", "ie > 9"]
+    [
+      "@babel/preset-env",
+      {
+        "targets": [
+          "last 3 versions",
+          "ie >= 9"
+        ],
+        "useBuiltIns": "false",
+        "corejs": {
+          "version": 3
+        }
       }
-    }]
+    ]
   ],
-  "env": {
-    "test": {
-      "plugins": ["istanbul"]
-    }
-  }
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-runtime", {
+      "regenerator": true,
+      "corejs": 3
+    }]
+  ]
 }

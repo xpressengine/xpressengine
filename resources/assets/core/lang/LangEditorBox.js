@@ -24,11 +24,16 @@ class LangEditorBox {
     this.lines = lines || []
     this.autocomplete = autocomplete
 
-    this.init()
+    var that = this
+    window.XE.app('Lang').then((appLang) => {
+      $(function () {
+        that.init()
+      })
+    })
   }
 
   init () {
-    if (this.langKey && this.lines.length == 0) {
+    if (this.langKey && this.lines.length === 0) {
       window.XE.ajax({
         type: 'get',
         dataType: 'json',

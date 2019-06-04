@@ -1,6 +1,4 @@
-import _get from 'lodash/get'
-import _initial from 'lodash/initial'
-import _isFunction from 'lodash/isFunction'
+import _ from 'lodash'
 import $ from 'jquery'
 
 /* global FormData */
@@ -21,8 +19,8 @@ function ajaxSend ({ $element, element }) {
   const callback = $element.data('callback') || ''
   const validate = !!$element.data('validate')
 
-  const callbackObj = _initial(window, callback)
-  const callbackFunc = _get(window, callback)
+  const callbackObj = _.initial(window, callback)
+  const callbackFunc = _.get(window, callback)
 
   const formData = new FormData(element)
   const options = {
@@ -34,7 +32,7 @@ function ajaxSend ({ $element, element }) {
     processData: false
   }
 
-  if (_isFunction(callbackFunc)) {
+  if (_.isFunction(callbackFunc)) {
     options.success = function (data, textStatus, jqXHR) {
       callbackFunc.call(callbackObj, data, textStatus, jqXHR)
     }

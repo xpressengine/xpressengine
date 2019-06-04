@@ -1,5 +1,4 @@
-import isUndefined from 'lodash/isUndefined'
-import findIndex from 'lodash/findIndex'
+import _ from 'lodash'
 
 /**
  * @class
@@ -122,7 +121,7 @@ class EventEmitter {
 
     // listener 호출
     this.eventMaps[eventName].forEach((item, symbolKey) => {
-      if (isUndefined(item) && isUndefined(symbolKey)) return
+      if (_.isUndefined(item) && _.isUndefined(symbolKey)) return
 
       if (item.options.once) this.eventMaps[eventName].delete(symbolKey)
 
@@ -190,10 +189,10 @@ const sortListener = (arr) => {
     }
 
     // before를 지정하지 않았으면 유지
-    if (isUndefined(currentItem.before)) return 0
+    if (_.isUndefined(currentItem.before)) return 0
 
     // before로 지정한 대상이 앞에 있으면 재정렬
-    if (findIndex(sortList, { 'name': currentItem.before }) < sortList.indexOf(currentItem)) return (targetIsA) ? 1 : -1
+    if (_.findIndex(sortList, { 'name': currentItem.before }) < sortList.indexOf(currentItem)) return (targetIsA) ? 1 : -1
     if (targetItem.name === currentItem.before) return (targetIsA) ? 1 : -1
 
     return 0

@@ -11,6 +11,7 @@ class Router extends App {
   constructor (base, fixed = 'plugin', settings = '') {
     super()
 
+    this.routes = new Map()
     this.setup(base, fixed, settings)
   }
 
@@ -23,11 +24,9 @@ class Router extends App {
       return Promise.resolve(this)
     }
 
-    this.routes = new Map()
+    super.boot(XE)
 
     return new Promise((resolve) => {
-      super.boot(XE)
-
       this.baseURL = XE.options.baseURL
       this.fixedPrefix = XE.options.fixedPrefix
       this.settingsPrefix = XE.options.settingsPrefix
@@ -60,7 +59,6 @@ class Router extends App {
           if (exposed.routes) this.addRoutes(exposed.routes)
         })
       })
-
 
       resolve(this)
     })
@@ -117,4 +115,3 @@ class Router extends App {
 }
 
 export default Router
-export const routerInstance = new Router()

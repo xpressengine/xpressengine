@@ -23,19 +23,25 @@ class Lang extends App {
     return 'Lang'
   }
 
-  boot (XE, config) {
+  boot (XE, options) {
     if (this.booted()) {
       return Promise.resolve(this)
     }
 
     return new Promise((resolve) => {
       super.boot(XE)
+      if (options.translation.locales) {
+        this.$$config.dispatch('lang/setLocales', {
+          locales: options.translation.locales,
+          default: options.defaultLocale,
+          current: options.locale
+        })
+      }
 
-      this.XE = XE
       this.locales = this.$$config.getters['lang/locales'] || []
 
-      if (config.translation) {
-        this.set(config.translation.terms)
+      if (options.translation) {
+        this.set(options.translation.terms)
       }
 
       resolve(this)
@@ -75,7 +81,7 @@ class Lang extends App {
   * @return {string}
   */
   getCurrentLocale () {
-    return config.getters['lang/current'].code
+    return this.$$config.getters['lang/current'].code
   }
 
   /**
@@ -101,7 +107,7 @@ class Lang extends App {
     let message = ''
 
     return new Promise((resolve, reject) => {
-      that.XE.get('/lang/lines/' + item).then((response) => {
+      this.$$xe.get('/lang/lines/' + item).then((response) => {
         if (Array.isArray(response.data)) {
           message = $$.find(response.data, { 'locale': this.locales[0] }).value
           Translator.add(id, message)
@@ -126,7 +132,7 @@ class Lang extends App {
     const that = this
 
     return new Promise((resolve, reject) => {
-      that.XE.get(this.$$config.getters['router/origin'] + '/lang/lines/many', {keys: langKeys}).then(response => {
+      this.$$xe.get(this.$$config.getters['router/origin'] + '/lang/lines/many', {keys: langKeys}).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
             result[key] = $$.find(val, { 'locale': config.getters['lang/current'].code }).value

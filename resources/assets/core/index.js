@@ -1,5 +1,5 @@
 // external libraries
-import $ from 'jquery'
+// import $ from 'jquery'
 import blankshield from 'blankshield'
 import moment from 'moment'
 import URI from 'urijs'
@@ -10,7 +10,7 @@ import lodash from 'lodash'
 import * as $$ from 'xe/utils'
 import Component from 'xe/component'
 import DynamicLoadManager from 'xe/dynamic-load-manager'
-import griper from 'xe/common/js/griper'
+import Griper from 'xe/griper'
 import Lang from 'xe/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
@@ -22,9 +22,9 @@ import { STORE_URL, CHANGE_ORIGIN } from './router/store'
 import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
 import { STORE_TOKEN } from './request/store'
 
-let xeInstance
 const booted = Symbol('booted')
 const symbolApp = Symbol('App')
+const $ = window.$
 
 const defaultConfig = {
   baseURL: window.location.origin,
@@ -51,10 +51,12 @@ const defaultConfig = {
  */
 class XE {
   constructor () {
-    if (xeInstance) return xeInstance
+    if (typeof window.XE !== 'undefined') return window.XE
+    window.XE = this
 
     $$.eventify(this)
     this[booted] = false
+    this[symbolApp] = new Map()
     // @deprecated
     this.options = defaultConfig
     this.config = config
@@ -80,10 +82,9 @@ class XE {
       }
     })
 
-    this[symbolApp] = new Map()
-
     // internal libraries
     this.Utils = $$
+    this.Griper = this.registerApp('Griper', new Griper())
     this.Progress = this.registerApp('Progress', Progress)
     this.Router = this.registerApp('Router', new Router())
     this.Request = this.registerApp('Request', new Request())
@@ -205,6 +206,7 @@ class XE {
     })
 
     return Promise.all([
+      this.Griper.boot(this, this.options),
       this.Router.boot(this, this.options),
       this.Request.boot(this, this.options),
       this.Lang.boot(this, this.options),
@@ -317,7 +319,6 @@ class XE {
 
   configure (options = {}) {
     const config = Object.assign({}, defaultConfig, options)
-
     this.options = Object.assign({}, this.options, config)
 
     if (config.routes) {
@@ -373,10 +374,10 @@ class XE {
    */
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, url)
+      options = $.extend({}, this.Request.config, { headers: { 'X-CSRF-TOKEN': this.config.getters['request/xsrfToken'] } }, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.config.getters['request/xsrfToken']}}, { url: url })
+      options = $.extend({}, options, this.Request.config, { headers: { 'X-CSRF-TOKEN': this.config.getters['request/xsrfToken'] } }, { url: url })
       url = undefined
     }
 
@@ -487,7 +488,7 @@ class XE {
    * </pre>
    */
   toast (type = 'danger', message, pos) {
-    griper.toast(type, message, pos)
+    this.Griper.toast(type, message, pos)
   }
 
   /**
@@ -500,7 +501,7 @@ class XE {
    * @param {string} 팝업에 출력될 메시지
    */
   toastByStatus (status, message) {
-    return griper.toast(griper.toast.fn.statusToType(status), message)
+    this.Griper.toast(this.Griper.toast.fn.statusToType(status), message)
   }
 
   /**
@@ -509,7 +510,7 @@ class XE {
    * @param {string} message 엘리먼트에 출력될 메시지
    */
   formError ($element, message) {
-    return griper.form($element, message)
+    this.Griper.form($element, message)
   }
 
   /**
@@ -517,7 +518,7 @@ class XE {
    * @param {object} jquery form object
    */
   formErrorClear ($form) {
-    return griper.form.fn.clear($form)
+    return this.Griper.form.fn.clear($form)
   }
 
   /**
@@ -576,7 +577,4 @@ class XE {
   }
 }
 
-xeInstance = new XE()
-if (!window.XE) window.XE = xeInstance
-
-export default xeInstance
+export default new XE()
