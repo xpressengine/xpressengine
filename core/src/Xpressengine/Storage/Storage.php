@@ -201,8 +201,15 @@ class Storage
      * @param mixed         $option   disk option (ex. aws s3 'visibility: public')
      * @return File
      */
-    public function create($content, $path, $name, $disk = null, $originId = null, UserInterface $user = null, $option = [])
-    {
+    public function create(
+        $content,
+        $path,
+        $name,
+        $disk = null,
+        $originId = null,
+        UserInterface $user = null,
+        $option = []
+    ) {
         $id = $this->keygen->generate();
         $path = $this->makePath($id, $path);
 
