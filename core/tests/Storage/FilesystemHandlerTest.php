@@ -38,7 +38,7 @@ class FilesystemHandlerTest extends \PHPUnit\Framework\TestCase
         $mockFilesystem = m::mock('Illuminate\Contracts\Filesystem\Filesystem');
         $mockFilesystem->shouldReceive('put')
             ->once()
-            ->with('attached/filenamestring', 'content')
+            ->with('attached/filenamestring', 'content', [])
             ->andReturn(true);
 
         $filesystem->shouldReceive('disk')->once()->with('local')->andReturn($mockFilesystem);

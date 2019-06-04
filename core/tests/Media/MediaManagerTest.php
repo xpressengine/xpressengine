@@ -202,9 +202,9 @@ class MediaManagerTest extends \PHPUnit\Framework\TestCase
         $instance->shouldReceive('getHandler')->twice()->with(Media::TYPE_IMAGE)->andReturn($this->handler);
 
         $this->handler->shouldReceive('createThumbnails')->once()
-            ->with($mockImage, $mockCommand, 'S', 'local', 'path', $originId)->andReturn($mockImage);
+            ->with($mockImage, $mockCommand, 'S', 'local', 'path', $originId, [])->andReturn($mockImage);
         $this->handler->shouldReceive('createThumbnails')->once()
-            ->with($mockImage, $mockCommand, 'M', 'local', 'path', $originId)->andReturn($mockImage);
+            ->with($mockImage, $mockCommand, 'M', 'local', 'path', $originId, [])->andReturn($mockImage);
 
         $instance->createThumbnails($mockMedia);
     }

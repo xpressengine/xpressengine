@@ -74,7 +74,9 @@ class ImageHandlerTest extends \PHPUnit\Framework\TestCase
             '',
             m::on(function () { return true; }),
             null,
-            null
+            null,
+            null,
+            []
         )->andReturn($mockThumbFile);
 
         $mockThumbImg = m::mock('Xpressengine\Media\Models\Image');

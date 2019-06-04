@@ -38,7 +38,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $handler->shouldReceive('store')
             ->once()
-            ->with($resource, m::on(function () { return true; }), 'local')
+            ->with($resource, m::on(function () { return true; }), 'local', [])
             ->andReturn(true);
 
         $repo->shouldReceive('create')->once()->with(m::on(function ($args) {
@@ -104,7 +104,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $handler->shouldReceive('store')
             ->once()
-            ->with($resource, m::on(function () { return true; }), 'local')
+            ->with($resource, m::on(function () { return true; }), 'local', [])
             ->andReturn(false);
 
         try {
@@ -135,7 +135,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $handler->shouldReceive('store')->once()->with('file_get_content', m::on(function () {
             return true;
-        }), 'local')->andReturn(true);
+        }), 'local', [])->andReturn(true);
 
         $mockTempFile->shouldReceive('destroy')->andReturnNull();
 
