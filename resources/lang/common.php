@@ -529,10 +529,6 @@ return [
         'ko' => '문서',
         'en' => 'Document',
     ],
-    'user' => [
-        'ko' => '회원',
-        'en' => 'User',
-    ],
     'userId' => [
         'ko' => '회원 아이디',
         'en' => 'User ID',
@@ -2804,10 +2800,6 @@ return [
         'ko' => '설정하러 가기',
         'en' => 'Move to setting',
     ],
-    'siteToken' => [
-        'ko' => '사이트 토큰',
-        'en' => 'Site token',
-    ],
     'InvalidSiteTokenInformation' => [
         'ko' => '사이트 토큰 정보가 잘못되었습니다.',
         'en' => 'Invalid site token information.',
@@ -3184,4 +3176,16 @@ return [
         'ko' => '업데이트 버전',
         'en' => 'Update version',
     ],
+    'siteSettingMailingDefaultSetting' => [
+        'ko' => '메일링 기본 설정',
+        'en' => 'Mailing preferences'
+    ],
+    'mailSenderName' => [
+        'ko' => '메일 발신자 이름',
+        'en' => 'Name of mail sender'
+    ],
+    'mailSenderAddress' => [
+        'ko' => '발신 이메일 주소',
+        'en' => 'From email address'
+    ]
 ];

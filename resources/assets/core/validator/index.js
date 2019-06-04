@@ -837,7 +837,7 @@ class Validator extends App {
     } else if (alertType === 'form') {
       griper.form($element, message)
     } else if (alertType === 'toast') {
-      griper.toast($element, message)
+      griper.toast('danger', message)
     }
   }
 

@@ -76,13 +76,13 @@ class OpenGraphImporter extends AbstractImporter
         parent::exec($data);
 
         if (isset($images)) {
-            foreach ($images as $image) {
-                $this->addMeta('image', $image['url']);
+            foreach ($images as $i => $image) {
+                $this->addMeta('image', $image['url'], $i);
                 if (isset($image['width'])) {
-                    $this->addMeta('image_width', $image['width']);
+                    $this->addMeta('image_width', $image['width'], $i);
                 }
                 if (isset($image['height'])) {
-                    $this->addMeta('image_height', $image['height']);
+                    $this->addMeta('image_height', $image['height'], $i);
                 }
             }
         }

@@ -218,12 +218,21 @@ class ThemeMigration extends Migration
                 break;
         }
 
+        $startTime = time();
+        $contentCount = 0;
         foreach ($contents as $content) {
             $content['instance_id'] = $boardId;
 
-            app('xe.board.handler')->add($content, \Auth::user(), $config);
+            $boardItem = app('xe.board.handler')->add($content, \Auth::user(), $config);
 
-            sleep(1);
+            $newWriteTimeTimestamp = strtotime('+' . $contentCount++ . ' minutes', $startTime);
+            $newWriteTimeString = date('Y-m-d H:i:s', $newWriteTimeTimestamp);
+
+            $boardItem->head = $newWriteTimeTimestamp . '-' . $boardItem->id;
+            $boardItem->created_at = $newWriteTimeString;
+            $boardItem->updated_at = $newWriteTimeString;
+
+            $boardItem->save();
         }
     }
 

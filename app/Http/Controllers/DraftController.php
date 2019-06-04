@@ -110,7 +110,7 @@ class DraftController extends Controller
     {
         if (Auth::guest() !== true) {
             if ($draft = XeDraft::getById($draftId)) {
-                if (Auth::user()->getId() == $draft->userId) {
+                if (Auth::user()->getId() == $draft->user_id) {
                     XeDraft::remove($draft);
                 }
             }

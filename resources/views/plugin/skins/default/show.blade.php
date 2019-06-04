@@ -39,10 +39,10 @@
                             <i class="xi-user"></i>
                             @if($email = array_get($author, 'email'))
                                 <a href="mailto:{{ $email }}">
-                                    {{ '@'.array_get($author, 'name', '') }}
+                                    {{ array_get($author, 'name', '') }}
                                 </a>
                             @else
-                                {{ '@'.array_get($author, 'name', '') }}
+                                {{ array_get($author, 'name', '') }}
                             @endif
                         </dd>
 
@@ -127,7 +127,7 @@
                                     <th scope="row">{{xe_trans('xe::author')}}</th>
                                     <td>
                                         @if($authors = $plugin->getAuthors())
-                                            {{ '@'.reset($authors)['name'] }}
+                                            {{ reset($authors)['name'] }}
                                         @endif
                                     </td>
                                 </tr>
