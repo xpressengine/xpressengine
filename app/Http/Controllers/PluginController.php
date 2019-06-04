@@ -487,56 +487,6 @@ class PluginController extends Controller
     }
 
     /**
-     * Show the create form for the new plugin.
-     *
-     * @return \Xpressengine\Presenter\Presentable
-     */
-    public function getMakePlugin()
-    {
-        return api_render('index.make-plugin', []);
-    }
-
-    /**
-     * Make new plugin.
-     *
-     * @param Request  $request  request
-     * @param Operator $operator Operator
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function makePlugin(Request $request, Operator $operator)
-    {
-        if ($operator->isLocked()) {
-            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
-        }
-
-        $this->validate($request, [
-            'name' => 'required|alpha_dash',
-            'vendor' => 'required|alpha_dash',
-        ]);
-
-        $parameters = [
-            'name' => $request->get('name'),
-            'vendor' => $request->get('vendor'),
-            '--no-interaction' => true,
-        ];
-        if ($ns = $request->get('namespace')) {
-            $parameters['--namespace'] = $ns;
-        }
-        if ($title = $request->get('title')) {
-            $parameters['--title'] = $title;
-        }
-
-        $logFile = $this->prepareOperation($operator, true);
-
-        app()->terminating(function () use ($parameters, $logFile) {
-            Artisan::call('make:plugin', $parameters, new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
-
-        return redirect()->route('settings.operation.index')
-            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
-    }
-
-    /**
      * Renew the plugin
      *
      * @param PluginHandler $handler  plugin handler instance
