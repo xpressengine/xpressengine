@@ -396,6 +396,13 @@ class XeUpdate extends ShouldOperation
         $this->filesystem->deleteDirectory($source);
         $this->filesystem->deleteDirectory(base_path('vendor-old'));
         $this->info('done');
+
+        $items = new FilesystemIterator(base_path('vendor/bin'), FilesystemIterator::SKIP_DOTS);
+        foreach ($items as $item) {
+            if ($item->isFile()) {
+                @chmod($item->getPathname(), 0755);
+            }
+        }
     }
 
     /**
