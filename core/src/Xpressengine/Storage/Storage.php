@@ -121,6 +121,7 @@ class Storage
      * @param string|null   $name     be saved file name
      * @param string|null   $disk     disk name (ex. local, ftp, s3 ...)
      * @param UserInterface $user     user instance
+     * @param mixed         $option   disk option (ex. aws s3 'visibility: public')
      * @return File
      */
     public function upload(
@@ -128,7 +129,8 @@ class Storage
         $path,
         $name = null,
         $disk = null,
-        UserInterface $user = null
+        UserInterface $user = null,
+        $option = []
     ) {
 
         $this->validateUploadedFile($uploaded);
@@ -147,7 +149,7 @@ class Storage
         $disk = $disk ?: $this->distributor->allot($uploaded);
         $user = $user ?: $this->auth->user();
 
-        if (!$this->files->store(file_get_contents($uploaded->getPathname()), $path . '/' . $name, $disk)) {
+        if (!$this->files->store(file_get_contents($uploaded->getPathname()), $path . '/' . $name, $disk, $option)) {
             throw new WritingFailException;
         }
 
@@ -196,9 +198,10 @@ class Storage
      * @param string|null   $disk     disk for saved
      * @param string|null   $originId original file id
      * @param UserInterface $user     user instance
+     * @param mixed         $option   disk option (ex. aws s3 'visibility: public')
      * @return File
      */
-    public function create($content, $path, $name, $disk = null, $originId = null, UserInterface $user = null)
+    public function create($content, $path, $name, $disk = null, $originId = null, UserInterface $user = null, $option = [])
     {
         $id = $this->keygen->generate();
         $path = $this->makePath($id, $path);
@@ -207,7 +210,7 @@ class Storage
         $disk = $disk ?: $this->distributor->allot($tempFile);
         $user = $user ?: $this->auth->user();
 
-        if (!$this->files->store($content, $path . '/' . $name, $disk)) {
+        if (!$this->files->store($content, $path . '/' . $name, $disk, $option)) {
             throw new WritingFailException;
         }
 
