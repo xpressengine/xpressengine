@@ -1614,6 +1614,21 @@ aside {
 }
 // === //관리자 인증 스타일 ===
 
+// === 관리자 페이지 데이터 없을 때 노출 되는 화면 ===
+.section-data-empty {
+  padding: 100px 0;
+  text-align: center;
+
+  .section-data-empty__image {
+    width: 121px;
+    height: 138px;
+    margin: 0 auto 40px;
+    background: url(../img/icon-data-empty.svg) 0 0 no-repeat;
+    background-size: 121px 138px;
+  }
+}
+// === //관리자 페이지 데이터 없을 때 노출 되는 화면 ===
+
 @media (max-width: 767px) {
   .panel-group {
     .panel-heading {
