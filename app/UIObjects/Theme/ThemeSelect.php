@@ -50,6 +50,7 @@ class ThemeSelect extends AbstractUIObject
      */
     public function render()
     {
+        $themes = [];
         $args = $this->arguments;
         $prefix = array_get($args, 'prefixName', 'theme_');
         /** @var ThemeHandler $themeHandler */
