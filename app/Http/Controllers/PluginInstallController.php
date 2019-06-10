@@ -153,7 +153,7 @@ class PluginInstallController extends Controller
         $handler->getAllPlugins(true);
         $componentTypes = $this->getComponentTypes();
 
-        return api_render('install.items', compact('plugins', 'operation', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
+        return api_render('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
     }
 
     /**
