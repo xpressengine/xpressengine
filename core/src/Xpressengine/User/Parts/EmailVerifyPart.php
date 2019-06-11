@@ -142,7 +142,7 @@ class EmailVerifyPart extends RegisterFormPart
      */
     protected function isEnabled()
     {
-        return $this->service('xe.config')->get('user.join')->get('guard_forced', false);
+        return $this->service('xe.config')->get('user.common')->get('guard_forced', false);
     }
 
     /**
