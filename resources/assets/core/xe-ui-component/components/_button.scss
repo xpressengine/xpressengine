@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /* CSS Document */
 
 @mixin button-outline-variant($color) {
@@ -10,11 +11,12 @@
   &:focus,
   &.focus,
   &:active,
-  &.active{
+  &.active {
     color: #fff;
     background-color: $color;
     border-color: $color;
   }
+
   &:hover {
     color: #fff;
     background-color: $color;
@@ -22,7 +24,7 @@
   }
 
   &:active,
-  &.active{
+  &.active {
     &:hover,
     &:focus,
     &.focus {
@@ -57,6 +59,7 @@
   border: 1px solid $btn-default-border;
   white-space: nowrap;
   text-decoration: none;
+
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
   @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
   @include user-select(none);
@@ -87,7 +90,8 @@
   &[disabled],
   fieldset[disabled] & {
     cursor: $cursor-disabled;
-    @include opacity(.65);
+
+    @include opacity(0.65);
   }
 
   // [converter] extracted a& to a.btn
@@ -108,6 +112,7 @@ a.xe-btn {
 .xe-btn-secondary {
   @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border);
 }
+
 .xe-btn-primary {
   @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
 }
@@ -178,18 +183,21 @@ a.xe-btn {
   fieldset[disabled] & {
     background-color: transparent;
   }
+
   &,
   &:hover,
   &:focus,
   &:active {
     border-color: transparent !important;
   }
+
   &:hover,
   &:focus {
     color: $link-hover-color;
     text-decoration: $link-hover-decoration;
     background-color: transparent !important;
   }
+
   &[disabled],
   fieldset[disabled] & {
     &:hover,
@@ -208,10 +216,12 @@ a.xe-btn {
   // line-height: ensure even-numbered height of button next to large input
   @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
 }
+
 .xe-btn-sm {
   // line-height: ensure proper height of button next to small input
   @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
 }
+
 .xe-btn-xs {
   @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
 }
@@ -247,24 +257,29 @@ input[type="button"] {
     opacity: 0;
     width: 0;
     height: 0;
+
     &:checked + .toggle {
       background-color: #6f8dff;
-      &:after {
+
+      &::after {
         left: 41px;
         outline: none;
       }
-      &:before{
-        left:11px;
-        content:"ON";
+
+      &::before {
+        left: 11px;
+        content: "ON";
       }
     }
   }
+
   label {
     font-weight: 400;
     font-size: 13px;
     cursor: pointer;
     line-height: 30px;
   }
+
   .toggle {
     position: relative;
     display: inline-block;
@@ -273,10 +288,11 @@ input[type="button"] {
     background-color: #dadbde;
     border-radius: 15px;
     margin-right: 10px;
-    transition: background .3s ease;
+    transition: background 0.3s ease;
     vertical-align: middle;
     content: "";
-    &:after {
+
+    &::after {
       display: inline-block;
       position: relative;
       left: 0;
@@ -286,18 +302,21 @@ input[type="button"] {
       background-color: #fff;
       border-radius: 20px;
       border: 1px solid #e4e4e4;
-      transition: left .3s ease,background .3s ease,box-shadow .1s ease;
+      transition: left 0.3s ease, background 0.3s ease, box-shadow 0.1s ease;
       content: "";
     }
-    &:before{
+
+    &::before {
       position: absolute;
-      right:10px;
-      content:"OFF";
-      color:#fff;
+      right: 10px;
+      content: "OFF";
+      color: #fff;
     }
   }
-  input[disabled]~.toggle{
+
+  input[disabled] ~ .toggle {
     cursor: $cursor-disabled;
-    @include opacity(.65);
+
+    @include opacity(0.65);
   }
 }

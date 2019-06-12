@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /* CSS Document */
 
 .xe-select-label {
@@ -6,31 +7,36 @@
   .label-list ul {
     margin: 0;
     padding: 0;
+
     li {
       list-style: none;
     }
   }
+
   .label-list li {
     list-style: none;
-    a{
+
+    a {
       text-decoration: none;
     }
   }
 }
 
 .xe-dropdown-menu,
-.xe-dropdown-menu ul{
+.xe-dropdown-menu ul {
   margin: 0;
   padding: 0;
+
   li {
     list-style: none;
+
     a {
-    text-decoration: none;
+      text-decoration: none;
     }
   }
 }
 
-/*dropdown*/
+/* dropdown */
 
 @mixin dropdown-arrow($color) {
   display: inline-block;
@@ -46,7 +52,8 @@
   content: "";
 }
 
-.xe-dropdown, .xe-dropup {
+.xe-dropdown,
+.xe-dropup {
   display: block;
   position: relative;
   font-size: 14px;
@@ -59,7 +66,7 @@
 .xe-select-box.xe-btn {
   display: block;
   position: relative;
-  width:100%;
+  width: 100%;
   padding-right: $dropdown-right-padding;
   text-align: left;
   white-space: nowrap;
@@ -71,11 +78,13 @@
   &.active {
     background-color: $btn-default-bg;
   }
+
   &:hover {
     background-color: $btn-default-bg;
   }
-  &:active{
-    &:focus{
+
+  &:active {
+    &:focus {
       background-color: $btn-default-bg;
       outline: none;
     }
@@ -91,15 +100,15 @@
 .xe-dropdown > .xe-btn,
 .xe-dropup > .xe-btn,
 .xe-select-box.xe-btn,
-.xe-select-label .label-input{
-  &:after{
+.xe-select-label .label-input {
+  &::after {
     @include dropdown-arrow($dropdown-arrow-color);
   }
 }
 
 .xe-dropup {
   .xe-dropdown-menu {
-    margin-top:auto;
+    margin-top: auto;
     margin-bottom: -1px;
     top: auto;
     bottom: 100%;
@@ -113,7 +122,7 @@
   left: 0;
   top: 100%;
   max-height: 366px;
-  margin-top:-1px !important;
+  margin-top: -1px !important;
   border: 1px solid $dropdown-border-color;
   border-radius: 0 0 2px 2px;
   background-color: #fff;
@@ -122,7 +131,7 @@
 
 .open .xe-dropdown-menu {
   display: block;
-  min-width:100%;
+  min-width: 100%;
 }
 
 .xe-dropdown-menu li {
@@ -133,11 +142,13 @@
     color: #2c2e37;
     text-align: left;
     line-height: $line-height-base;
+
     &:hover {
       background-color: #2389ee;
       color: #fff !important;
     }
   }
+
   &.on a {
     color: #2c8beb;
   }
@@ -150,6 +161,7 @@
   text-overflow: ellipsis;
   word-break: break-word;
   white-space: nowrap;
+
   select {
     position: absolute;
     top: 0;
@@ -165,19 +177,23 @@
 
 .xe-select-label {
   position: relative;
+
   .label-input {
     display: block;
     position: relative;
     overflow: hidden;
     padding: 0 $dropdown-right-padding 0 10px;
-    background-color: #F6F7F9;
-    border: 1px solid #DBDADF;
+    background-color: #f6f7f9;
+    border: 1px solid #dbdadf;
     border-radius: 2px;
+
     ul li {
       float: left;
+
       &:first-child .label-choice {
         margin-left: 0;
       }
+
       .label-choice {
         display: block;
         position: relative;
@@ -185,10 +201,11 @@
         padding: 1px 28px 1px 8px;
         color: #fff;
         font-size: 13px;
-        background-color: #B5B8BD;
-        border: 1px solid #DBDADF;
+        background-color: #b5b8bd;
+        border: 1px solid #dbdadf;
         border-radius: 4px;
         line-height: $line-height-base;
+
         button {
           position: absolute;
           right: 3px;
@@ -201,6 +218,7 @@
           cursor: pointer;
         }
       }
+
       .search-label {
         height: 21px;
         margin: 5px 2px;
@@ -209,40 +227,47 @@
       }
     }
   }
+
   .label-list {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    border: 1px solid #8DC5FF;
+    border: 1px solid #8dc5ff;
     background-color: #fff;
     z-index: 100;
   }
+
   &.open .label-list {
     display: block;
   }
+
   .label-list .label-division {
     padding: 10px;
     font-size: 13px;
     line-height: $line-height-base;
     text-align: left;
+
     + .label-division {
-      border-top: 1px solid #DBDBDD;
+      border-top: 1px solid #dbdbdd;
     }
+
     strong {
       display: block;
       margin-bottom: 10px;
       color: $text-color;
     }
+
     a {
       display: block;
       padding: 0 10px;
       color: #696e7a;
       line-height: 24px;
       border-radius: 4px;
+
       &:hover {
-        background-color: #2992FB;
+        background-color: #2992fb;
         color: #fff;
       }
     }
@@ -255,18 +280,20 @@
   height: 0;
   margin-left: 2px;
   vertical-align: middle;
-  border-top:   $caret-width-base dashed;
+  border-top: $caret-width-base dashed;
   border-right: $caret-width-base solid transparent;
-  border-left:  $caret-width-base solid transparent;
+  border-left: $caret-width-base solid transparent;
 }
 
 .ly_popup_profile {
   display: none;
   position: absolute;
   z-index: 25;
+
   &.open {
     display: block;
   }
+
   ul {
     min-width: 140px;
     padding: 8px 0;
@@ -275,8 +302,10 @@
     background-color: #fff;
     list-style: none;
   }
+
   li {
     height: 30px;
+
     > a {
       overflow: hidden;
       display: block;
@@ -286,6 +315,7 @@
       line-height: 30px;
       color: #2c2e37;
       text-decoration: none;
+
       &:hover {
         background-color: #f4f4f4;
       }

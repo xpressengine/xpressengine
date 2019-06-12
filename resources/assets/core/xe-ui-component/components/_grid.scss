@@ -2,19 +2,19 @@
 // Grid system
 // --------------------------------------------------
 
-
 // Framework grid generation
 // [converter] This is defined recursively in LESS, but Sass supports real loops
 @mixin make-grid-columns($i: 1, $list: ".xe-col-xs-#{$i}, .xe-col-sm-#{$i}, .xe-col-md-#{$i}, .xe-col-lg-#{$i}") {
   @for $i from (1 + 1) through $grid-columns {
     $list: "#{$list}, .xe-col-xs-#{$i}, .xe-col-sm-#{$i}, .xe-col-md-#{$i}, .xe-col-lg-#{$i}";
   }
+
   #{$list} {
     position: relative;
     // Prevent columns from collapsing when empty
     min-height: 1px;
     // Inner gutter via padding
-    padding-left:  ceil(($grid-gutter-width / 2));
+    padding-left: ceil(($grid-gutter-width / 2));
     padding-right: floor(($grid-gutter-width / 2));
   }
 }
@@ -24,11 +24,11 @@
   @for $i from (1 + 1) through $grid-columns {
     $list: "#{$list}, .xe-col-#{$class}-#{$i}";
   }
+
   #{$list} {
     float: left;
   }
 }
-
 
 @mixin calc-grid-column($index, $class, $type) {
   @if ($type == width) and ($index > 0) {
@@ -36,33 +36,37 @@
       width: percentage(($index / $grid-columns));
     }
   }
+
   @if ($type == push) and ($index > 0) {
     .xe-col-#{$class}-push-#{$index} {
       left: percentage(($index / $grid-columns));
     }
   }
+
   @if ($type == push) and ($index == 0) {
     .xe-col-#{$class}-push-0 {
       left: auto;
     }
   }
+
   @if ($type == pull) and ($index > 0) {
     .xe-col-#{$class}-pull-#{$index} {
       right: percentage(($index / $grid-columns));
     }
   }
+
   @if ($type == pull) and ($index == 0) {
     .xe-col-#{$class}-pull-0 {
       right: auto;
     }
   }
+
   @if ($type == offset) {
     .xe-col-#{$class}-offset-#{$index} {
       margin-left: percentage(($index / $grid-columns));
     }
   }
 }
-
 
 // Container widths
 //
@@ -74,14 +78,15 @@
   @media (min-width: $screen-sm-min) {
     max-width: $container-sm;
   }
+
   @media (min-width: $screen-md-min) {
     max-width: $container-md;
   }
+
   @media (min-width: $screen-lg-min) {
     max-width: $container-lg;
   }
 }
-
 
 // Fluid container
 //
@@ -92,7 +97,6 @@
   @include container-fixed;
 }
 
-
 // Row
 //
 // Rows contain and clear the floats of your columns.
@@ -101,13 +105,11 @@
   @include make-row;
 }
 
-
 // Columns
 //
 // Common styles for small and large grid columns
 
 @include make-grid-columns;
-
 
 // Extra small grid
 //
@@ -115,7 +117,6 @@
 // smartphones.
 
 @include make-grid(xs);
-
 
 // Small grid
 //
@@ -126,7 +127,6 @@
   @include make-grid(sm);
 }
 
-
 // Medium grid
 //
 // Columns, offsets, pushes, and pulls for the desktop device range.
@@ -134,7 +134,6 @@
 @media (min-width: $screen-md-min) {
   @include make-grid(md);
 }
-
 
 // Large grid
 //

@@ -14,6 +14,7 @@
   -moz-transition: opacity 1s ease;
   -webkit-transition: opacity 1s ease;
   transition: opacity 1s ease;
+
   &.visible {
     opacity: 1;
   }
@@ -41,6 +42,7 @@
   -moz-transition: left 0.4s ease;
   -webkit-transition: left 0.4s ease;
   transition: left 0.4s ease;
+
   .xe-placeholder {
     //최승만 수정. TODO 추후 수정되어야함 파일이 없어서 오류 콘솔
     //background: url("../../../assets_temp/lightbox/preloader.gif") no-repeat center center;
@@ -49,13 +51,15 @@
     text-align: center;
     width: 100%;
     display: inline-block;
-    &:before {
+
+    &::before {
       content: "";
       display: inline-block;
       height: 50%;
       width: 1px;
       margin-right: -1px;
     }
+
     img {
       display: inline-block;
       max-height: 100%;
@@ -64,10 +68,12 @@
       vertical-align: middle;
     }
   }
+
   &.rightSpring {
     -moz-animation: rightSpring 0.3s;
     -webkit-animation: rightSpring 0.3s;
   }
+
   &.leftSpring {
     -moz-animation: leftSpring 0.3s;
     -webkit-animation: leftSpring 0.3s;
@@ -81,7 +87,7 @@
 
 @-moz-keyframes rightSpring {
   0% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 
   50% {
@@ -89,14 +95,13 @@
   }
 
   100% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
 
-
 @-moz-keyframes leftSpring {
   0% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 
   50% {
@@ -104,16 +109,15 @@
   }
 
   100% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
-
 
 /* Safari and Chrome Keyframe Animations */
 
 @-webkit-keyframes rightSpring {
   0% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 
   50% {
@@ -121,14 +125,13 @@
   }
 
   100% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
 
-
 @-webkit-keyframes leftSpring {
   0% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 
   50% {
@@ -136,14 +139,14 @@
   }
 
   100% {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
 
-
 /* Arrows */
 
-#xe-prevArrow, #xe-nextArrow {
+#xe-prevArrow,
+#xe-nextArrow {
   display: block;
   border: none;
   text-decoration: none;
@@ -161,7 +164,8 @@
   background: transparent 0 0 repeat scroll url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBR‌​AA7");
 }
 
-#xe-prevArrow i, #xe-nextArrow i {
+#xe-prevArrow i,
+#xe-nextArrow i {
   display: none;
   position: absolute;
   top: 50%;
@@ -170,7 +174,7 @@
   height: 48px;
   margin-top: -124px;
   border-radius: 2px;
-  background-color: #22252A;
+  background-color: #22252a;
   text-align: center;
   line-height: 48px;
 }
@@ -183,6 +187,7 @@
   &:hover i {
     display: block;
   }
+
   i {
     position: absolute;
     top: 50%;

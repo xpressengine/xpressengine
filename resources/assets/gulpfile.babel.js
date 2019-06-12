@@ -5,8 +5,6 @@ import wpConfig from './webpack.config.babel.js'
 import wpConfigDll, { resolveAlias } from './dll.webpack.config.babel.js'
 const argv = require('minimist')(process.argv.slice(2))
 
-console.debug('argv', argv)
-
 const $ = require('gulp-load-plugins')()
 
 const mode = (process.env.NODE_ENV !== 'production') ? 'develoment' : 'production'
@@ -14,7 +12,8 @@ let generateSourceMaps = mode !== 'production'
 const ignore = [
   '!node_modules/**/*',
   '!./**/xe-ui-component/slickgrid/**/*',
-  '!core/settings/css/bootstrap/**/*'
+  '!core/settings/css/bootstrap/**/*',
+  '!core/plugin/swiper2/idangerous.swiper.css'
 ]
 
 if (process.env.SOURCEMAPS === 'true' || process.env.SOURCEMAPS === '1') {
@@ -35,7 +34,7 @@ function mergeWpConfig (config) {
 }
 
 const taskWebpackBundle = function () {
-  return gulp.src('./webpack.config.babel.js', { since: gulp.lastRun(taskWebpackBundle) })
+  return gulp.src('./webpack.config.babel.js')
     .pipe($.plumber())
     .pipe(webpack({
       config: mergeWpConfig(wpConfig),
@@ -52,7 +51,7 @@ taskWebpackBundle.flags = {
 }
 
 const taskWebpackDll = function () {
-  return gulp.src('./dll.webpack.config.babel.js', { since: gulp.lastRun(taskWebpackDll) })
+  return gulp.src('./dll.webpack.config.babel.js')
     .pipe($.plumber())
     .pipe(webpack({
       config: mergeWpConfig(wpConfigDll),
@@ -69,7 +68,7 @@ taskWebpackDll.flags = {
 }
 
 const taskLintScript = function () {
-  return gulp.src(['./core/**/*.js', ...ignore], { since: gulp.lastRun(taskLintScript) })
+  return gulp.src(['./core/**/*.js', ...ignore])
     .pipe($.plumber())
     .pipe($.eslint())
     .pipe($.eslint.format())
@@ -77,7 +76,7 @@ const taskLintScript = function () {
 taskLintScript.displayName = 'lint:script'
 
 const taskLintScriptFix = function () {
-  return gulp.src(['./core/**/*.js', ...ignore], { since: gulp.lastRun(taskLintScriptFix) })
+  return gulp.src(['./core/**/*.js', ...ignore])
     .pipe($.plumber())
     .pipe($.eslint({
       fix: true
@@ -88,7 +87,7 @@ const taskLintScriptFix = function () {
 taskLintScriptFix.displayName = 'lint:fix-script'
 
 const taskLintStyle = function () {
-  return gulp.src(['./core/**/*.css', './core/**/*.scss', ...ignore], { since: gulp.lastRun(taskLintStyle) })
+  return gulp.src(['./core/**/*.css', './core/**/*.scss', ...ignore])
     .pipe($.plumber())
     .pipe($.stylelint({
       reporters: [
@@ -113,7 +112,7 @@ taskFixStyle.displayName = 'lint:fix-style'
 taskFixStyle.description = '.scss 자동 교정'
 
 const taskSass = function () {
-  return gulp.src(['./core/**/*.scss', ...ignore], { since: gulp.lastRun(taskSass) })
+  return gulp.src(['./core/**/*.scss', ...ignore])
     .pipe($.if(generateSourceMaps, $.sourcemaps.init()))
     .pipe($.sass({ outputStyle: 'compressed' }).on('error', $.sass.logError))
     .pipe($.autoprefixer({

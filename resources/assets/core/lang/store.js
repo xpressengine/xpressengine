@@ -36,7 +36,7 @@ const actions = {
   setTerms: ({ commit }, terms) => {
     const data = []
     Object.entries(terms).forEach(element => {
-      data.push({id: element[0], message: element[1]})
+      data.push({ id: element[0], message: element[1] })
     })
 
     commit(STORE_TERMS, data)

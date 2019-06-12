@@ -26,10 +26,9 @@
     // select elements in input groups. To fix it, we float the input. Details:
     // https://github.com/twbs/bootstrap/issues/11561#issuecomment-28936855
     float: left;
-
     width: 100%;
     margin-bottom: 0;
-    
+
     &:focus {
       z-index: 3;
     }
@@ -46,6 +45,7 @@
 .xe-input-group-lg > .xe-input-group-btn > .xe-btn {
   @extend .xe-input-lg;
 }
+
 .xe-input-group-sm > .xe-form-control,
 .xe-input-group-sm > .xe-input-group-addon,
 .xe-input-group-sm > .xe-input-group-btn > .xe-btn {
@@ -91,6 +91,7 @@
     font-size: $font-size-small;
     border-radius: $input-border-radius-small;
   }
+
   &.xe-input-lg {
     padding: $padding-large-vertical $padding-large-horizontal;
     font-size: $font-size-large;
@@ -116,9 +117,11 @@
 .xe-input-group-btn:last-child > .xe-btn-group:not(:last-child) > .xe-btn {
   @include border-right-radius(0);
 }
+
 .xe-input-group-addon:first-child {
   border-right: 0;
 }
+
 .xe-input-group .xe-form-control:last-child,
 .xe-input-group-addon:last-child,
 .xe-input-group-btn:last-child > .xe-btn,
@@ -129,6 +132,7 @@
 .xe-input-group-btn:first-child > .xe-btn-group:not(:first-child) > .xe-btn {
   @include border-left-radius(0);
 }
+
 .xe-input-group-addon:last-child {
   border-left: 0;
 }
@@ -146,6 +150,7 @@
   // element above the siblings.
   > .xe-btn {
     position: relative;
+
     + .xe-btn {
       margin-left: -1px;
     }
@@ -164,6 +169,7 @@
       margin-right: -1px;
     }
   }
+
   &:last-child {
     > .xe-btn,
     > .xe-btn-group {

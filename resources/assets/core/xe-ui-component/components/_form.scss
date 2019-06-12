@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /* CSS Document */
 
 .xe-label {
@@ -7,18 +8,21 @@
   min-width: $xe-label-size;
   min-height: $xe-label-size;
   margin-top: 10px;
-  margin-bottom: 10px;  
+  margin-bottom: 10px;
   text-align: left;
   cursor: pointer;
   line-height: 19px;
   font-size: 14px;
-  .xe-label-text{
+
+  .xe-label-text {
     display: inline-block;
-    padding-left: 25px;      
+    padding-left: 25px;
     color: $text-color;
   }
+
   input {
-    &[type="checkbox"], &[type="radio"] {
+    &[type="checkbox"],
+    &[type="radio"] {
       overflow: hidden;
       position: absolute;
       width: 0;
@@ -29,6 +33,7 @@
       left: -9999px;
     }
   }
+
   > input {
     &[type="checkbox"] + .xe-input-helper {
       display: inline-block;
@@ -42,6 +47,7 @@
       border-radius: $border-radius-base;
       vertical-align: middle;
     }
+
     &[type="radio"] + .xe-input-helper {
       display: inline-block;
       position: absolute;
@@ -55,17 +61,22 @@
       vertical-align: middle;
       border-radius: 50%;
     }
-    &[type="checkbox"]:hover + .xe-input-helper, &[type="radio"]:hover + .xe-input-helper {
+
+    &[type="checkbox"]:hover + .xe-input-helper,
+    &[type="radio"]:hover + .xe-input-helper {
       border-color: $xe-label-color;
     }
+
     &[type="checkbox"]:checked + .xe-input-helper {
       border-color: transparent;
       background-color: $xe-label-color;
     }
+
     &[type="radio"]:checked + .xe-input-helper {
       border-color: $xe-label-color;
     }
-    &[type="checkbox"]:checked + .xe-input-helper:after {
+
+    &[type="checkbox"]:checked + .xe-input-helper::after {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -75,45 +86,46 @@
       margin-left: -4px;
       border-right: 2px solid #fff;
       border-bottom: 2px solid #fff;
-      -webkit-transform: rotate(40deg);
       transform: rotate(40deg);
       content: "";
     }
-    &[type="radio"]:checked + .xe-input-helper:after {
+
+    &[type="radio"]:checked + .xe-input-helper::after {
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 8px;
-      height: 12px;
-      margin-top: -8px;
-      margin-left: -4px;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      -webkit-transform: rotate(40deg);
-      transform: rotate(40deg);
-      content: "";
       width: 10px;
       height: 10px;
       margin-top: -5px;
       margin-left: -5px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+      content: "";
       border: none;
       background-color: $xe-label-color;
       border-radius: 50%;
     }
-    &[type="checkbox"]:disabled + .xe-input-helper, &[type="radio"]:disabled + .xe-input-helper {
-      border-color: #DEDFE2;
+
+    &[type="checkbox"]:disabled + .xe-input-helper,
+    &[type="radio"]:disabled + .xe-input-helper {
+      border-color: #dedfe2;
     }
-    &[type="checkbox"]:disabled:checked + .xe-input-helper, &[type="radio"]:disabled:checked + .xe-input-helper:after {
+
+    &[type="checkbox"]:disabled:checked + .xe-input-helper,
+    &[type="radio"]:disabled:checked + .xe-input-helper::after {
       border-color: transparent;
       background-color: #c8c9cc;
     }
-    &[type="checkbox"]:disabled + .xe-input-helper + .xe-label-text, &[type="radio"]:disabled + .xe-input-helper + .xe-label-text {
+
+    &[type="checkbox"]:disabled + .xe-input-helper + .xe-label-text,
+    &[type="radio"]:disabled + .xe-input-helper + .xe-label-text {
       color: #b5b7bd;
     }
   }
 }
 
-.xe-form-label{
+.xe-form-label {
   display: inline-block;
   max-width: 100%;
   margin-bottom: 5px;
@@ -127,7 +139,7 @@
 
 .xe-form-control {
   display: block;
-  width:100%;
+  width: 100%;
   height: $input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
   padding: $padding-base-vertical $padding-base-horizontal;
   font-size: $font-size-base;
@@ -167,11 +179,11 @@
   fieldset[disabled] & {
     cursor: $cursor-disabled;
   }
+
   &:focus {
     box-shadow: none;
     border-color: $brand-primary;
   }
-
 }
 
 textarea.xe-form-control {
@@ -196,30 +208,30 @@ textarea.xe-form-control {
       width: auto; // Prevent labels from stacking above inputs in `.form-group`
       vertical-align: middle;
     }
-    
-    .xe-input-group {
-        display: inline-table;
-        vertical-align: middle;
 
-        .xe-input-group-addon,
-        .xe-input-group-btn,
-        .xe-form-control {
-          width: auto;
-        }
+    .xe-input-group {
+      display: inline-table;
+      vertical-align: middle;
+
+      .xe-input-group-addon,
+      .xe-input-group-btn,
+      .xe-form-control {
+        width: auto;
       }
+    }
 
     // Input groups need that 100% width though
     .xe-input-group > .xe-form-control {
       width: 100%;
     }
-      
+
     .xe-label {
       display: inline-block;
       margin-top: 0;
       margin-bottom: 0;
       margin-right: 20px;
       vertical-align: middle;
-    
+
       label {
         padding-left: 0;
       }
@@ -229,20 +241,21 @@ textarea.xe-form-control {
     .xe-select-box.xe-btn,
     .xe-dropdown,
     .xe-dropup,
-    .xe-select-label .label-input {  
+    .xe-select-label .label-input {
       display: inline-block;
-      width:auto;
+      width: auto;
     }
-
   }
 }
 
 .xe-form-inline {
   @include form-inline;
+
   margin-bottom: $xe-form-group-bottom-margin;
 }
 
 @include input-size('.xe-input-sm', $input-height-small, $padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $input-border-radius-small);
+
 .xe-form-group-sm {
   .xe-form-control {
     height: $input-height-small;
@@ -251,17 +264,20 @@ textarea.xe-form-control {
     line-height: $line-height-small;
     border-radius: $input-border-radius-small;
   }
+
   select.xe-form-control {
     height: $input-height-small;
     line-height: $input-height-small;
   }
+
   textarea.xe-form-control,
   select[multiple].xe-form-control {
     height: auto;
-  }  
+  }
 }
 
 @include input-size('.xe-input-lg', $input-height-large, $padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $input-border-radius-large);
+
 .xe-form-group-lg {
   .xe-form-control {
     height: $input-height-large;
@@ -270,10 +286,12 @@ textarea.xe-form-control {
     line-height: $line-height-large;
     border-radius: $input-border-radius-large;
   }
+
   select.xe-form-control {
     height: $input-height-large;
     line-height: $input-height-large;
   }
+
   textarea.xe-form-control,
   select[multiple].form-control {
     height: auto;
@@ -285,6 +303,7 @@ textarea.xe-form-control {
   border-color: #dd251e !important;
   color: #db2828;
 }
+
 .success-input .xe-form-control,
 .success-input.xe-form-control {
   border-color: #2c8beb !important;
@@ -296,6 +315,7 @@ textarea.xe-form-control {
   font-size: 13px;
   color: #2c8beb;
 }
+
 .wrong-input .text-message,
 .wrong-input.text-message {
   color: #db2828 !important;
