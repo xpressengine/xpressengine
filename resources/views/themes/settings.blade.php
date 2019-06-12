@@ -112,7 +112,13 @@
                             <h2>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::enterTitle')) }}</h2>
                         @show
                         @section('page_description')
-                            <small>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', '')) }}</small>
+                            @php
+                                $description = xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', ''));
+                            @endphp
+
+                            @if ($description != '')
+                                <small>{{ $description }}</small>
+                            @endif
                         @show
                     </div>
                 </div>
