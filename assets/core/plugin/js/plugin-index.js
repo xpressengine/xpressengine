@@ -62,7 +62,7 @@ window.jQuery(function ($) {
         }).get()
       },
       remove: function () {
-        var pluginIds = [];
+        var pluginIds = []
         if ($(this).data('plugin-id')) {
           pluginIds = [$(this).data('plugin-id')]
         } else {
@@ -83,7 +83,7 @@ window.jQuery(function ($) {
         return false
       },
       activate: function () {
-        var pluginIds = [];
+        var pluginIds = []
         if ($(this).data('plugin-id')) {
           pluginIds = [$(this).data('plugin-id')]
         } else {
@@ -104,7 +104,7 @@ window.jQuery(function ($) {
         return false
       },
       deactivate: function () {
-        var pluginIds = [];
+        var pluginIds = []
         if ($(this).data('plugin-id')) {
           pluginIds = [$(this).data('plugin-id')]
         } else {
