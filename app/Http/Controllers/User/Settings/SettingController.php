@@ -47,10 +47,66 @@ class SettingController extends Controller
     }
 
     /**
+     * edit user setting
+     *
+     * @param CaptchaManager $captcha CaptchaManager instance
+     * @param UserHandler    $handler UserHandler instance
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
+    public function editSetting(CaptchaManager $captcha, UserHandler $handler)
+    {
+        $config = app('xe.config')->get('user.common');
+
+        $parts = $handler->getRegisterParts();
+        $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
+
+        $parts = collect($parts)->partition(function ($part, $key) use ($activated) {
+            return in_array($key, $activated) || $part::isImplicit();
+        });
+        $parts->splice(0, 1, [array_merge(array_flip($activated), $parts->first()->all())]);
+
+        return XePresenter::make(
+            'user.settings.setting.common',
+            compact('config', 'captcha', 'parts')
+        );
+    }
+
+    /**
+     * update user setting
+     *
+     * @param Request        $request request
+     * @param CaptchaManager $captcha CaptchaManager instance
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateSetting(Request $request, CaptchaManager $captcha)
+    {
+        $inputs = $request->except('_token');
+        $config = app('xe.config')->get('user.common');
+
+        if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
+            throw new ConfigurationNotExistsException();
+        }
+
+        $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
+        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+
+        foreach ($inputs as $key => $val) {
+            $config->set($key, $val);
+        }
+        app('xe.config')->modify($config);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    /**
      * get Common setting
      *
      * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.2 instead use editSetting
      */
     public function editCommon(CaptchaManager $captcha)
     {
@@ -68,6 +124,8 @@ class SettingController extends Controller
      * @param Request        $request request
      * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.2 instead use editSetting
      */
     public function updateCommon(Request $request, CaptchaManager $captcha)
     {
@@ -90,6 +148,8 @@ class SettingController extends Controller
      *
      * @param CaptchaManager $captcha CaptchaManager instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.2 instead use editSetting
      */
     public function editJoin(CaptchaManager $captcha, UserHandler $handler)
     {
@@ -105,16 +165,17 @@ class SettingController extends Controller
 
         return XePresenter::make(
             'user.settings.setting.join',
-            compact('config','captcha', 'parts')
+            compact('config', 'captcha', 'parts')
         );
     }
-
 
     /**
      * update Join setting
      *
      * @param Request $request request
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.2 instead use editSetting
      */
     public function updateJoin(Request $request)
     {
