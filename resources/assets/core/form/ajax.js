@@ -9,8 +9,8 @@ export default function bindAjaxForm (formEntity) {
       const $element = $(element)
       preventSubmit()
       ajaxSend({ $element, element })
-      return Promise.resolve({stop: true})
-    }, {name: 'xe.form.ajax'})
+      return Promise.resolve({ stop: true })
+    }, { name: 'xe.form.ajax' })
   }
 }
 

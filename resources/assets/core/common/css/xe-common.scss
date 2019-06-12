@@ -6,7 +6,7 @@
  * 3. Prevent adjustments of font size after orientation changes in IE and iOS.
  */
 
- html {
+html {
   font-family: sans-serif; /* 1 */
   line-height: 1.15; /* 2 */
   -ms-text-size-adjust: 100%; /* 3 */
@@ -425,9 +425,10 @@ textarea {
 html {
   box-sizing: border-box;
 }
+
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -441,6 +442,7 @@ html {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
 .xe-sr-only-focusable:active,
 .xe-sr-only-focusable:focus {
   position: static;
@@ -454,6 +456,7 @@ html {
 .xe-pull-right {
   float: right !important;
 }
+
 .xe-pull-left {
   float: left !important;
 }
@@ -464,16 +467,18 @@ html {
   white-space: nowrap;
 }
 
-.xe-ellipsis{
+.xe-ellipsis {
   @include text-overflow;
 }
 
 .xe-show {
   display: block !important;
 }
+
 .xe-hidden {
   display: none !important;
 }
+
 .xe-invisible {
   visibility: hidden;
 }
@@ -486,6 +491,7 @@ html {
 .xe-form__input--requried {
   color: red;
 }
+
 .xe-form__input--requried::after {
   content: '*';
   color: #ff2c55;

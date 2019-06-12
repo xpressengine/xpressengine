@@ -1,10 +1,11 @@
 @charset "utf-8";
+
 .draft_save_list {
   width: 100%;
   max-height: 350px;
   overflow-y: scroll;
-  border: 0px solid #ddd;
-  background-color: #fff
+  border: 0 solid #ddd;
+  background-color: #fff;
 }
 
 .draft_save_list > ul {
@@ -13,22 +14,22 @@
   padding: 0;
   height: 100%;
   position: relative;
-  list-style: none
+  list-style: none;
 }
 
 .draft_save_list li {
   position: relative;
   padding: 9px 264px 9px 0;
-  border-top: 1px solid #f4f4f4
+  border-top: 1px solid #f4f4f4;
 }
 
 .draft_save_list li:first-child {
   padding-top: 0;
-  border-top: 0
+  border-top: 0;
 }
 
 .draft_save_list li:first-child .draft_info {
-  padding-top: 0
+  padding-top: 0;
 }
 
 .draft_save_list .draft_info {
@@ -36,7 +37,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  padding: 9px 0
+  padding: 9px 0;
 }
 
 .draft_save_list .draft_title {
@@ -46,7 +47,7 @@
   color: #696a7a;
   white-space: nowrap;
   text-overflow: ellipsis;
-  vertical-align: top
+  vertical-align: top;
 }
 
 .draft_info .draft_state {
@@ -62,24 +63,24 @@
   font-size: 10px;
   line-height: 16px;
   color: #fff;
-  vertical-align: top
+  vertical-align: top;
 }
 
 .draft_info .draft_state.v2 {
   border-color: #399cf7;
   background-color: #fff;
-  color: #399cf7
+  color: #399cf7;
 }
 
 .draft_info .draft_date {
   float: left;
   margin-right: 20px;
   font-size: 13px;
-  color: #bebebe
+  color: #bebebe;
 }
 
 .draft_info .draft_date > span {
-  margin-right: 6px
+  margin-right: 6px;
 }
 
 .draft_info .btn_draft_delete {
@@ -92,35 +93,40 @@
   line-height: 14px;
   font-size: 6px;
   color: #fff;
-  text-align: center
+  text-align: center;
 }
 
 .draft_info .btn_draft_delete > i {
-  line-height: 14px
+  line-height: 14px;
 }
 
 @media (max-width: 767px) {
   .draft_save_list {
     top: 50px;
     height: 290px;
-    padding: 0 0 0 12px
+    padding: 0 0 0 12px;
   }
+
   .draft_save_list > ul {
-    padding: 19px 12px 0 0
+    padding: 19px 12px 0 0;
   }
+
   .draft_save_list li {
-    padding: 7px 0 0
+    padding: 7px 0 0;
   }
+
   .draft_save_list li:first-child .draft_info {
-    padding: 0
+    padding: 0;
   }
+
   .draft_save_list .draft_info {
     position: relative;
     margin: 4px 0 9px;
-    padding: 0
+    padding: 0;
   }
+
   .draft_info .btn_draft_delete {
     position: absolute;
-    right: 0
+    right: 0;
   }
 }

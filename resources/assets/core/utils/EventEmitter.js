@@ -126,7 +126,7 @@ class EventEmitter {
       if (item.options.once) this.eventMaps[eventName].delete(symbolKey)
 
       let listenerArgs = (args.length) ? [eventName, ...args] : [eventName]
-      listenerChain = listenerChain.then((chainArgs = {stop: false}) => {
+      listenerChain = listenerChain.then((chainArgs = { stop: false }) => {
         if (chainArgs.stop === true) {
           return Promise.resolve(chainArgs)
         }

@@ -5,8 +5,6 @@ import wpConfig from './webpack.config.babel.js'
 import wpConfigDll, { resolveAlias } from './dll.webpack.config.babel.js'
 const argv = require('minimist')(process.argv.slice(2))
 
-console.debug('argv', argv)
-
 const $ = require('gulp-load-plugins')()
 
 const mode = (process.env.NODE_ENV !== 'production') ? 'develoment' : 'production'
@@ -14,7 +12,8 @@ let generateSourceMaps = mode !== 'production'
 const ignore = [
   '!node_modules/**/*',
   '!./**/xe-ui-component/slickgrid/**/*',
-  '!core/settings/css/bootstrap/**/*'
+  '!core/settings/css/bootstrap/**/*',
+  '!core/plugin/swiper2/idangerous.swiper.css'
 ]
 
 if (process.env.SOURCEMAPS === 'true' || process.env.SOURCEMAPS === '1') {
