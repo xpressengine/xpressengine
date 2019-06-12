@@ -97,7 +97,7 @@ export default class Toast extends Plugin {
   }
 
   add (type, message, pos) {
-    if (type === 'danger' || type === 'warning' || 'failed') {
+    if (type === 'danger' || type === 'warning' || type === 'failed') {
       pos = 'center'
     }
 
