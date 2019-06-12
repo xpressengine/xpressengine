@@ -530,7 +530,7 @@ var Category = (function (XE, $, Tree) {
       var that = this
 
       if (confirm(XE.Lang.trans('xe::confirmDelete')) == false) {
-        return;
+        return
       }
 
       XE.ajax({
@@ -559,7 +559,7 @@ var Category = (function (XE, $, Tree) {
       var that = this
 
       if (confirm(XE.Lang.trans('xe::confirmDelete')) == false) {
-        return;
+        return
       }
 
       XE.ajax({

@@ -178,7 +178,7 @@
       ].join('')
     },
     getLabel: function (mode, span) {
-      var l = {xs: 'primary', sm: 'success', md: 'info', lg: 'warning'}[mode] || 'default'
+      var l = { xs: 'primary', sm: 'success', md: 'info', lg: 'warning' }[mode] || 'default'
       return [
         '<span class="tag label label-' + l + '" data-mode="' + mode + '" data-span="' + span + '">',
         '<span>' + mode + ':' + span + '</span>',
@@ -406,9 +406,9 @@
               return
             }
 
-            _this.addWidget(_flat[$selected.data('uid')], $.extend({}, data, {'@attributes': attr}))
+            _this.addWidget(_flat[$selected.data('uid')], $.extend({}, data, { '@attributes': attr }))
           } else {
-            _this.updateWidget(widgetId, $.extend({}, data, {'@attributes': attr}))
+            _this.updateWidget(widgetId, $.extend({}, data, { '@attributes': attr }))
             _this.$btnPlaceWidget.data('widget', null)
           }
 
@@ -577,7 +577,7 @@
         }).disableSelection()
       },
       addCol: function (target, mode, span) {
-        var data = {grid: {}}
+        var data = { grid: {} }
         data.grid[mode] = span
 
         if (target instanceof Col) {
