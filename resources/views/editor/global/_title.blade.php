@@ -5,7 +5,3 @@
 @section('page_description')
     <small>{{ xe_trans('xe::descEditorSetting') }}</small>
 @endsection
-
-@section('content_bread_crumbs')
-
-@endsection

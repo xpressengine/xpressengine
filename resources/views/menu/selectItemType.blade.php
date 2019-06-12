@@ -4,7 +4,7 @@
     <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::selectItemType') }}</h2>
 @endsection
 @section('page_description')
-    <p class="sub-text">{{ xe_trans('xe::selectItemTypeDescription') }}</p>
+    <small>{{ xe_trans('xe::selectItemTypeDescription') }}</small>
 @endsection
 @extends('menu.layout')
 @section('menuContent')

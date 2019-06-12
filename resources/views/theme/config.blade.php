@@ -7,19 +7,6 @@
     <p>{{xe_trans('xe::themeSettingsDescription')}}<br><br></p>
 @stop
 
-@section('content_bread_crumbs')
-    <li><a href="{{ route('settings') }}">Home</a></li>
-
-    <li><i class="xi-angle-right"></i>
-    @if($theme->getSettingsURI())
-    <a href="{{ $theme->getSettingsURI() }}">{{ $theme->getTitle() }}</a>
-    @else
-    {{ $theme->getTitle() }}
-    @endif
-    </li>
-
-    <li><i class="xi-angle-right"></i><a href="#">{{ $config->get('_configTitle', xe_trans('xe::default')) }} {{xe_trans('xe::settings')}}</a></li>
-@stop
 <div class="row">
     <div class="col-sm-12">
         <form id="setting-form" role="form" action="{{ route('settings.theme.setting', ['theme'=>request()->get('theme')]) }}" method="post" enctype="multipart/form-data">

@@ -153,35 +153,29 @@ return [
                 'display' => true,
                 'ordering' => 100
             ],
-            'user.setting.join' => [
-                'title' => 'xe::joinSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 200
-            ],
             'user.setting.terms' => [
                 'title' => 'xe::termsSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 300
+                'ordering' => 200
             ],
             'user.setting.skin' => [
                 'title' => 'xe::skinSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 400
+                'ordering' => 300
             ],
             'user.setting.field' => [
                 'title' => 'xe::dynamicFieldSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 500
+                'ordering' => 400
             ],
             'user.setting.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 600
+                'ordering' => 500
             ],
             'contents' => [
                 'title' => 'xe::contents',

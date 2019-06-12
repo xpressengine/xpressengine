@@ -79,7 +79,7 @@ class UserMigration extends Migration
             $table->string('user_id', 36)->comment('user ID');
             $table->timestamp('created_at')->nullable()->comment('created date');
 
-            $table->unique(['group_id','user_id']);
+            $table->unique(['group_id', 'user_id']);
             $table->index('group_id');
             $table->index('user_id');
         });
@@ -99,7 +99,7 @@ class UserMigration extends Migration
             $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->primary('id');
-            $table->unique(['provider','account_id']);
+            $table->unique(['provider', 'account_id']);
         });
 
         Schema::create('user_email', function (Blueprint $table) {
@@ -183,8 +183,7 @@ class UserMigration extends Migration
     {
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
-            ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.join', 'vars' => '{"joinable":true}'],
+            ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com", "joinable":true}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -209,12 +208,73 @@ class UserMigration extends Migration
                 'description' => 'sub user group'
             ]
         );
-        $joinConfig = app('xe.config')->get('user.join');
+        $joinConfig = app('xe.config')->get('user.common');
 
         $joinConfig->set('joinGroup', $joinGroup->id);
         app('xe.config')->modify($joinConfig);
 
         // set admin's group
         auth()->user()->joinGroups($joinGroup);
+    }
+
+    /**
+     * check updated
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if ($this->checkNeedMergeConfig() == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * run update
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if ($this->checkNeedMergeConfig() == true) {
+            $this->mergeConfig();
+        }
+    }
+
+    /**
+     * check need user setting merge(common, join)
+     *
+     * @return bool
+     */
+    private function checkNeedMergeConfig()
+    {
+        return app('xe.config')->get('user.join') !== null ? true : false;
+    }
+
+    /**
+     * run user setting merge(common, join)
+     *
+     * @return void
+     */
+    private function mergeConfig()
+    {
+        $commonConfig = app('xe.config')->get('user.common');
+        $joinConfig = app('xe.config')->get('user.join');
+
+        $commonConfigAttribute = $commonConfig->getPureAll();
+        $joinConfigAttribute = $joinConfig->getPureAll();
+
+        foreach ($joinConfigAttribute as $name => $value) {
+            $commonConfigAttribute[$name] = $value;
+        }
+
+        app('xe.config')->put('user.common', $commonConfigAttribute);
+        app('xe.config')->remove($joinConfig);
     }
 }

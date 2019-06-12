@@ -112,23 +112,14 @@
                             <h2>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::enterTitle')) }}</h2>
                         @show
                         @section('page_description')
-                            <small>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', '')) }}</small>
+                            @php
+                                $description = xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', ''));
+                            @endphp
+
+                            @if ($description != '')
+                                <small>{{ $description }}</small>
+                            @endif
                         @show
-                    </div>
-                </div>
-                <div class="row locate">
-                    <div class="col-sm-12">
-                        <ul>
-                        @if ($selectedMenu)
-                            <li><a href="{{ route('settings') }}">Home</a></li>
-                            <!-- 게시판 인스턴스 설정 같이 빵조각을 표시하기 어려운 환경 일 수 있음 -->
-                            @foreach ($selectedMenu->getBreadCrumbs() as $menu)
-                            <li><i class="xi-angle-right"></i><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a></li>
-                            @endforeach
-                        @endif
-                            <!-- contents 에서 임의로 빵조각을 추가할 수 있음-->
-                            @yield('content_bread_crumbs')
-                        </ul>
                     </div>
                 </div>
                 @show
