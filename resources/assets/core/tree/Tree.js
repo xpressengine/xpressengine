@@ -1,7 +1,6 @@
 import 'nestedSortable'
 import $ from 'jquery'
-import isObject from 'lodash/isObject'
-import isFunction from 'lodash/isFunction'
+import _ from 'lodash'
 import Item from './Item'
 
 let _prevent = false
@@ -65,12 +64,12 @@ class Tree {
     let options = $.extend({}, defaultOptions)
 
     // custom option 추가
-    if (isObject(treeOptions)) {
+    if (_.isObject(treeOptions)) {
       $.extend(options, treeOptions)
     }
 
     // start function 추가
-    if (isObject(treeOptions) && isFunction(treeOptions.start)) {
+    if (_.isObject(treeOptions) && _.isFunction(treeOptions.start)) {
       options.start = treeOptions.start
     } else {
       options.start = function (e, ui) {
@@ -81,14 +80,14 @@ class Tree {
         ordering = itemData.ordering
         itemId = itemData.id
 
-        if (isObject(config) && isFunction(config.dragStart)) {
+        if (_.isObject(config) && _.isFunction(config.dragStart)) {
           config.dragStart()
         }
       }
     }
 
     // stop function 추가
-    if (isObject(treeOptions) && isFunction(treeOptions.stop)) {
+    if (_.isObject(treeOptions) && _.isFunction(treeOptions.stop)) {
       options.stop = treeOptions.stop
     } else {
       options.stop = function (e, ui) {
@@ -97,12 +96,12 @@ class Tree {
         const moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.item-container').data('parent')
         const moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item)
 
-        if (isObject(config) && isFunction(config.dragStop)) {
+        if (_.isObject(config) && _.isFunction(config.dragStop)) {
           config.dragStop()
         }
 
         if ((parentId !== moveParentId && !_prevent) || (ordering !== moveOrdering && !_prevent)) {
-          if (isObject(config) && isFunction(config.update)) {
+          if (_.isObject(config) && _.isFunction(config.update)) {
             config.update({
               item: $item,
               itemId: itemId,
@@ -115,17 +114,17 @@ class Tree {
     }
 
     // relocate function 추가 default 사용안함.
-    if (isObject(treeOptions) && isFunction(treeOptions.relocate)) {
+    if (_.isObject(treeOptions) && _.isFunction(treeOptions.relocate)) {
       options.relocate = treeOptions.relocate
     }
 
     // receive function 추가 default 사용안함.
-    if (isObject(treeOptions) && isFunction(treeOptions.receive)) {
+    if (_.isObject(treeOptions) && _.isFunction(treeOptions.receive)) {
       options.receive = treeOptions.receive
     }
 
     // placeholder 추가
-    if (isObject(treeOptions) && treeOptions.placeholder) {
+    if (_.isObject(treeOptions) && treeOptions.placeholder) {
       options.placeholder = treeOptions.placeholder
     } else {
       options.placeholder = {
@@ -136,7 +135,7 @@ class Tree {
       }
     }
 
-    if (isObject(treeOptions) && isFunction(treeOptions.isAllowed)) {
+    if (_.isObject(treeOptions) && _.isFunction(treeOptions.isAllowed)) {
       options.isAllowed = treeOptions.isAllowed
     } else {
       options.isAllowed = function (placeholder, placeholderParent, currentItem) {

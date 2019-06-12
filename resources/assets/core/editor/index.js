@@ -43,9 +43,15 @@ class Editor extends App {
   }
 
   boot (XE) {
-    super.boot(XE)
+    if (this.booted()) {
+      return Promise.resolve(this)
+    }
 
-    return Promise.resolve(this)
+    return new Promise((resolve) => {
+      super.boot(XE)
+
+      resolve(this)
+    })
   }
 
   /**
@@ -64,7 +70,7 @@ class Editor extends App {
         this.$$emit('editor.define', editor)
       }
     } catch (e) {
-      console.error(e)
+      // console.error(e)
     }
   }
 

@@ -5,7 +5,6 @@
   * @class
   */
   function Draft (elem, key, callback, withForm, container, apiUrl) {
-    var _this = this
     this.key = key
     this.elem = elem
     this.callback = callback
@@ -44,7 +43,9 @@
       this.uid = this._getUid()
       this.appendComponent()
 
-      XE.Lang.requestTransAll(['xe::draftSave', 'xe::draftSaved', 'xe::autoSave', 'xe::draftLoad'])
+      Promise.all([XE.app('Lang'), XE.app('Request')]).then(function (app) {
+        app[0].requestTransAll(['xe::draftSave', 'xe::draftSaved', 'xe::autoSave', 'xe::draftLoad'])
+      })
     },
 
     _getUid: function () {
@@ -117,9 +118,9 @@
                 temp += `<div class="draft_info">`
 
                 if (item.is_auto == 1) {
-                  temp += `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`
+                  temp += `<span class="draft_state">${window.XE.Lang.trans('xe::autoSave')}</span>`
                 } else {
-                  temp += `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`
+                  temp += `<span class="draft_state v2">${window.XE.Lang.trans('xe::draftSave')}</span>`
                 }
 
                 temp += `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`
@@ -152,9 +153,9 @@
                 temp += `<div class="draft_info">`
 
                 if (item.is_auto == 1) {
-                  temp += `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`
+                  temp += `<span class="draft_state">${window.XE.Lang.trans('xe::autoSave')}</span>`
                 } else {
-                  temp += `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`
+                  temp += `<span class="draft_state v2">${window.XE.Lang.trans('xe::draftSave')}</span>`
                 }
 
                 temp += `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`
@@ -262,11 +263,11 @@
         this.reqPut()
       }
 
-      XE.toast('success', XE.Lang.trans('xe::draftSaved'))
+      window.XE.toast('success', window.XE.Lang.trans('xe::draftSaved'))
     },
 
     reqPost: function () {
-      XE.ajax({
+      window.XE.ajax({
         url: this.apiUrl.draft.add,
         type: 'post',
         dataType: 'json',
@@ -282,7 +283,7 @@
     },
 
     reqPut: function () {
-      XE.ajax({
+      window.XE.ajax({
         url: this.apiUrl.draft.update + '/' + this.draftId,
         type: 'post',
         dataType: 'json',
@@ -312,7 +313,7 @@
     },
 
     setAuto: function () {
-      XE.ajax({
+      window.XE.ajax({
         url: this.apiUrl.auto.set,
         type: 'post',
         data: this.getReqSerialize() + '&key=' + this.key
@@ -324,7 +325,7 @@
 
       return new Promise((resolve, reject) => {
         if (key) {
-          XE.ajax({
+          window.XE.ajax({
             url: this.apiUrl.auto.unset,
             type: 'post',
             data: 'key=' + key,
@@ -342,7 +343,7 @@
     load: function (param, callback) {
       var _this = this
 
-      XE.ajax({
+      window.XE.ajax({
         url: _this.apiUrl.draft.list,
         type: 'get',
         dataType: 'json',
@@ -384,7 +385,7 @@
         this.draftId = null
       }
 
-      XE.ajax({
+      window.XE.ajax({
         url: _this.apiUrl.draft.delete + '/' + id,
         type: 'post',
         dataType: 'json',

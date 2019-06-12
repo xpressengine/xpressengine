@@ -1,7 +1,8 @@
+import _ from 'lodash'
+
 export const STORE_LOCALE = 'STORE_LOCALE'
 export const CHANGE_LOCALE = 'CHANGE_LOCALE'
 export const STORE_TERMS = 'STORE_TERMS'
-import isNil from 'lodash/isNil'
 
 const state = {
   locales: [],
@@ -50,7 +51,7 @@ const mutations = {
       })
     }
 
-    if (isNil(payload.default)) {
+    if (_.isNil(payload.default)) {
       payload.default = payload.locales[0].code
     }
 
