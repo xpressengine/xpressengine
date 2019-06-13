@@ -1646,7 +1646,7 @@ return [
     ],
     'extension' => [
         'ko' => '익스텐션',
-        'en' => 'extension',
+        'en' => 'Extension',
     ],
     'installNow' => [
         'ko' => '지금 설치',
@@ -3187,5 +3187,65 @@ return [
     'mailSenderAddress' => [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
-    ]
+    ],
+    'installedTheme' => [
+        'ko' => '설치된 테마',
+        'en' => 'Installed theme'
+    ],
+    'installedThemeDescription' => [
+        'ko' => '스토어 및 직접 설치한 테마 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of themes.'
+    ],
+    'installedExtension' => [
+        'ko' => '설치된 익스텐션',
+        'en' => 'Installed extension'
+    ],
+    'installedExtensionDescription' => [
+        'ko' => '스토어 및 직접 설치한 익스텐션 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of extensions.'
+    ],
+    'installNewTheme' => [
+        'ko' => '새 테마 설치',
+        'en' => 'Install new theme'
+    ],
+    'installNewExtension' => [
+        'ko' => '새 익스텐션 설치',
+        'en' => 'Install new extension'
+    ],
+    'addTheme' => [
+        'ko' => '테마 추가',
+        'en' => 'Add Theme'
+    ],
+    'addThemeDescription' => [
+        'ko' => 'XE Store에 등록된 테마를 내 사이트에 추가해보세요.',
+        'en' => 'Please add the theme registered in XE Store to my site.'
+    ],
+    'addExtension' => [
+        'ko' => '익스텐션 추가',
+        'en' => 'Add Extension'
+    ],
+    'addExtensionDescription' => [
+        'ko' => 'XE Store에 등록된 익스텐션을 내 사이트에 추가해보세요',
+        'en' => 'Please add the extension registered in XE Store to my site.'
+    ],
+    'settingTheme' => [
+        'ko' => '테마 설정',
+        'en' => 'Setting theme'
+    ],
+    'themeEditor' => [
+        'ko' => '테마 에디터',
+        'en' => 'Theme editor'
+    ],
+    'extensionEditor' => [
+        'ko' => '익스텐션 에디터',
+        'en' => 'Extension editor'
+    ],
+    'activated' => [
+        'ko' => '활성화된',
+        'en' => 'Activated'
+    ],
+    'deactivated' => [
+        'ko' => '비활성화된',
+        'en' => 'deactivated'
+    ],
 ];

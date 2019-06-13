@@ -183,6 +183,7 @@ return [
                 'description' => '',
                 'ordering' => 4000
             ],
+
             'plugin' => [
                 'title' => 'xe::pluginAndUpdate',
                 'display' => true,
@@ -219,6 +220,62 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+
+            'theme' => [
+                'title' => 'xe::theme',
+                'display' => true,
+                'description' => '',
+                'ordering' => 5000
+            ],
+            'theme.installed' => [
+                'title' => 'xe::installedTheme',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
+            ],
+            'theme.install' => [
+                'title' => 'xe::addTheme',
+                'display' => true,
+                'description' => '',
+                'ordering' => 200
+            ],
+            'theme.setting' => [
+                'title' => 'xe::settingTheme',
+                'display' => true,
+                'description' => '',
+                'ordering' => 300
+            ],
+            'theme.editor' => [
+                'title' => 'xe::themeEditor',
+                'display' => true,
+                'description' => '',
+                'ordering' => 400
+            ],
+            'extension' => [
+                'title' => 'xe::extension',
+                'display' => true,
+                'description' => '',
+                'ordering' => 5000
+            ],
+            'extension.installed' => [
+                'title' => 'xe::installedExtension',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
+            ],
+            'extension.install' => [
+                'title' => 'xe::addExtension',
+                'display' => true,
+                'description' => '',
+                'ordering' => 200
+            ],
+            'extension.editor' => [
+                'title' => 'xe::extensionEditor',
+                'display' => true,
+                'description' => '',
+                'ordering' => 300
+            ],
+
             'setting' => [
                 'title' => 'xe::settings',
                 'display' => true,

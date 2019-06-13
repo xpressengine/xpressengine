@@ -40,7 +40,6 @@ use Xpressengine\Plugin\Exceptions\PluginNotFoundException;
  */
 class PluginHandler
 {
-
     /**
      * 활성화 된 상태
      */
@@ -541,6 +540,64 @@ class PluginHandler
         }
 
         return $this->getPlugins();
+    }
+
+    public function getAllThemes($refresh = false)
+    {
+        $themes = [];
+        $allPlugins = $this->getAllPlugins($refresh);
+
+        /** @var PluginEntity $plugin */
+        foreach ($allPlugins as $plugin) {
+            if (empty($plugin->getComponentList('theme') == false)) {
+                //플러그인에 컴포넌트가 2개 이상일 경우 스토어에 등록된 정보 확인해서 구분
+                if (count($plugin->getComponentList()) > 1) {
+                    $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+                    if ($storePlugin == null) {
+                        //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
+                        continue;
+                    } elseif ($storePlugin && $storePlugin->is_theme == false) {
+                        continue;
+                    }
+                }
+
+                $themes[] = $plugin;
+            }
+        }
+
+        return $themes;
+    }
+
+    public function getAllExtensions($refresh = false)
+    {
+        $extensions = [];
+        $allPlugins = $this->getAllPlugins($refresh);
+
+        /** @var PluginEntity $plugin */
+        foreach ($allPlugins as $plugin) {
+            //플러그인에 테마 컴포넌트가 없으면 익스텐션
+            if (empty($plugin->getComponentList('theme') == true)) {
+                $extensions[] = $plugin;
+                continue;
+            }
+
+            //컴포넌트에 테마가 있는데 컴포넌트가 1개면 테마
+            if (count($plugin->getComponentList()) < 2) {
+                continue;
+            }
+
+            $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+            if ($storePlugin == null) {
+                //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
+//                continue;
+            } elseif ($storePlugin && $storePlugin->is_extension == false) {
+                continue;
+            }
+
+            $extensions[] = $plugin;
+        }
+
+        return $extensions;
     }
 
     /**

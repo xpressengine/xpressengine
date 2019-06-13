@@ -816,6 +816,30 @@ Route::settings(
     }
 );
 
+Route::settings('theme', function () {
+    Route::get('/installed', [
+        'as' => 'settings.theme.installed',
+        'uses' => 'ThemeSettingsController@installed',
+        'settings_menu' => 'theme.installed'
+        ]);
+    Route::get('/install', [
+        'as' => 'settings.theme.install',
+        'uses' => 'ThemeSettingsController@install',
+        'settings_menu' => 'theme.install']);
+});
+
+Route::settings('extension', function () {
+    Route::get('/installed', [
+        'as' => 'settings.extension.installed',
+        'uses' => 'ExtensionSettingsController@installed',
+        'settings_menu' => 'extension.installed']);
+
+    Route::get('/install', [
+        'as' => 'settings.extension.install',
+        'uses' => 'ExtensionSettingsController@install',
+        'settings_menu' => 'extension.install']);
+});
+
 Route::settings('category', function () {
 
     // 이하 신규
