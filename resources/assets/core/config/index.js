@@ -9,17 +9,7 @@ import { module as user } from 'xe/user/store'
 Vue.use(Vuex)
 Vue.config.productionTip = false
 
-const state = {
-  useXeSpinner: true,
-  userToken: null,
-  loginUserId: null
-}
-
-/**
- * Config store
- * @ignore
- */
-const config = new Vuex.Store({
+const store = () => new Vuex.Store({
   modules: {
     lang,
     request,
@@ -29,4 +19,4 @@ const config = new Vuex.Store({
   }
 })
 
-export default config
+export default store()

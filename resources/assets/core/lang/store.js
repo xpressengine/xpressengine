@@ -1,7 +1,8 @@
+import _ from 'lodash'
+
 export const STORE_LOCALE = 'STORE_LOCALE'
 export const CHANGE_LOCALE = 'CHANGE_LOCALE'
 export const STORE_TERMS = 'STORE_TERMS'
-import isNil from 'lodash/isNil'
 
 const state = {
   locales: [],
@@ -35,7 +36,7 @@ const actions = {
   setTerms: ({ commit }, terms) => {
     const data = []
     Object.entries(terms).forEach(element => {
-      data.push({id: element[0], message: element[1]})
+      data.push({ id: element[0], message: element[1] })
     })
 
     commit(STORE_TERMS, data)
@@ -50,7 +51,7 @@ const mutations = {
       })
     }
 
-    if (isNil(payload.default)) {
+    if (_.isNil(payload.default)) {
       payload.default = payload.locales[0].code
     }
 

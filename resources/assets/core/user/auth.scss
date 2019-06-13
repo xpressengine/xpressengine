@@ -1,7 +1,8 @@
 @charset "utf-8";
+
 /* CSS Document */
 
-/*reset css*/
+/* reset css */
 legend {
   position: absolute;
   clip: rect(0 0 0 0);
@@ -10,16 +11,20 @@ legend {
   margin: -1px;
   overflow: hidden;
 }
+
 .user em {
   font-style: normal;
 }
+
 .user a {
   color: #2c8beb;
   text-decoration: none;
 }
+
 .user a:hover {
   color: #085daa;
 }
+
 .user ul,
 .user h1,
 .user form,
@@ -49,6 +54,7 @@ legend {
   margin-right: -4px;
   margin-left: -4px;
 }
+
 .pull-r {
   float: none;
 }
@@ -111,14 +117,17 @@ hr {
   padding-right: 4px;
   padding-left: 4px;
 }
+
 .row-title {
   margin: 5px 0;
   padding-left: 4px;
   font-size: 14px;
 }
+
 .row-title i {
   margin-left: 10px;
 }
+
 .user {
   max-width: 330px;
   margin: 0 auto;
@@ -126,51 +135,64 @@ hr {
   color: #2c2e37;
   font-size: 14px;
 }
+
 .user.v2 {
   max-width: 430px;
 }
+
 .user fieldset {
   border: none;
 }
+
 .user .xe-input-text {
   margin: 0;
   background-color: transparent;
 }
+
 .user .text-message {
   color: #696e7a;
 }
+
 .user .success-input .text-message {
   color: #2c8beb;
 }
+
 .user .text-message.normal {
   color: #696e7a !important;
 }
+
 .user .xe-select-style {
   display: block;
 }
+
 .user .auth-group {
   position: relative;
   margin-bottom: 8px;
 }
+
 .user.find-password .auth-group {
   position: relative;
   margin-bottom: 16px;
 }
+
 .user .xe-input-group {
   margin: 16px 0;
 }
+
 .user .xe-input-group label {
   font-size: 14px;
   color: #696e7a;
   line-height: 20px;
   font-weight: normal;
 }
+
 .user h1 {
   margin-bottom: 24px;
   font-size: 24px !important;
   line-height: 32px;
   font-weight: normal;
 }
+
 .user .sub-text {
   margin-bottom: 16px;
   font-size: 14px;
@@ -180,55 +202,67 @@ hr {
 .user .g-recaptcha {
   margin: 16px auto;
 }
+
 .user .xe-btn-primary,
 .user .xe-btn.xe-btn-link {
   // width: 100%;
   margin-bottom: 16px;
   // text-align: center;
 }
+
 .user .xe-btn-blue {
   color: #fff;
 }
+
 .user .auth-text {
   margin-top: 24px;
   text-align: center;
 }
+
 .user .auto-text {
   font-size: 14px;
   color: #696e7a;
   line-height: 20px;
 }
+
 .user .auto-text a {
   color: #2c8beb,;
 }
+
 .user .auth-noti {
   margin-top: 12px;
   font-size: 13px;
   color: #8e8e93;
   line-height: 18px;
 }
+
 .user .hr {
   border-top: 1px solid #e4e4e4;
 }
+
 .user .hr .text-hr {
   margin-top: -12px;
   text-align: center;
 }
+
 .user .hr .text-hr > span {
   padding: 0 16px;
   background-color: #fff;
 }
+
 .user .auth-sns {
   position: relative;
   padding: 23px 0 20px;
   text-align: center;
   border-bottom: 1px solid #e4e4e4;
 }
+
 .user .auth-sns li {
   display: inline-block;
   list-style-type: none;
   width: 48px;
 }
+
 .user .auth-sns li a {
   display: inline-block;
   width: 40px;
@@ -236,21 +270,27 @@ hr {
   border-radius: 50%;
   background-color: #3b5998;
 }
+
 .user .auth-sns li.sns-facebook a {
   background-color: #3b5998;
 }
+
 .user .auth-sns li.sns-twitter a {
   background-color: #55acee;
 }
+
 .user .auth-sns li.sns-naver a {
   background-color: #23b300;
 }
+
 .user .auth-sns li.sns-google a {
   background-color: #4184f3;
 }
+
 .user .auth-sns li.sns-github a {
   background-color: #444;
 }
+
 .user .auth-sns li.sns-line a {
   background-color: #00c300;
 }
@@ -258,26 +298,33 @@ hr {
 .user .auth-sns li.sns-facebook a:hover {
   background-color: #1d315b;
 }
+
 .user .auth-sns li.sns-twitter a:hover {
   background-color: #006daa;
 }
+
 .user .auth-sns li.sns-naver a:hover {
   background-color: #1c8d00;
 }
+
 .user .auth-sns li.sns-google a:hover {
   background-color: #3a76d6;
 }
+
 .user .auth-sns li.sns-github a:hover {
   background-color: #222;
 }
+
 .user .auth-sns li.sns-line a:hover {
   background-color: #23b300;
 }
+
 .user .auth-sns li a i {
   color: #fff;
   font-size: 25px;
   line-height: 40px;
 }
+
 .user hr {
   margin: 0;
   border-color: #e4e4e4;
@@ -286,14 +333,17 @@ hr {
 .user .auth-sns.v2 {
   border-bottom: none;
 }
+
 .user .auth-sns.v2 ul {
   max-width: 230px;
   margin: 8px auto 16px;
 }
+
 .user .auth-sns.v2 li {
   position: relative;
   display: block;
 }
+
 .user .auth-sns.v2 li a {
   display: block;
   width: 270px;
@@ -306,7 +356,8 @@ hr {
   line-height: 48px;
   text-align: left;
 }
-.user .auth-sns.v2 li a:before {
+
+.user .auth-sns.v2 li a::before {
   content: "";
   position: absolute;
   top: 0;
@@ -315,6 +366,7 @@ hr {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 .user .auth-sns.v2 li a i {
   font-size: 30px;
   line-height: inherit;
@@ -335,13 +387,16 @@ hr {
   border-color: transparent;
   background-color: transparent;
 }
+
 .user .auth-group .btn-eye .xi-eye-off,
 .user .auth-group .btn-eye.on .xi-eye {
   display: none;
 }
+
 .user .auth-group .btn-eye.on .xi-eye-off {
   display: block;
 }
+
 .user .auth-group.option {
   background-color: #f6f7f8;
   color: #2c2e37;
@@ -351,15 +406,18 @@ hr {
   margin-bottom: 16px;
   border-bottom: 1px solid #e4e4e4;
 }
+
 .info p {
   margin: 0 0 24px;
   color: #696e7a;
 }
+
 .info em,
 .user .sub-text em {
   font-weight: 600;
   color: #2c2e37;
 }
+
 .info em.info-title {
   display: inline-block;
   margin-bottom: 8px;

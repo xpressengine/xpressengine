@@ -1,31 +1,22 @@
 import EventEmitter from './EventEmitter'
 import config from 'xe/config'
-
-// lodash
-import curry from 'lodash/curry'
-import debounce from 'lodash/debounce'
-import find from 'lodash/find'
-import forEach from 'lodash/forEach'
-import mapValues from 'lodash/mapValues'
-import throttle from 'lodash/throttle'
-import trim from 'lodash/trim'
-import trimEnd from 'lodash/trimEnd'
-import trimStart from 'lodash/trimStart'
+import lodash from 'lodash'
 
 export * from './_deprecated'
+
 export {
-  EventEmitter,
-  // lodash
-  curry,
-  debounce,
-  find,
-  forEach,
-  mapValues,
-  throttle,
-  trim,
-  trimEnd,
-  trimStart
+  EventEmitter
 }
+
+export const curry = lodash.curry
+export const debounce = lodash.debounce
+export const find = lodash.find
+export const forEach = lodash.forEach
+export const mapValues = lodash.mapValues
+export const throttle = lodash.throttle
+export const trim = lodash.trim
+export const trimEnd = lodash.trimEnd
+export const trimStart = lodash.trimStart
 
 /**
  * @module Utils
@@ -156,7 +147,7 @@ export function asset (resourceUri) {
 
   result += resourceUri
 
-  return trimEnd(result.split(/[?#]/)[0], '/')
+  return _.trimEnd(result.split(/[?#]/)[0], '/')
 }
 
 const windowObjectReference = {}
@@ -189,7 +180,7 @@ export function openWindow (url, name = null, options = {}) {
   options = Object.assign({}, defaultWindowFeatures, options)
 
   if (windowObjectReference[name] == null || windowObjectReference[name].closed) {
-    mapValues(options, (value, key) => {
+    _.mapValues(options, (value, key) => {
       value = (value === false) ? 'no' : (value === true) ? 'yes' : value
       features.push(key + '=' + value)
     })

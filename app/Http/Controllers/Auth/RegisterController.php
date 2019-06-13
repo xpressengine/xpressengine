@@ -102,7 +102,7 @@ class RegisterController extends Controller
             );
         }
 
-        $config = app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.common');
 
         // 가입 인증을 사용하지 않을 경우, 곧바로 회원가입 폼 출력
         if (!$config->get('guard_forced', false) || $request->get('token')) {
@@ -110,7 +110,6 @@ class RegisterController extends Controller
         }
 
         return \XePresenter::make('register.index');
-
     }
 
     /**
@@ -121,7 +120,7 @@ class RegisterController extends Controller
      */
     protected function getRegisterForm(Request $request)
     {
-        $config = app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.common');
 
         // 활성화된 가입폼 가져오기
         $parts = $this->handler->getRegisterParts();
@@ -202,7 +201,7 @@ class RegisterController extends Controller
             );
         }
 
-        $config = app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.common');
 
         // 활성화된 가입폼 가져오기
         $parts = $this->handler->getRegisterParts();
@@ -250,7 +249,7 @@ class RegisterController extends Controller
      */
     protected function checkJoinable()
     {
-        return XeConfig::getVal('user.join.joinable') === true;
+        return XeConfig::getVal('user.common.joinable') === true;
     }
 
     /**
@@ -330,7 +329,7 @@ class RegisterController extends Controller
             $this->validate($request, [ 'email' => 'email' ]);
 
             // 인증 요청중인 이메일이 있는지 확인
-            $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
+            $useEmailConfirm = app('xe.config')->getVal('user.common.guard_forced') === true;
             if ($useEmailConfirm) {
                 if ($request->user()->getPendingEmail() !== null) {
                     throw new PendingEmailAlreadyExistsException();

@@ -343,25 +343,14 @@ Route::settings(
         Route::group(
             ['prefix' => 'setting'],
             function () {
-
                 Route::get('/', [
                     'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@editCommon',
+                    'uses' => 'User\Settings\SettingController@editSetting',
                     'settings_menu' => 'user.setting.default',
                 ]);
                 Route::post('/', [
                     'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@updateCommon'
-                ]);
-
-                Route::get('join', [
-                    'as' => 'settings.user.setting.join',
-                    'uses' => 'User\Settings\SettingController@editJoin',
-                    'settings_menu' => 'user.setting.join',
-                ]);
-                Route::post('join', [
-                    'as' => 'settings.user.setting.join',
-                    'uses' => 'User\Settings\SettingController@updateJoin'
+                    'uses' => 'User\Settings\SettingController@updateSetting',
                 ]);
 
                 Route::group(['prefix' => 'terms', 'settings_menu' => 'user.setting.terms'], function () {

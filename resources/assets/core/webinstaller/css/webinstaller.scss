@@ -2,26 +2,56 @@
 
 /* common */
 
-body, ol, ul, h1, h2, h3, h4, h5, h6, p, th, td, dl, dd, form, fieldset, legend, input, textarea {
+body,
+ol,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+th,
+td,
+dl,
+dd,
+form,
+fieldset,
+legend,
+input,
+textarea {
   margin: 0;
   padding: 0;
 }
 
-body, input, textarea, select, table, .dt_sl {
-  font-family: "나눔바른고딕",NanumBarunGothic,'나눔고딕',NanumGothic,'맑은 고딕',malgungothic,'굴림',Gulim,AppleGothic,sans-serif;
+body,
+input,
+textarea,
+select,
+table,
+.dt_sl {
+  font-family: "나눔바른고딕", NanumBarunGothic, '나눔고딕', NanumGothic, '맑은 고딕', malgungothic, '굴림', Gulim, AppleGothic, sans-serif;
   font-size: 13px;
   color: #777;
 }
 
-img, fieldset {
+img,
+fieldset {
   border: 0;
 }
 
-img, input, select, button {
+img,
+input,
+select,
+button {
   vertical-align: middle;
 }
 
-input, select, button, textarea {
+input,
+select,
+button,
+textarea {
   outline: none;
 }
 
@@ -35,7 +65,8 @@ table {
   border-spacing: 0;
 }
 
-hr, legend {
+hr,
+legend {
   display: none;
 }
 
@@ -48,6 +79,7 @@ caption {
 a {
   color: #444;
   text-decoration: none;
+
   &:hover {
     text-decoration: none;
   }
@@ -55,7 +87,8 @@ a {
 
 /* layout */
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -64,7 +97,7 @@ html, body {
 header {
   position: relative;
   height: 70px;
-  background-color: #536FE1;
+  background-color: #536fe1;
   z-index: 10;
 }
 
@@ -72,37 +105,48 @@ header {
   position: relative;
   min-height: 100%;
   margin: -70px 0 -50px 0;
+
   .agree-area {
     padding: 30px 0;
     border-bottom: 1px solid #eee;
   }
+
   textarea.xe-form-control {
-    border-color: #C8C7CC;
+    border-color: #c8c7cc;
     color: #a9a9ab;
     font-size: 13px;
     resize: none;
   }
+
   h2 {
     margin-bottom: 27px;
     font-size: 24px;
     color: #2c2e37;
     font-weight: normal;
   }
+
   table {
     width: 100%;
     margin-bottom: 70px;
     border-top: 1px solid #eee;
-    th, td {
+
+    th,
+    td {
       padding: 10px 0;
       text-align: left;
     }
+
     tr:first-child {
-      th, td {
+      th,
+      td {
         padding-top: 30px;
       }
     }
   }
-  .btn-start, .btn-next, .btn-again {
+
+  .btn-start,
+  .btn-next,
+  .btn-again {
     display: inline-block;
     width: 150px;
     height: 45px;
@@ -110,13 +154,16 @@ header {
     border: none;
     cursor: pointer;
   }
+
   .btn-next {
     background-image: url(../img/btn_next.png);
   }
+
   .btn-again {
     width: 190px;
     background-image: url(../img/btn_again.png);
   }
+
   .btn-center {
     margin-top: 50px;
     text-align: center;
@@ -134,6 +181,7 @@ header {
   height: 50px;
   padding-top: 20px;
   z-index: 10;
+
   .text-copy {
     display: block;
     width: 347px;
@@ -147,12 +195,15 @@ header .header-inner {
   max-width: 1000px;
   min-width: 640px;
   margin: 0 auto;
+
   h1 {
     display: inline-block;
     font-size: 33px;
     line-height: 77px;
+
     a {
       color: #fff;
+
       .brand-title {
         display: inline-block;
         width: 194px;
@@ -162,30 +213,35 @@ header .header-inner {
       }
     }
   }
+
   ul {
     float: right;
+
     li {
       display: inline-block;
       position: relative;
       padding-right: 23px;
+
       &.step3 {
         padding-right: 0;
       }
-      &:after {
+
+      &::after {
         position: absolute;
         top: 50%;
         right: 6px;
         width: 10px;
         height: 10px;
         margin-top: -7px;
-        border-top: 1px solid #B3C2FD;
-        border-right: 1px solid #B3C2FD;
+        border-top: 1px solid #b3c2fd;
+        border-right: 1px solid #b3c2fd;
         background-color: transparent;
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
         content: "";
       }
+
       a {
         display: block;
         width: 51px;
@@ -193,29 +249,38 @@ header .header-inner {
         background: url(../img/step_01.png) 50% 50% no-repeat;
         line-height: 70px;
       }
-      &:first-child:after, &.step3:after {
+
+      &:first-child::after,
+      &.step3::after {
         border-color: transparent;
       }
+
       &:first-child a {
         display: none;
       }
+
       &.on:first-child a {
         display: block;
         width: 57px;
         background-image: url(../img/img_start.png);
       }
+
       &.step2 a {
         background-image: url(../img/step_02.png);
       }
+
       &.step3 a {
         background-image: url(../img/step_03.png);
       }
+
       &.on a {
         background-image: url(../img/step_01_on.png);
       }
+
       &.step2.on a {
         background-image: url(../img/step_02_on.png);
       }
+
       &.step3.on a {
         background-image: url(../img/step_03_on.png);
       }
@@ -223,7 +288,7 @@ header .header-inner {
   }
 }
 
-/*content*/
+/* content */
 
 .start_content {
   position: relative;
@@ -237,65 +302,80 @@ header .header-inner {
 h2.title-installer {
   font-size: 0;
   margin-bottom: 15px;
+
   span {
     display: inline-block;
     height: 24px;
     background-repeat: no-repeat;
   }
+
   .text-xe {
     width: 38px;
     margin-right: 3px;
     background-image: url(../img/text_xe.png);
   }
+
   .text-installer {
     margin-left: 8px;
     width: 112px;
     background-image: url(../img/text_installer.png);
   }
+
   .dot {
     width: 6px;
     background-image: url(../img/dot.png);
   }
+
   .num0 {
     width: 19px;
     background-image: url(../img/num_0.png);
   }
+
   .num1 {
     width: 10px;
     background-image: url(../img/num_1.png);
   }
+
   .num2 {
     width: 17px;
     background-image: url(../img/num_2.png);
   }
+
   .num3 {
     width: 16px;
     background-image: url(../img/num_3.png);
   }
+
   .num4 {
     width: 17px;
     background-image: url(../img/num_4.png);
   }
+
   .num5 {
     width: 17px;
     background-image: url(../img/num_5.png);
   }
+
   .num6 {
     width: 17px;
     background-image: url(../img/num_6.png);
   }
+
   .num7 {
     width: 17px;
     background-image: url(../img/num_7.png);
   }
+
   .num8 {
     width: 17px;
     background-image: url(../img/num_8.png);
   }
+
   .num9 {
     width: 17px;
     background-image: url(../img/num_9.png);
   }
+
   span[class*="num"] {
     margin: 0 2px;
   }
@@ -325,12 +405,15 @@ h2.title-installer {
   border-bottom: 1px solid #eee;
   font-size: 16px;
   color: #848499;
+
   &:first-child {
     border-top: 1px solid #eee;
   }
+
   > div {
     display: table-cell;
     vertical-align: middle;
+
     .install-check {
       position: absolute;
       left: 0;
@@ -338,9 +421,10 @@ h2.title-installer {
       width: 30px;
       height: 30px;
       margin-top: -15px;
-      background-color: #DADCE8;
+      background-color: #dadce8;
       border-radius: 50%;
-      &:after {
+
+      &::after {
         position: absolute;
         left: 50%;
         top: 50%;
@@ -355,22 +439,28 @@ h2.title-installer {
         content: "";
       }
     }
+
     strong {
       font-weight: normal;
-      color: #F44540;
+      color: #f44540;
     }
   }
+
   &.pass {
     color: #2c2e37;
+
     .install-check {
-      background-color: #6682EF;
+      background-color: #6682ef;
     }
   }
+
   &.false {
     color: #2c2e37;
+
     .install-check {
-      background-color: #F44540;
-      &:before {
+      background-color: #f44540;
+
+      &::before {
         position: absolute;
         left: 6px;
         top: 14px;
@@ -385,7 +475,8 @@ h2.title-installer {
         transform: rotate(-45deg);
         content: "";
       }
-      &:after {
+
+      &::after {
         top: 14px;
         left: 7px;
         border-width: 0;

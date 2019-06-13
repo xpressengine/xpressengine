@@ -23,7 +23,6 @@ class Aspect {
 
     this.proxy = new Proxy(target, {
       apply (target, thisArg, params) {
-        // console.debug('params', ...params)
         let result = symbolDummy
         const adviceArguments = { params, result }
         that.applyTarget('before', thisArg, adviceArguments)

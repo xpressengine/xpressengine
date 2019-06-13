@@ -1,25 +1,27 @@
 import * as $$ from 'xe/utils'
-const booted = Symbol('booted')
+const symbolBooted = Symbol('booted')
 
 export default class Plugin {
   constructor () {
     $$.eventify(this)
-    this[booted] = false
+    this[symbolBooted] = false
   }
 
   boot (XE, App) {
-    if (!this[booted]) {
-      this.$$xe = XE
-      this.$$app = App
-      this[booted] = true
+    return new Promise((resolve) => {
+      if (this[symbolBooted]) {
+        resolve(this)
+      } else {
+        this.$$xe = XE
+        this.$$app = App
+      }
 
-      return !this[booted]
-    }
-
-    return true
+      resolve(this)
+      this[symbolBooted] = true
+    })
   }
 
-  get booted () {
-    return this[booted]
+  booted () {
+    return this[symbolBooted]
   }
 }

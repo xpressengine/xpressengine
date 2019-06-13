@@ -72,6 +72,7 @@
 
 .xe-table-bordered {
   border: 1px solid $table-border-color;
+
   > thead,
   > tbody,
   > tfoot {
@@ -82,6 +83,7 @@
       }
     }
   }
+
   > thead > tr {
     > th,
     > td {
@@ -122,6 +124,7 @@
   float: none;
   display: table-column;
 }
+
 .xe-table {
   td,
   th {
@@ -143,7 +146,8 @@
   overflow-x: auto;
   min-height: 0.01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
   margin-bottom: $line-height-computed;
-  .xe-table{
+
+  .xe-table {
     margin-bottom: 0;
   }
 
@@ -184,6 +188,7 @@
           > td:first-child {
             border-left: 0;
           }
+
           > th:last-child,
           > td:last-child {
             border-right: 0;
@@ -203,7 +208,6 @@
           }
         }
       }
-
     }
   }
 }

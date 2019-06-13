@@ -2,88 +2,102 @@
 @import "../settings/css/bootstrap/mixins";
 @import "../settings/css/bootstrap/utilities";
 
-/*reset*/
+/* reset */
 .theme-select-list,
-.theme-select-list ul{
-  margin:0;
-  padding:0;
+.theme-select-list ul {
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
-.theme-select-list{
-  .theme-desc{
+.theme-select-list {
+  .theme-desc {
     position: relative;
     min-height: 100px;
     padding: 15px 200px 15px 15px;
     // margin-right: 20px;
-    border-top:1px solid #e4e4e4;
+    border-top: 1px solid #e4e4e4;
     background-color: #f5f6fe;
-    img{
+
+    img {
       position: absolute;
-      top:15px;
+      top: 15px;
       left: 15px;
       max-width: 98px;
       max-height: 70px;
     }
-    strong{
+
+    strong {
       display: block;
       margin-top: 10px;
       font-size: 18px;
       font-weight: normal;
     }
   }
-  .btn-right{
+
+  .btn-right {
     position: absolute;
     right: 20px;
-    top:50%;
-    margin-top:-16px;
-    .btn{
-      i{
+    top: 50%;
+    margin-top: -16px;
+
+    .btn {
+      i {
         margin-right: 3px;
-        font-size:15px;
+        font-size: 15px;
         vertical-align: middle;
-        padding-bottom:2px;
+        padding-bottom: 2px;
       }
     }
   }
-  ul{
-    li{
+
+  ul {
+    li {
       position: relative;
-      border-top:1px solid #e4e4e4;
+      border-top: 1px solid #e4e4e4;
+
       @include clearfix;
-      .skin-select-btn{
+
+      .skin-select-btn {
         float: left;
         height: 100%;
         padding: 15px 10px;
-        .btn{
-          i{
+
+        .btn {
+          i {
             display: none;
-            &.visible-xs{
+
+            &.visible-xs {
               font-size: 18px;
             }
           }
-          &.on{
+
+          &.on {
             background-color: $brand-primary;
-            color:#fff;
+            color: #fff;
             border-color: transparent;
-            i{
+
+            i {
               display: inline-block;
               margin-right: 3px;
             }
           }
         }
       }
-      strong{
+
+      strong {
         display: block;
-        margin-top:20px;
+        margin-top: 20px;
         padding: 0 120px 0 20px;
       }
-      .btn-right{
-        top:12px;
-        right:15px;
-        margin:0;
-        .btn{
-          color:$gray-light;
+
+      .btn-right {
+        top: 12px;
+        right: 15px;
+        margin: 0;
+
+        .btn {
+          color: $gray-light;
           text-decoration: none;
         }
       }
@@ -92,19 +106,22 @@
 }
 
 @media (min-width: 768px) {
-  .theme-select-list{
-    .theme-desc{
-      padding-left: 125px
+  .theme-select-list {
+    .theme-desc {
+      padding-left: 125px;
     }
-    ul{
-      li{
+
+    ul {
+      li {
         padding-left: 5px;
-        .skin-select-btn{
-          .btn{
+
+        .skin-select-btn {
+          .btn {
             width: 86px;
           }
         }
-        strong{
+
+        strong {
           padding-right: 300px;
         }
       }

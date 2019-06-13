@@ -15,7 +15,7 @@
             <dd>By
                 @if($authors = $plugin->getAuthors())
                     <a href="{{ array_get(reset($authors),'homepage', array_get(reset($authors),'email')) }}">
-                        {{ '@'.reset($authors)['name'] }}
+                        {{ reset($authors)['name'] }}
                     </a>
                 @endif
             </dd>

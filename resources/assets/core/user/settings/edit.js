@@ -95,7 +95,7 @@ var EmailBox = (function (XE, $) {
     },
 
     delete: function (email) {
-      XE.post('settings.user.mail.delete', {userId: _userId, address: email})
+      XE.post('settings.user.mail.delete', { userId: _userId, address: email })
         .then(response => {
           var i = _mails.indexOf(email)
           _mails.splice(i, 1)

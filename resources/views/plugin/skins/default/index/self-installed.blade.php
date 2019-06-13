@@ -3,7 +3,7 @@
 @stop
 
 @section('page_description')
-    <p class="sub-text">{{ xe_trans('xe::pluginListDescription') }}</p>
+    <small>{{ xe_trans('xe::pluginListDescription') }}</small>
 @stop
 
 @include($_skin::view('index.tab'))

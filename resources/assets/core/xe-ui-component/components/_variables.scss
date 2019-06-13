@@ -3,7 +3,6 @@
 // Variables
 // --------------------------------------------------
 
-
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
@@ -38,7 +37,6 @@ $link-color:            $brand-primary !default;
 $link-hover-color:      darken($link-color, 15%) !default;
 //** Link hover decoration.
 $link-hover-decoration: underline !default;
-
 
 // //== Typography
 // //
@@ -88,7 +86,6 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)) !default;
 // //** Element ID within SVG icon file.
 // $icon-font-svg-id:        "glyphicons_halflingsregular" !default;
 
-
 //== Components
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
@@ -122,7 +119,6 @@ $caret-width-base:          4px !default;
 // //** Carets increase slightly in size for larger components.
 $caret-width-large:         5px !default;
 
-
 //== Tables
 //
 //## Customizes the `.table` component with basic values, each used across all table variations.
@@ -142,7 +138,6 @@ $table-bg-active:               $table-bg-hover !default;
 
 //** Border color for table and cell borders.
 $table-border-color:            #ddd !default;
-
 
 //== Buttons
 //
@@ -346,7 +341,6 @@ $screen-xs-max:              ($screen-sm-min - 1) !default;
 $screen-sm-max:              ($screen-md-min - 1) !default;
 $screen-md-max:              ($screen-lg-min - 1) !default;
 
-
 //== Grid system
 //
 //## Define your custom responsive grid.
@@ -360,7 +354,6 @@ $grid-gutter-width:         30px !default;
 $grid-float-breakpoint:     $screen-sm-min !default;
 //** Point at which the navbar begins collapsing.
 $grid-float-breakpoint-max: ($grid-float-breakpoint - 1) !default;
-
 
 //== Container sizes
 //
@@ -553,13 +546,12 @@ $tooltip-max-width:           200px !default;
 $tooltip-color:               #fff !default;
 //** Tooltip background color
 $tooltip-bg:                  #000 !default;
-$tooltip-opacity:             .9 !default;
+$tooltip-opacity:             0.9 !default;
 
 //** Tooltip arrow width
 $tooltip-arrow-width:         5px !default;
 //** Tooltip arrow color
 $tooltip-arrow-color:         $tooltip-bg !default;
-
 
 // //== Popovers
 // //
@@ -635,7 +627,7 @@ $modal-content-fallback-border-color:          #999 !default;
 //** Modal backdrop background color
 $modal-backdrop-bg:           #000 !default;
 //** Modal backdrop opacity
-$modal-backdrop-opacity:      .5 !default;
+$modal-backdrop-opacity:      0.5 !default;
 //** Modal header border color
 $modal-header-border-color:   #e5e5e5 !default;
 //** Modal footer border color
@@ -794,7 +786,6 @@ $modal-sm:                    300px !default;
 $well-bg:                     #f5f5f5 !default;
 $well-border:                 darken($well-bg, 7%) !default;
 
-
 // //== Badges
 // //
 // //##
@@ -899,15 +890,15 @@ $well-border:                 darken($well-bg, 7%) !default;
 // //** Horizontal line color.
 // $hr-border:                   $gray-lighter !default;
 
-/*add custom*/
-$xe-input-bg:                         #2389EE !default;
-$xe-input-border:                     #BEBFC5 !default;
+/* add custom */
+$xe-input-bg:                         #2389ee !default;
+$xe-input-border:                     #bebfc5 !default;
 $dropdown-right-padding:              37px !default;
 $dropdown-arrow-color:                #656973 !default;
 
 $modal-color:                #434a53 !default;
 
-$xe-label-size:                       18px !default
-$xe-label-color:                       $brand-primary !default
+$xe-label-size:                       18px !default;
+$xe-label-color:                       $brand-primary !default;
 
-$xe-form-group-bottom-margin:                       20px !default
+$xe-form-group-bottom-margin:                       20px !default;

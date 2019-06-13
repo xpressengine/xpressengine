@@ -10,8 +10,6 @@
 }
 
 .c3 text {
-  -webkit-user-select: none;
-  -moz-user-select: none;
   user-select: none;
 }
 
@@ -64,7 +62,7 @@
 }
 
 .c3-bar._expanded_ {
-  fill-opacity: .75;
+  fill-opacity: 0.75;
 }
 
 .c3-target.c3-focused {
@@ -77,16 +75,16 @@
 }
 
 .c3-target.c3-defocused {
-  opacity: .3 !important;
+  opacity: 0.3 !important;
 }
 
 .c3-region {
   fill: #4682b4;
-  fill-opacity: .1;
+  fill-opacity: 0.1;
 }
 
 .c3-brush .extent {
-  fill-opacity: .1;
+  fill-opacity: 0.1;
 }
 
 .c3-legend-item {
@@ -94,11 +92,11 @@
 }
 
 .c3-legend-item-hidden {
-  opacity: .15;
+  opacity: 0.15;
 }
 
 .c3-legend-background {
-  opacity: .75;
+  opacity: 0.75;
   fill: #fff;
   stroke: #d3d3d3;
   stroke-width: 1px;
@@ -117,14 +115,12 @@
   border-spacing: 0;
   background-color: #fff;
   empty-cells: show;
-  -webkit-box-shadow: 7px 7px 12px -9px #777;
-  -moz-box-shadow: 7px 7px 12px -9px #777;
   box-shadow: 7px 7px 12px -9px #777;
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .c3-tooltip tr {
-  border: 1px solid #ccc
+  border: 1px solid #ccc;
 }
 
 .c3-tooltip th {
@@ -142,7 +138,7 @@
   border-left: 1px dotted #999;
 }
 
-.c3-tooltip td>span {
+.c3-tooltip td > span {
   display: inline-block;
   width: 10px;
   height: 10px;
@@ -155,7 +151,7 @@
 
 .c3-area {
   stroke-width: 0;
-  opacity: .2;
+  opacity: 0.2;
 }
 
 .c3-chart-arcs-title {

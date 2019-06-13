@@ -1,6 +1,8 @@
+// import '@babel/polyfill'
 import App from 'xe/app'
 import Axios from 'axios'
-import Qs from 'qs'
+// import Qs from 'qs'
+import { stringify } from 'qs'
 import { eventify } from 'xe/utils'
 import $ from 'jquery'
 
@@ -10,7 +12,6 @@ import ResponseEntity from './response_entity'
 import RequestError from './errors/request.error'
 
 import { STORE_TOKEN } from './store'
-import { routerInstance } from '../router'
 
 /**
  * @class
@@ -95,14 +96,14 @@ class Request extends App {
    * @param {*} axiosConfig
    * @return {Axios}
    */
-  request (url, options, axiosConfig = {}) {
+  async request (url, options, axiosConfig = {}) {
     this.$$emit('start', new RequestEntity({
       method: (options.method === 'delete') ? 'post' : options.method,
       container: (options.container) ? options.container : $('body')
     }))
 
     axiosConfig = Object.assign({}, axiosConfig)
-    axiosConfig.url = this.resolveRoute(url)
+    axiosConfig.url = await this.resolveRoute(url)
     axiosConfig.method = options.method || 'get'
     axiosConfig.data = options.data
     axiosConfig.params = options.params
@@ -178,11 +179,11 @@ class Request extends App {
     if (typeof data === 'string') {
       return data
     } else {
-      return Qs.stringify(data)
+      return stringify(data)
     }
   }
 
-  resolveRoute (uri) {
+  async resolveRoute (uri) {
     let routeName
     let params = {}
     let url
@@ -194,8 +195,10 @@ class Request extends App {
       routeName = uri
     }
 
-    if (routerInstance.has(routeName)) {
-      url = routerInstance.get(routeName).url(params)
+    const appRouter = await this.$$xe.app('Router')
+
+    if (appRouter.has(routeName)) {
+      url = appRouter.get(routeName).url(params)
     } else {
       url = uri
     }

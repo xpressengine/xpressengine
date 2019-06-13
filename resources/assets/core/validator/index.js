@@ -1,12 +1,11 @@
 import App from 'xe/app'
-import griper from 'xe/common/js/griper'
+// import griper from 'xe/common/js/griper'
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
 import $ from 'jquery'
 import { getForm } from 'xe/form'
 import { ValidationError } from 'xe/validator/errors/validator.error.js'
-
 import PluginMarker from './marker'
 
 const originalRules = {}
@@ -594,9 +593,7 @@ class Validator extends App {
     })
 
     if (lang.length > 0) {
-      this.$$xe.app('Lang').then((langInstance) => {
-        langInstance.requestTransAll(lang)
-      })
+      this.$$xe.Lang.requestTransAll(lang)
     }
 
     if (this.rules[ruleName] !== undefined) {
@@ -810,7 +807,7 @@ class Validator extends App {
   * @param {jQuery} $form jQuery form element
   */
   errorClear ($form) {
-    griper.form.fn.clear($form)
+    this.$$xe.Griper.form.fn.clear($form)
   }
 
   /**
@@ -835,9 +832,9 @@ class Validator extends App {
     if (typeof this.alertTypes[alertType] === 'function') {
       this.alertTypes[alertType]($element, message)
     } else if (alertType === 'form') {
-      griper.form($element, message)
+      this.$$xe.Griper.form($element, message)
     } else if (alertType === 'toast') {
-      griper.toast('danger', message)
+      this.$$xe.Griper.toast('danger', message)
     }
   }
 
