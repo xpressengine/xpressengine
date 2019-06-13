@@ -80,12 +80,14 @@ class PluginProvider
         $order = array_get($filters, 'order');
         $order_type = array_get($filters, 'order_type');
 
+        $is_free = array_get($filters, 'is_free');
+
         $site_token = array_get($filters, 'site_token');
 
         try {
             $response = $this->request(
                 $url,
-                compact('q', 'authors', 'tags', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
+                compact('q', 'authors', 'tags', 'page', 'count', 'collection', 'order', 'order_type', 'site_token', 'is_free')
             );
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
