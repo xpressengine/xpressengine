@@ -1,0 +1,231 @@
+.media-manager {
+  margin: 0 -15px;
+  font-family: $sys-font-stack;
+
+  /*
+  * 1. Change the default monospaced font family in all browsers (opinionated).
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
+
+  pre {
+    font-family: $sys-font-stack-mono;
+  }
+
+  /*
+  * 1. Change the default monospaced font family in all browsers (opinionated).
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
+
+  code,
+  kbd,
+  samp {
+    font-family: $sys-font-stack-mono;
+  }
+}
+
+// input type="text" 스타일
+.media-manager__input-group {
+
+}
+
+.media-manager__input-text {
+  &::placeholder {
+    color: $n80;
+  }
+}
+
+// button common (default)
+.media-manager__button {
+  height: 36px;
+  padding: 0 12px;
+  border: 0 none;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  background-color: $n20;
+  color: $n400;
+  outline: none;
+
+  &:hover {
+    background-color: $n30;
+  }
+
+  &.disabled,
+  &[disabled] {
+    background-color: $n20;
+    color: $n70;
+  }
+
+  &.button-selected {
+    background-color: $n700;
+    color: $n0;
+
+    &:active {
+      background-color: $n700;
+      color: $n0;
+    }
+  }
+
+  &:active {
+    background-color: $b200;
+    color: $b500;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.4);
+  }
+}
+
+// button primary
+.media-manager__button--primary {
+  background-color: $b500;
+  color: $n0;
+
+  &:hover {
+    background-color: $b400;
+  }
+
+  &:active {
+    background-color: $b600;
+    color: $n0;
+  }
+}
+
+// button danger
+.media-manager__button--danger {
+  background-color: $r500;
+  color: $n0;
+
+  &:hover {
+    background-color: #ff5630;
+  }
+
+  &:active {
+    background-color: $r700;
+    color: $n0;
+  }
+}
+
+// 버튼 그룹
+.media-manager__button-group {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .media-manager__button {
+    float: left;
+    margin: 0 1px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// 버튼 그룹 라디오 (하나 선택 되는 형태)
+.media-manager__button-group-radio {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .media-manager__button {
+    float: left;
+    margin: 0 1px;
+    border-radius: 0;
+
+    &:first-child {
+      margin-left: 0;
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    &.button-selected {
+      background-color: $b500;
+      color: $n0;
+
+      &:hover {
+        background-color: $b400;
+      }
+
+      &:active {
+        background-color: $b600;
+        color: $n0;
+      }
+    }
+  }
+}
+
+// dimmed
+.media-manager-dimmed {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.6;
+  background-color: #343d52;
+  z-index: 90;
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .media-manager {
+    display: flex;
+    margin: 0;
+    border: 1px solid $n40;
+    background-color: $n0;
+
+    .media-manager-aside {
+      flex: 0 0 auto;
+      border-right: 1px solid $n40;
+      max-width: 240px;
+    }
+
+    .media-manager-main {
+      flex: 1;
+    }
+
+    .media-manager__mobile-view {
+      display: none !important;
+    }
+  }
+}
+
+
+
+/* break point, bootstrap 3.4.1 기준 */
+/* wide desctop */
+@media (min-width: 1200px) {
+
+}
+
+/* desctop */
+@media (min-width: 992px) {
+
+}
+
+/* xe-col-sm- */
+@media (min-width: 768px) {
+
+}
+
+/* xe-col-xs- */
+@media (max-width: 768px) {
+  
+}

@@ -1,0 +1,177 @@
+.media-manager-content {
+
+}
+
+// 리스트 타입
+.media-manager-content__list-type {
+  .media-manager-content-header {
+    display: flex;
+    background-color: $n10;
+  }
+
+  .media-manager-content-header__button {
+    margin: 0;
+    padding: 0 15px;
+    border: 0 none;
+    font-size: 14px;
+    line-height: 48px;
+    background-color: transparent;
+    letter-spacing: -0.03px;
+    color: $n900;
+  }
+
+  .media-manager-content-header__title {
+    flex: 1;
+    height: 48px;
+  }
+
+  .media-manager-content-header__writer {
+    display: none;
+  }
+
+  .media-manager-content-header__size {
+    display: none;
+  }
+
+  .media-manager-content-header__date {
+    display: none;
+  }
+
+  // 리스트 영역
+  .media-manager-content-list-box {
+    .media-manager-content-list {
+      .media-manager-content__checkbox {
+
+      }
+
+      .media-manager-content__icon {
+
+      }
+
+      .media-manager-content-list__content-box {
+
+      }
+
+      .media-manager-content__title {
+
+      }
+
+      .media-manager-content__writer {
+
+      }
+
+      .media-manager-content__size {
+
+      }
+
+      .media-manager-content__date {
+        
+      }
+    }
+  }
+}
+
+// 카드 타입
+.media-manager-content__card-type {
+  
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .media-manager-content__list-type {
+    .media-manager-content-header__writer {
+      display: block;
+      flex: 0 0 120px;
+      
+      .media-manager-content-header__button {
+        margin-right: 10px
+      }
+    }
+  
+    .media-manager-content-header__size {
+      display: block;
+      flex: 0 0 100px;
+      
+      .media-manager-content-header__button {
+        margin-right: 10px
+      }
+    }
+  
+    .media-manager-content-header__date {
+      display: block;
+      flex: 0 0 120px;
+      
+      .media-manager-content-header__button {
+        margin-right: 10px
+      }
+    }
+
+    .media-manager-content-header__more {
+      display: block;
+      flex: 0 0 36px;
+    }
+
+    // 리스트 영역
+    .media-manager-content-list {
+      margin: 0;
+      padding: 0;
+      word-break: break-all;
+
+      li {
+        display: flex;
+        align-items: center;
+      }
+
+      .media-manager-content__checkbox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        flex: 0 0 80px;
+      }
+
+      .media-manager-content__icon {
+        display: block;
+        flex: 0 0 80px;
+      }
+
+      .media-manager-content-list__content-box {
+        display: flex;
+        width: 100%;
+        align-items: center;
+      }
+
+      .media-manager-content__title {
+        flex: 1;
+      }
+
+      .media-manager-content__writer {
+        display: block;
+        flex: 0 0 120px;
+        padding: 0 25px 0 15px;
+      }
+
+      .media-manager-content__size {
+        display: block;
+        flex: 0 0 100px;
+        padding: 0 25px 0 15px;
+      }
+
+      .media-manager-content__date {
+        display: block;
+        flex: 0 0 120px;
+        padding: 0 25px 0 15px;
+      }
+
+      .media-manager-content__more {
+        display: block;
+        flex: 0 0 36px;
+      }
+    }
+  }
+}

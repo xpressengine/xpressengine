@@ -1,0 +1,241 @@
+/* webfont, font-weight: 100 은 임시 삭제 */
+// SpoqaHanSans
+// @font-face {
+//   font-family: 'Spoqa Han Sans';
+//   font-weight: 100;
+//   src: local('Spoqa Han Sans Thin'),
+//   url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansThin.woff2) format('woff2'),
+//   url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansThin.woff) format('woff');
+// }
+
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 300;
+  src:
+    local('Spoqa Han Sans Light'),
+    url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansLight.woff2) format('woff2'),
+  url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansLight.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 400;
+  src:
+    local('Spoqa Han Sans Regular'),
+    url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansRegular.woff2) format('woff2'),
+  url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansRegular.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 700;
+  src:
+    local('Spoqa Han Sans Bold'),
+    url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansBold.woff2) format('woff2'),
+  url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansBold.woff) format('woff');
+}
+
+// noto sans kr
+// @font-face {
+//   font-family: 'Noto Sans KR';
+//   font-style: normal;
+//   font-weight: 100;
+//   src: local('NotoSansKR-Thin'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff2) format('woff2'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff) format('woff');
+// }
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('NotoSansKR-Light'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff2) format('woff2'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('NotoSansKR-Regular'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format('woff2'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    local('NotoSansKR-Medium'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2) format('woff2'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('NotoSansKR-Bold'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2) format('woff2'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 900;
+  src:
+    local('NotoSansKR-Black'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff2) format('woff2'),
+    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff) format('woff');
+}
+
+// Roboto
+// Roboto Thin
+// @font-face {
+//   font-family: 'Roboto';
+//   font-style: normal;
+//   font-weight: 100;
+//   src: local('Roboto Thin'), local('Roboto-Thin'),
+//     url(//fonts.gstatic.com/s/roboto/v19/KFOkCnqEu92Fr1MmgVxIIzI.woff2) format('woff2'),
+//     url(//fonts.gstatic.com/s/roboto/v19/KFOkCnqEu92Fr1MmgVxIIzQ.woff) format('woff');
+// }
+
+// Roboto Light
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('Roboto Light'),
+    local('Roboto-Light'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmSU5fBBc4.woff2) format('woff2'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmSU5fBBc-.woff) format('woff');
+}
+
+// Roboto Regular
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOmCnqEu92Fr1Mu4mxM.woff) format('woff');
+}
+
+// Roboto Medium
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    local('Roboto Medium'),
+    local('Roboto-Medium'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc4.woff2) format('woff2'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc-.woff) format('woff');
+}
+
+// Roboto Bold
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('Roboto Bold'),
+    local('Roboto-Bold'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmWUlfBBc4.woff2) format('woff2'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmWUlfBBc-.woff) format('woff');
+}
+
+// Roboto Black
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src:
+    local('Roboto Black'),
+    local('Roboto-Black'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmYUtfBBc4.woff2) format('woff2'),
+    url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmYUtfBBc-.woff) format('woff');
+}
+
+// AvenirLTStd : 영문폰트 (book, light, medium, heavy, black)
+// 처음에는 Light, Medium, Black 만 사용하다가 수정 됨
+// @font-face {
+//   // font-family: 'Avenir LT Std';
+//   // font-family: 'Avenir';
+//   font-family: 'Avenir LT Std';
+//   // font-weight: 400;
+//   // font-weight: 200;
+//   font-weight: 100;
+//   font-style: normal;
+//   src: local('Avenir LT Std 35 Light'),
+//     url("../fonts/AvenirLTStd/AvenirLTStd-Light.woff2") format("woff2"),
+//     url("../fonts/AvenirLTStd/AvenirLTStd-Light.woff") format("woff");
+// }
+
+@font-face {
+  // font-family: 'Avenir';
+  font-family: 'Avenir LT Std';
+  font-weight: 300;
+  font-style: normal;
+  src:
+    local('Avenir LT Std 45 Book'),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Book.woff2") format("woff2"),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Book.woff") format("woff");
+}
+
+@font-face {
+  // font-family: 'Avenir';
+  font-family: 'Avenir LT Std';
+  font-weight: 400;
+  font-style: normal;
+  src:
+    local('Avenir LT Std 55 Roman'),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Roman.woff2") format("woff2"),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Roman.woff") format("woff");
+}
+
+@font-face {
+  // font-family: 'Avenir';
+  font-family: 'Avenir LT Std';
+  // font-weight: 700;
+  // font-weight: 400;
+  font-weight: 500;
+  font-style: normal;
+  src:
+    local('Avenir LT Std 65 Medium'),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Medium.woff2") format("woff2"),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Medium.woff") format("woff");
+}
+
+@font-face {
+  // font-family: 'Avenir';
+  font-family: 'Avenir LT Std';
+  font-weight: 700;
+  font-style: normal;
+  src:
+    local('Avenir LT Std 85 Heavy'),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Heavy.woff2") format("woff2"),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Heavy.woff") format("woff");
+}
+
+@font-face {
+  // font-family: 'Avenir';
+  font-family: 'Avenir LT Std';
+  // font-weight: 900;
+  // font-weight: 600;
+  font-weight: 900;
+  font-style: normal;
+  src:
+    local('Avenir LT Std 95 Black'),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Black.woff2") format("woff2"),
+    url("../fonts/AvenirLTStd/AvenirLTStd-Black.woff") format("woff");
+}
