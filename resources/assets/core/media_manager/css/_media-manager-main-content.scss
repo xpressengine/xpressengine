@@ -63,11 +63,11 @@
   // 리스트 영역
   .media-manager-content-list-box {
     .media-manager-content-list {
-      .media-manager-content__checkbox {
+      .media-manager-content-list__checkbox {
 
       }
 
-      .media-manager-content__icon {
+      .media-manager-content-list__icon {
 
       }
 
@@ -75,19 +75,19 @@
 
       }
 
-      .media-manager-content__title {
+      .media-manager-content-list__title {
 
       }
 
-      .media-manager-content__writer {
+      .media-manager-content-list__writer {
 
       }
 
-      .media-manager-content__size {
+      .media-manager-content-list__size {
 
       }
 
-      .media-manager-content__date {
+      .media-manager-content-list__date {
         
       }
     }
@@ -160,7 +160,7 @@
         align-items: center;
       }
 
-      .media-manager-content__checkbox {
+      .media-manager-content-list__checkbox {
         position: absolute;
         top: 0;
         left: 0;
@@ -168,7 +168,7 @@
         flex: 0 0 80px;
       }
 
-      .media-manager-content__icon {
+      .media-manager-content-list__icon {
         display: block;
         flex: 0 0 80px;
       }
@@ -179,29 +179,29 @@
         align-items: center;
       }
 
-      .media-manager-content__title {
+      .media-manager-content-list__title {
         flex: 1;
       }
 
-      .media-manager-content__writer {
+      .media-manager-content-list__writer {
         display: block;
         flex: 0 0 120px;
         padding: 0 25px 0 15px;
       }
 
-      .media-manager-content__size {
+      .media-manager-content-list__size {
         display: block;
         flex: 0 0 100px;
         padding: 0 25px 0 15px;
       }
 
-      .media-manager-content__date {
+      .media-manager-content-list__date {
         display: block;
         flex: 0 0 120px;
         padding: 0 25px 0 15px;
       }
 
-      .media-manager-content__more {
+      .media-manager-content-list__more {
         display: block;
         flex: 0 0 36px;
       }
