@@ -133,7 +133,7 @@
                                    data-toggle="xe-page-toggle-menu"
                                    data-url="{{ route('toggleMenuPage') }}"
                                    data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'
-                                   {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ $log->getUser()->getDisplayName() }}</a></td>
+                                   {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}</a></td>
                             <td>{{ $log->summary }}</td>
                             <td>{{ $log->ipaddress }}</td>
                             <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">{{ xe_trans('xe::view') }}</a></td>
