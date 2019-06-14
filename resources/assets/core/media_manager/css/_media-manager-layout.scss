@@ -179,6 +179,21 @@
   }
 }
 
+// 말줄임 버튼
+.media-manager__button-ellipsis {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  background-color: transparent;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 // dimmed
 .media-manager-dimmed {
   display: none;

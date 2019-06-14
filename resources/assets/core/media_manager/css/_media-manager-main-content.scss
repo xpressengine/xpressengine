@@ -117,6 +117,12 @@
       background-color: $n10;
     }
 
+    .media-manager-content-header__title {
+      .media-manager-content-header__button {
+        margin-left: 10px;
+      }
+    }
+
     .media-manager-content-header__writer {
       display: block;
       flex: 0 0 120px;
@@ -156,21 +162,41 @@
       word-break: break-all;
 
       li {
+        position: relative;
         display: flex;
         align-items: center;
+        padding: 13px 0;
+        border-top: 1px solid $n30;
+        cursor: pointer;
+        z-index: 10;
+
+        &:hover {
+          background-color: $n20;
+        }
+
+        &.active {
+          background-color: $b100;
+        }
       }
 
       .media-manager-content-list__checkbox {
-        position: absolute;
-        top: 0;
-        left: 0;
         display: block;
-        flex: 0 0 80px;
+        position: absolute;
+        overflow: hidden;
+        top: 14px;
+        left: 30px;
+        width: 1px;
+        height: 1px;
       }
 
       .media-manager-content-list__icon {
         display: block;
-        flex: 0 0 80px;
+        flex: 0 0 auto;
+
+        .media-manager-content-list__icon-thumb {
+          position: relative;
+          margin: 0 15px 0 25px;
+        }
       }
 
       .media-manager-content-list__content-box {
@@ -181,6 +207,11 @@
 
       .media-manager-content-list__title {
         flex: 1;
+        margin-right: 10px;
+
+        .media-manager-content-list__text {
+          color: $n900;
+        }
       }
 
       .media-manager-content-list__writer {
@@ -203,8 +234,40 @@
 
       .media-manager-content-list__more {
         display: block;
-        flex: 0 0 36px;
+        flex: 0 0 42px;
+        height: 18px;
+        text-align: center;
+
+        &.open {
+          .media-manager__svg {
+            fill: $n400;
+          }
+        }
       }
+
+      .media-manager-content-list__text {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: -0.03px;
+        color: $n200;
+      }
+    }
+
+    // 아이콘 이미지 공통
+    .media-manager-content-list__icon-thumb {
+      width: 24px;
+      height: 24px;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      background-size: 24px 24px;
+    }
+
+    .media-manager-content-list__icon-image {
+      background-image: url(../img/icon-list-image.png);
+    }
+
+    .media-manager-content-list__icon-folder {
+      background-image: url(../img/icon-list-folder.svg);
     }
   }
 }
