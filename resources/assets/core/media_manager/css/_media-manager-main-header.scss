@@ -283,6 +283,11 @@
       }
     }
   }
+
+  .media-manager-header-mobile-search-area {
+    height: 48px;
+    background-color: $n10;
+  }
 }
 
 /* tablet */
@@ -377,5 +382,9 @@
     .media-manager__button-search-cancel {
       display: none;
     }
+  }
+
+  .media-manager-header-mobile-search-area {
+    display: none;
   }
 }

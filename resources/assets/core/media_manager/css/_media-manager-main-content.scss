@@ -4,9 +4,32 @@
 
 // 리스트 타입
 .media-manager-content__list-type {
+  position: relative;
+
+  // 리스트형 리스트 정렬 영역
+  .media-manager-content-sort {
+    .media-manager-content__button-sort {
+      position: absolute;
+      top: -48px;
+      left: 0;
+      margin: 0;
+      padding: 0 15px;
+      border: 0 none;
+      font-size: 14px;
+      line-height: 48px;
+      background-color: transparent;
+      letter-spacing: -0.03px;
+      color: $n900;
+      outline: none;
+    }
+
+    .media-manager-content-sort__list {
+      display: none;
+    }
+  }
+
   .media-manager-content-header {
-    display: flex;
-    background-color: $n10;
+    display: none;
   }
 
   .media-manager-content-header__button {
@@ -84,6 +107,16 @@
 /* tablet */
 @media (min-width: 768px) {
   .media-manager-content__list-type {
+    // 리스트형 리스트 정렬 영역
+    .media-manager-content-sort {
+      display: none;
+    }
+
+    .media-manager-content-header {
+      display: flex;
+      background-color: $n10;
+    }
+
     .media-manager-content-header__writer {
       display: block;
       flex: 0 0 120px;

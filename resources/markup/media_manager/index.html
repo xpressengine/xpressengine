@@ -195,10 +195,35 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <!-- 모바일 리스트 형에서 검색, sort 버튼 노출 영역 -->
+                                    <div class="media-manager-header-mobile-search-area"></div>
                                 </div>
                                 <div class="media-manager-content">
                                     <!-- 리스트 - 리스트형 -->
                                     <div class="media-manager-content__list-type">
+                                        <!-- 리스트형 모바일에서 sort 팝업 노출 버튼 -->
+                                        <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
+                                        <div class="media-manager-content-sort">
+                                            <button type="button" class="media-manager-content__button-sort">제목순 <span class="blind">리스트 정렬 버튼</span></button>
+                                            <ul class="media-manager-content-sort__list">
+                                                <li>
+                                                    <button type="button">제목순</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button">글쓴이순</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button">업로드 글순</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button">파일 크기순</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button">날짜순</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- //리스트형 모바일에서 sort 팝업 노출 버튼 -->
                                         <div class="media-manager-content-header">
                                             <div class="media-manager-content-header__title">
                                                 <button type="button" class="media-manager-content-header__button">제목</button>
