@@ -3,7 +3,6 @@
 namespace Xpressengine\MediaLibrary;
 
 use Xpressengine\Http\Request;
-use Xpressengine\MediaLibrary\Exceptions\NotExistRootFolderException;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFileRepository;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
@@ -22,34 +21,12 @@ class MediaLibraryHandler
         $this->folders = app('xe.media_library.folders');
     }
 
-    public function getRootFolderItem()
-    {
-        $rootFolderItem = $this->folders->query()->where([['parent_id', ''], ['name', '/']])->first();
-
-        if ($rootFolderItem == null) {
-            throw new NotExistRootFolderException();
-        }
-
-        return $rootFolderItem;
-    }
-
-    public function getFolderItems(Request $request)
-    {
-        $query = $this->folders->query();
-
-        if ($name = $request->get('keyword')) {
-            $query = $query->where(['name', 'like', '%' . $name . '%']);
-        }
-
-        return $query->get();
-    }
-
     public function getFolderItem($folderId)
     {
         if ($folderId != '') {
             $folderItem = $this->folders->find($folderId);
         } else {
-            $folderItem = $this->getRootFolderItem();
+            $folderItem = $this->folders->getRootFolderItem();
         }
 
         return $folderItem;
@@ -60,7 +37,7 @@ class MediaLibraryHandler
         if ($request->get('keyword', '') == '') {
             $folderList = $folderItem->getChildren();
         } else {
-            $folderList = $this->getFolderItems($request);
+            $folderList = $this->folders->getFolderItems($request);
         }
 
         return $folderList;
