@@ -1,15 +1,15 @@
-.media-manager-header {
+.media-library-header {
   position: relative;
 
-  .media-manager-header__title {
+  .media-library-header__title {
     display: none;
   }
 
   // input 영역 텍스트 삭제 버튼 관련 공통
-  .media-manager__input-group {
+  .media-library__input-group {
     position: relative;
 
-    .media-manager__button-text-remove {
+    .media-library__button-text-remove {
       position: absolute;
       width: 36px;
       height: 36px;
@@ -24,12 +24,16 @@
       }
     }
   }
+
+  .media-library-header-mobile-upload-button {
+
+  }
 }
 
 /* mobile */
 @media (max-width: 768px) {
   // 버튼 - 삭제, 이동, 선택해제
-  .media-manager-header__button-box--state-item-check {
+  .media-library-header__button-box--state-item-check {
     display: none;
     position: absolute;
     top: -70px;
@@ -38,11 +42,11 @@
     height: 70px;
     background-color: #343d52;
 
-    .media-manager-header__button-box-inner {
+    .media-library-header__button-box-inner {
       display: flex;
       justify-content: center;
 
-      .media-manager__button {
+      .media-library__button {
         height: 70px;
         border-radius: 0;
         font-size: 13px;
@@ -55,22 +59,22 @@
         }
       }
 
-      > .media-manager__button {
+      > .media-library__button {
         width: 23%;
       }
 
-      .media-manager__button-group {
+      .media-library__button-group {
         display: flex;
         width: 46%;
 
-        .media-manager__button {
+        .media-library__button {
           flex: 1;
           margin: 0;
         }
       }
     }
 
-    .media-manager__icon {
+    .media-library__icon {
       display: block;
       margin: 5px auto;
       width: 20px;
@@ -80,22 +84,22 @@
       background-size: 20px 20px;
     }
 
-    .media-manager__icon-delete {
+    .media-library__icon-delete {
       background-image: url(../img/icon-trash.svg);
     }
 
-    .media-manager__icon-move {
+    .media-library__icon-move {
       background-image: url(../img/icon-move.svg);
     }
 
-    .media-manager__icon-deselect {
+    .media-library__icon-deselect {
       background-image: url(../img/icon-check.svg);
     }
   }
 
   // 버튼 - 새폴더 업로드
-  .media-manager__button-group--state-upload {
-    .media-manager__button-group-inner {
+  .media-library__button-group--state-upload {
+    .media-library__button-group-inner {
       position: fixed;
       bottom: -100px;
       left: 0;
@@ -104,7 +108,7 @@
       z-index: 100;
       transition: bottom 0.2s ease-out;
 
-      .media-manager__button {
+      .media-library__button {
         width: 100%;
         height: 50px;
         margin: 0;
@@ -123,7 +127,7 @@
         }
       }
       
-      .media-manager__icon {
+      .media-library__icon {
         display: inline-block;
         width: 20px;
         height: 20px;
@@ -134,37 +138,37 @@
         vertical-align: -4px;
       }
   
-      .media-manager__icon-folder {
+      .media-library__icon-folder {
         background-image: url(../img/icon-check.svg);
       }
   
-      .media-manager__icon-upload {
+      .media-library__icon-upload {
         background-image: url(../img/icon-check.svg);
       }
     }
 
     &.open {
-      .media-manager__button-group-inner {
+      .media-library__button-group-inner {
         bottom: 0;
       }
 
-      .media-manager__state-upload-dimmed {
+      .media-library__state-upload-dimmed {
         display: block;
       }
     }
   }
 
   // 검색 영역
-  .media-manager__search {
+  .media-library__search {
     position: absolute;
     top: 6px;
     right: 45px;
 
-    .media-manager__input-group {
+    .media-library__input-group {
       display: none;
     }
 
-    .media-manager__button-search-cancel {
+    .media-library__button-search-cancel {
       display: none;
     }
 
@@ -179,22 +183,22 @@
       background-color: #343d52;
       z-index: 10;
 
-      .media-manager__input-group {
+      .media-library__input-group {
         position: relative;
         display: block;
         flex: 1;
 
-        .media-manager__button-text-remove {
+        .media-library__button-text-remove {
           top: 6px;
           right: 0;
     
-          .media-manager__svg {
+          .media-library__svg {
             fill: $n0;
           }
         }
       }
 
-      .media-manager__input-text {
+      .media-library__input-text {
         width: 100%;
         height: 100%;
         padding-left: 15px;
@@ -210,11 +214,11 @@
         }        
       }
 
-      .media-manager__button-icon--search {
+      .media-library__button-icon--search {
         display: none;
       }
 
-      .media-manager__button-search-cancel {
+      .media-library__button-search-cancel {
         display: block;
         height: 48px;
         background-color: transparent;
@@ -227,14 +231,14 @@
     }
   }
 
-  .media-manager__button-group-radio {
+  .media-library__button-group-radio {
     position: absolute;
     top: 6px;
     right: 9px;
     width: 36px;
     height: 36px;
 
-    .media-manager__button {
+    .media-library__button {
       display: none;
       width: 36px;
       height: 36px;
@@ -244,7 +248,7 @@
         border-radius: 0;
         background-color: transparent;
 
-        .media-manager__svg {
+        .media-library__svg {
           fill: $n900;
         }
 
@@ -259,12 +263,12 @@
     }
   }
 
-  .media-manager__button-icon {
+  .media-library__button-icon {
     height: 36px;
     padding: 8px;
     line-height: 36px;
 
-    &.media-manager__button-icon--search {
+    &.media-library__button-icon--search {
       padding: 9px;
       background-color: transparent;
 
@@ -284,7 +288,7 @@
     }
   }
 
-  .media-manager-header-mobile-search-area {
+  .media-library-header-mobile-search-area {
     height: 48px;
     background-color: $n10;
   }
@@ -292,7 +296,7 @@
 
 /* tablet */
 @media (min-width: 768px) {
-  .media-manager-header {
+  .media-library-header {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -300,7 +304,7 @@
     padding: 0 17px 0 24px;
     border-bottom: 1px solid $n30;
 
-    .media-manager-header__title {
+    .media-library-header__title {
       display: block;
       margin: 0;
       padding: 0;
@@ -314,8 +318,8 @@
     }
   }
 
-  .media-manager__input-group {
-    .media-manager__input-text {
+  .media-library__input-group {
+    .media-library__input-text {
       width: 200px;
       height: 36px;
       padding: 0 24px 0 12px;
@@ -334,57 +338,57 @@
       }
     }
 
-    .media-manager__button-text-remove {
+    .media-library__button-text-remove {
       top: 0;
       right: 0;
 
-      .media-manager__svg {
+      .media-library__svg {
         fill: $n80;
       }
     }
   }
 
-  .media-manager-header__button-box {
+  .media-library-header__button-box {
     margin-left: 16px;
 
-    .media-manager-header__button-box-inner {
+    .media-library-header__button-box-inner {
       display: flex;
 
-      .media-manager__button-group {
+      .media-library__button-group {
         margin-left: 16px;
       }
     }
   }
 
-  .media-manager-header__button-box--state-item-check {
+  .media-library-header__button-box--state-item-check {
     display: block !important;
-    .media-manager__icon {
+    .media-library__icon {
       display: none;
     }
   }
 
-  .media-manager__button-group-radio {
+  .media-library__button-group-radio {
     margin: 0 16px;
 
     .button-selected {
-      .media-manager__svg {
+      .media-library__svg {
         fill: #fff;
       }
     }
   }
 
   // 검색영역 모바일에서만 노출 됨
-  .media-manager__search {
-    .media-manager__button-icon--search {
+  .media-library__search {
+    .media-library__button-icon--search {
       display: none;
     }
 
-    .media-manager__button-search-cancel {
+    .media-library__button-search-cancel {
       display: none;
     }
   }
 
-  .media-manager-header-mobile-search-area {
+  .media-library-header-mobile-search-area {
     display: none;
   }
 }

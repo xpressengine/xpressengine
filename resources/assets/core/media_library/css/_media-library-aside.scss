@@ -1,35 +1,35 @@
 /* mobile 전용 */
 @media (max-width: 768px) {
   // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용
-  .media-manager-aside {
+  .media-library-aside {
     position: relative;
 
     // 저장소가 1개일 때 화살표 제거
     &.state-one {
-      .media-manager-aside__mobile-button-icon {
+      .media-library-aside__mobile-button-icon {
         display: none;
       }
     }
 
-    .media-manager-aside__title {
+    .media-library-aside__title {
       display: none;
     }
 
-    .media-manager-aside__content {
+    .media-library-aside__content {
       &.open {
         // 버튼 화살표 움직임
-        .media-manager-aside__mobile-button-icon {
+        .media-library-aside__mobile-button-icon {
           transform: rotate(180deg);
         }
 
         // 저장소 팝업 노출
-        .media-manager-aside__list {
+        .media-library-aside__list {
           display: block;
         }
       }
     }
 
-    .media-manager-aside__mobile-button {
+    .media-library-aside__mobile-button {
       position: relative;
       display: block;
       width: 100%;
@@ -44,7 +44,7 @@
       outline: none;
     }
 
-    .media-manager-aside__mobile-button-icon {
+    .media-library-aside__mobile-button-icon {
       position: absolute;
       top: 50%;
       right: 15px;
@@ -57,7 +57,7 @@
       }
     }
 
-    .media-manager-aside__list {
+    .media-library-aside__list {
       display: none;
       position: absolute;
       top: 42px;
@@ -80,14 +80,14 @@
         }
 
         &.on {
-          .media-manager-aside__button {
+          .media-library-aside__button {
             color: $b500;
           }
         }
       }
     }
 
-    .media-manager-aside__button {
+    .media-library-aside__button {
       padding: 0;
       border: 0 none;
       font-size: 14px;
@@ -104,14 +104,14 @@
 /* tablet */
 @media (min-width: 768px) {
   // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용, PC는 여기서부터 새로 적용
-  .media-manager-aside {
+  .media-library-aside {
     padding: 32px 24px;
     // 저장소가 1개일 때 
     &.state-one {
       display: none;
     }
 
-    .media-manager-aside__title {
+    .media-library-aside__title {
       margin: 0;
       padding: 0 0 24px;
       font-size: 14px;
@@ -120,11 +120,11 @@
       font-weight: bold;
     }
 
-    .media-manager-aside__mobile-button {
+    .media-library-aside__mobile-button {
       display: none;
     }
 
-    .media-manager-aside__list {
+    .media-library-aside__list {
       margin: 0;
       padding: 0;
       list-style: none;
@@ -149,13 +149,13 @@
             background-color: $b500;
           }
 
-          .media-manager-aside__button {
+          .media-library-aside__button {
             color: $b500;
           }    
         }
       }
 
-      .media-manager-aside__button {
+      .media-library-aside__button {
         margin: 0;
         padding: 0;
         border: 0;

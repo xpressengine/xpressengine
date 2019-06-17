@@ -1,4 +1,4 @@
-.media-manager {
+.media-library {
   margin: 0 -15px;
   font-family: $sys-font-stack;
 
@@ -33,18 +33,18 @@
 }
 
 // input type="text" 스타일
-.media-manager__input-group {
+.media-library__input-group {
 
 }
 
-.media-manager__input-text {
+.media-library__input-text {
   &::placeholder {
     color: $n80;
   }
 }
 
 // button common (default)
-.media-manager__button {
+.media-library__button {
   height: 36px;
   padding: 0 12px;
   border: 0 none;
@@ -87,7 +87,7 @@
 }
 
 // button primary
-.media-manager__button--primary {
+.media-library__button--primary {
   background-color: $b500;
   color: $n0;
 
@@ -102,7 +102,7 @@
 }
 
 // button danger
-.media-manager__button--danger {
+.media-library__button--danger {
   background-color: $r500;
   color: $n0;
 
@@ -117,14 +117,14 @@
 }
 
 // 버튼 그룹
-.media-manager__button-group {
+.media-library__button-group {
   &:after {
     content: '';
     display: block;
     clear: both;
   }
 
-  .media-manager__button {
+  .media-library__button {
     float: left;
     margin: 0 1px;
 
@@ -139,14 +139,14 @@
 }
 
 // 버튼 그룹 라디오 (하나 선택 되는 형태)
-.media-manager__button-group-radio {
+.media-library__button-group-radio {
   &:after {
     content: '';
     display: block;
     clear: both;
   }
 
-  .media-manager__button {
+  .media-library__button {
     float: left;
     margin: 0 1px;
     border-radius: 0;
@@ -180,7 +180,7 @@
 }
 
 // 말줄임 버튼
-.media-manager__button-ellipsis {
+.media-library__button-ellipsis {
   width: 18px;
   height: 18px;
   margin: 0;
@@ -195,7 +195,7 @@
 }
 
 // dimmed
-.media-manager-dimmed {
+.media-library-dimmed {
   display: none;
   position: fixed;
   top: 0;
@@ -209,23 +209,23 @@
 
 /* tablet */
 @media (min-width: 768px) {
-  .media-manager {
+  .media-library {
     display: flex;
     margin: 0;
     border: 1px solid $n40;
     background-color: $n0;
 
-    .media-manager-aside {
+    .media-library-aside {
       flex: 0 0 auto;
       border-right: 1px solid $n40;
       max-width: 240px;
     }
 
-    .media-manager-main {
+    .media-library-main {
       flex: 1;
     }
 
-    .media-manager__mobile-view {
+    .media-library__mobile-view {
       display: none !important;
     }
   }

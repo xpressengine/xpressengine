@@ -1,14 +1,14 @@
-.media-manager-content {
+.media-library-content {
 
 }
 
 // 리스트 타입
-.media-manager-content__list-type {
+.media-library-content__list-type {
   position: relative;
 
   // 리스트형 리스트 정렬 영역
-  .media-manager-content-sort {
-    .media-manager-content__button-sort {
+  .media-library-content-sort {
+    .media-library-content__button-sort {
       position: absolute;
       top: -48px;
       left: 0;
@@ -23,16 +23,16 @@
       outline: none;
     }
 
-    .media-manager-content-sort__list {
+    .media-library-content-sort__list {
       display: none;
     }
   }
 
-  .media-manager-content-header {
+  .media-library-content-header {
     display: none;
   }
 
-  .media-manager-content-header__button {
+  .media-library-content-header__button {
     margin: 0;
     padding: 0 15px;
     border: 0 none;
@@ -43,29 +43,29 @@
     color: $n900;
   }
 
-  .media-manager-content-header__title {
+  .media-library-content-header__title {
     flex: 1;
     height: 48px;
   }
 
-  .media-manager-content-header__writer {
+  .media-library-content-header__writer {
     display: none;
   }
 
-  .media-manager-content-header__size {
+  .media-library-content-header__size {
     display: none;
   }
 
-  .media-manager-content-header__date {
+  .media-library-content-header__date {
     display: none;
   }
 
   // 리스트 영역
-  .media-manager-content-list-box {
+  .media-library-content-list-box {
     background-color: $n0;
   }
 
-  .media-manager-content-list {
+  .media-library-content-list {
     margin: 0;
     padding: 0;
     word-break: break-all;
@@ -87,36 +87,36 @@
         background-color: $b100;
       }
 
-      &.media-manager-content-list__item--folder-depth-up {
-        .media-manager-content-list__checkbox {
+      &.media-library-content-list__item--folder-depth-up {
+        .media-library-content-list__checkbox {
           display: none;
         }
 
-        .media-manager-content-list__content-box {
-          .media-manager-content-list__writer,
-          .media-manager-content-list__size,
-          .media-manager-content-list__date {
+        .media-library-content-list__content-box {
+          .media-library-content-list__writer,
+          .media-library-content-list__size,
+          .media-library-content-list__date {
             display: none;
           }
         }
 
-        .media-manager-content-list__more {
+        .media-library-content-list__more {
           display: none;
         }
       }
 
-      &.media-manager-content-list__item--folder {
-        .media-manager-content-list__writer,
-        .media-manager-content-list__date {
+      &.media-library-content-list__item--folder {
+        .media-library-content-list__writer,
+        .media-library-content-list__date {
           display: none;
         }
 
-        .media-manager-content-list__size {
+        .media-library-content-list__size {
           &:before {
             display: none;
           }
 
-          .media-manager-content-list__text {
+          .media-library-content-list__text {
             margin-left: 0;
 
             &:before {
@@ -125,13 +125,13 @@
           }
         }
 
-        .media-manager-content-list__more {
+        .media-library-content-list__more {
           margin-left: auto;
         }
       }
     }
 
-    .media-manager-content-list__checkbox {
+    .media-library-content-list__checkbox {
       position: absolute;
       top: 0;
       left: 0;
@@ -141,7 +141,7 @@
       // display: block;
       // flex: 0 0 46px;
 
-      .media-manager__label {
+      .media-library__label {
         position: relative;
         display: flex;
         align-items: center;
@@ -156,7 +156,7 @@
         text-align: left;
 
         input {
-          &[type="checkbox"] + .media-manager__input-helper {
+          &[type="checkbox"] + .media-library__input-helper {
             display: inline-block;
             position: static;
             width: 16px;
@@ -167,12 +167,12 @@
             vertical-align: middle;
           }
 
-          &[type="checkbox"]:checked + .media-manager__input-helper {
+          &[type="checkbox"]:checked + .media-library__input-helper {
             border-color: transparent;
             background-color: $b500;
           }
 
-          &[type="checkbox"]:checked + .media-manager__input-helper::after {
+          &[type="checkbox"]:checked + .media-library__input-helper::after {
             position: absolute;
             left: 50%;
             top: 50%;
@@ -188,7 +188,7 @@
         }
       }
 
-      .media-manager__input-checkbox {
+      .media-library__input-checkbox {
         overflow: hidden;
         position: absolute;
         width: 1px;
@@ -197,17 +197,17 @@
       }
     }
 
-    .media-manager-content-list__icon {
+    .media-library-content-list__icon {
       display: block;
       flex: 0 0 auto;
 
-      .media-manager-content-list__icon-thumb {
+      .media-library-content-list__icon-thumb {
         position: relative;
         margin: 0 15px 0 46px;
       }
     }
 
-    .media-manager-content-list__content-box {
+    .media-library-content-list__content-box {
       flex: 1;
       margin-right: 42px;
       line-height: 15px;
@@ -219,7 +219,7 @@
       }
     }
 
-    .media-manager-content-list__text {
+    .media-library-content-list__text {
       display: inline-block;
       margin-top: 6px;
       font-size: 12px;
@@ -238,8 +238,8 @@
       }
     }
 
-    .media-manager-content-list__title {
-      .media-manager-content-list__text {
+    .media-library-content-list__title {
+      .media-library-content-list__text {
         margin-top: 0;
         margin-left: 0;
         font-size: 15px;
@@ -252,11 +252,11 @@
       }
     }
 
-    .media-manager-content-list__writer {
+    .media-library-content-list__writer {
       position: relative;
       float: left;
 
-      .media-manager-content-list__text {
+      .media-library-content-list__text {
         margin-left: 0;
 
         &:before {
@@ -265,17 +265,17 @@
       }
     }
 
-    .media-manager-content-list__size {
+    .media-library-content-list__size {
       position: relative;
       float: left;
     }
 
-    .media-manager-content-list__date {
+    .media-library-content-list__date {
       position: relative;
       float: left;
     }
 
-    .media-manager-content-list__more {
+    .media-library-content-list__more {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -286,7 +286,7 @@
       height: 100%;
       z-index: 20;
 
-      .media-manager__button-ellipsis {
+      .media-library__button-ellipsis {
         background: url(../img/icon-ellipsis-off.svg) 0 0 no-repeat;
         background-size: 18px 18px;
         // outline: none;
@@ -294,22 +294,22 @@
       }
 
       &.open {
-        .media-manager__button-ellipsis {
+        .media-library__button-ellipsis {
           background-image: url(../img/icon-ellipsis-on.svg);
           transform:rotate(90deg);
         }
 
-        .media-manager__svg {
+        .media-library__svg {
           fill: $n400;
         }
 
-        .media-manager-content-list__more-list {
+        .media-library-content-list__more-list {
           display: block;
         }
       }
     }
 
-    .media-manager-content-list__more-list {
+    .media-library-content-list__more-list {
       display: none;
       position: absolute;
       top: 50%;
@@ -334,7 +334,7 @@
         }
       }
 
-      .media-manager-content-list__more-list-button {
+      .media-library-content-list__more-list-button {
         width: 100%;
         border: 0 none;
         font-size: 14px;
@@ -350,14 +350,14 @@
         }
       }
 
-      .media-manager-content-list__more-list-button--delete {
+      .media-library-content-list__more-list-button--delete {
         color: $r500;
       }
     }
   }
 
   // 아이콘 이미지 공통
-  .media-manager-content-list__icon-thumb {
+  .media-library-content-list__icon-thumb {
     // width: 24px;
     // height: 24px;
     // background-position: 0 0;
@@ -371,22 +371,22 @@
     background-size: 32px 32px;
   }
 
-  .media-manager-content-list__icon-image {
+  .media-library-content-list__icon-image {
     background-image: url(../img/icon-list-image.png);
   }
 
-  .media-manager-content-list__icon-folder {
+  .media-library-content-list__icon-folder {
     background-image: url(../img/icon-list-folder.svg);
   }
 }
 
 // 카드 타입
-.media-manager-content__card-type {
+.media-library-content__card-type {
   
 }
 
 // 페이징 스타일
-.media-manager-paging {
+.media-library-paging {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,7 +397,7 @@
   background-color: $n0;
   text-align: center;
 
-  .media-manager-paging {
+  .media-library-paging {
     &__box {
       display: none;
       width: 100%;
@@ -406,7 +406,7 @@
         // display: inline-block;
         display: flex;
   
-        .media-manager-paging-item {
+        .media-library-paging-item {
           border: 0;
           line-height: 24px;
   
@@ -415,19 +415,19 @@
           }
         }
 
-        .media-manager-paging__box-items {
+        .media-library-paging__box-items {
           flex: 1;
         }
       }
     }
   }
 
-  .media-manager-paging__box-items {
+  .media-library-paging__box-items {
     display: inline-block;
     font-size: 14px;
     line-height: 24px;
 
-    .media-manager-paging-item {
+    .media-library-paging-item {
       width: auto;
       height: auto;
       line-height: 16px;
@@ -435,7 +435,7 @@
     }
   }
 
-  .media-manager-paging-item {
+  .media-library-paging-item {
     display: inline-block;
     margin: 0 2px;
     width: 24px;
@@ -481,8 +481,8 @@
 /* mobile */
 @media (max-width: 768px) {
   // 페이징 스타일
-  .media-manager-paging {
-    .media-manager-paging {
+  .media-library-paging {
+    .media-library-paging {
       &__box--normal {
         display: none;
       }
@@ -515,57 +515,57 @@
 
 /* tablet */
 @media (min-width: 768px) {
-  .media-manager-content__list-type {
+  .media-library-content__list-type {
     // 리스트형 리스트 정렬 영역
-    .media-manager-content-sort {
+    .media-library-content-sort {
       display: none;
     }
 
-    .media-manager-content-header {
+    .media-library-content-header {
       display: flex;
       background-color: $n10;
     }
 
-    .media-manager-content-header__title {
-      .media-manager-content-header__button {
+    .media-library-content-header__title {
+      .media-library-content-header__button {
         margin-left: 10px;
       }
     }
 
-    .media-manager-content-header__writer {
+    .media-library-content-header__writer {
       display: block;
       flex: 0 0 120px;
       
-      .media-manager-content-header__button {
+      .media-library-content-header__button {
         margin-right: 10px
       }
     }
   
-    .media-manager-content-header__size {
+    .media-library-content-header__size {
       display: block;
       flex: 0 0 110px;
       
-      .media-manager-content-header__button {
+      .media-library-content-header__button {
         margin-right: 10px
       }
     }
   
-    .media-manager-content-header__date {
+    .media-library-content-header__date {
       display: block;
       flex: 0 0 120px;
       
-      .media-manager-content-header__button {
+      .media-library-content-header__button {
         margin-right: 10px
       }
     }
 
-    .media-manager-content-header__more {
+    .media-library-content-header__more {
       display: block;
       flex: 0 0 42px;
     }
 
     // 리스트 영역
-    .media-manager-content-list {
+    .media-library-content-list {
       margin: 0;
       padding: 0;
       word-break: break-all;
@@ -586,69 +586,69 @@
           background-color: $b100;
         }
   
-        &.media-manager-content-list__item--folder {
-          .media-manager-content-list__writer,
-          .media-manager-content-list__date {
+        &.media-library-content-list__item--folder {
+          .media-library-content-list__writer,
+          .media-library-content-list__date {
             display: block;
           }
         }
       }
 
-      .media-manager-content-list__checkbox {
+      .media-library-content-list__checkbox {
         width: calc(100% - 42px);
 
-        .media-manager__label {
+        .media-library__label {
           display: none;
         }
       }
 
-      .media-manager-content-list__icon {
+      .media-library-content-list__icon {
         display: block;
         flex: 0 0 auto;
 
-        .media-manager-content-list__icon-thumb {
+        .media-library-content-list__icon-thumb {
           position: relative;
           margin: 0 15px 0 25px;
         }
       }
 
-      .media-manager-content-list__content-box {
+      .media-library-content-list__content-box {
         display: flex;
         align-items: center;
         width: 100%;
 
-        &.media-manager-content-list__content-box--folder {
-          .media-manager-content-list__writer,
-          .media-manager-content-list__date {
+        &.media-library-content-list__content-box--folder {
+          .media-library-content-list__writer,
+          .media-library-content-list__date {
             display: block;
           }
         }
       }
 
-      .media-manager-content-list__title {
+      .media-library-content-list__title {
         flex: 1;
         margin-right: 10px;
 
-        .media-manager-content-list__text {
+        .media-library-content-list__text {
           color: $n900;
         }
       }
 
-      .media-manager-content-list__writer {
+      .media-library-content-list__writer {
         display: block;
         float: none;
         flex: 0 0 120px;
         padding: 0 25px 0 15px;
       }
 
-      .media-manager-content-list__size {
+      .media-library-content-list__size {
         display: block;
         float: none;
         flex: 0 0 110px;
         padding: 0 25px 0 15px;
       }
 
-      .media-manager-content-list__date {
+      .media-library-content-list__date {
         display: block;
         float: none;
         flex: 0 0 120px;
@@ -656,7 +656,7 @@
         padding: 0 25px 0 15px;
       }      
 
-      .media-manager-content-list__text {
+      .media-library-content-list__text {
         margin: 0;
         font-size: 14px;
         line-height: 20px;
@@ -670,7 +670,7 @@
     }
 
     // 아이콘 이미지 공통
-    .media-manager-content-list__icon-thumb {
+    .media-library-content-list__icon-thumb {
       width: 24px;
       height: 24px;
       background-size: 24px 24px;
@@ -678,18 +678,18 @@
   }
 
   // 페이징 스타일
-  .media-manager-paging {
+  .media-library-paging {
     height: auto;
     min-height: 78px;
     padding: 7px 0;
 
-    .media-manager-paging-item {
+    .media-library-paging-item {
       width: 32px;
       height: 32px;
       line-height: 31px;
     }
 
-    .media-manager-paging {
+    .media-library-paging {
       display: block;
       text-align: center;
 
@@ -723,7 +723,7 @@
         }
 
         &[href] {
-          &.media-manager-paging-item--active {
+          &.media-library-paging-item--active {
             color: $b500;
           }
         } 
