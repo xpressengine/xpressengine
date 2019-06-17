@@ -90,7 +90,7 @@ class MediaLibraryFileRepository
 
     protected function getPaginate($query, $attributes)
     {
-        $perPageCount = 15;
+        $perPageCount = 50;
         if (isset($attributes['per_page']) == true) {
             $perPageCount = $attributes['per_page'];
         }

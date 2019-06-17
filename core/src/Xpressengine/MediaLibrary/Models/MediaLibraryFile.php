@@ -13,7 +13,7 @@ class MediaLibraryFile extends DynamicModel
     public $incrementing = false;
 
     protected $fillable = [
-        'file_id', 'folder_id', 'user_id', 'title', 'caption',
+        'file_id', 'folder_id', 'user_id', 'title', 'ext', 'caption',
         'alt_text', 'description'
     ];
 

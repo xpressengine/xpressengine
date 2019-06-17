@@ -3,9 +3,13 @@
 namespace Xpressengine\MediaLibrary;
 
 use Xpressengine\Http\Request;
+use Xpressengine\MediaLibrary\Exceptions\NotFoundFolderException;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFileRepository;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
+use XeDB;
+use XeStorage;
+use XeMedia;
 
 class MediaLibraryHandler
 {
@@ -87,5 +91,44 @@ class MediaLibraryHandler
         });
 
         return $files;
+    }
+
+    public function uploadFile(Request $request)
+    {
+        XeDB::beginTransaction();
+
+        try {
+            $uploadFile = $request->file('file');
+            $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
+
+            if (XeMedia::is($file) == true) {
+                $media = XeMedia::make($file);
+                XeMedia::createThumbnails($media);
+            }
+
+            $folderItem = $this->getFolderItem($request->get('folder_id', ''));
+            if ($folderItem == null) {
+                throw new NotFoundFolderException();
+            }
+
+            $fileAttribute = [
+                'file_id' => $file->id,
+                'folder_id' => $folderItem->id,
+                'user_id' => \Auth::user()->getId(),
+                'ext' => $uploadFile->getClientOriginalExtension()
+            ];
+
+            $fileModel = $this->files->createModel();
+            $fileModel->fill($fileAttribute);
+            $fileModel->save();
+        } catch (\Exception $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+
+        XeDB::commit();
+
+        return $fileModel;
     }
 }

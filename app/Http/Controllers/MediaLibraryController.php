@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Xpressengine\Http\Request;
 use XePresenter;
+use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 
 class MediaLibraryController extends Controller
@@ -28,5 +29,16 @@ class MediaLibraryController extends Controller
         $returnValue['file'] = $this->handler->getFileList($targetFolderItem, $request);
 
         return XePresenter::makeApi($returnValue);
+    }
+
+    public function upload(Request $request)
+    {
+        if ($request->file('file') == null) {
+            throw new UploadFileNotExistException();
+        }
+
+        $file = $this->handler->uploadFile($request);
+
+        return XePresenter::makeApi([$file]);
     }
 }
