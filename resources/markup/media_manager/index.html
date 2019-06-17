@@ -201,8 +201,8 @@
                                 <div class="media-manager-content">
                                     <!-- 리스트 - 리스트형 -->
                                     <div class="media-manager-content__list-type">
-                                        <!-- 리스트형 모바일에서 sort 팝업 노출 버튼 -->
                                         <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
+                                        <!-- 리스트형 모바일에서 sort 팝업 노출 버튼 -->
                                         <div class="media-manager-content-sort">
                                             <button type="button" class="media-manager-content__button-sort">제목순 <span class="blind">리스트 정렬 버튼</span></button>
                                             <ul class="media-manager-content-sort__list">
@@ -225,6 +225,7 @@
                                         </div>
                                         <!-- //리스트형 모바일에서 sort 팝업 노출 버튼 -->
                                         <div class="media-manager-content-header">
+                                            <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
                                             <div class="media-manager-content-header__title">
                                                 <button type="button" class="media-manager-content-header__button">제목</button>
                                             </div>
@@ -241,10 +242,20 @@
                                         </div>
                                         <div class="media-manager-content-list-box">
                                             <ul class="media-manager-content-list">
-                                                <li class="">
-                                                    <!-- [D] PC 에서 체크박스는 숨겨 놓았음, li 클릭 시 class="media-manager__input-checkbox" 에 체크 및 체크해제 스크립트 적용 -->
+                                                <!-- 
+                                                    [D] 리스트가 폴더일 때 class="media-manager-content-list__item--folder" 추가,
+                                                        리스트가 상위폴더 일 때 class="media-manager-content-list__item--folder-depth-up" 추가
+                                                -->
+                                                <li class="media-manager-content-list__item--folder-depth-up">
+                                                    <!-- 
+                                                        [D] PC : label 영역을 리스트영역에 크게 적용하여 라벨 클릭 시 체크박스 class="media-manager__input-checkbox" 에 자동으로 체크 되도록 적용하였습니다. 
+                                                            모바일 : 체크박스 영역을 체크해야 체크 되도록 라벨 영역의 크기를 줄여 좋았습니다.
+                                                    -->
                                                     <div class="media-manager__input-group media-manager-content-list__checkbox">
-                                                        <input type="checkbox" class="media-manager__input-checkbox">
+                                                        <label class="media-manager__label">
+                                                            <input type="checkbox" class="media-manager__input-checkbox">
+                                                            <span class="media-manager__input-helper"></span>
+                                                        </label>
                                                     </div>
                                                     <div class="media-manager-content-list__icon">
                                                         <!-- [D] 이미지 클래스 정보
@@ -268,41 +279,32 @@
                                                         </div>
                                                     </div>
                                                     <!-- [D] class="media-manager__button-ellipsis" 버튼 클릭 시 class="media-manager-content-list__more" 영역에 class="open" 추가 (말줄임 버튼 컬러 변경 및 팝업 노출) -->
-                                                    <div class="media-manager-content-list__more ">
-                                                        <button type="button" class="media-manager__button-ellipsis">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
-                                                                <defs>
-                                                                    <path id="icon-ellipsis" d="M14 19a2 2 0 1 1-3.999.001A2 2 0 0 1 14 19zm0-14a2 2 0 1 1-3.999.001A2 2 0 0 1 14 5zm0 7a2 2 0 1 1-3.999.001A2 2 0 0 1 14 12z"/>
-                                                                </defs>
-                                                                <g fill="none" fill-rule="evenodd">
-                                                                    <path d="M0 0h24v24H0z"/>
-                                                                    <mask id="icon-ellipsis-mask" fill="#fff">
-                                                                        <use xlink:href="#icon-ellipsis"/>
-                                                                    </mask>
-                                                                    <g class="media-manager__svg" fill="#c1c7d0" mask="url(#icon-ellipsis-mask)">
-                                                                        <path d="M0 0h24v24H0z"/>
-                                                                    </g>
-                                                                </g>
-                                                            </svg>
-                                                        </button>
-                                                        <ul style="display: none">
+                                                    <div class="media-manager-content-list__more open">
+                                                        <button type="button" class="media-manager__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                        <ul class="media-manager-content-list__more-list">
                                                             <li>
-                                                                <button type="button">편집하기</button>
+                                                                <button type="button" class="media-manager-content-list__more-list-button">편집하기</button>
                                                             </li>
                                                             <li>
-                                                                <button type="button">삭제</button>
+                                                                <button type="button" class="media-manager-content-list__more-list-button media-manager-content-list__more-list-button--delete">삭제</button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </li>
                                                 <!-- 
-                                                    [D] 리스트 클릭 시(li 클릭 시) class="active" 추가, class="active" 추가 될 때 class="media-manager__input-checkbox" 체크박스에 체크 및 체크해제 적용!!
-                                                    [D] 리스트 더블 클릭 시 편집하기 창 노출 
+                                                    [D] PC화면에서 리스트 클릭 시(li 클릭 시) class="active" 추가, class="active" 추가 될 때 class="media-manager__input-checkbox" 체크박스에 체크 및 체크해제 적용!!
+                                                        PC화면에서 리스트 더블 클릭 시 편집하기 창 노출 
+
+                                                    [D] 모바일화면에서 체크박스 선택 시 class="active" 추가, 체크박스 체크 및 해제 적용
+                                                        모바일화면에서 리스트 클릭 시 (li 클릭 시) 편집하기 창 노출
                                                 -->
-                                                <li class="active">
+                                                <li class="media-manager-content-list__item--folder active">
                                                     <label class="media-manager-content-list__checkbox-label" for="test"></label>
                                                     <div class="media-manager__input-group media-manager-content-list__checkbox">
-                                                        <input type="checkbox" id="test" class="media-manager__input-checkbox">
+                                                        <label class="media-manager__label">
+                                                            <input type="checkbox" class="media-manager__input-checkbox">
+                                                            <span class="media-manager__input-helper"></span>
+                                                        </label>
                                                     </div>
                                                     <div class="media-manager-content-list__icon">
                                                         <div class="media-manager-content-list__icon-thumb media-manager-content-list__icon-folder"></div>
@@ -321,11 +323,24 @@
                                                             <span class="media-manager-content-list__text">-</span>
                                                         </div>
                                                     </div>
-                                                    <div class="media-manager-content-list__more"><span>모어</span></div>
+                                                    <div class="media-manager-content-list__more ">
+                                                        <button type="button" class="media-manager__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                        <ul class="media-manager-content-list__more-list">
+                                                            <li>
+                                                                <button type="button" class="media-manager-content-list__more-list-button">편집하기</button>
+                                                            </li>
+                                                            <li>
+                                                                <button type="button" class="media-manager-content-list__more-list-button media-manager-content-list__more-list-button--delete">삭제</button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </li>
                                                 <li class="">
                                                     <div class="media-manager__input-group media-manager-content-list__checkbox">
-                                                        <input type="checkbox" class="media-manager__input-checkbox">
+                                                        <label class="media-manager__label">
+                                                            <input type="checkbox" class="media-manager__input-checkbox">
+                                                            <span class="media-manager__input-helper"></span>
+                                                        </label>
                                                     </div>
                                                     <div class="media-manager-content-list__icon">
                                                         <div class="media-manager-content-list__icon-thumb media-manager-content-list__icon-image"></div>
@@ -344,7 +359,17 @@
                                                             <span class="media-manager-content-list__text">2019.05.16</span>
                                                         </div>
                                                     </div>
-                                                    <div class="media-manager-content-list__more"><span>모어</span></div>
+                                                    <div class="media-manager-content-list__more ">
+                                                        <button type="button" class="media-manager__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                        <ul class="media-manager-content-list__more-list">
+                                                            <li>
+                                                                <button type="button" class="media-manager-content-list__more-list-button">편집하기</button>
+                                                            </li>
+                                                            <li>
+                                                                <button type="button" class="media-manager-content-list__more-list-button media-manager-content-list__more-list-button--delete">삭제</button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </div>
