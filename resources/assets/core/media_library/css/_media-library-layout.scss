@@ -210,10 +210,13 @@
 /* tablet */
 @media (min-width: 768px) {
   .media-library {
-    display: flex;
     margin: 0;
-    border: 1px solid $n40;
-    background-color: $n0;
+    
+    .media-library-box {
+      display: flex;
+      border: 1px solid $n40;
+      background-color: $n0;
+    }
 
     .media-library-aside {
       flex: 0 0 auto;
