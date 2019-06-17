@@ -100,7 +100,7 @@ trait ComposerRunTrait
         if (Platform::isWindows()) {
             if (!getenv('APPDATA')) {
                 throw new \Exception(
-                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to " . route('settings.setting.edit')
                 );
             }
         }
@@ -109,7 +109,7 @@ trait ComposerRunTrait
             $home = getenv('HOME');
             if (!$home) {
                 throw new \Exception(
-                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to " . route('settings.setting.edit')
                 );
             }
         }
