@@ -227,6 +227,7 @@ return [
         App\Providers\SiteServiceProvider::class,
         App\Providers\PurifierServiceProvider::class,
         App\Providers\LogServiceProvider::class,
+        App\Providers\MediaLibraryProvider::class
     ],
 
     /*

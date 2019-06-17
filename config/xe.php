@@ -183,6 +183,12 @@ return [
                 'description' => '',
                 'ordering' => 4000
             ],
+            'media_manager' => [
+                'title' => 'xe::media',
+                'display' => true,
+                'description' => '',
+                'ordering' => 4500
+            ],
             'plugin' => [
                 'title' => 'xe::pluginAndUpdate',
                 'display' => true,

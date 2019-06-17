@@ -3187,5 +3187,41 @@ return [
     'mailSenderAddress' => [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
+    ],
+    'media' => [
+        'ko' => '미디어',
+        'en' => 'Media'
+    ],
+    'rootFolderNotExistMessage' => [
+        'ko' => 'Root 폴더가 존재하지 않습니다.',
+        'en' => 'Root folder does not exist.'
+    ],
+    'folderNotFoundMessage' => [
+        'ko' => '폴더를 찾을 수 없습니다.',
+        'en' => 'Folder could not be found.'
+    ],
+    'folderRenameMessage' => [
+        'ko' => '폴더 이름이 변경되었습니다.',
+        'en' => 'Folder has been renamed.'
+    ],
+    'folderNameDuplicateMessage' => [
+        'ko' => '폴더의 이름이 중복되었습니다.',
+        'en' => 'Folder name is duplicated.'
+    ],
+    'unableRootTargetMessage' => [
+        'ko' => 'Root 폴더를 대상으로 작업할 수 없습니다.',
+        'en' => 'Unable to target root folder.',
+    ],
+    'notExistUploadFileMessage' => [
+        'ko' => '업로드할 파일이 존재하지 않습니다.',
+        'en' => 'The file to upload does not exist.'
+    ],
+    'fileNotFoundMessage' => [
+        'ko' => '파일을 찾을 수 없습니다.',
+        'en' => 'File could not be found.'
+    ],
+    'fileInformationUpdateMessage' => [
+        'ko' => '파일 정보가 수정되었습니다.',
+        'en' => 'The file information has been modified.'
     ]
 ];

@@ -854,6 +854,12 @@ Route::group(['prefix' => 'tag'], function () {
 
 Route::get('file/{id}', ['as' => 'file.path', 'uses' => 'StorageController@file'])->where('id', '[0-9a-z\-]+');
 
+Route::settings('media', function () {
+    Route::get('/', [
+        'as' => 'settings.media_library.index',
+        'uses' => 'MediaLibraryController@index',
+        'settings_menu' => 'media_manager']);
+});
 
 Route::settings('dynamicField', function () {
     Route::get('/', ['as' => 'manage.dynamicField.index', 'uses' => 'DynamicFieldController@index']);
