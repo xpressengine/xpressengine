@@ -44,7 +44,22 @@ class MediaLibraryHandler
             $folderList = $this->folders->getFolderItems($request);
         }
 
+        foreach ($folderList as $folderItem) {
+            $folderItem->setAttribute('file_count', $this->getChildHasFileCount($folderItem));
+        }
+
         return $folderList;
+    }
+
+    private function getChildHasFileCount($parentFolderItem)
+    {
+        $count = 0;
+        $count += $parentFolderItem->files->count();
+        foreach ($parentFolderItem->getChildren() as $child) {
+            $count += $this->getChildHasFileCount($child);
+        }
+
+        return $count;
     }
 
     public function getFolderPath(MediaLibraryFolder $folderItem)

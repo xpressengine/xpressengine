@@ -14,6 +14,8 @@ class MediaLibraryFolder extends Node
 
     protected $fillable = ['disk', 'parent_id', 'name', 'ordering'];
 
+    protected $hidden = ['files'];
+
     protected static $aggregator;
 
     public function getClosureTable()
