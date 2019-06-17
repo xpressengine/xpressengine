@@ -526,7 +526,10 @@ class Storage
             'z'     => 'application/x-compress',
             'xhtml' => 'application/xhtml+xml',
             'xht'   => 'application/xhtml+xml',
-            'zip'   => 'application/x-zip',
+            'zip'   => [
+                'application/x-zip',
+                'application/zip',
+            ],
             'rar'   => 'application/x-rar',
             'mid'   => 'audio/midi',
             'midi'  => 'audio/midi',
