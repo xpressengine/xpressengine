@@ -81,6 +81,7 @@
                                 </div>
                             </div>
                             <div class="media-manager-main">
+                                <!-- 우측 상단 영역 -->
                                 <div class="media-manager-header">
                                     <!-- [D] 저장소명 적용 (PC 에서만 노출, 모바일은 aside 영역의 class="media-manager-aside__mobile-button" 에 적용된 내용이 노출 됨) -->
                                     <h3 class="media-manager-header__title">Main Assets</h3>
@@ -198,7 +199,10 @@
                                     <!-- 모바일 리스트 형에서 검색, sort 버튼 노출 영역 -->
                                     <div class="media-manager-header-mobile-search-area"></div>
                                 </div>
+                                <!-- //우측 상단 영역 -->
+                                <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
                                 <div class="media-manager-content">
+                                    <h3 class="blind">파일정보 리스트형, 카드형</h3>
                                     <!-- 리스트 - 리스트형 -->
                                     <div class="media-manager-content__list-type">
                                         <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
@@ -373,15 +377,39 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="media-manager-content-paging">
-                                            페이징
-                                        </div>
                                     </div>
                                     <!-- //리스트 - 리스트형 -->
+
+                                    <!-- 페이징, 게시판 페이징 가져와서 수정 (리스트형, 카드형 공통 페이징) -->
+                                    <div class="media-manager-paging">
+                                        <h4 class="blind">데이터 페이징</h4>
+                                        <div class="media-manager-paging__box media-manager-paging__box--normal">
+                                            <a class="media-manager-paging-item media-manager-paging-item--prev" title="이전"><i class="xi-angle-left-min"></i></a>
+                                            <a href="#" class="media-manager-paging-item media-manager-paging-item--active ">1</a>
+                                            <a href="#" class="media-manager-paging-item ">2</a>
+                                            <a href="#" class="media-manager-paging-item media-manager-paging-item--next" title="다음"><i class="xi-angle-right-min"></i></a>
+                                        </div>
+                                
+                                        <div class="media-manager-paging__box media-manager-paging__box--simple">
+                                            <a class="media-manager-paging-item media-manager-paging-item--prev" title="이전"><i class="xi-angle-left-min"></i></a>
+                                            <span class="media-manager-paging__box-items"><strong class="media-manager-paging-item media-manager-paging-item--active">1</strong> / <span class="media-manager-paging-item">2</span></span>
+                                            <a href="#" class="media-manager-paging-item media-manager-paging-item--next" title="다음"><i class="xi-angle-right-min"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- //페이징 -->
                                 </div>
+                                <!-- //우측 중앙 영역 (리스트, 페이징 포함)-->
+                                <!-- 우측 하단 영역(폴더 빵조각) -->
                                 <div class="media-manager-breadcrumbs">
-                                    폴더
+                                    <h3 class="blind">현재 폴더 정보</h3>
+                                    <div class="media-manager-breadcrumbs-info">
+                                        <span class="media-manager-breadcrumbs-info__image"></span>
+                                        <a href="#" class="media-manager-breadcrumbs-info__link">/ <span class="media-manager-breadcrumbs-info__link-text">assets</span></a>
+                                        <a href="#" class="media-manager-breadcrumbs-info__link">/ <span class="media-manager-breadcrumbs-info__link-text">core</span></a>
+                                        <a href="#" class="media-manager-breadcrumbs-info__link">/ <span class="media-manager-breadcrumbs-info__link-text">media manager</span></a>
+                                    </div>
                                 </div>
+                                <!-- //우측 하단 영역(폴더 빵조각) -->
                             </div>
                             <!-- [D] 딤드가 필요할 때는 해당 딤드 display: block 적용 -->
                             <div class="media-manager-dimmed" style="display: none"></div>
