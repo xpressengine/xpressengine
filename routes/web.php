@@ -861,6 +861,19 @@ Route::group(['prefix' => 'media_library'], function () {
     ]);
 
     Route::post('/upload', ['as' => 'media_library.upload', 'uses' => 'MediaLibraryController@upload']);
+    Route::post('/folder', ['as' => 'media_library.store_folder', 'uses' => 'MediaLibraryController@createFolder']);
+    Route::put('/folder/{folder_id}', [
+        'as' => 'media_library.update_folder',
+        'uses' => 'MediaLibraryController@updateFolder'
+    ]);
+    Route::delete('/folder/{folder_id}', [
+        'as' => 'media_library.drop_folder',
+        'uses' => 'MediaLibraryController@dropFolder'
+    ]);
+    Route::put('/folder/{folder_id}/move', [
+        'as' => 'media_library.move_folder',
+        'uses' => 'MediaLibraryController@moveFolder'
+    ]);
 });
 
 Route::settings('dynamicField', function () {

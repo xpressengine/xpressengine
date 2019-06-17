@@ -10,6 +10,15 @@ class MediaLibraryFolderRepository
 {
     use EloquentRepositoryTrait;
 
+    public function storeItem($attribute)
+    {
+        $model = $this->createModel();
+        $model->fill($attribute);
+        $model->save();
+
+        return $model;
+    }
+
     public function getRootFolderItem()
     {
         $rootFolderItem = $this->query()->where([['parent_id', ''], ['name', '/']])->first();
