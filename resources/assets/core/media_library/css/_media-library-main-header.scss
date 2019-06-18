@@ -1,5 +1,19 @@
 .media-library-header {
-  position: relative;
+  // position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+
+  &.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 30;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
 
   .media-library-header__title {
     display: none;
@@ -70,6 +84,109 @@
       width: 16px;
       height: 1px;
       margin: 0 0 0 -7px;
+    }
+  }
+}
+
+// 리스트형 리스트 정렬 영역
+.media-library-content-sort {
+  &.open {
+    .media-library-content-sort__list {
+      bottom: 0;
+    }
+  }
+
+  .media-library-content__button-sort {
+    position: absolute;
+    // top: -48px;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0 15px;
+    border: 0 none;
+    font-size: 14px;
+    line-height: 48px;
+    background-color: transparent;
+    letter-spacing: -0.03px;
+    color: $n900;
+    outline: none;
+
+    .media-library-sort-arrow {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 11px;
+      height: 11px;
+      margin-top: -6px;
+      background: url(../img/icon-arrow-path.svg) 0 0 no-repeat;
+      background-size: 11px 11px;
+      transition: transform 0.2s ease-in-out;
+      transform: rotate(90deg);
+    }
+
+    &.active-sort--up {
+      .media-library-sort-arrow {
+        display: inline-block;
+      }
+    }
+
+    &.active-sort--down {
+      .media-library-sort-arrow {
+        display: inline-block;
+        transform: rotate(270deg);
+      }
+    }
+  }
+
+  .media-library-content-sort__list {
+    display: block;
+    position: fixed;
+    bottom: -250px;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: $n0;
+    list-style: none;
+    z-index: 100;
+    transition: bottom 0.2s ease-in-out;
+
+    > li {
+      list-style: none;
+
+      &.on {
+        .media-library-content-sort__list-button {
+          &:after {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            width: 8px;
+            height: 12px;
+            margin-top: -8px;
+            margin-left: 0;
+            border-right: 1px solid $n900;
+            border-bottom: 1px solid $n900;
+            transform: rotate(40deg);
+            content: "";
+          }
+        }
+      }
+    }
+
+    .media-library-content-sort__list-button {
+      position: relative;
+      width: 100%;
+      height: 50px;
+      padding: 0;
+      border: 0 none;
+      border-top: 1px solid $n30;
+      font-size: 15px;
+      line-height: 20px;
+      letter-spacing: -0.01px;
+      background-color: $n0;
+      cursor: pointer;
+      outline: none;
     }
   }
 }
@@ -345,6 +462,10 @@
 /* tablet */
 @media (min-width: 768px) {
   .media-library-header {
+    position: static;
+    top: auto;
+    left: auto;
+    width: auto;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -364,6 +485,11 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  // 리스트형 리스트 정렬 영역 (모바일에서만 노출)
+  .media-library-content-sort {
+    display: none;
   }
 
   .media-library__input-group {

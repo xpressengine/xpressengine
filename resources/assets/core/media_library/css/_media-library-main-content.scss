@@ -6,33 +6,12 @@
 .media-library-content__list-type {
   position: relative;
 
-  // 리스트형 리스트 정렬 영역
-  .media-library-content-sort {
-    .media-library-content__button-sort {
-      position: absolute;
-      top: -48px;
-      left: 0;
-      margin: 0;
-      padding: 0 15px;
-      border: 0 none;
-      font-size: 14px;
-      line-height: 48px;
-      background-color: transparent;
-      letter-spacing: -0.03px;
-      color: $n900;
-      outline: none;
-    }
-
-    .media-library-content-sort__list {
-      display: none;
-    }
-  }
-
   .media-library-content-header {
     display: none;
   }
 
   .media-library-content-header__button {
+    position: relative;
     margin: 0;
     padding: 0 15px;
     border: 0 none;
@@ -41,6 +20,33 @@
     background-color: transparent;
     letter-spacing: -0.03px;
     color: $n900;
+
+    .media-library-sort-arrow {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 11px;
+      height: 11px;
+      margin-top: -6px;
+      background: url(../img/icon-arrow-path.svg) 0 0 no-repeat;
+      background-size: 11px 11px;
+      transition: transform 0.2s ease-in-out;
+      transform: rotate(90deg);
+    }
+
+    &.active-sort--up {
+      .media-library-sort-arrow {
+        display: inline-block;
+      }
+    }
+
+    &.active-sort--down {
+      .media-library-sort-arrow {
+        display: inline-block;
+        transform: rotate(270deg);
+      }
+    }
   }
 
   .media-library-content-header__title {
@@ -532,11 +538,6 @@
   }
 
   .media-library-content__list-type {
-    // 리스트형 리스트 정렬 영역
-    .media-library-content-sort {
-      display: none;
-    }
-
     .media-library-content-header {
       display: flex;
       background-color: $n10;
