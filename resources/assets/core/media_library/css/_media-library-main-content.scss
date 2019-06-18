@@ -358,12 +358,6 @@
 
   // 아이콘 이미지 공통
   .media-library-content-list__icon-thumb {
-    // width: 24px;
-    // height: 24px;
-    // background-position: 0 0;
-    // background-repeat: no-repeat;
-    // background-size: 24px 24px;
-
     width: 32px;
     height: 32px;
     background-position: 0 0;
@@ -383,6 +377,29 @@
 // 카드 타입
 .media-library-content__card-type {
   
+}
+
+// 검색 후 데이터 없을 때 노출
+.media-library-content-empty {
+  padding: 110px 30px;
+  border: 1px solid $n30;
+  background-color: $n10;
+  text-align: center;
+
+  .media-library-content-empty__image {
+    display: inline-block;
+    width: 76px;
+    height: 113px;
+    margin-bottom: 36px;
+    background: url(../img/icon-telescope.svg) 0 0 no-repeat;
+    background-size: 76px 113px;
+  }
+
+  .media-library-content-empty__text {
+    font-size: 14px;
+    line-height: 20px;
+    color: $n90;
+  }
 }
 
 // 페이징 스타일
@@ -473,11 +490,6 @@
 }
 // === //페이징 스타일 ===
 
-@media (min-width: 768px) {
-  
-}
-  
-
 /* mobile */
 @media (max-width: 768px) {
   // 페이징 스타일
@@ -515,6 +527,10 @@
 
 /* tablet */
 @media (min-width: 768px) {
+  .media-library-content {
+    flex: 1;
+  }
+
   .media-library-content__list-type {
     // 리스트형 리스트 정렬 영역
     .media-library-content-sort {
@@ -731,4 +747,29 @@
     }
   }
   // === //페이징 스타일 ===
+
+  // 검색 후 데이터 없을 때 노출
+  .media-library-content-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 230px 30px;
+    border: 0 none;
+
+    .media-library-content-empty__image {
+      display: inline-block;
+      width: 86px;
+      height: 127px;
+      margin-bottom: 32px;
+      background: url(../img/icon-telescope.svg) 0 0 no-repeat;
+      background-size: 86px 127px;
+    }
+
+    .media-library-content-empty__text {
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
 }
