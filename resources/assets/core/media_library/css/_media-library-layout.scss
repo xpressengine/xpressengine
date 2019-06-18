@@ -207,6 +207,14 @@
   z-index: 90;
 }
 
+.media-library-main {
+  position: relative;
+
+  .media-library-content {
+    padding-top: 48px;
+  }
+}
+
 /* tablet */
 @media (min-width: 768px) {
   .media-library {
@@ -228,6 +236,10 @@
       display: flex;
       flex-direction: column;
       flex: 1;
+
+      .media-library-content {
+        padding-top: 0;
+      }
     }
 
     .media-library__mobile-view {
