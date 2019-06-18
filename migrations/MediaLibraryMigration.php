@@ -111,7 +111,7 @@ class MediaLibraryMigration extends Migration
 
                 $table->string('file_id', 36);
                 $table->string('folder_id', 36);
-                $table->string('user_id', 36);
+                $table->string('user_id', 36)->nullable();
                 $table->string('title')->nullable();
                 $table->string('ext')->nullable();
                 $table->string('caption')->nullable();
