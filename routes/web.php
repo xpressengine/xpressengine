@@ -860,20 +860,29 @@ Route::group(['prefix' => 'media_library'], function () {
         'uses' => 'MediaLibraryController@index'
     ]);
 
-    Route::post('/upload', ['as' => 'media_library.upload', 'uses' => 'MediaLibraryController@upload']);
-    Route::post('/folder', ['as' => 'media_library.store_folder', 'uses' => 'MediaLibraryController@createFolder']);
-    Route::put('/folder/{folder_id}', [
-        'as' => 'media_library.update_folder',
-        'uses' => 'MediaLibraryController@updateFolder'
-    ]);
-    Route::delete('/folder/{folder_id}', [
-        'as' => 'media_library.drop_folder',
-        'uses' => 'MediaLibraryController@dropFolder'
-    ]);
-    Route::put('/folder/{folder_id}/move', [
-        'as' => 'media_library.move_folder',
-        'uses' => 'MediaLibraryController@moveFolder'
-    ]);
+    Route::group(['prefix' => 'folder'], function () {
+        Route::get('/{folder_id}', ['as' => 'media_library.get_folder', 'uses' => 'MediaLibraryController@getFolder']);
+        Route::post('/', ['as' => 'media_library.store_folder', 'uses' => 'MediaLibraryController@createFolder']);
+        Route::put('/{folder_id}', [
+            'as' => 'media_library.update_folder',
+            'uses' => 'MediaLibraryController@updateFolder'
+        ]);
+        Route::delete('/{folder_id}', [
+            'as' => 'media_library.drop_folder',
+            'uses' => 'MediaLibraryController@dropFolder'
+        ]);
+        Route::put('/{folder_id}/move', [
+            'as' => 'media_library.move_folder',
+            'uses' => 'MediaLibraryController@moveFolder'
+        ]);
+    });
+
+    Route::group(['prefix' => 'file'], function () {
+        Route::get('/{file_id}', ['as' => 'media_library.get_file', 'uses' => 'MediaLibraryController@getFile']);
+        Route::put('/{file_id}/update', ['as' => 'media_library.update_file', 'uses' => 'MediaLibraryController@updateFile']);
+        Route::post('/', ['as' => 'media_library.upload', 'uses' => 'MediaLibraryController@upload']);
+        Route::put('/move', ['as' => 'media_library.move_file', 'uses' => 'MediaLibraryController@moveFile']);
+    });
 });
 
 Route::settings('dynamicField', function () {

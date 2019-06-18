@@ -47,12 +47,16 @@ class MediaLibraryFileRepository
         if (isset($attributes['keyword']) == true) {
             $keyword = $attributes['keyword'];
 
-            $query = $query->where(function ($query) use ($keyword) {
-                $query->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('caption', 'like', '%' . $keyword . '%')
-                    ->orWhere('alt_text', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
-            });
+            if (isset($attributes['target']) == false) {
+                $query = $query->where(function ($query) use ($keyword) {
+                    $query->where('title', 'like', '%' . $keyword . '%')
+                        ->orWhere('caption', 'like', '%' . $keyword . '%')
+                        ->orWhere('alt_text', 'like', '%' . $keyword . '%')
+                        ->orWhere('description', 'like', '%' . $keyword . '%');
+                });
+            } else {
+                $query = $query->where($attributes['target'], 'like', '%' . $keyword . '%');
+            }
         }
 
         if (isset($attributes['mime']) == true) {
@@ -98,5 +102,14 @@ class MediaLibraryFileRepository
         $items = $query->paginate($perPageCount, ['*'], 'file_page')->appends(array_forget($attributes, 'file_page'));
 
         return $items;
+    }
+
+    public function setCommonFileVisible($fileItem)
+    {
+        if ($fileItem->user != null) {
+            $fileItem->user->setAttribute('profile_image_url', $fileItem->user->getProfileImage());
+            $fileItem->user->addVisible(['profile_image_url']);
+        }
+        $fileItem->file->addVisible(['path', 'filename']);
     }
 }

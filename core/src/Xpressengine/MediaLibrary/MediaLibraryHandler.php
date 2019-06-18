@@ -3,7 +3,9 @@
 namespace Xpressengine\MediaLibrary;
 
 use Xpressengine\Http\Request;
+use Xpressengine\MediaLibrary\Exceptions\DuplicateFileTitleException;
 use Xpressengine\MediaLibrary\Exceptions\DuplicateFolderNameException;
+use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFolderException;
 use Xpressengine\MediaLibrary\Exceptions\UnableRootFolderException;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
@@ -40,7 +42,7 @@ class MediaLibraryHandler
             $attribute = $request->except('_token');
             $attribute['parent_id'] = $parentFolderItem->id;
 
-            if ($this->checkDuplicateName($attribute['parent_id'], $attribute['name']) == true) {
+            if ($this->checkDuplicateFolderName($attribute['parent_id'], $attribute['name']) == true) {
                 throw new DuplicateFolderNameException();
             }
 
@@ -75,7 +77,7 @@ class MediaLibraryHandler
             $oldParentFolderItem = $this->getFolderItem($folderItem->parent_id);
             $newParentFolderItem = $this->getFolderItem($request->get('parent_id', ''));
 
-            if ($this->checkDuplicateName($newParentFolderItem->id, $folderItem->name) == true) {
+            if ($this->checkDuplicateFolderName($newParentFolderItem->id, $folderItem->name) == true) {
                 throw new DuplicateFolderNameException();
             }
 
@@ -97,30 +99,20 @@ class MediaLibraryHandler
 
     public function updateFolder(Request $request, $folderId)
     {
-        XeDB::beginTransaction();
-
-        try {
-            $folderItem = $this->getFolderItem($folderId);
-            if ($folderItem == null) {
-                throw new NotFoundFolderException();
-            } elseif ($folderItem == $this->folders->getRootFolderItem()) {
-                throw new UnableRootFolderException();
-            }
-
-            if ($this->checkDuplicateName($folderItem->parent_id, $request->get('name')) == true) {
-                throw new DuplicateFolderNameException();
-            }
-
-            $attribute = $request->except(['_token', 'parent_id', 'disk', 'ordering']);
-
-            $this->folders->update($folderItem, $attribute);
-        } catch (\Exception $e) {
-            XeDB::rollback();
-
-            throw $e;
+        $folderItem = $this->getFolderItem($folderId);
+        if ($folderItem == null) {
+            throw new NotFoundFolderException();
+        } elseif ($folderItem == $this->folders->getRootFolderItem()) {
+            throw new UnableRootFolderException();
         }
 
-        XeDB::commit();
+        if ($this->checkDuplicateFolderName($folderItem->parent_id, $request->get('name')) == true) {
+            throw new DuplicateFolderNameException();
+        }
+
+        $attribute = $request->except(['_token', 'parent_id', 'disk', 'ordering']);
+
+        $this->folders->update($folderItem, $attribute);
     }
 
     public function dropFolder(Request $request, $folderId)
@@ -159,8 +151,9 @@ class MediaLibraryHandler
         XeDB::commit();
     }
 
-    protected function checkDuplicateName($parentFolderId, $name)
+    protected function checkDuplicateFolderName($parentFolderId, $name)
     {
+        //TODO 조회하는 해당 아이템 예외 필요
         return $this->folders->query()->where([['parent_id', $parentFolderId], ['name', $name]])
             ->count() > 0 ? true : false;
     }
@@ -195,7 +188,7 @@ class MediaLibraryHandler
         return $folderList;
     }
 
-    private function getChildHasFileCount($parentFolderItem)
+    public function getChildHasFileCount($parentFolderItem)
     {
         $count = 0;
         $count += $parentFolderItem->files->count();
@@ -242,14 +235,36 @@ class MediaLibraryHandler
         $files = $this->files->getItems($attributes);
 
         $files->each(function ($item) {
-            if ($item->user != null) {
-                $item->user->setAttribute('profile_image_url', $item->user->getProfileImage());
-                $item->user->addVisible(['profile_image_url']);
-            }
-            $item->file->addVisible(['path', 'filename']);
+            $this->files->setCommonFileVisible($item);
         });
 
         return $files;
+    }
+
+    public function getFileItem($fileId)
+    {
+        $fileItem = $this->files->query()->find($fileId);
+        if ($fileItem == null) {
+            throw new NotFoundFileException();
+        }
+
+        $this->files->setCommonFileVisible($fileItem);
+
+        return $fileItem;
+    }
+
+    public function updateFile(Request $request, $fileId)
+    {
+        $fileItem = $this->getFileItem($fileId);
+        $attribute = $request->only(['title', 'alt_text', 'caption', 'description']);
+
+        //파일 이름 중복 검사
+        if (isset($attribute['title']) && $attribute['title'] != '' &&
+            $this->checkDuplicateFileTitle($fileItem->folder_id, $attribute['title']) == true) {
+            throw new DuplicateFileTitleException();
+        }
+
+        $this->files->update($fileItem, $attribute);
     }
 
     public function uploadFile(Request $request)
@@ -277,6 +292,8 @@ class MediaLibraryHandler
                 'ext' => $uploadFile->getClientOriginalExtension()
             ];
 
+            //TODO 실제 파일명 중복 검사해서 title에 보여줄 이름 추가
+
             $fileModel = $this->files->createModel();
             $fileModel->fill($fileAttribute);
             $fileModel->save();
@@ -289,5 +306,42 @@ class MediaLibraryHandler
         XeDB::commit();
 
         return $fileModel;
+    }
+
+    public function moveFile(Request $request)
+    {
+        $targetFolder = $this->getFolderItem($request->get('folder_id', ''));
+        $fileIds = $request->get('file_id', []);
+        if (is_array($fileIds) == false) {
+            $fileIds = [$fileIds];
+        }
+
+        foreach ($fileIds as $fileId) {
+            XeDB::beginTransaction();
+            try {
+                $fileItem = $this->getFileItem($fileId);
+                if ($this->checkDuplicateFileTitle($targetFolder->id, $fileItem->title) == true) {
+                    //TODO 변경될 파일명 정의 필요
+                    $fileItem->title = 'hi';
+                }
+
+                $fileItem->folder_id = $targetFolder->id;
+
+                $fileItem->save();
+            } catch (\Exception $e) {
+                XeDB::rollback();
+
+                throw $e;
+            }
+            XeDB::commit();
+        }
+    }
+
+    protected function checkDuplicateFileTitle($folder_id, $title)
+    {
+        //TODO 조회하는 해당 아이템 예외 필요
+        return $this->files->query()->whereNotNull('title')
+            ->where([['folder_id', $folder_id], ['title', $title]])
+            ->count() > 0 ? true : false;
     }
 }

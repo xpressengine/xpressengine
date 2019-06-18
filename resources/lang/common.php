@@ -3208,6 +3208,10 @@ return [
         'ko' => '폴더의 이름이 중복되었습니다.',
         'en' => 'Folder name is duplicated.'
     ],
+    'fileNameDuplicateMessage' => [
+        'ko' => '파일의 제목이 중복되었습니다.',
+        'en' => 'File title is duplicated'
+    ],
     'unableRootTargetMessage' => [
         'ko' => 'Root 폴더를 대상으로 작업할 수 없습니다.',
         'en' => 'Unable to target root folder.',

@@ -30,6 +30,14 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi($returnValue);
     }
 
+    public function getFolder(Request $request, $folderId)
+    {
+        $folderItem = $this->handler->getFolderItem($folderId);
+        $folderItem->setAttribute('file_count', $this->handler->getChildHasFileCount($folderItem));
+
+        return XePresenter::makeApi([$folderItem]);
+    }
+
     public function createFolder(Request $request)
     {
         $folderItem = $this->handler->createFolder($request);
@@ -58,6 +66,29 @@ class MediaLibraryController extends Controller
         $this->handler->dropFolder($request, $folderId);
 
         return \XePresenter::makeApi([]);
+    }
+
+    public function getFile(Request $request, $fileId)
+    {
+        $fileItem = $this->handler->getFileItem($fileId);
+
+        return XePresenter::makeApi([$fileItem]);
+    }
+
+    public function updateFile(Request $request, $fileId)
+    {
+        $this->handler->updateFile($request, $fileId);
+
+        return XePresenter::makeApi([
+            'message' => xe_trans('xe::fileInformationUpdateMessage')
+        ]);
+    }
+
+    public function moveFile(Request $request)
+    {
+        $this->handler->moveFile($request);
+
+        return XePresenter::makeApi([]);
     }
 
     public function upload(Request $request)
