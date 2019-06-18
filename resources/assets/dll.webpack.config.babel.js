@@ -1,5 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
+import { VueLoaderPlugin } from 'vue-loader'
 
 const pathInfo = {
   root: path.resolve(__dirname, '../../'),
@@ -115,11 +116,12 @@ export default [
       new webpack.DllReferencePlugin({
         manifest: path.resolve(__dirname, './vendor-manifest.json')
       }),
-      new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/), // eslint-disable-line
       new webpack.DllPlugin({
         name: '_xe_dll_common',
         path: path.resolve(__dirname, './[name]-manifest.json')
-      })
+      }),
+      new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/), // eslint-disable-line
+      new VueLoaderPlugin()
     ],
     module: {
       rules: [
@@ -129,12 +131,25 @@ export default [
           use: {
             loader: 'babel-loader'
           }
+        },
+        {
+          test: /\.vue$/,
+          exclude: /node_modules/,
+          use: 'vue-loader'
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            'sass-loader'
+          ]
         }
       ]
     },
     resolve: {
       alias: resolveAlias,
-      extensions: ['.js']
+      extensions: ['.js', '.json', '.vue']
     },
     externals: {
       window: 'window'

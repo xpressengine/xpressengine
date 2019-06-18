@@ -35,6 +35,15 @@ class App {
   }
 
   /**
+   * 앱 이름 반환
+   * @static
+   * @returns {String}
+   */
+  static appName () {
+    return 'MediaManager'
+  }
+
+  /**
   * booting이 끝났는지 확인
   */
   booted () {

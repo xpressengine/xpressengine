@@ -51,6 +51,7 @@ export default {
         to: path.resolve(__dirname, '../../assets'),
         ignore: [
           '**/*.scss',
+          '**/*.vue',
           'core/**/errors/*.error.js',
           'core/**/index.js',
           'core/**/store.js',
@@ -108,7 +109,7 @@ export default {
   },
   resolve: {
     alias: resolveAlias,
-    extensions: ['.js']
+    extensions: ['.js', '.json', '.vue']
   },
   externals: {
     window: 'window'

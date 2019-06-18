@@ -123,6 +123,42 @@ const taskSass = function () {
 }
 taskSass.displayName = 'sass'
 
+const taskHtmlBuildPreview = function () {
+  const options = {
+    root: '../markup'
+  }
+  const plugins = [
+    require('posthtml-extend')(options),
+    require('posthtml-include')(options)
+  ]
+
+  return gulp.src(['../markup/**/src/!(_)*.html'])
+    .pipe($.plumber())
+    .pipe($.posthtml(plugins))
+    .pipe($.rename((path) => {
+      let dirname = path.dirname.split('/')
+      dirname.pop()
+      path.dirname = dirname.join('/')
+    }))
+    .pipe(gulp.dest('../markup'))
+}
+taskHtmlBuildPreview.displayName = 'html:preview'
+taskHtmlBuildPreview.description = 'PostHTML: 미리보기 생성'
+
+const taskHtmlBuildSync = function () {
+  const options = {
+    root: './resources/markup'
+  }
+  const plugins = [ require('posthtml-include')(options) ]
+
+  return gulp.src('resources/markup/src/views/**/*.html')
+    // .pipe($.plumber())
+    .pipe($.posthtml(plugins))
+    .pipe($.rename({ extname: '.html' }))
+    .pipe(gulp.dest('resources/sync-views'))
+}
+taskHtmlBuildSync.displayName = 'html:sync'
+
 const taskClear = function () {
   return gulp.src('./jsdoc')
     .pipe($.clean({ force: true }))
@@ -161,6 +197,9 @@ gulp.task(taskLintStyle)
 gulp.task(taskFixStyle)
 gulp.task(taskLintScript)
 gulp.task(taskLintScriptFix)
+
+// PostHTML
+gulp.task(taskHtmlBuildPreview)
 
 // webpack
 gulp.task(taskWebpack)
