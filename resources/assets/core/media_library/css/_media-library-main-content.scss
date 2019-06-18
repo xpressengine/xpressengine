@@ -371,10 +371,12 @@
     background-size: 32px 32px;
   }
 
-  .media-library-content-list__icon-image {
-    background-image: url(../img/icon-list-image.png);
+  // 폴더, 썸네일 외 모든 곳 적용
+  .media-library-content-list__icon-etc {
+    background-image: url(../img/icon-list-etc.svg);
   }
 
+  // 폴더 이미지
   .media-library-content-list__icon-folder {
     background-image: url(../img/icon-list-folder.svg);
   }
@@ -583,17 +585,8 @@
 
     // 리스트 영역
     .media-library-content-list {
-      margin: 0;
-      padding: 0;
-      word-break: break-all;
-
       > li {
-        position: relative;
-        display: flex;
-        align-items: center;
-        padding: 13px 0;
-        border-top: 1px solid $n30;
-        cursor: pointer;
+        padding: 8px 0 9px;
 
         &:hover {
           background-color: $n20;
@@ -684,13 +677,6 @@
           display: none;
         }
       }
-    }
-
-    // 아이콘 이미지 공통
-    .media-library-content-list__icon-thumb {
-      width: 24px;
-      height: 24px;
-      background-size: 24px 24px;
     }
   }
 

@@ -294,8 +294,9 @@
                                                         </div>
                                                         <div class="media-library-content-list__icon">
                                                             <!-- [D] 이미지 클래스 정보
-                                                                폴더 이미지 : media-library-content-list__icon-folder,
-                                                                이미지(jpg, png 등등) 이미지 : media-library-content-list__icon-image
+                                                                폴더 이미지 : class="media-library-content-list__icon-folder",
+                                                                기타 이미지 : class="media-library-content-list__icon-etc",
+                                                                jpg, png 같은 이미지는 썸네일 적용 (background-image 적용)
                                                             -->
                                                             <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
                                                         </div>
@@ -378,11 +379,47 @@
                                                             </label>
                                                         </div>
                                                         <div class="media-library-content-list__icon">
-                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-image"></div>
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-etc"></div>
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
                                                                 <span class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb " style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <span class="media-library-content-list__text">썸네일 이미지</span>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
