@@ -196,12 +196,15 @@
   // 버튼 - 삭제, 이동, 선택해제
   .media-library-header__button-box--state-item-check {
     display: none;
-    position: absolute;
-    top: -70px;
+    // position: absolute;
+    // top: -70px;
+    position: fixed;
+    top: 0;
     left : 0;
     width: 100%;
     height: 70px;
     background-color: #343d52;
+    z-index: 30;
 
     &.open {
       display: block;
@@ -536,6 +539,7 @@
 
   .media-library-header__button-box--state-item-check {
     display: block;
+    
     .media-library__icon {
       display: none;
     }
