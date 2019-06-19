@@ -1,5 +1,5 @@
 <template>
-  <li>@</li>
+  <a href="#" class="media-library-paging-item media-library-paging-item--active ">@1</a>
 </template>
 
 <script>
@@ -10,7 +10,6 @@ const types = {
 export default {
   props: ['item'],
   components: {
-    PathItem
   },
   data () {
     return {}

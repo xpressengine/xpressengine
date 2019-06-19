@@ -6,6 +6,7 @@
 
 <script>
 import PathItem from './path-item.vue'
+
 const types = {
   'DELETE_FOLDER' : 'DELETE_FOLDER'
 }

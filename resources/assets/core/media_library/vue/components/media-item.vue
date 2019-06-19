@@ -1,27 +1,43 @@
 <template>
   <li class>
-    <div class="media-manager__input-group media-manager-content-list__checkbox">
-      <input type="checkbox" class="media-manager__input-checkbox">
+    <div class="media-library__input-group media-library-content-list__checkbox">
+      <label class="media-library__label">
+        <input type="checkbox" class="media-library__input-checkbox" @click="selectMedia">
+        <span class="media-library__input-helper"></span>
+      </label>
     </div>
-    <div class="media-manager-content-list__icon">
-      <div class="media-manager-content-list__icon-thumb media-manager-content-list__icon-image" v-bind:style="{ 'background-mage': 'url(' + thumbnailUrl + ');' }"></div>
+    <div class="media-library-content-list__icon">
+      <div
+        class="media-library-content-list__icon-thumb"
+        style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"
+      ></div>
     </div>
-    <div class="media-manager-content-list__content-box">
-      <div class="media-manager-content-list__title">
-        <span class="media-manager-content-list__text"><a href="#" @click="showMedia(media, $event)" data-target="#media-manager-modal">{{ media.title }}</a></span>
+    <div class="media-library-content-list__content-box">
+      <div class="media-library-content-list__title">
+        <span class="media-library-content-list__text">{title}</span>
       </div>
-      <div class="media-manager-content-list__writer">
-        <span class="media-manager-content-list__text"><img :src="userProfileImage" style="width: 30px; height: 30px;"> {{ userName }}</span>
+      <div class="media-library-content-list__writer">
+        <span class="media-library-content-list__text">admin</span>
       </div>
-      <div class="media-manager-content-list__size">
-        <span class="media-manager-content-list__text">{{ filesize }}</span>
+      <div class="media-library-content-list__size">
+        <span class="media-library-content-list__text">{filesize}</span>
       </div>
-      <div class="media-manager-content-list__date">
-        <span class="media-manager-content-list__text">2019.05.16</span>
+      <div class="media-library-content-list__date">
+        <span class="media-library-content-list__text">2019.05.16</span>
       </div>
     </div>
-    <div class="media-manager-content-list__more">
-      <span>모어</span>
+    <div class="media-library-content-list__more">
+      <button type="button" class="media-library__button-ellipsis">
+        <span class="blind">편집하기, 삭제 팝업 버튼</span>
+      </button>
+      <ul class="media-library-content-list__more-list">
+        <li>
+          <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+        </li>
+        <li>
+          <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+        </li>
+      </ul>
     </div>
   </li>
 </template>
@@ -38,15 +54,10 @@ export default {
   methods: {
     selectMedia: function(event) {
       if (event) {
-        $(event.target)
-          .closest(".media-item")
-          .toggleClass("media-item--selected");
+        console.debug('event.target', $(event.target).closest('li'))
+        $(event.target).closest('li').toggleClass('active')
 
-        if (
-          $(event.target)
-            .closest(".media-item")
-            .hasClass("media-item--selected")
-        ) {
+        if ($(event.target).closest('li').hasClass('active')) {
           this.$root.putSelectedMedia(this);
         } else {
           this.$root.removeSelectedMedia(this);
@@ -57,8 +68,8 @@ export default {
       event.preventDefault();
       if (typeof media.id !== "undefined") {
         this.$router.push({ path: `media_manager/show/${media.id}` });
-        $("#media-manager-modal").modal("show");
-        $("#media-manager-modal").one("hide.bs.modal", () => {
+        $("#media-library-modal").modal("show");
+        $("#media-library-modal").one("hide.bs.modal", () => {
           console.debug("back");
           this.$router.go(-1);
         });
@@ -66,18 +77,18 @@ export default {
     }
   },
   computed: {
-    thumbnailUrl ({ $props }) {
+    thumbnailUrl({ $props }) {
       const media = $props.media;
       return "/storage/app/" + media.file.path + "/" + media.file.filename;
     },
-    userName ({ $props }) {
+    userName({ $props }) {
       const media = $props.media;
       return media.user.display_name;
     },
-    userProfileImage ({ $props }) {
+    userProfileImage({ $props }) {
       return $props.media.user.profile_image_url;
     },
-    filesize ({ $props }) {
+    filesize({ $props }) {
       return filesize($props.media.file.size);
     }
   }

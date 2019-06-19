@@ -21,6 +21,8 @@ const router = new VueRouter(RouteMap)
 
 let renderMode = 'inline'
 
+let componentAppInstance = null
+
 /**
 * @class 미디어 매니저
 * @extends App
@@ -52,12 +54,23 @@ class MediaManager extends App {
   * @returns {Promise}
   */
   _componentBoot (options) {
+    if (this.componentBooted) {
+      return Promise.resolve(componentAppInstance)
+    }
+
     return new Promise((resolve) => {
       this.componentBooted = true
       renderMode = options.renderMode
 
-      const ddd = new Vue({
-        el: '#media-manager',
+      let $ground = $('#media-library')
+
+      if (!$ground.length) {
+        $('body').append('<div id="media-library">')
+        window.XE.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
+      }
+
+      const componentAppInstance = new Vue({
+        el: '#media-library',
         store,
         router,
         components: {
@@ -128,7 +141,8 @@ class MediaManager extends App {
           })
         }
       })
-      resolve(ddd)
+
+      resolve(componentAppInstance)
     })
   }
 
@@ -151,13 +165,18 @@ class MediaManager extends App {
   * 팝업 UI로 열기
   * @returns {Promise}
   */
-  open () {
+  open (options) {
     return new Promise((resolve) => {
+      console.debug('ML:open()', options)
       this._componentBoot({
         renderMode: 'modal'
       }).then((ddd) => {
+        if (renderMode === 'modal') {
+          $('#media-manager-modal-container').xeModal('show')
+        }
+
         resolve(ddd)
-        // show.modal
+        this.$$emit('modal.open', 'test')
       })
     })
   }
