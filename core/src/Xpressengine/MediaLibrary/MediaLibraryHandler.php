@@ -115,7 +115,33 @@ class MediaLibraryHandler
         $this->folders->update($folderItem, $attribute);
     }
 
-    public function dropFolder(Request $request, $folderId)
+    public function dropItems(Request $request)
+    {
+        $targetIds = $request->get('target_ids', []);
+        if (is_array($targetIds) == false) {
+            $targetIds = [$targetIds];
+        }
+
+        foreach ($targetIds as $targetId) {
+            if ($this->folders->query()->find($targetId) != null) {
+                $this->dropFolder($targetId);
+            } else {
+                $this->dropFile($targetId);
+            }
+        }
+    }
+
+    protected function dropFile($fileId)
+    {
+        $fileItem = $this->files->query()->find($fileId);
+        if ($fileItem == null) {
+            return;
+        }
+
+        $this->files->delete($fileItem);
+    }
+
+    protected function dropFolder($folderId)
     {
         XeDB::beginTransaction();
 
@@ -128,12 +154,11 @@ class MediaLibraryHandler
             }
 
             foreach ($folderItem->getChildren() as $child) {
-                $this->dropFolder($request, $child->id);
+                $this->dropFolder($child->id);
             }
 
             foreach ($folderItem->files as $file) {
-                //TODO 파일 삭제 확인
-                $this->files->delete($file);
+                $this->dropFile($file->id);
             }
 
             $parentFolderItem = $this->getFolderItem($folderItem->parent_id);

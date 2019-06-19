@@ -859,6 +859,10 @@ Route::group(['prefix' => 'media_library'], function () {
         'as' => 'media_library.index',
         'uses' => 'MediaLibraryController@index'
     ]);
+    Route::delete('/', [
+        'as' => 'media_library.drop',
+        'uses' => 'MediaLibraryController@drop'
+    ]);
 
     Route::group(['prefix' => 'folder'], function () {
         Route::get('/{folder_id}', ['as' => 'media_library.get_folder', 'uses' => 'MediaLibraryController@getFolder']);
@@ -866,10 +870,6 @@ Route::group(['prefix' => 'media_library'], function () {
         Route::put('/{folder_id}', [
             'as' => 'media_library.update_folder',
             'uses' => 'MediaLibraryController@updateFolder'
-        ]);
-        Route::delete('/{folder_id}', [
-            'as' => 'media_library.drop_folder',
-            'uses' => 'MediaLibraryController@dropFolder'
         ]);
         Route::put('/{folder_id}/move', [
             'as' => 'media_library.move_folder',

@@ -2,11 +2,14 @@
 
 namespace Xpressengine\MediaLibrary\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
 class MediaLibraryFileRepository
 {
-    use EloquentRepositoryTrait;
+    use EloquentRepositoryTrait {
+        delete as traitDelete;
+    }
 
     const ORDER_TYPE_UPDATED_DESC = 1;
     const ORDER_TYPE_CREATED_DESC = 2;
@@ -111,5 +114,24 @@ class MediaLibraryFileRepository
             $fileItem->user->addVisible(['profile_image_url']);
         }
         $fileItem->file->addVisible(['path', 'filename']);
+    }
+
+    public function delete(Model $item)
+    {
+        \XeDB::beginTransaction();
+
+        try {
+            $realFile = $item->file;
+
+            $this->traitDelete($item);
+
+            \XeStorage::delete($realFile);
+        } catch (\Exception $e) {
+            \XeDB::rollback();
+
+            throw $e;
+        }
+
+        \XeDB::commit();
     }
 }

@@ -30,6 +30,13 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi($returnValue);
     }
 
+    public function drop(Request $request)
+    {
+        $this->handler->dropItems($request);
+
+        return XePresenter::makeApi([]);
+    }
+
     public function getFolder(Request $request, $folderId)
     {
         $folderItem = $this->handler->getFolderItem($folderId);
@@ -59,13 +66,6 @@ class MediaLibraryController extends Controller
         return \XePresenter::makeApi([
             'message' => xe_trans('xe::folderRenameMessage')
         ]);
-    }
-
-    public function dropFolder(Request $request, $folderId)
-    {
-        $this->handler->dropFolder($request, $folderId);
-
-        return \XePresenter::makeApi([]);
     }
 
     public function getFile(Request $request, $fileId)
