@@ -272,6 +272,9 @@
                                                 <div class="media-library-content-header__writer">
                                                     <button type="button" class="media-library-content-header__button">글쓴이 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
                                                 </div>
+                                                <div class="media-library-content-header__upload">
+                                                    <button type="button" class="media-library-content-header__button">업로드 글 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
                                                 <div class="media-library-content-header__size">
                                                     <button type="button" class="media-library-content-header__button">파일 크기 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
                                                 </div>
@@ -307,10 +310,14 @@
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
-                                                                <span class="media-library-content-list__text">..</span>
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">..</button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text"></span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                             </div>
                                                             <div class="media-library-content-list__size">
                                                                 <span class="media-library-content-list__text"></span>
@@ -340,7 +347,6 @@
                                                             모바일화면에서 리스트 클릭 시 (li 클릭 시) 편집하기 창 노출
                                                     -->
                                                     <li class="media-library-content-list__item--folder active">
-                                                        <label class="media-library-content-list__checkbox-label" for="test"></label>
                                                         <div class="media-library__input-group media-library-content-list__checkbox">
                                                             <label class="media-library__label">
                                                                 <input type="checkbox" class="media-library__input-checkbox">
@@ -352,10 +358,14 @@
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
-                                                                <span class="media-library-content-list__text">board</span>
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">board</button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">-</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                             </div>
                                                             <div class="media-library-content-list__size">
                                                                 <span class="media-library-content-list__text">10 개</span>
@@ -388,10 +398,14 @@
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
-                                                                <span class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</span>
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
                                                             </div>
                                                             <div class="media-library-content-list__size">
                                                                 <span class="media-library-content-list__text">999 MB</span>
@@ -424,10 +438,15 @@
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
-                                                                <span class="media-library-content-list__text">썸네일 이미지</span>
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">썸네일 이미지</button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                             </div>
                                                             <div class="media-library-content-list__size">
                                                                 <span class="media-library-content-list__text">999 MB</span>
@@ -514,8 +533,7 @@
                                     <!-- media-library 전체 영역 -->
                                     <div class="media-library">
                                         <!-- 업로드 노출 영역 -->
-                                        <!-- [D] 팝업으로 노출 될 때 업로드 버튼 클릭 시 display: block 적용 -->
-                                        <div class="media-library-upload" style="display: none">
+                                        <div class="media-library-upload">
                                             업로드 영역
                                         </div>
                                         <!-- //업로드 노출 영역 -->
@@ -560,14 +578,14 @@
                                                             <button type="button" class="media-library__button-text-remove">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
                                                                     <defs>
-                                                                        <path id="icon-text-remove-popup" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.674 13.104l-1.572 1.571-3.103-3.103-3.104 3.103-1.572-1.571L10.426 12 7.323 8.896l1.572-1.572 3.104 3.103 3.103-3.103 1.572 1.572L13.57 12l3.104 3.103v.001z"/>
+                                                                        <path id="icon-text-remove" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.674 13.104l-1.572 1.571-3.103-3.103-3.104 3.103-1.572-1.571L10.426 12 7.323 8.896l1.572-1.572 3.104 3.103 3.103-3.103 1.572 1.572L13.57 12l3.104 3.103v.001z"/>
                                                                     </defs>
                                                                     <g fill="none" fill-rule="evenodd">
                                                                         <path d="M0 0h24v24H0z"/>
-                                                                        <mask id="icon-text-remove-mask-popup" fill="#fff">
-                                                                            <use xlink:href="#icon-text-remove-popup"/>
+                                                                        <mask id="icon-text-remove-mask" fill="#fff">
+                                                                            <use xlink:href="#icon-text-remove"/>
                                                                         </mask>
-                                                                        <g class="media-library__svg" fill="#424242" mask="url(#icon-text-remove-mask-popup)">
+                                                                        <g class="media-library__svg" fill="#424242" mask="url(#icon-text-remove-mask)">
                                                                             <path d="M0 0h24v24H0z"/>
                                                                         </g>
                                                                     </g>
@@ -723,6 +741,9 @@
                                                             <div class="media-library-content-header__writer">
                                                                 <button type="button" class="media-library-content-header__button">글쓴이 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
                                                             </div>
+                                                            <div class="media-library-content-header__upload">
+                                                                <button type="button" class="media-library-content-header__button">업로드 글 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                            </div>
                                                             <div class="media-library-content-header__size">
                                                                 <button type="button" class="media-library-content-header__button">파일 크기 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
                                                             </div>
@@ -758,10 +779,14 @@
                                                                     </div>
                                                                     <div class="media-library-content-list__content-box">
                                                                         <div class="media-library-content-list__title">
-                                                                            <span class="media-library-content-list__text">..</span>
+                                                                            <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                            <button type="button" class="media-library-content-list__text">..</button>
                                                                         </div>
                                                                         <div class="media-library-content-list__writer">
                                                                             <span class="media-library-content-list__text"></span>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__upload">
+                                                                            <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                                         </div>
                                                                         <div class="media-library-content-list__size">
                                                                             <span class="media-library-content-list__text"></span>
@@ -791,7 +816,6 @@
                                                                         모바일화면에서 리스트 클릭 시 (li 클릭 시) 편집하기 창 노출
                                                                 -->
                                                                 <li class="media-library-content-list__item--folder active">
-                                                                    <label class="media-library-content-list__checkbox-label" for="test"></label>
                                                                     <div class="media-library__input-group media-library-content-list__checkbox">
                                                                         <label class="media-library__label">
                                                                             <input type="checkbox" class="media-library__input-checkbox">
@@ -803,10 +827,14 @@
                                                                     </div>
                                                                     <div class="media-library-content-list__content-box">
                                                                         <div class="media-library-content-list__title">
-                                                                            <span class="media-library-content-list__text">board</span>
+                                                                            <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                            <button type="button" class="media-library-content-list__text">board</button>
                                                                         </div>
                                                                         <div class="media-library-content-list__writer">
                                                                             <span class="media-library-content-list__text">-</span>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__upload">
+                                                                            <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                                         </div>
                                                                         <div class="media-library-content-list__size">
                                                                             <span class="media-library-content-list__text">10 개</span>
@@ -839,10 +867,14 @@
                                                                     </div>
                                                                     <div class="media-library-content-list__content-box">
                                                                         <div class="media-library-content-list__title">
-                                                                            <span class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</span>
+                                                                            <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                            <button type="button" class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</button>
                                                                         </div>
                                                                         <div class="media-library-content-list__writer">
                                                                             <span class="media-library-content-list__text">admin</span>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__upload">
+                                                                            <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
                                                                         </div>
                                                                         <div class="media-library-content-list__size">
                                                                             <span class="media-library-content-list__text">999 MB</span>
@@ -875,10 +907,15 @@
                                                                     </div>
                                                                     <div class="media-library-content-list__content-box">
                                                                         <div class="media-library-content-list__title">
-                                                                            <span class="media-library-content-list__text">썸네일 이미지</span>
+                                                                            <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                            <button type="button" class="media-library-content-list__text">썸네일 이미지</button>
                                                                         </div>
                                                                         <div class="media-library-content-list__writer">
                                                                             <span class="media-library-content-list__text">admin</span>
+                                                                        </div>
+                                                                        <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                                        <div class="media-library-content-list__upload" style="display: none">
+                                                                            <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                                         </div>
                                                                         <div class="media-library-content-list__size">
                                                                             <span class="media-library-content-list__text">999 MB</span>
