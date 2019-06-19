@@ -1,4 +1,5 @@
 .media-library {
+  position: relative;
   margin: 0 -15px;
   font-family: $sys-font-stack;
 
@@ -292,9 +293,10 @@
     }
 
     .media-library-aside {
-      flex: 0 0 auto;
+      // flex: 0 0 auto;
+      flex: 0 0 180px;
       border-right: 1px solid $n40;
-      max-width: 240px;
+      max-width: 180px;
     }
 
     .media-library-main {
