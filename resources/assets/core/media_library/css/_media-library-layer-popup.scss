@@ -1,5 +1,5 @@
-// === 레이어 팝업 ===
-.media-library-layer-popup {
+// === 다이얼로그 레이어 팝업 ===
+.media-library-dialog-popup {
   overflow-y: auto;
   position: fixed;
   top: 0;
@@ -9,25 +9,25 @@
   background-color: rgba(52, 61, 82, 0.6);
   z-index: 1010;
 
-  .media-library-layer-popup-table {
+  .media-library-dialog-popup-table {
     display: table;
     width: 100%;
     height: 100%;
   }
 
-  .media-library-layer-popup-table-cell {
+  .media-library-dialog-popup-table-cell {
     display: table-cell;
     vertical-align: middle;
   }
 
   // 컨텐츠 470px 기준
-  .media-library-layer-popup-content-box {
+  .media-library-dialog-popup-content-box {
     width: 100%;
     max-width: 534px;
     margin: 0 auto;
   }
 
-  .media-library-layer-popup-content {
+  .media-library-dialog-popup-content {
     margin: 32px;
     padding: 20px 24px;
     border: 1px solid #d4d5dc;
@@ -36,9 +36,9 @@
     background-color: $n0;
   }
 
-  // 헤더
-  .media-library-layer-popup-header {
-    .media-library-layer-popup-header__title {
+  // 다이얼로그 헤더
+  .media-library-dialog-popup-header {
+    .media-library-dialog-popup-header__title {
       margin: 0 0 24px;
       padding: 0;
       font-size: 20px;
@@ -49,16 +49,8 @@
     }
   }
 
-  // 바디
-  .media-library-layer-popup-body {
-    .media-library__input-text {
-      background-color: $n10;
-
-      &:focus {
-        background-color: $n0;
-      }
-    }
-
+  // 다이얼로그 바디
+  .media-library-dialog-popup-body {
     .media-library__input-group-label {
       display: block;
       margin: 0;
@@ -89,15 +81,15 @@
       }
     }
 
-    .media-library-layer-popup__text {
+    .media-library-dialog-popup__text {
       font-size: 15px;
       line-height: 20px;
       letter-spacing: -0.03px;
     }
   }
 
-  // 푸터
-  .media-library-layer-popup-footer {
+  // 다이얼로그 푸터
+  .media-library-dialog-popup-footer {
     display: flex;
     justify-content: flex-end;
     padding-top: 16px;
@@ -108,23 +100,20 @@
       margin-left: 8px;
     }
   }
-}
 
-// 삭제 팝업
-.media-library-layer-popup--delete {
-  .media-library-layer-popup-body {
-    padding-bottom: 42px;
+  // 삭제 다이얼로그 팝업
+  &.media-library-dialog-popup--delete {
+    .media-library-dialog-popup-body {
+      padding-bottom: 42px;
+    }
+  
+    .media-library-dialog-popup-footer {
+      border-top: 1px solid $n40;
+    }
   }
 
-  .media-library-layer-popup-footer {
-    border-top: 1px solid $n40;
-  }
-}
-// === //레이어 팝업 ===
-
-// simple tree
-.media-library-layer-popup {
-  .media-library-simple-tree {
+  // simple tree 팝업 (폴더 이동 팝업)
+  &.media-library-simple-tree {
     padding-top: 12px;
   }
 
@@ -156,4 +145,149 @@
       font-size: inherit;
     }
   }
+}
+// === //다이얼로그 레이어 팝업 ===
+
+// === 레이어팝업 (미디어 매니저, 편집 팝업) ===
+.media-library-layer-popup {
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background-color: rgba(52, 61, 82, 0.6);
+  z-index: 1010;
+
+  .media-library-layer-popup-content {
+
+  }
+
+  // 레이어팝업 헤더
+  .media-library-layer-popup-header {
+
+  }
+
+  // 레이어팝업 바디
+  .media-library-layer-popup-body {
+    
+  }
+
+  // 레이어팝업 푸터
+  .media-library-layer-popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 17px 23px;
+
+    .media-library__button {
+      height: 32px;
+      line-height: 32px;
+      margin-left: 8px;
+    }
+  }
+
+  // === 미디어 라이브러리 레이어 팝업 스타일 ===
+  &.media-library-layer-popup--media-library {
+    .media-library-layer-popup-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: $n0;
+    }
+
+    .media-library-layer-popup-header {
+      display: none;
+    }
+
+    .media-library-layer-popup-body {
+      flex: 1;
+      max-height: 100%;
+      min-height: 50%;
+  
+      .media-library {
+        height: 100%;
+        margin: 0;
+  
+        .media-library-box {
+          height: 100%;
+          display: flex;
+          border: 0 none;
+          border-bottom: 1px solid $n40;
+        }
+  
+        .media-library-main {
+          .media-library-content {
+            overflow-y: auto;
+          }
+        }
+  
+        .media-library-upload {
+          display: none;
+          position: absolute;
+          top: 79px;
+          right: 0;
+          width: calc(100% - 180px);
+          height: calc(100% - 79px);
+          z-index: 50;
+        }
+      }
+    }
+  }
+  // === //미디어 라이브러리 레이어 팝업 스타일 ===
+}
+// === //레이어팝업 (미디어 매니저, 편집 팝업) ===
+
+/* mobile */
+@media (max-width: 768px) {
+  // === 레이어팝업 (미디어 매니저, 편집 팝업) ===
+  .media-library-layer-popup {
+    // === 미디어 라이브러리 레이어 팝업 스타일 ===
+    &.media-library-layer-popup--media-library {
+      .media-library-layer-popup-body {
+        .media-library {
+          .media-library-box {
+            // 모바일만 적용
+            flex-direction: column;
+          }
+    
+          .media-library-main {
+            // 모바일만 적용
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+    
+            .media-library-content {
+              // 모바일만
+              flex: 1;
+            }
+          }
+        }
+      }
+    }
+    // === //미디어 라이브러리 레이어 팝업 스타일 ===
+  }
+  // === //레이어팝업 (미디어 매니저, 편집 팝업) ===
+}
+/* tablet */
+@media (min-width: 768px) {
+  // === 레이어팝업 (미디어 매니저, 편집 팝업) ===
+  .media-library-layer-popup {
+    // === 미디어 라이브러리 레이어 팝업 스타일 ===
+    &.media-library-layer-popup--media-library {
+      .media-library-layer-popup-body {
+        .media-library__input-text {
+          background-color: $n10;
+    
+          &:focus {
+            background-color: $n0;
+          }
+        }
+      }
+    }
+    // === //미디어 라이브러리 레이어 팝업 스타일 ===
+  }
+  // === //레이어팝업 (미디어 매니저, 편집 팝업) ===
 }

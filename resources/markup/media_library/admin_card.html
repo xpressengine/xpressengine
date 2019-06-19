@@ -501,111 +501,111 @@
                             <!-- //좌측, 우측 컨텐츠 묶은 영역 -->
                             <!-- [D] 딤드가 필요할 때는 해당 딤드 display: block 적용 -->
                             <div class="media-library-dimmed" style="display: none"></div>
-
-                            <!-- 레이어 팝업(기본) - 새폴더 -->
-                            <div class="media-library-layer-popup" style="display: none">
-                                <div class="media-library-layer-popup-table">
-                                    <div class="media-library-layer-popup-table-cell">
-                                        <div class="media-library-layer-popup-content-box">
-                                            <div class="media-library-layer-popup-content">
-                                                <div class="media-library-layer-popup-header">
-                                                    <h3 class="media-library-layer-popup-header__title">새폴더 <span class="blind">레이어 팝업</span></h3>
-                                                </div>
-                                                <div class="media-library-layer-popup-body">
-                                                    <div class="media-library__input-group-box">
-                                                        <label class="media-library__input-group-label">
-                                                            <span class="media-library__input-group-label-title">폴더 이름</span>
-                                                            <div class="media-library__input-group">        
-                                                                <input type="text" class="media-library__input-text">
-                                                                <button type="button" class="media-library__button-text-remove">
-                                                                    <span class="media-library__button-text-remove-image"></span>
-                                                                </button>
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="media-library-layer-popup-footer">
-                                                    <button type="button" class="media-library__button media-library__button--subtle">
-                                                        취소
-                                                    </button>
-                                                    <button type="button" class="media-library__button media-library__button--primary">
-                                                        만들기
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- //레이어 팝업(기본) -->
-
-                            <!-- 레이어 팝업 - 삭제버튼 클릭 시 -->
-                            <div class="media-library-layer-popup media-library-layer-popup--delete" style="display: none">
-                                <div class="media-library-layer-popup-table">
-                                    <div class="media-library-layer-popup-table-cell">
-                                        <div class="media-library-layer-popup-content-box">
-                                            <div class="media-library-layer-popup-content">
-                                                <div class="media-library-layer-popup-header">
-                                                    <h3 class="media-library-layer-popup-header__title">선택한 아이템을 삭제하시겠습니까? <span class="blind">레이어 팝업</span></h3>
-                                                </div>
-                                                <div class="media-library-layer-popup-body">
-                                                    <p class="media-library-layer-popup__text">선택한 아이템이 영구적으로 삭제됩니다.</p>
-                                                </div>
-                                                <div class="media-library-layer-popup-footer">
-                                                    <button type="button" class="media-library__button media-library__button--subtle">
-                                                        취소
-                                                    </button>
-                                                    <button type="button" class="media-library__button media-library__button--danger">
-                                                        삭제
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- //레이어 팝업 - 삭제버튼 클릭 시 -->
-
-                            <!-- 레이어 팝업 - 파일 또는 폴더 이동 -->
-                            <div class="media-library-layer-popup" style="display: none">
-                                <div class="media-library-layer-popup-table">
-                                    <div class="media-library-layer-popup-table-cell">
-                                        <div class="media-library-layer-popup-content-box">
-                                            <div class="media-library-layer-popup-content">
-                                                <div class="media-library-layer-popup-header">
-                                                    <h3 class="media-library-layer-popup-header__title">파일 또는 폴더 이동 <span class="blind">레이어 팝업</span></h3>
-                                                </div>
-                                                <div class="media-library-layer-popup-body">
-                                                    <div class="media-library__input-group-box">
-                                                        <label class="media-library__input-group-label">
-                                                            <span class="media-library__input-group-label-title">이동 할 폴더 검색</span>
-                                                            <div class="media-library__input-group">        
-                                                                <input type="text" id="mediaLibrarySimpleTreeSearch" class="media-library__input-text">
-                                                                <button type="button" class="media-library__button-text-remove">
-                                                                    <span class="media-library__button-text-remove-image"></span>
-                                                                </button>
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                    <div id="mediaLibrarySimpleTree" class="media-library-simple-tree"></div>
-                                                </div>
-                                                <div class="media-library-layer-popup-footer">
-                                                    <button type="button" class="media-library__button media-library__button--subtle">
-                                                        취소
-                                                    </button>
-                                                    <!-- [D] 폴더 선택 시 disabled 제거 -->
-                                                    <button type="button" class="media-library__button media-library__button--primary" disabled>
-                                                        이동
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- //레이어 팝업 - 파일 또는 폴더 이동 -->
                         </div>
                         <!-- //media-library 전체 영역 -->
+
+                        <!-- 레이어 팝업(기본) - 새폴더 -->
+                        <div class="media-library-dialog-popup" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">새폴더 <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <div class="media-library__input-group-box">
+                                                    <label class="media-library__input-group-label">
+                                                        <span class="media-library__input-group-label-title">폴더 이름</span>
+                                                        <div class="media-library__input-group">        
+                                                            <input type="text" class="media-library__input-text">
+                                                            <button type="button" class="media-library__button-text-remove">
+                                                                <span class="media-library__button-text-remove-image"></span>
+                                                            </button>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <button type="button" class="media-library__button media-library__button--primary">
+                                                    만들기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업(기본) -->
+
+                        <!-- 레이어 팝업 - 삭제버튼 클릭 시 -->
+                        <div class="media-library-dialog-popup media-library-dialog-popup--delete" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">선택한 아이템을 삭제하시겠습니까? <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <p class="media-library-dialog-popup__text">선택한 아이템이 영구적으로 삭제됩니다.</p>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <button type="button" class="media-library__button media-library__button--danger">
+                                                    삭제
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업 - 삭제버튼 클릭 시 -->
+
+                        <!-- 레이어 팝업 - 파일 또는 폴더 이동 -->
+                        <div class="media-library-dialog-popup" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">파일 또는 폴더 이동 <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <div class="media-library__input-group-box">
+                                                    <label class="media-library__input-group-label">
+                                                        <span class="media-library__input-group-label-title">이동 할 폴더 검색</span>
+                                                        <div class="media-library__input-group">        
+                                                            <input type="text" id="mediaLibrarySimpleTreeSearch" class="media-library__input-text">
+                                                            <button type="button" class="media-library__button-text-remove">
+                                                                <span class="media-library__button-text-remove-image"></span>
+                                                            </button>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <div id="mediaLibrarySimpleTree" class="media-library-simple-tree"></div>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <!-- [D] 폴더 선택 시 disabled 제거 -->
+                                                <button type="button" class="media-library__button media-library__button--primary" disabled>
+                                                    이동
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업 - 파일 또는 폴더 이동 -->
                      </div>
                 </div>
                 <!--//어드민 컨텐츠 영역 -->

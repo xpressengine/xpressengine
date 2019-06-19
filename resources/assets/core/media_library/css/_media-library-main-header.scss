@@ -110,6 +110,7 @@
     letter-spacing: -0.03px;
     color: $n900;
     outline: none;
+    z-index: 40;
 
     .media-library-sort-arrow {
       display: none;
@@ -331,6 +332,7 @@
     position: absolute;
     top: 6px;
     right: 45px;
+    z-index: 40;
 
     .media-library__input-group {
       display: none;
@@ -349,7 +351,7 @@
       width: 100%;
       height: 48px;
       background-color: #343d52;
-      z-index: 10;
+      z-index: 50;
 
       .media-library__input-group {
         position: relative;
@@ -405,6 +407,7 @@
     right: 9px;
     width: 36px;
     height: 36px;
+    z-index: 40;
 
     .media-library__button {
       display: none;
@@ -457,8 +460,10 @@
   }
 
   .media-library-header-mobile-search-area {
+    position: relative;
     height: 48px;
     background-color: $n10;
+    z-index: 30;
   }
 }
 
