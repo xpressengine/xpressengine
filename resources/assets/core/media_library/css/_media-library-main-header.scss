@@ -496,29 +496,7 @@
   }
 
   .media-library__input-group {
-    .media-library__input-text {
-      width: 200px;
-      height: 36px;
-      padding: 0 24px 0 12px;
-      border: 1px solid #d4d5dc;
-      border-radius: 3px;
-      font-size: 14px;
-      line-height: 20px;
-      letter-spacing: -0.03px;
-      color: $n800;
-      outline: none;
-      transition: all 0.5s ease-out;
-
-      &:focus {
-        border-radius: 4px;
-        border: 2px solid $b400;
-      }
-    }
-
     .media-library__button-text-remove {
-      top: 0;
-      right: 0;
-
       .media-library__svg {
         fill: $n80;
       }

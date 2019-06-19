@@ -260,8 +260,9 @@
                                     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
                                     <div class="media-library-content" style="display: block">
                                         <h3 class="blind">파일정보 리스트형, 카드형</h3>
-                                        <!-- 리스트 - 리스트형 -->
-                                        <div class="media-library-content__list-type">
+                                        
+                                        <!-- 리스트 - 카드형 -->
+                                        <div class="media-library-content__card-type">
                                             <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
                                             <div class="media-library-content-header">
                                                 <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
@@ -340,7 +341,6 @@
                                                             모바일화면에서 리스트 클릭 시 (li 클릭 시) 편집하기 창 노출
                                                     -->
                                                     <li class="media-library-content-list__item--folder active">
-                                                        <label class="media-library-content-list__checkbox-label" for="test"></label>
                                                         <div class="media-library__input-group media-library-content-list__checkbox">
                                                             <label class="media-library__label">
                                                                 <input type="checkbox" class="media-library__input-checkbox">
@@ -451,7 +451,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <!-- //리스트 - 리스트형 -->
+                                        <!-- //리스트 - 카드형 -->
     
                                         <!-- 페이징, 게시판 페이징 가져와서 수정 (리스트형, 카드형 공통 페이징) -->
                                         <div class="media-library-paging">
@@ -587,8 +587,7 @@
                                                             </div>
                                                         </label>
                                                     </div>
-                                                    <!-- [D] class="media-library-layer-popup-body" 와 동일한 width 를 스크립트로 적용 (tree 깊이가 깊어지거나 ) -->
-                                                    <div id="mediaLibrarySimpleTree" class="media-library-simple-tree" style=""></div>
+                                                    <div id="mediaLibrarySimpleTree" class="media-library-simple-tree"></div>
                                                 </div>
                                                 <div class="media-library-layer-popup-footer">
                                                     <button type="button" class="media-library__button media-library__button--subtle">
@@ -674,7 +673,7 @@ $(document).ready(function() {
         searchMinInputLength: 2,
 
         // Number of pixels to indent each additional nesting level
-        indentSize: 15,
+        indentSize: 25,
 
         // Show child count badges?
         childCountShow: true,

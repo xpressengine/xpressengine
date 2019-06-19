@@ -498,6 +498,68 @@
 }
 // === //페이징 스타일 ===
 
+
+
+// 카드 타입
+.media-library-content__card-type {
+  .media-library-content-header {
+    display: none;
+  }
+
+  .media-library-content-list-box {
+    background-color: $n0;
+  }
+
+  .media-library-content-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 15px 0 0;
+    list-style: none;
+
+    > li {
+      position: relative;
+      flex: 0 0 33.3333%;
+      margin-bottom: 15px;
+      list-style: none;
+    }
+
+    .media-library-content-list__checkbox {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      margin-left: -50px;
+    }
+
+    .media-library-content-list__icon {
+      width: 110px;
+      height: 110px;
+      border: 1px solid $n40;
+      border-radius: 4px;
+      margin: 0 auto;
+    }
+
+    .media-library-content-list__title {
+      overflow: hidden;
+      width: 110px;
+      height: 19px;
+      margin: 8px auto 0;
+    }
+
+    .media-library-content-list__writer,
+    .media-library-content-list__size, 
+    .media-library-content-list__date,
+    .media-library-content-list__more {
+      display: none
+    }
+  }
+}
+
+
+
+
+
+
 /* mobile */
 @media (max-width: 768px) {
   // 페이징 스타일
@@ -608,7 +670,11 @@
         width: calc(100% - 42px);
 
         .media-library__label {
-          display: none;
+          input {
+            &[type="checkbox"] + .media-library__input-helper {
+              display: none;
+            }
+          }
         }
       }
 

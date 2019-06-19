@@ -1,0 +1,159 @@
+// === 레이어 팝업 ===
+.media-library-layer-popup {
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(52, 61, 82, 0.6);
+  z-index: 1010;
+
+  .media-library-layer-popup-table {
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+
+  .media-library-layer-popup-table-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  // 컨텐츠 470px 기준
+  .media-library-layer-popup-content-box {
+    width: 100%;
+    max-width: 534px;
+    margin: 0 auto;
+  }
+
+  .media-library-layer-popup-content {
+    margin: 32px;
+    padding: 20px 24px;
+    border: 1px solid #d4d5dc;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    background-color: $n0;
+  }
+
+  // 헤더
+  .media-library-layer-popup-header {
+    .media-library-layer-popup-header__title {
+      margin: 0 0 24px;
+      padding: 0;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 32px;
+      letter-spacing: -0.01px;
+      color: $n900;
+    }
+  }
+
+  // 바디
+  .media-library-layer-popup-body {
+    .media-library__input-text {
+      background-color: $n10;
+
+      &:focus {
+        background-color: $n0;
+      }
+    }
+
+    .media-library__input-group-label {
+      display: block;
+      margin: 0;
+      padding: 0;
+      font-weight: 400;
+
+      .media-library__input-group-label-title {
+        display: inline-block;
+        margin: 0 0 8px;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        letter-spacing: -0.03px;
+        color: $n500;
+      }
+    }
+
+    .media-library__button-text-remove {
+      padding: 9px;
+
+      .media-library__button-text-remove-image {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background: url(../img/icon-input-close.svg) 0 0 no-repeat;
+        background-size: 18px 18px;
+      }
+    }
+
+    .media-library-layer-popup__text {
+      font-size: 15px;
+      line-height: 20px;
+      letter-spacing: -0.03px;
+    }
+  }
+
+  // 푸터
+  .media-library-layer-popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 16px;
+
+    .media-library__button {
+      height: 32px;
+      line-height: 32px;
+      margin-left: 8px;
+    }
+  }
+}
+
+// 삭제 팝업
+.media-library-layer-popup--delete {
+  .media-library-layer-popup-body {
+    padding-bottom: 42px;
+  }
+
+  .media-library-layer-popup-footer {
+    border-top: 1px solid $n40;
+  }
+}
+// === //레이어 팝업 ===
+
+// simple tree
+.media-library-layer-popup {
+  .media-library-simple-tree {
+    padding-top: 12px;
+  }
+
+  .simpleTree-nodeContainer {
+    &:hover {
+      background-color: $n20;
+    }
+  }
+
+  .simpleTree-selected {
+    font-weight: 400;
+    background-color: transparent;
+    color: $b500;
+  }
+
+  .simpleTree-label {
+    border: 0 none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+
+    &:hover {
+      font-weight: 400;
+    }
+  }
+
+  .simpleTree-toggle {
+    &:not(.disabled):hover {
+      font-size: inherit;
+    }
+  }
+}
