@@ -16,7 +16,6 @@ namespace App\Console\Commands;
 use FilesystemIterator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -97,21 +96,18 @@ class XeUpdate extends ShouldOperation
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
-     * @throws \Throwable
+     * @throws \Throwable|\GuzzleHttp\Exception\GuzzleException
      */
     public function handle()
     {
-        $this->line('///////////////////////////////////');
-        $this->output->block('Updating Xpressengine.');
-        $this->line('///////////////////////////////////');
+        $this->output->title('Updating Xpressengine.');
 
         $updateVersion = $this->argument('version') ?: $this->releaseProvider->getLatestCoreVersion();
         $skipDownload = $this->option('skip-download');
         $skipComposer = $this->option('skip-composer');
 
         if (!in_array($updateVersion, $this->releaseProvider->coreVersions())) {
-            throw new \Exception("Unknown version [$updateVersion]");
+            throw new \RuntimeException("Unknown version [$updateVersion]");
         }
 
         // 현재 파일이 업데이트할 버전보다 낮지 않다면 다운로드 하지 않음.
@@ -130,7 +126,7 @@ class XeUpdate extends ShouldOperation
         $this->line(" $installedVersion -> $updateVersion");
 
         if (version_compare($installedVersion, $updateVersion) !== -1) {
-            throw new \Exception("Version [$updateVersion] is already installed.");
+            throw new \RuntimeException("Version [$updateVersion] is already installed.");
         }
 
         // confirm
@@ -142,15 +138,9 @@ class XeUpdate extends ShouldOperation
             return;
         }
 
-        $this->operator->lock();
-
-        $this->operator->setCoreMode($updateVersion);
-        $this->setExpires();
-
-        try {
-            if (0 !== $this->clearCache(true)) {
-                throw new \Exception('cache clear fail.. check your system.');
-            }
+        $this->startCore(function ($operator) use ($updateVersion, $skipDownload, $skipComposer, $installedVersion) {
+            $operator->version($updateVersion);
+            $operator->save();
 
             $this->writer->reset()->write(true);
 
@@ -158,15 +148,11 @@ class XeUpdate extends ShouldOperation
             // download
             if (!$skipDownload) {
                 if (!$this->filesystem->isWritable(base_path())) {
-                    throw new \Exception('Could not write to project root.');
+                    throw new \RuntimeException('Could not write to project root.');
                 }
 
                 $this->output->section('Clone project.');
-                $this->output->write(' cloning ... ');
-
                 $this->cloneProject($tempPath);
-
-                $this->info('done');
 
                 $this->output->section('Download.');
                 $this->download($updateVersion, $tempPath);
@@ -193,13 +179,13 @@ class XeUpdate extends ShouldOperation
                 ], true, $this->output);
 
                 if (0 !== $result) {
-                    throw new \Exception('Failed to composer update.');
+                    throw new \RuntimeException('Composer update failed..', $result);
                 }
             }
 
             if (!$skipDownload) {
-                $this->output->section('Copy file to project.');
-                $this->copyToProject($tempPath);
+                $this->output->section('Merging to project.');
+                $this->mergeToProject($tempPath);
             }
 
             if (!$skipComposer) {
@@ -211,7 +197,7 @@ class XeUpdate extends ShouldOperation
                 ], false, $this->output);
 
                 if (0 !== $result) {
-                    throw new \Exception('Failed to composer dump.');
+                    throw new \RuntimeException('Failed to composer dump.');
                 }
             }
 
@@ -219,20 +205,10 @@ class XeUpdate extends ShouldOperation
             $this->output->section('Running migration..');
             $this->migrateCore($installedVersion);
 
-        } catch (\Exception $e) {
-            $this->setFailed($e->getCode());
-            throw $e;
-        } catch (\Throwable $e) {
-            $this->setFailed($e->getCode());
-            throw new FatalThrowableError($e);
-        } finally {
-            $this->operator->unlock();
-        }
+        });
 
         // mark installed
         $this->markInstalled($updateVersion);
-
-        $this->setSucceed();
 
         $this->output->success("Update the Xpressengine to ver.{$updateVersion}.");
     }
@@ -248,7 +224,7 @@ class XeUpdate extends ShouldOperation
     {
         if ($this->filesystem->isDirectory($destination)) {
             if (!$this->filesystem->deleteDirectory($destination)) {
-                throw new \Exception('Failed to empty directory.');
+                throw new \RuntimeException('Failed to empty directory.');
             }
         }
 
@@ -260,6 +236,7 @@ class XeUpdate extends ShouldOperation
         }
 
         foreach ($sources as $item) {
+            $this->output->write("  Cloning <info>{$item}</info>: ");
             $source = base_path($item);
             $target = $destination.'/'.$item;
             if (is_dir($source)) {
@@ -270,6 +247,7 @@ class XeUpdate extends ShouldOperation
                 }
                 $this->filesystem->copy($source, $target);
             }
+            $this->output->writeln('done');
         }
     }
 
@@ -337,7 +315,7 @@ class XeUpdate extends ShouldOperation
      * @param string $ver         version
      * @param string $destination destination dir
      * @return void
-     * @throws \Exception
+     * @throws \Exception|\GuzzleHttp\Exception\GuzzleException
      */
     private function download($ver, $destination)
     {
@@ -348,11 +326,11 @@ class XeUpdate extends ShouldOperation
                 break;
             }
 
-            $this->output->write(" Download v{$version} ... ");
+            $this->output->write(" Downloading <info>v{$version}</info>: ");
             $filepath = $this->releaseProvider->download($version, $updatesPath);
             $zip = new \ZipArchive;
             if ($zip->open($filepath) !== true) {
-                throw new \Exception("fail to open zip file [$filepath]");
+                throw new \RuntimeException("fail to open zip file [$filepath]");
             }
 
             $zip->extractTo($destination);
@@ -360,7 +338,7 @@ class XeUpdate extends ShouldOperation
 
             $this->filesystem->delete($filepath);
 
-            $this->info('done');
+            $this->output->writeln('done');
         }
 
         $this->filesystem->deleteDirectory($updatesPath);
@@ -372,30 +350,30 @@ class XeUpdate extends ShouldOperation
      * @param string $source the path for updated
      * @return void
      */
-    private function copyToProject($source)
+    private function mergeToProject($source)
     {
-        $this->output->write(' - Copying vendor ... ');
+        $this->output->write(' - Copying <info>vendor</info>: ');
         if ($this->filesystem->isDirectory($newVendorPath = base_path('vendor-new'))) {
             if (!$this->filesystem->deleteDirectory($newVendorPath)) {
-                throw new \Exception("Failed to empty directory [$newVendorPath].");
+                throw new \RuntimeException("Failed to empty directory [$newVendorPath].");
             }
         }
         $this->filesystem->moveDirectory($source.'/vendor', $newVendorPath);
-        $this->info('done');
+        $this->output->writeln('done');
 
-        $this->output->write(' - Copying core ... ');
+        $this->output->write(' - Copying <info>core</info>: ');
         $this->copyDirectory($source, base_path(), ['vendor', 'plugins', 'privates', 'storage']);
-        $this->info('done');
+        $this->output->writeln('done');
 
-        $this->output->write(' - Changing vendor ... ');
+        $this->output->write(' - Changing <info>vendor</info>: ');
         $this->filesystem->moveDirectory(base_path('vendor'), base_path('vendor-old'), true);
         $this->filesystem->moveDirectory(base_path('vendor-new'), base_path('vendor'), true);
-        $this->info('done');
+        $this->output->writeln('done');
 
-        $this->output->write(' - Deleting Unnecessary files ... ');
+        $this->output->write(' - Deleting Unnecessary files: ');
         $this->filesystem->deleteDirectory($source);
         $this->filesystem->deleteDirectory(base_path('vendor-old'));
-        $this->info('done');
+        $this->output->writeln('done');
 
         $items = new FilesystemIterator(base_path('vendor/bin'), FilesystemIterator::SKIP_DOTS);
         foreach ($items as $item) {

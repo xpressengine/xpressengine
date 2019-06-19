@@ -36,9 +36,7 @@ use Xpressengine\Foundation\Operator;
  */
 abstract class ShouldOperation extends Command
 {
-    use ComposerRunTrait {
-        ComposerRunTrait::runComposer as doRunComposer;
-    }
+    use ComposerRunTrait;
 
     /**
      * Operator instance
@@ -46,6 +44,13 @@ abstract class ShouldOperation extends Command
      * @var Operator
      */
     protected $operator;
+
+    /**
+     * The log path.
+     *
+     * @var string
+     */
+    protected $log;
 
     /**
      * ShouldOperation constructor.
@@ -68,103 +73,111 @@ abstract class ShouldOperation extends Command
      */
     public function run(InputInterface $input, OutputInterface $output)
     {
-        if ($output instanceof ConsoleOutputInterface) {
-            $logFile = 'logs/operation-'.Carbon::now()->format('YmdHis').'.log';
-            $path = $this->laravel->storagePath().DIRECTORY_SEPARATOR.$logFile;
+        $datetime = Carbon::now()->format('YmdHis');
+        $this->log = $file = "logs/operation-{$datetime}.log";
+        $path = $this->laravel->storagePath().DIRECTORY_SEPARATOR.$file;
 
-            $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
+        $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
 
-            $this->operator->log($logFile);
-            $this->operator->write();
-        }
-
-        if ($file = $this->operator->getLogFile()) {
-            \Log::useFiles($this->laravel->storagePath().DIRECTORY_SEPARATOR.$file);
-        }
+        \Log::useFiles($path);
 
         return parent::run($input, $output);
     }
 
     /**
-     * Execute composer update.
+     * Start the operation
      *
-     * @param array $packages specific package name. no need version
-     * @return int
-     * @throws \Exception
+     * @param string        $mode     operation mode
+     * @param callable      $callback callback
+     * @param callable|null $onError  callback for error
+     * @return void
      * @throws \Throwable
      */
-    protected function composerUpdate(array $packages)
+    protected function start($mode, callable $callback, callable $onError = null)
     {
-        if (!$this->operator->isLocked()) {
-            $this->operator->lock();
-        }
+        $this->operator->lock();
 
-        $this->setExpires();
+        $method = 'set'.ucfirst($mode).'Mode';
+        $this->operator->$method();
+
+        $this->operator->log($this->log);
+        $this->operator->expiresAt(Carbon::now()->addSeconds($limit = $this->getTimeLimit())->toDateTimeString());
+        $this->operator->save();
+
+        set_time_limit($limit);
 
         try {
-            if (0 !== $this->clearCache(true)) {
-                throw new \Exception('cache clear fail.. check your system.');
+            if (0 !== $code = $this->clearCache(true)) {
+                throw new \RuntimeException('cache clear fail.. check your system.', $code);
             }
 
-            $this->prepareComposer();
-
-            $inputs = [
-                'command' => 'update',
-                "--with-dependencies" => true,
-                '--working-dir' => base_path(),
-                'packages' => $packages
-            ];
-
-            $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
-
-            return $result;
+            call_user_func($callback, $this->operator);
         } catch (\Exception $e) {
-            $this->setFailed($e->getCode());
-            throw $e;
+            $this->errorHandle($e, $onError);
         } catch (\Throwable $e) {
-            $this->setFailed($e->getCode());
-            throw new FatalThrowableError($e);
+            $this->errorHandle($e, $onError);
         } finally {
             $this->operator->unlock();
         }
+
+        $this->setSucceed();
     }
 
     /**
-     * Run composer dump command.
+     * Handle error for the operation.
      *
-     * @param string $path working directory
-     * @return int
-     * @throws \Exception
+     * @param \Throwable    $e        exception
+     * @param callable|null $callback callback
+     * @return void
+     * @throws \Throwable
      */
-    protected function composerDump($path)
+    protected function errorHandle($e, callable $callback = null)
     {
-        $inputs = [
-            'command' => 'dump-autoload',
-            '--working-dir' => $path,
-        ];
-
-        $this->writeResult($result = $this->runComposer($inputs, false, $this->output));
-
-        return $result;
-    }
-
-    /**
-     * Run composer
-     *
-     * @param array                       $inputs     input arguments
-     * @param bool                        $skipPlugin if true, xe plugin is skip
-     * @param OutputInterface|string|null $output     output
-     * @return int
-     * @throws \Exception
-     */
-    protected function runComposer($inputs, $skipPlugin = false, $output = null)
-    {
-        if (!$this->laravel->runningInConsole()) {
-            ignore_user_abort(true);
-            set_time_limit($this->getExpiredTime());
+        $this->setFailed($e->getCode());
+        if ($callback) {
+            call_user_func($callback, $e);
         }
 
-        return $this->doRunComposer($inputs, $skipPlugin, $output);
+        throw $e;
+    }
+
+    /**
+     * Start the core operation
+     *
+     * @param callable      $callback callback
+     * @param callable|null $onError  callback for error
+     * @return void
+     * @throws \Throwable
+     */
+    protected function startCore(callable $callback, callable $onError = null)
+    {
+        $this->start(Operator::TYPE_CORE, $callback, $onError);
+    }
+
+    /**
+     * Start the plugin operation
+     *
+     * @param callable      $callback callback
+     * @param callable|null $onError  callback for error
+     * @return void
+     * @throws \Throwable
+     */
+    protected function startPlugin(callable $callback, callable $onError = null)
+    {
+        $this->start(Operator::TYPE_PLUGIN, $callback, $onError);
+    }
+
+    /**
+     * Start the private plugin operation
+     *
+     * @param callable      $callback callback
+     * @param callable|null $onError  callback for error
+     * @return void
+     * @throws \Throwable
+     */
+    protected function startPrivate(callable $callback, callable $onError = null)
+    {
+        $this->start(Operator::TYPE_PRIVATE, $callback, $onError);
     }
 
     /**
@@ -180,30 +193,6 @@ abstract class ShouldOperation extends Command
         $this->line(PHP_EOL);
 
         return $result;
-    }
-
-    /**
-     * Set the operation expires.
-     *
-     * @return void
-     */
-    protected function setExpires()
-    {
-        $expiresAt = !$this->laravel->runningInConsole() ?
-            Carbon::now()->addSeconds($this->getExpiredTime())->toDateTimeString() : null;
-
-        $this->operator->expiresAt($expiresAt);
-        $this->operator->write();
-    }
-
-    /**
-     * Get expired time.
-     *
-     * @return int|string
-     */
-    protected function getExpiredTime()
-    {
-        return $this->laravel->runningInConsole() ? 0 : $this->getTimeLimit();
     }
 
     /**
@@ -245,13 +234,8 @@ abstract class ShouldOperation extends Command
      */
     protected function writeResult($result)
     {
-        // composer 동작이 완료되는 시점에서 쓰기 작업을 수행하므로
-        // 결과를 기록하기 전에 파일을 다시 읽어들인다.
-        // @todo : Composer::postUpdateOrInstall 실행시 operation 작성코드가 제거됨. 다시 load 필요한지 확인.
-        $this->operator->load();
-
         $operation = $this->operator->getOperation();
         $result !== 0 ? $operation->failed() : $operation->succeed();
-        $this->operator->write();
+        $this->operator->save();
     }
 }

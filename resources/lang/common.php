@@ -2905,8 +2905,8 @@ return [
         'en' => 'A new version of XE has been downloaded.',
     ],
     'alertUpdateCore' => [
-        'ko' => 'XE를 :version 버전으로 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
-        'en' => 'Update XE to version :version . It may take up to several minutes.',
+        'ko' => 'XE를 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
+        'en' => 'Update XE. It may take up to several minutes.',
     ],
     'confirmUpdate' => [
         'ko' => '업데이트하시겠습니까?',
@@ -3187,5 +3187,17 @@ return [
     'mailSenderAddress' => [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
-    ]
+    ],
+    'unableFindPhp' => [
+        'ko' => 'PHP 바이너리를 찾을 수 없습니다.',
+        'en' => 'Unable to find PHP binary.'
+    ],
+    'useConsoleCommandLine' => [
+        'ko' => '콘솔 커맨드 라인을 이용하세요.',
+        'en' => 'Please use the console command line.'
+    ],
+    'unknownVersion' => [
+        'ko' => '알 수 없는 버전입니다. :ver',
+        'en' => 'Unknown version. :ver',
+    ],
 ];

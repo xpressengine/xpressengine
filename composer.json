@@ -48,12 +48,12 @@
     },
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://store.xehub.io"
-        },
-        {
             "type": "path",
             "url": "./privates/*"
+        },
+        {
+            "type": "composer",
+            "url": "https://store.xehub.io"
         }
     ],
     "autoload": {

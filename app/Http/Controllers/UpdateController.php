@@ -14,9 +14,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Console\Output\StreamOutput;
+use Illuminate\Console\Application as Console;
+use Illuminate\Support\ProcessUtils;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Process\Process;
 use XePresenter;
 use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
@@ -44,6 +45,7 @@ class UpdateController extends Controller
      * @param PluginHandler   $handler         PluginHandler
      * @param PluginProvider  $provider        PluginProvider
      * @return \Xpressengine\Presenter\Presentable
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function show(Operator $operator, ReleaseProvider $releaseProvider, PluginHandler $handler, PluginProvider $provider)
     {
@@ -81,14 +83,30 @@ class UpdateController extends Controller
      * @param Operator        $operator        Operator instance
      * @param ReleaseProvider $releaseProvider ReleaseProvider
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(Request $request, Operator $operator, ReleaseProvider $releaseProvider)
     {
+        if (Console::phpBinary() === false) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
+            ]);
+        }
+
         if($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
         $version = $request->get('version') ?: __XE_VERSION__;
+
+        if (!in_array($version, $releaseProvider->coreVersions())) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::unknownVersion', ['ver' => $version])
+            ]);
+        }
+
         $latestVersion = $releaseProvider->getLatestCoreVersion();
         $skipDownload = version_compare(__XE_VERSION__, $latestVersion) === 0
             || $request->get('skip-download') === 'Y';
@@ -98,18 +116,19 @@ class UpdateController extends Controller
             $skipComposer = false;
         }
 
-        $startTime = now()->format('YmdHis');
-        $logFile = "logs/core-update-$startTime.log";
+        $operator->setCoreMode(false)->save();
 
-        $operator->setCoreMode($version, $logFile, false);
-
-        app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
-            Artisan::call('xe:update', [
-                'version' => $version,
-                '--skip-download' => $skipDownload,
-                '--skip-composer' => $skipComposer,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
+        app()->terminating(function () use ($version, $skipDownload, $skipComposer) {
+            $command = ['xe:update', ProcessUtils::escapeArgument($version)];
+            if ($skipDownload) {
+                $command[] = '--skip-download';
+            }
+            if ($skipComposer) {
+                $command[] = '--skip-composer';
+            }
+            $command[] = '--no-interaction';
+            $commandLine = Console::formatCommandString(implode(' ', $command)).' 2>&1 &';
+            (new Process($commandLine, base_path(), null, null, null))->run();
         });
 
         return redirect()->route('settings.operation.index')->with(
@@ -127,10 +146,6 @@ class UpdateController extends Controller
     public function showOperation(Operator $operator)
     {
         if (!$operator->isInProgress()) {
-            if ($operator->isPrivate()) {
-                return redirect()->route('settings.plugins', ['install_type' => 'self-installed']);
-            }
-
             return redirect()->route('settings.coreupdate.show');
         }
 
@@ -142,6 +157,7 @@ class UpdateController extends Controller
      *
      * @param Operator $operator Operator instance
      * @return \Xpressengine\Presenter\Presentable
+     * @throws \Exception
      */
     public function progress(Operator $operator)
     {
@@ -158,8 +174,22 @@ class UpdateController extends Controller
         if ($operator->getLogFile() && file_exists($path = storage_path($operator->getLogFile()))) {
             $log = nl2br(file_get_contents($path));
         }
+
+        $redirect = null;
+        if (!$inProgress) {
+            if ($operator->isPrivate()) {
+                $redirect = route('settings.plugins', ['install_type' => 'self-installed']);
+            } elseif ($operator->isPlugin()) {
+                $redirect = route('settings.plugins');
+            } else {
+                $redirect = route('settings.coreupdate.show');
+            }
+        }
+
         return api_render('update.progress', compact('operator'), [
             'in_progress' => $inProgress,
+            'succeed' => $operator->isSucceed(),
+            'redirect' => $redirect,
             'log' => $log
         ]);
     }

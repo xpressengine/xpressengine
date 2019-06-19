@@ -18,9 +18,9 @@ use Illuminate\Filesystem\Filesystem;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Foundation\Operator;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 
 /**
  * Abstract Class ComponentMakeCommand
@@ -45,22 +45,16 @@ abstract class ComponentMakeCommand extends MakeCommand
     protected $componentType;
 
     /**
-     * @var PluginHandler instance
-     */
-    protected $handler;
-
-    /**
      * Create a new component creator command instance.
      *
      * @param Filesystem         $files    Filesystem instance
      * @param Operator           $operator Operator instance
      * @param PluginHandler      $handler  PluginHandler instance
+     * @param PluginProvider $provider PluginProvider instance
      */
-    public function __construct(Filesystem $files, Operator $operator, PluginHandler $handler)
+    public function __construct(Filesystem $files, Operator $operator, PluginHandler $handler, PluginProvider $provider)
     {
-        parent::__construct($files, $operator);
-
-        $this->handler = $handler;
+        parent::__construct($files, $operator, $handler, $provider);
 
         $this->addOption('--title', '', InputOption::VALUE_OPTIONAL, 'The title of component');
         $this->addOption('--description', '', InputOption::VALUE_OPTIONAL, 'The description of component');
