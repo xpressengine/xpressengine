@@ -9,6 +9,7 @@ class MediaLibraryFileRepository
 {
     use EloquentRepositoryTrait {
         delete as traitDelete;
+        update as traitUpdate;
     }
 
     const ORDER_TYPE_UPDATED_DESC = 1;
@@ -27,6 +28,74 @@ class MediaLibraryFileRepository
         $items = $this->getPaginate($query, $attributes);
 
         return $items;
+    }
+
+    public function storeItem($attribute)
+    {
+        $fileItem = $this->createModel();
+        $fileItem->fill($attribute);
+        $fileItem->save();
+
+        $generateTitle = $this->getGenerateTitle($fileItem);
+        if ($fileItem->title != $generateTitle) {
+            $fileItem->title = $generateTitle;
+            $fileItem->save();
+        }
+
+        return $fileItem;
+    }
+
+    public function update(Model $item, array $data = [])
+    {
+        $this->traitUpdate($item, $data);
+
+        $data['title'] = $this->getGenerateTitle($item);
+        if ($item->title != $data['title']) {
+            $item->title = $data['title'];
+            $this->traitUpdate($item, $data);
+        }
+
+        return $item;
+    }
+
+    public function getGenerateTitle($fileItem)
+    {
+        if ($this->query()->where(
+            [
+                ['id', '<>', $fileItem->id],
+                ['folder_id', $fileItem->folder_id],
+                ['title', $fileItem->title]
+            ]
+        )->exists() == false) {
+            return $fileItem->title;
+        }
+
+        $increment = 0;
+        while ($this->checkExistTitle($fileItem, $increment) == true) {
+            ++$increment;
+        }
+
+        return $this->attachTitleIncrement($fileItem->title, $increment);
+    }
+
+    private function checkExistTitle($fileItem, $increment)
+    {
+        return $this->query()->where(
+            [
+                ['id', '<>', $fileItem->id],
+                ['folder_id', $fileItem->folder_id],
+                ['title', $this->attachTitleIncrement($fileItem->title, $increment)]
+            ]
+        )->exists();
+    }
+
+    private function attachTitleIncrement($title, $increment)
+    {
+        if ($increment > 0) {
+            $title .= ' (' . $increment . ')';
+        }
+
+        return $title;
     }
 
     protected function makeWhere($query, $attributes)

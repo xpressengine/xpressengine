@@ -113,7 +113,6 @@ class MediaLibraryMigration extends Migration
                 $table->string('folder_id', 36);
                 $table->string('user_id', 36)->nullable();
                 $table->string('title')->nullable();
-                $table->string('original_title')->nullable();
                 $table->string('ext')->nullable();
                 $table->string('caption')->nullable();
                 $table->string('alt_text')->nullable();
@@ -133,7 +132,6 @@ class MediaLibraryMigration extends Migration
                 $table->string('parent_id', 36);
                 $table->string('disk');
                 $table->string('name');
-                $table->string('original_name');
                 $table->integer('ordering');
 
                 $table->timestamps();
