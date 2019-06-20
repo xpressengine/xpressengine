@@ -123,6 +123,8 @@ class UserController extends Controller
 
         $content = $selectedSection['content'];
         $selectedSection['selected'] = true;
+
+        $mode = $request->isMobile() ? 'mobile' : 'desktop';
         $tabContent = $content instanceof \Closure ? $content($user) : $content;
 
         return XePresenter::make('index', compact('user', 'menus', 'tabContent'));

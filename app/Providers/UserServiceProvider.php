@@ -611,7 +611,7 @@ class UserServiceProvider extends ServiceProvider
     {
         UserHandler::setSettingsSections('settings', [
             'title' => 'xe::defaultSettings',
-            'content' => function ($user) {
+            'content' => function ($user, $mode = 'desktop') {
                 // dynamic field
                 $fieldTypes = $this->app['xe.dynamicField']->gets('user');
 
@@ -619,7 +619,7 @@ class UserServiceProvider extends ServiceProvider
                     ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
                 )->load();
 
-                $skin = $this->app['xe.skin']->getAssigned('user/settings');
+                $skin = $this->app['xe.skin']->getAssigned('user/settings', $mode);
 
                 return $skin->setView('edit')->setData(compact('user', 'fieldTypes'));
             }
