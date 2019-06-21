@@ -14,10 +14,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Console\Application as Console;
-use Illuminate\Support\ProcessUtils;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Process\Process;
 use XePresenter;
 use Xpressengine\Foundation\Operator;
 use Xpressengine\Foundation\ReleaseProvider;
@@ -37,6 +34,8 @@ use Xpressengine\Plugin\PluginProvider;
  */
 class UpdateController extends Controller
 {
+    use ArtisanBackgroundHelper;
+
     /**
      * Show core status.
      *
@@ -87,13 +86,6 @@ class UpdateController extends Controller
      */
     public function update(Request $request, Operator $operator, ReleaseProvider $releaseProvider)
     {
-        if (Console::phpBinary() === false) {
-            return back()->with('alert', [
-                'type' => 'danger',
-                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
-            ]);
-        }
-
         if($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
@@ -118,18 +110,12 @@ class UpdateController extends Controller
 
         $operator->setCoreMode(false)->save();
 
-        app()->terminating(function () use ($version, $skipDownload, $skipComposer) {
-            $command = ['xe:update', ProcessUtils::escapeArgument($version)];
-            if ($skipDownload) {
-                $command[] = '--skip-download';
-            }
-            if ($skipComposer) {
-                $command[] = '--skip-composer';
-            }
-            $command[] = '--no-interaction';
-            $commandLine = Console::formatCommandString(implode(' ', $command)).' 2>&1 &';
-            (new Process($commandLine, base_path(), null, null, null))->run();
-        });
+        $this->runArtisan('xe:update', [
+            'version' => $version,
+            '--skip-download' => $skipDownload,
+            '--skip-composer' => $skipComposer,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',

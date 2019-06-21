@@ -14,11 +14,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Console\Application as Console;
-use Illuminate\Support\ProcessUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Process\Process;
 use XePresenter;
 use Xpressengine\Foundation\Operator;
 use Xpressengine\Http\Request;
@@ -39,6 +36,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  */
 class PluginController extends Controller
 {
+    use ArtisanBackgroundHelper;
 
     /**
      * PluginController constructor.
@@ -217,13 +215,6 @@ class PluginController extends Controller
      */
     public function download(Request $request, Operator $operator, PluginHandler $handler)
     {
-        if (Console::phpBinary() === false) {
-            return back()->with('alert', [
-                'type' => 'danger',
-                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
-            ]);
-        }
-
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
@@ -252,13 +243,10 @@ class PluginController extends Controller
 
         $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($plugins) {
-            $arguments = implode(' ', array_map(function ($id) {
-                return ProcessUtils::escapeArgument($id);
-            }, $plugins));
-            $commandLine = Console::formatCommandString("plugin:update $arguments --no-interaction").' 2>&1 &';
-            (new Process($commandLine, base_path(), null, null, null))->run();
-        });
+        $this->runArtisan('plugin:update', [
+            'plugin' => $plugins,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -277,13 +265,6 @@ class PluginController extends Controller
      */
     public function install(Request $request, PluginHandler $handler, PluginProvider $provider, Operator $operator)
     {
-        if (Console::phpBinary() === false) {
-            return back()->with('alert', [
-                'type' => 'danger',
-                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
-            ]);
-        }
-
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
@@ -302,13 +283,10 @@ class PluginController extends Controller
 
         $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($pluginIds) {
-            $arguments = implode(' ', array_map(function ($id) {
-                return ProcessUtils::escapeArgument($id);
-            }, $pluginIds));
-            $commandLine = Console::formatCommandString("plugin:install $arguments --no-interaction").' 2>&1 &';
-            (new Process($commandLine, base_path(), null, null, null))->run();
-        });
+        $this->runArtisan('plugin:install', [
+            'plugin' => $pluginIds,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -344,13 +322,6 @@ class PluginController extends Controller
      */
     public function delete(Request $request, PluginHandler $handler, Operator $operator)
     {
-        if (Console::phpBinary() === false) {
-            return back()->with('alert', [
-                'type' => 'danger',
-                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
-            ]);
-        }
-
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
@@ -376,20 +347,11 @@ class PluginController extends Controller
 
         $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($pluginIds, $force) {
-            $command = [
-                'plugin:uninstall',
-                implode(' ', array_map(function ($id) {
-                    return ProcessUtils::escapeArgument($id);
-                }, $pluginIds)),
-                '--no-interaction',
-            ];
-            if (!!$force) {
-                $command[] = '--force';
-            }
-            $commandLine = Console::formatCommandString(implode(' ', $command)).' 2>&1 &';
-            (new Process($commandLine, base_path(), null, null, null))->run();
-        });
+        $this->runArtisan('plugin:uninstall', [
+            'plugin' => $pluginIds,
+            '--force' => !!$force,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -524,13 +486,6 @@ class PluginController extends Controller
      */
     public function renewPlugin(PluginHandler $handler, Operator $operator, $pluginId)
     {
-        if (Console::phpBinary() === false) {
-            return back()->with('alert', [
-                'type' => 'danger',
-                'message' => xe_trans('xe::unableFindPhp').xe_trans('xe::useConsoleCommandLine')
-            ]);
-        }
-
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
@@ -551,15 +506,7 @@ class PluginController extends Controller
 
         $operator->setPrivateMode(false)->save();
 
-        app()->terminating(function () use ($pluginId) {
-            $command = [
-                'private:update',
-                ProcessUtils::escapeArgument($pluginId),
-                '--no-interaction',
-            ];
-            $commandLine = Console::formatCommandString(implode(' ', $command)).' 2>&1 &';
-            (new Process($commandLine, base_path(), null, null, null))->run();
-        });
+        $this->runArtisan('private:update', ['name' => $pluginId]);
 
         return redirect()->route('settings.operation.index')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);

@@ -3188,14 +3188,6 @@ return [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
     ],
-    'unableFindPhp' => [
-        'ko' => 'PHP 바이너리를 찾을 수 없습니다.',
-        'en' => 'Unable to find PHP binary.'
-    ],
-    'useConsoleCommandLine' => [
-        'ko' => '콘솔 커맨드 라인을 이용하세요.',
-        'en' => 'Please use the console command line.'
-    ],
     'unknownVersion' => [
         'ko' => '알 수 없는 버전입니다. :ver',
         'en' => 'Unknown version. :ver',

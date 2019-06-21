@@ -18,10 +18,8 @@ use App\Console\MultipleOutput;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Foundation\Operator;
 
 /**
