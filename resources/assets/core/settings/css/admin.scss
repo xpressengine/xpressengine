@@ -2108,7 +2108,7 @@ aside {
 }
 // === //플러그인 익스텐션 리스트 (카드형) ===
 
-// === 테마, 익스텐션 레이어 팝업 ===
+// === 레이어 팝업 공통 ===
 .admin-layer-popup {
   position: fixed;
   top: 0;
@@ -2119,6 +2119,7 @@ aside {
   z-index: 1010;
 
   &.admin-layer-popup--full-page-inner-scroll {
+    // 스크롤 타입
     padding: 15px;
 
     .admin-layer-popup-content {
@@ -2131,8 +2132,10 @@ aside {
     }
   }
 
-
   .admin-layer-popup-content {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     border-radius: 4px;
@@ -2140,15 +2143,75 @@ aside {
   }
 
   .admin-layer-popup-header {
-
+    // 따로 스타일이 나온게 없어서 공통으로 스타일 적용 못함 (다음에 디자인 나오면 적용)
   }
 
   .admin-layer-popup-body {
-    // height: calc(100% - 70px);
+    flex: 1;
   }
 
   .admin-layer-popup-footer {
+    width: 100%;
     height: 70px;
+    border-top: 1px solid #dfe1e6;
+  }
+}
+// === //레이어 팝업 공통 ===
+
+// === 테마, 익스텐션 레이어 팝업 ===
+.admin-layer-popup {
+  &.admin-layer-popup--plugin {
+    .admin-layer-popup-content {
+      max-width: 1140px;
+    }
+
+    .admin-layer-popup-header {
+      padding: 24px 16px 16px;
+
+      .admin-layer-popup-plugin__title-box {
+        display: flex;
+        align-items: center;
+      }
+
+      .admin-layer-popup-plugin__thumb {
+        flex: 0 0 60px;
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: 60px 60px;
+      }
+
+      .admin-layer-popup-plugin__title {
+        flex: 1;
+        margin: 0 0 0 24px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .admin-layer-popup-plugin__title-sub-text {
+        margin: 18px 0 12px;
+        font-size: 15px;
+        line-height: 24px;
+        color: rgba(0,0,0,0.7);
+      }
+    }
+  
+    .admin-layer-popup-body {
+      .admin-layer-popup__iframe {
+        border: 0 none;
+        vertical-align: top;
+      }
+    }
+  
+    .admin-layer-popup-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 24px;
+    }
   }
 }
 // === //테마, 익스텐션 레이어 팝업 ===
@@ -2525,17 +2588,13 @@ aside {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    margin: -24px -12px 32px;
+    margin: 22px -12px 8px;
 
     > li {
-      margin: 24px 12px 0;
+      margin: 0 12px 24px;
       border-radius: 6px;
       box-sizing: border-box;
       background-color: #fff;
-
-      &:first-child {
-        margin-top: 24px;
-      }
     }
 
     .list-card__image {
@@ -2606,6 +2665,31 @@ aside {
     }
   }
   // === //플러그인 익스텐션 리스트 (카드형) ===
+  
+  // === 테마, 익스텐션 레이어 팝업 ===
+  .admin-layer-popup {
+    &.admin-layer-popup--plugin {
+      .admin-layer-popup-header {
+        position: relative;
+
+        .admin-layer-popup-plugin__title {
+          padding-right: 180px;
+        }
+
+        .admin-layer-popup-plugin__title-sub-text {
+          margin-bottom: 0;
+        }
+
+        .admin-layer-popup-plugin__button-box {
+          position: absolute;
+          top: 38px;
+          right: 16px;
+        }
+      }
+    }
+  }
+  // === //테마, 익스텐션 레이어 팝업 ===
+
 }
 
 @media (min-width: 1068px) {
