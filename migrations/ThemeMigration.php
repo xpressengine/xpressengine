@@ -304,7 +304,7 @@ class ThemeMigration extends Migration
             'slug' => '테마 디자인 변경하기',
             'content' => '<img class="__xe_image" data-id="' . $exampleImageInfo['id'] . '" src="' . $exampleImageInfo['path'] .
                 '" xe-file-id="' . $exampleImageInfo['id'] . '" alt="' . $exampleImageInfo['filename'] . '" />'
-                . '<p>다른 테마가 필요하신가요? 내가 만든 테마를 적용하고 싶으신가요?<br/><a href="'.route('settings.setting.theme').'" target="_blank">사이트관리 > 설정 > 테마 기본설정</a>에서 변경할 수 있습니다.</p>',
+                . '<p>다른 테마가 필요하신가요? 내가 만든 테마를 적용하고 싶으신가요?<br/><a href="'.route('settings.edit.theme').'" target="_blank">사이트관리 > 테마 > 테마 설정</a>에서 변경할 수 있습니다.</p>',
             '_coverId' => $thumbNailInfo['id'],
             'allow_comment' => '1',
             'use_alarm' => '1',
