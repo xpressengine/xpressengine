@@ -206,6 +206,7 @@ class ThemeSettingsController extends Controller
 
         if (empty($files)) {
             return \XePresenter::make('theme.edit', [
+                'themes' => $themes,
                 'theme' => $theme,
                 'files' => $files,
             ]);
