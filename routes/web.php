@@ -516,6 +516,14 @@ Route::settings('setting', function () {
         'as' => 'settings.auth.admin',
         'uses' => 'SettingsController@postAdminAuth'
     ]);
+
+    //TOGETHER 호환성 문제로 유지
+    //@deprecated
+    Route::get('theme', [
+        'as' => 'settings.setting.theme',
+        'uses' => 'ThemeSettingsController@editSetting',
+        'settings_menu' => 'theme.setting'
+    ]);
 });
 
 Route::settings(
