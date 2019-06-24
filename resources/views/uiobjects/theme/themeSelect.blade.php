@@ -42,7 +42,7 @@
                                         <a href="{{ route('settings.theme.config', ['theme' => $configId]) }}" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::modify')}}</span></a>
                                     @endif
                                     <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">{{xe_trans('xe::preview')}}</span></a>
-                                    <a href="#" target="_blank" class="btn btn-link __xe_theme_config_delete" onclick="return false;" data-id="{{$configId}}" data-url="{{route('settings.theme.setting')}}"><i class="xi-trash"></i><span class="hidden-xs">{{xe_trans('xe::delete')}}</span></a>
+                                    <a href="#" target="_blank" class="btn btn-link __xe_theme_config_delete" onclick="return false;" data-id="{{$configId}}" data-url="{{route('settings.theme.config')}}"><i class="xi-trash"></i><span class="hidden-xs">{{xe_trans('xe::delete')}}</span></a>
                                 </div>
                             </li>
                         @endforeach
@@ -61,7 +61,7 @@
 {{ XeFrontend::html('theme.config')->content('
 <div id="addConfig" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <form action="'.route('settings.theme.setting').'" method="POST" onsubmit="$(\'.__xe_submit_btn\').button(\'loading\')">
+        <form action="'.route('settings.theme.config').'" method="POST" onsubmit="$(\'.__xe_submit_btn\').button(\'loading\')">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

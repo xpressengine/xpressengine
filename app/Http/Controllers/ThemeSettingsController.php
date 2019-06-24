@@ -184,10 +184,20 @@ class ThemeSettingsController extends Controller
 
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
-        $this->validate($request, ['theme' => 'required']);
+        $themes = $themeHandler->getAllTheme();
+        $blankThemeClass = app('config')->get('xe.theme.blank');
+        $blankThemeId = $blankThemeClass::getId();
 
-        $themeId = $request->get('theme');
-        $fileName = $request->get('file');
+        if (isset($themes[$blankThemeId]) == true) {
+            unset($themes[$blankThemeId]);
+        }
+
+        $themeId = $request->get('theme', null);
+        if ($themeId == null) {
+            $themeId = array_first($themes)->getId();
+        }
+
+        $fileName = $request->get('file', null);
 
         $theme = \XeTheme::getTheme($themeId);
 
@@ -223,6 +233,7 @@ class ThemeSettingsController extends Controller
         $editFile['content'] = $fileContent;
 
         return \XePresenter::make('theme.edit', [
+            'themes' => $themes,
             'theme' => $theme,
             'files' => $files,
             'editFile' => $editFile

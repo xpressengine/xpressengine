@@ -625,9 +625,9 @@ Route::settings(
 
         Route::group(['prefix' => 'config'], function () {
             Route::get('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@editConfig']);
-            Route::put('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@updateConfig']);
-            Route::delete('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@deleteConfig']);
-            Route::post('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@createConfig']);
+            Route::put('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@updateConfig']);
+            Route::delete('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@deleteConfig']);
+            Route::post('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@createConfig']);
         });
 
         Route::group(

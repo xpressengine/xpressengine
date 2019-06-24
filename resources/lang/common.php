@@ -3242,6 +3242,10 @@ return [
         'ko' => '테마 에디터',
         'en' => 'Theme editor'
     ],
+    'themeEditorDescription' => [
+        'ko' => '테마 상세 편집 기능을 제공합니다.',
+        'en' => 'Provides theme edit function.'
+    ],
     'extensionEditor' => [
         'ko' => '익스텐션 에디터',
         'en' => 'Extension editor'
