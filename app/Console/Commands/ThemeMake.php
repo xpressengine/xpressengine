@@ -59,7 +59,7 @@ class ThemeMake extends ComponentMakeCommand
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -106,6 +106,9 @@ class ThemeMake extends ComponentMakeCommand
 
             $this->refresh($plugin);
         } catch (\Exception $e) {
+            $this->clean($path);
+            throw $e;
+        } catch (\Throwable $e) {
             $this->clean($path);
             throw $e;
         }

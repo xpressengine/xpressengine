@@ -110,6 +110,9 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
         } catch (\Exception $e) {
             $this->clean($path);
             throw $e;
+        } catch (\Throwable $e) {
+            $this->clean($path);
+            throw $e;
         }
 
         $this->info("Skin is created successfully.");

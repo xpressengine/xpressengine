@@ -14,9 +14,6 @@
 
 namespace App\Console\Commands;
 
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Xpressengine\Plugin\PluginHandler;
-
 /**
  * Class PluginMake
  *
@@ -51,55 +48,47 @@ class PluginMake extends MakeCommand
     /**
      * Execute the console command.
      *
-     * @param PluginHandler $handler PluginHandler
      * @return void
      * @throws \Exception
      */
-    public function handle(PluginHandler $handler)
+    public function handle()
     {
         $name = $this->argument('name');
         $namespace = $this->getNamespace($name, $this->argument('vendor'));
 
         $title = $this->getTitleInput($name);
 
-        $this->operator->lock();
+        $path = app('path.privates').DIRECTORY_SEPARATOR.$name;
 
-        try {
-            $this->copyStubDirectory($path = app('path.privates').DIRECTORY_SEPARATOR.$name);
+        $this->startPrivate(function () use ($path, $name, $namespace, $title) {
+            $this->info('Generating the plugin');
+            $this->copyStubDirectory($path);
             $this->makeUsable($path, $name, $namespace, $title);
-            $this->info('Generate the plugin');
 
-            $this->operator->setPrivateMode();
-            $this->operator->install($packageName = 'xpressengine-plugin/'.$name, '*');
-            $this->operator->write();
+            $this->writeRequire('install', [
+                ['name' => $packageName = 'xpressengine-plugin/'.$name, 'version' => '*']
+            ]);
 
-            $this->info('Run composer update command');
-            $this->line('> composer update');
+            $this->warn('Composer update command is running.. It may take up to a few minutes.');
+            $this->line(" composer update --with-dependencies " . $packageName);
 
-            $result = $this->composerUpdate([$packageName]);
+            $this->composerUpdate([$packageName]);
 
-            if (0 !== $result) {
-                throw new \Exception('Fail to run composer update');
-            }
+            // composer 실행을 마쳤습니다.
+            $this->warn('Composer update command is finished.'.PHP_EOL);
 
-            // plugin activate
-            $this->activatePlugin($handler, $name);
 
-        } catch (\Exception $e) {
+        }, function () use ($path) {
             $this->files->deleteDirectory($path);
-            throw $e;
-        } catch (\Throwable $e) {
-            $this->files->deleteDirectory($path);
-            throw new FatalThrowableError($e);
-        } finally {
-            if ($this->operator->isLocked()) {
-                $this->operator->unlock();
-            }
-        }
+        });
 
-        $this->info("Plugin is created and activated successfully.");
+        // plugin activate
+        $this->activatePlugin($name);
+
+
         $this->info("See ./plugins/$name directory.");
         $this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
+        $this->output->success('Plugin is created and activated successfully.');
     }
 
     /**
@@ -222,21 +211,5 @@ class PluginMake extends MakeCommand
         $replace = [$namespace, $name, $title];
 
         $this->buildFile($path.'/src/Controller.stub', $search, $replace, $path.'/src/Controller.php');
-    }
-
-    /**
-     * Activate plugin.
-     *
-     * @param PluginHandler $handler PluginHandler
-     * @param string        $name    plugin name
-     * @return void
-     */
-    protected function activatePlugin(PluginHandler $handler, $name)
-    {
-        $handler->getAllPlugins(true);
-
-        if (!$handler->isActivated($name)) {
-            $handler->activatePlugin($name);
-        }
     }
 }

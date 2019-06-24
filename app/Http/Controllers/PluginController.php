@@ -13,9 +13,7 @@
  */
 namespace App\Http\Controllers;
 
-use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -38,6 +36,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  */
 class PluginController extends Controller
 {
+    use ArtisanBackgroundHelper;
 
     /**
      * PluginController constructor.
@@ -88,73 +87,6 @@ class PluginController extends Controller
         } else {
             return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
         }
-    }
-
-    /**
-     * Show confirm for delete the plugin.
-     *
-     * @param Request       $request request
-     * @param PluginHandler $handler PluginHandler instance
-     * @return \Xpressengine\Presenter\Presentable
-     */
-    public function getDelete(Request $request, PluginHandler $handler)
-    {
-        $pluginIds = $request->get('pluginId');
-        $pluginIds = explode(',', $pluginIds);
-
-        $collection = $handler->getAllPlugins(true);
-        $plugins = $collection->getList($pluginIds);
-
-        return api_render('index.delete', compact('plugins'));
-    }
-
-    /**
-     * Delete plugins.
-     *
-     * @param Request       $request  request
-     * @param PluginHandler $handler  PluginHandler instance
-     * @param Operator      $operator ComposerFileWriter instance
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function delete(Request $request, PluginHandler $handler, Operator $operator)
-    {
-        if ($operator->isLocked()) {
-            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
-        }
-
-        $handler->getAllPlugins(true);
-
-        $pluginIds = $request->get('pluginId', []);
-        $force = $request->get('force');
-
-        if (empty($pluginIds)) {
-            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
-        }
-
-        $collection = $handler->getAllPlugins(true);
-
-        $plugins = $collection->getList($pluginIds);
-
-        foreach ($plugins as $id => $plugin) {
-            if ($plugin === null) {
-                throw new HttpException(422, xe_trans('xe::pluginNotFound', ['plugin' => $id]));
-            }
-        }
-
-        $logFile = $this->prepareOperation($operator);
-
-        app()->terminating(function () use ($pluginIds, $force, $logFile) {
-            Artisan::call('plugin:uninstall', [
-                'plugin' => $pluginIds,
-                '--force' => !!$force,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
-
-        return redirect()->route('settings.operation.index')->with(
-            'alert',
-            ['type' => 'success', 'message' => xe_trans('xe::deletingPlugin')]
-        );
     }
 
     /**
@@ -276,11 +208,12 @@ class PluginController extends Controller
     /**
      * Update plugins.
      *
-     * @param Request  $request  request
-     * @param Operator $operator Operator instance
+     * @param Request       $request  request
+     * @param Operator      $operator Operator instance
+     * @param PluginHandler $handler PluginHandler instance
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function download(Request $request, Operator $operator)
+    public function download(Request $request, Operator $operator, PluginHandler $handler)
     {
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
@@ -290,22 +223,30 @@ class PluginController extends Controller
 
         foreach ($plugins as $id => $info) {
             if(array_get($info, 'update', false)) {
+                if (!$handler->getPlugin($id)) {
+                    return back()->with('alert', [
+                        'type' => 'danger',
+                        'message' => xe_trans('xe::pluginNotFound', ['plugin' => $id])
+                    ]);
+                }
+
                 $plugins[$id] = $id.':'.array_get($info, 'version');
             }
         }
 
         if (empty($plugins)) {
-            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::noPluginsSelected')
+            ]);
         }
 
-        $logFile = $this->prepareOperation($operator);
+        $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($plugins, $logFile) {
-            Artisan::call('plugin:update', [
-                'plugin' => $plugins,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $this->runArtisan('plugin:update', [
+            'plugin' => $plugins,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -338,14 +279,14 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        $logFile = $this->prepareOperation($operator);
+        $pluginIds = array_pluck($pluginsData, 'plugin_id');
 
-        app()->terminating(function () use ($pluginIds, $logFile) {
-            Artisan::call('plugin:install', [
-                'plugin' => $pluginIds,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $operator->setPluginMode(false)->save();
+
+        $this->runArtisan('plugin:install', [
+            'plugin' => $pluginIds,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -354,19 +295,68 @@ class PluginController extends Controller
     }
 
     /**
-     * Prepare before the operation.
+     * Show confirm for delete the plugin.
      *
-     * @param Operator $operator Operator instance
-     * @param bool     $private  is private mode
-     * @return string
+     * @param Request       $request request
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
      */
-    protected function prepareOperation(Operator $operator, $private = false)
+    public function getDelete(Request $request, PluginHandler $handler)
     {
-        $startTime = now()->format('YmdHis');
-        $logFile = "logs/plugin-$startTime.log";
-        $private ? $operator->setPrivateMode($logFile, false) : $operator->setPluginMode($logFile, false);
+        $pluginIds = $request->get('pluginId');
+        $pluginIds = explode(',', $pluginIds);
 
-        return $logFile;
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->getList($pluginIds);
+
+        return api_render('index.delete', compact('plugins'));
+    }
+
+    /**
+     * Delete plugins.
+     *
+     * @param Request       $request  request
+     * @param PluginHandler $handler  PluginHandler instance
+     * @param Operator      $operator ComposerFileWriter instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete(Request $request, PluginHandler $handler, Operator $operator)
+    {
+        if ($operator->isLocked()) {
+            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
+        }
+
+        $handler->getAllPlugins(true);
+
+        $pluginIds = $request->get('pluginId', []);
+        $force = $request->get('force');
+
+        if (empty($pluginIds)) {
+            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
+        }
+
+        $collection = $handler->getAllPlugins(true);
+
+        $plugins = $collection->getList($pluginIds);
+
+        foreach ($plugins as $id => $plugin) {
+            if ($plugin === null) {
+                throw new HttpException(422, xe_trans('xe::pluginNotFound', ['plugin' => $id]));
+            }
+        }
+
+        $operator->setPluginMode(false)->save();
+
+        $this->runArtisan('plugin:uninstall', [
+            'plugin' => $pluginIds,
+            '--force' => !!$force,
+            '--no-interaction' => true,
+        ]);
+
+        return redirect()->route('settings.operation.index')->with(
+            'alert',
+            ['type' => 'success', 'message' => xe_trans('xe::deletingPlugin')]
+        );
     }
 
     /**
@@ -514,15 +504,9 @@ class PluginController extends Controller
             ]);
         }
 
-        $logFile = $this->prepareOperation($operator, true);
+        $operator->setPrivateMode(false)->save();
 
-        app()->terminating(function () use ($pluginId, $logFile) {
-            Artisan::call(
-                'private:update',
-                ['name' => $pluginId],
-                new StreamOutput(fopen(storage_path($logFile), 'a'))
-            );
-        });
+        $this->runArtisan('private:update', ['name' => $pluginId]);
 
         return redirect()->route('settings.operation.index')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);

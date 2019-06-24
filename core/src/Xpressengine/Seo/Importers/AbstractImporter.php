@@ -137,7 +137,7 @@ abstract class AbstractImporter
      *
      * @param string       $key      item key
      * @param string|array $contents meta content
-     * @param int     $sequence sequence number
+     * @param int          $sequence sequence number
      * @return void
      */
     protected function addMeta($key, $contents, $sequence = 0)

@@ -14,8 +14,6 @@
 
 namespace App\Console\Commands;
 
-use Xpressengine\Plugin\PluginHandler;
-
 /**
  * Class PrivateUpdateCommand
  *
@@ -26,7 +24,7 @@ use Xpressengine\Plugin\PluginHandler;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class PrivateUpdateCommand extends ShouldOperation
+class PrivateUpdateCommand extends PluginCommand
 {
     /**
      * The name and signature of the console command.
@@ -45,13 +43,12 @@ class PrivateUpdateCommand extends ShouldOperation
     /**
      * Execute the console command.
      *
-     * @param PluginHandler $handler plugin handler instance
      * @return void
      * @throws \Exception
      */
-    public function handle(PluginHandler $handler)
+    public function handle()
     {
-        if (!$plugin = $handler->getPlugin($name = $this->argument('name'))) {
+        if (!$plugin = $this->handler->getPlugin($name = $this->argument('name'))) {
             throw new \Exception("The plugin[$name] is not found.");
         }
 
@@ -59,29 +56,40 @@ class PrivateUpdateCommand extends ShouldOperation
             throw new \Exception("The plugin[$name] is not private plugin");
         }
 
-        if ($activated = $plugin->isActivated()) {
-            $handler->deactivatePlugin($name);
-        }
+        $this->startPrivate(function () use ($plugin, &$activated) {
+            if ($activated = $plugin->isActivated()) {
+                $this->deactivatePlugin($plugin->getId());
+            }
 
-        $this->info('Unlink plugin');
-        $this->output->write('  - Unlinking ... ');
-        unlink($plugin->getPath());
-        $this->info('done');
+            $this->info('Unlink plugin');
+            $this->output->write('  - Unlinking ... ');
+            if (!app('files')->delete($plugin->getPath())) {
+                throw new \RuntimeException('Unable to unlink.');
+            }
+            $this->info('done');
 
-        $this->operator->setPrivateMode();
-        $this->operator->install($packageName = 'xpressengine-plugin/'.$name, '*');
-        $this->operator->write();
+            $this->writeRequire('install', [
+                ['name' => $packageName = 'xpressengine-plugin/'.$plugin->getId(), 'version' => '*']
+            ]);
 
-        $this->info('Run composer update command');
-        $this->line('> composer update');
-        $result = $this->composerUpdate([$packageName]);
+            $this->warn('Composer update command is running.. It may take up to a few minutes.');
+            $this->line(" composer update --with-dependencies " . $packageName);
 
-        if (0 !== $result) {
-            throw new \Exception('Fail to run composer update');
-        }
+            $this->composerUpdate([$packageName]);
+
+            // composer 실행을 마쳤습니다.
+            $this->warn('Composer update command is finished.' . PHP_EOL);
+        }, function () use ($plugin) {
+            if (!is_link($plugin->getPath())) {
+                app('files')->link(
+                    app('path.privates').DIRECTORY_SEPARATOR.$plugin->getId(),
+                    $plugin->getPath()
+                );
+            }
+        });
 
         if ($activated) {
-            $handler->activatePlugin($name);
+            $this->activatePlugin($name);
         }
 
         $this->output->success('Plugin is updated.');
