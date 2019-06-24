@@ -273,15 +273,25 @@
           </div>
         </div>
         <!--//어드민 컨텐츠 영역 -->
-        <div class="admin-layer-popup admin-layer-popup--full-page-inner-scroll" style="display: none">
+        <div class="admin-layer-popup admin-layer-popup--full-page-inner-scroll admin-layer-popup--plugin" style="display: block">
           <div class="admin-layer-popup-content">
             <div class="admin-layer-popup-header">
-              <h3 class="blind">테마, 익스텐션 상세보기 레이어팝업</h3>
+              <h3 class="blind">테마, 익스텐션 플러그인 상세보기 레이어팝업</h3>
+              <div class="admin-layer-popup-plugin__title-box">
+                <div class="admin-layer-popup-plugin__thumb" style="background-image: url(https://store.xehub.io/storage/icon/02f9d603-8bdf-4e76-9241-627c97126c75/thumbnails/S/2S0My71J36A4lTuVLzf43SeArFn5N8Yo1Jk8xt0y.png)"></div>
+                <h3 class="admin-layer-popup-plugin__title">게시판 v.1.0.3</h3>
+              </div>
+              <p class="admin-layer-popup-plugin__title-sub-text">이 플러그인은 XE3에서 게시판 기능을 제공합니다.</p>
+              <div class="admin-layer-popup-plugin__button-box">
+                <button type="button" class="btn btn-default">미리보기</button>
+                <button type="button" class="btn btn-default">비활성화</button>
+              </div>
             </div>
             <div class="admin-layer-popup-body">
+              <iframe src="https://store.xehub.io/plugins/board/iframe" id="iframeStore" class="admin-layer-popup__iframe" width="100%" height="100%"></iframe>
             </div>
             <div class="admin-layer-popup-footer">
-
+              <button type="button" class="btn btn-default __close-layer-popup">닫기</button>
             </div>
           </div>
         </div>
@@ -295,55 +305,59 @@
 <div class="dim"></div>
 <script>
 $(document).ready(function() {
-function loadCheckFunc(headUrl, asideUrl, footUrl) {
-    $('header').load( headUrl );
-    $('aside').load( asideUrl );
-    $('.footer').load( footUrl );
-}
-function init_include() {
-    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
-}
-init_include();
-
-
-// admin-tab
-var targetElement = document.getElementsByClassName('admin-tab-list')[0],
-    targetElementInner = targetElement.childNodes,
-    tmpwidth = 18;
-    tabLeft = document.getElementsByClassName('admin-tab-left')[0],
-    tabRight = document.getElementsByClassName('admin-tab-right')[0];
-
-for(i = 0; i < targetElementInner.length; i++ ) {
-  if( !isNaN(targetElementInner[i].offsetWidth) ) {
-    var tmpmargin = targetElementInner[i].currentStyle || window.getComputedStyle(targetElementInner[i]),
-    regExp = /(\-|[0-9])+(.[0-9]+)?/g,
-    targetMargin = Number(regExp.exec(tmpmargin.marginLeft)[0]);
-    tmpwidth += targetElementInner[i].offsetWidth;
-    tmpwidth += targetMargin;
+  function loadCheckFunc(headUrl, asideUrl, footUrl) {
+      $('header').load( headUrl );
+      $('aside').load( asideUrl );
+      $('.footer').load( footUrl );
   }
-}
+  function init_include() {
+      loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+  }
+  init_include();
 
-tabLeft.addEventListener('click', function (){
-  targetElement.scrollLeft = 0;
-  this.style.display = "none";
-  tabRight.style.display = "block";
-});
-tabRight.addEventListener('click', function (){
-  targetElement.scrollLeft = tmpwidth;
-  this.style.display = "none";
-  tabLeft.style.display = "block";
-});
-targetElement.addEventListener('scroll', function(){
-  
-  var targetCenter = ((targetElement.offsetWidth - tmpwidth) / 2) * -1;
-  if ( targetElement.scrollLeft <= targetCenter) {
-    tabLeft.style.display = "none";
+  // admin-tab
+  var targetElement = document.getElementsByClassName('admin-tab-list')[0],
+      targetElementInner = targetElement.childNodes,
+      tmpwidth = 18;
+      tabLeft = document.getElementsByClassName('admin-tab-left')[0],
+      tabRight = document.getElementsByClassName('admin-tab-right')[0];
+
+  for(i = 0; i < targetElementInner.length; i++ ) {
+    if( !isNaN(targetElementInner[i].offsetWidth) ) {
+      var tmpmargin = targetElementInner[i].currentStyle || window.getComputedStyle(targetElementInner[i]),
+      regExp = /(\-|[0-9])+(.[0-9]+)?/g,
+      targetMargin = Number(regExp.exec(tmpmargin.marginLeft)[0]);
+      tmpwidth += targetElementInner[i].offsetWidth;
+      tmpwidth += targetMargin;
+    }
+  }
+
+  tabLeft.addEventListener('click', function (){
+    targetElement.scrollLeft = 0;
+    this.style.display = "none";
     tabRight.style.display = "block";
-  } else {
-    tabRight.style.display = "none";
+  });
+  tabRight.addEventListener('click', function (){
+    targetElement.scrollLeft = tmpwidth;
+    this.style.display = "none";
     tabLeft.style.display = "block";
-  }
-});
+  });
+  targetElement.addEventListener('scroll', function(){
+    
+    var targetCenter = ((targetElement.offsetWidth - tmpwidth) / 2) * -1;
+    if ( targetElement.scrollLeft <= targetCenter) {
+      tabLeft.style.display = "none";
+      tabRight.style.display = "block";
+    } else {
+      tabRight.style.display = "none";
+      tabLeft.style.display = "block";
+    }
+  });
+
+  // 마크업 확인 레이어 팝업 닫기 버튼 이벤트
+  $('.__close-layer-popup').click(function() {
+    $('.admin-layer-popup--plugin').css('display', 'none');
+  });
 
 });
 </script>
