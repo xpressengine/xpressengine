@@ -44,7 +44,7 @@
 
 <div id="addConfig" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <form action="{{ route('settings.theme.setting.create') }}" method="POST">
+        <form action="{{ route('settings.theme.setting') }}" method="POST">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -73,7 +73,6 @@
         {{--});--}}
 
         $('.__xe_btn-delete').click(function(){
-
             if(confirm('{{ xe_trans('xe::confirmThemeDelete') }}')) {
                 $('input[name=_method]').val('delete');
                 $('#setting-form').submit();

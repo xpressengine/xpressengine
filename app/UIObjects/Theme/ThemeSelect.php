@@ -51,6 +51,7 @@ class ThemeSelect extends AbstractUIObject
     public function render()
     {
         $themes = [];
+        $blankTheme = null;
         $args = $this->arguments;
         $prefix = array_get($args, 'prefixName', 'theme_');
         /** @var ThemeHandler $themeHandler */
@@ -58,6 +59,14 @@ class ThemeSelect extends AbstractUIObject
 
         if (!isset($args['themes'])) {
             $themes = $themeHandler->getAllTheme();
+        }
+
+        $blankThemeClass = app('config')->get('xe.theme.blank');
+        $blankThemeId = $blankThemeClass::getId();
+
+        if (isset($themes[$blankThemeId]) == true) {
+            $blankTheme = $themes[$blankThemeId];
+            unset($themes[$blankThemeId]);
         }
 
         if (!isset($args['selectedTheme'])) {
@@ -76,7 +85,13 @@ class ThemeSelect extends AbstractUIObject
 
         $this->loadFiles();
 
-        $this->template = view($this->view, compact('themes', 'selectedThemeId', 'prefix', 'previewLink'))->render();
+        $this->template = view($this->view, compact(
+            'themes',
+            'selectedThemeId',
+            'prefix',
+            'previewLink',
+            'blankTheme'
+        ))->render();
 
         return parent::render();
     }

@@ -471,13 +471,6 @@ Route::settings('setting', function () {
     ]);
     Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
 
-    Route::get('theme', [
-        'as' => 'settings.setting.theme',
-        'uses' => 'SettingsController@editTheme',
-        'settings_menu' => ['setting.theme']
-    ]);
-    Route::post('theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
-
     Route::get('permissions', [
         'as' => 'settings.setting.permissions',
         'uses' => 'SettingsController@editPermissions',
@@ -611,6 +604,31 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
+        Route::get('installed', [
+            'as' => 'settings.theme.installed',
+            'uses' => 'ThemeSettingsController@installed',
+            'settings_menu' => 'theme.installed'
+        ]);
+
+        Route::get('install', [
+            'as' => 'settings.theme.install',
+            'uses' => 'ThemeSettingsController@install',
+            'settings_menu' => 'theme.install'
+        ]);
+
+        Route::get('setting', [
+            'as' => 'settings.edit.theme',
+            'uses' => 'ThemeSettingsController@editSetting',
+            'settings_menu' => 'theme.setting'
+        ]);
+        Route::post('setting', ['as' => 'settings.update.theme', 'uses' => 'ThemeSettingsController@updateSetting']);
+
+        Route::group(['prefix' => 'config'], function () {
+            Route::get('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@editConfig']);
+            Route::put('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@updateConfig']);
+            Route::delete('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@deleteConfig']);
+            Route::post('/', ['as' => 'settings.theme.setting', 'uses' => 'ThemeSettingsController@createConfig']);
+        });
 
         Route::group(
             ['middleware' => ['admin']],
@@ -619,22 +637,12 @@ Route::settings(
                     'edit',
                     [
                         'as' => 'settings.theme.edit',
-                        'uses' => 'ThemeController@edit',
-                        'settings_menu' => 'setting.theme.edit',
+                        'uses' => 'ThemeSettingsController@edit',
+                        'settings_menu' => 'theme.editor',
                     ]
                 );
-                Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
+                Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeSettingsController@update']);
             }
-        );
-
-
-        Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
-        Route::put('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
-        Route::delete('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@deleteSetting']);
-
-        Route::post(
-            'setting/create',
-            ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']
         );
     }
 );
@@ -815,18 +823,6 @@ Route::settings(
         });
     }
 );
-
-Route::settings('theme', function () {
-    Route::get('/installed', [
-        'as' => 'settings.theme.installed',
-        'uses' => 'ThemeSettingsController@installed',
-        'settings_menu' => 'theme.installed'
-        ]);
-    Route::get('/install', [
-        'as' => 'settings.theme.install',
-        'uses' => 'ThemeSettingsController@install',
-        'settings_menu' => 'theme.install']);
-});
 
 Route::settings('extension', function () {
     Route::get('/installed', [

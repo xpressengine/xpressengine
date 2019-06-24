@@ -3232,6 +3232,12 @@ return [
         'ko' => '테마 설정',
         'en' => 'Setting theme'
     ],
+    'settingThemeDescription' => [
+        'ko' => '사이트에서 기본으로 출력할 데스크탑/모바일용 테마를 지정해보세요.<br>
+                원하는 페이지에 원하는 테마를 각각 지정할 수 있습니다.',
+        'en' => 'Specify a theme for your desktop / mobile that will be displayed by default on your site.<br>
+                You can specify each theme you want on the page you want.'
+    ],
     'themeEditor' => [
         'ko' => '테마 에디터',
         'en' => 'Theme editor'
@@ -3248,4 +3254,20 @@ return [
         'ko' => '비활성화된',
         'en' => 'deactivated'
     ],
+    'creatorName' => [
+        'ko' => '창작자명',
+        'en' => 'Creator name'
+    ],
+    'keyword' => [
+        'ko' => '키워드',
+        'en' => 'Keyword'
+    ],
+    'mySiteTheme' => [
+        'ko' => '내 사이트 테마',
+        'en' => 'My site theme'
+    ],
+    'mySiteExtension' =>[
+        'ko' => '내 사이트 익스텐션',
+        'en' => 'My site extension'
+    ]
 ];
