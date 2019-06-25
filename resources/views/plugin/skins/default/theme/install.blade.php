@@ -10,7 +10,8 @@
     <div class="col-sm-12">
         <form method="get" action="{{route('settings.theme.install')}}">
             <div class="panel-heading">
-                <div class="pull-right">
+                <!-- [D] panel 밖에 위치할 때 class="search-group-box" 안에 검색 영역 적용 -->
+                <div class="search-group-box">
                     <div class="input-group search-group">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -36,6 +37,8 @@
                             </button>
                         </div>
                     </div>
+                    <!-- [D] 버튼 상황에 맞춰 추가 -->
+                    <button type="button" class="xu-button xu-button--default admin-button--active">테마 업로드</button>
                 </div>
             </div>
 

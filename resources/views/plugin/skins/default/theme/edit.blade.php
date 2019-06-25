@@ -6,27 +6,32 @@
     <small>{{xe_trans('xe::themeEditorDescription')}}</small>
 @stop
 
-<div class="col-sm-12">
-    <div class="panel-group">
-        <div class="panel admin-tab">
-            <div class="pull-left">
-                {{ $theme->getTitle() }}
-            </div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <div class="panel admin-tab">
+                <div class="panel-heading clearfix">
+                    <div class="pull-left">
+                        <strong class="panel-title">{{ $theme->getTitle() }}</strong>
+                    </div>
 
-            <div class="pull-right">
-                <div class="input-group search-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="selected-type">{{$theme->getTitle()}}</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            @foreach ($themes as $editableTheme)
-                            <li>
-                                <a href="{{route('settings.theme.edit', ['theme' => $editableTheme->getId()])}}" data-target="query"><span>{{$editableTheme->getTitle()}}</span></a>
-                            </li>
-                            @endforeach
-                        </ul>
+                    <div class="pull-right">
+                        <span class="input-group-label">테마선택</span>
+                        <div class="input-group search-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="selected-type">{{$theme->getTitle()}}</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach ($themes as $editableTheme)
+                                    <li>
+                                        <a href="{{route('settings.theme.edit', ['theme' => $editableTheme->getId()])}}" data-target="query"><span>{{$editableTheme->getTitle()}}</span></a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

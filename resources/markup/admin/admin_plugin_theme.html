@@ -51,7 +51,37 @@
         <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
         <div class="row">
           <div class="col-sm-12">
-            <div class="panel admin-tab">
+            <div class="search-group-box">
+                <div class="input-group search-group">
+                  <form action="" data-submit="xe-plugin-items" method="GET">
+                    <div class="input-group-btn">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="selected-type">키워드</span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+                          <a href="#" data-target="q"><span>키워드</span></a>
+                        </li>
+                        <li>
+                          <a href="#" data-target="author"><span>창작자명</span></a>
+                        </li>
+                        <li>
+                          <a href="#" data-target="tag"><span>태그</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="search-input-group">
+                      <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                      <button class="btn-link">
+                        <i class="xi-close"></i><span class="sr-only">검색</span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <button type="button" class="xu-button xu-button--default admin-button--active">테마 업로드</button>
+            </div>
+            <div class="panel admin-tab clearfix">
               <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
               
               <ul class="admin-tab-list">

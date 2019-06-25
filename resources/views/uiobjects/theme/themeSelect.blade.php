@@ -4,8 +4,8 @@
     <ul class="theme-select-list">
         @if ($blankTheme != null)
             <li class="theme-item blank-theme-item">
-                <strong class="ellipsis">{{ $blankTheme->getTitle() }}</strong>
-
+                <strong class="blank-theme-item__text ellipsis">{{ $blankTheme->getTitle() }}</strong>
+                
                 @if($configs = app('xe.theme')->getThemeConfigList($blankTheme->getId()))
                     @foreach($configs as $configId => $config)
                         <div class="skin-select-btn">
@@ -16,6 +16,7 @@
                         </div>
                     @endforeach
                 @endif
+                
             </li>
         @endif
 

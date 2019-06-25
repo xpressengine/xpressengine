@@ -34,6 +34,42 @@
         }
       }
     }
+
+    &.blank-theme-item {
+      display: flex;
+      align-items: center;
+      border: 1px solid #e0e0e0;
+      background-color: #fff;
+
+      .blank-theme-item__text {
+        flex: 1;
+        padding-left: 15px;
+      }
+
+      .skin-select-btn {
+        padding: 15px 10px;
+
+        .btn {
+          i {
+            display: none;
+
+            &.visible-xs {
+              font-size: 18px;
+            }
+          }
+
+          &.on {
+            border-color: transparent;
+            background-color: #6F8DFF;
+            color: #fff;
+
+            i {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
   }
 
   .theme-desc {
@@ -103,7 +139,7 @@
 
             i {
               display: inline-block;
-              margin-right: 3px;
+              // margin-right: 3px;
             }
           }
         }
@@ -142,11 +178,33 @@
         .skin-select-btn {
           .btn {
             width: 86px;
+
+            &.on {
+              i {
+                margin-right: 3px;
+              }
+            }
           }
         }
 
         strong {
           padding-right: 300px;
+        }
+      }
+    }
+
+    .theme-item {
+      &.blank-theme-item {
+        .skin-select-btn {
+          .btn {
+            width: 86px;
+  
+            &.on {
+              i {
+                margin-right: 3px;
+              }
+            }
+          }
         }
       }
     }

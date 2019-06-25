@@ -11,6 +11,51 @@
         <div class="panel-group">
             <div class="panel">
                 <div class="panel-heading">
+                    <div class="pull-left">
+                        <div class="btn-group">
+                            <button class="btn btn-default __xe_check_all">{{ xe_trans('xe::selectAll') }}</button>
+                        </div>
+                        <div class="btn-group __xe_controll_btn">
+                            <a href="{{ route('settings.plugins.manage.activate') }}" class="btn btn-default on __xe_activate_plugin"><span>{{ xe_trans('xe::activate') }}</span></a>
+                            <a href="{{ route('settings.plugins.manage.deactivate') }}" class="btn btn-default on __xe_deactivate_plugin"><span>{{ xe_trans('xe::deactivate') }}</span></a>
+                            <a href="{{ route('settings.plugins.manage.delete') }}" class="btn btn-default on __xe_remove_plugin"><span>{{ xe_trans('xe::delete') }}</span></a>
+                        </div>
+                    </div>
+                    <div class="pull-right text-align--right">
+                        <div class="search-btn-group">
+                            <a href="{{route('settings.extension.install')}}" class="xe-btn xe-btn-install"><i class="xi-plus"></i>{{xe_trans('xe::installNewExtension')}}</a>
+                            <button type="button" class="btn btn-default">{{xe_trans('xe::extension')}} {{xe_trans('xe::upload')}}</button>
+                        </div>
+                        <div class="input-group search-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="selected-type">{{ xe_trans('xe::filter') }}</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#" data-target="allTheme"><span>{{xe_trans('xe::all')}}</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-target="activated"><span>{{xe_trans('xe::activatedExtension')}}</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-target="deactivated"><span>{{xe_trans('xe::deactivatedExtension')}}</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="search-input-group">
+                                <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                                <button class="btn-link">
+                                    <i class="xi-close"></i><span class="sr-only">검색</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+                <!-- <div class="panel-heading">
                     <div class="pull-right">
                         <div class="btn-group">
                             <a href="{{route('settings.extension.install')}}" class="xe-btn">{{xe_trans('xe::installNewExtension')}}</a>
@@ -58,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <ul class="list-group list-plugin">
                     @foreach ($plugins as $plugin)

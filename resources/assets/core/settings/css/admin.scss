@@ -35,6 +35,15 @@
 @import "component/variables";
 @import "component/button";
 
+/* 단일 클래스 스타일 */
+.text-align--center {text-align: center !important}
+.text-align--left {text-align: left !important}
+.text-align--right {text-align: right !important}
+
+.vertical-align--top {vertical-align: top !important}
+.vertical-align--middle {vertical-align: middle !important}
+.vertical-align--bottom {vertical-align: bottom !important}
+
 /* reset, helper class */
 legend {
   position: absolute;
@@ -284,6 +293,15 @@ aside {
 
   a {
     color: #2c2e37;
+  }
+}
+
+// 영문 파일명이 줄바꿈 되도록 속성 추가
+.nav-pills {
+  li {
+    a {
+      word-break: break-all;
+    }
   }
 }
 
@@ -1234,6 +1252,18 @@ aside {
       background-color: #6f8dff;
       color: #fff;
     }
+
+    .input-group-label {
+      display: inline-block;
+      font-size: 15px;
+      line-height: 33px;
+
+      + .input-group {
+        // display: inline-block;
+        // width: auto;
+        // vertical-align: top;
+      }
+    }
   }
 
   .list-plugin {
@@ -1394,6 +1424,26 @@ aside {
     height: 33px;
     margin-left: -1px;
   }
+}
+
+// 상단 우측 검색 및 버튼 추가 시 적용 (감싸줌)
+.search-group-box {
+  margin-bottom: 7px;
+  text-align: right;
+
+  .search-group {
+    display: inline-block;
+    width: auto;
+    margin: 7px 0;
+    vertical-align: middle;
+
+    + .xu-button {
+      margin-left: 15px;
+      margin: 7px 0 7px 15px;
+    }
+  }
+
+  
 }
 
 .xe-lypop-plugin {
@@ -2278,7 +2328,15 @@ aside {
         button {
           flex: 1;
 
-          & + button {
+          & + button, & + a {
+            margin-left: 10px;
+          }
+        }
+
+        a {
+          flex: 1;
+
+          & + a, & + button {
             margin-left: 10px;
           }
         }
@@ -2303,6 +2361,10 @@ aside {
       }
 
       .pull-left {
+        margin: 20px 0;
+      }
+
+      .pull-right {
         margin: 20px 0;
       }
     } // panel-heading
@@ -2483,6 +2545,14 @@ aside {
       .pull-right {
         float: right !important;
         margin: 17px 0;
+      }
+
+      .input-group-label {
+        + .input-group {
+          display: inline-block;
+          width: auto;
+          vertical-align: top;
+        }
       }
     }
   }

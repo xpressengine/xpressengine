@@ -11,15 +11,6 @@
         <div class="panel-group">
             <div class="panel">
                 <div class="panel-heading">
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <a href="{{route('settings.theme.install')}}" class="xe-btn">{{xe_trans('xe::installNewTheme')}}</a>
-                            <button type="button" class="xe-btn">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-heading">
                     <div class="pull-left">
                         <div class="btn-group">
                             <button class="btn btn-default __xe_check_all">{{ xe_trans('xe::selectAll') }}</button>
@@ -30,8 +21,11 @@
                             <a href="{{ route('settings.plugins.manage.delete') }}" class="btn btn-default on __xe_remove_plugin"><span>{{ xe_trans('xe::delete') }}</span></a>
                         </div>
                     </div>
-
-                    <div class="pull-right">
+                    <div class="pull-right text-align--right">
+                        <div class="search-btn-group">
+                            <a href="{{route('settings.theme.install')}}" class="xe-btn xe-btn-install"><i class="xi-plus"></i>{{xe_trans('xe::installNewTheme')}}</a>
+                            <button type="button" class="btn btn-default">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</button>
+                        </div>
                         <div class="input-group search-group">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
