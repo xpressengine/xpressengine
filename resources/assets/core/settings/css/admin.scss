@@ -30,6 +30,11 @@
 // xe-modal-plugin-detail
 @import "modal-plugin";
 
+// 임시 컴포넌트 버튼 (cdn 링크 적용 전 임시 사용)
+@import "component/functions";
+@import "component/variables";
+@import "component/button";
+
 /* reset, helper class */
 legend {
   position: absolute;
@@ -139,6 +144,45 @@ p.text {
   border: 0 none;
   background-color: transparent;
 }
+
+// === 테마, 익스텐션 페이지 버튼 스타일 추가 ===
+// 미리보기
+.admin-button--preview {
+  color: #345bd9;
+}
+
+// 설치됨 버튼
+.admin-button--complete {
+  background-color: #deebff;
+  color: #505f79;
+
+  &:hover, &:hover:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+  }
+
+  &:active, &:active:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+  }
+}
+
+// 활성화 버튼
+.admin-button--active {
+  background-color: #505f79;
+  color: #fff;
+
+  &:hover, &:hover:not([disabled]) {
+    background-color: #505f79;
+  }
+
+  &:active, &:active:not([disabled]) {
+    background-color: #505f79;
+    color: #fff;
+  }
+}
+
+// === //테마, 익스텐션 페이지 버튼 스타일 추가 ===
 
 /* layout */
 
@@ -2020,6 +2064,7 @@ aside {
   > li {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 2px 1px -1px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
+    transition: box-shadow 0.2s ease-in-out;
 
     &:hover {
       box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1), 0 3px 14px 2px rgba(0, 0, 0, 0.1), 0 8px 10px 1px rgba(0, 0, 0, 0.1);
@@ -2055,6 +2100,7 @@ aside {
   > li {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 2px 1px -1px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
+    transition: box-shadow 0.2s ease-in-out;
 
     &:hover {
       box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1), 0 3px 14px 2px rgba(0, 0, 0, 0.1), 0 8px 10px 1px rgba(0, 0, 0, 0.1);
