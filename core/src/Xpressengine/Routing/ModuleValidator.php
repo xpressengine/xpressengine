@@ -31,6 +31,7 @@ use Xpressengine\Site\SiteHandler;
  */
 class ModuleValidator implements ValidatorInterface
 {
+    use InstanceRouteChecker;
     /**
      * @var null
      */
@@ -114,9 +115,7 @@ class ModuleValidator implements ValidatorInterface
             return false;
         }
 
-        $uri = $route->uri();
-
-        if (strpos($uri, '{instanceGroup') !== 0) {
+        if (!$this->isInstance($route)) {
             return false;
         }
 
@@ -124,6 +123,7 @@ class ModuleValidator implements ValidatorInterface
         if (isset($actions['module'])) {
             return true;
         }
+
         return false;
     }
 

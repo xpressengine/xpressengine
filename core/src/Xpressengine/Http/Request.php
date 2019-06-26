@@ -17,6 +17,7 @@ namespace Xpressengine\Http;
 use Closure;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
@@ -51,6 +52,11 @@ class Request extends \Illuminate\Http\Request
      * @var Repository
      */
     protected $config;
+
+    /**
+     * @var bool
+     */
+    protected $localeSegment = false;
 
     /**
      * 현재 요청이 모바일 페이지 요청인지 조회한다.
@@ -192,5 +198,89 @@ class Request extends \Illuminate\Http\Request
         Arr::forget($results, $keys);
 
         return $results;
+    }
+
+    /**
+     * Get the current path info for the request.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        $path = $this->rawPath();
+
+        if ($this->enabledLocaleSegment()) {
+            $locale = $this->getLocale();
+            $path = trim(Str::startsWith($path, $locale) ? substr($path, strlen($locale)) : $path, '/');
+        }
+
+        return $path;
+
+    }
+
+    /**
+     * Get the current raw path info for the request.
+     *
+     * @return string
+     */
+    public function rawPath()
+    {
+        return parent::path();
+    }
+
+    /**
+     * Get a raw segment from the URI (1 based index).
+     *
+     * @param int          $index   segment index
+     * @param string|null  $default default value
+     * @return string|null
+     */
+    public function rawSegment($index, $default = null)
+    {
+        return Arr::get($this->rawSegments(), $index - 1, $default);
+    }
+
+    /**
+     * Get all of the raw segments for the request path.
+     *
+     * @return array
+     */
+    public function rawSegments()
+    {
+        $segments = explode('/', rawurldecode($this->rawPath()));
+
+        return array_values(array_filter($segments, function ($value) {
+            return $value !== '';
+        }));
+    }
+
+    /**
+     * Get the locale.
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->enabledLocaleSegment() ? $this->rawSegment(1) : parent::getLocale();
+    }
+
+    /**
+     * Enables locale segment
+     *
+     * @return void
+     */
+    public function enableLocaleSegment()
+    {
+        $this->localeSegment = true;
+    }
+
+    /**
+     * Determine if locale segment is enabled
+     *
+     * @return bool
+     */
+    public function enabledLocaleSegment()
+    {
+        return $this->localeSegment === true;
     }
 }

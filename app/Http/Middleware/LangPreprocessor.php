@@ -14,11 +14,8 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
-use Illuminate\Contracts\Cookie\Factory as CookieFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
-use XeLang;
 use Closure;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Rating;
@@ -82,16 +79,6 @@ class LangPreprocessor
      */
     public function handle(Request $request, Closure $next)
     {
-        // check locale at request & set locale
-        $locale = $request->get('_l');
-        if(!$locale) {
-            $locale = $request->cookie('locale') ?: $this->app['xe.translator']->getLocale();
-        }
-        $this->app->setLocale($locale);
-        $this->app['cookie']->queue(
-            $this->app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
-        );
-
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->prepare($request);
         }

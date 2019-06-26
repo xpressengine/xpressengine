@@ -30,6 +30,7 @@ use Illuminate\Routing\Route;
  */
 class UriValidator implements ValidatorInterface
 {
+    use InstanceRouteChecker;
 
     /**
      * Validate a given rule against a route and request.
@@ -41,13 +42,12 @@ class UriValidator implements ValidatorInterface
      */
     public function matches(Route $route, Request $request)
     {
-        $path = $request->path() == '/' ? '/' : '/' . $request->path();
-        $firstSegment = $request->segment(1);
-        $uri = $route->uri();
-        if (strpos($uri, '{instanceGroup') === 0 && $firstSegment === null) {
+        if ($request->segment(1) === null && $this->isInstance($route)) {
             return true;
         } else {
-            return preg_match($route->getCompiled()->getRegex(), rawurldecode($path));
+            $path = $request->decodedPath() == '/' ? '/' : '/' . $request->decodedPath();
+
+            return preg_match($route->getCompiled()->getRegex(), $path);
         }
     }
 }

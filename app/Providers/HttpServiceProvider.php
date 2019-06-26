@@ -13,6 +13,7 @@
  */
 namespace App\Providers;
 
+use Illuminate\Contracts\Cookie\Factory as CookieFactory;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -34,7 +35,7 @@ class HttpServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['request']->setConfig($this->app['config']);
+        //
     }
 
     /**
@@ -44,15 +45,39 @@ class HttpServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // bind Request
-        $this->app->bind(\Xpressengine\Http\Request::class, 'request');
+        // request 는 web 요청에서만 사용됨. index.php 에서 생성된 후 router 에 의해
+        // dispatch 되기전에 rebound 됨. 이 시점에 request 에서 처리하기 위한 요소를 정의 함.
+        $this->app->rebinding('request', function ($app, $request) {
+            $config = $app['config'];
+            $request->setConfig($config);
 
-        // set config to request when rebind request
-        $this->app->rebinding(
-            'request',
-            function ($app, $request) {
-                return $request->setConfig($app['config']);
+            if ($config['xe.lang.locale_route'] === true) {
+                if (in_array($locale = $request->rawSegment(1), $config['xe.lang.locales'])) {
+                    $app['url']->formatHostUsing(function ($root) use ($locale) {
+                        return rtrim($root, '/') . '/' . $locale;
+                    });
+                    $request->enableLocaleSegment();
+                } else {
+                    $locale = $this->getFallbackLocale();
+                }
+            } else {
+                $locale = $request->get('_l') ?: $request->cookie('locale');
+                if (!in_array($locale, $config['xe.lang.locales'])) {
+                    $locale = $this->getFallbackLocale();
+                }
+
+                $app['cookie']->queue(
+                    $app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
+                );
             }
-        );
+
+            $app->setLocale($locale);
+        });
+    }
+
+    protected function getFallbackLocale()
+    {
+//        return $this->app['config']['app.fallback_locale'];
+        return $this->app['xe.translator']->getLocale();
     }
 }

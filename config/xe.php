@@ -29,6 +29,7 @@ return [
             'en' => 'English',
         ],
         'autocomplete' => false,
+        'locale_route' => true,
     ],
 
     'settings' => [

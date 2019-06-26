@@ -283,9 +283,16 @@ if (function_exists('locale_url') === false) {
      */
     function locale_url($locale)
     {
-        $queries = app('request')->query->all();
-        array_set($queries, '_l', $locale);
-        return app('request')->url() . '?' . http_build_query($queries);
+        $request = app('request');
+        $queries = $request->query->all();
+        if (config('xe.lang.locale_route') === true) {
+            $url = $request->root().'/'.$locale.'/'.$request->path();
+        } else {
+            $url = $request->url();
+            array_set($queries, '_l', $locale);
+        }
+
+        return $url.'?'.http_build_query($queries);
     }
 }
 
