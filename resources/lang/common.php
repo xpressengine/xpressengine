@@ -3192,4 +3192,8 @@ return [
         'ko' => '알 수 없는 버전입니다. :ver',
         'en' => 'Unknown version. :ver',
     ],
+    'unavailableUrl' => [
+        'ko' => '사용할 수 없는 url 입니다.',
+        'en' => 'Unavailable url.',
+    ],
 ];

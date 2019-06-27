@@ -30,7 +30,7 @@ return [
         ],
         'autocomplete' => false,
 
-        'locale_type' => 'null', // null(cookie), route, domain
+        'locale_type' => 'route', // null(cookie), route, domain
         'locale_domains' => [
             'ko' => 'example1.test',
             'en' => 'example2.test',
