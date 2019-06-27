@@ -22,21 +22,6 @@
   // input 영역 텍스트 삭제 버튼 관련 공통
   .media-library__input-group {
     position: relative;
-
-    .media-library__button-text-remove {
-      position: absolute;
-      width: 36px;
-      height: 36px;
-      padding: 10px;
-      border: 0 none;
-      background-color: transparent;
-      outline: none;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-    }
   }
 
   .media-library-header-mobile-upload-button {
@@ -362,8 +347,8 @@
           top: 6px;
           right: 0;
     
-          .media-library__svg {
-            fill: $n0;
+          .media-library__button-text-remove-image {
+            background-image: url(../img/icon-input-close-white.svg);
           }
         }
       }
@@ -462,6 +447,7 @@
   .media-library-header-mobile-search-area {
     position: relative;
     height: 48px;
+    border-bottom: 1px solid $n30;
     background-color: $n10;
     z-index: 30;
   }

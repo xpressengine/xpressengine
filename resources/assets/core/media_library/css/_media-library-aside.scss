@@ -30,16 +30,19 @@
     }
 
     .media-library-aside__mobile-button {
+      overflow: hidden;
       position: relative;
       display: block;
       width: 100%;
       height: 48px;
-      padding: 0 15px;
+      padding: 0 50px 0 15px;
       border: 0 none;
       font-size: 14px;
       line-height: 24px;
       color: $n900;
       background-color: $n30;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       text-align: left;
       outline: none;
     }
@@ -59,9 +62,12 @@
 
     .media-library-aside__list {
       display: none;
+      overflow-y: auto;
       position: absolute;
       top: 42px;
       right: 11px;
+      max-height: 225px;
+      max-width: calc(100% - 40px);
       margin: 0;
       padding: 13px 17px;
       border: 1px solid #d4d5dc;
@@ -69,7 +75,7 @@
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
       background-color: $n0;
       list-style: none;
-      z-index: 20;
+      z-index: 60;
 
       > li {
         margin-top: 8px;
@@ -105,10 +111,15 @@
 @media (min-width: 768px) {
   // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용, PC는 여기서부터 새로 적용
   .media-library-aside {
-    padding: 32px 24px;
+    overflow-y: auto;
+    
     // 저장소가 1개일 때 
     &.state-one {
       display: none;
+    }
+
+    .media-library-aside-inner {
+      padding: 32px 10px 32px 24px;
     }
 
     .media-library-aside__title {
@@ -145,7 +156,8 @@
             top: 3px;
             left: -24px;
             width: 3px;
-            height: 18px;
+            // height: 18px;
+            height: calc(100% - 5px);
             background-color: $b500;
           }
 

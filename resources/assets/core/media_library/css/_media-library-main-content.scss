@@ -311,6 +311,8 @@
       }
 
       &.open {
+        z-index: 30;
+
         .media-library__button-ellipsis {
           background-image: url(../img/icon-ellipsis-on.svg);
           transform:rotate(90deg);
@@ -400,10 +402,21 @@
 
 // 검색 후 데이터 없을 때 노출
 .media-library-content-empty {
-  padding: 110px 30px;
-  border: 1px solid $n30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  // border: 1px solid $n30;
   background-color: $n10;
   text-align: center;
+  min-height: 250px;
+
+  // .media-library-content-empty-inner {
+  //   display: table-cell;
+  //   vertical-align: middle;
+  //   text-align: center;
+  // }
 
   .media-library-content-empty__image {
     display: inline-block;
@@ -658,7 +671,7 @@
 /* tablet */
 @media (min-width: 768px) {
   .media-library-content {
-    flex: 1;
+    flex: 1 1 auto;
   }
 
   .media-library-content__list-type {
@@ -676,7 +689,8 @@
     .media-library-content-header__writer {
       display: block;
       // flex: 0 0 120px;
-      flex: 0 0 90px;
+      // flex: 0 0 90px;
+      flex: 0 0 75px;
       
       .media-library-content-header__button {
         // margin-right: 10px
@@ -685,7 +699,7 @@
 
     .media-library-content-header__upload {
       display: block;
-      flex: 0 0 160px;
+      flex: 0 0 130px;
       
       .media-library-content-header__button {
         // margin-right: 10px
@@ -695,6 +709,8 @@
     .media-library-content-header__size {
       display: block;
       // flex: 0 0 110px;
+
+      // flex: 0 0 93px;
       flex: 0 0 93px;
       
       .media-library-content-header__button {
@@ -705,7 +721,9 @@
     .media-library-content-header__date {
       display: block;
       // flex: 0 0 120px;
-      flex: 0 0 110px;
+      
+      // flex: 0 0 110px;
+      flex: 0 0 95px;
       
       .media-library-content-header__button {
         // margin-right: 10px
@@ -728,6 +746,12 @@
 
         &.active {
           background-color: $b100;
+        }
+
+        &.media-library-content-list__item--folder-depth-up {
+          .media-library-content-list__upload {
+            display: none !important;
+          }
         }
   
         &.media-library-content-list__item--folder {
@@ -804,8 +828,11 @@
         float: none;
         // flex: 0 0 120px;
         // padding: 0 25px 0 15px;
-        flex: 0 0 90px;
-        padding: 0 15px;
+        // flex: 0 0 90px;
+        flex: 0 0 75px;
+
+
+        // padding: 0 15px;
       }
 
       .media-library-content-list__upload {
@@ -813,8 +840,8 @@
         float: none;
         // flex: 0 0 120px;
         // padding: 0 25px 0 15px;
-        flex: 0 0 160px;
-        padding: 0 15px;
+        flex: 0 0 130px;
+        // padding: 0 15px;
 
         .media-library-content-list__text {
           display: block;
@@ -828,22 +855,29 @@
       .media-library-content-list__size {
         display: block;
         float: none;
+        // flex: 0 0 93px;
         flex: 0 0 93px;
+
         // padding: 0 25px 0 15px;
-        padding: 0 15px;
+        // padding: 0 15px;
       }
 
       .media-library-content-list__date {
         display: block;
         float: none;
-        flex: 0 0 110px;
+        // flex: 0 0 110px;
+        flex: 0 0 95px;
+        
+        
         // margin-right: 42px;
         // padding: 0 25px 0 15px;
-        padding: 0 15px;
+        // padding: 0 15px;
       }      
 
       .media-library-content-list__text {
         margin: 0;
+        // padding: 0 15px;
+        padding-left: 15px;
         font-size: 14px;
         line-height: 20px;
         letter-spacing: -0.03px;
@@ -858,7 +892,7 @@
 
   // 페이징 스타일
   .media-library-paging {
-    height: auto;
+    // height: auto;
     min-height: 78px;
     padding: 7px 0;
 
@@ -869,9 +903,6 @@
     }
 
     .media-library-paging {
-      display: block;
-      text-align: center;
-
       &__box {
         display: inline-block;
 
@@ -913,13 +944,8 @@
 
   // 검색 후 데이터 없을 때 노출
   .media-library-content-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 230px 30px;
     border: 0 none;
+    min-height: 300px;
 
     .media-library-content-empty__image {
       display: inline-block;

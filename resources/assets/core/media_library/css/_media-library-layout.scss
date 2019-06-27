@@ -2,6 +2,7 @@
   position: relative;
   margin: 0 -15px;
   font-family: $sys-font-stack;
+  word-break: break-all;
 
   /*
   * 1. Change the default monospaced font family in all browsers (opinionated).
@@ -22,15 +23,15 @@
   samp {
     font-family: $sys-font-stack-mono;
   }
+}
 
-  .blind {
-    position: absolute;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    margin: -1px;
-    width: 1px;
-    height: 1px
-  }
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  width: 1px;
+  height: 1px
 }
 
 // input type="text" 스타일
@@ -67,21 +68,45 @@
     right: 0;
     width: 36px;
     height: 36px;
-    padding: 10px;
+    padding: 9px;
     border: 0 none;
     background-color: transparent;
     outline: none;
 
-    svg {
-      width: 16px;
-      height: 16px;
+    .media-library__button-text-remove-image {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background: url(../img/icon-input-close.svg) 0 0 no-repeat;
+      background-size: 18px 18px;
     }
   }
 }
 
-.media-library__input-text {
+.media-library__input-text, 
+.media-library__textarea {
   &::placeholder {
     color: $n80;
+  }
+}
+
+.media-library__textarea {
+  width: 100%;
+  height: 78px;
+  padding: 8px 12px;
+  border: 1px solid #d4d5dc;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.03px;
+  color: $n800;
+  outline: none;
+  transition: all 0.5s ease-out;
+  box-sizing: border-box;
+
+  &:focus {
+    border-radius: 4px;
+    border: 2px solid $b400;
   }
 }
 
@@ -180,6 +205,11 @@
     background-color: transparent;
     color: $n70;
   }
+}
+
+// button subtle
+.media-library__button--icon {
+  padding: 0 8px;
 }
 
 // 버튼 그룹
@@ -294,9 +324,9 @@
 
     .media-library-aside {
       // flex: 0 0 auto;
-      flex: 0 0 180px;
       border-right: 1px solid $n40;
-      max-width: 180px;
+      // max-width: 180px;
+      width: 160px;
     }
 
     .media-library-main {
