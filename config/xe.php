@@ -29,7 +29,12 @@ return [
             'en' => 'English',
         ],
         'autocomplete' => false,
-        'locale_route' => true,
+
+        'locale_type' => 'null', // null(cookie), route, domain
+        'locale_domains' => [
+            'ko' => 'example1.test',
+            'en' => 'example2.test',
+        ]
     ],
 
     'settings' => [

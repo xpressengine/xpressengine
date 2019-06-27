@@ -561,11 +561,11 @@ class UserServiceProvider extends ServiceProvider
      */
     private function setProfileImageResolverOfUser()
     {
-        $default = $this->app['config']['xe.user.profileImage.default'];
-        $storage = $this->app['xe.storage'];
-        $media = $this->app['xe.media'];
         User::setProfileImageResolver(
-            function ($imageId) use ($default, $storage, $media) {
+            function ($imageId) {
+                $default = $this->app['config']['xe.user.profileImage.default'];
+                $storage = $this->app['xe.storage'];
+                $media = $this->app['xe.media'];
                 try {
                     if($imageId !== null) {
                         /** @var Storage $storage */

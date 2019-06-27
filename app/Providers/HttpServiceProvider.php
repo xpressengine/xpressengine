@@ -29,16 +29,6 @@ use Illuminate\Support\ServiceProvider;
 class HttpServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register any application services.
      *
      * @return void
@@ -51,13 +41,18 @@ class HttpServiceProvider extends ServiceProvider
             $config = $app['config'];
             $request->setConfig($config);
 
-            if ($config['xe.lang.locale_route'] === true) {
+            if ($config['xe.lang.locale_type'] === 'route') {
                 if (in_array($locale = $request->rawSegment(1), $config['xe.lang.locales'])) {
                     $app['url']->formatHostUsing(function ($root) use ($locale) {
                         return rtrim($root, '/') . '/' . $locale;
                     });
                     $request->enableLocaleSegment();
                 } else {
+                    $locale = $this->getFallbackLocale();
+                }
+            } elseif ($config['xe.lang.locale_type'] === 'domain') {
+                $locale = array_search($request->getHttpHost(), $config['xe.lang.locale_domains']);
+                if ($locale === false) {
                     $locale = $this->getFallbackLocale();
                 }
             } else {
@@ -77,7 +72,6 @@ class HttpServiceProvider extends ServiceProvider
 
     protected function getFallbackLocale()
     {
-//        return $this->app['config']['app.fallback_locale'];
         return $this->app['xe.translator']->getLocale();
     }
 }
