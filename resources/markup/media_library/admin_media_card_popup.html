@@ -250,8 +250,8 @@
                                     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
                                     <div class="media-library-content" style="display: block">
                                         <h3 class="blind">파일정보 리스트형, 카드형</h3>
-                                        <!-- 리스트 - 리스트형 -->
-                                        <div class="media-library-content__list-type">
+                                        <!-- 리스트 - 카드형 -->
+                                        <div class="media-library-content__card-type">
                                             <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
                                             <div class="media-library-content-header">
                                                 <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
@@ -381,6 +381,48 @@
                                                             </ul>
                                                         </div>
                                                     </li>
+                                                    <li class="active">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
                                                     <li class="">
                                                         <div class="media-library__input-group media-library-content-list__checkbox">
                                                             <label class="media-library__label">
@@ -395,14 +437,101 @@
                                                             <div class="media-library-content-list__title">
                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
                                                                 <button type="button" class="media-library-content-list__text">
-                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
                                                                 </button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
                                                             </div>
-                                                            <div class="media-library-content-list__upload">
-                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                             </div>
                                                             <div class="media-library-content-list__size">
                                                                 <span class="media-library-content-list__text">999 MB</span>
@@ -469,7 +598,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <!-- //리스트 - 리스트형 -->
+                                        <!-- //리스트 - 카드형 -->
     
                                         <!-- 페이징, 게시판 페이징 가져와서 수정 (리스트형, 카드형 공통 페이징) -->
                                         <div class="media-library-paging">
@@ -728,8 +857,8 @@
                                                     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
                                                     <div class="media-library-content" style="display: block">
                                                         <h3 class="blind">파일정보 리스트형, 카드형</h3>
-                                                        <!-- 리스트 - 리스트형 (리스트형, 카드형 통으로 적용) -->
-                                                        <div class="media-library-content__list-type">
+                                                        <!-- 리스트 - 카드형 -->
+                                                        <div class="media-library-content__card-type">
                                                             <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
                                                             <div class="media-library-content-header">
                                                                 <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
@@ -780,7 +909,7 @@
                                                                             <div class="media-library-content-list__title">
                                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
                                                                                 <button type="button" class="media-library-content-list__text">
-                                                                                    
+                                                                                    <!-- 2019/06/28 카드형에서 말줄임 적용을 위해 span 태그 추가 -->
                                                                                     <span class="media-library-content-list__text-ellipsis">..</span>
                                                                                 </button>
                                                                             </div>
@@ -798,7 +927,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <!-- [D] class="media-library__button-ellipsis" 버튼 클릭 시 class="media-library-content-list__more" 영역에 class="open" 추가 (말줄임 버튼 컬러 변경 및 팝업 노출) -->
-                                                                        <div class="media-library-content-list__more">
+                                                                        <div class="media-library-content-list__more open">
                                                                             <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
                                                                             <ul class="media-library-content-list__more-list">
                                                                                 <li>
@@ -859,6 +988,48 @@
                                                                             </ul>
                                                                         </div>
                                                                     </li>
+                                                                    <li class="active">
+                                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                                            <label class="media-library__label">
+                                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                                <span class="media-library__input-helper"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__icon">
+                                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__content-box">
+                                                                            <div class="media-library-content-list__title">
+                                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                                <button type="button" class="media-library-content-list__text">
+                                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__writer">
+                                                                                <span class="media-library-content-list__text">admin</span>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__upload">
+                                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__size">
+                                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__date">
+                                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__more ">
+                                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                                            <ul class="media-library-content-list__more-list">
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
                                                                     <li class="">
                                                                         <div class="media-library__input-group media-library-content-list__checkbox">
                                                                             <label class="media-library__label">
@@ -873,14 +1044,101 @@
                                                                             <div class="media-library-content-list__title">
                                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
                                                                                 <button type="button" class="media-library-content-list__text">
-                                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
                                                                                 </button>
                                                                             </div>
                                                                             <div class="media-library-content-list__writer">
                                                                                 <span class="media-library-content-list__text">admin</span>
                                                                             </div>
-                                                                            <div class="media-library-content-list__upload">
-                                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
+                                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__size">
+                                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__date">
+                                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__more ">
+                                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                                            <ul class="media-library-content-list__more-list">
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="">
+                                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                                            <label class="media-library__label">
+                                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                                <span class="media-library__input-helper"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__icon">
+                                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__content-box">
+                                                                            <div class="media-library-content-list__title">
+                                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                                <button type="button" class="media-library-content-list__text">
+                                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__writer">
+                                                                                <span class="media-library-content-list__text">admin</span>
+                                                                            </div>
+                                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__size">
+                                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__date">
+                                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__more ">
+                                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                                            <ul class="media-library-content-list__more-list">
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="">
+                                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                                            <label class="media-library__label">
+                                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                                <span class="media-library__input-helper"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__icon">
+                                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                                        </div>
+                                                                        <div class="media-library-content-list__content-box">
+                                                                            <div class="media-library-content-list__title">
+                                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                                <button type="button" class="media-library-content-list__text">
+                                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="media-library-content-list__writer">
+                                                                                <span class="media-library-content-list__text">admin</span>
+                                                                            </div>
+                                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
                                                                             </div>
                                                                             <div class="media-library-content-list__size">
                                                                                 <span class="media-library-content-list__text">999 MB</span>
@@ -947,7 +1205,7 @@
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                        <!-- //리스트 - 리스트형 -->
+                                                        <!-- //리스트 - 카드형 -->
                     
                                                         <!-- 페이징, 게시판 페이징 가져와서 수정 (리스트형, 카드형 공통 페이징) -->
                                                         <div class="media-library-paging">

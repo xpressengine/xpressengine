@@ -278,7 +278,7 @@
                                                     -->
                                                     <li class="media-library-content-list__item--folder-depth-up">
                                                         <!-- 
-                                                            [D] PC : label 영역을 리스트영역에 크게 적용하여 라벨 클릭 시 체크박스 class="media-library__input-checkbox" 에 자동으로 체크 되도록 적용하였습니다. 
+                                                            [D] [D] PC : li 영역 클릭 시 class="media-library__input-checkbox" 에 체크 적용 필요
                                                                 모바일 : 체크박스 영역을 체크해야 체크 되도록 라벨 영역의 크기를 줄여 좋았습니다.
                                                         -->
                                                         <div class="media-library__input-group media-library-content-list__checkbox">
@@ -291,14 +291,17 @@
                                                             <!-- [D] 이미지 클래스 정보
                                                                 폴더 이미지 : class="media-library-content-list__icon-folder",
                                                                 기타 이미지 : class="media-library-content-list__icon-etc",
-                                                                jpg, png 같은 이미지는 썸네일 적용 (background-image 적용)
+                                                                미리보기 이미지 : class="media-library-content-list__icon-preview" jpg, png 같은 이미지는 썸네일 적용 (background-image 적용)
                                                             -->
                                                             <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
-                                                                <button type="button" class="media-library-content-list__text">..</button>
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <!-- 2019/06/28 카드형에서 말줄임 적용을 위해 span 태그 추가 -->
+                                                                    <span class="media-library-content-list__text-ellipsis">..</span>
+                                                                </button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text"></span>
@@ -346,7 +349,9 @@
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
-                                                                <button type="button" class="media-library-content-list__text">board</button>
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">board</span>
+                                                                </button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">-</span>
@@ -386,7 +391,9 @@
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
-                                                                <button type="button" class="media-library-content-list__text">제목제목제목제목제목제목제목제목제목</button>
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                </button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
@@ -421,12 +428,14 @@
                                                             </label>
                                                         </div>
                                                         <div class="media-library-content-list__icon">
-                                                            <div class="media-library-content-list__icon-thumb " style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
                                                         </div>
                                                         <div class="media-library-content-list__content-box">
                                                             <div class="media-library-content-list__title">
                                                                 <!-- 제목 텍스트 태그를 button 태그로 변경 -->
-                                                                <button type="button" class="media-library-content-list__text">썸네일 이미지</button>
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
                                                             </div>
                                                             <div class="media-library-content-list__writer">
                                                                 <span class="media-library-content-list__text">admin</span>
