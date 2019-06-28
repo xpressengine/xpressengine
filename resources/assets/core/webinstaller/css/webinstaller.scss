@@ -179,19 +179,14 @@ header {
 
 .footer {
   position: relative;
-  // height: 50px;
-  padding-top: 20px;
+  height: 50px;
+  padding-top: 10px;
   z-index: 10;
 
   .text-copy {
-    // display: block;
-    // width: 347px;
-    // height: 19px;
-    // margin: 0 auto;
-    // background: url(../img/bg_footer.png) 50% 0 no-repeat;
-
+    min-width: 640px;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     font-size: 16px;
     color: #777;
     text-align: center;
