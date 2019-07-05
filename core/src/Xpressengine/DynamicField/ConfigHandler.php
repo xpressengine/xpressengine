@@ -227,7 +227,7 @@ class ConfigHandler
      * @param ConfigEntity $config config entity
      * @return string
      *
-     * @deprecated
+     * @deprecated since version 3.0.1 instead use $type->getTableName()
      */
     public function getTableName(ConfigEntity $config)
     {
@@ -245,7 +245,7 @@ class ConfigHandler
      * @param ConfigEntity $config config entity
      * @return string
      *
-     * @deprecated
+     * @deprecated since version 3.0.1 instead use $type->getRevisionTableName()
      */
     public function getRevisionTableName(ConfigEntity $config)
     {
