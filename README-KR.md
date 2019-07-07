@@ -27,7 +27,7 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 
 ## 시작하기
 
-XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
+XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](https://www.xpressengine.io/guide)
 
 ## Xehub 커뮤니티 개발자
 @akasima @bnu @jhyeon1010 @kimyu711 @woongbin
