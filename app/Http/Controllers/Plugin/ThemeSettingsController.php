@@ -12,8 +12,9 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Plugin;
 
+use App\Http\Controllers\Controller;
 use File;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -41,33 +42,107 @@ class ThemeSettingsController extends Controller
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
+
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-index.js')->before(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
     }
 
     public function installed(Request $request, PluginHandler $handler)
     {
-        $plugins = $handler->getAllThemes(true);
+        $field = [];
+        $field['status'] = $request->get('status');
+        $field['keyword'] = $request->get('query', null);
+
+        $themes = $handler->getAllThemes(true);
+        $themes = $themes->fetch($field);
+
         $unresolvedComponents = $handler->getUnresolvedComponents();
 
         return XePresenter::make('theme.installed', compact(
             'handler',
-            'plugins',
+            'themes',
             'unresolvedComponents'
         ));
     }
 
-    public function install(Request $request, PluginProvider $pluginProvider)
+    public function install(Request $request, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
-        $filter = ['collection' => 'theme'];
+        $filter = [
+            'collection' => 'theme',
+            'site_token' => app('xe.config')->get('plugin')->get('site_token')
+        ];
 
-        $storeThemes = $pluginProvider->search(array_merge($filter, $request->except('_token')));
+        $saleType = $request->get('sale_type', 'free');
 
+        //TODO 릴리즈 기준 확인
+        $orderTypes = [
+            '1' => ['name' => '다운로드 많은 순', 'order' => 'downloadeds', 'order_type' => 'desc'],
+            '2' => ['name' => '다운로드 적은 순', 'order' => 'downloadeds', 'order_type' => 'asc'],
+            '3' => ['name' => '가격 낮은 순', 'order' => 'price', 'order_type' => 'asc'],
+            '4' => ['name' => '가격 높은 순', 'order' => 'price', 'order_type' => 'desc'],
+            '5' => ['name' => '빠른 순', 'order' => 'updated_at', 'order_type' => 'asc'],
+            '6' => ['name' => '늦은 순', 'order' => 'updated_at', 'order_type' => 'desc'],
+        ];
+
+        if ($orderType = $request->get('order_key')) {
+            $order = $orderTypes[$orderType];
+            array_forget($order, 'name');
+            $filter = array_merge($filter, $order);
+        }
+
+        $storeThemes = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')));
+        $themeCategories = $pluginProvider->getThemeCategories('theme');
+
+        $countFree = $countCharge = $countMySite = 0;
         $items = new Collection($storeThemes->data);
-        $plugins = new LengthAwarePaginator($items, $storeThemes->total, $storeThemes->per_page, $storeThemes->current_page);
-        $plugins->setPath(route('settings.plugins.install.items'));
-        $plugins->appends('filter', $filter);
-//        $plugins->appends('q', $q);
+        $items->map(function ($item) use (&$countFree, &$countCharge, &$countMySite) {
+            if ($item->is_free == true) {
+                $countFree++;
+            } else {
+                $countCharge++;
+            }
 
-        return XePresenter::make('theme.install', compact('plugins'));
+            if ($item->is_purchased == true) {
+                $countMySite++;
+            }
+        });
+
+        if ($request->get('sale_type') == 'my_site') {
+            $items = $items->filter(function ($item, $value) {
+                return $item->is_purchased == true;
+            });
+        }
+
+        $typeCounts = [
+            'free' => $countFree,
+            'charge' => $countCharge,
+            'mySite' => $countMySite
+        ];
+
+        $themes = new LengthAwarePaginator(
+            $items,
+            $storeThemes->total,
+            $storeThemes->per_page,
+            $storeThemes->current_page
+        );
+        $themes->setPath(route('settings.plugins.install.items'));
+        $themes->appends('filter', $filter);
+
+        return XePresenter::make(
+            'theme.install',
+            compact('saleType', 'themes', 'themeCategories', 'pluginHandler', 'orderTypes', 'typeCounts')
+        );
+    }
+
+    public function getDetailPopup(Request $request)
+    {
+        return api_render('common.detail_popup');
     }
 
     public function editSetting(ThemeHandler $themeHandler)
@@ -180,6 +255,11 @@ class ThemeSettingsController extends Controller
         $themeHandler->deleteThemeConfig($themeId);
 
         return \XePresenter::makeApi([]);
+    }
+
+    public function test()
+    {
+        return \XePresenter::make('common.detail_popup');
     }
 
     public function edit(Request $request, ThemeHandler $themeHandler)

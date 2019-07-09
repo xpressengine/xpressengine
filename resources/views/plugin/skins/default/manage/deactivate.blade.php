@@ -1,7 +1,5 @@
-{{-- @deprecated since 3.0.4 use instead use manage/deactivate.blade.php --}}
 <form action="{{ route('settings.plugins.manage.deactivate') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
-
     <div class="xe-modal-header">
         <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
         <strong class="xe-modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::deactivate') }}</strong>
@@ -13,9 +11,7 @@
                 {{ xe_trans('xe::cautionDeactivatePlugin') }}
             </p>
             <div class="xe-lypop-plugin-check version">
-
                 @foreach($plugins as $plugin)
-
                     @if(!$plugin->isActivated())
                         <label class="xe-label">
                             <input type="checkbox" disabled checked>
@@ -30,7 +26,6 @@
                         </label>
                     @endif
                 @endforeach
-
             </div>
         </div>
     </div>

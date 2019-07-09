@@ -565,6 +565,8 @@ class PluginHandler
             }
         }
 
+        $themes = new PluginCollection($themes);
+
         return $themes;
     }
 
@@ -596,6 +598,8 @@ class PluginHandler
 
             $extensions[] = $plugin;
         }
+
+        $extensions = new PluginCollection($extensions);
 
         return $extensions;
     }

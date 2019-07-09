@@ -521,7 +521,7 @@ Route::settings('setting', function () {
     //@deprecated
     Route::get('theme', [
         'as' => 'settings.setting.theme',
-        'uses' => 'ThemeSettingsController@editSetting',
+        'uses' => 'Plugin\ThemeSettingsController@editSetting',
         'settings_menu' => 'theme.setting'
     ]);
 });
@@ -614,29 +614,45 @@ Route::settings(
     function () {
         Route::get('installed', [
             'as' => 'settings.theme.installed',
-            'uses' => 'ThemeSettingsController@installed',
+            'uses' => 'Plugin\ThemeSettingsController@installed',
             'settings_menu' => 'theme.installed'
         ]);
 
         Route::get('install', [
             'as' => 'settings.theme.install',
-            'uses' => 'ThemeSettingsController@install',
+            'uses' => 'Plugin\ThemeSettingsController@install',
             'settings_menu' => 'theme.install'
         ]);
 
+        Route::get(
+            'detail',
+            ['as' => 'settings.theme.detail', 'uses' => 'Plugin\ThemeSettingsController@getDetailPopup']
+        );
+
         Route::get('setting', [
             'as' => 'settings.edit.theme',
-            'uses' => 'ThemeSettingsController@editSetting',
+            'uses' => 'Plugin\ThemeSettingsController@editSetting',
             'settings_menu' => 'theme.setting'
         ]);
-        Route::post('setting', ['as' => 'settings.update.theme', 'uses' => 'ThemeSettingsController@updateSetting']);
+        Route::post(
+            'setting',
+            ['as' => 'settings.update.theme', 'uses' => 'Plugin\ThemeSettingsController@updateSetting']
+        );
 
         Route::group(['prefix' => 'config'], function () {
-            Route::get('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@editConfig']);
-            Route::put('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@updateConfig']);
-            Route::delete('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@deleteConfig']);
-            Route::post('/', ['as' => 'settings.theme.config', 'uses' => 'ThemeSettingsController@createConfig']);
+            Route::get('/', ['as' => 'settings.theme.config', 'uses' => 'Plugin\ThemeSettingsController@editConfig']);
+            Route::put('/', ['as' => 'settings.theme.config', 'uses' => 'Plugin\ThemeSettingsController@updateConfig']);
+            Route::delete(
+                '/',
+                ['as' => 'settings.theme.config', 'uses' => 'Plugin\ThemeSettingsController@deleteConfig']
+            );
+            Route::post(
+                '/',
+                ['as' => 'settings.theme.config', 'uses' => 'Plugin\ThemeSettingsController@createConfig']
+            );
         });
+
+        Route::get('/test', 'Plugin\ThemeSettingsController@test');
 
         Route::group(
             ['middleware' => ['admin']],
@@ -645,15 +661,27 @@ Route::settings(
                     'edit',
                     [
                         'as' => 'settings.theme.edit',
-                        'uses' => 'ThemeSettingsController@edit',
+                        'uses' => 'Plugin\ThemeSettingsController@edit',
                         'settings_menu' => 'theme.editor',
                     ]
                 );
-                Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeSettingsController@update']);
+                Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'Plugin\ThemeSettingsController@update']);
             }
         );
     }
 );
+
+Route::settings('extension', function () {
+    Route::get('/installed', [
+        'as' => 'settings.extension.installed',
+        'uses' => 'Plugin\ExtensionSettingsController@installed',
+        'settings_menu' => 'extension.installed']);
+
+    Route::get('/install', [
+        'as' => 'settings.extension.install',
+        'uses' => 'Plugin\ExtensionSettingsController@install',
+        'settings_menu' => 'extension.install']);
+});
 
 /* update */
 Route::settings('update', function(){
@@ -686,6 +714,69 @@ Route::settings('operation', function(){
 Route::settings(
     'plugins',
     function () {
+        Route::group(['permission' => 'plugin'], function () {
+            Route::group(['prefix' => 'manage'], function () {
+                Route::get('delete', [
+                    'as' => 'settings.plugins.manage.delete',
+                    'uses' => 'Plugin\PluginManageController@getDelete'
+                ]);
+
+                Route::post('delete', [
+                    'as' => 'settings.plugins.manage.delete',
+                    'uses' => 'Plugin\PluginManageController@delete'
+                ]);
+
+                Route::post('update', [
+                    'as' => 'settings.plugins.manage.update',
+                    'uses' => 'Plugin\PluginManageController@download'
+                ]);
+
+                Route::get('activate', [
+                    'as' => 'settings.plugins.manage.activate',
+                    'uses' => 'Plugin\PluginManageController@getActivate'
+                ]);
+
+                Route::post('activate', [
+                    'as' => 'settings.plugins.manage.activate',
+                    'uses' => 'Plugin\PluginManageController@activate'
+                ]);
+
+                Route::get('deactivate', [
+                    'as' => 'settings.plugins.manage.deactivate',
+                    'uses' => 'Plugin\PluginManageController@getDeactivate'
+                ]);
+
+                Route::post('deactivate', [
+                    'as' => 'settings.plugins.manage.deactivate',
+                    'uses' => 'Plugin\PluginManageController@deactivate'
+                ]);
+            });
+
+            Route::group(['prefix' => '{pluginId}'], function () {
+                Route::get('/', [
+                    'as' => 'settings.plugins.show',
+                    'uses' => 'Plugin\PluginManageController@show',
+                ]);
+                Route::put('activate', [
+                    'as' => 'settings.plugins.activate',
+                    'uses' => 'Plugin\PluginManageController@putActivatePlugin'
+                ]);
+                Route::put('deactivate', [
+                    'as' => 'settings.plugins.deactivate',
+                    'uses' => 'Plugin\PluginManageController@putDeactivatePlugin'
+                ]);
+                Route::put('update', [
+                    'as' => 'settings.plugins.update',
+                    'uses' => 'Plugin\PluginManageController@putUpdatePlugin'
+                ]);
+                Route::put('renew', [
+                    'as' => 'settings.plugins.renew',
+                    'uses' => 'Plugin\PluginManageController@renewPlugin'
+                ]);
+            });
+        });
+
+        //@deprecated
         Route::group(['permission' => 'plugin'], function() {
 
             // plugins == plugins/installed
@@ -739,110 +830,10 @@ Route::settings(
                         'settings_menu' => ['plugin.list']
                     ]
                 );
-
-                // ANY: plugins/installed/{pluginId}
-                Route::group(
-                    ['prefix' => '{pluginId}'],
-                    function () {
-                        Route::get(
-                            '/',
-                            [
-                                'as' => 'settings.plugins.show',
-                                'uses' => 'PluginController@show',
-                                'settings_menu' => ['plugin.list.detail']
-                            ]
-                        );
-                        Route::put(
-                            'activate',
-                            [
-                                'as' => 'settings.plugins.activate',
-                                'uses' => 'PluginController@putActivatePlugin'
-                            ]
-                        );
-                        Route::put(
-                            'deactivate',
-                            [
-                                'as' => 'settings.plugins.deactivate',
-                                'uses' => 'PluginController@putDeactivatePlugin'
-                            ]
-                        );
-                        Route::put(
-                            'update',
-                            [
-                                'as' => 'settings.plugins.update',
-                                'uses' => 'PluginController@putUpdatePlugin'
-                            ]
-                        );
-                        Route::put(
-                            'renew',
-                            [
-                                'as' => 'settings.plugins.renew',
-                                'uses' => 'PluginController@renewPlugin'
-                            ]
-                        );
-                    });
-
-            });
-
-            Route::group(['prefix'=>'manage'], function() {
-
-                // GET: plugins/manage/delete
-                Route::get('delete', [
-                    'as' => 'settings.plugins.manage.delete',
-                    'uses' => 'PluginController@getDelete'
-                ]);
-
-                // POST: plugins/manage/delete
-                Route::post('delete', [
-                    'as' => 'settings.plugins.manage.delete',
-                    'uses' => 'PluginController@delete'
-                ]);
-
-                // POST: plugins/manage/update
-                Route::post('update', [
-                    'as' => 'settings.plugins.manage.update',
-                    'uses' => 'PluginController@download'
-                ]);
-
-                // GET: plugins/manage/activate
-                Route::get('activate', [
-                    'as' => 'settings.plugins.manage.activate',
-                    'uses' => 'PluginController@getActivate'
-                ]);
-
-                // POST: plugins/manage/activate
-                Route::post('activate', [
-                    'as' => 'settings.plugins.manage.activate',
-                    'uses' => 'PluginController@activate'
-                ]);
-
-                // GET: plugins/manage/deactivate
-                Route::get('deactivate', [
-                    'as' => 'settings.plugins.manage.deactivate',
-                    'uses' => 'PluginController@getDeactivate'
-                ]);
-
-                // POST: plugins/manage/deactivate
-                Route::post('deactivate', [
-                    'as' => 'settings.plugins.manage.deactivate',
-                    'uses' => 'PluginController@deactivate'
-                ]);
             });
         });
     }
 );
-
-Route::settings('extension', function () {
-    Route::get('/installed', [
-        'as' => 'settings.extension.installed',
-        'uses' => 'ExtensionSettingsController@installed',
-        'settings_menu' => 'extension.installed']);
-
-    Route::get('/install', [
-        'as' => 'settings.extension.install',
-        'uses' => 'ExtensionSettingsController@install',
-        'settings_menu' => 'extension.install']);
-});
 
 Route::settings('category', function () {
 

@@ -1,13 +1,9 @@
-{{-- @deprecated since 3.0.4 use instead use manage/delete.blade.php --}}
 <form action="{{ route('settings.plugins.manage.delete') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
-
     <div class="xe-modal-header">
         <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
         <strong class="xe-modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::delete') }}</strong>
     </div>
-
-
 
     <div class="xe-modal-body">
         <div class="xe-lypop-plugin">
@@ -17,7 +13,6 @@
             </p>
             <hr>
             <div class="xe-lypop-plugin-check version">
-
                 @foreach($plugins as $plugin)
                     <label class="xe-label">
                         <input type="checkbox" class="__xe_select-plugin" name="pluginId[]" value="{{ $plugin->getId() }}" checked >
@@ -25,7 +20,6 @@
                         <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b> {{ $plugin->isActivated() ? xe_trans('xe::activatedPlugin') : '' }}</div>
                     </label>
                 @endforeach
-
             </div>
             <div>
                 <label>

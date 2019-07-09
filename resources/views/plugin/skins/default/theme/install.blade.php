@@ -9,13 +9,21 @@
 <div class="row">
     <div class="col-sm-12">
         <form method="get" action="{{route('settings.theme.install')}}">
+            <input type="hidden" value="{{Request::get('sale_type', 'free')}}" name="sale_type">
             <div class="panel-heading">
-                <!-- [D] panel 밖에 위치할 때 class="search-group-box" 안에 검색 영역 적용 -->
                 <div class="search-group-box">
                     <div class="input-group search-group">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <span class="selected-type">{{ xe_trans('xe::keyword') }}</span>
+                                <span class="selected-type">
+                                    @if (\Request::has('tags'))
+                                        {{xe_trans('xe::tag')}}
+                                    @elseif (\Request::has('authors'))
+                                        {{xe_trans('xe::creatorName')}}
+                                    @else
+                                        {{xe_trans('xe::keyword')}}
+                                    @endif
+                                </span>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
@@ -31,23 +39,32 @@
                             </ul>
                         </div>
                         <div class="search-input-group">
-                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="query" value="{{Request::get('')}}">
+                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="query"
+                               @if (Request::has('query'))
+                                    value="{{Request::get('query')}}" name="query"
+                               @elseif (Request::has('authors'))
+                                   value="{{Request::get('authors')}}" name="authors"
+                               @elseif (Request::has('tags'))
+                                   value="{{Request::get('tags')}}" name="tags"
+                               @endif>
                             <button class="btn-link">
-                                <i class="xi-close"></i><span class="sr-only">검색</span>
+                                <i class="xi-search"></i><span class="sr-only">검색</span>
                             </button>
                         </div>
                     </div>
                     <!-- [D] 버튼 상황에 맞춰 추가 -->
-                    <button type="button" class="xu-button xu-button--default admin-button--active">테마 업로드</button>
+                    @if (Request::get('sale_type') == 'my_site')
+                        <button type="button" class="xu-button xu-button--default admin-button--active">테마 업로드</button>
+                    @endif
                 </div>
             </div>
 
             <div class="panel admin-tab">
                 <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
                 <ul class="admin-tab-list">
-                    <li class="free on"><a href="{{ route('settings.plugins.install.items', ['free' => true]) }}" data-toggle="xe-page" data-target=".__xe_plugin_items" >{{ xe_trans('xe::무료') }}</a></li>
-                    <li class="charge"><a href="{{ route('settings.plugins.install.items', ['free' => false]) }}" data-toggle="xe-page" data-target=".__xe_plugin_items">{{ xe_trans('xe::유료') }}</a></li>
-                    <li class="my_site"><a href="{{ route('settings.plugins.install.items', ['free' => 'purchased']) }}" data-toggle="xe-page" data-target=".__xe_plugin_items" >{{ xe_trans('xe::mySitePlugins') }}</a></li>
+                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'free']) }}">{{ xe_trans('xe::무료') }} <span class="xe-badge xe-primary">{{$typeCounts['free']}}</span></a></li>
+                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'charge']) }}">{{ xe_trans('xe::유료') }} <span class="xe-badge xe-primary">{{$typeCounts['charge']}}</span></a></li>
+                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'my_site']) }}">{{ xe_trans('xe::mySitePlugins') }} <span class="xe-badge xe-primary">{{$typeCounts['mySite']}}</span></a></li>
                 </ul>
                 <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>
@@ -56,46 +73,47 @@
             <div class="clearfix">
                 <div class="pull-right">
                     <div class="dropdown" style="display: inline-block">
-                        <!-- [D] 버튼 보더와 배경색 제거를 위해 class="btn-default--transparent" 으로 버튼 스타일 추가 -->
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <span class="__xe_text">카테고리</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
-                            <li class=""><a href="#" value="">전체</a></li>
-                            <li><a href="#" value="">Blog</a></li>
-                            <li class="active"><a href="#" value="">Gallery</a></li>
-                            <li><a href="#" value="">Board</a></li>
-                            <li><a href="#" value="">헬프센터 게시판</a></li>
-                            <li><a href="#" value="">Notice</a></li>
+                            <li><a href="{{route('settings.theme.install')}}">전체</a></li>
+                            @foreach ($themeCategories as $value => $category)
+                                <li @if (Request::get('category') == $value) class="active" @endif><a href="{{route('settings.theme.install', ['category' => $value])}}">{{$category}}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="dropdown" style="display: inline-block">
                         <!-- [D] 버튼 보더와 배경색 제거를 위해 class="btn-default--transparent" 으로 버튼 스타일 추가 -->
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <span class="__xe_text">인기순</span> <span class="caret"></span>
+                            <span class="__xe_text">정렬</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
-                            <li class=""><a href="#" value="">전체2</a></li>
-                            <li><a href="#" value="26bf2a59">Blog2</a></li>
-                            <li class="active"><a href="#" value="29ced82a">Gallery2</a></li>
-                            <li><a href="#" value="2aa71eee">Board2</a></li>
-                            <li><a href="#" value="6cbb0719">헬프센터 게시판2</a></li>
-                            <li><a href="#" value="e447aabb">Notice2</a></li>
+                            @foreach ($orderTypes as $idx => $value)
+                                <li @if (Request::get('order_key') == $idx) class="active" @endif><a href="{{route('settings.theme.install', ['order_key' => $idx])}}">{{$value['name']}}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
         </form>
 
-        @if ($plugins->count() > 0)
+        @if ($themes->count() > 0)
             <ul class="list-group list-card list-theme">
-                @foreach ($plugins as $idx => $theme)
-                    @include($_skin::view('theme.item'))
+                @foreach ($themes as $idx => $theme)
+                    {{-- TODO 내가 구매한 플러그인 수정--}}
+                    @if (Request::get('sale_type') == 'my_site')
+                        @if ($theme->is_purchased = true)
+                            @include($_skin::view('theme.item'))
+                        @endif
+                    @else
+                        @include($_skin::view('theme.item'))
+                    @endif
                 @endforeach
             </ul>
         @else
             @php
-                $message = 'no theme';
+                $message = '아직 등록된 테마가 없습니다!';
             @endphp
             @include($_skin::view('empty'))
         @endif
@@ -109,7 +127,7 @@
             $("#xe-install-plugin").submit();
         })
         $(document).on('click','.search-group li a',function(){
-            $(".search-group").find('input[type="text"]').attr('name',$(this).data('target'));
+            $(".search-group").find('input[type="text"]').attr('name', $(this).data('target'));
             $(".search-group").find('.selected-type').text($(this).text());
         })
     });

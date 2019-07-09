@@ -95,6 +95,22 @@
                                     </li>
                                 </ul>
                             </div>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    {{ Request::get('component') ? $componentTypes[Request::get('component')] : xe_trans('xe::supportingComponents') }}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ route('settings.plugins', Request::except(['component'])) }}"><span>{{ xe_trans('xe::all') }} {{ xe_trans('xe::component') }}</span></a>
+                                    </li>
+                                    @foreach($componentTypes as $type => $typeText)
+                                        <li>
+                                            <a href="{{ route('settings.plugins', array_merge( Request::all(), ['component'=> $type] )) }}"><span @if(Request::get('component') === $type)class="text-muted"@endif  >{{ $typeText }}</span></a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                             <div class="search-input-group">
                                 <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
                                 <button class="btn-link">
@@ -106,8 +122,8 @@
                 </div> -->
 
                 <ul class="list-group list-plugin">
-                    @foreach ($plugins as $plugin)
-                        @include($_skin::view('common.item'))
+                    @foreach ($plugins as $item)
+                        @include($_skin::view('common.installed_item'))
                     @endforeach
                 </ul>
             </div>
