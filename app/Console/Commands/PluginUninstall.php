@@ -13,7 +13,7 @@
  */
 namespace App\Console\Commands;
 
-use File;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
 /**
@@ -50,7 +50,7 @@ class PluginUninstall extends PluginCommand
      * @return void
      * @throws \Exception
      */
-    public function handle()
+    public function handle(Filesystem $filesystem)
     {
         $data = $this->getPluginData($this->argument('plugin'));
 
@@ -74,66 +74,67 @@ class PluginUninstall extends PluginCommand
             return;
         }
 
-        $this->checkActivated($data);
+        $this->startPlugin(function () use ($data, &$composed) {
+            $this->checkActivated($data);
 
-        // 플러그인 uninstall 실행
-        $this->processUninstall($data);
+            // 플러그인 uninstall 실행
+            $this->processUninstall($data);
 
-        $plugins = Collection::make($data)->partition(function ($info) {
-            return !$info['is_dev'];
+            $stables = Collection::make($data)->filter(function ($info) {
+                return !$info['plugin']->hasVendor();
+            })->all();
+
+            if (count($stables) > 0) {
+                $this->writeRequire('uninstall', $stables);
+
+                $packages = array_pluck($stables, 'name');
+                // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
+                $this->warn('Composer update command is running.. It may take up to a few minutes.');
+                $this->line(" composer update --with-dependencies " . implode(' ', $packages));
+
+                $this->composerUpdate($packages);
+
+                // composer 실행을 마쳤습니다.
+                $this->warn('Composer update command is finished.' . PHP_EOL);
+
+                $composed = true;
+            }
+        }, function () {
+            $this->printFailedPlugins();
         });
 
-        $stables = $plugins->first();
-        $develops = $plugins->last();
-
-        if ($stables && count($stables) > 0) {
-            $this->operator->lock();
-            $this->writeRequire('uninstall', $stables);
-
-            $packages = array_pluck($stables, 'name');
-            // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
-            $this->warn('Composer update command is running.. It may take up to a few minutes.');
-            $this->line(" composer update --with-dependencies " . implode(' ', $packages));
-
-            $result = $this->composerUpdate($packages);
-
-            // composer 실행을 마쳤습니다.
-            $this->warn('Composer update command is finished.'.PHP_EOL);
-
+        if (isset($composed)) {
             $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-            if ($result === 0) {
-                $uninstalled = array_get($changed, 'uninstalled', []);
-                if (count($uninstalled) < 1) {
-                    $this->output->error(
-                    // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다.
-                    // 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                        "Uninstall failed. Because of the dependencies between plugins, ".
-                        "Uninstall may not be able to success. Please check the plugin's dependencies."
-                    );
-                }
+            $uninstalled = array_get($changed, 'uninstalled', []);
+            if (count($uninstalled) < 1) {
+                $this->output->error(
+                // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다.
+                // 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                    "Uninstall failed. Because of the dependencies between plugins, " .
+                    "Uninstall may not be able to success. Please check the plugin's dependencies."
+                );
+            }
 
-                foreach ($uninstalled as $name => $version) {
-                    $this->output->success("$name:$version plugin is uninstalled");
-                }
-            } else {
-                $this->output->error("UnInstallation failed.");
+            foreach ($uninstalled as $name => $version) {
+                $this->output->success("$name:$version plugin is uninstalled");
             }
         }
+
+        $develops = Collection::make($data)->filter(function ($info) {
+            return $info['plugin']->hasVendor();
+        });
 
         foreach ($develops as $info) {
-            if (!File::deleteDirectory(plugins_path($info['id']))) {
-                $this->output->block(
-                    'Unable to remove plugin. Please delete the directory of plugin manually.',
-                    'WARNING',
-                    'fg=black;bg=yellow',
-                    ' ',
-                    true
+            if (!$filesystem->deleteDirectory(plugins_path($info['id']))) {
+                $this->output->warning(
+                    'Unable to remove ['.$info['name'].'] plugin. Please delete the directory of plugin manually.'
                 );
             } else {
-                $this->output->success($info['name'].":".$info['version']." plugin is uninstalled");
+                $this->output->success($info['name'] . ":" . $info['version'] . " plugin is uninstalled");
             }
         }
+
     }
 
     /**
@@ -155,15 +156,12 @@ class PluginUninstall extends PluginCommand
                 throw new \Exception('Plugin not found');
             }
 
-            $isDev = file_exists($plugin->getPath('vendor')) ? true : false;
-
             $data[] = [
                 'id' => $id,
                 'name' => $plugin->getName(),
                 'version' => $plugin->getVersion(),
                 'title' => $plugin->getTitle(),
                 'plugin' => $plugin,
-                'is_dev' => $isDev
             ];
         }
 
@@ -189,7 +187,7 @@ class PluginUninstall extends PluginCommand
                     );
                 }
 
-                $this->handler->deactivatePlugin($info['id']);
+                $this->deactivatePlugin($info['id']);
             }
         }
     }

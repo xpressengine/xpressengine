@@ -52,7 +52,7 @@ trait PluginApplyRequireTrait
             $writer->removeRequire($name);
         }
 
-        $writer->setUpdateMode(array_merge(array_keys($installs), array_keys($updates)));
+        $writer->setUpdateMode(array_keys($installs + $updates));
         $writer->write();
     }
 

@@ -85,6 +85,13 @@ class Storage
     protected $response;
 
     /**
+     * Custom extension to mime type map
+     *
+     * @var array
+     */
+    protected static $customMimeMap = [];
+
+    /**
      * constructor
      *
      * @param FileRepository    $repo        file repository instance
@@ -479,7 +486,7 @@ class Storage
      */
     public static function getExtensionToMimeTypeMap()
     {
-        return [
+        $map = [
             'hqx'   => 'application/mac-binhex40',
             'cpt'   => 'application/mac-compactpro',
             'csv'   => 'text/x-comma-separated-values',
@@ -648,5 +655,18 @@ class Storage
                 'image/vnd.microsoft.icon',
             ],
         ];
+
+        return array_merge($map, static::$customMimeMap);
+    }
+
+    /**
+     * Extend the extension to mime type map
+     *
+     * @param array $map map array
+     * @return void
+     */
+    public static function extendMimeMap(array $map)
+    {
+        static::$customMimeMap = array_merge(static::$customMimeMap, $map);
     }
 }

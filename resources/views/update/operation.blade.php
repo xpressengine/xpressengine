@@ -15,7 +15,7 @@
     <div class="panel-body">
         <p class="help-block">
             @if($operator->isCore())
-                {{ xe_trans('xe::alertUpdateCore', ['version' => $operator->getVersion()]) }}
+                {{ xe_trans('xe::alertUpdateCore') }}
             @else
                 {{ xe_trans('xe::descUpdatePlugins') }}
             @endif
@@ -47,11 +47,7 @@
         var url = "{{ route('settings.operation.progress') }}";
         XE.page(url, '.__xe_operation', {}, function(response){
           var data = response.data;
-          if(data.in_progress !== true) {
-            $('#__xe-dialog').modal('hide');
-            clearInterval(loadOperation);
-            location.reload();
-          } else {
+          if(data.in_progress === true) {
             $('#__xe-dialog').modal({backdrop:'static'});
             if (data.log) {
               $('#__xe-operation-log').show();
@@ -59,6 +55,13 @@
               $well.html(data.log);
               $well.animate({ scrollTop: $well.prop('scrollHeight')}, 100);
             }
+          } else {
+            $('#__xe-dialog').modal('hide');
+            clearInterval(loadOperation);
+          }
+
+          if (data.succeed === true) {
+            location.assign(data.redirect);
           }
         });
       }, 3000);

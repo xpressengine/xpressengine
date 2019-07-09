@@ -2905,8 +2905,8 @@ return [
         'en' => 'A new version of XE has been downloaded.',
     ],
     'alertUpdateCore' => [
-        'ko' => 'XE를 :version 버전으로 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
-        'en' => 'Update XE to version :version . It may take up to several minutes.',
+        'ko' => 'XE를 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
+        'en' => 'Update XE. It may take up to several minutes.',
     ],
     'confirmUpdate' => [
         'ko' => '업데이트하시겠습니까?',
@@ -3188,44 +3188,8 @@ return [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
     ],
-    'media' => [
-        'ko' => '미디어',
-        'en' => 'Media'
+    'unknownVersion' => [
+        'ko' => '알 수 없는 버전입니다. :ver',
+        'en' => 'Unknown version. :ver',
     ],
-    'rootFolderNotExistMessage' => [
-        'ko' => 'Root 폴더가 존재하지 않습니다.',
-        'en' => 'Root folder does not exist.'
-    ],
-    'folderNotFoundMessage' => [
-        'ko' => '폴더를 찾을 수 없습니다.',
-        'en' => 'Folder could not be found.'
-    ],
-    'folderRenameMessage' => [
-        'ko' => '폴더 이름이 변경되었습니다.',
-        'en' => 'Folder has been renamed.'
-    ],
-    'folderNameDuplicateMessage' => [
-        'ko' => '폴더의 이름이 중복되었습니다.',
-        'en' => 'Folder name is duplicated.'
-    ],
-    'fileNameDuplicateMessage' => [
-        'ko' => '파일의 제목이 중복되었습니다.',
-        'en' => 'File title is duplicated'
-    ],
-    'unableRootTargetMessage' => [
-        'ko' => 'Root 폴더를 대상으로 작업할 수 없습니다.',
-        'en' => 'Unable to target root folder.',
-    ],
-    'notExistUploadFileMessage' => [
-        'ko' => '업로드할 파일이 존재하지 않습니다.',
-        'en' => 'The file to upload does not exist.'
-    ],
-    'fileNotFoundMessage' => [
-        'ko' => '파일을 찾을 수 없습니다.',
-        'en' => 'File could not be found.'
-    ],
-    'fileInformationUpdateMessage' => [
-        'ko' => '파일 정보가 수정되었습니다.',
-        'en' => 'The file information has been modified.'
-    ]
 ];

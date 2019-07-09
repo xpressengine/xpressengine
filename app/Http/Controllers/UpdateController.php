@@ -14,8 +14,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Foundation\Operator;
@@ -36,6 +34,8 @@ use Xpressengine\Plugin\PluginProvider;
  */
 class UpdateController extends Controller
 {
+    use ArtisanBackgroundHelper;
+
     /**
      * Show core status.
      *
@@ -44,6 +44,7 @@ class UpdateController extends Controller
      * @param PluginHandler   $handler         PluginHandler
      * @param PluginProvider  $provider        PluginProvider
      * @return \Xpressengine\Presenter\Presentable
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function show(Operator $operator, ReleaseProvider $releaseProvider, PluginHandler $handler, PluginProvider $provider)
     {
@@ -81,6 +82,7 @@ class UpdateController extends Controller
      * @param Operator        $operator        Operator instance
      * @param ReleaseProvider $releaseProvider ReleaseProvider
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(Request $request, Operator $operator, ReleaseProvider $releaseProvider)
     {
@@ -89,6 +91,14 @@ class UpdateController extends Controller
         }
 
         $version = $request->get('version') ?: __XE_VERSION__;
+
+        if (!in_array($version, $releaseProvider->coreVersions())) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::unknownVersion', ['ver' => $version])
+            ]);
+        }
+
         $latestVersion = $releaseProvider->getLatestCoreVersion();
         $skipDownload = version_compare(__XE_VERSION__, $latestVersion) === 0
             || $request->get('skip-download') === 'Y';
@@ -98,19 +108,14 @@ class UpdateController extends Controller
             $skipComposer = false;
         }
 
-        $startTime = now()->format('YmdHis');
-        $logFile = "logs/core-update-$startTime.log";
+        $operator->setCoreMode(false)->save();
 
-        $operator->setCoreMode($version, $logFile, false);
-
-        app()->terminating(function () use ($version, $skipComposer, $skipDownload, $logFile) {
-            Artisan::call('xe:update', [
-                'version' => $version,
-                '--skip-download' => $skipDownload,
-                '--skip-composer' => $skipComposer,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $this->runArtisan('xe:update', [
+            'version' => $version,
+            '--skip-download' => $skipDownload,
+            '--skip-composer' => $skipComposer,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -127,10 +132,6 @@ class UpdateController extends Controller
     public function showOperation(Operator $operator)
     {
         if (!$operator->isInProgress()) {
-            if ($operator->isPrivate()) {
-                return redirect()->route('settings.plugins', ['install_type' => 'self-installed']);
-            }
-
             return redirect()->route('settings.coreupdate.show');
         }
 
@@ -142,6 +143,7 @@ class UpdateController extends Controller
      *
      * @param Operator $operator Operator instance
      * @return \Xpressengine\Presenter\Presentable
+     * @throws \Exception
      */
     public function progress(Operator $operator)
     {
@@ -158,8 +160,22 @@ class UpdateController extends Controller
         if ($operator->getLogFile() && file_exists($path = storage_path($operator->getLogFile()))) {
             $log = nl2br(file_get_contents($path));
         }
+
+        $redirect = null;
+        if (!$inProgress) {
+            if ($operator->isPrivate()) {
+                $redirect = route('settings.plugins', ['install_type' => 'self-installed']);
+            } elseif ($operator->isPlugin()) {
+                $redirect = route('settings.plugins');
+            } else {
+                $redirect = route('settings.coreupdate.show');
+            }
+        }
+
         return api_render('update.progress', compact('operator'), [
             'in_progress' => $inProgress,
+            'succeed' => $operator->isSucceed(),
+            'redirect' => $redirect,
             'log' => $log
         ]);
     }

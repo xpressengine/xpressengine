@@ -78,7 +78,7 @@ abstract class GenericTheme extends AbstractTheme
     public function getEditFiles()
     {
         $path = base_path($this->getPath());
-        $editable = $this->info('editable');
+        $editable = $this->info('editable', []);
 
         $files = [];
         foreach ($editable as $file) {

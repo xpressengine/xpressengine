@@ -100,7 +100,7 @@ trait ComposerRunTrait
         if (Platform::isWindows()) {
             if (!getenv('APPDATA')) {
                 throw new \Exception(
-                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to " . route('settings.setting.edit')
                 );
             }
         }
@@ -109,7 +109,7 @@ trait ComposerRunTrait
             $home = getenv('HOME');
             if (!$home) {
                 throw new \Exception(
-                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to " . route('settings.setting.edit')
                 );
             }
         }
@@ -154,7 +154,7 @@ trait ComposerRunTrait
         }
 
         $cnt = gc_collect_cycles();
-        $this->info('GC collected cycles: '. $cnt);
+        $output->writeln("GC collected cycles: <warning>$cnt </warning>");
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
@@ -162,7 +162,7 @@ trait ComposerRunTrait
         $result = $application->run(new ArrayInput($inputs), $output);
 
         $cnt = gc_collect_cycles();
-        $this->info('GC collected cycles: '. $cnt);
+        $output->writeln("GC collected cycles: <warning>$cnt </warning>");
 
         return $result;
     }
