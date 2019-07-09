@@ -52,7 +52,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- [D] 버튼 상황에 맞춰 추가 -->
                     @if (Request::get('sale_type') == 'my_site')
                         <button type="button" class="xu-button xu-button--default admin-button--active">테마 업로드</button>
                     @endif

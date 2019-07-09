@@ -75,14 +75,11 @@
     </div>
 </div>
 
-<div class="__xe_plugin_items">
-{{--    @include($_skin::view('install.items'))--}}
-</div>
-
 <form action="{{ route('settings.plugins.install') }}" method="POST" id="xe-install-plugin">
     {{ csrf_field() }}
     <input type="hidden" name="pluginId[]">
 </form>
+
 <script>
     $(function(){
         $(document).on('click','.plugin-install',function(){

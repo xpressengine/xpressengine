@@ -37,7 +37,6 @@
                     <button type="button" class="xu-button xu-button--default admin-button--active">활성화</button>
                 @endif
             @else
-{{--                TODO 유료 테마 확인--}}
                 @if(data_get($theme, 'is_purchased'))
                     <button class="plugin-install xu-button xu-button--primary" data-target="{{$theme->plugin_id}}">{{ xe_trans('xe::installNow') }}</button>
                 @elseif(data_get($theme, 'is_free') === false)

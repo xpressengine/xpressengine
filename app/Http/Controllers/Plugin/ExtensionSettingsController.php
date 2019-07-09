@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Plugin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 
 class ExtensionSettingsController extends Controller
 {
@@ -25,21 +28,93 @@ class ExtensionSettingsController extends Controller
 
     public function installed(Request $request, PluginHandler $handler)
     {
-        $plugins = $handler->getAllExtensions(true);
+        $field = [];
+        $field['status'] = $request->get('status');
+        $field['keyword'] = $request->get('query', null);
+        $field['component'] = $request->get('component');
+
+        $extensions = $handler->getAllExtensions(true);
+        $extensions = $extensions->fetch($field);
+
         $unresolvedComponents = $handler->getUnresolvedComponents();
         $componentTypes = $this->getComponentTypes();
 
         return XePresenter::make('extension.installed', compact(
             'handler',
-            'plugins',
+            'extensions',
             'unresolvedComponents',
             'componentTypes'
         ));
     }
 
-    public function install(Request $request)
+    public function install(Request $request, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
-        return XePresenter::make('extension.install');
+        $saleType = $request->get('sale_type', 'free');
+
+        $filter = [
+            'collection' => 'extension',
+            'site_token' => app('xe.config')->get('plugin')->get('site_token'),
+            'sale_type' => $saleType
+        ];
+
+        //TODO 릴리즈 기준 확인
+        $orderTypes = [
+            '1' => ['name' => '다운로드 많은 순', 'order' => 'downloadeds', 'order_type' => 'desc'],
+            '2' => ['name' => '다운로드 적은 순', 'order' => 'downloadeds', 'order_type' => 'asc'],
+            '3' => ['name' => '가격 낮은 순', 'order' => 'price', 'order_type' => 'asc'],
+            '4' => ['name' => '가격 높은 순', 'order' => 'price', 'order_type' => 'desc'],
+            '5' => ['name' => '빠른 순', 'order' => 'updated_at', 'order_type' => 'asc'],
+            '6' => ['name' => '늦은 순', 'order' => 'updated_at', 'order_type' => 'desc'],
+        ];
+
+        if ($orderType = $request->get('order_key')) {
+            $order = $orderTypes[$orderType];
+            array_forget($order, 'name');
+            $filter = array_merge($filter, $order);
+        }
+
+        $storeExtensions = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $extensionCategories = $pluginProvider->getPluginCategories('extension');
+
+        $countFree = $countCharge = $countMySite = 0;
+        $items = new Collection($storeExtensions->data);
+        $items->map(function ($item) use (&$countFree, &$countCharge, &$countMySite) {
+            if ($item->is_free == true) {
+                $countFree++;
+            } else {
+                $countCharge++;
+            }
+
+            if ($item->is_purchased == true) {
+                $countMySite++;
+            }
+        });
+
+        if ($request->get('sale_type') == 'my_site') {
+            $items = $items->filter(function ($item, $value) {
+                return $item->is_purchased == true;
+            });
+        }
+
+        $typeCounts = [
+            'free' => $countFree,
+            'charge' => $countCharge,
+            'mySite' => $countMySite
+        ];
+
+        $extensions = new LengthAwarePaginator(
+            $items,
+            $storeExtensions->total,
+            $storeExtensions->per_page,
+            $storeExtensions->current_page
+        );
+        $extensions->setPath(route('settings.extension.install'));
+        $extensions->appends('filter', $filter);
+
+        return XePresenter::make(
+            'extension.install',
+            compact('saleType', 'extensions', 'extensionCategories', 'pluginHandler', 'orderTypes', 'typeCounts')
+        );
     }
 
     protected function getComponentTypes()
@@ -57,6 +132,7 @@ class ExtensionSettingsController extends Controller
             'FieldType' => xe_trans('xe::dynamicField'),
             'FieldSkin' => xe_trans('xe::dynamicFieldSkin'),
         ];
+
         return $componentTypes;
     }
 }

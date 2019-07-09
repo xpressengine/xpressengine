@@ -73,12 +73,13 @@ class ThemeSettingsController extends Controller
 
     public function install(Request $request, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
+        $saleType = $request->get('sale_type', 'free');
+
         $filter = [
             'collection' => 'theme',
-            'site_token' => app('xe.config')->get('plugin')->get('site_token')
+            'site_token' => app('xe.config')->get('plugin')->get('site_token'),
+            'sale_type' => $saleType
         ];
-
-        $saleType = $request->get('sale_type', 'free');
 
         //TODO 릴리즈 기준 확인
         $orderTypes = [
@@ -96,8 +97,8 @@ class ThemeSettingsController extends Controller
             $filter = array_merge($filter, $order);
         }
 
-        $storeThemes = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')));
-        $themeCategories = $pluginProvider->getThemeCategories('theme');
+        $storeThemes = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $themeCategories = $pluginProvider->getPluginCategories('theme');
 
         $countFree = $countCharge = $countMySite = 0;
         $items = new Collection($storeThemes->data);
@@ -131,7 +132,7 @@ class ThemeSettingsController extends Controller
             $storeThemes->per_page,
             $storeThemes->current_page
         );
-        $themes->setPath(route('settings.plugins.install.items'));
+        $themes->setPath(route('settings.theme.install'));
         $themes->appends('filter', $filter);
 
         return XePresenter::make(
