@@ -4,21 +4,25 @@
             <div class="admin-layer-popup-header">
                 <h3 class="blind">테마, 익스텐션 플러그인 상세보기 레이어팝업</h3>
                 <div class="admin-layer-popup-plugin__title-box">
-                    <div class="admin-layer-popup-plugin__thumb" style="background-image: url(https://store.xehub.io/storage/icon/02f9d603-8bdf-4e76-9241-627c97126c75/thumbnails/S/2S0My71J36A4lTuVLzf43SeArFn5N8Yo1Jk8xt0y.png)"></div>
-                    <h3 class="admin-layer-popup-plugin__title">게시판 v.1.0.3</h3>
+                    <div class="admin-layer-popup-plugin__thumb" style="background-image: url({{$storePluginItem->icon_url}})"></div>
+                    <h3 class="admin-layer-popup-plugin__title">{{$storePluginItem->title . ' v' . $storePluginItem->latest_release->version}}</h3>
                 </div>
-                <p class="admin-layer-popup-plugin__title-sub-text">이 플러그인은 XE3에서 게시판 기능을 제공합니다.</p>
+                <p class="admin-layer-popup-plugin__title-sub-text">{{$storePluginItem->latest_release->description}}</p>
                 <div class="admin-layer-popup-plugin__button-box">
-                    <!-- [D] 상태에 맞는 버튼 추가 -->
-                    <button type="button" class="xu-button xu-button--default admin-button--complete">설치됨</button>
-                    <button type="button" class="xu-button xu-button--default admin-button--active">활성화</button>
+                    <button type="button" class="xu-button xu-button--default admin-button--complete">{{xe_trans('xe::installed')}}</button>
+
+                    @if ($pluginEntity->isActivated() == true)
+                        <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
+                    @else
+                        <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
+                    @endif
                 </div>
             </div>
             <div class="admin-layer-popup-body">
-                <iframe src="https://store.xehub.io/plugins/board/iframe" id="iframeStore" class="admin-layer-popup__iframe" width="100%" height="100%"></iframe>
+                <iframe src="{{'https://store.xehub.io/plugins/' . $storePluginItem->plugin_id . '/iframe'}}" id="iframeStore" class="admin-layer-popup__iframe" width="100%" height="100%"></iframe>
             </div>
             <div class="admin-layer-popup-footer">
-                <button type="button" class="xu-button xu-button--default __close-layer-popup">닫기</button>
+                <button type="button" class="xu-button xu-button--default __close-layer-popup">{{xe_trans('xe::close')}}</button>
             </div>
         </div>
     </div>

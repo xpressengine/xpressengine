@@ -33,6 +33,28 @@ class PluginManageController extends Controller
         }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
     }
 
+    public function getDetailPopup(Request $request, $pluginId)
+    {
+        return api_render('common.detail_popup');
+    }
+
+    public function testPopup(Request $request, $pluginId, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
+    {
+        $storePluginItem = $pluginProvider->find($pluginId);
+        $pluginEntity = $pluginHandler->getPlugin($pluginId);
+
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-index.js')->before(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
+
+        return \XePresenter::make('common.detail_popup', compact('storePluginItem', 'pluginEntity'));
+    }
+
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         // refresh plugin cache

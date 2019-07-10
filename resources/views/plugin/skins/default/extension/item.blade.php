@@ -31,9 +31,9 @@
         <div class="list-card-button-box">
             @if ($extensionEntity != null)
                 @if ($extensionEntity->isActivated() == true)
-                    <button type="button" class="xu-button xu-button--default admin-button--disabled">비활성화</button>
+                    <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $extensionEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
                 @else
-                    <button type="button" class="xu-button xu-button--default admin-button--active">활성화</button>
+                    <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $extensionEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
                 @endif
             @else
                 @if (data_get($extension, 'is_purchased'))

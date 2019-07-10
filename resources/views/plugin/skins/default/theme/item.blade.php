@@ -2,7 +2,8 @@
     $themeEntity = $pluginHandler->getPlugin(data_get($theme, 'plugin_id'));
 @endphp
 <li @if ($themeEntity != null && $themeEntity->isActivated()) class="active" @endif>
-    <a  href="{{route('settings.theme.detail', ['pluginName' => $theme->name])}}" data-toggle="xe-page-modal" class="list-card__link">
+{{--    <a  href="{{route('settings.plugins.detail', ['pluginName' => $theme->name])}}" data-toggle="xe-page-modal" class="list-card__link">--}}
+    <a href="{{route('settings.plugins.popup_test', ['pluginName' => $themeEntity->getId()])}}" target="_blank">
         <span class="blind">카드 이미지</span>
         <div class="list-card__image">
             <div class="list-card__image-content" style="background-image: url({{$theme->icon}})"></div>
@@ -31,9 +32,9 @@
         <div class="list-card-button-box">
             @if ($themeEntity != null)
                 @if ($themeEntity->isActivated() == true)
-                    <button type="button" class="xu-button xu-button--default admin-button--disabled">비활성화</button>
+                    <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $themeEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
                 @else
-                    <button type="button" class="xu-button xu-button--default admin-button--active">활성화</button>
+                    <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $themeEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
                 @endif
             @else
                 @if(data_get($theme, 'is_purchased'))

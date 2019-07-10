@@ -141,11 +141,6 @@ class ThemeSettingsController extends Controller
         );
     }
 
-    public function getDetailPopup(Request $request)
-    {
-        return api_render('common.detail_popup');
-    }
-
     public function editSetting(ThemeHandler $themeHandler)
     {
         $selectedTheme = $themeHandler->getSiteThemeId();
