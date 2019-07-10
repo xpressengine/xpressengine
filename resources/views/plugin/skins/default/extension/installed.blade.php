@@ -24,7 +24,7 @@
                     <div class="pull-right text-align--right">
                         <div class="search-btn-group">
                             <a href="{{route('settings.extension.install')}}" class="xe-btn xe-btn-install"><i class="xi-plus"></i>{{xe_trans('xe::installNewExtension')}}</a>
-                            <button type="button" class="btn btn-default">{{xe_trans('xe::extension')}} {{xe_trans('xe::upload')}}</button>
+                            <a href="{{route('settings.plugins.manage.upload', ['type' => 'extension'])}}" class="btn btn-default" data-toggle="xe-page-modal">{{xe_trans('xe::extension')}} {{xe_trans('xe::upload')}}</a>
                         </div>
                         <form method="get" action="{{route('settings.extension.installed')}}">
                             <div class="input-group search-group">

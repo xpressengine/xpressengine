@@ -85,8 +85,7 @@ class PluginProvider
         $category = array_get($filters, 'category');
 
         $site_token = array_get($filters, 'site_token');
-\Log::info($filters);
-\Log::info($sale_type);
+
         try {
             $response = $this->request(
                 $url,

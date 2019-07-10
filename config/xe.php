@@ -183,7 +183,6 @@ return [
                 'description' => '',
                 'ordering' => 4000
             ],
-
             'plugin' => [
                 'title' => 'xe::pluginAndUpdate',
                 'display' => true,
@@ -220,7 +219,6 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
-
             'theme' => [
                 'title' => 'xe::theme',
                 'display' => true,
@@ -269,13 +267,6 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
-            'extension.editor' => [
-                'title' => 'xe::extensionEditor',
-                'display' => true,
-                'description' => '',
-                'ordering' => 300
-            ],
-
             'setting' => [
                 'title' => 'xe::settings',
                 'display' => true,

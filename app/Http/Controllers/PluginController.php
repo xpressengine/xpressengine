@@ -53,8 +53,6 @@ class PluginController extends Controller
             }
             return $next($request);
         }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
-
-        \Log::info('nonono');
     }
 
     /**

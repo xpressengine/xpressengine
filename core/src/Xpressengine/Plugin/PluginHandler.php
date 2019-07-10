@@ -17,6 +17,8 @@ namespace Xpressengine\Plugin;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\UploadedFile;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -27,6 +29,7 @@ use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginDependencyException;
 use Xpressengine\Plugin\Exceptions\PluginNotFoundException;
+use ZipArchive;
 
 /**
  * XE에 등록된 플러그인의 전체적인 관리를 담당한다.
@@ -779,5 +782,106 @@ class PluginHandler
     public function addComponent($component)
     {
         $this->register->add($component);
+    }
+
+    public function uploadPlugin(UploadedFile $uploadFile)
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = app('files');
+        $zip = new ZipArchive();
+
+        $pluginName = str_replace(
+            '.' . $uploadFile->getClientOriginalExtension(),
+            "",
+            $uploadFile->getClientOriginalName()
+        );
+        $extractPath = app_storage_path('plugin/' . $pluginName);
+
+        try {
+            $this->checkExistAlreadyPlugin($filesystem, $pluginName);
+
+            $this->removeGarageDirectory($filesystem, $extractPath);
+
+            $extractFolder = $zip->open($uploadFile);
+            $zip->extractTo($extractPath);
+            $zip->close();
+
+            $this->fixExtracted($filesystem, $extractPath);
+            $this->checkExistRequireFiles($filesystem, $extractPath);
+            $this->removeVendorDir($filesystem, $extractPath);
+
+            $this->movePlugin($filesystem, $extractPath, $pluginName);
+        } catch (\Exception $e) {
+            $this->removeGarageDirectory($filesystem, $extractPath);
+
+            throw $e;
+        }
+
+        return $pluginName;
+    }
+
+    private function checkExistAlreadyPlugin(Filesystem $filesystem, $targetDir)
+    {
+        if ($filesystem->exists(app('path.privates') . DIRECTORY_SEPARATOR . $targetDir) == true) {
+            throw new \Exception('private exists');
+        }
+
+        if ($filesystem->exists(app('path.plugins') . DIRECTORY_SEPARATOR . $targetDir) == true) {
+            throw new \Exception('plugin exists');
+        }
+
+        return true;
+    }
+
+    private function fixExtracted(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->move($targetDir, $targetDir . '_temp');
+
+        $directory = $this->searchPluginRootDirectory($filesystem, $targetDir . '_temp');
+
+        $filesystem->move($directory, $targetDir . '/');
+
+        $filesystem->deleteDirectory($targetDir . '_temp');
+    }
+
+    private function removeGarageDirectory(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->deleteDirectory($targetDir);
+        $filesystem->deleteDirectory($targetDir . '_temp');
+    }
+
+    private function searchPluginRootDirectory(Filesystem $filesystem, $targetDir)
+    {
+        $list = $filesystem->directories($targetDir);
+
+        if (count($list) === 1) {
+            return $this->searchPluginRootDirectory($filesystem, $list[0]);
+        } else {
+            return $targetDir;
+        }
+    }
+
+    private function removeVendorDir(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->deleteDirectory($targetDir . '/vendor');
+    }
+
+    private function checkExistRequireFiles(Filesystem $filesystem, $targetDir)
+    {
+        $requireFiles = [
+            'plugin.php',
+            'composer.json'
+        ];
+
+        foreach ($requireFiles as $requireFile) {
+            if ($filesystem->exists($targetDir . DIRECTORY_SEPARATOR . $requireFile) == false) {
+                throw new \Exception('not exist');
+            }
+        }
+    }
+
+    private function movePlugin(Filesystem $filesystem, $targetDir, $pluginName)
+    {
+        $filesystem->move($targetDir, app('path.privates') . DIRECTORY_SEPARATOR . $pluginName);
     }
 }

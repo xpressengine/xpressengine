@@ -624,6 +624,11 @@ Route::settings(
             'settings_menu' => 'theme.install'
         ]);
 
+        Route::get('test', [
+            'as' => 'settings.theme.test',
+            'uses' => 'Plugin\ThemeSettingsController@test'
+        ]);
+
         Route::get(
             'detail',
             ['as' => 'settings.theme.detail', 'uses' => 'Plugin\ThemeSettingsController@getDetailPopup']
@@ -756,6 +761,15 @@ Route::settings(
                 Route::post('deactivate', [
                     'as' => 'settings.plugins.manage.deactivate',
                     'uses' => 'Plugin\PluginManageController@deactivate'
+                ]);
+
+                Route::get('upload', [
+                    'as' => 'settings.plugins.manage.upload',
+                    'uses' => 'Plugin\PluginManageController@getUpload'
+                ]);
+                Route::post('upload', [
+                    'as' => 'settings.plugins.manage.upload',
+                    'uses' => 'Plugin\PluginManageController@postUpload'
                 ]);
             });
 

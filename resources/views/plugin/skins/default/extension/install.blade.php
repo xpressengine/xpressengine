@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     @if (Request::get('sale_type') == 'my_site')
-                        <button type="button" class="xu-button xu-button--default admin-button--active">익스텐션 업로드</button>
+                        <a href="{{route('settings.plugins.manage.upload', ['type' => 'extension'])}}" class="xu-button xu-button--default admin-button--active" data-toggle="xe-page-modal">익스텐션 업로드</a>
                     @endif
                 </div>
             </div>

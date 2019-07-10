@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Plugin;
 
+use App\Http\Controllers\ArtisanBackgroundHelper;
 use App\Http\Controllers\Controller;
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,6 +19,8 @@ use Xpressengine\Support\Exceptions\XpressengineException;
 
 class PluginManageController extends Controller
 {
+    use ArtisanBackgroundHelper;
+
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
@@ -54,7 +57,7 @@ class PluginManageController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return api_render('index.activate', compact('plugins'));
+        return api_render('manage.activate', compact('plugins'));
     }
 
     public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -96,7 +99,7 @@ class PluginManageController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return api_render('index.deactivate', compact('plugins'));
+        return api_render('manage.deactivate', compact('plugins'));
     }
 
     public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -138,7 +141,7 @@ class PluginManageController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return api_render('index.delete', compact('plugins'));
+        return api_render('manage.delete', compact('plugins'));
     }
 
     public function delete(Request $request, PluginHandler $handler, Operator $operator)
@@ -314,5 +317,65 @@ class PluginManageController extends Controller
         ];
 
         return $componentTypes;
+    }
+
+    public function renewPlugin(PluginHandler $handler, Operator $operator, $pluginId)
+    {
+        if ($operator->isLocked()) {
+            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
+        }
+
+        if (!$plugin = $handler->getPlugin($pluginId)) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::pluginNotFound', ['plugin' => $pluginId])
+            ]);
+        }
+
+        if (!$plugin->isPrivate()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::pluginUnableToDependenciesRenew', ['name' => $pluginId])
+            ]);
+        }
+
+        $operator->setPrivateMode(false)->save();
+
+        $this->runArtisan('private:update', ['name' => $pluginId]);
+
+        return redirect()->route('settings.operation.index')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
+    }
+
+    public function getUpload(Request $request)
+    {
+        $typeName = xe_trans('xe::' . $request->get('type'));
+
+        return api_render('common.upload_popup', ['typeName' => $typeName]);
+    }
+
+    public function postUpload(Request $request, PluginHandler $pluginHandler)
+    {
+        $uploadFile = $request->file('plugin');
+        if ($uploadFile == null) {
+            return redirect()->back();
+        }
+
+        try {
+            $pluginName =  $pluginHandler->uploadPlugin($uploadFile);
+            app()->terminating(function () use ($pluginName) {
+                Artisan::call('plugin:private_install', [
+                    'name' => $pluginName,
+                    '--no-interaction' => true,
+                ]);
+            });
+        } catch (\Exception $e) {
+            return back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
+        }
+
+        return redirect()->route('settings.operation.index')->with(
+            'alert',
+            ['type' => 'success', 'message' => xe_trans('xe::installingPlugin')]
+        );
     }
 }
