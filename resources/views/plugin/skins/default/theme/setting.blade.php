@@ -6,6 +6,9 @@
     <small>{!! xe_trans('xe::settingThemeDescription') !!}</small>
 @endsection
 
+    @if (file_exists(app_storage_path('theme_preview.json')))
+        <a href="{{route('settings.theme.stop_preview')}}" class="xe-btn xe-btn-positive">미리보기 종료(임시)</a>
+    @endif
 <div class="row">
     <div class="col-sm-12">
         <form role="form" action="{{ route('settings.update.theme') }}" method="post" id="__xe_settingForm" enctype="multipart/form-data">

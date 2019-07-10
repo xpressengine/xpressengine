@@ -63,7 +63,7 @@
                 <ul class="admin-tab-list">
                     <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'free']) }}">{{ xe_trans('xe::무료') }} <span class="xe-badge xe-primary">{{$typeCounts['free']}}</span></a></li>
                     <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'charge']) }}">{{ xe_trans('xe::유료') }} <span class="xe-badge xe-primary">{{$typeCounts['charge']}}</span></a></li>
-                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'my_site']) }}">{{ xe_trans('xe::mySitePlugins') }} <span class="xe-badge xe-primary">{{$typeCounts['mySite']}}</span></a></li>
+                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="{{ route('settings.theme.install', ['sale_type' => 'my_site']) }}">{{ xe_trans('xe::mySiteTheme') }} <span class="xe-badge xe-primary">{{$typeCounts['mySite']}}</span></a></li>
                 </ul>
                 <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>

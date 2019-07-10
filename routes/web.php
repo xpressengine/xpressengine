@@ -652,7 +652,14 @@ Route::settings(
             );
         });
 
-        Route::get('/test', 'Plugin\ThemeSettingsController@test');
+        Route::get(
+            'set_preview',
+            ['as' => 'settings.theme.set_preview', 'uses' => 'Plugin\ThemeSettingsController@setStartPreview']
+        );
+        Route::get(
+            'stop_preview',
+            ['as' => 'settings.theme.stop_preview', 'uses' => 'Plugin\ThemeSettingsController@setStopPreview']
+        );
 
         Route::group(
             ['middleware' => ['admin']],

@@ -258,9 +258,25 @@ class ThemeSettingsController extends Controller
         return \XePresenter::makeApi([]);
     }
 
-    public function test()
+    public function setStartPreview(Request $request)
     {
-        return \XePresenter::make('common.detail_popup');
+        $configId = $request->get('configId');
+
+        $array = [
+            'configId' => $configId,
+            'userId' => \Auth::user()->getId()
+        ];
+
+        file_put_contents(app_storage_path('theme_preview.json'), json_enc($array));
+
+        return redirect()->to('/');
+    }
+
+    public function setStopPreview(Request $request)
+    {
+        if (file_exists(app_storage_path('theme_preview.json'))) {
+            \File::delete(app_storage_path('theme_preview.json'));
+        }
     }
 
     public function edit(Request $request, ThemeHandler $themeHandler)

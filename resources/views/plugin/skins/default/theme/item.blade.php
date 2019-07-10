@@ -31,7 +31,6 @@
         <div class="list-card-button-box">
             @if ($themeEntity != null)
                 @if ($themeEntity->isActivated() == true)
-                    <button type="button" class="xu-button xu-button--default admin-button--preview">미리보기</button>
                     <button type="button" class="xu-button xu-button--default admin-button--disabled">비활성화</button>
                 @else
                     <button type="button" class="xu-button xu-button--default admin-button--active">활성화</button>
