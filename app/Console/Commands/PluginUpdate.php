@@ -70,46 +70,38 @@ class PluginUpdate extends PluginCommand
             return;
         }
 
-        $this->operator->lock();
-        $this->writeRequire('update', $data);
+        $this->startPlugin(function () use ($data) {
+            $this->writeRequire('update', $data);
 
-        $packages = array_pluck($data, 'name');
-        // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
-        $this->warn('Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --with-dependencies ". implode(' ', $packages));
+            $packages = array_pluck($data, 'name');
+            // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
+            $this->warn('Composer update command is running.. It may take up to a few minutes.');
+            $this->line(" composer update --with-dependencies " . implode(' ', $packages));
 
-        $result = $this->composerUpdate($packages);
+            $this->composerUpdate($packages);
 
-        // composer 실행을 마쳤습니다
-        $this->warn('Composer update command is finished.'.PHP_EOL);
+            // composer 실행을 마쳤습니다
+            $this->warn('Composer update command is finished.'.PHP_EOL);
+
+        }, function () {
+            $this->printFailedPlugins();
+        });
 
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        if ($result === 0) {
-            $updated = array_get($changed, 'updated', []);
-            if (count($updated) < 1) {
-                $this->output->error(
-                // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다.
-                // 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                    "Plugin update failed. It may have failed due to dependencies between plugins. ".
-                    "Please check the plugin dependencies."
-                );
-            }
+        $updated = array_get($changed, 'updated', []);
+        if (count($updated) < 1) {
+            $this->output->error(
+            // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다.
+            // 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                "Plugin update failed. It may have failed due to dependencies between plugins. ".
+                "Please check the plugin dependencies."
+            );
+        }
 
-            foreach ($updated as $name => $version) {
-                $this->output->success("$name:$version plugin is updated");
-            }
-        } else {
-            // 설치 실패한 플러그인을 가져온다.
-            $failed = $this->getFailedPlugins();
-            $this->printFailedPlugins($failed);
-
-            if(!empty($failed['install']) || !empty($failed['updated'])) {
-                $this->output->error(
-                    "Plugin update failed due to paid plugins that I did not purchase."
-                );
-            }
+        foreach ($updated as $name => $version) {
+            $this->output->success("$name:$version plugin is updated");
         }
     }
 

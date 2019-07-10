@@ -87,74 +87,69 @@ class Operator
     /**
      * Set a operation for the core.
      *
-     * @param string      $ver   core version
-     * @param string|null $log   operation log path
-     * @param bool        $doRun set status to running
-     * @return void
+     * @param bool $run set status to running
+     * @return $this
      */
-    public function setCoreMode($ver, $log = null, $doRun = true)
+    public function setCoreMode($run = true)
     {
         $this->data['type'] = static::TYPE_CORE;
 
         $operation = $this->getOperation($this->data['type']);
-        $operation->version($ver);
 
-        $this->defaultSetUp($operation, $log, $doRun);
+        $this->defaultSetUp($operation, $run);
+
+        return $this;
     }
 
     /**
      * Set a operation for the plugin.
      *
-     * @param string|null $log   operation log path
-     * @param bool        $doRun set status to running
-     * @return void
+     * @param bool $run set status to running
+     * @return $this
      */
-    public function setPluginMode($log = null, $doRun = true)
+    public function setPluginMode($run = true)
     {
         $this->data['type'] = static::TYPE_PLUGIN;
 
         $operation = $this->getOperation($this->data['type']);
         $operation->flush();
 
-        $this->defaultSetUp($operation, $log, $doRun);
+        $this->defaultSetUp($operation, $run);
+
+        return $this;
     }
 
     /**
      * Set a operation for the private plugin.
      *
-     * @param string|null $log   operation log path
-     * @param bool        $doRun set status to running
-     * @return void
+     * @param bool $run set status to running
+     * @return $this
      */
-    public function setPrivateMode($log = null, $doRun = true)
+    public function setPrivateMode($run = true)
     {
         $this->data['type'] = static::TYPE_PRIVATE;
 
         $operation = $this->getOperation($this->data['type']);
         $operation->flush();
 
-        $this->defaultSetUp($operation, $log, $doRun);
+        $this->defaultSetUp($operation, $run);
+
+        return $this;
     }
 
     /**
      * Set default operation information.
      *
-     * @param Operation   $operation the operation
-     * @param string|null $log       operation log path
-     * @param bool        $doRun     set status to running
+     * @param Operation $operation the operation
+     * @param bool      $run       set status to running
      * @return void
      */
-    protected function defaultSetUp(Operation $operation, $log = null, $doRun = true)
+    protected function defaultSetUp(Operation $operation, $run = true)
     {
-        $doRun ? $operation->running() : $operation->ready();
-        if ($log) {
-            $operation->log($log);
-        }
+        $run ? $operation->running() : $operation->ready();
 
         $operation->expiresAt(null);
         $operation->completedAt(null);
-
-        $this->write();
     }
 
     /**
@@ -219,6 +214,16 @@ class Operator
             $json = \Composer\Json\JsonFormatter::format($json, true, true);
         }
         file_put_contents($this->path, $json);
+    }
+
+    /**
+     * Save current data
+     *
+     * @return void
+     */
+    public function save()
+    {
+        $this->write();
     }
 
     /**

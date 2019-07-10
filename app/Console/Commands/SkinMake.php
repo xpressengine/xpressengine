@@ -60,7 +60,7 @@ class SkinMake extends ComponentMakeCommand
      * Execute the console command.
      *
      * @return bool|null
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -110,10 +110,12 @@ class SkinMake extends ComponentMakeCommand
         } catch (\Exception $e) {
             $this->clean($path);
             throw $e;
+        } catch (\Throwable $e) {
+            $this->clean($path);
+            throw $e;
         }
 
         $this->info("Skin is created successfully.");
-
     }
 
     /**

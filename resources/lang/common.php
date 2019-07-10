@@ -2905,8 +2905,8 @@ return [
         'en' => 'A new version of XE has been downloaded.',
     ],
     'alertUpdateCore' => [
-        'ko' => 'XE를 :version 버전으로 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
-        'en' => 'Update XE to version :version . It may take up to several minutes.',
+        'ko' => 'XE를 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
+        'en' => 'Update XE. It may take up to several minutes.',
     ],
     'confirmUpdate' => [
         'ko' => '업데이트하시겠습니까?',
@@ -3187,6 +3187,10 @@ return [
     'mailSenderAddress' => [
         'ko' => '발신 이메일 주소',
         'en' => 'From email address'
+    ],
+    'unknownVersion' => [
+        'ko' => '알 수 없는 버전입니다. :ver',
+        'en' => 'Unknown version. :ver',
     ],
     'installedTheme' => [
         'ko' => '설치된 테마',

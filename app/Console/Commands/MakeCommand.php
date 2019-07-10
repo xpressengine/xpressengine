@@ -16,7 +16,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Filesystem\Filesystem;
 use Xpressengine\Foundation\Operator;
-use Xpressengine\Installer\XpressengineInstaller;
+use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 
 /**
  * Abstract Class MakeCommand
@@ -28,10 +29,8 @@ use Xpressengine\Installer\XpressengineInstaller;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-abstract class MakeCommand extends ShouldOperation
+abstract class MakeCommand extends PluginCommand
 {
-    use PluginApplyRequireTrait;
-
     /**
      * The filesystem instance.
      *
@@ -42,12 +41,14 @@ abstract class MakeCommand extends ShouldOperation
     /**
      * Create a new component creator command instance.
      *
-     * @param Filesystem         $files    Filesystem instance
-     * @param Operator           $operator Operator instance
+     * @param Filesystem     $files    Filesystem instance
+     * @param Operator       $operator Operator instance
+     * @param PluginHandler  $handler  PluginHandler
+     * @param PluginProvider $provider PluginProvider
      */
-    public function __construct(Filesystem $files, Operator $operator)
+    public function __construct(Filesystem $files, Operator $operator, PluginHandler $handler, PluginProvider $provider)
     {
-        parent::__construct($operator);
+        parent::__construct($operator, $handler, $provider);
 
         $this->files = $files;
     }
@@ -92,32 +93,6 @@ abstract class MakeCommand extends ShouldOperation
         if ($to) {
             $this->files->move($file, $to);
         }
-    }
-
-    /**
-     * Execute composer update.
-     *
-     * !! 같은 코드가 PluginCommand 에도 정의되어 있음.
-     *
-     * @param array $packages specific package name. no need version
-     * @return int
-     * @throws \Throwable
-     */
-    protected function composerUpdate(array $packages)
-    {
-        $this->applyRequire($this->operator->getOperation());
-
-        try {
-            $result = parent::composerUpdate($packages);
-        } catch (\Exception $e) {
-            $this->rollbackRequire();
-            throw $e;
-        }
-
-        $this->operator->setResult(XpressengineInstaller::$changed, XpressengineInstaller::$failed);
-        $this->operator->write();
-
-        return $result;
     }
 
     /**

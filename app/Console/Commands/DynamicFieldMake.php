@@ -59,6 +59,7 @@ class DynamicFieldMake extends ComponentMakeCommand
      *
      * @return bool|null
      * @throws \Exception
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -109,6 +110,9 @@ class DynamicFieldMake extends ComponentMakeCommand
 
             $this->refresh($plugin);
         } catch (\Exception $e) {
+            $this->clean($path);
+            throw $e;
+        } catch (\Throwable $e) {
             $this->clean($path);
             throw $e;
         }

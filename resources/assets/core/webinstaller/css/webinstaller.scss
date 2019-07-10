@@ -150,18 +150,19 @@ header {
     display: inline-block;
     width: 150px;
     height: 45px;
-    background: url(../img/btn_start.png) 50% 0 no-repeat;
+    border-radius: 45px;
     border: none;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 45px;
+    letter-spacing: 1px;
+    background-color: #536fe1;
+    color: #fff;
     cursor: pointer;
-  }
-
-  .btn-next {
-    background-image: url(../img/btn_next.png);
   }
 
   .btn-again {
     width: 190px;
-    background-image: url(../img/btn_again.png);
   }
 
   .btn-center {
@@ -179,15 +180,16 @@ header {
 .footer {
   position: relative;
   height: 50px;
-  padding-top: 20px;
+  padding-top: 10px;
   z-index: 10;
 
   .text-copy {
-    display: block;
-    width: 347px;
-    height: 19px;
-    margin: 0 auto;
-    background: url(../img/bg_footer.png) 50% 0 no-repeat;
+    min-width: 640px;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #777;
+    text-align: center;
   }
 }
 
@@ -300,8 +302,10 @@ header .header-inner {
 }
 
 h2.title-installer {
-  font-size: 0;
-  margin-bottom: 15px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #536fe1;
 
   span {
     display: inline-block;

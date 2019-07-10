@@ -23,7 +23,7 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
 /**
- * Class PluginCommand
+ * Abstract Class PluginCommand
  *
  * @category    Commands
  * @package     App\Console\Commands
@@ -32,7 +32,7 @@ use Xpressengine\Plugin\PluginProvider;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PluginCommand extends ShouldOperation
+abstract class PluginCommand extends ShouldOperation
 {
     use PluginApplyRequireTrait;
 
@@ -127,37 +127,63 @@ class PluginCommand extends ShouldOperation
      */
     protected function writeRequire($action, $data)
     {
-        $this->operator->setPluginMode();
         foreach ($data as $info) {
             $this->operator->{$action}($info['name'], $info['version']);
         }
-        $this->operator->write();
+        $this->operator->save();
     }
 
     /**
      * Execute composer update.
      *
-     * !! 같은 코드가 MakeCommand 에도 정의되어 있음.
-     *
      * @param array $packages specific package name. no need version
-     * @return int
+     * @return void
      * @throws \Throwable
      */
     protected function composerUpdate(array $packages)
     {
-        $this->applyRequire($this->operator->getOperation());
-
         try {
-            $result = parent::composerUpdate($packages);
+            $this->applyRequire($this->operator->getOperation());
+
+            $this->prepareComposer();
+
+            $inputs = [
+                'command' => 'update',
+                "--with-dependencies" => true,
+                '--working-dir' => base_path(),
+                'packages' => $packages
+            ];
+
+            if (0 !== $result = $this->runComposer($inputs, false, $this->output)) {
+                throw new \RuntimeException('Composer update failed..', $result);
+            }
         } catch (\Exception $e) {
+            $this->rollbackRequire();
+            throw $e;
+        } catch (\Throwable $e) {
             $this->rollbackRequire();
             throw $e;
         }
 
         $this->operator->setResult(XpressengineInstaller::$changed, XpressengineInstaller::$failed);
-        $this->operator->write();
+        $this->operator->save();
+    }
 
-        return $result;
+    /**
+     * Run composer dump command.
+     *
+     * @param string $path working directory
+     * @return int
+     * @throws \Exception
+     */
+    protected function composerDump($path)
+    {
+        $inputs = [
+            'command' => 'dump-autoload',
+            '--working-dir' => $path,
+        ];
+
+        return $this->runComposer($inputs, false, $this->output);
     }
 
     /**
@@ -171,6 +197,20 @@ class PluginCommand extends ShouldOperation
         $this->handler->getAllPlugins(true);
         if ($this->handler->isActivated($pluginId) === false) {
             $this->handler->activatePlugin($pluginId);
+        }
+    }
+
+    /**
+     * Deactivate plugin.
+     *
+     * @param string $pluginId plugin id
+     * @return void
+     */
+    protected function deactivatePlugin($pluginId)
+    {
+        $this->handler->getAllPlugins(true);
+        if ($this->handler->isActivated($pluginId)) {
+            $this->handler->deactivatePlugin($pluginId);
         }
     }
 
@@ -203,7 +243,7 @@ class PluginCommand extends ShouldOperation
      */
     protected function getFailedPlugins()
     {
-        return array_merge(['installed' => [], 'updated' => [], 'uninstalled' => []], $this->operator->getFailed());
+        return array_merge(['install' => [], 'update' => [], 'uninstall' => []], $this->operator->getFailed());
     }
 
     /**
@@ -239,11 +279,12 @@ class PluginCommand extends ShouldOperation
     /**
      * Print failed.
      *
-     * @param array $failed failed information
      * @return void
      */
-    protected function printFailedPlugins(array $failed)
+    protected function printFailedPlugins()
     {
+        $failed = $this->getFailedPlugins();
+
         $codes = [
             '401' => 'This is paid plugin. If you have already purchased this plugin, check the \'site_token\' field in your setting file(config/production/xe.php).',
             '403' => 'This is paid plugin. You need to buy it in the Market-place.',

@@ -30,19 +30,19 @@ Laravel is one of the most modern PHP frameworks and the most popular among them
 To install XE3, refer to the following guide. [Install guide](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
 
 ## Maintainers
-@akasima @bnu @jhyeon1010 @kimyu711 @woongbin
+@akasima @bnu @jhyeon1010 @kimyu711 @woongbin @jihyeok
 
 ## Documentation
-* Documentation Site (Korean) : https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/
-* Front-end Documentation Site (Korean) : https://xpressengine.gitbooks.io/xpressengine-front-end/content/
+* Documentation Site (Korean) : https://www.xpressengine.io/guide/README
+* Front-end Documentation Site (Korean) : https://www.xpressengine.io/guide/js/js
 
 ## Support
-* Official site (Korean) : http://xpressengine.io/
-* Official Forum : http://xpressengine.io/qna/
+* Official site (Korean) : https://xpressengine.io/
+* Official Forum : https://xpressengine.io/qna/
 * Slack : https://xpressengine-forum-invite.herokuapp.com/
 
 ## License
-Copyright 2015 NAVER Corp. <http://www.navercorp.com>
+Copyright 2019 XE Factory Co. <https://xehub.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -59,4 +59,4 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  usage
 
 ## Powered By
-* Naver D2 : http://d2.naver.com/
+* Xpressengine : https://xpressengine.io
