@@ -6,7 +6,7 @@
       <h3 class="blind">파일정보 리스트형, 카드형</h3>
 
       <!-- 리스트 - 리스트형 -->
-      <div class="media-library-content__list-type">
+      <div :class="'media-library-content__' + listType + '-type'">
         <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
         <div class="media-library-content-header">
           <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
@@ -134,25 +134,29 @@ export default {
   },
   data() {
     return {
-      listStyle: "gallery",
+      listType: 'list', // list, card
       filter: {
         folder_id: null,
         page: 1
       }
     };
   },
+  methods: {
+    changeListType (type = null) {
+      if (type) {
+        this.listType = type
+      }
+    }
+  },
   computed: {
-    containerClass() {
-      return "media-list media-list--" + this.listStyle;
+    mediaItems () {
+      return this.$store.state.media.media
     },
-    mediaItems() {
-      return this.$store.state.media.media;
+    folderList () {
+      return this.$store.state.media.folder
     },
-    folderList() {
-      return this.$store.state.media.folder;
-    },
-    pathItems() {
-      return this.$store.state.media.path;
+    pathItems () {
+      return this.$store.state.media.path
     }
   }
 };

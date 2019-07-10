@@ -1,26 +1,28 @@
 <template>
-  <li class>
+  <li @click="selectMedia">
     <div class="media-library__input-group media-library-content-list__checkbox">
       <label class="media-library__label">
-        <input type="checkbox" class="media-library__input-checkbox" @click="selectMedia">
+        <input type="checkbox" class="media-library__input-checkbox" />
         <span class="media-library__input-helper"></span>
       </label>
     </div>
     <div class="media-library-content-list__icon">
       <div
-        class="media-library-content-list__icon-thumb"
-        style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"
+        class="media-library-content-list__icon-thumb media-library-content-list__icon-preview"
+        :style="{ 'background-image': 'url(' + thumbnailUrl + ')' }"
       ></div>
     </div>
     <div class="media-library-content-list__content-box">
       <div class="media-library-content-list__title">
-        <span class="media-library-content-list__text">{title}</span>
+        <button type="button" class="media-library-content-list__text">
+          <span class="media-library-content-list__text-ellipsis">{{ media.title }}</span>
+        </button>
       </div>
       <div class="media-library-content-list__writer">
-        <span class="media-library-content-list__text">admin</span>
+        <span class="media-library-content-list__text">{{ userName }}</span>
       </div>
       <div class="media-library-content-list__size">
-        <span class="media-library-content-list__text">{filesize}</span>
+        <span class="media-library-content-list__text">{{ filesize }}</span>
       </div>
       <div class="media-library-content-list__date">
         <span class="media-library-content-list__text">2019.05.16</span>
@@ -35,7 +37,10 @@
           <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
         </li>
         <li>
-          <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+          <button
+            type="button"
+            class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete"
+          >삭제</button>
         </li>
       </ul>
     </div>
@@ -54,10 +59,16 @@ export default {
   methods: {
     selectMedia: function(event) {
       if (event) {
-        console.debug('event.target', $(event.target).closest('li'))
-        $(event.target).closest('li').toggleClass('active')
+        console.debug("event.target", $(event.target).closest("li"));
+        $(event.target)
+          .closest("li")
+          .toggleClass("active");
 
-        if ($(event.target).closest('li').hasClass('active')) {
+        if (
+          $(event.target)
+            .closest("li")
+            .hasClass("active")
+        ) {
           this.$root.putSelectedMedia(this);
         } else {
           this.$root.removeSelectedMedia(this);
@@ -71,7 +82,7 @@ export default {
         $("#media-library-modal").modal("show");
         $("#media-library-modal").one("hide.bs.modal", () => {
           console.debug("back");
-          this.$router.go(-1);
+          // this.$router.go(-1);
         });
       }
     }

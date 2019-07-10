@@ -179,7 +179,7 @@ taskJsdoc.displayName = 'jsdoc'
 
 const taskWatch = function () {
   gulp.watch(['./core/**/*.scss', ...ignore], taskSass)
-  gulp.watch(['./core/**/*.js', ...ignore], gulp.series(taskWebpackDll, taskWebpackBundle))
+  gulp.watch(['./core/**/*.js', './core/**/*.vue', ...ignore], gulp.series(taskWebpackDll, taskWebpackBundle))
 }
 
 const taskBuild = gulp.series(taskWebpackDll, taskWebpackBundle, taskSass)

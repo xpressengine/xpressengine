@@ -12,18 +12,9 @@
       <div class="media-library__input-group">
         <input type="text" class="media-library__input-text" placeholder="미디어 검색...">
         <button type="button" class="media-library__button-text-remove">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
             <defs>
-              <path
-                id="icon-text-remove"
-                d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.674 13.104l-1.572 1.571-3.103-3.103-3.104 3.103-1.572-1.571L10.426 12 7.323 8.896l1.572-1.572 3.104 3.103 3.103-3.103 1.572 1.572L13.57 12l3.104 3.103v.001z"
-              ></path>
+              <path id="icon-text-remove" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.674 13.104l-1.572 1.571-3.103-3.103-3.104 3.103-1.572-1.571L10.426 12 7.323 8.896l1.572-1.572 3.104 3.103 3.103-3.103 1.572 1.572L13.57 12l3.104 3.103v.001z"></path>
             </defs>
             <g fill="none" fill-rule="evenodd">
               <path d="M0 0h24v24H0z"></path>
@@ -58,13 +49,12 @@
       </button>
       <button type="button" class="media-library__button media-library__button-search-cancel">취소</button>
     </div>
+
     <!--
       [D] 하단 리스트에서 아이템 선택 시 class="media-library-header__button-box--state-item-check" 영역에 class="open" 적용,
       PC 에서는 무조건 노출됨
     -->
-    <div
-      class="media-library-header__button-box media-library-header__button-box--state-item-check"
-    >
+    <div class="media-library-header__button-box media-library-header__button-box--state-item-check">
       <div class="media-library-header__button-box-inner">
         <button type="button" class="media-library__button media-library__button--danger">
           <span class="media-library__icon media-library__icon-delete"></span>
@@ -82,10 +72,11 @@
         </div>
       </div>
     </div>
+
     <div class="media-library__button-group-radio">
       <!-- [D] 선택 시 class="button-selected" 추가 -->
       <!-- 카드형 버튼 -->
-      <button type="button" class="media-library__button">
+      <button type="button" :class="{ 'media-library__button': true, 'button-selected': $parent.listType === 'card' }" @click="$parent.changeListType('card')">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="12" viewBox="0 0 15 12">
           <defs>
             <path id="icon-card" d="M0 0h3.947v5.25H0V0zm0 6.75h3.947V12H0V6.75zM5.526 0h3.948v5.25H5.526V0zm0 6.75h3.948V12H5.526V6.75zM11.053 0H15v5.25h-3.947V0zm0 6.75H15V12h-3.947V6.75z"></path>
@@ -102,7 +93,7 @@
         </svg>
       </button>
       <!-- 리스트형 버튼 -->
-      <button type="button" class="media-library__button button-selected">
+      <button type="button" :class="{ 'media-library__button': true, 'button-selected': $parent.listType === 'list' }" @click="$parent.changeListType('list')">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="11" viewBox="0 0 16 11">
           <defs>
             <path id="icon-list" d="M4 0h12v2.2H4V0zm0 4.4h12v2.2H4V4.4zm0 4.4h12V11H4V8.8zM0 0h2.4v2.2H0V0zm0 4.4h2.4v2.2H0V4.4zm0 4.4h2.4V11H0V8.8z"></path>
@@ -127,7 +118,7 @@
           <span class="media-library__icon media-library__icon-folder"></span>
           새폴더
         </button>
-        <button type="button" class="media-library__button media-library__button--default">
+        <button type="button" class="media-library__button media-library__button--default" @click="toggleAttachArea">
           <span class="media-library__icon media-library__icon-upload"></span>
           업로드
         </button>
@@ -185,30 +176,33 @@
 
 <script>
 export default {
-  name: "SettingsHeaderTool",
-  props: ["todo"],
+  name: 'SettingsHeaderTool',
+  props: ['todo'],
   methods: {
     createFolder(event) {
-      window.XE.post("/media_manager/folder", {
-        disk: "media",
+      window.XE.post('/media_manager/folder', {
+        disk: 'media',
         name: this.createFolderName,
-        parent_id: this.$store.getters["media/currentFolder"].id
+        parent_id: this.$store.getters['media/currentFolder'].id
       }).then(response => {
-        this.$store.dispatch("media/addFolder", response.data[0]);
+        this.$store.dispatch('media/addFolder', response.data[0]);
       });
+    },
+    toggleAttachArea () {
+      $('.media-library-upload').toggleClass('active');
     }
   },
   computed: {
     currentFolder: function() {
-      if (this.$store.getters["media/currentFolder"]) {
-        return this.$store.getters["media/currentFolder"].id;
+      if (this.$store.getters['media/currentFolder']) {
+        return this.$store.getters['media/currentFolder'].id;
       }
       return null;
     }
   },
   data() {
     return {
-      createFolderName: "",
+      createFolderName: '',
       csrfToken: XE.options.userToken
     };
   }

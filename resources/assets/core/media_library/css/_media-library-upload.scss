@@ -4,4 +4,26 @@
   margin-bottom: 16px;
   background-color: $n0;
   border: 1px dashed $n80;
+
+  &.active {
+    display: block;
+  }
+}
+
+.media-library__button--attach {
+  position: relative;
+  overflow: hidden;
+}
+
+#fileupload {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: 0;
+  opacity: 0;
+  direction: ltr;
+  cursor: pointer;
+  font-size: 200px;
 }

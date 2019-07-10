@@ -88,6 +88,7 @@ class MediaManager extends App {
           }
         },
         created: function () {
+          const that = this
           this.renderMode = renderMode
 
           store.dispatch('media/loadData').then(() => {
@@ -96,14 +97,36 @@ class MediaManager extends App {
             $(function () {
               if (typeof $.fn.fileupload !== 'undefined') {
                 $('.form-control--file').fileupload({
+                  url: '/media_library/file',
                   dataType: 'json',
-                  maxChunkSize: 1000000,
-                  formData: () => $('.form-control--file').closest('form').serializeArray(),
+                  sequentialUploads: true,
+                  // maxChunkSize: 1000000,
+                  formData: () => {
+                    return [
+                      {
+                        name: '_token',
+                        value: window.XE.options.userToken
+                      },
+                      {
+                        name: 'folder_id',
+                        value: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                      }
+                    ]
+                  },
+                  add: function (e, data) {
+                    console.debug('JF::add', data)
+                    data.submit()
+                  },
                   done: function (e, data) {
                     $.each(data.result.files, function (index, file) {
                       $('<p/>').text(file.name).appendTo(document.body)
                     })
-                    store.dispatch('media/addMedia', data.result)
+                    // store.dispatch('media/addMedia', data.result)
+                    store.dispatch('media/loadData', () => {
+                      return {
+                        folder_id: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                      }
+                    })
                   }
                 })
               } else {
@@ -172,7 +195,7 @@ class MediaManager extends App {
         renderMode: 'modal'
       }).then((ddd) => {
         if (renderMode === 'modal') {
-          $('#media-manager-modal-container').xeModal('show')
+          $('#media-manager-modal-container').show()
         }
 
         resolve(ddd)

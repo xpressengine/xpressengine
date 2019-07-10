@@ -25,7 +25,7 @@
         <span class="media-library-content-list__text">-</span>
       </div>
       <div class="media-library-content-list__size">
-        <span class="media-library-content-list__text">@10 개</span>
+        <span class="media-library-content-list__text">{{ fileCount }} 개</span>
       </div>
       <div class="media-library-content-list__date">
         <span class="media-library-content-list__text">-</span>
@@ -74,7 +74,11 @@ export default {
     name ({ $props }) {
       const folder = $props.folder
       return folder.name
-    }
+    },
+    fileCount ({ $props }) {
+      const folder = $props.folder
+      return folder.file_count
+    },
   }
 }
 </script>

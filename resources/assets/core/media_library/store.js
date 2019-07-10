@@ -50,7 +50,7 @@ const actions = {
   },
   loadData ({ commit }, filter = {}) {
     return new Promise((resolve, reject) => {
-      window.XE.get('/media_manager/index', filter)
+      window.XE.get('/media_library', filter)
         .then((response) => {
           commit(types.SET_FOLDER_LIST, response.data.folder)
           commit(types.SET_MEDIA_LIST, response.data.file.data)

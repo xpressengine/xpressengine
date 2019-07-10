@@ -31,7 +31,7 @@
   clip: rect(0 0 0 0);
   margin: -1px;
   width: 1px;
-  height: 1px
+  height: 1px;
 }
 
 // input type="text" 스타일
@@ -83,7 +83,7 @@
   }
 }
 
-.media-library__input-text, 
+.media-library__input-text,
 .media-library__textarea {
   &::placeholder {
     color: $n80;
@@ -315,7 +315,7 @@
 @media (min-width: 768px) {
   .media-library {
     margin: 0;
-    
+
     .media-library-box {
       display: flex;
       border: 1px solid $n40;
@@ -365,5 +365,5 @@
 
 /* xe-col-xs- */
 @media (max-width: 768px) {
-  
+
 }
