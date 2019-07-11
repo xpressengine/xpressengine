@@ -10,11 +10,12 @@
                 <p class="admin-layer-popup-plugin__title-sub-text">{{$storePluginItem->latest_release->description}}</p>
                 <div class="admin-layer-popup-plugin__button-box">
                     <button type="button" class="xu-button xu-button--default admin-button--complete">{{xe_trans('xe::installed')}}</button>
-
-                    @if ($pluginEntity->isActivated() == true)
-                        <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
-                    @else
-                        <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
+                    @if ($pluginEntity != null)
+                        @if ($pluginEntity->isActivated() == true)
+                            <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
+                        @else
+                            <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
+                        @endif
                     @endif
                 </div>
             </div>
