@@ -81,14 +81,12 @@ class ThemeSettingsController extends Controller
             'sale_type' => $saleType
         ];
 
-        //TODO 릴리즈 기준 확인
         $orderTypes = [
-            '1' => ['name' => '다운로드 많은 순', 'order' => 'downloadeds', 'order_type' => 'desc'],
-            '2' => ['name' => '다운로드 적은 순', 'order' => 'downloadeds', 'order_type' => 'asc'],
-            '3' => ['name' => '가격 낮은 순', 'order' => 'price', 'order_type' => 'asc'],
-            '4' => ['name' => '가격 높은 순', 'order' => 'price', 'order_type' => 'desc'],
-            '5' => ['name' => '빠른 순', 'order' => 'updated_at', 'order_type' => 'asc'],
-            '6' => ['name' => '늦은 순', 'order' => 'updated_at', 'order_type' => 'desc'],
+            '1' => ['name' => '인기순', 'order' => 'downloadeds', 'order_type' => 'desc'],
+            '2' => ['name' => '업데이트', 'order' => 'updated_at', 'order_type' => 'desc'],
+            '3' => ['name' => '최신순', 'order' => 'latest', 'order_type' => 'asc'],
+            '4' => ['name' => '가격 낮은 순', 'order' => 'price', 'order_type' => 'asc'],
+            '5' => ['name' => '가격 높은 순', 'order' => 'price', 'order_type' => 'desc'],
         ];
 
         if ($orderType = $request->get('order_key')) {
