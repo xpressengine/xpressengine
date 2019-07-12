@@ -8,8 +8,12 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form method="get" action="{{route('settings.extension.install')}}">
+        <form method="get" action="{{route('settings.extension.install')}}" class="plugin-install-form">
             <input type="hidden" value="{{Request::get('sale_type', 'free')}}" name="sale_type">
+            <input type="hidden" value="{{Request::get('category', '')}}" name="category">
+            <input type="hidden" value="{{Request::get('order_key', '')}}" name="order_key">
+            <input type="hidden" value="{{Request::get('target', '')}}" name="target">
+
             <div class="panel-heading">
                 <div class="search-group-box">
                     <div class="input-group search-group">
@@ -39,7 +43,7 @@
                             </ul>
                         </div>
                         <div class="search-input-group">
-                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="query"
+                            <input type="text" class="form-control" placeholder="검색어를 입력하세요"
                                 @if (Request::has('query'))
                                     value="{{Request::get('query')}}" name="query"
                                 @elseif (Request::has('authors'))
@@ -61,9 +65,9 @@
             <div class="panel admin-tab">
                 <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
                 <ul class="admin-tab-list">
-                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="{{ route('settings.extension.install', ['sale_type' => 'free']) }}">{{ xe_trans('xe::무료') }} <span class="xe-badge xe-primary">{{$typeCounts['free']}}</span></a></li>
-                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="{{ route('settings.extension.install', ['sale_type' => 'charge']) }}">{{ xe_trans('xe::유료') }} <span class="xe-badge xe-primary">{{$typeCounts['charge']}}</span></a></li>
-                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="{{ route('settings.extension.install', ['sale_type' => 'my_site']) }}">{{ xe_trans('xe::mySiteExtension') }} <span class="xe-badge xe-primary">{{$typeCounts['mySite']}}</span></a></li>
+                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::무료') }} <span class="xe-badge xe-primary">{{$typeCounts['free']}}</span></a></li>
+                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::유료') }} <span class="xe-badge xe-primary">{{$typeCounts['charge']}}</span></a></li>
+                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::mySiteExtension') }} <span class="xe-badge xe-primary">{{$typeCounts['mySite']}}</span></a></li>
                 </ul>
                 <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>
@@ -76,9 +80,9 @@
                             <span class="__xe_text">카테고리</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
-                            <li><a href="{{route('settings.extension.install')}}">전체</a></li>
+                            <li><a href="#" class="__plugin-install-link" data-type="category" data-value="">전체</a></li>
                             @foreach ($extensionCategories as $value => $category)
-                                <li @if (Request::get('category') == $value) class="active" @endif><a href="{{route('settings.extension.install', ['category' => $value])}}">{{$category}}</a></li>
+                                <li @if (Request::get('category') == $value) class="active" @endif><a href="#" class="__plugin-install-link" data-type="category" data-value="{{$value}}">{{$category}}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -88,7 +92,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
                             @foreach ($orderTypes as $idx => $value)
-                                <li @if (Request::get('order_key') == $idx) class="active" @endif><a href="{{route('settings.extension.install', ['order_key' => $idx])}}">{{$value['name']}}</a></li>
+                                <li @if (Request::get('order_key') == $idx) class="active" @endif><a href="#" class="__plugin-install-link" data-type="order_key" data-value="{{$idx}}">{{$value['name']}}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -101,7 +105,7 @@
                 @foreach ($extensions as $idx => $extension)
 {{--                     TODO 내가 구매한 플러그인 수정--}}
                     @if (Request::get('sale_type') == 'my_site')
-                        @if ($extension->is_purchased = true)
+                        @if ($extension->is_purchased == true)
                             @include($_skin::view('extension.item'))
                         @endif
                     @else
@@ -137,5 +141,10 @@
             $(".search-group").find('input[type="text"]').attr('name', $(this).data('target'));
             $(".search-group").find('.selected-type').text($(this).text());
         })
+
+        $('.__plugin-install-link').click(function () {
+            $('.plugin-install-form').find('input[name=' + $(this).data('type') + ']').val($(this).data('value'));
+            $(this).closest('form').submit();
+        });
     });
 </script>

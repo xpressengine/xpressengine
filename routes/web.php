@@ -629,11 +629,6 @@ Route::settings(
             'uses' => 'Plugin\ThemeSettingsController@test'
         ]);
 
-        Route::get(
-            'detail',
-            ['as' => 'settings.theme.detail', 'uses' => 'Plugin\ThemeSettingsController@getDetailPopup']
-        );
-
         Route::get('setting', [
             'as' => 'settings.edit.theme',
             'uses' => 'Plugin\ThemeSettingsController@editSetting',
