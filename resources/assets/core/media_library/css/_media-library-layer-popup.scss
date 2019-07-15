@@ -175,7 +175,8 @@
   // 레이어팝업 바디
   .media-library-layer-popup-body {
     // flex: 1;
-    flex: 1 1 auto;
+    // flex: 1 1 auto;
+    flex: 1 1 100%;
     max-height: 100%;
     min-height: 50%;
   }
