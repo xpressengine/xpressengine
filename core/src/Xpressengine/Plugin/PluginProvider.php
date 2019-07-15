@@ -64,7 +64,7 @@ class PluginProvider
      */
     public function search($filters = [], $page = 1, $count = 10)
     {
-        $url = 'plugins/search';
+        $url = 'plugins/items';
 
         $query = array_get($filters, 'query');
         $q = implode(',', (array) $query);

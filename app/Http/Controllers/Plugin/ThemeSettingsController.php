@@ -95,34 +95,18 @@ class ThemeSettingsController extends Controller
             $filter = array_merge($filter, $order);
         }
 
-        $storeThemes = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeThemeInformation = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeThemes = $storeThemeInformation->items;
+        $storeThemeCounts = $storeThemeInformation->counts;
         $themeCategories = $pluginProvider->getPluginCategories('theme');
 
-        $countFree = $countCharge = $countMySite = 0;
         $items = new Collection($storeThemes->data);
-        $items->map(function ($item) use (&$countFree, &$countCharge, &$countMySite) {
-            if ($item->is_free == true) {
-                $countFree++;
-            } else {
-                $countCharge++;
-            }
-
-            if ($item->is_purchased == true) {
-                $countMySite++;
-            }
-        });
 
         if ($request->get('sale_type') == 'my_site') {
             $items = $items->filter(function ($item, $value) {
                 return $item->is_purchased == true;
             });
         }
-
-        $typeCounts = [
-            'free' => $countFree,
-            'charge' => $countCharge,
-            'mySite' => $countMySite
-        ];
 
         $themes = new LengthAwarePaginator(
             $items,
@@ -135,7 +119,7 @@ class ThemeSettingsController extends Controller
 
         return XePresenter::make(
             'theme.install',
-            compact('saleType', 'themes', 'themeCategories', 'pluginHandler', 'orderTypes', 'typeCounts')
+            compact('saleType', 'themes', 'themeCategories', 'pluginHandler', 'orderTypes', 'storeThemeCounts')
         );
     }
 

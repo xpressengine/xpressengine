@@ -3277,5 +3277,9 @@ return [
     'mySiteExtension' =>[
         'ko' => '내 사이트 익스텐션',
         'en' => 'My site extension'
+    ],
+    'buying' => [
+        'ko' => '구매하기',
+        'en' => 'Buying'
     ]
 ];

@@ -39,7 +39,7 @@
                 @if (data_get($extension, 'is_purchased'))
                     <button class="plugin-install xu-button xu-button--primary" data-target="{{$extension->plugin_id}}">{{ xe_trans('xe::installNow') }}</button>
                 @elseif (data_get($extension, 'is_free') == false)
-                    <a href="{{ data_get($extension, 'link') }}" class="btn-link" target="_blank">{{ xe_trans('xe::goToBuy') }}</a>
+                    <a href="{{ data_get($extension, 'link') }}" class="btn-link xu-button xu-button--primary" target="_blank">{{ xe_trans('xe::buying') }}</a>
                 @else
                     <button class="plugin-install xu-button xu-button--primary" data-target="{{$extension->plugin_id}}">{{ xe_trans('xe::installNow') }}</button>
                 @endif

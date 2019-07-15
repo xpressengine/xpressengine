@@ -71,34 +71,18 @@ class ExtensionSettingsController extends Controller
             $filter = array_merge($filter, $order);
         }
 
-        $storeExtensions = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeExtensionInformation = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeExtensions = $storeExtensionInformation->items;
+        $storeExtensionCounts = $storeExtensionInformation->counts;
         $extensionCategories = $pluginProvider->getPluginCategories('extension');
 
-        $countFree = $countCharge = $countMySite = 0;
         $items = new Collection($storeExtensions->data);
-        $items->map(function ($item) use (&$countFree, &$countCharge, &$countMySite) {
-            if ($item->is_free == true) {
-                $countFree++;
-            } else {
-                $countCharge++;
-            }
-
-            if ($item->is_purchased == true) {
-                $countMySite++;
-            }
-        });
 
         if ($request->get('sale_type') == 'my_site') {
             $items = $items->filter(function ($item, $value) {
                 return $item->is_purchased == true;
             });
         }
-
-        $typeCounts = [
-            'free' => $countFree,
-            'charge' => $countCharge,
-            'mySite' => $countMySite
-        ];
 
         $extensions = new LengthAwarePaginator(
             $items,
@@ -111,7 +95,7 @@ class ExtensionSettingsController extends Controller
 
         return XePresenter::make(
             'extension.install',
-            compact('saleType', 'extensions', 'extensionCategories', 'pluginHandler', 'orderTypes', 'typeCounts')
+            compact('saleType', 'extensions', 'extensionCategories', 'pluginHandler', 'orderTypes', 'storeExtensionCounts')
         );
     }
 
