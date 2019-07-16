@@ -78,12 +78,6 @@ class ExtensionSettingsController extends Controller
 
         $items = new Collection($storeExtensions->data);
 
-        if ($request->get('sale_type') == 'my_site') {
-            $items = $items->filter(function ($item, $value) {
-                return $item->is_purchased == true;
-            });
-        }
-
         $extensions = new LengthAwarePaginator(
             $items,
             $storeExtensions->total,

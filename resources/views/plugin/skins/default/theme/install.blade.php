@@ -104,14 +104,7 @@
         @if ($themes->count() > 0)
             <ul class="list-group list-card list-theme">
                 @foreach ($themes as $idx => $theme)
-                    {{-- TODO 내가 구매한 플러그인 수정--}}
-                    @if (Request::get('sale_type') == 'my_site')
-                        @if ($theme->is_purchased == true)
-                            @include($_skin::view('theme.item'))
-                        @endif
-                    @else
-                        @include($_skin::view('theme.item'))
-                    @endif
+                    @include($_skin::view('theme.item'))
                 @endforeach
             </ul>
         @else

@@ -102,12 +102,6 @@ class ThemeSettingsController extends Controller
 
         $items = new Collection($storeThemes->data);
 
-        if ($request->get('sale_type') == 'my_site') {
-            $items = $items->filter(function ($item, $value) {
-                return $item->is_purchased == true;
-            });
-        }
-
         $themes = new LengthAwarePaginator(
             $items,
             $storeThemes->total,
