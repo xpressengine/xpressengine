@@ -60,11 +60,11 @@ class HttpServiceProvider extends ServiceProvider
                 if (!in_array($locale, $config['xe.lang.locales'])) {
                     $locale = $this->getFallbackLocale();
                 }
-
-                $app['cookie']->queue(
-                    $app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
-                );
             }
+
+            $app['cookie']->queue(
+                $app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
+            );
 
             $app->setLocale($locale);
         });
