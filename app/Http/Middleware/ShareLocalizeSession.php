@@ -59,8 +59,10 @@ class ShareLocalizeSession
             $this->app['session']->flush();
             $this->app['session']->setId($id);
             $this->app['session']->start();
+        }
 
-            $queries = array_except($request->query->all(), '_s');
+        if ($request->method() === 'GET' && array_has($queries = $request->query->all(), '_s')) {
+            $queries = array_except($queries, '_s');
             return redirect($request->url().(count($queries) > 0 ? '?'.http_build_query($queries) : ''));
         }
 
