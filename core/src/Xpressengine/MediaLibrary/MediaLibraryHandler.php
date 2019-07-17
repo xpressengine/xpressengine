@@ -209,7 +209,7 @@ class MediaLibraryHandler
         $ancestors = $folderItem->ancestors(false)->get();
 
         /** @var MediaLibraryFolder $ancestor */
-        foreach ($ancestors as $ancestor) {
+        foreach ($ancestors->reverse() as $ancestor) {
             $paths[] = ['id' => $ancestor->id, 'name' => $ancestor->name];
         }
 
