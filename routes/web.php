@@ -854,34 +854,66 @@ Route::group(['prefix' => 'tag'], function () {
 
 Route::get('file/{id}', ['as' => 'file.path', 'uses' => 'StorageController@file'])->where('id', '[0-9a-z\-]+');
 
+Route::settings('mediaLibrary', function () {
+    Route::get('/', [
+        'as' => 'settings.mediaLibrary.index',
+        'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@index',
+        'settings_menu' => 'setting.media_library'
+    ]);
+
+    Route::get('contents', [
+        'as' => 'settings.mediaLibrary.contents',
+        'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@contents',
+        'settings_menu' => 'contents.media_library'
+    ]);
+});
+
 Route::group(['prefix' => 'media_library'], function () {
     Route::get('/', [
         'as' => 'media_library.index',
-        'uses' => 'MediaLibraryController@index'
+        'uses' => 'MediaLibrary\MediaLibraryController@index'
     ]);
     Route::delete('/', [
         'as' => 'media_library.drop',
-        'uses' => 'MediaLibraryController@drop'
+        'uses' => 'MediaLibrary\MediaLibraryController@drop'
     ]);
 
     Route::group(['prefix' => 'folder'], function () {
-        Route::get('/{folder_id}', ['as' => 'media_library.get_folder', 'uses' => 'MediaLibraryController@getFolder']);
-        Route::post('/', ['as' => 'media_library.store_folder', 'uses' => 'MediaLibraryController@createFolder']);
+        Route::get('/{folder_id}', [
+            'as' => 'media_library.get_folder',
+            'uses' => 'MediaLibrary\MediaLibraryController@getFolder'
+        ]);
+        Route::post('/', [
+            'as' => 'media_library.store_folder',
+            'uses' => 'MediaLibrary\MediaLibraryController@createFolder'
+        ]);
         Route::put('/{folder_id}', [
             'as' => 'media_library.update_folder',
-            'uses' => 'MediaLibraryController@updateFolder'
+            'uses' => 'MediaLibrary\MediaLibraryController@updateFolder'
         ]);
         Route::put('/{folder_id}/move', [
             'as' => 'media_library.move_folder',
-            'uses' => 'MediaLibraryController@moveFolder'
+            'uses' => 'MediaLibrary\MediaLibraryController@moveFolder'
         ]);
     });
 
     Route::group(['prefix' => 'file'], function () {
-        Route::get('/{file_id}', ['as' => 'media_library.get_file', 'uses' => 'MediaLibraryController@getFile']);
-        Route::put('/{file_id}/update', ['as' => 'media_library.update_file', 'uses' => 'MediaLibraryController@updateFile']);
-        Route::post('/', ['as' => 'media_library.upload', 'uses' => 'MediaLibraryController@upload']);
-        Route::put('/move', ['as' => 'media_library.move_file', 'uses' => 'MediaLibraryController@moveFile']);
+        Route::get('/{file_id}', [
+            'as' => 'media_library.get_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@getFile'
+        ]);
+        Route::put('/{file_id}/update', [
+            'as' => 'media_library.update_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@updateFile'
+        ]);
+        Route::post('/', [
+            'as' => 'media_library.upload',
+            'uses' => 'MediaLibrary\MediaLibraryController@upload'
+        ]);
+        Route::put('/move', [
+            'as' => 'media_library.move_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
+        ]);
     });
 });
 

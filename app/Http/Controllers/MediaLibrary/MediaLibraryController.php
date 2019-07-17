@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MediaLibrary;
 
+use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use XePresenter;
 use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
