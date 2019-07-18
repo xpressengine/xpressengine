@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="media-library-paging-item media-library-paging-item--active ">@1</a>
+  <a href="#" class="media-library-paging-item media-library-paging-item--active">@1</a>
 </template>
 
 <script>
@@ -30,15 +30,3 @@ export default {
   }
 }
 </script>
-
-
-<style lang="scss">
-  .folder-item {
-    display: table-row;
-
-    > div {
-      display: table-cell;
-      border: 1px solid black;
-    }
-  }
-</style>

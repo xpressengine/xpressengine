@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     view (event) {
-      this.$store.dispatch("media/viewFolder", this.folder.id)
+      this.$parent.viewFolder(this.folder.id)
     },
     deleteFolder (event) {
       this.$store.dispatch("media/deleteFolder", this.folder.id)

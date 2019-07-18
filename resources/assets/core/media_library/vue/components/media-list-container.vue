@@ -1,6 +1,7 @@
 <template>
   <div class="media-library-main">
     <header-tool></header-tool>
+
     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
     <div class="media-library-content" style="display: block;">
       <h3 class="blind">파일정보 리스트형, 카드형</h3>
@@ -51,7 +52,7 @@
               [D] 리스트가 폴더일 때 class="media-library-content-list__item--folder" 추가,
               리스트가 상위폴더 일 때 class="media-library-content-list__item--folder-depth-up" 추가
             -->
-            <li class="media-library-content-list__item--folder-depth-up">
+            <li v-if="parentFolder.id" @dblclick="viewParentFolder" class="media-library-content-list__item--folder-depth-up">
               <!--
                 [D] PC : label 영역을 리스트영역에 크게 적용하여 라벨 클릭 시 체크박스 class="media-library__input-checkbox" 에 자동으로 체크 되도록 적용하였습니다.
                 모바일 : 체크박스 영역을 체크해야 체크 되도록 라벨 영역의 크기를 줄여 좋았습니다.
@@ -70,6 +71,8 @@
                 -->
                 <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
               </div>
+
+              <!-- 상위 폴더 -->
               <div class="media-library-content-list__content-box">
                 <div class="media-library-content-list__title">
                   <span class="media-library-content-list__text">..</span>
@@ -85,7 +88,7 @@
                 </div>
               </div>
               <!-- [D] class="media-library__button-ellipsis" 버튼 클릭 시 class="media-library-content-list__more" 영역에 class="open" 추가 (말줄임 버튼 컬러 변경 및 팝업 노출) -->
-              <div class="media-library-content-list__more open">
+              <!-- <div class="media-library-content-list__more open">
                 <button type="button" class="media-library__button-ellipsis">
                   <span class="blind">편집하기, 삭제 팝업 버튼</span>
                 </button>
@@ -100,7 +103,7 @@
                     >삭제</button>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </li>
 
             <folder-item v-for="folder in folderList" :key="folder.id" :folder="folder"></folder-item>
@@ -138,7 +141,8 @@ export default {
       filter: {
         folder_id: null,
         page: 1
-      }
+      },
+      parentFolder: {}
     };
   },
   methods: {
@@ -146,7 +150,25 @@ export default {
       if (type) {
         this.listType = type
       }
+    },
+    viewFolder (folderId) {
+      this.$store.dispatch("media/viewFolder", folderId)
+    },
+    viewParentFolder () {
+      const parentFolder = this.$store.getters['media/parentFolder']
+      this.$store.dispatch('media/viewFolder')(parentFolder.id)
     }
+  },
+  mounted: function () {
+    console.debug('container mounted', this.$store.state)
+    this.paginate = this.$store.getters['media/paginate']
+    this.parentFolder = this.$store.getters['media/parentFolder']
+
+    this.$store.watch({
+      path: (a, b) => {
+        console.debug('watch', a, b)
+      }
+    })
   },
   computed: {
     mediaItems () {

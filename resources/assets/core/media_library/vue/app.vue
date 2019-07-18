@@ -1,13 +1,13 @@
 <script>
-import SettingsHeaderTool from "./components/settings/header-tool.vue";
 import MainContainer from "./components/main-container.vue";
+import DetailContainer from "./components/detail-container.vue";
 import $ from "jquery";
 
 export default {
   props: ["renderMode"],
   components: {
-    SettingsHeaderTool,
-    MainContainer
+    MainContainer,
+    DetailContainer
   },
   computed: {},
   mounted: function() {},
@@ -34,36 +34,37 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+    }
   }
 };
 </script>
 
 <template>
-  <div
-    id="media-manager-modal-container"
-    class="media-library-layer-popup media-library-layer-popup--media-library"
-    tabindex="-1"
-    role="dialog"
-    v-if="$props.renderMode === 'modal'"
-  >
-    <div class="media-library-layer-popup-content">
-      <div class="media-library-layer-popup-header">
-        <h3 class="blind">미디어 라이브러리 레이어팝업</h3>
-      </div>
-      <div class="media-library-layer-popup-body">
-        <main-container></main-container>
-      </div>
-      <div class="media-library-layer-popup-footer">
-        <!-- <button type="button" class="media-library__button media-library__button--subtle">취소</button> -->
-        <button
-          type="button"
-          class="media-library__button media-library__button--primary"
-          @click="importMedia"
-        >삽입</button>
+  <div>
+    <div
+      id="media-manager-modal-container"
+      class="media-library-layer-popup media-library-layer-popup--media-library"
+      tabindex="-1"
+      role="dialog"
+      v-if="$props.renderMode === 'modal'"
+    >
+      <div class="media-library-layer-popup-content">
+        <div class="media-library-layer-popup-header">
+          <h3 class="blind">미디어 라이브러리 레이어팝업</h3>
+        </div>
+        <div class="media-library-layer-popup-body">
+          <main-container></main-container>
+        </div>
+        <div class="media-library-layer-popup-footer">
+          <!-- <button type="button" class="media-library__button media-library__button--subtle">취소</button> -->
+          <button type="button" class="media-library__button media-library__button--primary" @click="importMedia">삽입</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <main-container v-else></main-container>
+    <main-container v-else></main-container>
+
+    <detail-container></detail-container>
+  </div>
 </template>

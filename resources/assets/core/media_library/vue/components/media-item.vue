@@ -1,5 +1,5 @@
 <template>
-  <li @click="selectMedia">
+  <li @dblclick.prevent="$root.showDetailMedia(media.id)" @click="selectMedia">
     <div class="media-library__input-group media-library-content-list__checkbox">
       <label class="media-library__label">
         <input type="checkbox" class="media-library__input-checkbox" />
@@ -7,10 +7,7 @@
       </label>
     </div>
     <div class="media-library-content-list__icon">
-      <div
-        class="media-library-content-list__icon-thumb media-library-content-list__icon-preview"
-        :style="{ 'background-image': 'url(' + thumbnailUrl + ')' }"
-      ></div>
+      <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" :style="{ 'background-image': 'url(' + thumbnailUrl + ')' }"></div>
     </div>
     <div class="media-library-content-list__content-box">
       <div class="media-library-content-list__title">
@@ -90,7 +87,7 @@ export default {
   computed: {
     thumbnailUrl({ $props }) {
       const media = $props.media;
-      return "/storage/app/" + media.file.path + "/" + media.file.filename;
+      return '/storage/app/public/media/' + media.file.path + '/' + media.file.filename;
     },
     userName({ $props }) {
       const media = $props.media;

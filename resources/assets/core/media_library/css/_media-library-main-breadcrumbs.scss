@@ -29,6 +29,16 @@
   color: $n90;
   vertical-align: middle;
 
+  &::before {
+    content: ' / ';
+  }
+
+  &:first-of-type {
+    &::before {
+      content: '';
+    }
+  }
+
   .media-library-breadcrumbs-info__link-text {
     color: $n90;
   }
@@ -39,6 +49,7 @@
 
     .media-library-breadcrumbs-info__link-text {
       color: $b400;
+      font-weight: bold;
       text-decoration: underline;
     }
   }

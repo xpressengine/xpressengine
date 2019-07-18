@@ -41,12 +41,36 @@ const getters = {
   },
   currentFolder (state) {
     return state.path[state.path.length - 1]
+  },
+  parentFolder (state) {
+    if (state.path.length <= 1) {
+      return {}
+    }
+
+    return state.path[state.path.length - 2]
+  },
+  paginate (state) {
+    const paginate = state.paginate
+    return {
+      current: paginate.current_page,
+      last: paginate.last_page,
+      perpage: paginate.per_page,
+      path: paginate.path,
+      totalCount: paginate.total,
+      from: paginate.from,
+      to: paginate.to,
+      firstUrl: paginate.first_page_url,
+      lastUrl: paginate.last_page_url,
+      prevUrl: paginate.prev_page_url,
+      nextUrl: paginate.next_page_url
+    }
   }
 }
 
 const actions = {
-  setFilter ({ commit }, filter = {}, reset = false) {
+  setFilter ({ commit, dispatch, state }, filter = {}, reset = false) {
     commit(types.SET_FILTER, filter, reset)
+    dispatch('loadData', state.filter)
   },
   loadData ({ commit }, filter = {}) {
     return new Promise((resolve, reject) => {
@@ -63,14 +87,14 @@ const actions = {
   addMedia ({ commit }, payload) {
     commit(types.ADD_MEDIA, payload)
   },
-  viewFolder ({ commit }, payload) {
-    this.dispatch('media/loadData', { folder_id: payload })
+  viewFolder ({ dispatch }, payload) {
+    dispatch('media/setFilter', { folder_id: payload })
   },
   addFolder ({ commit }, payload) {
     commit(types.ADD_FOLDER, payload)
   },
   deleteFolder ({ commit }, folderId) {
-    window.XE.delete('/media_manager/folder/' + folderId)
+    window.XE.delete('/media_library/folder/' + folderId)
       .then((response) => {
         commit(types.DELETE_FOLDER, folderId)
       })

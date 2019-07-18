@@ -54,9 +54,9 @@
       [D] 하단 리스트에서 아이템 선택 시 class="media-library-header__button-box--state-item-check" 영역에 class="open" 적용,
       PC 에서는 무조건 노출됨
     -->
-    <div class="media-library-header__button-box media-library-header__button-box--state-item-check">
+    <div v-if="$root.selectedMedia && $root.selectedMedia.length" class="media-library-header__button-box media-library-header__button-box--state-item-check open">
       <div class="media-library-header__button-box-inner">
-        <button type="button" class="media-library__button media-library__button--danger">
+        <button @click="$root.remove()" type="button" class="media-library__button media-library__button--danger">
           <span class="media-library__icon media-library__icon-delete"></span>
           삭제
         </button>
@@ -65,7 +65,7 @@
             <span class="media-library__icon media-library__icon-move"></span>
             이동
           </button>
-          <button type="button" class="media-library__button media-library__button--default">
+          <button type="button" @click="clearSelected" class="media-library__button media-library__button--default">
             <span class="media-library__icon media-library__icon-deselect"></span>
             선택해제
           </button>
@@ -114,11 +114,11 @@
     <!-- [D] 모바일에서 버튼 class="media-library-header-mobile-upload-button" (아래 html 구조에 있음) 클릭 시 class="open" 추가 -->
     <div class="media-library__button-group media-library__button-group--state-upload">
       <div class="media-library__button-group-inner">
-        <button type="button" class="media-library__button media-library__button--default">
+        <button @click="dialogCreateFolder" type="button" class="media-library__button media-library__button--default">
           <span class="media-library__icon media-library__icon-folder"></span>
           새폴더
         </button>
-        <button type="button" class="media-library__button media-library__button--default" @click="toggleAttachArea">
+        <button @click="toggleAttachArea" type="button" class="media-library__button media-library__button--default">
           <span class="media-library__icon media-library__icon-upload"></span>
           업로드
         </button>
@@ -190,6 +190,13 @@ export default {
     },
     toggleAttachArea () {
       $('.media-library-upload').toggleClass('active');
+    },
+    clearSelected () {
+      this.$root.clearSelectedMedia()
+    },
+    dialogCreateFolder () {
+      console.debug('dialogCreateFolder');
+      this.$root.showDialog('create-folder')
     }
   },
   computed: {

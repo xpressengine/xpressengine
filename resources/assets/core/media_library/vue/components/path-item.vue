@@ -1,7 +1,5 @@
 <template>
-  <li class="media-list__path-item" @click="view">
-    {{ pathName }}
-  </li>
+  <a href="#" class="media-library-breadcrumbs-info__link" @click="view"><span class="media-library-breadcrumbs-info__link-text">{{ pathName }}</span></a>
 </template>
 
 <script>
@@ -16,6 +14,7 @@ export default {
   },
   methods: {
     view (event) {
+      event.preventDefault()
       this.$store.dispatch('media/viewFolder', this.path.id)
     }
   },

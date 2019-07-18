@@ -1,7 +1,11 @@
 <template>
-  <ol class="media-list__path">
-    <path-item v-for="path in items" :key="path.id" :path="path"></path-item>
-  </ol>
+  <div class="media-library-breadcrumbs">
+      <h3 class="blind">현재 폴더 정보</h3>
+      <div class="media-library-breadcrumbs-info">
+          <span class="media-library-breadcrumbs-info__image"></span>
+          <path-item v-for="path in items" :key="path.id" :path="path"></path-item>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -30,6 +34,7 @@ export default {
   },
   computed: {
     items ({ $props }) {
+      console.debug('path $props.pathItems', $props.pathItems)
       return $props.pathItems
     },
   }

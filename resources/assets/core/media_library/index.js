@@ -66,8 +66,8 @@ class MediaManager extends App {
 
       if (!$ground.length) {
         $('body').append('<div id="media-library">')
-        window.XE.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
       }
+      window.XE.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
 
       const componentAppInstance = new Vue({
         el: '#media-library',
@@ -79,7 +79,9 @@ class MediaManager extends App {
         data: function () {
           return {
             renderMode: 'inline',
-            selectedMedia: []
+            selectedMedia: [],
+            showMedia: null,
+            dialog: null
           }
         },
         computed: {
@@ -88,11 +90,12 @@ class MediaManager extends App {
           }
         },
         created: function () {
-          const that = this
           this.renderMode = renderMode
 
           store.dispatch('media/loadData').then(() => {
             router.push({ name: 'home' })
+
+            this.$emit('loaded')
 
             $(function () {
               if (typeof $.fn.fileupload !== 'undefined') {
@@ -100,7 +103,7 @@ class MediaManager extends App {
                   url: '/media_library/file',
                   dataType: 'json',
                   sequentialUploads: true,
-                  // maxChunkSize: 1000000,
+                  maxChunkSize: 1000000,
                   formData: () => {
                     return [
                       {
@@ -136,17 +139,44 @@ class MediaManager extends App {
           })
         },
         methods: {
-          putSelectedMedia: function (item) {
+          showDetailMedia (id) {
+            this.showMedia = id
+            this.$emit('show-detail-media', id, store.getters['media/media'](id))
+          },
+          hideDetailMedia () {
+            this.showMedia = null
+            this.$emit('show-detail-media-closed')
+          },
+          createFolder (name, parent = null, disk = null) {
+            return window.XE.post('/media_library/folder', {
+              name: name,
+              parent_id: parent || this.$store.getters['media/currentFolder'].id,
+              disk: 'media'
+            })
+              .then((response) => {
+                this.$store.dispatch('media/loadData', { folder_id: response.data[0].parent_id })
+              })
+          },
+          putSelectedMedia (item) {
             this.selectedMedia.push(item.media.id)
           },
-          removeSelectedMedia: function (item) {
+          clearSelectedMedia () {
+            this.selectedMedia = []
+          },
+          deleteMedia (id) {
+            return window.XE.delete('/media_library', { target_ids: id })
+              .then(() => {
+                store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
+              })
+          },
+          removeSelectedMedia (item) {
             if (this.selectedMedia.length) {
               this.selectedMedia.splice(this.selectedMedia.findIndex(v => item.media.id === v), 1)
             }
           },
-          remove: function () {
+          remove () {
             if (this.selectedMedia.length) {
-              window.XE.delete('/media_library/file', { file_id: this.selectedMedia })
+              window.XE.delete('/media_library', { target_ids: this.selectedMedia })
                 .then(() => {
                   this.selectedMedia.forEach(function (item) {
                     store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
@@ -154,6 +184,10 @@ class MediaManager extends App {
                   this.selectedMedia = []
                 })
             }
+          },
+          showDialog (dialog) {
+            console.debug('showDialog', dialog)
+            this.dialog = dialog
           }
         },
         render (h) {

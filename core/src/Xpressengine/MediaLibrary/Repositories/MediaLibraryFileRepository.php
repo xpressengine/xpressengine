@@ -182,7 +182,10 @@ class MediaLibraryFileRepository
             $fileItem->user->setAttribute('profile_image_url', $fileItem->user->getProfileImage());
             $fileItem->user->addVisible(['profile_image_url']);
         }
-        $fileItem->file->addVisible(['path', 'filename']);
+
+        if (!empty($fileItem->file)) {
+            $fileItem->file->addVisible(['path', 'filename']);
+        }
     }
 
     public function delete(Model $item)
