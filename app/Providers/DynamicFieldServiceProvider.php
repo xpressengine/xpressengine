@@ -30,6 +30,7 @@ use App\FieldTypes\Boolean;
 use App\FieldTypes\Address;
 use App\FieldTypes\CellPhoneNumber;
 use App\FieldSkins\Category\DefaultSkin as CategoryDefault;
+use App\FieldSkins\Category\CategoryRadioSkin;
 use App\FieldSkins\Number\DefaultSkin as NumberDefault;
 use App\FieldSkins\Text\DefaultSkin as TextDefault;
 use App\FieldSkins\Text\EmailSkin as TextEmail;
@@ -96,6 +97,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler = app('xe.dynamicField')->getRegisterHandler();
 
         $registerHandler->add(CategoryDefault::class);
+        $registerHandler->add(CategoryRadioSkin::class);
         $registerHandler->add(NumberDefault::class);
         $registerHandler->add(TextDefault::class);
         $registerHandler->add(TextEmail::class);
