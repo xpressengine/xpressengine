@@ -37,7 +37,7 @@ class Composer
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = null;
+    protected static $packagistUrl = 'store.xehub.io';
 
     protected static $packagistToken = null;
 
@@ -126,10 +126,7 @@ class Composer
     public static function postDependenciesSolving(InstallerEvent $event)
     {
         if (static::$packagistUrl !== null && static::$packagistToken !== null) {
-            $io = $event->getIO();
-            $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
-            $token = static::$packagistToken;
-            $io->setAuthentication($host, $token);
+            $event->getIO()->setAuthentication(static::$packagistUrl, static::$packagistToken);
         }
     }
 
