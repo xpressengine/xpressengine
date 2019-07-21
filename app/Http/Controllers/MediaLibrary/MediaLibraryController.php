@@ -15,7 +15,7 @@ class MediaLibraryController extends Controller
 
     public function __construct()
     {
-        $this->handler = app('xe.media_library');
+        $this->handler = app('xe.media_library.handler');
     }
 
     public function index(Request $request)

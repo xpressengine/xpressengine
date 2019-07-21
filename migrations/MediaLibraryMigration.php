@@ -32,7 +32,7 @@ class MediaLibraryMigration extends Migration
      */
     public function installed()
     {
-
+        $this->storeConfig();
     }
 
     /**
@@ -67,6 +67,10 @@ class MediaLibraryMigration extends Migration
      */
     public function checkUpdated($installedVersion = null)
     {
+        if ($this->checkExistConfig() == false) {
+            return false;
+        }
+
         if ($this->checkExistTables() == false) {
             return false;
         }
@@ -87,6 +91,10 @@ class MediaLibraryMigration extends Migration
      */
     public function update($installedVersion = null)
     {
+        if ($this->checkExistConfig() == false) {
+            $this->storeConfig();
+        }
+
         if ($this->checkExistTables() == false) {
             $this->createTables();
         }
@@ -154,6 +162,19 @@ class MediaLibraryMigration extends Migration
         }
     }
 
+    private function checkExistConfig()
+    {
+        return \DB::table('config')->where('name', 'media_library')->exists();
+    }
+
+    private function storeConfig()
+    {
+        \DB::table('config')->insert([
+            'name' => 'media_library',
+            'vars' => '{"container":{}, "file":{"dimensions":{"MAX":{"width":4000, "height":4000}}}}'
+        ]);
+    }
+
     private function checkExistRootFolder()
     {
         return \DB::table($this->folderTableName)->where('name', '/')->exists();
@@ -161,6 +182,7 @@ class MediaLibraryMigration extends Migration
 
     private function storeRootFolder()
     {
+        //TODO root 폴더 정보 config에 등록
         $rootFolderAttributes = [
             'parent_id' => '',
             'disk' => 'media',

@@ -2,6 +2,8 @@
 
 namespace Xpressengine\MediaLibrary;
 
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFolderException;
@@ -271,11 +273,32 @@ class MediaLibraryHandler
 
         try {
             $uploadFile = $request->file('file');
+
+            $mediaLibraryConfig = config('xe.media.mediaLibrary');
+
+            //file size check
+            if ($mediaLibraryConfig['max_size'] != null && $mediaLibraryConfig['max_size'] != '' &&
+                $mediaLibraryConfig['max_size'] * 1024 * 1024 < $uploadFile->getSize()) {
+                throw new HttpException(
+                    Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
+                    xe_trans('xe::msgMaxFileSize', [
+                        'fileMaxSize' => $mediaLibraryConfig['max_size'],
+                        'uploadFileName' => $uploadFile->getClientOriginalName()
+                    ])
+                );
+            }
+
             $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
 
             if (XeMedia::is($file) == true) {
                 $media = XeMedia::make($file);
-                XeMedia::createThumbnails($media);
+
+                $metaData = $media['meta'];
+                $thumbnailConfig = config('xe.media.thumbnail.dimensions');
+                if ($metaData['width'] < $thumbnailConfig['MAX']['width'] ||
+                    $metaData['height'] < $thumbnailConfig['MAX']['height']) {
+                    XeMedia::createThumbnails($media);
+                }
             }
 
             $folderItem = $this->getFolderItem($request->get('folder_id', ''));

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\MediaLibrary\MediaLibraryConfigHandler;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
@@ -31,6 +32,8 @@ class MediaLibraryProvider extends ServiceProvider
         $this->bindClasses();
 
         $this->registerRepositories();
+
+        app('xe.media_library.configHandler')->setThumbnailTypes();
     }
 
     private function bindClasses()
@@ -38,7 +41,12 @@ class MediaLibraryProvider extends ServiceProvider
         $this->app->singleton(MediaLibraryHandler::class, function () {
             return new MediaLibraryHandler;
         });
-        $this->app->alias(MediaLibraryHandler::class, 'xe.media_library');
+        $this->app->alias(MediaLibraryHandler::class, 'xe.media_library.handler');
+
+        $this->app->singleton(MediaLibraryConfigHandler::class, function () {
+            return new MediaLibraryConfigHandler(app('xe.config')->get('media_library'));
+        });
+        $this->app->alias(MediaLibraryConfigHandler::class, 'xe.media_library.configHandler');
     }
 
     private function setModels()

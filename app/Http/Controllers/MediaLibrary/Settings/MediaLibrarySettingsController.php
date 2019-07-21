@@ -8,9 +8,18 @@ use XeFrontend;
 
 class MediaLibrarySettingsController extends Controller
 {
-    public function index(Request $request)
+    public function fileSetting(Request $request)
     {
         return \XePresenter::make('mediaLibrary.settings.index');
+    }
+
+    public function storeFileSetting(Request $request)
+    {
+        $fileConfig = $request->except('_token');
+
+        app('xe.media_library.configHandler')->storeConfig(['file' => $fileConfig]);
+
+        return redirect()->route('settings.mediaLibrary.index')->with('alert', ['type' => 'success', 'message' => '저장']);
     }
 
     public function contents()
