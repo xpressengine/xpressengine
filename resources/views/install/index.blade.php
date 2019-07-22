@@ -38,15 +38,7 @@
     <div class="content __xe_step" data-step="0">
         <div class="start_content">
             <h2 class="title-installer">
-                <span class="text-xe"><span class="xe-sr-only">XE</span></span>
-                <!--version number area ex) .num0 ~ .num9 -->
-                <span class="num3"><em class="xe-sr-only">3</em></span>
-                <span class="dot"><em class="xe-sr-only">.</em></span>
-                <span class="num0"><em class="xe-sr-only">0</em></span>
-                <span class="dot"><em class="xe-sr-only">.</em></span>
-                <span class="num0"><em class="xe-sr-only">0</em></span>
-                <!--// version number area-->
-                <span class="text-installer"><span class="xe-sr-only">installer</span></span>
+                XE {{__XE_VERSION__}} Installer
             </h2>
             <div class="xe-dropdown">
                 <button class="xe-btn" type="button" data-toggle="xe-dropdown">{{ trans('xe::install.localeExpression') }}</button>
@@ -57,7 +49,7 @@
             </div>
 
             <p class="text-version-check">{{ trans('xe::install.checkForInstall') }}</p>
-            <a href="#" class="btn-start __xe_btn_next"><span class="xe-sr-only">start</span></a>
+            <a href="#" class="btn-start __xe_btn_next">START</a>
         </div>
     </div>
 
@@ -68,8 +60,8 @@
         </ul>
         <div class="btn-center">
             <!--[D] 모든 항목 pass 시 btn-next로 변경, 버튼태그로 교체 가능  -->
-            <a href="#" class="btn-next __xe_btn_next" style="display: none;"><span class="xe-sr-only">next</span></a>
-            <a href="#" class="btn-again __xe_btn_check"><span class="xe-sr-only">again</span></a>
+            <a href="#" class="btn-next __xe_btn_next" style="display: none;">NEXT</a>
+            <a href="#" class="btn-again __xe_btn_check">AGAIN</a>
         </div>
     </div>
 
@@ -84,7 +76,7 @@
             </label>
         </div>
         <div class="btn-center">
-            <a href="#" class="btn-next __xe_btn_next"><span class="xe-sr-only">next</span></a>
+            <a href="#" class="btn-next __xe_btn_next">NEXT</a>
         </div>
     </div>
 
@@ -179,7 +171,7 @@
                 </tbody>
             </table>
             <div class="btn-center">
-                <a href="#" class="btn-next __xe_btn_submit"><span class="xe-sr-only">next</span></a>
+                <a href="#" class="btn-next __xe_btn_submit">NEXT</a>
             </div>
         </form>
     </div>
@@ -188,7 +180,7 @@
 </div>
 <div class="footer">
     <p class="text-copy">
-        <span class="xe-sr-only">Copyright © NAVER Corp. Supported by D2 Program.</span>
+        &copy; 2019 엑스이팩토리 Co.
     </p>
 </div>
 

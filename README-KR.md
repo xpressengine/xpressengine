@@ -30,22 +30,19 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
 
 ## Xehub 커뮤니티 개발자
-@akasima @bnu @jhyeon1010 @kimyu711 @woongbin
-
-## 기여자
-http://xpressengine.io/contributors
+@akasima @bnu @jhyeon1010 @kimyu711 @woongbin @jihyeok
 
 ## 매뉴얼                                                                   
-* 한글 매뉴얼 : https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/
-* Front-end 메뉴얼 : https://xpressengine.gitbooks.io/xpressengine-front-end/content/
+* 한글 매뉴얼 : https://www.xpressengine.io/guide/README
+* Front-end 메뉴얼 : https://www.xpressengine.io/guide/js/js
 
 ## 지원
-* 공식 사이트 : http://xpressengine.io/
-* 공식 포럼 : http://xpressengine.io/qna/
+* 공식 사이트 : https://xpressengine.io/
+* 공식 포럼 : https://xpressengine.io/qna/
 * 슬랙 : https://xpressengine-forum-invite.herokuapp.com/
 
 ## 라이센스
-Copyright 2015 NAVER Corp. <http://www.navercorp.com>
+Copyright 2019 XE Factory Co. <https://xehub.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -62,4 +59,4 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  usage
 
 ## Powered By 
-* Naver D2 : http://d2.naver.com/
+* Xpressengine : https://xpressengine.io
