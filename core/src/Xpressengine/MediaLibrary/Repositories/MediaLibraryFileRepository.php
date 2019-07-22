@@ -184,11 +184,13 @@ class MediaLibraryFileRepository
         }
 
         if (!empty($fileItem->file)) {
-            $media = \XeMedia::getHandlerByFile($fileItem->file)->make($fileItem->file);
+            if (\XeMedia::is($fileItem->file) == true) {
+                $media = \XeMedia::getHandlerByFile($fileItem->file)->make($fileItem->file);
 
-            $fileItem->setAttribute('url', $fileItem->file->url());
-            $fileItem->setAttribute('width', $media['meta']['width']);
-            $fileItem->setAttribute('height', $media['meta']['height']);
+                $fileItem->setAttribute('url', $fileItem->file->url());
+                $fileItem->setAttribute('width', $media['meta']['width']);
+                $fileItem->setAttribute('height', $media['meta']['height']);
+            }
 
             $fileItem->file->addVisible(['path', 'filename']);
         }
