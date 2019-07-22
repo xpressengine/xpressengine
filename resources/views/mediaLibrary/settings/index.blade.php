@@ -1,13 +1,13 @@
 @section('page_title')
     <h2>{{xe_trans('xe::media')}} {{xe_trans('xe::settings')}}</h2>
 @endsection
-
+<form method="post" action="{{route('settings.mediaLibrary.storeFileSetting')}}" class="plugin-install-form">
+    {!! csrf_field() !!}
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
             <div class="panel">
-                <form method="post" action="{{route('settings.mediaLibrary.storeFileSetting')}}" class="plugin-install-form">
-                    {!! csrf_field() !!}
+
 
                     <div class="panel-heading">
                         <div class="pull-left">
@@ -126,7 +126,6 @@
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
 
             <div class="panel-footer">
@@ -137,3 +136,4 @@
         </div>
     </div>
 </div>
+</form>
