@@ -27,7 +27,7 @@
                 [D] 내부 class="media-library__button" 클릭 시 버튼 영역에 class="button-selected" 추가하고, class="media-library-button-data" 영역에 class="open" 추가
                 class="open" 추가 시 리스트 영역 레이어 노출 됨
             -->
-            <div class="media-library-button-data">
+            <div v-if="false" class="media-library-button-data">
               <button type="button" class="media-library__button media-library__button--subtle media-library__button--icon">
                 <span class="media-library__button-icon media-library__button-icon--ellipsis"></span>
               </button>
@@ -142,7 +142,8 @@ export default {
   },
   computed: {
     thumbnailUrl () {
-      return "/storage/app/public/media/" + this.media.file.path + "/" + this.media.file.filename;
+      return this.media.file.url;
+      // return "/storage/app/public/media/" + this.media.file.path + "/" + this.media.file.filename;
     },
     userName () {
       return this.media.user.display_name;

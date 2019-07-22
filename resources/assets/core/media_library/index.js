@@ -103,7 +103,7 @@ class MediaLibrary extends App {
                   url: '/media_library/file',
                   dataType: 'json',
                   sequentialUploads: true,
-                  maxChunkSize: 1000000,
+                  // maxChunkSize: 1000000,
                   formData: () => {
                     return [
                       {
