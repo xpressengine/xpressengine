@@ -64,13 +64,13 @@
                           <dt>파일 URL</dt>
                           <dd>
                               <div class="media-library__input-group">
-                                  <input type="text" class="media-library__input-text" value="http://google.co.kr/search/" disabled="">
+                                  <input @click="urlCopy($event)" type="text" class="media-library__input-text" :value="media.file.url" readonly="">
                               </div>
                           </dd>
                           <dt>업로드 날짜</dt>
                           <dd>{{ media.created_at }}</dd>
-                          <dt>규격</dt>
-                          <dd>@900x900</dd>
+                          <dt v-if="media.file.width && media.file.height">규격</dt>
+                          <dd v-if="media.file.width && media.file.height"> {{ media.file.width }}x{{ media.file.height }}</dd>
                       </dl>
                   </div>
                   <div class="media-library-layer-popup-detail-info-content">
@@ -162,6 +162,15 @@ export default {
     },
     close () {
       this.$root.hideDetailMedia()
+    },
+    urlCopy (e) {
+      console.debug('urlCopy', e)
+      $(e.target).select();
+      if (typeof document.execCommand === "function") {
+          document.execCommand('copy');
+      }else{ //ie 대응
+          window.clipboardData.setData('Text', token);
+      }
     },
     save () {
       return new Promise((resolve, reject) => {
