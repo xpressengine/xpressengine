@@ -2276,6 +2276,10 @@ return [
         'ko' => '[:extensions] 확장자만 업로드 가능합니다. [:uploadFileName]',
         'en' => '[:extensions] extensions only upload. [:uploadFileName]',
     ],
+    'msgImpossibleUploadingFiles' => [
+        'ko' => '[:extensions] 확장자들은 업로드 불가능합니다. [:uploadFileName]',
+        'en' => '[:extensions] extensions can not be uploaded. [:uploadFileName]',
+    ],
     'uploadPermission' => [
         'ko' => '업로드 권한',
         'en' => 'Upload permission',
