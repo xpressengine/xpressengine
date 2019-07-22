@@ -187,12 +187,12 @@ class MediaLibraryFileRepository
             if (\XeMedia::is($fileItem->file) == true) {
                 $media = \XeMedia::getHandlerByFile($fileItem->file)->make($fileItem->file);
 
-                $fileItem->setAttribute('url', $fileItem->file->url());
-                $fileItem->setAttribute('width', $media['meta']['width']);
-                $fileItem->setAttribute('height', $media['meta']['height']);
+                $fileItem->file->setAttribute('url', $fileItem->file->url());
+                $fileItem->file->setAttribute('width', $media['meta']['width']);
+                $fileItem->file->setAttribute('height', $media['meta']['height']);
             }
 
-            $fileItem->file->addVisible(['path', 'filename']);
+            $fileItem->file->addVisible(['path', 'filename', 'url', 'width', 'height']);
         }
     }
 
