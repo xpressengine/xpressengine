@@ -1,61 +1,139 @@
 @section('page_title')
-    <h2>미디어 라이브러리</h2>
+    <h2>{{xe_trans('xe::media')}} {{xe_trans('xe::settings')}}</h2>
 @endsection
 
 <div class="row">
     <div class="col-sm-12">
-        <form method="post" action="{{route('settings.mediaLibrary.storeFileSetting')}}" class="plugin-install-form">
-            {!! csrf_field() !!}
-            이미지 크기 설정
-            <table class="xe-table">
-                <tr>
-                    <th>small 폭</th>
-                    <th>small 높이</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="dimensions_s_width" value="{{config('xe.media.thumbnail.dimensions')['S']['width']}}"></td>
-                    <td><input type="text" name="dimensions_s_height" value="{{config('xe.media.thumbnail.dimensions')['S']['height']}}"></td>
-                </tr>
+        <div class="panel-group">
+            <div class="panel">
+                <form method="post" action="{{route('settings.mediaLibrary.storeFileSetting')}}" class="plugin-install-form">
+                    {!! csrf_field() !!}
 
-                <tr>
-                    <th>medium 폭</th>
-                    <th>medium 높이</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="dimensions_m_width" value="{{config('xe.media.thumbnail.dimensions')['M']['width']}}"></td>
-                    <td><input type="text" name="dimensions_m_height" value="{{config('xe.media.thumbnail.dimensions')['M']['height']}}"></td>
-                </tr>
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{xe_trans('xe::imageSizeSetting')}}</h3>
+                            <small>{{xe_trans('xe::imageSizeSettingDescription')}}</small>
+                        </div>
+                    </div>
 
-                <tr>
-                    <th>large 폭</th>
-                    <th>large 높이</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="dimensions_l_width" value="{{config('xe.media.thumbnail.dimensions')['L']['width']}}"></td>
-                    <td><input type="text" name="dimensions_l_height" value="{{config('xe.media.thumbnail.dimensions')['L']['height']}}"></td>
-                </tr>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Small ({{xe_trans('xe::thumbnail')}}) {{xe_trans('xe::width')}}</label>
+                                        <input type="text" name="dimensions_s_width" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['S']['width']}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Small ({{xe_trans('xe::thumbnail')}}) {{xe_trans('xe::height')}}</label>
+                                        <input type="text" name="dimensions_s_height" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['S']['height']}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>최대 크기 폭</th>
-                    <th>최대 크기 높이</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="dimensions_max_width" value="{{config('xe.media.thumbnail.dimensions')['MAX']['width']}}"></td>
-                    <td><input type="text" name="dimensions_max_height" value="{{config('xe.media.thumbnail.dimensions')['MAX']['height']}}"></td>
-                </tr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Medium {{xe_trans('xe::max')}} {{xe_trans('xe::width')}}</label>
+                                        <input type="text" name="dimensions_m_width" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['M']['width']}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Medium {{xe_trans('xe::max')}} {{xe_trans('xe::height')}}</label>
+                                        <input type="text" name="dimensions_m_height" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['M']['height']}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>업로드 최대 용량(MB)</th>
-                    <td><input type="text" name="max_size" value="{{config('xe.media.mediaLibrary.max_size')}}"></td>
-                </tr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Large {{xe_trans('xe::max')}} {{xe_trans('xe::width')}}</label>
+                                        <input type="text" name="dimensions_l_width" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['L']['width']}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>Large {{xe_trans('xe::max')}} {{xe_trans('xe::height')}}</label>
+                                        <input type="text" name="dimensions_l_height" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['L']['height']}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>제한 파일 <small>업로드 제한할 확장자</small></th>
-                    <td><input type="text" name="disallow_extensions" value="{{config('xe.media.mediaLibrary.disallow_extensions')}}"></td>
-                </tr>
-            </table>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::maxSizeImageWidth')}}</label>
+                                        <input type="text" name="dimensions_max_width" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['MAX']['width']}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::maxSizeImageHeight')}}</label>
+                                        <input type="text" name="dimensions_max_height" class="form-control" value="{{config('xe.media.thumbnail.dimensions')['MAX']['height']}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <button type="submit" class="xe-btn xe-btn-positive">저장</button>
-        </form>
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{xe_trans('xe::uploadFileSetting')}}</h3>
+                            <small>{{xe_trans('xe::uploadFileSettingDescription')}}</small>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::uploadMaxSize')}}(MB)</label>
+                                        <input type="text" name="max_size" class="form-control" value="{{config('xe.media.mediaLibrary.max_size')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::restrictFile')}} <small>{{xe_trans('xe::restrictFileDescription')}}</small></label>
+                                        <input type="text" name="disallow_extensions" class="form-control" value="{{config('xe.media.mediaLibrary.disallow_extensions')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="panel-footer">
+                <div class="pull-right">
+                    <button type="submit" class="xe-btn xe-btn-positive">{{xe_trans('xe::save')}}</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

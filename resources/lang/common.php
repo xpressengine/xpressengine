@@ -2276,6 +2276,10 @@ return [
         'ko' => '[:extensions] 확장자만 업로드 가능합니다. [:uploadFileName]',
         'en' => '[:extensions] extensions only upload. [:uploadFileName]',
     ],
+    'msgImpossibleUploadingFiles' => [
+        'ko' => '[:extensions] 확장자들은 업로드 불가능합니다. [:uploadFileName]',
+        'en' => '[:extensions] extensions can not be uploaded. [:uploadFileName]',
+    ],
     'uploadPermission' => [
         'ko' => '업로드 권한',
         'en' => 'Upload permission',
@@ -3192,4 +3196,56 @@ return [
         'ko' => '알 수 없는 버전입니다. :ver',
         'en' => 'Unknown version. :ver',
     ],
+    'imageSizeSetting' => [
+        'ko' => '이미지 크기 설정',
+        'en' => 'Image size setting'
+    ],
+    'imageSizeSettingDescription' => [
+        'ko' => '미디어 라이브러리에 이미지를 추가할 때 사용할 최대 크기(픽셀)를 설정합니다.',
+        'en' => 'Sets the maximum size (in pixels) to use when adding images to the media library.'
+    ],
+    'uploadFileSetting' => [
+        'ko' => '업로드 파일 설정',
+        'en' => 'Upload file setting'
+    ],
+    'uploadFileSettingDescription' => [
+        'ko' => '미디어 라이브러리에 파일을 추가할 때 최대 용량과 파일 종류를 설정합니다.',
+        'en' => 'Sets the maximum capacity and file type when adding files to the media library.'
+    ],
+    'thumbnail' => [
+        'ko' => '썸네일',
+        'en' => 'thumbnail'
+    ],
+    'width' => [
+        'ko' => '폭',
+        'en' => 'width'
+    ],
+    'height' => [
+        'ko' => '높이',
+        'en' => 'height'
+    ],
+    'max' => [
+        'ko' => '최대',
+        'en' => 'Max'
+    ],
+    'maxSizeImageWidth' => [
+        'ko' => '최대 크기 이미지 폭',
+        'en' => 'Max size image width'
+    ],
+    'maxSizeImageHeight' => [
+        'ko' => '최대 크기 이미지 높이',
+        'en' => 'Max size image height'
+    ],
+    'uploadMaxSize' => [
+        'ko' => '업로드 최대 용량',
+        'en' => 'Maximum Upload Capacity'
+    ],
+    'restrictFile' => [
+        'ko' => '제한 파일',
+        'en' => 'Restrict file'
+    ],
+    'restrictFileDescription' => [
+        'ko' => '업로드를 제한하는 파일의 확장자를 추가할 수 있습니다.',
+        'en' => 'You can add a file extension to restrict uploads.'
+    ]
 ];

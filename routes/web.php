@@ -855,14 +855,20 @@ Route::group(['prefix' => 'tag'], function () {
 Route::get('file/{id}', ['as' => 'file.path', 'uses' => 'StorageController@file'])->where('id', '[0-9a-z\-]+');
 
 Route::settings('mediaLibrary', function () {
-    Route::get('/fileSetting', [
+    Route::get('/', [
         'as' => 'settings.mediaLibrary.index',
-        'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@fileSetting',
+        'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@index',
         'settings_menu' => 'setting.media_library'
     ]);
+
     Route::post('/fileSetting', [
         'as' => 'settings.mediaLibrary.storeFileSetting',
         'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@storeFileSetting'
+    ]);
+
+    Route::post('/containerSetting', [
+        'as' => 'settings.mediaLibrary.storeContainerSetting',
+        'uses' => 'MediaLibrary\Settings\MediaLibrarySettingsController@storeContrainerSetting'
     ]);
 
     Route::get('/contents', [

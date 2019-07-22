@@ -288,6 +288,22 @@ class MediaLibraryHandler
                 );
             }
 
+            //file extension check
+            $disallowExtensions = array_map(function ($v) {
+                return trim($v);
+            }, explode(',', $mediaLibraryConfig['disallow_extensions']));
+
+            if (array_search('*', $disallowExtensions) === true
+                || in_array(strtolower($uploadFile->getClientOriginalExtension()), $disallowExtensions)) {
+                throw new HttpException(
+                    Response::HTTP_NOT_ACCEPTABLE,
+                    xe_trans('xe::msgImpossibleUploadingFiles', [
+                        'extensions' => $mediaLibraryConfig['disallow_extensions'],
+                        'uploadFileName' => $uploadFile->getClientOriginalName()
+                    ])
+                );
+            }
+
             $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
 
             if (XeMedia::is($file) == true) {
