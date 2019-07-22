@@ -14,10 +14,10 @@
                             <div class="list-group-item">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="useCaptcha" value="true" @if($config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::use')}}
+                                        <input type="radio" name="useCaptcha" value="true" @if($config->get('useCaptcha')) checked="checked" @endif @if ($captcha->available() != true) disabled @endif> {{xe_trans('xe::use')}}
                                     </label>
                                     <label>
-                                        <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
+                                        <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif @if ($captcha->available() != true) disabled @endif> {{xe_trans('xe::disuse')}}
                                     </label>
                                 </div>
                             </div>
