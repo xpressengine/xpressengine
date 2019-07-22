@@ -1,7 +1,6 @@
 .media-library-upload {
   display: none;
   width: 100%;
-  height: 50px;
   margin-bottom: 16px;
   padding: 64px;
   border: 1px dashed $n80;
@@ -15,6 +14,7 @@
   .fileinput-button {
     position: relative;
     overflow: hidden;
+    display: inline-block;
   }
 
   [type=file] {

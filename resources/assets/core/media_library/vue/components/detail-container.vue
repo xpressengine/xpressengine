@@ -27,7 +27,7 @@
                 [D] 내부 class="media-library__button" 클릭 시 버튼 영역에 class="button-selected" 추가하고, class="media-library-button-data" 영역에 class="open" 추가
                 class="open" 추가 시 리스트 영역 레이어 노출 됨
             -->
-            <div class="media-library-button-data">
+            <div v-if="false" class="media-library-button-data">
               <button type="button" class="media-library__button media-library__button--subtle media-library__button--icon">
                 <span class="media-library__button-icon media-library__button-icon--ellipsis"></span>
               </button>
@@ -64,13 +64,13 @@
                           <dt>파일 URL</dt>
                           <dd>
                               <div class="media-library__input-group">
-                                  <input type="text" class="media-library__input-text" value="http://google.co.kr/search/" disabled="">
+                                  <input @click="urlCopy($event)" type="text" class="media-library__input-text" :value="media.file.url" readonly="">
                               </div>
                           </dd>
                           <dt>업로드 날짜</dt>
                           <dd>{{ media.created_at }}</dd>
-                          <dt>규격</dt>
-                          <dd>@900x900</dd>
+                          <dt v-if="media.file.width && media.file.height">규격</dt>
+                          <dd v-if="media.file.width && media.file.height"> {{ media.file.width }}x{{ media.file.height }}</dd>
                       </dl>
                   </div>
                   <div class="media-library-layer-popup-detail-info-content">
@@ -142,7 +142,8 @@ export default {
   },
   computed: {
     thumbnailUrl () {
-      return "/storage/app/public/media/" + this.media.file.path + "/" + this.media.file.filename;
+      return this.media.file.url;
+      // return "/storage/app/public/media/" + this.media.file.path + "/" + this.media.file.filename;
     },
     userName () {
       return this.media.user.display_name;
@@ -162,6 +163,15 @@ export default {
     },
     close () {
       this.$root.hideDetailMedia()
+    },
+    urlCopy (e) {
+      console.debug('urlCopy', e)
+      $(e.target).select();
+      if (typeof document.execCommand === "function") {
+          document.execCommand('copy');
+      }else{ //ie 대응
+          window.clipboardData.setData('Text', token);
+      }
     },
     save () {
       return new Promise((resolve, reject) => {

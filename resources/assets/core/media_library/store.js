@@ -88,7 +88,7 @@ const actions = {
     commit(types.ADD_MEDIA, payload)
   },
   viewFolder ({ dispatch }, payload) {
-    dispatch('media/setFilter', { folder_id: payload })
+    dispatch('setFilter', { folder_id: payload })
   },
   addFolder ({ commit }, payload) {
     commit(types.ADD_FOLDER, payload)

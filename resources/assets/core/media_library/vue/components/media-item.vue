@@ -87,7 +87,8 @@ export default {
   computed: {
     thumbnailUrl({ $props }) {
       const media = $props.media;
-      return '/storage/app/public/media/' + media.file.path + '/' + media.file.filename;
+      return media.file.url;
+      // return '/storage/app/public/media/' + media.file.path + '/' + media.file.filename;
     },
     userName({ $props }) {
       const media = $props.media;

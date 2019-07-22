@@ -22,7 +22,6 @@ const types = {
 };
 
 export default {
-  props: ["paginate"],
   components: {
     PaginationItem
   },
