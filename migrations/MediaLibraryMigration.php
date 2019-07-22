@@ -1,4 +1,16 @@
 <?php
+/**
+ * MediaLibraryMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 namespace Xpressengine\Migrations;
 
@@ -8,6 +20,18 @@ use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\Support\Migration;
 use Schema;
 
+/**
+ * MediaLibraryMigration.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryMigration extends Migration
 {
     private $fileTableName = 'media_library_files';

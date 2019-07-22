@@ -1,19 +1,49 @@
 <?php
+/**
+ * MediaLibraryConfigHandler.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 namespace Xpressengine\MediaLibrary;
 
 use Xpressengine\Config\ConfigEntity;
 
+/**
+ * Class MediaLibraryConfigHandler
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryConfigHandler
 {
     /** @var ConfigEntity $config */
     protected $config;
 
+    /**
+     * MediaLibraryConfigHandler constructor.
+     *
+     * @param ConfigEntity $config media library config
+     */
     public function __construct($config)
     {
         $this->config = $config;
     }
 
+    /**
+     * @return void
+     */
     public function setThumbnailTypes()
     {
         if ($this->config == null) {
@@ -40,6 +70,11 @@ class MediaLibraryConfigHandler
         config(['xe.media.mediaLibrary' => $mediaLibraryConfig]);
     }
 
+    /**
+     * @param array $attribute attribute
+     *
+     * @return void
+     */
     public function storeConfig($attribute)
     {
         if (isset($attribute['file']) ==  true) {
@@ -53,6 +88,11 @@ class MediaLibraryConfigHandler
         app('xe.config')->modify($this->config);
     }
 
+    /**
+     * @param array $attributes attribute
+     *
+     * @return array
+     */
     private function getNewFileConfigFormat($attributes)
     {
         $config = [];

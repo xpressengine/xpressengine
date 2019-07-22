@@ -1,4 +1,16 @@
 <?php
+/**
+ * MediaLibraryController.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 namespace App\Http\Controllers\MediaLibrary;
 
@@ -8,16 +20,34 @@ use XePresenter;
 use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 
+/**
+ * Class MediaLibraryController
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryController extends Controller
 {
     /** @var MediaLibraryHandler $handler */
     protected $handler;
 
+    /**
+     * MediaLibraryController constructor.
+     */
     public function __construct()
     {
         $this->handler = app('xe.media_library.handler');
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function index(Request $request)
     {
         $returnValue = [];
@@ -31,6 +61,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi($returnValue);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function drop(Request $request)
     {
         $this->handler->dropItems($request);
@@ -38,6 +74,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([]);
     }
 
+    /**
+     * @param Request $request  request
+     * @param string  $folderId target folder id
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function getFolder(Request $request, $folderId)
     {
         $folderItem = $this->handler->getFolderItem($folderId);
@@ -46,6 +88,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([$folderItem]);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function createFolder(Request $request)
     {
         $folderItem = $this->handler->createFolder($request);
@@ -53,6 +101,13 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([$folderItem]);
     }
 
+    /**
+     * @param Request $request  request
+     * @param string  $folderId target folder id
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function moveFolder(Request $request, $folderId)
     {
         $newParentFolderItem = $this->handler->moveFolder($request, $folderId);
@@ -60,6 +115,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([$newParentFolderItem]);
     }
 
+    /**
+     * @param Request $request  request
+     * @param string  $folderId target folder id
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function updateFolder(Request $request, $folderId)
     {
         $this->handler->updateFolder($request, $folderId);
@@ -69,6 +130,12 @@ class MediaLibraryController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request request
+     * @param string  $fileId  target file id
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function getFile(Request $request, $fileId)
     {
         $fileItem = $this->handler->getFileItem($fileId);
@@ -76,6 +143,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([$fileItem]);
     }
 
+    /**
+     * @param Request $request request
+     * @param string  $fileId  target file id
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function updateFile(Request $request, $fileId)
     {
         $this->handler->updateFile($request, $fileId);
@@ -85,6 +158,12 @@ class MediaLibraryController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function moveFile(Request $request)
     {
         $this->handler->moveFile($request);
@@ -92,6 +171,12 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi([]);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     * @throws \Exception
+     */
     public function upload(Request $request)
     {
         if ($request->file('file') == null) {

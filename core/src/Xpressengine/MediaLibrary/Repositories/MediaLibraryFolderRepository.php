@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * MediaLibraryFolderRepository.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,12 +18,27 @@ use Xpressengine\Http\Request;
 use Xpressengine\MediaLibrary\Exceptions\NotExistRootFolderException;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
+/**
+ * Class MediaLibraryFolderRepository
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryFolderRepository
 {
     use EloquentRepositoryTrait {
         update as traitUpdate;
     }
 
+    /**
+     * @param array $attribute attribute
+     *
+     * @return Model
+     */
     public function storeItem($attribute)
     {
         $folderItem = $this->createModel();
@@ -28,6 +54,12 @@ class MediaLibraryFolderRepository
         return $folderItem;
     }
 
+    /**
+     * @param Model $item item
+     * @param array $data data
+     *
+     * @return Model
+     */
     public function update(Model $item, array $data = [])
     {
         $this->traitUpdate($item, $data);
@@ -40,6 +72,11 @@ class MediaLibraryFolderRepository
         return $item;
     }
 
+    /**
+     * @param Model $folderItem item
+     *
+     * @return string
+     */
     public function getGenerateName($folderItem)
     {
         if ($this->query()->where(
@@ -60,6 +97,12 @@ class MediaLibraryFolderRepository
         return $this->attachNameIncrement($folderItem->name, $increment);
     }
 
+    /**
+     * @param Model $folderItem item
+     * @param int   $increment  increment count
+     *
+     * @return bool
+     */
     private function checkExistName($folderItem, $increment)
     {
         return $this->query()->where(
@@ -71,6 +114,12 @@ class MediaLibraryFolderRepository
         )->exists();
     }
 
+    /**
+     * @param string $name      name
+     * @param int    $increment increment count
+     *
+     * @return string
+     */
     private function attachNameIncrement($name, $increment)
     {
         if ($increment > 0) {
@@ -80,6 +129,9 @@ class MediaLibraryFolderRepository
         return $name;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
+     */
     public function getRootFolderItem()
     {
         $rootFolderItem = $this->query()->where([['parent_id', ''], ['name', '/']])->first();
@@ -91,6 +143,11 @@ class MediaLibraryFolderRepository
         return $rootFolderItem;
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getFolderItems(Request $request)
     {
         $query = $this->query();
