@@ -7,7 +7,7 @@
 
 <script>
     $(function () {
-        XE.app('MediaManager').then(function (appMediaLibrary) {
+        XE.app('MediaLibrary').then(function (appMediaLibrary) {
             appMediaLibrary.show();
         })
     })

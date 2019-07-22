@@ -13,7 +13,7 @@ import DynamicLoadManager from 'xe/dynamic-load-manager'
 import Form from 'xe/form'
 import Griper from 'xe/griper'
 import Lang from 'xe/lang'
-import MediaManager from 'xe/media_library'
+import MediaLibrary from 'xe/media_library'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
 import Router from 'xe/router'
@@ -94,7 +94,7 @@ class XE {
     this.Validator = this.registerApp('Validator', new Validator())
     this.Form = this.registerApp('Form', new Form())
     this.Component = this.registerApp('Component', new Component())
-    this.MediaManager = this.registerApp('MediaManager', new MediaManager())
+    this.MediaLibrary = this.registerApp('MediaLibrary', new MediaLibrary())
 
     // external libraries
     this._ = lodash
@@ -216,7 +216,7 @@ class XE {
       this.Form.boot(this, this.options),
       this.Validator.boot(this, this.options),
       this.Component.boot(this, this.options),
-      this.MediaManager.boot(this, this.options)
+      this.MediaLibrary.boot(this, this.options)
     ])
       .then(() => {
         // @FIXME

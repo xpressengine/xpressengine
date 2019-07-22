@@ -25,7 +25,7 @@ export default {
       });
       console.debug("mediaList", this, mediaList);
 
-      window.XE.MediaManager.$$emit("media.import", mediaList);
+      window.XE.MediaLibrary.$$emit("media.import", mediaList);
 
       if (this.$root.renderMode === "modal") {
         $("#media-manager-modal-container").hide();

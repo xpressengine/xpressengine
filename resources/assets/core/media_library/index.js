@@ -27,7 +27,7 @@ let componentAppInstance = null
 * @class 미디어 매니저
 * @extends App
 */
-class MediaManager extends App {
+class MediaLibrary extends App {
   constructor () {
     super()
 
@@ -35,7 +35,7 @@ class MediaManager extends App {
   }
 
   static appName () {
-    return 'MediaManager'
+    return 'MediaLibrary'
   }
 
   boot (XE, config) {
@@ -205,7 +205,6 @@ class MediaManager extends App {
 
   /**
   * 페이지 내 대상 Element에 UI 출력
-  * @fires mediaManager.show
   * @returns {Promise}
   */
   show () {
@@ -239,4 +238,4 @@ class MediaManager extends App {
   }
 }
 
-export default MediaManager
+export default MediaLibrary

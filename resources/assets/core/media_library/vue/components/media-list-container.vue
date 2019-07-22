@@ -152,6 +152,7 @@ export default {
       }
     },
     viewFolder (folderId) {
+      console.debug('viewFolder', folderId);
       this.$store.dispatch("media/viewFolder", folderId)
     },
     viewParentFolder () {
@@ -160,7 +161,6 @@ export default {
     }
   },
   mounted: function () {
-    console.debug('container mounted', this.$store.state)
     this.paginate = this.$store.getters['media/paginate']
     this.parentFolder = this.$store.getters['media/parentFolder']
 
