@@ -2204,113 +2204,96 @@ aside {
 }
 // === //플러그인 익스텐션 리스트 (카드형) ===
 
-// === 레이어 팝업 공통 ===
-.admin-layer-popup {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(52, 61, 82, 0.6);
-  z-index: 1010;
-
-  &.admin-layer-popup--full-page-inner-scroll {
-    // 스크롤 타입
-    padding: 15px;
-
-    .admin-layer-popup-content {
-      max-width: 1220px;
-      margin: 0 auto;
-    }
-
-    .admin-layer-popup-body {
-      overflow-y: auto;
-    }
+// --- 테마, 익스텐션 레이어 팝업 ---
+.popup-plugin-modal {
+  .xe-modal-dialog {
+    height: calc(100% - 20px);
   }
 
-  .admin-layer-popup-content {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  .xe-modal-content {
     height: 100%;
-    border-radius: 4px;
-    background-color: #fff;
   }
 
-  .admin-layer-popup-header {
-    // 따로 스타일이 나온게 없어서 공통으로 스타일 적용 못함 (다음에 디자인 나오면 적용)
+  .admin-layer-plugin-popup--plugin {
+    height: 100%;
+
+    .admin-layer-plugin-popup-content {
+      height: 100%;
+    }
+
+    .admin-layer-plugin-popup-header {
+      .admin-layer-plugin-popup-plugin__title-sub-text {
+        overflow: hidden;
+        height: 72px;
+        display:-webkit-box; 
+        -webkit-line-clamp:3;
+        -webkit-box-orient:vertical;
+      }
+    }
+
+    .admin-layer-plugin-popup-body {
+      height: calc(100% - 308px);
+    }
+  } 
+}
+
+.admin-layer-plugin-popup--plugin {
+  .admin-layer-plugin-popup-content {
+    max-width: 1140px;
   }
 
-  .admin-layer-popup-body {
-    flex: 1;
+  .admin-layer-plugin-popup-header {
+    padding: 24px 16px 16px;
+
+    .admin-layer-plugin-popup-plugin__title-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-layer-plugin-popup-plugin__thumb {
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      background-size: 60px 60px;
+    }
+
+    .admin-layer-plugin-popup-plugin__title {
+      flex: 1;
+      margin: 0 0 0 24px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .admin-layer-plugin-popup-plugin__title-sub-text {
+      margin: 18px 0 12px;
+      font-size: 15px;
+      line-height: 24px;
+      color: rgba(0,0,0,0.7);
+    }
   }
 
-  .admin-layer-popup-footer {
+  .admin-layer-plugin-popup-body {
+    .admin-layer-plugin-popup__iframe {
+      border: 0 none;
+      vertical-align: top;
+    }
+  }
+
+  .admin-layer-plugin-popup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     width: 100%;
     height: 70px;
     border-top: 1px solid #dfe1e6;
+    padding: 0 24px;
   }
 }
-// === //레이어 팝업 공통 ===
-
-// === 테마, 익스텐션 레이어 팝업 ===
-.admin-layer-popup {
-  &.admin-layer-popup--plugin {
-    .admin-layer-popup-content {
-      max-width: 1140px;
-    }
-
-    .admin-layer-popup-header {
-      padding: 24px 16px 16px;
-
-      .admin-layer-popup-plugin__title-box {
-        display: flex;
-        align-items: center;
-      }
-
-      .admin-layer-popup-plugin__thumb {
-        flex: 0 0 60px;
-        width: 60px;
-        height: 60px;
-        border-radius: 10px;
-        background-position: 0 0;
-        background-repeat: no-repeat;
-        background-size: 60px 60px;
-      }
-
-      .admin-layer-popup-plugin__title {
-        flex: 1;
-        margin: 0 0 0 24px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .admin-layer-popup-plugin__title-sub-text {
-        margin: 18px 0 12px;
-        font-size: 15px;
-        line-height: 24px;
-        color: rgba(0,0,0,0.7);
-      }
-    }
-  
-    .admin-layer-popup-body {
-      .admin-layer-popup__iframe {
-        border: 0 none;
-        vertical-align: top;
-      }
-    }
-  
-    .admin-layer-popup-footer {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 24px;
-    }
-  }
-}
-// === //테마, 익스텐션 레이어 팝업 ===
+// --- //테마, 익스텐션 레이어 팝업 ---
 
 @media (max-width: 767px) {
   .panel-group {
@@ -2781,30 +2764,53 @@ aside {
     }
   }
   // === //플러그인 익스텐션 리스트 (카드형) ===
-  
-  // === 테마, 익스텐션 레이어 팝업 ===
-  .admin-layer-popup {
-    &.admin-layer-popup--plugin {
-      .admin-layer-popup-header {
-        position: relative;
 
-        .admin-layer-popup-plugin__title {
-          padding-right: 180px;
-        }
+  // --- 테마, 익스텐션 레이어 팝업 ---
+  .popup-plugin-modal {
+    .xe-modal-dialog {
+      width: auto;
+      max-width: 1170px;
+      height: calc(100% - 60px);
+    }
 
-        .admin-layer-popup-plugin__title-sub-text {
-          margin-bottom: 0;
-        }
+    .xe-modal-content {
+      margin: 0 15px;
+    }
 
-        .admin-layer-popup-plugin__button-box {
-          position: absolute;
-          top: 38px;
-          right: 16px;
+    .admin-layer-plugin-popup--plugin {
+      .admin-layer-plugin-popup-header {
+        .admin-layer-plugin-popup-plugin__title-sub-text {
+          height: 48px;
+          -webkit-line-clamp:2;
         }
+      }
+
+      .admin-layer-plugin-popup-body {
+        height: calc(100% - 236px);
+      }
+    } 
+  }
+
+  .admin-layer-plugin-popup--plugin {
+    .admin-layer-plugin-popup-header {
+      position: relative;
+
+      .admin-layer-plugin-popup-plugin__title {
+        padding-right: 180px;
+      }
+
+      .admin-layer-plugin-popup-plugin__title-sub-text {
+        margin-bottom: 0;
+      }
+
+      .admin-layer-plugin-popup-plugin__button-box {
+        position: absolute;
+        top: 38px;
+        right: 16px;
       }
     }
   }
-  // === //테마, 익스텐션 레이어 팝업 ===
+  // --- //테마, 익스텐션 레이어 팝업 ---
 
 }
 

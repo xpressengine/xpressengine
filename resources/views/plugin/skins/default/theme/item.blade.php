@@ -2,8 +2,7 @@
     $themeEntity = $pluginHandler->getPlugin(data_get($theme, 'plugin_id'));
 @endphp
 <li @if ($themeEntity != null && $themeEntity->isActivated()) class="active" @endif>
-{{--    <a  href="{{route('settings.plugins.detail', ['pluginName' => $theme->name])}}" data-toggle="xe-page-modal" class="list-card__link">--}}
-    <a href="{{route('settings.plugins.popup_test', ['pluginName' => data_get($theme, 'plugin_id')])}}" target="_blank">
+    <a href="{{route('settings.plugins.detail', ['pluginName' => data_get($theme, 'plugin_id')])}}" data-toggle="xe-page-modal">
         <span class="blind">카드 이미지</span>
         <div class="list-card__image">
             <div class="list-card__image-content" style="background-image: url({{$theme->icon}})"></div>

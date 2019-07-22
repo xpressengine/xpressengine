@@ -33,12 +33,7 @@ class PluginManageController extends Controller
         }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
     }
 
-    public function getDetailPopup(Request $request, $pluginId)
-    {
-        return api_render('common.detail_popup');
-    }
-
-    public function testPopup(Request $request, $pluginId, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
+    public function getDetailPopup(Request $request, $pluginId, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
         $storePluginItem = $pluginProvider->find($pluginId);
         $pluginEntity = $pluginHandler->getPlugin($pluginId);
@@ -52,7 +47,7 @@ class PluginManageController extends Controller
             ]
         )->load();
 
-        return \XePresenter::make('common.detail_popup', compact('storePluginItem', 'pluginEntity'));
+        return api_render('common.detail_popup', compact('storePluginItem', 'pluginEntity'));
     }
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)

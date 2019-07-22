@@ -834,10 +834,6 @@ Route::settings(
                     'detail',
                     ['as' => 'settings.plugins.detail', 'uses' => 'Plugin\PluginManageController@getDetailPopup']
                 );
-                Route::get(
-                    'popup_test',
-                    ['as' => 'settings.plugins.popup_test', 'uses' => 'Plugin\PluginManageController@testPopup']
-                );
                 Route::put('activate', [
                     'as' => 'settings.plugins.activate',
                     'uses' => 'Plugin\PluginManageController@putActivatePlugin'
