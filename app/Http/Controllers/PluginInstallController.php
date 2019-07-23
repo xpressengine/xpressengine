@@ -34,6 +34,8 @@ use Xpressengine\Presenter\Presentable;
  * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
+ *
+ * @deprecated since 3.0.4 instead use ExtensionSettingsController or ThemeSettingsController
  */
 class PluginInstallController extends Controller
 {

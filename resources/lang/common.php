@@ -1646,7 +1646,7 @@ return [
     ],
     'extension' => [
         'ko' => '익스텐션',
-        'en' => 'extension',
+        'en' => 'Extension',
     ],
     'installNow' => [
         'ko' => '지금 설치',
@@ -3196,4 +3196,94 @@ return [
         'ko' => '사용할 수 없는 url 입니다.',
         'en' => 'Unavailable url.',
     ],
+    'installedTheme' => [
+        'ko' => '설치된 테마',
+        'en' => 'Installed theme'
+    ],
+    'installedThemeDescription' => [
+        'ko' => '스토어 및 직접 설치한 테마 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of themes.'
+    ],
+    'installedExtension' => [
+        'ko' => '설치된 익스텐션',
+        'en' => 'Installed extension'
+    ],
+    'installedExtensionDescription' => [
+        'ko' => '스토어 및 직접 설치한 익스텐션 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of extensions.'
+    ],
+    'installNewTheme' => [
+        'ko' => '새 테마 설치',
+        'en' => 'Install new theme'
+    ],
+    'installNewExtension' => [
+        'ko' => '새 익스텐션 설치',
+        'en' => 'Install new extension'
+    ],
+    'addTheme' => [
+        'ko' => '테마 추가',
+        'en' => 'Add Theme'
+    ],
+    'addThemeDescription' => [
+        'ko' => 'XE Store에 등록된 테마를 내 사이트에 추가해보세요.',
+        'en' => 'Please add the theme registered in XE Store to my site.'
+    ],
+    'addExtension' => [
+        'ko' => '익스텐션 추가',
+        'en' => 'Add Extension'
+    ],
+    'addExtensionDescription' => [
+        'ko' => 'XE Store에 등록된 익스텐션을 내 사이트에 추가해보세요',
+        'en' => 'Please add the extension registered in XE Store to my site.'
+    ],
+    'settingTheme' => [
+        'ko' => '테마 설정',
+        'en' => 'Setting theme'
+    ],
+    'settingThemeDescription' => [
+        'ko' => '사이트에서 기본으로 출력할 데스크탑/모바일용 테마를 지정해보세요.<br>
+                원하는 페이지에 원하는 테마를 각각 지정할 수 있습니다.',
+        'en' => 'Specify a theme for your desktop / mobile that will be displayed by default on your site.<br>
+                You can specify each theme you want on the page you want.'
+    ],
+    'themeEditor' => [
+        'ko' => '테마 에디터',
+        'en' => 'Theme editor'
+    ],
+    'themeEditorDescription' => [
+        'ko' => '테마 상세 편집 기능을 제공합니다.',
+        'en' => 'Provides theme edit function.'
+    ],
+    'extensionEditor' => [
+        'ko' => '익스텐션 에디터',
+        'en' => 'Extension editor'
+    ],
+    'activated' => [
+        'ko' => '활성화된',
+        'en' => 'Activated'
+    ],
+    'deactivated' => [
+        'ko' => '비활성화된',
+        'en' => 'deactivated'
+    ],
+    'creatorName' => [
+        'ko' => '창작자명',
+        'en' => 'Creator name'
+    ],
+    'keyword' => [
+        'ko' => '키워드',
+        'en' => 'Keyword'
+    ],
+    'mySiteTheme' => [
+        'ko' => '내 사이트 테마',
+        'en' => 'My site theme'
+    ],
+    'mySiteExtension' =>[
+        'ko' => '내 사이트 익스텐션',
+        'en' => 'My site extension'
+    ],
+    'buying' => [
+        'ko' => '구매하기',
+        'en' => 'Buying'
+    ]
 ];

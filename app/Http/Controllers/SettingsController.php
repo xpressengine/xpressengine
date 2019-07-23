@@ -270,6 +270,8 @@ class SettingsController extends Controller
      *
      * @param ThemeHandler $themeHandler ThemeHandler instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use ThemeSettingsController@editSetting
      */
     public function editTheme(ThemeHandler $themeHandler)
     {
@@ -284,6 +286,8 @@ class SettingsController extends Controller
      * @param ThemeHandler $themeHandler ThemeHandler instance
      * @param Request      $request      request
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.4 instead use THemeSettingsController@updateSetting
      */
     public function updateTheme(ThemeHandler $themeHandler, Request $request)
     {

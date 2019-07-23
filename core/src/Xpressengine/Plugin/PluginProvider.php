@@ -64,7 +64,7 @@ class PluginProvider
      */
     public function search($filters = [], $page = 1, $count = 10)
     {
-        $url = 'plugins/search';
+        $url = 'plugins/items';
 
         $query = array_get($filters, 'query');
         $q = implode(',', (array) $query);
@@ -80,12 +80,17 @@ class PluginProvider
         $order = array_get($filters, 'order');
         $order_type = array_get($filters, 'order_type');
 
+        $sale_type = array_get($filters, 'sale_type');
+
+        $category = array_get($filters, 'category');
+
         $site_token = array_get($filters, 'site_token');
 
         try {
             $response = $this->request(
                 $url,
-                compact('q', 'authors', 'tags', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
+                compact('q', 'authors', 'tags', 'page', 'count', 'collection',
+                    'order', 'order_type', 'site_token', 'sale_type', 'category')
             );
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
@@ -93,6 +98,23 @@ class PluginProvider
             }
             throw $e;
         }
+
+        return $response;
+    }
+
+    public function getPluginCategories($collection)
+    {
+        $url = 'categories';
+
+        try {
+            $response = $this->request($url, compact('collection'));
+        } catch (ClientException $e) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+            throw $e;
+        }
+
         return $response;
     }
 

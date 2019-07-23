@@ -30,6 +30,20 @@
 // xe-modal-plugin-detail
 @import "modal-plugin";
 
+// 임시 컴포넌트 버튼 (cdn 링크 적용 전 임시 사용)
+@import "component/functions";
+@import "component/variables";
+@import "component/button";
+
+/* 단일 클래스 스타일 */
+.text-align--center {text-align: center !important}
+.text-align--left {text-align: left !important}
+.text-align--right {text-align: right !important}
+
+.vertical-align--top {vertical-align: top !important}
+.vertical-align--middle {vertical-align: middle !important}
+.vertical-align--bottom {vertical-align: bottom !important}
+
 /* reset, helper class */
 legend {
   position: absolute;
@@ -38,6 +52,16 @@ legend {
   height: 1px;
   margin: -1px;
   overflow: hidden;
+}
+
+/* blind */
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  width: 1px;
+  height: 1px
 }
 
 .logo-area h1,
@@ -123,6 +147,51 @@ p.text {
     content: "";
   }
 }
+
+// 부트 스트랩 버튼 스타일 추가
+.btn-default--transparent {
+  border: 0 none;
+  background-color: transparent;
+}
+
+// === 테마, 익스텐션 페이지 버튼 스타일 추가 ===
+// 미리보기
+.admin-button--preview {
+  color: #345bd9;
+}
+
+// 설치됨 버튼
+.admin-button--complete {
+  background-color: #deebff;
+  color: #505f79;
+
+  &:hover, &:hover:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+  }
+
+  &:active, &:active:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+  }
+}
+
+// 활성화 버튼
+.admin-button--active {
+  background-color: #505f79;
+  color: #fff;
+
+  &:hover, &:hover:not([disabled]) {
+    background-color: #505f79;
+  }
+
+  &:active, &:active:not([disabled]) {
+    background-color: #505f79;
+    color: #fff;
+  }
+}
+
+// === //테마, 익스텐션 페이지 버튼 스타일 추가 ===
 
 /* layout */
 
@@ -224,6 +293,15 @@ aside {
 
   a {
     color: #2c2e37;
+  }
+}
+
+// 영문 파일명이 줄바꿈 되도록 속성 추가
+.nav-pills {
+  li {
+    a {
+      word-break: break-all;
+    }
   }
 }
 
@@ -1174,6 +1252,18 @@ aside {
       background-color: #6f8dff;
       color: #fff;
     }
+
+    .input-group-label {
+      display: inline-block;
+      font-size: 15px;
+      line-height: 33px;
+
+      + .input-group {
+        // display: inline-block;
+        // width: auto;
+        // vertical-align: top;
+      }
+    }
   }
 
   .list-plugin {
@@ -1334,6 +1424,26 @@ aside {
     height: 33px;
     margin-left: -1px;
   }
+}
+
+// 상단 우측 검색 및 버튼 추가 시 적용 (감싸줌)
+.search-group-box {
+  margin-bottom: 7px;
+  text-align: right;
+
+  .search-group {
+    display: inline-block;
+    width: auto;
+    margin: 7px 0;
+    vertical-align: middle;
+
+    + .xu-button {
+      margin-left: 15px;
+      margin: 7px 0 7px 15px;
+    }
+  }
+
+  
 }
 
 .xe-lypop-plugin {
@@ -1808,6 +1918,383 @@ aside {
 }
 // === //관리자 인증 스타일 ===
 
+// === 관리자 페이지 데이터 없을 때 노출 되는 화면 ===
+.section-data-empty {
+  padding: 100px 0;
+  text-align: center;
+
+  .section-data-empty__image {
+    width: 121px;
+    height: 138px;
+    margin: 0 auto 40px;
+    background: url(../img/icon-data-empty.svg) 0 0 no-repeat;
+    background-size: 121px 138px;
+  }
+}
+// === //관리자 페이지 데이터 없을 때 노출 되는 화면 ===
+
+// === 플러그인 카드 리스트 (공통) ===
+.list-card {
+  margin-top: 22px;
+  list-style: none;
+
+  > li {
+    margin-top: 24px;
+    width: 100%;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background-color: #fff;
+    
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .list-card__link {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+
+      .list-card__image-content {
+        transform: scale(1.1);
+
+        &:after {
+          opacity: 1;
+        }
+      }
+
+      .list-card__search-icon {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+
+  .list-card__image {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .list-card__image-content {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    padding-top: 56.25%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: scale(1);
+    transition: transform 0.3s ease-out;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(38, 132, 255, 0.4);
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+  }
+
+  .list-card__search-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -25px;
+    border-radius: 50px;
+    background-color: #2684ff;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease-out;
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -12px;
+      margin-left: -12px;
+      font-size: 24px;
+      color: #fff;
+    }
+  }
+
+  .list-card-info {
+    padding: 16px 17px 9px;
+  }
+
+  .list-card-info__title-box {
+    display: flex;
+  }
+
+  .list-card-info__title {
+    flex: 1;
+    overflow: hidden;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #091e42;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .list-card-info__price {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 24px;
+    border-radius: 20px;
+    background-color: #d3d3d3;
+    color: #64676f;
+  }
+
+  .list-card-info__sub-text-box {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .list-card-info__sub-text {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #a5adba;
+
+    + .list-card-info__sub-text {
+      position: relative;
+      margin-left: 8px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -6px;
+        width: 2px;
+        height: 2px;
+        margin-top: -1px;
+        background-color: #c1c7d0;
+      }
+    }
+  }
+
+  .list-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 17px;
+    border-top: 1px solid #ebecf0;
+  }
+
+  .list-card-download {
+    color: #6b778c;
+  }
+}
+// === //플러그인 카드 리스트 (공통) ===
+
+// === 플러그인 테마 리스트 (카드형) ===
+.list-theme {
+  > li {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 2px 1px -1px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1), 0 3px 14px 2px rgba(0, 0, 0, 0.1), 0 8px 10px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    &.active {
+      border: 2px solid #2684ff;
+    }
+  }
+
+  .list-card__link {
+    width: 100%;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .list-card__search-icon {
+    margin-top: -60px;
+  }
+
+  .list-card-footer {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 17px;
+  }
+}
+// === //플러그인 테마 리스트 (카드형) ===
+
+// === 플러그인 익스텐션 리스트 (카드형) ===
+.list-extension {
+  > li {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 2px 1px -1px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1), 0 3px 14px 2px rgba(0, 0, 0, 0.1), 0 8px 10px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    &.active {
+      border: 2px solid #2684ff;
+    }
+  }
+
+  .list-card__link {
+    display: block;
+    width: 100%;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .list-card__image {
+    overflow: hidden;
+    float: left;
+    width: 70px;
+    height: 70px;
+    margin: 16px 15px;
+  }
+
+  .list-card__image-content {
+    width: 70px;
+    height: 70px;
+
+    &:after {
+      display :none;
+    }
+  }
+
+  .list-card__search-icon {
+    display: none;
+  }
+
+  .list-card-info {
+    overflow: hidden;
+    padding: 30px 15px 30px 0;
+  }
+
+  .list-card-footer {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 17px;
+  }
+}
+// === //플러그인 익스텐션 리스트 (카드형) ===
+
+// --- 테마, 익스텐션 레이어 팝업 ---
+.popup-plugin-modal {
+  .xe-modal-dialog {
+    height: calc(100% - 20px);
+  }
+
+  .xe-modal-content {
+    height: 100%;
+  }
+
+  .admin-layer-plugin-popup--plugin {
+    height: 100%;
+
+    .admin-layer-plugin-popup-content {
+      height: 100%;
+    }
+
+    .admin-layer-plugin-popup-header {
+      .admin-layer-plugin-popup-plugin__title-sub-text {
+        overflow: hidden;
+        height: 72px;
+        display:-webkit-box; 
+        -webkit-line-clamp:3;
+        -webkit-box-orient:vertical;
+      }
+    }
+
+    .admin-layer-plugin-popup-body {
+      height: calc(100% - 308px);
+    }
+  } 
+}
+
+.admin-layer-plugin-popup--plugin {
+  .admin-layer-plugin-popup-content {
+    max-width: 1140px;
+  }
+
+  .admin-layer-plugin-popup-header {
+    padding: 24px 16px 16px;
+
+    .admin-layer-plugin-popup-plugin__title-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-layer-plugin-popup-plugin__thumb {
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      background-size: 60px 60px;
+    }
+
+    .admin-layer-plugin-popup-plugin__title {
+      flex: 1;
+      margin: 0 0 0 24px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .admin-layer-plugin-popup-plugin__title-sub-text {
+      margin: 18px 0 12px;
+      font-size: 15px;
+      line-height: 24px;
+      color: rgba(0,0,0,0.7);
+    }
+  }
+
+  .admin-layer-plugin-popup-body {
+    .admin-layer-plugin-popup__iframe {
+      border: 0 none;
+      vertical-align: top;
+    }
+  }
+
+  .admin-layer-plugin-popup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 70px;
+    border-top: 1px solid #dfe1e6;
+    padding: 0 24px;
+  }
+}
+// --- //테마, 익스텐션 레이어 팝업 ---
+
 @media (max-width: 767px) {
   .panel-group {
     .panel-heading {
@@ -1824,7 +2311,15 @@ aside {
         button {
           flex: 1;
 
-          & + button {
+          & + button, & + a {
+            margin-left: 10px;
+          }
+        }
+
+        a {
+          flex: 1;
+
+          & + a, & + button {
             margin-left: 10px;
           }
         }
@@ -1849,6 +2344,10 @@ aside {
       }
 
       .pull-left {
+        margin: 20px 0;
+      }
+
+      .pull-right {
         margin: 20px 0;
       }
     } // panel-heading
@@ -2030,6 +2529,14 @@ aside {
         float: right !important;
         margin: 17px 0;
       }
+
+      .input-group-label {
+        + .input-group {
+          display: inline-block;
+          width: auto;
+          vertical-align: top;
+        }
+      }
     }
   }
 
@@ -2174,6 +2681,137 @@ aside {
     width: 120px;
     height: 120px;
   }
+
+  // === 플러그인 카드 리스트 (공통) ===
+  .list-card {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 22px -12px 8px;
+
+    > li {
+      margin: 0 12px 24px;
+      border-radius: 6px;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+
+    .list-card__image {
+      overflow: hidden;
+      width: 100%;
+      height: 180px;
+    }
+
+    .list-card__image-content {
+      padding: 0;
+    }
+  }
+  // === //플러그인 카드 리스트 (공통) ===
+
+  // === 플러그인 테마 리스트 (카드형) ===
+  .list-theme {
+    > li {
+      flex: 0 0 320px;
+      width: 320px;
+      height: 318px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 2px 1px -1px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+
+      &:hover {
+        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1), 0 3px 14px 2px rgba(0, 0, 0, 0.1), 0 8px 10px 1px rgba(0, 0, 0, 0.1);
+      }
+
+      &.active {
+        border: 2px solid #2684ff;
+      }
+    }
+  }
+  // === //플러그인 테마 리스트 (카드형) ===
+
+  // === 플러그인 익스텐션 리스트 (카드형) ===
+  .list-extension {
+    > li {
+      flex: 0 0 413px;
+      width: 413px;
+    }
+
+    .list-card__link {
+      width: 100%;
+    }
+
+    .list-card__image {
+      overflow: hidden;
+      width: 70px;
+      height: 70px;
+    }
+
+    .list-card__image-content {
+      width: 70px;
+      height: 70px;
+
+      &:after {
+        display :none;
+      }
+    }
+
+    .list-card__search-icon {
+      display: none;
+    }
+
+    .list-card-info {
+      flex: 1;
+      padding: 30px 16px 30px 0;
+    }
+  }
+  // === //플러그인 익스텐션 리스트 (카드형) ===
+
+  // --- 테마, 익스텐션 레이어 팝업 ---
+  .popup-plugin-modal {
+    .xe-modal-dialog {
+      width: auto;
+      max-width: 1170px;
+      height: calc(100% - 60px);
+    }
+
+    .xe-modal-content {
+      margin: 0 15px;
+    }
+
+    .admin-layer-plugin-popup--plugin {
+      .admin-layer-plugin-popup-header {
+        .admin-layer-plugin-popup-plugin__title-sub-text {
+          height: 48px;
+          -webkit-line-clamp:2;
+        }
+      }
+
+      .admin-layer-plugin-popup-body {
+        height: calc(100% - 236px);
+      }
+    } 
+  }
+
+  .admin-layer-plugin-popup--plugin {
+    .admin-layer-plugin-popup-header {
+      position: relative;
+
+      .admin-layer-plugin-popup-plugin__title {
+        padding-right: 180px;
+      }
+
+      .admin-layer-plugin-popup-plugin__title-sub-text {
+        margin-bottom: 0;
+      }
+
+      .admin-layer-plugin-popup-plugin__button-box {
+        position: absolute;
+        top: 38px;
+        right: 16px;
+      }
+    }
+  }
+  // --- //테마, 익스텐션 레이어 팝업 ---
+
 }
 
 @media (min-width: 1068px) {
