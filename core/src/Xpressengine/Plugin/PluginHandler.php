@@ -545,6 +545,13 @@ class PluginHandler
         return $this->getPlugins();
     }
 
+    /**
+     * 등록된 테마 목록을 반환
+     *
+     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     *
+     * @return array|PluginCollection
+     */
     public function getAllThemes($refresh = false)
     {
         $themes = [];
@@ -573,6 +580,13 @@ class PluginHandler
         return $themes;
     }
 
+    /**
+     * 등록된 익스텐션 목록을 반환
+     *
+     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     *
+     * @return array|PluginCollection
+     */
     public function getAllExtensions($refresh = false)
     {
         $extensions = [];
@@ -784,6 +798,12 @@ class PluginHandler
         $this->register->add($component);
     }
 
+    /**
+     * @param UploadedFile $uploadFile upload plugin file
+     *
+     * @return mixed
+     * @throws \Exception
+     */
     public function uploadPlugin(UploadedFile $uploadFile)
     {
         /** @var Filesystem $filesystem */
@@ -820,6 +840,13 @@ class PluginHandler
         return $pluginName;
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return bool
+     * @throws \Exception
+     */
     private function checkExistAlreadyPlugin(Filesystem $filesystem, $targetDir)
     {
         if ($filesystem->exists(app('path.privates') . DIRECTORY_SEPARATOR . $targetDir) == true) {
@@ -833,6 +860,12 @@ class PluginHandler
         return true;
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
     private function fixExtracted(Filesystem $filesystem, $targetDir)
     {
         $filesystem->move($targetDir, $targetDir . '_temp');
@@ -844,12 +877,24 @@ class PluginHandler
         $filesystem->deleteDirectory($targetDir . '_temp');
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
     private function removeGarageDirectory(Filesystem $filesystem, $targetDir)
     {
         $filesystem->deleteDirectory($targetDir);
         $filesystem->deleteDirectory($targetDir . '_temp');
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return mixed
+     */
     private function searchPluginRootDirectory(Filesystem $filesystem, $targetDir)
     {
         $list = $filesystem->directories($targetDir);
@@ -861,11 +906,24 @@ class PluginHandler
         }
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
     private function removeVendorDir(Filesystem $filesystem, $targetDir)
     {
         $filesystem->deleteDirectory($targetDir . '/vendor');
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     * @throws \Exception
+     */
     private function checkExistRequireFiles(Filesystem $filesystem, $targetDir)
     {
         $requireFiles = [
@@ -880,6 +938,13 @@ class PluginHandler
         }
     }
 
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     * @param string     $pluginName plugin name
+     *
+     * @return void
+     */
     private function movePlugin(Filesystem $filesystem, $targetDir, $pluginName)
     {
         $filesystem->move($targetDir, app('path.privates') . DIRECTORY_SEPARATOR . $pluginName);

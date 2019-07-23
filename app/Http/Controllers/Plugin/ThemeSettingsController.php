@@ -1,15 +1,15 @@
 <?php
 /**
- * ThemeController.php
+ * ThemeSettingsController
  *
  * PHP version 7
  *
- * @category    Controllers
- * @package     App\Http\Controllers
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @category  Controllers
+ * @package   App\Http\Controllers\Plugin
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link      https://xpressengine.io
  */
 
 namespace App\Http\Controllers\Plugin;
@@ -28,17 +28,20 @@ use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
 /**
- * Class ThemeController
+ * Class ThemeSettingsController
  *
  * @category    Controllers
- * @package     App\Http\Controllers
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @package     App\Http\Controllers\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
  */
 class ThemeSettingsController extends Controller
 {
+    /**
+     * ThemeSettingsController constructor.
+     */
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
@@ -53,6 +56,12 @@ class ThemeSettingsController extends Controller
         )->load();
     }
 
+    /**
+     * @param Request       $request request
+     * @param PluginHandler $handler plugin handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function installed(Request $request, PluginHandler $handler)
     {
         $field = [];
@@ -71,6 +80,13 @@ class ThemeSettingsController extends Controller
         ));
     }
 
+    /**
+     * @param Request        $request        request
+     * @param PluginHandler  $pluginHandler  plugin handler
+     * @param PluginProvider $pluginProvider plugin provider
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function install(Request $request, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
         $saleType = $request->get('sale_type', 'free');
@@ -95,7 +111,13 @@ class ThemeSettingsController extends Controller
             $filter = array_merge($filter, $order);
         }
 
-        $storeThemeInformation = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeThemeInformation = $pluginProvider->search(
+            array_merge(
+                $filter,
+                $request->except('_token', 'order_key')
+            ),
+            $request->get('page', 1)
+        );
         $storeThemes = $storeThemeInformation->items;
         $storeThemeCounts = $storeThemeInformation->counts;
         $themeCategories = $pluginProvider->getPluginCategories('theme');
@@ -117,6 +139,11 @@ class ThemeSettingsController extends Controller
         );
     }
 
+    /**
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editSetting(ThemeHandler $themeHandler)
     {
         $selectedTheme = $themeHandler->getSiteThemeId();
@@ -124,6 +151,12 @@ class ThemeSettingsController extends Controller
         return \XePresenter::make('theme.setting', compact('selectedTheme'));
     }
 
+    /**
+     * @param ThemeHandler $themeHandler theme handler
+     * @param Request      $request      request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateSetting(ThemeHandler $themeHandler, Request $request)
     {
         // resolve theme
@@ -134,6 +167,12 @@ class ThemeSettingsController extends Controller
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createConfig(Request $request, ThemeHandler $themeHandler)
     {
         $instanceId = $request->get('theme');
@@ -159,6 +198,12 @@ class ThemeSettingsController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function editConfig(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
@@ -177,6 +222,12 @@ class ThemeSettingsController extends Controller
         return \XePresenter::make('theme.config', compact('theme', 'config'));
     }
 
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateConfig(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
@@ -215,7 +266,12 @@ class ThemeSettingsController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
-    //TODO return 확인
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function deleteConfig(Request $request, ThemeHandler $themeHandler)
     {
         $themeId = $request->get('theme');
@@ -229,6 +285,11 @@ class ThemeSettingsController extends Controller
         return \XePresenter::makeApi([]);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function setStartPreview(Request $request)
     {
         $configId = $request->get('configId');
@@ -243,6 +304,11 @@ class ThemeSettingsController extends Controller
         return redirect()->to('/');
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return void
+     */
     public function setStopPreview(Request $request)
     {
         if (file_exists(app_storage_path('theme_preview.json'))) {
@@ -250,6 +316,12 @@ class ThemeSettingsController extends Controller
         }
     }
 
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
         $themes = $themeHandler->getAllTheme();
@@ -309,6 +381,12 @@ class ThemeSettingsController extends Controller
         ]);
     }
 
+    /**
+     * @param Request      $request      request
+     * @param ThemeHandler $themeHandler theme handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, ThemeHandler $themeHandler)
     {
         $themeId = $request->get('theme');

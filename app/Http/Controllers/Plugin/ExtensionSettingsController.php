@@ -1,4 +1,16 @@
 <?php
+/**
+ * ExtensionSettingsController
+ *
+ * PHP version 7
+ *
+ * @category  Controllers
+ * @package   App\Http\Controllers\Plugin
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link      https://xpressengine.io
+ */
 
 namespace App\Http\Controllers\Plugin;
 
@@ -10,8 +22,21 @@ use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
+/**
+ * Class ExtensionSettingsController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class ExtensionSettingsController extends Controller
 {
+    /**
+     * ExtensionSettingsController constructor.
+     */
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
@@ -26,6 +51,12 @@ class ExtensionSettingsController extends Controller
         )->load();
     }
 
+    /**
+     * @param Request       $request request
+     * @param PluginHandler $handler plugin handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function installed(Request $request, PluginHandler $handler)
     {
         $field = [];
@@ -47,6 +78,13 @@ class ExtensionSettingsController extends Controller
         ));
     }
 
+    /**
+     * @param Request        $request        request
+     * @param PluginHandler  $pluginHandler  plugin handler
+     * @param PluginProvider $pluginProvider plugin provider
+     *
+     * @return mixed|\Xpressengine\Presenter\Presentable
+     */
     public function install(Request $request, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
     {
         $saleType = $request->get('sale_type', 'free');
@@ -71,7 +109,10 @@ class ExtensionSettingsController extends Controller
             $filter = array_merge($filter, $order);
         }
 
-        $storeExtensionInformation = $pluginProvider->search(array_merge($filter, $request->except('_token', 'order_key')), $request->get('page', 1));
+        $storeExtensionInformation = $pluginProvider->search(
+            array_merge($filter, $request->except('_token', 'order_key')),
+            $request->get('page', 1)
+        );
         $storeExtensions = $storeExtensionInformation->items;
         $storeExtensionCounts = $storeExtensionInformation->counts;
         $extensionCategories = $pluginProvider->getPluginCategories('extension');
@@ -89,10 +130,20 @@ class ExtensionSettingsController extends Controller
 
         return XePresenter::make(
             'extension.install',
-            compact('saleType', 'extensions', 'extensionCategories', 'pluginHandler', 'orderTypes', 'storeExtensionCounts')
+            compact(
+                'saleType',
+                'extensions',
+                'extensionCategories',
+                'pluginHandler',
+                'orderTypes',
+                'storeExtensionCounts'
+            )
         );
     }
 
+    /**
+     * @return array
+     */
     protected function getComponentTypes()
     {
         $componentTypes = [

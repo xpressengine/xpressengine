@@ -1,7 +1,29 @@
 <?php
+/**
+ * PluginPrivateInstall.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 
 namespace App\Console\Commands;
 
+/**
+ * Class PluginPrivateInstall
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginPrivateInstall extends PluginCommand
 {
     /**
@@ -16,12 +38,11 @@ class PluginPrivateInstall extends PluginCommand
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Install the plugin in the private folder.';
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @return void
+     * @throws \Throwable
      */
     public function handle()
     {

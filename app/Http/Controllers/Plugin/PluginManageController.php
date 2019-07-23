@@ -1,4 +1,16 @@
 <?php
+/**
+ * PluginManageController
+ *
+ * PHP version 7
+ *
+ * @category  Controllers
+ * @package   App\Http\Controllers\Plugin
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link      https://xpressengine.io
+ */
 
 namespace App\Http\Controllers\Plugin;
 
@@ -17,10 +29,23 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
 
+/**
+ * Class PluginManageController
+ *
+ * @category    Controllers
+ * @package     App\Http\Controllers\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginManageController extends Controller
 {
     use ArtisanBackgroundHelper;
 
+    /**
+     * PluginManageController constructor.
+     */
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
@@ -33,8 +58,20 @@ class PluginManageController extends Controller
         }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
     }
 
-    public function getDetailPopup(Request $request, $pluginId, PluginHandler $pluginHandler, PluginProvider $pluginProvider)
-    {
+    /**
+     * @param Request        $request        request
+     * @param string         $pluginId       plugin id
+     * @param PluginHandler  $pluginHandler  plugin handler
+     * @param PluginProvider $pluginProvider plugin provider
+     *
+     * @return mixed
+     */
+    public function getDetailPopup(
+        Request $request,
+        $pluginId,
+        PluginHandler $pluginHandler,
+        PluginProvider $pluginProvider
+    ) {
         $storePluginItem = $pluginProvider->find($pluginId);
         $pluginEntity = $pluginHandler->getPlugin($pluginId);
 
@@ -50,6 +87,13 @@ class PluginManageController extends Controller
         return api_render('common.detail_popup', compact('storePluginItem', 'pluginEntity'));
     }
 
+    /**
+     * @param string         $pluginId plugin id
+     * @param PluginHandler  $handler  plugin handler
+     * @param PluginProvider $provider plugin provider
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         // refresh plugin cache
@@ -66,6 +110,12 @@ class PluginManageController extends Controller
         return XePresenter::make('show', compact('plugin', 'componentTypes', 'unresolvedComponents'));
     }
 
+    /**
+     * @param Request       $request request
+     * @param PluginHandler $handler plugin handler
+     *
+     * @return mixed
+     */
     public function getActivate(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -77,6 +127,14 @@ class PluginManageController extends Controller
         return api_render('manage.activate', compact('plugins'));
     }
 
+    /**
+     * @param Request             $request             request
+     * @param PluginHandler       $handler             plugin handler
+     * @param InterceptionHandler $interceptionHandler intercept handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         $handler->getAllPlugins(true);
@@ -108,6 +166,12 @@ class PluginManageController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
+    /**
+     * @param Request       $request request
+     * @param PluginHandler $handler plugin handler
+     *
+     * @return mixed
+     */
     public function getDeactivate(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -119,6 +183,14 @@ class PluginManageController extends Controller
         return api_render('manage.deactivate', compact('plugins'));
     }
 
+    /**
+     * @param Request             $request             request
+     * @param PluginHandler       $handler             plugin handler
+     * @param InterceptionHandler $interceptionHandler intercept handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         $handler->getAllPlugins(true);
@@ -150,6 +222,12 @@ class PluginManageController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
+    /**
+     * @param Request       $request request
+     * @param PluginHandler $handler plugin handler
+     *
+     * @return mixed
+     */
     public function getDelete(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginId');
@@ -161,6 +239,13 @@ class PluginManageController extends Controller
         return api_render('manage.delete', compact('plugins'));
     }
 
+    /**
+     * @param Request       $request  request
+     * @param PluginHandler $handler  plugin handler
+     * @param Operator      $operator operator
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete(Request $request, PluginHandler $handler, Operator $operator)
     {
         if ($operator->isLocked()) {
@@ -202,6 +287,12 @@ class PluginManageController extends Controller
         );
     }
 
+    /**
+     * @param Request  $request  request
+     * @param Operator $operator operator
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function download(Request $request, Operator $operator)
     {
         if ($operator->isLocked()) {
@@ -235,6 +326,14 @@ class PluginManageController extends Controller
         );
     }
 
+    /**
+     * @param Request        $request  request
+     * @param PluginHandler  $handler  plugin handler
+     * @param PluginProvider $provider plugin provider
+     * @param Operator       $operator operator
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function install(Request $request, PluginHandler $handler, PluginProvider $provider, Operator $operator)
     {
         if ($operator->isLocked()) {
@@ -266,6 +365,12 @@ class PluginManageController extends Controller
         );
     }
 
+    /**
+     * @param Operator $operator operator
+     * @param bool     $private  is private
+     *
+     * @return string
+     */
     protected function prepareOperation(Operator $operator, $private = false)
     {
         $startTime = now()->format('YmdHis');
@@ -275,6 +380,14 @@ class PluginManageController extends Controller
         return $logFile;
     }
 
+    /**
+     * @param string              $pluginId            plugin id
+     * @param PluginHandler       $handler             plugin handler
+     * @param InterceptionHandler $interceptionHandler intercept handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -289,6 +402,14 @@ class PluginManageController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
+    /**
+     * @param string              $pluginId            plugin id
+     * @param PluginHandler       $handler             plugin handler
+     * @param InterceptionHandler $interceptionHandler intercept handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -303,6 +424,14 @@ class PluginManageController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
+    /**
+     * @param string              $pluginId            plugin id
+     * @param PluginHandler       $handler             plugin handler
+     * @param InterceptionHandler $interceptionHandler intercept handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
@@ -314,9 +443,15 @@ class PluginManageController extends Controller
             throw $e;
         }
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::appliedUpdatePlugin')]);
+        return redirect()->back()->with(
+            'alert',
+            ['type' => 'success', 'message' => xe_trans('xe::appliedUpdatePlugin')]
+        );
     }
 
+    /**
+     * @return array
+     */
     protected function getComponentTypes()
     {
         $componentTypes = [
@@ -336,6 +471,13 @@ class PluginManageController extends Controller
         return $componentTypes;
     }
 
+    /**
+     * @param PluginHandler $handler  plugin handler
+     * @param Operator      $operator operator
+     * @param string        $pluginId plugin id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function renewPlugin(PluginHandler $handler, Operator $operator, $pluginId)
     {
         if ($operator->isLocked()) {
@@ -364,6 +506,11 @@ class PluginManageController extends Controller
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return mixed
+     */
     public function getUpload(Request $request)
     {
         $typeName = xe_trans('xe::' . $request->get('type'));
@@ -371,6 +518,12 @@ class PluginManageController extends Controller
         return api_render('common.upload_popup', ['typeName' => $typeName]);
     }
 
+    /**
+     * @param Request       $request       request
+     * @param PluginHandler $pluginHandler plugin handler
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postUpload(Request $request, PluginHandler $pluginHandler)
     {
         $uploadFile = $request->file('plugin');
