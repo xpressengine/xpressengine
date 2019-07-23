@@ -721,58 +721,22 @@ Route::settings('operation', function(){
 Route::settings(
     'plugins',
     function () {
-        //@deprecated
-        Route::group(['permission' => 'plugin'], function() {
-
-            // plugins == plugins/installed
+        //@deprecated Together 컨텐츠 호환 위해 유지 필요
+        Route::group(['permission' => 'plugin'], function () {
             Route::get(
                 '/',
                 [
                     'as' => 'settings.plugins',
                     'uses' => 'PluginController@index',
-                    'settings_menu' => ['plugin.list']
                 ]
             );
 
-
-            // plugins/install
-            Route::group(['prefix' => 'install'], function() {
-
-                Route::get(
-                    'items',
-                    [
-                        'as' => 'settings.plugins.install.items',
-                        'uses' => 'PluginInstallController@items'
-                    ]
-                );
-
-                Route::get(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.install.index',
-                        'uses' => 'PluginInstallController@index',
-                        'settings_menu' => 'plugin.install'
-                    ]
-                );
-
-                Route::post(
-                    '/',
-                    [
-                        'as' => 'settings.plugins.install',
-                        'uses' => 'PluginController@install'
-                    ]
-                );
-
-            });
-
-            // GET: plugins/installed index page
-            Route::group(['prefix'=>'installed'], function() {
+            Route::group(['prefix'=>'installed'], function () {
                 Route::get(
                     '/',
                     [
                         'as' => 'settings.plugins',
                         'uses' => 'PluginController@index',
-                        'settings_menu' => ['plugin.list']
                     ]
                 );
             });
@@ -850,6 +814,33 @@ Route::settings(
                     'as' => 'settings.plugins.renew',
                     'uses' => 'Plugin\PluginManageController@renewPlugin'
                 ]);
+            });
+        });
+
+        //@deprecated since 3.0.4
+        Route::group(['permission' => 'plugin'], function () {
+            Route::group(['prefix' => 'install'], function () {
+                Route::get(
+                    'items',
+                    [
+                        'as' => 'settings.plugins.install.items',
+                        'uses' => 'PluginInstallController@items'
+                    ]
+                );
+                Route::get(
+                    '/',
+                    [
+                        'as' => 'settings.plugins.install.index',
+                        'uses' => 'PluginInstallController@index',
+                    ]
+                );
+                Route::post(
+                    '/',
+                    [
+                        'as' => 'settings.plugins.install',
+                        'uses' => 'PluginController@install'
+                    ]
+                );
             });
         });
     }

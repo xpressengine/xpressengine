@@ -64,31 +64,34 @@ class PluginController extends Controller
      */
     public function index(Request $request, PluginHandler $handler)
     {
-        $installType = $request->get('install_type', 'fetched');
+        //Together 테마 기존 데이터 연동 위해 유지
+        return redirect()->route('settings.extension.install');
 
-        // filter input
-        $field = [];
-        $field['component'] = $request->get('component');
-        $field['status'] = $request->get('status');
-        $field['keyword'] = $request->get('query');
-
-        if ($field['keyword'] === '') {
-            $field['keyword'] = null;
-        }
-
-        $collection = $handler->getAllPlugins(true);
-        $filtered = $collection->fetch($field);
-        $plugins = $collection->fetchByInstallType($installType, $filtered);
-
-        $componentTypes = $this->getComponentTypes();
-
-        $unresolvedComponents = $handler->getUnresolvedComponents();
-
-        if ($installType === 'fetched') {
-            return XePresenter::make('index.fetched', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
-        } else {
-            return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
-        }
+//        $installType = $request->get('install_type', 'fetched');
+//
+//        // filter input
+//        $field = [];
+//        $field['component'] = $request->get('component');
+//        $field['status'] = $request->get('status');
+//        $field['keyword'] = $request->get('query');
+//
+//        if ($field['keyword'] === '') {
+//            $field['keyword'] = null;
+//        }
+//
+//        $collection = $handler->getAllPlugins(true);
+//        $filtered = $collection->fetch($field);
+//        $plugins = $collection->fetchByInstallType($installType, $filtered);
+//
+//        $componentTypes = $this->getComponentTypes();
+//
+//        $unresolvedComponents = $handler->getUnresolvedComponents();
+//
+//        if ($installType === 'fetched') {
+//            return XePresenter::make('index.fetched', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
+//        } else {
+//            return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
+//        }
     }
 
     /**

@@ -183,42 +183,6 @@ return [
                 'description' => '',
                 'ordering' => 4000
             ],
-            'plugin' => [
-                'title' => 'xe::pluginAndUpdate',
-                'display' => true,
-                'description' => '',
-                'ordering' => 5000
-            ],
-            'plugin.list' => [
-                'title' => 'xe::pluginInstalled',
-                'display' => true,
-                'description' => '',
-                'ordering' => 200
-            ],
-            'plugin.list.fetched' => [
-                'title' => 'xe::fetchedPlugin',
-                'display' => false,
-                'description' => '',
-                'ordering' => 200
-            ],
-            'plugin.list.self-installed' => [
-                'title' => 'xe::selfInstalledPlugin',
-                'display' => false,
-                'description' => '',
-                'ordering' => 200
-            ],
-            'plugin.list.detail' => [
-                'title' => 'xe::pluginDetails',
-                'display' => false,
-                'description' => '',
-                'ordering' => 100
-            ],
-            'plugin.install' => [
-                'title' => 'xe::installPlugin',
-                'display' => true,
-                'description' => '',
-                'ordering' => 200
-            ],
             'theme' => [
                 'title' => 'xe::theme',
                 'display' => true,
