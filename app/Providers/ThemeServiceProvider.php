@@ -65,7 +65,7 @@ class ThemeServiceProvider extends ServiceProvider
     {
         // TODO: move code to valid location!!!
         // TODO: check permission!!
-        $this->registerInterceptForThemePreview();
+//        $this->registerInterceptForThemePreview();
 
         $this->registerBlankTheme();
 
@@ -76,38 +76,38 @@ class ThemeServiceProvider extends ServiceProvider
         $this->setThemeHandlerForTheme();
     }
 
-    /**
-     * Add event listener for preview theme.
-     *
-     * @return void
-     */
-    protected function registerInterceptForThemePreview()
-    {
-        if ($this->app['request']->isManageRequest() === false && file_exists(app_storage_path('theme_preview.json'))) {
-            $previewInformation = json_dec(file_get_contents(app_storage_path('theme_preview.json')));
-
-            $themeConfigId = $previewInformation->configId;
-            $userId = $previewInformation->userId;
-
-            if ($themeConfigId !== null) {
-                intercept(
-                    'XeTheme@getSelectedTheme',
-                    'preview_theme',
-                    function ($target) use ($themeConfigId, $userId) {
-                        $user = auth()->user();
-                        if (!$user->isAdmin() || $user->getId() != $userId) {
-                            return $target();
-                        }
-
-                        /** @var ThemeHandler $themeHandler */
-                        $themeHandler = $target->getTargetObject();
-                        $themeHandler->selectTheme($themeConfigId);
-                        return $target();
-                    }
-                );
-            }
-        }
-    }
+//    /**
+//     * Add event listener for preview theme.
+//     *
+//     * @return void
+//     */
+//    protected function registerInterceptForThemePreview()
+//    {
+//        if ($this->app['request']->isManageRequest() === false && file_exists(app_storage_path('theme_preview.json'))) {
+//            $previewInformation = json_dec(file_get_contents(app_storage_path('theme_preview.json')));
+//
+//            $themeConfigId = $previewInformation->configId;
+//            $userId = $previewInformation->userId;
+//
+//            if ($themeConfigId !== null) {
+//                intercept(
+//                    'XeTheme@getSelectedTheme',
+//                    'preview_theme',
+//                    function ($target) use ($themeConfigId, $userId) {
+//                        $user = auth()->user();
+//                        if (!$user->isAdmin() || $user->getId() != $userId) {
+//                            return $target();
+//                        }
+//
+//                        /** @var ThemeHandler $themeHandler */
+//                        $themeHandler = $target->getTargetObject();
+//                        $themeHandler->selectTheme($themeConfigId);
+//                        return $target();
+//                    }
+//                );
+//            }
+//        }
+//    }
 
     /**
      * Register the blank theme.
