@@ -119,12 +119,10 @@ class WidgetHandler
      */
     public function render($widgetId, $args = [])
     {
-        $currentUserRating = $this->guard->user()->getRating();
-
         try {
             $instance = $this->getInstance($widgetId, $args);
 
-            if (in_array($currentUserRating, $instance::$ratingWhiteList)) {
+            if (in_array($this->guard->user()->getRating(), $instance::$ratingWhiteList)) {
                 $ret = $instance->render();
                 if ($ret instanceof Renderable) {
                     $ret = $ret->render();
@@ -134,11 +132,7 @@ class WidgetHandler
                 return '';
             }
         } catch (Exception $e) {
-            if (in_array($currentUserRating, static::$displayErrorRatings)) {
-                return $this->view->make('widget.error', ['message' => $e->getMessage()])->render();
-            } else {
-                return '';
-            }
+            return $this->handleError($e);
         }
     }
 
@@ -184,11 +178,30 @@ class WidgetHandler
      */
     public function generateCode($widgetId, array $inputs)
     {
-        $widget = $this->getInstance($widgetId);
+        try {
+            $widget = $this->getInstance($widgetId);
 
-        $inputs = $widget->resolveSetting($inputs);
+            $inputs = $widget->resolveSetting($inputs);
 
-        return $this->generateXml('xe-widget', $inputs);
+            return $this->generateXml('xe-widget', $inputs);
+        } catch (Exception $e) {
+            return $this->handleError($e);
+        }
+    }
+
+    /**
+     * Error handle for output
+     *
+     * @param Exception $e exception
+     * @return string
+     */
+    protected function handleError(Exception $e)
+    {
+        if (in_array($this->guard->user()->getRating(), static::$displayErrorRatings)) {
+            return $this->view->make('widget.error', ['message' => $e->getMessage()])->render();
+        }
+
+        return '';
     }
 
     /**
