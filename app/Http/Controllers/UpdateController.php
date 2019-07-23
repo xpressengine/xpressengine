@@ -163,13 +163,7 @@ class UpdateController extends Controller
 
         $redirect = null;
         if (!$inProgress) {
-            if ($operator->isPrivate()) {
-                $redirect = route('settings.plugins', ['install_type' => 'self-installed']);
-            } elseif ($operator->isPlugin()) {
-                $redirect = route('settings.plugins');
-            } else {
-                $redirect = route('settings.coreupdate.show');
-            }
+            $redirect = route('settings.coreupdate.show');
         }
 
         return api_render('update.progress', compact('operator'), [
