@@ -314,6 +314,8 @@ class ThemeSettingsController extends Controller
         if (file_exists(app_storage_path('theme_preview.json'))) {
             \File::delete(app_storage_path('theme_preview.json'));
         }
+
+        return redirect()->back();
     }
 
     /**
