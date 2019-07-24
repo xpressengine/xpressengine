@@ -66,7 +66,7 @@ export default {
     showMedia (media, event) {
       event.preventDefault()
       if (typeof media.id !== 'undefined') {
-        this.$router.push({ path: `media_manager/show/${media.id}` })
+        // this.$router.push({ path: `media_manager/show/${media.id}` })
         $('#media-library-modal').modal('show')
         $('#media-library-modal').one('hide.bs.modal', () => {
           // console.debug('back')

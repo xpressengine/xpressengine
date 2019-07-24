@@ -35,17 +35,12 @@ export default {
     // [types.DELETE_FOLDER] (state, folder) {
     // }
   },
-  mounted: function () {
-    console.debug('detail.mounted', this)
-  },
   computed: {
     media () {
-      console.debug('this.$route.params.id', this.$route.params.id)
       return this.$store.getters['media/media'](this.$route.params.id)
     },
     imageUrl () {
       const media = this.media
-      console.debug('imageUrl', media.file_id)
       return '/storage/app/' + media.file.path + '/' + media.file.filename
     },
     // name ({ $props }) {
@@ -55,15 +50,3 @@ export default {
   }
 }
 </script>
-
-
-<style lang="scss">
-  // .folder-item {
-  //   display: table-row;
-
-  //   > div {
-  //     display: table-cell;
-  //     border: 1px solid black;
-  //   }
-  // }
-</style>

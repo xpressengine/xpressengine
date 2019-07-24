@@ -1,5 +1,6 @@
 <script>
 import SettingsHeaderTool from './settings/header-tool.vue'
+import MediaListContainer from './media-list-container.vue'
 import DiskList from './disk-list.vue'
 import DialogCreateFolder from './dialogs/create-folder.vue'
 import DialogDeleteItems from './dialogs/delete-media.vue'
@@ -8,6 +9,7 @@ export default {
   props: ['mediaItems', 'folderList', 'pathItems'],
   components: {
     SettingsHeaderTool,
+    MediaListContainer,
     DiskList,
     DialogCreateFolder,
     DialogDeleteItems
@@ -36,7 +38,7 @@ export default {
       <!-- [D] 저장소가 1개만 있을 경우 class="state-one" 추가 (화살표 노출 및 PC 에서 영역 제거) -->
       <disk-list v-if="false"></disk-list>
 
-      <router-view></router-view>
+      <MediaListContainer></MediaListContainer>
     </div>
 
     <!-- [D] 딤드가 필요할 때는 해당 딤드 display: block 적용 -->

@@ -195,7 +195,6 @@ export default {
       this.$root.clearSelectedMedia()
     },
     dialogCreateFolder () {
-      console.debug('dialogCreateFolder');
       this.$root.showDialog('create-folder')
     }
   },
