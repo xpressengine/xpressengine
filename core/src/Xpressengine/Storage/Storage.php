@@ -175,7 +175,7 @@ class Storage
             'disk' => $disk,
             'path' => $path,
             'filename' => $name,
-            'clientname' => $uploaded->getClientOriginalName(),
+            'clientname' => $this->getNormalizedOriginalName($uploaded),
             'mime' => $uploaded->getMimeType(),
             'size' => $uploaded->getSize(),
         ], $id);
@@ -202,6 +202,25 @@ class Storage
                 'detail' => 'The extension seems to be wrong.'
             ]);
         }
+    }
+
+    /**
+     * Returns the normalized original file name.
+     *
+     * thanks @jdssem
+     *
+     * @param UploadedFile $file uploaded file
+     * @return null|string
+     */
+    protected function getNormalizedOriginalName(UploadedFile $file)
+    {
+        $filename = $file->getClientOriginalName();
+
+        if (class_exists('Normalizer') && !\Normalizer::isNormalized($filename)) {
+            $filename = \Normalizer::normalize($filename);
+        }
+
+        return $filename;
     }
 
     /**
