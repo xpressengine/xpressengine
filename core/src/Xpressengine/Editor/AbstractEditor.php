@@ -467,6 +467,7 @@ abstract class AbstractEditor implements ComponentInterface
             'html' => $this->gate->allows('html', $instance),
             'tool' => $this->gate->allows('tool', $instance),
             'upload' => $this->gate->allows('upload', $instance),
+            'medialibrary' => auth()->user()->isAdmin()
         ];
         $data['stylesheet'] = $this->config->get('stylesheet') ? asset($this->config->get('stylesheet')) : null;
 
