@@ -58,6 +58,8 @@ class MediaLibrary extends App {
       return Promise.resolve(componentAppInstance)
     }
 
+    const that = this
+
     return new Promise((resolve) => {
       this.componentBooted = true
       renderMode = options.renderMode
@@ -108,16 +110,15 @@ class MediaLibrary extends App {
                     return [
                       {
                         name: '_token',
-                        value: window.XE.options.userToken
+                        value: that.$$xe.options.userToken
                       },
                       {
                         name: 'folder_id',
-                        value: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                        value: that.$$xe.config.getters['mediaLibrary/currentFolder'].id
                       }
                     ]
                   },
                   add: function (e, data) {
-                    console.debug('JF::add', data)
                     data.submit()
                   },
                   done: function (e, data) {
@@ -127,7 +128,7 @@ class MediaLibrary extends App {
                     // store.dispatch('media/addMedia', data.result)
                     store.dispatch('media/loadData', () => {
                       return {
-                        folder_id: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                        folder_id: that.$xe.config.getters['mediaLibrary/currentFolder'].id
                       }
                     })
                   }
@@ -148,7 +149,7 @@ class MediaLibrary extends App {
             this.$emit('show-detail-media-closed')
           },
           createFolder (name, parent = null, disk = null) {
-            return window.XE.post('/media_library/folder', {
+            return that.$$xe.post('/media_library/folder', {
               name: name,
               parent_id: parent || this.$store.getters['media/currentFolder'].id,
               disk: 'media'
@@ -162,9 +163,11 @@ class MediaLibrary extends App {
           },
           clearSelectedMedia () {
             this.selectedMedia = []
+            $('.media-library-content-list > li').removeClass('active')
+            $('.media-library-content-list > li').find('.media-library__input-checkbox').prop('checked', false)
           },
           deleteMedia (id) {
-            return window.XE.delete('/media_library', { target_ids: id })
+            return that.$$xe.delete('/media_library', { target_ids: id })
               .then(() => {
                 store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
               })
@@ -176,7 +179,7 @@ class MediaLibrary extends App {
           },
           remove () {
             if (this.selectedMedia.length) {
-              window.XE.delete('/media_library', { target_ids: this.selectedMedia })
+              that.$$xe.delete('/media_library', { target_ids: this.selectedMedia })
                 .then(() => {
                   this.selectedMedia.forEach(function (item) {
                     store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
@@ -186,8 +189,10 @@ class MediaLibrary extends App {
             }
           },
           showDialog (dialog) {
-            console.debug('showDialog', dialog)
             this.dialog = dialog
+          },
+          closeModal () {
+            $('#media-manager-modal-container').hide()
           }
         },
         render (h) {
@@ -223,7 +228,6 @@ class MediaLibrary extends App {
   */
   open (options) {
     return new Promise((resolve) => {
-      console.debug('ML:open()', options)
       this._componentBoot({
         renderMode: 'modal'
       }).then((ddd) => {
@@ -232,7 +236,6 @@ class MediaLibrary extends App {
         }
 
         resolve(ddd)
-        this.$$emit('modal.open', 'test')
       })
     })
   }

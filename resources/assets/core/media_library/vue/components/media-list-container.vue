@@ -52,7 +52,7 @@
               [D] 리스트가 폴더일 때 class="media-library-content-list__item--folder" 추가,
               리스트가 상위폴더 일 때 class="media-library-content-list__item--folder-depth-up" 추가
             -->
-            <li v-if="parentFolder.id" @dblclick="viewParentFolder" class="media-library-content-list__item--folder-depth-up">
+            <li v-if="parentFolder && parentFolder.id" @dblclick="viewParentFolder" class="media-library-content-list__item--folder-depth-up">
               <!--
                 [D] PC : label 영역을 리스트영역에 크게 적용하여 라벨 클릭 시 체크박스 class="media-library__input-checkbox" 에 자동으로 체크 되도록 적용하였습니다.
                 모바일 : 체크박스 영역을 체크해야 체크 되도록 라벨 영역의 크기를 줄여 좋았습니다.
@@ -63,7 +63,7 @@
                   <span class="media-library__input-helper"></span>
                 </label>
               </div>
-              <div class="media-library-content-list__icon">
+              <div @click="viewParentFolder" class="media-library-content-list__icon">
                 <!-- [D] 이미지 클래스 정보
                   폴더 이미지 : class="media-library-content-list__icon-folder",
                   기타 이미지 : class="media-library-content-list__icon-etc",
@@ -75,7 +75,7 @@
               <!-- 상위 폴더 -->
               <div class="media-library-content-list__content-box">
                 <div class="media-library-content-list__title">
-                  <span class="media-library-content-list__text">..</span>
+                  <span @click="viewParentFolder" class="media-library-content-list__text">..</span>
                 </div>
                 <div class="media-library-content-list__writer">
                   <span class="media-library-content-list__text"></span>
@@ -152,21 +152,24 @@ export default {
       }
     },
     viewFolder (folderId) {
-      console.debug('viewFolder', folderId);
-      this.$store.dispatch("media/viewFolder", folderId)
+      this.$store.dispatch("media/viewFolder", folderId).then((result) => {
+        this.parentFolder = result
+      })
     },
     viewParentFolder () {
       const parentFolder = this.$store.getters['media/parentFolder']
-      this.$store.dispatch('media/viewFolder')(parentFolder.id)
+      this.$store.dispatch('media/viewFolder', parentFolder.id)
     }
   },
   mounted: function () {
     this.paginate = this.$store.getters['media/paginate']
     this.parentFolder = this.$store.getters['media/parentFolder']
 
-    this.$store.watch({
-      path: (a, b) => {
-        console.debug('watch', a, b)
+    this.$store.subscribeAction({
+      after: (action, state) => {
+        if (action.type === 'media/loadData') {
+          this.parentFolder = this.$store.getters['media/parentFolder']
+        }
       }
     })
   },

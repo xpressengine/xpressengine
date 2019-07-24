@@ -34,21 +34,8 @@ export default {
   },
   computed: {
     items ({ $props }) {
-      console.debug('path $props.pathItems', $props.pathItems)
       return $props.pathItems
     },
   }
 }
 </script>
-
-
-<style lang="scss">
-  .folder-item {
-    display: table-row;
-
-    > div {
-      display: table-cell;
-      border: 1px solid black;
-    }
-  }
-</style>

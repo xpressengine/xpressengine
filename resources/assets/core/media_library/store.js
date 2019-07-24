@@ -70,7 +70,7 @@ const getters = {
 const actions = {
   setFilter ({ commit, dispatch, state }, filter = {}, reset = false) {
     commit(types.SET_FILTER, filter, reset)
-    dispatch('loadData', state.filter)
+    return dispatch('loadData', state.filter)
   },
   loadData ({ commit }, filter = {}) {
     return new Promise((resolve, reject) => {
@@ -87,15 +87,17 @@ const actions = {
   addMedia ({ commit }, payload) {
     commit(types.ADD_MEDIA, payload)
   },
-  viewFolder ({ dispatch }, payload) {
-    dispatch('setFilter', { folder_id: payload })
+  viewFolder ({ dispatch, getters }, payload) {
+    dispatch('setFilter', { folder_id: payload }).then(function () {
+      return getters['parentFolder']
+    })
   },
   addFolder ({ commit }, payload) {
     commit(types.ADD_FOLDER, payload)
   },
   deleteFolder ({ commit }, folderId) {
     window.XE.delete('/media_library/folder/' + folderId)
-      .then((response) => {
+      .then(() => {
         commit(types.DELETE_FOLDER, folderId)
       })
   }

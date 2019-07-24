@@ -5,7 +5,7 @@
         <div class="media-library-layer-popup-header">
           <h3 class="media-library-layer-popup-header__title">파일 상세정보 <span class="blind">레이어 팝업</span></h3>
           <!-- [D] 모바일에서 class="media-library-layer-popup__button-close" 버튼 클릭 시 팝업 닫기 기능 적용 (PC 에서는 해당 버튼 숨겨짐) -->
-          <button type="button" class="media-library-layer-popup__button-close">
+          <button @click="close" type="button" class="media-library-layer-popup__button-close">
             <span class="blind">파일 상세정보 레이어 팝업 닫기</span>
             <span class="media-library-layer-popup__button-close-image"></span>
           </button>
@@ -61,8 +61,8 @@
                           <dd>{{ media.file.mime }}</dd>
                           <dt>파일 크기</dt>
                           <dd>{{ filesize }}</dd>
-                          <dt>파일 URL</dt>
-                          <dd>
+                          <dt v-if="media.file.url">파일 URL</dt>
+                          <dd v-if="media.file.url">
                               <div class="media-library__input-group">
                                   <input @click="urlCopy($event)" type="text" class="media-library__input-text" :value="media.file.url" readonly="">
                               </div>
@@ -129,7 +129,6 @@ export default {
       this.media = media
     })
     this.$root.$on('show-detail-media-closed', () => {
-      console.debug('show-detail-media-closed')
       this.id = null
       this.media = null
     })
@@ -165,12 +164,11 @@ export default {
       this.$root.hideDetailMedia()
     },
     urlCopy (e) {
-      console.debug('urlCopy', e)
       $(e.target).select();
       if (typeof document.execCommand === "function") {
           document.execCommand('copy');
       }else{ //ie 대응
-          window.clipboardData.setData('Text', token);
+          window.clipboardData.setData('Text', this.media.file.url);
       }
     },
     save () {
@@ -188,7 +186,6 @@ export default {
             resolve()
           })
       })
-      //
     }
   }
 }

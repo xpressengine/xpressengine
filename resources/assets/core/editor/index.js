@@ -136,11 +136,11 @@ class Editor extends App {
   }
 }
 
+export default Editor
+
 /**
  * @type       {Editor}
  */
 const XEeditor = new Editor()
 if (!window.XEeditor) window.XEeditor = XEeditor
 XE.registerApp('Editor', XEeditor)
-
-export default Editor

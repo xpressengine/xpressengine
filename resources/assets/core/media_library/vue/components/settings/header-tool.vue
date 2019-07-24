@@ -8,7 +8,7 @@
     <!-- [D] 저장소명 적용 (PC 에서만 노출, 모바일은 aside 영역의 class="media-library-aside__mobile-button" 에 적용된 내용이 노출 됨) -->
     <h3 class="media-library-header__title">Main Assets</h3>
     <!-- [D] 모바일에서 검색버튼(class="media-library__button-icon--search") 클릭 시 class="search-open" 추가 -->
-    <div class="media-library__search">
+    <div v-if="false" class="media-library__search">
       <div class="media-library__input-group">
         <input type="text" class="media-library__input-text" placeholder="미디어 검색...">
         <button type="button" class="media-library__button-text-remove">
@@ -61,7 +61,7 @@
           삭제
         </button>
         <div class="media-library__button-group">
-          <button type="button" class="media-library__button media-library__button--default">
+          <button v-if="false" type="button" class="media-library__button media-library__button--default">
             <span class="media-library__icon media-library__icon-move"></span>
             이동
           </button>

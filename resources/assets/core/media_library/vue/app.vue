@@ -1,34 +1,28 @@
 <script>
-import MainContainer from "./components/main-container.vue";
-import DetailContainer from "./components/detail-container.vue";
-import $ from "jquery";
+import MainContainer from './components/main-container.vue'
+import DetailContainer from './components/detail-container.vue'
+import $ from 'jquery'
 
 export default {
-  props: ["renderMode"],
+  props: ['renderMode'],
   components: {
     MainContainer,
     DetailContainer
   },
-  computed: {},
-  mounted: function() {},
-
   methods: {
     importMedia() {
-      console.debug("import", this.$root.selectedMedia);
-      const mediaList = [];
+      const mediaList = []
 
       this.$root.selectedMedia.forEach(item => {
-        const media = this.$store.getters["media/media"](item);
-        media.thumbnailUrl =
-          "/storage/app/" + media.file.path + "/" + media.file.filename;
-        mediaList.push(media);
-      });
-      console.debug("mediaList", this, mediaList);
+        const media = this.$store.getters['media/media'](item)
+        media.thumbnailUrl = '/storage/app/' + media.file.path + '/' + media.file.filename
+        mediaList.push(media)
+      })
 
-      window.XE.MediaLibrary.$$emit("media.import", mediaList);
+      window.XE.MediaLibrary.$$emit('media.import', mediaList)
 
-      if (this.$root.renderMode === "modal") {
-        $("#media-manager-modal-container").hide();
+      if (this.$root.renderMode === 'modal') {
+        $('#media-manager-modal-container').hide()
       }
     }
   },
@@ -37,7 +31,7 @@ export default {
     return {
     }
   }
-};
+}
 </script>
 
 <template>
@@ -57,8 +51,8 @@ export default {
           <main-container></main-container>
         </div>
         <div class="media-library-layer-popup-footer">
-          <!-- <button type="button" class="media-library__button media-library__button--subtle">취소</button> -->
-          <button type="button" class="media-library__button media-library__button--primary" @click="importMedia">삽입</button>
+          <button @click="$root.closeModal" type="button" class="media-library__button media-library__button--subtle">닫기</button>
+          <button @click="importMedia" type="button" class="media-library__button media-library__button--primary">삽입</button>
         </div>
       </div>
     </div>

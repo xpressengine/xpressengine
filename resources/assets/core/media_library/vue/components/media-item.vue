@@ -1,5 +1,5 @@
 <template>
-  <li @dblclick.prevent="$root.showDetailMedia(media.id)" @click="selectMedia">
+  <li v-if="media.file" @dblclick="$root.showDetailMedia(media.id)" @click="selectMedia">
     <div class="media-library__input-group media-library-content-list__checkbox">
       <label class="media-library__label">
         <input type="checkbox" class="media-library__input-checkbox" />
@@ -22,22 +22,19 @@
         <span class="media-library-content-list__text">{{ filesize }}</span>
       </div>
       <div class="media-library-content-list__date">
-        <span class="media-library-content-list__text">2019.05.16</span>
+        <span class="media-library-content-list__text">{{ date }}</span>
       </div>
     </div>
-    <div class="media-library-content-list__more">
+    <div v-if="false" class="media-library-content-list__more">
       <button type="button" class="media-library__button-ellipsis">
-        <span class="blind">편집하기, 삭제 팝업 버튼</span>
+        <span class="blind">파일 관리</span>
       </button>
       <ul class="media-library-content-list__more-list">
         <li>
-          <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+          <button @click="modify" type="button" class="media-library-content-list__more-list-button">편집하기</button>
         </li>
         <li>
-          <button
-            type="button"
-            class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete"
-          >삭제</button>
+          <button @click="remove" type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
         </li>
       </ul>
     </div>
@@ -45,61 +42,52 @@
 </template>
 
 <script>
-import filesize from "filesize";
+import filesize from 'filesize'
+import moment from 'moment'
 
 export default {
-  props: ["media"],
+  props: ['media'],
   data() {
-    return {};
+    return {}
   },
-  mounted() {},
   methods: {
-    selectMedia: function(event) {
+    selectMedia (event) {
       if (event) {
-        console.debug("event.target", $(event.target).closest("li"));
-        $(event.target)
-          .closest("li")
-          .toggleClass("active");
-
-        if (
-          $(event.target)
-            .closest("li")
-            .hasClass("active")
-        ) {
-          this.$root.putSelectedMedia(this);
+        $(event.target).closest('li').toggleClass('active')
+        if ( $(event.target).closest('li').hasClass('active') ) {
+          this.$root.putSelectedMedia(this)
+          $(event.target).closest('li').find('.media-library__input-checkbox').prop('checked', true)
         } else {
-          this.$root.removeSelectedMedia(this);
+          this.$root.removeSelectedMedia(this)
+          $(event.target).closest('li').find('.media-library__input-checkbox').prop('checked', false)
         }
       }
     },
-    showMedia(media, event) {
-      event.preventDefault();
-      if (typeof media.id !== "undefined") {
-        this.$router.push({ path: `media_manager/show/${media.id}` });
-        $("#media-library-modal").modal("show");
-        $("#media-library-modal").one("hide.bs.modal", () => {
-          console.debug("back");
-          // this.$router.go(-1);
-        });
+    showMedia (media, event) {
+      event.preventDefault()
+      if (typeof media.id !== 'undefined') {
+        this.$router.push({ path: `media_manager/show/${media.id}` })
+        $('#media-library-modal').modal('show')
+        $('#media-library-modal').one('hide.bs.modal', () => {
+          // console.debug('back')
+          // this.$router.go(-1)
+        })
       }
     }
   },
   computed: {
     thumbnailUrl({ $props }) {
-      const media = $props.media;
-      return media.file.url;
-      // return '/storage/app/public/media/' + media.file.path + '/' + media.file.filename;
+      return $props.media.file.url
     },
     userName({ $props }) {
-      const media = $props.media;
-      return media.user.display_name;
-    },
-    userProfileImage({ $props }) {
-      return $props.media.user.profile_image_url;
+      return $props.media.user.display_name
     },
     filesize({ $props }) {
-      return filesize($props.media.file.size);
+      return filesize($props.media.file.size)
+    },
+    date ({ $props }) {
+      return moment($props.created_at).format('L')
     }
   }
-};
+}
 </script>
