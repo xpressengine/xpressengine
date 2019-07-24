@@ -7,8 +7,8 @@
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -28,8 +28,8 @@ use Xpressengine\Plugin\PluginProvider;
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class UpdateController extends Controller
@@ -163,13 +163,7 @@ class UpdateController extends Controller
 
         $redirect = null;
         if (!$inProgress) {
-            if ($operator->isPrivate()) {
-                $redirect = route('settings.plugins', ['install_type' => 'self-installed']);
-            } elseif ($operator->isPlugin()) {
-                $redirect = route('settings.plugins');
-            } else {
-                $redirect = route('settings.coreupdate.show');
-            }
+            $redirect = route('settings.coreupdate.show');
         }
 
         return api_render('update.progress', compact('operator'), [

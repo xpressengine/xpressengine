@@ -1,14 +1,50 @@
-    @section('page_title')
-        <h2>{{ xe_trans('xe::editTheme') }} - {{ $theme->getTitle() }}</h2>
-    @stop
+@section('page_title')
+    <h2>{{ xe_trans('xe::themeEditor') }}</h2>
+@stop
 
-    @section('page_description')
-        {{xe_trans('xe::editThemeDescription')}}
-    @stop
+@section('page_description')
+    <small>{{xe_trans('xe::themeEditorDescription')}}</small>
+@stop
 
-    @if(count($files) === 0)
-        <p>{{xe_trans('xe::themeNotSupportEdit')}}</p>
-    @else
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <div class="panel admin-tab">
+                <div class="panel-heading clearfix">
+                    <div class="pull-left">
+                        <strong class="panel-title">{{ $theme->getTitle() }}</strong>
+                    </div>
+
+                    <div class="pull-right">
+                        <span class="input-group-label">테마선택</span>
+                        <div class="input-group search-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="selected-type">{{$theme->getTitle()}}</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach ($themes as $editableTheme)
+                                    <li>
+                                        <a href="{{route('settings.theme.edit', ['theme' => $editableTheme->getId()])}}" data-target="query"><span>{{$editableTheme->getTitle()}}</span></a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(count($files) === 0)
+    @php
+        $message = xe_trans('xe::themeNotSupportEdit');
+    @endphp
+    @include($_skin::view('empty'))
+@else
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked" style="margin-bottom: 10px;">
@@ -65,7 +101,7 @@
         </div>
     </div>
 
-        @if($editFile['hasCache'])
+    @if($editFile['hasCache'])
         <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -88,28 +124,27 @@
                 </div>
             </div>
         </div>
-        @endif
-
     @endif
+@endif
 
-    {!!
-        XeFrontend::html('theme.insert-widget')->content("
-        <script>
-            jQuery(function($) {
-                $('.__xe_insert_widget').click(function(){
-                    $('#widgetGen').widgetGenerator().generate(function(data){
+{!!
+    XeFrontend::html('theme.insert-widget')->content("
+    <script>
+        jQuery(function($) {
+            $('.__xe_insert_widget').click(function(){
+                $('#widgetGen').widgetGenerator().generate(function(data){
 
-                        $('#widgetModal').modal('hide');
+                    $('#widgetModal').modal('hide');
 
-                        // add code to textarea
-                        var txt = $('textarea[name=content]');
-                        var caretPos = txt[0].selectionStart;
-                        var textAreaTxt = txt.val();
-                        txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
+                    // add code to textarea
+                    var txt = $('textarea[name=content]');
+                    var caretPos = txt[0].selectionStart;
+                    var textAreaTxt = txt.val();
+                    txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
 
-                    });
-                })
-            });
-        </script>
-        ")->load();
-    !!}
+                });
+            })
+        });
+    </script>
+    ")->load();
+!!}

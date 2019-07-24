@@ -1,3 +1,4 @@
+{{-- @deprecated since 3.0.4 use instead use manage/deactivate.blade.php --}}
 <form action="{{ route('settings.plugins.manage.deactivate') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
 
@@ -38,11 +39,3 @@
         <button type="submit" class="xe-btn xe-btn-primary" >{{ xe_trans('xe::deactivate') }}</button>
     </div>
 </form>
-
-
-
-
-
-
-
-

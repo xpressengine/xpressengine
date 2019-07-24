@@ -7,8 +7,8 @@
  * @category    UIObjects
  * @package     App\UIObjects\Theme
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -23,8 +23,8 @@ use Xpressengine\UIObject\AbstractUIObject;
  * @category    UIObjects
  * @package     App\UIObjects\Theme
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class ThemeSelect extends AbstractUIObject
@@ -51,6 +51,7 @@ class ThemeSelect extends AbstractUIObject
     public function render()
     {
         $themes = [];
+        $blankTheme = null;
         $args = $this->arguments;
         $prefix = array_get($args, 'prefixName', 'theme_');
         /** @var ThemeHandler $themeHandler */
@@ -58,6 +59,14 @@ class ThemeSelect extends AbstractUIObject
 
         if (!isset($args['themes'])) {
             $themes = $themeHandler->getAllTheme();
+        }
+
+        $blankThemeClass = app('config')->get('xe.theme.blank');
+        $blankThemeId = $blankThemeClass::getId();
+
+        if (isset($themes[$blankThemeId]) == true) {
+            $blankTheme = $themes[$blankThemeId];
+            unset($themes[$blankThemeId]);
         }
 
         if (!isset($args['selectedTheme'])) {
@@ -76,7 +85,13 @@ class ThemeSelect extends AbstractUIObject
 
         $this->loadFiles();
 
-        $this->template = view($this->view, compact('themes', 'selectedThemeId', 'prefix', 'previewLink'))->render();
+        $this->template = view($this->view, compact(
+            'themes',
+            'selectedThemeId',
+            'prefix',
+            'previewLink',
+            'blankTheme'
+        ))->render();
 
         return parent::render();
     }

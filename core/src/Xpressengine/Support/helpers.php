@@ -7,8 +7,8 @@
  * @category    Support
  * @package     Xpressengine\Support
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -283,9 +283,25 @@ if (function_exists('locale_url') === false) {
      */
     function locale_url($locale)
     {
-        $queries = app('request')->query->all();
-        array_set($queries, '_l', $locale);
-        return app('request')->url() . '?' . http_build_query($queries);
+        $request = app('request');
+        $queries = $request->query->all();
+        if (config('xe.lang.locale_type') === 'route') {
+            $url = $request->root().'/'.$locale.'/'.$request->path();
+        } elseif (config('xe.lang.locale_type') === 'domain') {
+            $domains = config('xe.lang.locale_domains');
+            if (!isset($domains[$locale])) {
+                throw new \Exception("Unknown locale [$locale]");
+            }
+            $url = $request->getScheme().'://'.$domains[$locale].'/'.$request->path();
+            if (auth()->check()) {
+                array_set($queries, '_s', encrypt(session()->getId()));
+            }
+        } else {
+            $url = $request->url();
+            array_set($queries, '_l', $locale);
+        }
+
+        return $url.(count($queries) > 0 ? '?'.http_build_query($queries) : '');
     }
 }
 

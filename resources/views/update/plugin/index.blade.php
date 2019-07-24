@@ -2,8 +2,15 @@
 @if(count($plugins) < 1)
 <div class="panel">
     <div class="panel-body">
-        <p class="help-block">{{ xe_trans('xe::noPluginsToUpdate') }}</p>
-        <a href="{{ route('settings.plugins.install.index') }}" >{{ xe_trans('xe::installNewPlugin') }}</a>
+        <div>
+            <p class="help-block">업데이트할 익스텐션이 없습니다.</p>
+            <a href="{{ route('settings.plugins.install.index') }}" >새 익스텐션 설치</a>
+        </div>
+
+        <div>
+            <p class="help-block">업데이트할 테마가 없습니다.</p>
+            <a href="{{ route('settings.plugins.install.index') }}" >새 테마 설치</a>
+        </div>
     </div>
 </div>
 @else
@@ -31,7 +38,6 @@
                 @include('update.plugin.item')
             @endforeach
         </ul>
-
     </div>
 </form>
 

@@ -7,8 +7,8 @@
  * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -17,6 +17,8 @@ namespace Xpressengine\Plugin;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\UploadedFile;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -27,6 +29,7 @@ use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginDependencyException;
 use Xpressengine\Plugin\Exceptions\PluginNotFoundException;
+use ZipArchive;
 
 /**
  * XE에 등록된 플러그인의 전체적인 관리를 담당한다.
@@ -34,13 +37,12 @@ use Xpressengine\Plugin\Exceptions\PluginNotFoundException;
  * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class PluginHandler
 {
-
     /**
      * 활성화 된 상태
      */
@@ -544,6 +546,82 @@ class PluginHandler
     }
 
     /**
+     * 등록된 테마 목록을 반환
+     *
+     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     *
+     * @return array|PluginCollection
+     */
+    public function getAllThemes($refresh = false)
+    {
+        $themes = [];
+        $allPlugins = $this->getAllPlugins($refresh);
+
+        /** @var PluginEntity $plugin */
+        foreach ($allPlugins as $plugin) {
+            if (empty($plugin->getComponentList('theme') == false)) {
+                //플러그인에 컴포넌트가 2개 이상일 경우 스토어에 등록된 정보 확인해서 구분
+                if (count($plugin->getComponentList()) > 1) {
+                    $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+                    if ($storePlugin == null) {
+                        //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
+                        continue;
+                    } elseif ($storePlugin && $storePlugin->is_theme == false) {
+                        continue;
+                    }
+                }
+
+                $themes[] = $plugin;
+            }
+        }
+
+        $themes = new PluginCollection($themes);
+
+        return $themes;
+    }
+
+    /**
+     * 등록된 익스텐션 목록을 반환
+     *
+     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     *
+     * @return array|PluginCollection
+     */
+    public function getAllExtensions($refresh = false)
+    {
+        $extensions = [];
+        $allPlugins = $this->getAllPlugins($refresh);
+
+        /** @var PluginEntity $plugin */
+        foreach ($allPlugins as $plugin) {
+            //플러그인에 테마 컴포넌트가 없으면 익스텐션
+            if (empty($plugin->getComponentList('theme') == true)) {
+                $extensions[] = $plugin;
+                continue;
+            }
+
+            //컴포넌트에 테마가 있는데 컴포넌트가 1개면 테마
+            if (count($plugin->getComponentList()) < 2) {
+                continue;
+            }
+
+            $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+            if ($storePlugin == null) {
+                //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
+//                continue;
+            } elseif ($storePlugin && $storePlugin->is_extension == false) {
+                continue;
+            }
+
+            $extensions[] = $plugin;
+        }
+
+        $extensions = new PluginCollection($extensions);
+
+        return $extensions;
+    }
+
+    /**
      * 등록된 플러그인의 목록을 반환한다.
      *
      * @return PluginCollection
@@ -718,5 +796,157 @@ class PluginHandler
     public function addComponent($component)
     {
         $this->register->add($component);
+    }
+
+    /**
+     * @param UploadedFile $uploadFile upload plugin file
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function uploadPlugin(UploadedFile $uploadFile)
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = app('files');
+        $zip = new ZipArchive();
+
+        $pluginName = str_replace(
+            '.' . $uploadFile->getClientOriginalExtension(),
+            "",
+            $uploadFile->getClientOriginalName()
+        );
+        $extractPath = app_storage_path('plugin/' . $pluginName);
+
+        try {
+            $this->checkExistAlreadyPlugin($filesystem, $pluginName);
+
+            $this->removeGarageDirectory($filesystem, $extractPath);
+
+            $extractFolder = $zip->open($uploadFile);
+            $zip->extractTo($extractPath);
+            $zip->close();
+
+            $this->fixExtracted($filesystem, $extractPath);
+            $this->checkExistRequireFiles($filesystem, $extractPath);
+            $this->removeVendorDir($filesystem, $extractPath);
+
+            $this->movePlugin($filesystem, $extractPath, $pluginName);
+        } catch (\Exception $e) {
+            $this->removeGarageDirectory($filesystem, $extractPath);
+
+            throw $e;
+        }
+
+        return $pluginName;
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function checkExistAlreadyPlugin(Filesystem $filesystem, $targetDir)
+    {
+        if ($filesystem->exists(app('path.privates') . DIRECTORY_SEPARATOR . $targetDir) == true) {
+            throw new \Exception('private exists');
+        }
+
+        if ($filesystem->exists(app('path.plugins') . DIRECTORY_SEPARATOR . $targetDir) == true) {
+            throw new \Exception('plugin exists');
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
+    private function fixExtracted(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->move($targetDir, $targetDir . '_temp');
+
+        $directory = $this->searchPluginRootDirectory($filesystem, $targetDir . '_temp');
+
+        $filesystem->move($directory, $targetDir . '/');
+
+        $filesystem->deleteDirectory($targetDir . '_temp');
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
+    private function removeGarageDirectory(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->deleteDirectory($targetDir);
+        $filesystem->deleteDirectory($targetDir . '_temp');
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return mixed
+     */
+    private function searchPluginRootDirectory(Filesystem $filesystem, $targetDir)
+    {
+        $list = $filesystem->directories($targetDir);
+
+        if (count($list) === 1) {
+            return $this->searchPluginRootDirectory($filesystem, $list[0]);
+        } else {
+            return $targetDir;
+        }
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     */
+    private function removeVendorDir(Filesystem $filesystem, $targetDir)
+    {
+        $filesystem->deleteDirectory($targetDir . '/vendor');
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function checkExistRequireFiles(Filesystem $filesystem, $targetDir)
+    {
+        $requireFiles = [
+            'plugin.php',
+            'composer.json'
+        ];
+
+        foreach ($requireFiles as $requireFile) {
+            if ($filesystem->exists($targetDir . DIRECTORY_SEPARATOR . $requireFile) == false) {
+                throw new \Exception('not exist');
+            }
+        }
+    }
+
+    /**
+     * @param Filesystem $filesystem filesystem object
+     * @param string     $targetDir  target directory name
+     * @param string     $pluginName plugin name
+     *
+     * @return void
+     */
+    private function movePlugin(Filesystem $filesystem, $targetDir, $pluginName)
+    {
+        $filesystem->move($targetDir, app('path.privates') . DIRECTORY_SEPARATOR . $pluginName);
     }
 }

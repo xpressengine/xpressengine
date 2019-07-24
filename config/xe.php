@@ -6,8 +6,8 @@
  *
  * @category    Config
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -29,6 +29,12 @@ return [
             'en' => 'English',
         ],
         'autocomplete' => false,
+
+        'locale_type' => 'route', // null(cookie), route, domain
+        'locale_domains' => [
+            'ko' => 'example1.test',
+            'en' => 'example2.test',
+        ]
     ],
 
     'settings' => [
@@ -189,38 +195,50 @@ return [
                 'description' => '',
                 'ordering' => 500
             ],
-            'plugin' => [
-                'title' => 'xe::pluginAndUpdate',
+            'theme' => [
+                'title' => 'xe::theme',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
             ],
-            'plugin.list' => [
-                'title' => 'xe::pluginInstalled',
+            'theme.installed' => [
+                'title' => 'xe::installedTheme',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
+            ],
+            'theme.install' => [
+                'title' => 'xe::addTheme',
                 'display' => true,
                 'description' => '',
                 'ordering' => 200
             ],
-            'plugin.list.fetched' => [
-                'title' => 'xe::fetchedPlugin',
-                'display' => false,
+            'theme.setting' => [
+                'title' => 'xe::settingTheme',
+                'display' => true,
                 'description' => '',
-                'ordering' => 200
+                'ordering' => 300
             ],
-            'plugin.list.self-installed' => [
-                'title' => 'xe::selfInstalledPlugin',
-                'display' => false,
+            'theme.editor' => [
+                'title' => 'xe::themeEditor',
+                'display' => true,
                 'description' => '',
-                'ordering' => 200
+                'ordering' => 400
             ],
-            'plugin.list.detail' => [
-                'title' => 'xe::pluginDetails',
-                'display' => false,
+            'extension' => [
+                'title' => 'xe::extension',
+                'display' => true,
+                'description' => '',
+                'ordering' => 5000
+            ],
+            'extension.installed' => [
+                'title' => 'xe::installedExtension',
+                'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
-            'plugin.install' => [
-                'title' => 'xe::installPlugin',
+            'extension.install' => [
+                'title' => 'xe::addExtension',
                 'display' => true,
                 'description' => '',
                 'ordering' => 200
@@ -236,18 +254,6 @@ return [
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
-            ],
-            'setting.theme' => [
-                'title' => 'xe::themeSettings',
-                'display' => true,
-                'description' => '',
-                'ordering' => 200
-            ],
-            'setting.theme.edit' => [
-                'title' => 'xe::themeEdit',
-                'display' => false,
-                'description' => '',
-                'ordering' => 200
             ],
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
