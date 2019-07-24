@@ -2,14 +2,14 @@ import $ from 'jquery'
 import App from 'xe/app'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
+// import VueRouter from 'vue-router'
 
 import { module as media } from './store'
-import RouteMap from './route_map'
+// import RouteMap from './route_map'
 import ComponentApp from './vue/app'
 
 Vue.use(Vuex)
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 const store = new Vuex.Store({
   modules: {
@@ -17,7 +17,7 @@ const store = new Vuex.Store({
   }
 })
 
-const router = new VueRouter(RouteMap)
+// const router = new VueRouter(RouteMap)
 
 let renderMode = 'inline'
 
@@ -74,7 +74,7 @@ class MediaLibrary extends App {
       const componentAppInstance = new Vue({
         el: '#media-library',
         store,
-        router,
+        // router,
         components: {
           App: ComponentApp
         },
@@ -95,7 +95,7 @@ class MediaLibrary extends App {
           this.renderMode = renderMode
 
           store.dispatch('media/loadData').then(() => {
-            router.push({ name: 'home' })
+            // router.push({ name: 'home' })
 
             this.$emit('loaded')
 
