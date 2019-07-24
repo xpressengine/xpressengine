@@ -291,7 +291,7 @@ class MediaLibraryHandler
     public function getFolderPath(MediaLibraryFolder $folderItem)
     {
         $paths = [];
-        $ancestors = $folderItem->ancestors(false)->get();
+        $ancestors = $folderItem->ancestors(false)->orderBy($folderItem->getDepthName())->get();
 
         /** @var MediaLibraryFolder $ancestor */
         foreach ($ancestors->reverse() as $ancestor) {
