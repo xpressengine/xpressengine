@@ -398,6 +398,11 @@
             }
           }
 
+          if (!attr['id'] || !attr['skin-id']) {
+            XE.toast('error', '위젯과 스킨을 선택하세요')
+            return
+          }
+
           var widgetId = _this.$btnPlaceWidget.data('widget')
 
           if (!widgetId) {
