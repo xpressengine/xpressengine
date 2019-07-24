@@ -18,6 +18,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * XE 자료실에 등록된 플러그인들을 조회할 때 사용하는 클래스
@@ -260,15 +261,23 @@ class PluginProvider
                 'Accept' => 'application/json',
             ],
             'query' => $queries,
+            'http_errors' => false,
         ];
         if ($this->auth !== null) {
             $options['auth'] = $this->auth;
         }
+
         $res = $client->request(
             'GET',
             $url,
             $options
         );
+
+        if ($res->getStatusCode() != 200) {
+            throw new HttpException(403, xe_trans('xe::needSiteTokenToViewListOfPurchasedStore', [
+                'link' => sprintf('<a href="%s">%s</a>', route('settings.setting.edit'), xe_trans('xe::moveToSetting'))
+            ]));
+        }
 
         return json_decode($res->getBody());
     }
