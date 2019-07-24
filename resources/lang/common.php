@@ -3341,5 +3341,13 @@ return [
     'buying' => [
         'ko' => '구매하기',
         'en' => 'Buying'
+    ],
+    'media' => [
+        'ko' => '미디어',
+        'en' => 'Media'
+    ],
+    'mediaLibrary' => [
+        'ko' => '미디어 라이브러리',
+        'en' => 'Media library'
     ]
 ];
