@@ -159,7 +159,7 @@ class Request extends App {
   */
   put (url, data, config = {}) {
     config.method = 'put'
-    return this.request(url, Object.assign({}, { data }, config))
+    return this.request(url, Object.assign({}, { data: this.prepareData(data) }, config))
   }
 
   /**

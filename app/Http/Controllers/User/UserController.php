@@ -27,6 +27,7 @@ use XeTheme;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
+use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
@@ -494,6 +495,11 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             $this->handler->leave($id);
+        } catch (CannotDeleteUserHavingSuperRatingException $e) {
+            XeDB::rollback();
+            $e = new HttpUserException([], 400, $e);
+            $e->setMessage('xe::cannotLeaveHaveSuperRatingUser');
+            throw $e;
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;

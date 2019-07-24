@@ -1,0 +1,369 @@
+.media-library {
+  position: relative;
+  margin: 0 -15px;
+  font-family: $sys-font-stack;
+  word-break: break-all;
+
+  /*
+  * 1. Change the default monospaced font family in all browsers (opinionated).
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
+
+  pre {
+    font-family: $sys-font-stack-mono;
+  }
+
+  /*
+  * 1. Change the default monospaced font family in all browsers (opinionated).
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
+
+  code,
+  kbd,
+  samp {
+    font-family: $sys-font-stack-mono;
+  }
+}
+
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  width: 1px;
+  height: 1px;
+}
+
+// input type="text" 스타일
+.media-library__input-group {
+  position: relative;
+
+  .media-library__input-text {
+    width: 100%;
+    height: 36px;
+    padding: 0 24px 0 12px;
+    border: 1px solid #d4d5dc;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.03px;
+    color: $n800;
+    outline: none;
+    transition: all 0.5s ease-out;
+
+    &:focus {
+      border-radius: 4px;
+      border: 2px solid $b400;
+
+      + .media-library__button-text-remove {
+        display: block;
+      }
+    }
+  }
+
+  .media-library__button-text-remove {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    padding: 9px;
+    border: 0 none;
+    background-color: transparent;
+    outline: none;
+
+    .media-library__button-text-remove-image {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background: url(../img/icon-input-close.svg) 0 0 no-repeat;
+      background-size: 18px 18px;
+    }
+  }
+}
+
+.media-library__input-text,
+.media-library__textarea {
+  &::placeholder {
+    color: $n80;
+  }
+}
+
+.media-library__textarea {
+  width: 100%;
+  height: 78px;
+  padding: 8px 12px;
+  border: 1px solid #d4d5dc;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.03px;
+  color: $n800;
+  outline: none;
+  transition: all 0.5s ease-out;
+  box-sizing: border-box;
+
+  &:focus {
+    border-radius: 4px;
+    border: 2px solid $b400;
+  }
+}
+
+// button common (default)
+.media-library__button {
+  height: 36px;
+  padding: 0 12px;
+  border: 0 none;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  background-color: $n20;
+  color: $n400;
+  outline: none;
+
+  &:hover {
+    background-color: $n30;
+  }
+
+  &.disabled,
+  &[disabled] {
+    background-color: $n20;
+    color: $n70;
+  }
+
+  &.button-selected {
+    background-color: $n700;
+    color: $n0;
+
+    &:active {
+      background-color: $n700;
+      color: $n0;
+    }
+  }
+
+  &:active {
+    background-color: $b200;
+    color: $b500;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.4);
+  }
+}
+
+// button primary
+.media-library__button--primary {
+  background-color: $b500;
+  color: $n0;
+
+  &:hover {
+    background-color: $b400;
+  }
+
+  &:active {
+    background-color: $b600;
+    color: $n0;
+  }
+
+  &.disabled,
+  &[disabled] {
+    background-color: $n20;
+    color: $n70;
+  }
+}
+
+// button danger
+.media-library__button--danger {
+  background-color: $r500;
+  color: $n0;
+
+  &:hover {
+    background-color: #ff5630;
+  }
+
+  &:active {
+    background-color: $r700;
+    color: $n0;
+  }
+
+  &.disabled,
+  &[disabled] {
+    background-color: $n20;
+    color: $n70;
+  }
+}
+
+// button subtle
+.media-library__button--subtle {
+  background-color: transparent;
+  color: $n600;
+
+  &.disabled,
+  &[disabled] {
+    background-color: transparent;
+    color: $n70;
+  }
+}
+
+// button subtle
+.media-library__button--icon {
+  padding: 0 8px;
+}
+
+// 버튼 그룹
+.media-library__button-group {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .media-library__button {
+    float: left;
+    margin: 0 1px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// 버튼 그룹 라디오 (하나 선택 되는 형태)
+.media-library__button-group-radio {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .media-library__button {
+    float: left;
+    margin: 0 1px;
+    border-radius: 0;
+
+    &:first-child {
+      margin-left: 0;
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    &.button-selected {
+      background-color: $b500;
+      color: $n0;
+
+      &:hover {
+        background-color: $b400;
+      }
+
+      &:active {
+        background-color: $b600;
+        color: $n0;
+      }
+    }
+  }
+}
+
+// 말줄임 버튼
+.media-library__button-ellipsis {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  background-color: transparent;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// dimmed
+.media-library-dimmed {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.6;
+  background-color: #343d52;
+  z-index: 90;
+}
+
+.media-library-main {
+  position: relative;
+
+  .media-library-content {
+    padding-top: 48px;
+  }
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .media-library {
+    margin: 0;
+
+    .media-library-box {
+      display: flex;
+      border: 1px solid $n40;
+      background-color: $n0;
+    }
+
+    .media-library-aside {
+      // flex: 0 0 auto;
+      border-right: 1px solid $n40;
+      // max-width: 180px;
+      width: 160px;
+    }
+
+    .media-library-main {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .media-library-content {
+        padding-top: 0;
+      }
+    }
+
+    .media-library__mobile-view {
+      display: none !important;
+    }
+  }
+}
+
+
+
+/* break point, bootstrap 3.4.1 기준 */
+/* wide desctop */
+@media (min-width: 1200px) {
+
+}
+
+/* desctop */
+@media (min-width: 992px) {
+
+}
+
+/* xe-col-sm- */
+@media (min-width: 768px) {
+
+}
+
+/* xe-col-xs- */
+@media (max-width: 768px) {
+
+}

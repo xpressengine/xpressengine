@@ -1,3 +1,4 @@
+{{-- @deprecated since 3.0.4 use instead use manage/activate.blade.php --}}
 <form action="{{ route('settings.plugins.manage.activate') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
     <div class="xe-modal-header">
@@ -36,4 +37,3 @@
         <button type="submit" class="xe-btn xe-btn-primary" >{{ xe_trans('xe::activate') }}</button>
     </div>
 </form>
-

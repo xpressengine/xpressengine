@@ -1,0 +1,182 @@
+/* mobile 전용 */
+@media (max-width: 768px) {
+  // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용
+  .media-library-aside {
+    position: relative;
+
+    // 저장소가 1개일 때 화살표 제거
+    &.state-one {
+      .media-library-aside__mobile-button-icon {
+        display: none;
+      }
+    }
+
+    .media-library-aside__title {
+      display: none;
+    }
+
+    .media-library-aside__content {
+      &.open {
+        // 버튼 화살표 움직임
+        .media-library-aside__mobile-button-icon {
+          transform: rotate(180deg);
+        }
+
+        // 저장소 팝업 노출
+        .media-library-aside__list {
+          display: block;
+        }
+      }
+    }
+
+    .media-library-aside__mobile-button {
+      overflow: hidden;
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 48px;
+      padding: 0 50px 0 15px;
+      border: 0 none;
+      font-size: 14px;
+      line-height: 24px;
+      color: $n900;
+      background-color: $n30;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+      outline: none;
+    }
+
+    .media-library-aside__mobile-button-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      margin-top: -12px;
+      transition: all 0.3s ease;
+
+      i {
+        font-size: 24px;
+        vertical-align: top;
+      }
+    }
+
+    .media-library-aside__list {
+      display: none;
+      overflow-y: auto;
+      position: absolute;
+      top: 42px;
+      right: 11px;
+      max-height: 225px;
+      max-width: calc(100% - 40px);
+      margin: 0;
+      padding: 13px 17px;
+      border: 1px solid #d4d5dc;
+      border-radius: 3px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+      background-color: $n0;
+      list-style: none;
+      z-index: 60;
+
+      > li {
+        margin-top: 8px;
+        list-style: none;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &.on {
+          .media-library-aside__button {
+            color: $b500;
+          }
+        }
+      }
+    }
+
+    .media-library-aside__button {
+      padding: 0;
+      border: 0 none;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: $n500;
+      background-color: transparent;
+      letter-spacing: -0.03px;
+      text-align: left;
+    }
+  }
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용, PC는 여기서부터 새로 적용
+  .media-library-aside {
+    overflow-y: auto;
+    
+    // 저장소가 1개일 때 
+    &.state-one {
+      display: none;
+    }
+
+    .media-library-aside-inner {
+      padding: 32px 10px 32px 24px;
+    }
+
+    .media-library-aside__title {
+      margin: 0;
+      padding: 0 0 24px;
+      font-size: 14px;
+      line-height: 20px;
+      color: $n80;
+      font-weight: bold;
+    }
+
+    .media-library-aside__mobile-button {
+      display: none;
+    }
+
+    .media-library-aside__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      > li {
+        position: relative;
+        margin-top: 8px;
+        list-style: none;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &.on {
+          &:before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: -24px;
+            width: 3px;
+            // height: 18px;
+            height: calc(100% - 5px);
+            background-color: $b500;
+          }
+
+          .media-library-aside__button {
+            color: $b500;
+          }    
+        }
+      }
+
+      .media-library-aside__button {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+        background-color: transparent;
+        text-align: left;
+      }
+    }
+  }
+}

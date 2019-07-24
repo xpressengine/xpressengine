@@ -10,13 +10,14 @@ import lodash from 'lodash'
 import * as $$ from 'xe/utils'
 import Component from 'xe/component'
 import DynamicLoadManager from 'xe/dynamic-load-manager'
+import Form from 'xe/form'
 import Griper from 'xe/griper'
 import Lang from 'xe/lang'
+import MediaLibrary from 'xe/media_library'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
 import Router from 'xe/router'
 import Translator from 'xe/common/js/translator'
-import Form from 'xe/form'
 import Validator from 'xe/validator'
 import { STORE_URL, CHANGE_ORIGIN } from './router/store'
 import { STORE_LOCALE, CHANGE_LOCALE } from './lang/store'
@@ -93,6 +94,7 @@ class XE {
     this.Validator = this.registerApp('Validator', new Validator())
     this.Form = this.registerApp('Form', new Form())
     this.Component = this.registerApp('Component', new Component())
+    this.MediaLibrary = this.registerApp('MediaLibrary', new MediaLibrary())
 
     // external libraries
     this._ = lodash
@@ -213,7 +215,8 @@ class XE {
       this.DynamicLoadManager.boot(this, this.options),
       this.Form.boot(this, this.options),
       this.Validator.boot(this, this.options),
-      this.Component.boot(this, this.options)
+      this.Component.boot(this, this.options),
+      this.MediaLibrary.boot(this, this.options)
     ])
       .then(() => {
         // @FIXME

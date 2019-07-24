@@ -1,0 +1,117 @@
+// .#{$prefix}-button,
+// [class*='#{$prefix}-button--'] {
+//   margin: 0;
+//   padding: 0;
+//   border-radius: 0;
+//   border: 0 none;
+//   outline: 0;
+//   // font-size: .9375rem;
+//   white-space: nowrap;
+//   box-sizing: border-box;
+// }
+
+.#{$prefix}-button {
+  display: inline-block;
+  margin: 0;
+  padding: 0 12px;
+  border: 0 none;
+  border-radius: 3px;
+  // border: 1px solid transparent;
+  font-size: 14px;
+  line-height: 36px;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  outline: 0;
+  background-color: $transparent;
+  color: $n400;
+
+  // 공통 적용
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  // 공통 적용
+  &:focus:not([disabled]),
+  &.focus:not([disabled]) {
+    box-shadow: 0 0 0 2px rgba($b400, 0.4);
+  }
+
+  // 사이즈
+  &--large {
+    font-size: 16px;
+    line-height: 48px;
+  }
+
+  &--small {
+    font-size: 14px;
+    line-height: 28px;
+  }
+
+  // block 일 때
+  &--block {
+    display: block;
+    width: 100%;
+
+    & + .xu-button--block {
+      margin-top: 4px;
+    }
+  }
+
+  &--link, &--subtle-link {
+    &:hover:not([disabled]),
+    &.hover:not([disabled]),
+    &:focus:not([disabled]),
+    &.focus:not([disabled]) {
+      text-decoration: underline;
+      border: 0 none;
+    }
+  }
+}
+
+// button-Colors
+@each $type, $value in $button-colors {
+  .#{$prefix}-button {
+
+    &--#{$type} {
+      outline: 0;
+      background-color: button-color($type, 'defaultBackgroundColor');
+      color: button-color($type, 'defaultColor');
+      // @if ($type == 'link') or ($type == 'subtle-link') {
+      //   text-decoration: underline;
+      //   border: 0 none;
+      // }
+
+      &:hover:not([disabled]),
+      &.hover:not([disabled]) {
+        // @if ($type == 'link') or ($type == 'subtle-link') {
+        //   text-decoration: underline;
+        //   border: 0 none;
+        // } @else {
+        //   text-decoration: none;
+        // }
+        background-color: button-color($type, 'hoverBackgroundColor');
+      }
+
+      &:disabled,
+      &.disabled {
+        color: button-color($type, 'disabledColor');
+        background-color: button-color($type, 'disabledBackgroundColor');
+      }
+
+      &:active:not([disabled]),
+      &.active:not([disabled]) {
+        color: button-color($type, 'activeColor');
+        background-color: button-color($type, 'activeBackgroundColor');
+      }
+    }
+
+    // 선택한 상태일 때 각 버튼에서 class="xu-button--selected" 를 추가
+    &--#{$type}.#{$prefix}-button--selected {
+      background-color: $n700;
+      color: $n0;
+    }
+  }
+}

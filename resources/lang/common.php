@@ -1646,7 +1646,7 @@ return [
     ],
     'extension' => [
         'ko' => '익스텐션',
-        'en' => 'extension',
+        'en' => 'Extension',
     ],
     'installNow' => [
         'ko' => '지금 설치',
@@ -2276,6 +2276,10 @@ return [
         'ko' => '[:extensions] 확장자만 업로드 가능합니다. [:uploadFileName]',
         'en' => '[:extensions] extensions only upload. [:uploadFileName]',
     ],
+    'msgImpossibleUploadingFiles' => [
+        'ko' => '[:extensions] 확장자들은 업로드 불가능합니다. [:uploadFileName]',
+        'en' => '[:extensions] extensions can not be uploaded. [:uploadFileName]',
+    ],
     'uploadPermission' => [
         'ko' => '업로드 권한',
         'en' => 'Upload permission',
@@ -2469,6 +2473,10 @@ return [
     'cannotDeleteMainEmailOfUser' => [
         'ko' => '대표이메일은 삭제할 수 없습니다.',
         'en' => 'Cannot delete main email of user'
+    ],
+    'cannotLeaveHaveSuperRatingUser' => [
+        'ko' => '최고 관리자 등급의 회원은 탈퇴할 수 없습니다.',
+        'en' => 'Users of the super rating can not be dismissed.',
     ],
     'SameAsMainEmail' => [
         'ko' => '기존 대표 이메일과 동일합니다.',
@@ -3192,8 +3200,158 @@ return [
         'ko' => '알 수 없는 버전입니다. :ver',
         'en' => 'Unknown version. :ver',
     ],
+    'imageSizeSetting' => [
+        'ko' => '이미지 크기 설정',
+        'en' => 'Image size setting'
+    ],
+    'imageSizeSettingDescription' => [
+        'ko' => '미디어 라이브러리에 이미지를 추가할 때 사용할 최대 크기(픽셀)를 설정합니다.',
+        'en' => 'Sets the maximum size (in pixels) to use when adding images to the media library.'
+    ],
+    'uploadFileSetting' => [
+        'ko' => '업로드 파일 설정',
+        'en' => 'Upload file setting'
+    ],
+    'uploadFileSettingDescription' => [
+        'ko' => '미디어 라이브러리에 파일을 추가할 때 최대 용량과 파일 종류를 설정합니다.',
+        'en' => 'Sets the maximum capacity and file type when adding files to the media library.'
+    ],
+    'thumbnail' => [
+        'ko' => '썸네일',
+        'en' => 'thumbnail'
+    ],
+    'width' => [
+        'ko' => '폭',
+        'en' => 'width'
+    ],
+    'height' => [
+        'ko' => '높이',
+        'en' => 'height'
+    ],
+    'max' => [
+        'ko' => '최대',
+        'en' => 'Max'
+    ],
+    'maxSizeImageWidth' => [
+        'ko' => '최대 크기 이미지 폭',
+        'en' => 'Max size image width'
+    ],
+    'maxSizeImageHeight' => [
+        'ko' => '최대 크기 이미지 높이',
+        'en' => 'Max size image height'
+    ],
+    'uploadMaxSize' => [
+        'ko' => '업로드 최대 용량',
+        'en' => 'Maximum Upload Capacity'
+    ],
+    'restrictFile' => [
+        'ko' => '제한 파일',
+        'en' => 'Restrict file'
+    ],
+    'restrictFileDescription' => [
+        'ko' => '업로드를 제한하는 파일의 확장자를 추가할 수 있습니다.',
+        'en' => 'You can add a file extension to restrict uploads.'
+    ],
     'unavailableUrl' => [
         'ko' => '사용할 수 없는 url 입니다.',
         'en' => 'Unavailable url.',
     ],
+    'installedTheme' => [
+        'ko' => '설치된 테마',
+        'en' => 'Installed theme'
+    ],
+    'installedThemeDescription' => [
+        'ko' => '스토어 및 직접 설치한 테마 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of themes.'
+    ],
+    'installedExtension' => [
+        'ko' => '설치된 익스텐션',
+        'en' => 'Installed extension'
+    ],
+    'installedExtensionDescription' => [
+        'ko' => '스토어 및 직접 설치한 익스텐션 목록을 관리 해보세요.',
+        'en' => 'Manage your store and your own list of extensions.'
+    ],
+    'installNewTheme' => [
+        'ko' => '새 테마 설치',
+        'en' => 'Install new theme'
+    ],
+    'installNewExtension' => [
+        'ko' => '새 익스텐션 설치',
+        'en' => 'Install new extension'
+    ],
+    'addTheme' => [
+        'ko' => '테마 추가',
+        'en' => 'Add Theme'
+    ],
+    'addThemeDescription' => [
+        'ko' => 'XE Store에 등록된 테마를 내 사이트에 추가해보세요.',
+        'en' => 'Please add the theme registered in XE Store to my site.'
+    ],
+    'addExtension' => [
+        'ko' => '익스텐션 추가',
+        'en' => 'Add Extension'
+    ],
+    'addExtensionDescription' => [
+        'ko' => 'XE Store에 등록된 익스텐션을 내 사이트에 추가해보세요',
+        'en' => 'Please add the extension registered in XE Store to my site.'
+    ],
+    'settingTheme' => [
+        'ko' => '테마 설정',
+        'en' => 'Setting theme'
+    ],
+    'settingThemeDescription' => [
+        'ko' => '사이트에서 기본으로 출력할 데스크탑/모바일용 테마를 지정해보세요.<br>
+                원하는 페이지에 원하는 테마를 각각 지정할 수 있습니다.',
+        'en' => 'Specify a theme for your desktop / mobile that will be displayed by default on your site.<br>
+                You can specify each theme you want on the page you want.'
+    ],
+    'themeEditor' => [
+        'ko' => '테마 에디터',
+        'en' => 'Theme editor'
+    ],
+    'themeEditorDescription' => [
+        'ko' => '테마 상세 편집 기능을 제공합니다.',
+        'en' => 'Provides theme edit function.'
+    ],
+    'extensionEditor' => [
+        'ko' => '익스텐션 에디터',
+        'en' => 'Extension editor'
+    ],
+    'activated' => [
+        'ko' => '활성화된',
+        'en' => 'Activated'
+    ],
+    'deactivated' => [
+        'ko' => '비활성화된',
+        'en' => 'deactivated'
+    ],
+    'creatorName' => [
+        'ko' => '창작자명',
+        'en' => 'Creator name'
+    ],
+    'keyword' => [
+        'ko' => '키워드',
+        'en' => 'Keyword'
+    ],
+    'mySiteTheme' => [
+        'ko' => '내 사이트 테마',
+        'en' => 'My site theme'
+    ],
+    'mySiteExtension' =>[
+        'ko' => '내 사이트 익스텐션',
+        'en' => 'My site extension'
+    ],
+    'buying' => [
+        'ko' => '구매하기',
+        'en' => 'Buying'
+    ],
+    'media' => [
+        'ko' => '미디어',
+        'en' => 'Media'
+    ],
+    'mediaLibrary' => [
+        'ko' => '미디어 라이브러리',
+        'en' => 'Media library'
+    ]
 ];

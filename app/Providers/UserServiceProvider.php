@@ -619,6 +619,10 @@ class UserServiceProvider extends ServiceProvider
                     ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
                 )->load();
 
+                $this->app['xe.skin']->setMobileResolver(function () {
+                    return app('request')->isMobile();
+                });
+
                 $skin = $this->app['xe.skin']->getAssigned('user/settings');
 
                 return $skin->setView('edit')->setData(compact('user', 'fieldTypes'));

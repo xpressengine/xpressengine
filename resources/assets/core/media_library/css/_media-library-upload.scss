@@ -1,0 +1,32 @@
+.media-library-upload {
+  display: none;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 64px;
+  border: 1px dashed $n80;
+  text-align: center;
+  background-color: #ebecf0;
+
+  &.active {
+    display: block;
+  }
+
+  .fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  [type=file] {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+    opacity: 0;
+    direction: ltr;
+    cursor: pointer;
+    font-size: 200px;
+  }
+}

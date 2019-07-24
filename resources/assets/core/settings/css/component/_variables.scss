@@ -1,0 +1,267 @@
+// prefix
+$prefix: 'xu' !default;
+
+// colors
+// System fonts
+$sys-font-stack: -apple-system, BlinkMacSystemFont, "San Francisco", "Roboto", "Segoe UI",  "Avenir LT Std", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", "Nanum Gothic", Dotum, 돋움, "Helvetica Neue", sans-serif;
+
+// Monospaced fonts
+$sys-font-stack-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+// colors
+// Primary color palette
+$b500: #345bd9 !default;
+$n800: #172b4d !default;
+$n0: #fff !default;
+
+// Secondary color palette
+$r500: #de3618 !default;
+$o500: #f49342 !default;
+$y500: #eec200 !default;
+$g500: #36b375 !default;
+$t500: #00b8d9 !default;
+$p500: #9c6ade !default;
+
+// Neutrals
+// 회색조를 대체하는 색상
+// Dark neutrals
+$n900: #091e42 !default;
+$n800: #172b4d !default;
+$n700: #253858 !default;
+$n600: #344563 !default;
+$n500: #42526e !default;
+
+// Mid-neutrals
+$n400: #505f79 !default;
+$n300: #5e6c84 !default;
+$n200: #6b778c !default;
+$n100: #7a869a !default;
+$n90: #8993a4 !default;
+$n80: #97a0af !default;
+$n70: #a5adba !default;
+$n60: #b3bac5 !default;
+
+// Light neutrals
+$n50: #c1c7d0 !default;
+$n40: #dfe1e6 !default;
+$n30: #ebecf0 !default;
+$n20: #f4f5f7 !default;
+$n10: #fafbfc !default;
+$n0: #fff !default;
+
+// Extended palette
+$r900: #330101 !default;
+$r700: #bf0711 !default;
+$r500: #de3618 !default;
+$r400: #ff5630 !default;
+$r300: #fead9a !default;
+$r100: #fbeae5 !default;
+
+// Oranges
+$o900: #4a1504 !default;
+$o700: #c05717 !default;
+$o500: #f49342 !default;
+$o400: #ffab00 !default;
+$o300: #ffc58b !default;
+$o100: #fcebdb !default;
+
+// Yellows
+$y900: #573b00 !default;
+$y700: #8a6116 !default;
+$y500: #eec200 !default;
+$y300: #ffea8a !default;
+$y100: #fcf1cd !default;
+
+// Greens
+$g900: #173630 !default;
+$g700: #173630 !default;
+$g500: #36b375 !default;
+$g300: #bff2cc !default;
+$g100: #e3fce5 !default;
+
+// Teals : 청록색
+$t900: #013c3f !default;
+$t700: #008da6 !default;
+$t500: #00b8d9 !default;
+$t300: #b5e7ef !default;
+$t100: #e0f5f5 !default;
+
+// Blues
+$b900: #131b40 !default;
+$b800: #1b2452 !default;
+$b700: #202e78 !default;
+$b600: #0747a6 !default;
+$b500: #345bd9 !default;
+$b400: #2684ff !default;
+$b300: #b3d4ff !default;
+$b200: #deebff !default;
+$b100: #ebf5fa !default;
+
+// Purples
+$p900: #230051 !default;
+$p700: #50248f !default;
+$p500: #9c6ade !default;
+$p300: #e3d0ff !default;
+$p100: #f6f0fd !default;
+
+$transparent: transparent !default;
+
+$button-colors: (
+  'default': (
+    'defaultBackgroundColor': $n20,
+    'defaultColor': $n400,
+    'hoverBackgroundColor': $n30,
+    'hoverColor': $n400,
+    'disabledBackgroundColor': $n20,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $b200,
+    'activeColor': $b500,
+    'focusBackgroundColor': $n20,
+    'focusColor': $n400,
+    'focusBoxShadowColor': $b400
+  ),
+  'primary': (
+    'defaultBackgroundColor': $b500,
+    'defaultColor': $n0,
+    'hoverBackgroundColor': $b400,
+    'hoverColor': $n0,
+    'disabledBackgroundColor': $n20,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $b600,
+    'activeColor': $n0,
+    'focusBackgroundColor': $b500,
+    'focusColor': $n0,
+    'focusBoxShadowColor': $b400
+  ),
+  'link': (
+    'defaultBackgroundColor': $transparent,
+    'defaultColor': $b500,
+    'hoverBackgroundColor': $transparent,
+    'hoverColor': $b400,
+    'disabledBackgroundColor': $transparent,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $transparent,
+    'activeColor': $b600,
+    'focusBackgroundColor': $transparent,
+    'focusColor': $b500,
+    'focusBoxShadowColor': $b400
+  ),
+  'subtle': (
+    'defaultBackgroundColor': $transparent,
+    'defaultColor': $n600,
+    'hoverBackgroundColor': $n30,
+    'hoverColor': $n400,
+    'disabledBackgroundColor': $transparent,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $b200,
+    'activeColor': $b500,
+    'focusBackgroundColor': $transparent,
+    'focusColor': $n600,
+    'focusBoxShadowColor': $b400
+  ),
+  'subtle-link': (
+    'defaultBackgroundColor': $transparent,
+    'defaultColor': $n200,
+    'hoverBackgroundColor': $transparent,
+    'hoverColor': $n80,
+    'disabledBackgroundColor': $transparent,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $transparent,
+    'activeColor': $n400,
+    'focusBackgroundColor': $transparent,
+    'focusColor': $n200,
+    'focusBoxShadowColor': $b400
+  ),
+  'warning': (
+    'defaultBackgroundColor': $o500,
+    'defaultColor': $n0,
+    'hoverBackgroundColor': $o400,
+    'hoverColor': $n0,
+    'disabledBackgroundColor': $n20,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $o700,
+    'activeColor': $n0,
+    'focusBackgroundColor': $o500,
+    'focusColor': $n0,
+    'focusBoxShadowColor': $b400
+  ),
+  'danger': (
+    'defaultBackgroundColor': $r500,
+    'defaultColor': $n0,
+    'hoverBackgroundColor': $r400,
+    'hoverColor': $n0,
+    'disabledBackgroundColor': $n20,
+    'disabledColor': $n70,
+    'selectedBackgroundColor': $n700,
+    'selectedColor': $n0,
+    'activeBackgroundColor': $r700,
+    'activeColor': $n0,
+    'focusBackgroundColor': $r500,
+    'focusColor': $n0,
+    'focusBoxShadowColor': $b400
+  )
+);
+
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+// $grid-breakpoints: () !default;
+// // stylelint-disable-next-line scss/dollar-variable-default
+// $grid-breakpoints: map-merge(
+//   (
+//     xs: 0,
+//     sm: 576px,
+//     md: 768px,
+//     lg: 992px,
+//     xl: 1200px
+//   ),
+//   $grid-breakpoints
+// );
+
+// @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
+// @include _assert-starts-at-zero($grid-breakpoints);
+
+
+// // Grid containers
+// //
+// // Define the maximum width of `.container` for different screen sizes.
+
+// $container-max-widths: () !default;
+// // stylelint-disable-next-line scss/dollar-variable-default
+// $container-max-widths: map-merge(
+//   (
+//     sm: 540px,
+//     md: 720px,
+//     lg: 960px,
+//     xl: 1140px
+//   ),
+//   $container-max-widths
+// );
+
+// @include _assert-ascending($container-max-widths, "$container-max-widths");
+
+
+// // Grid columns
+// //
+// // Set the number of columns and specify the width of the gutters.
+
+// $grid-columns:                12 !default;
+// $grid-gutter-width:           24px !default;
+
+// $text-color-dark: color-mask(.87);
+// $text-color-light: #FFF;
+// $text-color: $text-color-dark !default;
