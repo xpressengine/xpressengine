@@ -2,6 +2,10 @@
 {{ XeFrontend::js('/assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js') }}
 {{ XeFrontend::js('/assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js') }}
 
+@section('page_title')
+    <h2>{{xe_trans('xe::mediaLibrary')}}</h2>
+@endsection
+
 <div id="media-library"></div>
 
 <script>
