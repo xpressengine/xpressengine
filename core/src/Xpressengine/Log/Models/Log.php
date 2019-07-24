@@ -6,8 +6,8 @@
  *
  * @category    Log
  * @package     Xpressengine\Log
- * @author      XE Team (khongchi) <khongchi@xpressengine.com>
- * @copyright   2000-2014 Copyright (C) NAVER <http://www.navercorp.com>
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -19,9 +19,12 @@ use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Models\User;
 
 /**
+ * Class Log
+ *
  * @category    Log
  * @package     Xpressengine\Log
- * @author      XE Team (khongchi) <khongchi@xpressengine.com>
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */

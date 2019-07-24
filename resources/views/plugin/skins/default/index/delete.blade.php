@@ -1,3 +1,4 @@
+{{-- @deprecated since 3.0.4 use instead use manage/delete.blade.php --}}
 <form action="{{ route('settings.plugins.manage.delete') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
 
@@ -39,11 +40,3 @@
         <button type="submit" class="xe-btn xe-btn-primary" >{{ xe_trans('xe::delete') }}</button>
     </div>
 </form>
-
-
-
-
-
-
-
-

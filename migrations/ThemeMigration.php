@@ -7,8 +7,8 @@
  * @category    Migrations
  * @package     Xpressengine\Migrations
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -33,8 +33,8 @@ use Xpressengine\Support\Migration;
  * @category    Migrations
  * @package     Xpressengine\Migrations
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class ThemeMigration extends Migration
@@ -281,13 +281,18 @@ class ThemeMigration extends Migration
     public function getBlogBoardContents()
     {
         $thumbNailInfo = $this->storeImage(Plugin::path('assets/images/demo_images/blog6_thumb.jpg'), 'blog6_thumb.jpg');
-        $exampleImageInfo = $this->storeImage(Plugin::path('assets/images/demo_images/board_plugin_ex.png'), 'board_plugin_ex.png');
+        $themeImageInfo = $this->storeImage(Plugin::path('assets/images/demo_images/theme_install.png'), 'theme_install.png');
+        $extensionImageInfo = $this->storeImage(Plugin::path('assets/images/demo_images/extension_install.png'), 'extension_install.png');
         $contents[] = [
             'title' => '플러그인 관리하기',
             'slug' => '플러그인 관리하기',
-            'content' => '<img class="__xe_image" data-id="' . $exampleImageInfo['id'] . '" src="' . $exampleImageInfo['path'] .
-                '" xe-file-id="' . $exampleImageInfo['id'] . '" alt="' . $exampleImageInfo['filename'] . '" />'
-                . '<p>스토어에서 플러그인을 설치하여 사이트를 풍성하게 만들어보세요.<br/>플러그인은 <a href="'.route('settings.plugins').'" target="_blank">사이트관리 > 플러그인 > 플러그인 추가</a>에서 설정할 수 있습니다.</p>',
+            'content' => '<p>스토어에서 플러그인을 설치하여 사이트를 풍성하게 만들어보세요.<br/>' .
+                '<img class="__xe_image" data-id="' . $themeImageInfo['id'] . '" src="' . $themeImageInfo['path'] .
+                '" xe-file-id="' . $themeImageInfo['id'] . '" alt="' . $themeImageInfo['filename'] . '" />'
+                . '<br/>테마는 <a href="'.route('settings.theme.install').'" target="_blank">사이트관리 > 테마 > 테마 추가</a>에서 추가 할 수 있습니다.<br/><br/>'
+                . '<img class="__xe_image" data-id="' . $extensionImageInfo['id'] . '" src="' . $extensionImageInfo['path'] .
+                '" xe-file-id="' . $extensionImageInfo['id'] . '" alt="' . $extensionImageInfo['filename'] . '" />'
+                . '<br/>익스텐션은 <a href="'.route('settings.extension.install').'" target="_blank">사이트관리 > 익스텐션 > 익스텐션 추가</a>에서 추가 할 수 있습니다.</p>',
             '_coverId' => $thumbNailInfo['id'],
             'allow_comment' => '1',
             'use_alarm' => '1',
@@ -304,7 +309,7 @@ class ThemeMigration extends Migration
             'slug' => '테마 디자인 변경하기',
             'content' => '<img class="__xe_image" data-id="' . $exampleImageInfo['id'] . '" src="' . $exampleImageInfo['path'] .
                 '" xe-file-id="' . $exampleImageInfo['id'] . '" alt="' . $exampleImageInfo['filename'] . '" />'
-                . '<p>다른 테마가 필요하신가요? 내가 만든 테마를 적용하고 싶으신가요?<br/><a href="'.route('settings.setting.theme').'" target="_blank">사이트관리 > 설정 > 테마 기본설정</a>에서 변경할 수 있습니다.</p>',
+                . '<p>다른 테마가 필요하신가요? 내가 만든 테마를 적용하고 싶으신가요?<br/><a href="'.route('settings.edit.theme').'" target="_blank">사이트관리 > 테마 > 테마 설정</a>에서 변경할 수 있습니다.</p>',
             '_coverId' => $thumbNailInfo['id'],
             'allow_comment' => '1',
             'use_alarm' => '1',

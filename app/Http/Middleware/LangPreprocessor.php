@@ -7,18 +7,15 @@
  * @category    Middleware
  * @package     App\Http\Middleware
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
 namespace App\Http\Middleware;
 
-use Auth;
-use Illuminate\Contracts\Cookie\Factory as CookieFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
-use XeLang;
 use Closure;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Rating;
@@ -29,8 +26,8 @@ use Xpressengine\User\Rating;
  * @category    Middleware
  * @package     App\Http\Middleware
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class LangPreprocessor
@@ -82,16 +79,6 @@ class LangPreprocessor
      */
     public function handle(Request $request, Closure $next)
     {
-        // check locale at request & set locale
-        $locale = $request->get('_l');
-        if(!$locale) {
-            $locale = $request->cookie('locale') ?: $this->app['xe.translator']->getLocale();
-        }
-        $this->app->setLocale($locale);
-        $this->app['cookie']->queue(
-            $this->app[CookieFactory::class]->forever('locale', $locale, null, null, false, false)
-        );
-
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->prepare($request);
         }

@@ -211,10 +211,10 @@ class Handler extends ExceptionHandler
 
         return (new \Illuminate\Pipeline\Pipeline($this->container))
             ->send($request)
-            ->through([
+            ->through(!session()->isStarted() ? [
                 \App\Http\Middleware\EncryptCookies::class,
                 \Illuminate\Session\Middleware\StartSession::class,
-            ])
+            ] : [])
             ->then(function ($request) use ($e) {
                 return $this->toIlluminateResponse(
                     $this->isFatalError($e) || !$this->withTheme() ?

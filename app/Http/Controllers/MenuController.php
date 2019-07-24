@@ -7,8 +7,8 @@
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -39,8 +39,8 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 class MenuController extends Controller
@@ -331,27 +331,27 @@ class MenuController extends Controller
             'itemUrl'=> 'required',
             'itemTitle' => 'langRequired',
         ]);
-        
+
+        $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
+        $parentThemeMode = $request->get('parentTheme', false);
+        if ($parentThemeMode === false) {
+            $desktopTheme = $request->get('theme_desktop');
+            $mobileTheme = $request->get('theme_mobile');
+        } else {
+            $desktopTheme = null;
+            $mobileTheme = null;
+        }
+
         XeDB::beginTransaction();
-
-        $menu = XeMenu::menus()->find($menuId);
-
         try {
-            $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
-            $parentThemeMode = $request->get('parentTheme', false);
-            if ($parentThemeMode === false) {
-                $desktopTheme = $request->get('theme_desktop');
-                $mobileTheme = $request->get('theme_mobile');
-            } else {
-                $desktopTheme = null;
-                $mobileTheme = null;
-            }
+            $menu = XeMenu::menus()->find($menuId);
 
             list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
             $itemInput['parent'] = $itemInput['parent'] === $menu->getKey() ? null : $itemInput['parent'];
+
             $item = XeMenu::createItem($menu, [
                 'title' => $itemInput['itemTitle'],
-                'url' => trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"),
+                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
@@ -444,31 +444,30 @@ class MenuController extends Controller
             'itemTitle' => 'langRequired',
         ]);
 
+        $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
+
+        $item = XeMenu::items()->find($itemId);
+        $menu = $item->menu;
+        if ($menu->getKey() !== $menuId) {
+            throw new InvalidArgumentHttpException(400);
+        }
+
+        $parentThemeMode = $request->get('parentTheme', false);
+        if ($parentThemeMode === false) {
+            $desktopTheme = $request->get('theme_desktop');
+            $mobileTheme = $request->get('theme_mobile');
+        } else {
+            $desktopTheme = null;
+            $mobileTheme = null;
+        }
+
         XeDB::beginTransaction();
-
         try {
-            $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
-
-            $item = XeMenu::items()->find($itemId);
-            $menu = $item->menu;
-            if ($menu->getKey() !== $menuId) {
-                throw new InvalidArgumentHttpException(400);
-            }
-
-            $parentThemeMode = $request->get('parentTheme', false);
-            if ($parentThemeMode === false) {
-                $desktopTheme = $request->get('theme_desktop');
-                $mobileTheme = $request->get('theme_mobile');
-            } else {
-                $desktopTheme = null;
-                $mobileTheme = null;
-            }
-
             list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
 
             XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
-                'url' => trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"),
+                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
@@ -494,6 +493,26 @@ class MenuController extends Controller
         return redirect()->route('settings.menu.index')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
 
+    }
+
+    /**
+     * Determine if the given keyword is available for url
+     * 
+     * @param string $keyword url name
+     * @return string
+     */
+    protected function urlAvailable($keyword)
+    {
+        $reserved = array_merge(
+            array_values(config('xe.routing')),
+            array_values(config('xe.lang.locales'))
+        );
+
+        if (in_array($keyword, $reserved)) {
+            throw new HttpException(422, xe_trans('xe::unavailableUrl'));
+        }
+
+        return $keyword;
     }
 
     /**

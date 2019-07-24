@@ -5,17 +5,77 @@
 /* reset */
 .theme-select-list,
 .theme-select-list ul {
-  margin: 0;
+  margin: 0px;
   padding: 0;
   list-style: none;
 }
 
 .theme-select-list {
+  .theme-item {
+    margin-top: 20px;
+    border: 1px solid #e0e0e0;
+    border-top: 0 none;
+
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    > ul {
+      > li {
+        background-color: #fff;
+      }
+
+      > .theme-new-config-area {
+        text-align: right;
+
+        > button {
+          margin: 10px 10px 10px;
+        }
+      }
+    }
+
+    &.blank-theme-item {
+      display: flex;
+      align-items: center;
+      border: 1px solid #e0e0e0;
+      background-color: #fff;
+
+      .blank-theme-item__text {
+        flex: 1;
+        padding-left: 15px;
+      }
+
+      .skin-select-btn {
+        padding: 15px 10px;
+
+        .btn {
+          i {
+            display: none;
+
+            &.visible-xs {
+              font-size: 18px;
+            }
+          }
+
+          &.on {
+            border-color: transparent;
+            background-color: #6F8DFF;
+            color: #fff;
+
+            i {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .theme-desc {
     position: relative;
     min-height: 100px;
     padding: 15px 200px 15px 15px;
-    // margin-right: 20px;
     border-top: 1px solid #e4e4e4;
     background-color: #f5f6fe;
 
@@ -79,7 +139,7 @@
 
             i {
               display: inline-block;
-              margin-right: 3px;
+              // margin-right: 3px;
             }
           }
         }
@@ -118,11 +178,33 @@
         .skin-select-btn {
           .btn {
             width: 86px;
+
+            &.on {
+              i {
+                margin-right: 3px;
+              }
+            }
           }
         }
 
         strong {
           padding-right: 300px;
+        }
+      }
+    }
+
+    .theme-item {
+      &.blank-theme-item {
+        .skin-select-btn {
+          .btn {
+            width: 86px;
+  
+            &.on {
+              i {
+                margin-right: 3px;
+              }
+            }
+          }
         }
       }
     }

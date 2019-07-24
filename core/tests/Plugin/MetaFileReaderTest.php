@@ -1,8 +1,8 @@
 <?php
 /**
  * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @copyright 2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      https://xpressengine.io
  */
 
@@ -43,7 +43,7 @@ class MetaFileReaderStub extends MetaFileReader
     "board"
   ],
   "support": {
-    "email": "sungbum00@gmail.com",
+    "email": "developers@xpressengine.com",
     "issues": "http://myproject.com/issues",
     "forum": "http://myproject.com/forum",
     "wiki": "http://myproject.com/wiki",
@@ -53,7 +53,7 @@ class MetaFileReaderStub extends MetaFileReader
   "authors": [
     {
       "name": "xe",
-      "email": "sungbum00@gmail.com",
+      "email": "developers@xpressengine.com",
       "homepage": "https://xpressengine.io",
       "role": "Developer"
     }
