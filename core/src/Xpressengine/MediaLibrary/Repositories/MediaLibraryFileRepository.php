@@ -1,10 +1,33 @@
 <?php
+/**
+ * MediaLibraryFileRepository.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
 
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
+/**
+ * Class MediaLibraryFileRepository
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryFileRepository
 {
     use EloquentRepositoryTrait {
@@ -17,7 +40,9 @@ class MediaLibraryFileRepository
     const ORDER_TYPE_TITLE_ASC = 3;
 
     /**
-     * @param array $attributes
+     * @param array $attributes items attribute
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function getItems($attributes)
     {
@@ -30,6 +55,11 @@ class MediaLibraryFileRepository
         return $items;
     }
 
+    /**
+     * @param array $attribute new item attribute
+     *
+     * @return Model
+     */
     public function storeItem($attribute)
     {
         $fileItem = $this->createModel();
@@ -45,6 +75,12 @@ class MediaLibraryFileRepository
         return $fileItem;
     }
 
+    /**
+     * @param Model $item target item
+     * @param array $data data
+     *
+     * @return Model
+     */
     public function update(Model $item, array $data = [])
     {
         $this->traitUpdate($item, $data);
@@ -58,6 +94,11 @@ class MediaLibraryFileRepository
         return $item;
     }
 
+    /**
+     * @param Model $fileItem target item
+     *
+     * @return string
+     */
     public function getGenerateTitle($fileItem)
     {
         if ($this->query()->where(
@@ -78,6 +119,12 @@ class MediaLibraryFileRepository
         return $this->attachTitleIncrement($fileItem->title, $increment);
     }
 
+    /**
+     * @param Model $fileItem  item
+     * @param int   $increment increment count
+     *
+     * @return bool
+     */
     private function checkExistTitle($fileItem, $increment)
     {
         return $this->query()->where(
@@ -89,6 +136,12 @@ class MediaLibraryFileRepository
         )->exists();
     }
 
+    /**
+     * @param string $title     title
+     * @param int    $increment increment count
+     *
+     * @return string
+     */
     private function attachTitleIncrement($title, $increment)
     {
         if ($increment > 0) {
@@ -98,6 +151,12 @@ class MediaLibraryFileRepository
         return $title;
     }
 
+    /**
+     * @param Model $query      model
+     * @param array $attributes attribute
+     *
+     * @return mixed
+     */
     protected function makeWhere($query, $attributes)
     {
         if (isset($attributes['folder_id']) == true) {
@@ -140,6 +199,12 @@ class MediaLibraryFileRepository
         return $query;
     }
 
+    /**
+     * @param Model $query      model
+     * @param array $attributes attribute
+     *
+     * @return mixed
+     */
     protected function makeOrder($query, $attributes)
     {
         $orderType = self::ORDER_TYPE_UPDATED_DESC;
@@ -164,6 +229,12 @@ class MediaLibraryFileRepository
         return $query;
     }
 
+    /**
+     * @param Model $query      model
+     * @param array $attributes attribute
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     protected function getPaginate($query, $attributes)
     {
         $perPageCount = 50;
@@ -176,6 +247,11 @@ class MediaLibraryFileRepository
         return $items;
     }
 
+    /**
+     * @param Model $fileItem file item
+     *
+     * @return void
+     */
     public function setCommonFileVisible($fileItem)
     {
         if ($fileItem->user != null) {
@@ -196,6 +272,12 @@ class MediaLibraryFileRepository
         }
     }
 
+    /**
+     * @param Model $item item
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function delete(Model $item)
     {
         \XeDB::beginTransaction();

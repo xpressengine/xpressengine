@@ -1,4 +1,16 @@
 <?php
+/**
+ * MediaLibraryHandler.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
 
 namespace Xpressengine\MediaLibrary;
 
@@ -16,6 +28,16 @@ use XeStorage;
 use XeMedia;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
+/**
+ * Class MediaLibraryHandler
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryHandler
 {
     use NodePositionTrait;
@@ -26,12 +48,21 @@ class MediaLibraryHandler
     /** @var MediaLibraryFolderRepository $folders */
     protected $folders;
 
+    /**
+     * MediaLibraryHandler constructor.
+     */
     public function __construct()
     {
         $this->files = app('xe.media_library.files');
         $this->folders = app('xe.media_library.folders');
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \Exception
+     */
     public function createFolder(Request $request)
     {
         XeDB::beginTransaction();
@@ -58,6 +89,13 @@ class MediaLibraryHandler
         return $folderItem;
     }
 
+    /**
+     * @param Request $request  request
+     * @param string  $folderId folder id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @throws \Exception
+     */
     public function moveFolder(Request $request, $folderId)
     {
         XeDB::beginTransaction();
@@ -89,6 +127,12 @@ class MediaLibraryHandler
         return $newParentFolderItem;
     }
 
+    /**
+     * @param Request $request  request
+     * @param string  $folderId folder id
+     *
+     * @return void
+     */
     public function updateFolder(Request $request, $folderId)
     {
         $folderItem = $this->getFolderItem($folderId);
@@ -103,6 +147,12 @@ class MediaLibraryHandler
         $this->folders->update($folderItem, $attribute);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function dropItems(Request $request)
     {
         $targetIds = $request->get('target_ids', []);
@@ -119,6 +169,12 @@ class MediaLibraryHandler
         }
     }
 
+    /**
+     * @param string $fileId file id
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected function dropFile($fileId)
     {
         $fileItem = $this->files->query()->find($fileId);
@@ -129,6 +185,12 @@ class MediaLibraryHandler
         $this->files->delete($fileItem);
     }
 
+    /**
+     * @param string $folderId folder id
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected function dropFolder($folderId)
     {
         XeDB::beginTransaction();
@@ -164,6 +226,11 @@ class MediaLibraryHandler
         XeDB::commit();
     }
 
+    /**
+     * @param string $folderId folder id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
     public function getFolderItem($folderId)
     {
         if ($folderId != '') {
@@ -179,6 +246,12 @@ class MediaLibraryHandler
         return $folderItem;
     }
 
+    /**
+     * @param MediaLibraryFolder $folderItem folder item
+     * @param Request            $request    request
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getFolderList(MediaLibraryFolder $folderItem, Request $request)
     {
         if ($request->get('keyword', '') == '') {
@@ -194,6 +267,11 @@ class MediaLibraryHandler
         return $folderList;
     }
 
+    /**
+     * @param MediaLibraryFolder $parentFolderItem parent folder item
+     *
+     * @return int
+     */
     public function getChildHasFileCount($parentFolderItem)
     {
         $count = 0;
@@ -205,6 +283,11 @@ class MediaLibraryHandler
         return $count;
     }
 
+    /**
+     * @param MediaLibraryFolder $folderItem target folder item
+     *
+     * @return array
+     */
     public function getFolderPath(MediaLibraryFolder $folderItem)
     {
         $paths = [];
@@ -218,6 +301,12 @@ class MediaLibraryHandler
         return $paths;
     }
 
+    /**
+     * @param MediaLibraryFolder $folderItem folder item
+     * @param Request            $request    request
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function getFileList(MediaLibraryFolder $folderItem, Request $request)
     {
         $attributes = $request->all();
@@ -247,6 +336,11 @@ class MediaLibraryHandler
         return $files;
     }
 
+    /**
+     * @param string $fileId file id
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function getFileItem($fileId)
     {
         $fileItem = $this->files->query()->find($fileId);
@@ -259,6 +353,12 @@ class MediaLibraryHandler
         return $fileItem;
     }
 
+    /**
+     * @param Request $request request
+     * @param string  $fileId  file id
+     *
+     * @return void
+     */
     public function updateFile(Request $request, $fileId)
     {
         $fileItem = $this->getFileItem($fileId);
@@ -267,6 +367,12 @@ class MediaLibraryHandler
         $this->files->update($fileItem, $attribute);
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \Exception
+     */
     public function uploadFile(Request $request)
     {
         XeDB::beginTransaction();
@@ -342,6 +448,12 @@ class MediaLibraryHandler
         return $fileItem;
     }
 
+    /**
+     * @param Request $request request
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function moveFile(Request $request)
     {
         $targetFolder = $this->getFolderItem($request->get('folder_id', ''));

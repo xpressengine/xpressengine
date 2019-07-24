@@ -1,4 +1,16 @@
 <?php
+/**
+ * MediaLibraryProvider.php
+ *
+ * PHP version 7
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 
 namespace App\Providers;
 
@@ -10,6 +22,16 @@ use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFileRepository;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
 
+/**
+ * Class MediaLibraryProvider
+ *
+ * @category    MediaLibrary
+ * @package     Xpressengine\MediaLibrary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright (C) XEHub. <https://xehub.io>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class MediaLibraryProvider extends ServiceProvider
 {
     /**
@@ -20,6 +42,8 @@ class MediaLibraryProvider extends ServiceProvider
     public function boot()
     {
         $this->setModels();
+
+        app('xe.media_library.configHandler')->setThumbnailTypes();
     }
 
     /**
@@ -32,10 +56,13 @@ class MediaLibraryProvider extends ServiceProvider
         $this->bindClasses();
 
         $this->registerRepositories();
-
-        app('xe.media_library.configHandler')->setThumbnailTypes();
     }
 
+    /**
+     * bind media library classes
+     *
+     * @return void
+     */
     private function bindClasses()
     {
         $this->app->singleton(MediaLibraryHandler::class, function () {
@@ -49,12 +76,22 @@ class MediaLibraryProvider extends ServiceProvider
         $this->app->alias(MediaLibraryConfigHandler::class, 'xe.media_library.configHandler');
     }
 
+    /**
+     * set media library models
+     *
+     * @return void
+     */
     private function setModels()
     {
         MediaLibraryFileRepository::setModel(MediaLibraryFile::class);
         MediaLibraryFolderRepository::setModel(MediaLibraryFolder::class);
     }
 
+    /**
+     * register media library repositories
+     *
+     * @return void
+     */
     private function registerRepositories()
     {
         $this->app->singleton(MediaLibraryFileRepository::class, function () {
