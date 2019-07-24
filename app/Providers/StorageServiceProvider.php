@@ -19,6 +19,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\FileRepository;
 use Xpressengine\Storage\FilesystemHandler;
+use Xpressengine\Storage\MimeFilter;
 use Xpressengine\Storage\RoundRobinDistributor;
 use Xpressengine\Storage\Storage;
 use Xpressengine\Storage\TempFileCreator;
@@ -70,12 +71,13 @@ class StorageServiceProvider extends ServiceProvider
 
             return new $proxyClass(
                 new FileRepository,
-                new FilesystemHandler($app['filesystem'], $distributor),
+                new FilesystemHandler($app['filesystem']),
                 $app['auth']->guard(),
                 $app['xe.keygen'],
                 $distributor,
                 $app['xe.storage.temp'],
-                $app[ResponseFactory::class]
+                $app[ResponseFactory::class],
+                new MimeFilter($app['config']['filesystems'])
             );
         });
         $this->app->alias(Storage::class, 'xe.storage');

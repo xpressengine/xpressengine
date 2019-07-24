@@ -85,6 +85,13 @@ class Storage
     protected $response;
 
     /**
+     * MimeFilter instance
+     *
+     * @var MimeFilter
+     */
+    protected $mimeFilter;
+
+    /**
      * Custom extension to mime type map
      *
      * @var array
@@ -101,6 +108,7 @@ class Storage
      * @param Distributor       $distributor distributor instance
      * @param TempFileCreator   $tempFiles   temporary file creator instance
      * @param ResponseFactory   $response    ResponseFactory instance
+     * @param MimeFilter        $mimeFilter  MimeFilter instance
      */
     public function __construct(
         FileRepository $repo,
@@ -109,7 +117,8 @@ class Storage
         Keygen $keygen,
         Distributor $distributor,
         TempFileCreator $tempFiles,
-        ResponseFactory $response
+        ResponseFactory $response,
+        MimeFilter $mimeFilter
     ) {
         $this->repo = $repo;
         $this->files = $files;
@@ -118,6 +127,7 @@ class Storage
         $this->distributor = $distributor;
         $this->tempFiles = $tempFiles;
         $this->response = $response;
+        $this->mimeFilter = $mimeFilter;
     }
 
     /**
@@ -186,9 +196,7 @@ class Storage
             ]);
         }
 
-        $ext = strtolower($uploaded->getClientOriginalExtension());
-        $map = static::getExtensionToMimeTypeMap()[$ext] ?? [];
-        if (!in_array($uploaded->getMimeType(), (array)$map)) {
+        if (!$this->mimeFilter->isValid($uploaded)) {
             throw new InvalidFileException([
                 'name' => $uploaded->getClientOriginalName(),
                 'detail' => 'The extension seems to be wrong.'

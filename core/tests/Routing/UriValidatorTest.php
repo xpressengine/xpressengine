@@ -92,7 +92,7 @@ class UriValidatorTest extends TestCase
         $route->shouldReceive('getRegex')->andReturn("#^/home$#s");
 
         $request = $this->request;
-        $request->shouldReceive('path')->andReturn('home');
+        $request->shouldReceive('decodedPath')->andReturn('home');
         $request->shouldReceive('segment')->with(1)->andReturn('home');
         $route->shouldReceive('uri')->andReturn('{instanceGroup}');
 
