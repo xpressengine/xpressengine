@@ -42,6 +42,8 @@ class MediaLibraryProvider extends ServiceProvider
     public function boot()
     {
         $this->setModels();
+
+        app('xe.media_library.configHandler')->setThumbnailTypes();
     }
 
     /**
@@ -54,8 +56,6 @@ class MediaLibraryProvider extends ServiceProvider
         $this->bindClasses();
 
         $this->registerRepositories();
-
-        app('xe.media_library.configHandler')->setThumbnailTypes();
     }
 
     /**
