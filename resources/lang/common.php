@@ -2801,7 +2801,11 @@ return [
         'en' => 'Delete to sub category',
     ],
     'needSiteTokenToViewListOfPurchased' => [
-        'ko' => '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. :link',
+        'ko' => '스토어에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. :link',
+        'en' => 'you need site token to view the list of purchased. :link',
+    ],
+    'needSiteTokenToViewListOfPurchasedStore' => [
+        'ko' => '스토어에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. :link',
         'en' => 'you need site token to view the list of purchased. :link',
     ],
     'moveToSetting' => [
