@@ -3247,7 +3247,7 @@ return [
     'restrictFileDescription' => [
         'ko' => '업로드를 제한하는 파일의 확장자를 추가할 수 있습니다.',
         'en' => 'You can add a file extension to restrict uploads.'
-    ]
+    ],
     'unavailableUrl' => [
         'ko' => '사용할 수 없는 url 입니다.',
         'en' => 'Unavailable url.',
