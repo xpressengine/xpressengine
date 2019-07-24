@@ -2474,6 +2474,10 @@ return [
         'ko' => '대표이메일은 삭제할 수 없습니다.',
         'en' => 'Cannot delete main email of user'
     ],
+    'cannotLeaveHaveSuperRatingUser' => [
+        'ko' => '최고 관리자 등급의 회원은 탈퇴할 수 없습니다.',
+        'en' => 'Users of the super rating can not be dismissed.',
+    ],
     'SameAsMainEmail' => [
         'ko' => '기존 대표 이메일과 동일합니다.',
         'en' => 'Same as main email.',
