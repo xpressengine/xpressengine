@@ -3377,5 +3377,9 @@ return [
     'dependenciesUpdate' => [
         'ko' => '의존성 갱신',
         'en' => 'Update Dependencies'
+    ],
+    'selfInstall' => [
+        'ko' => '직접 설치한',
+        'en' => 'Self installed'
     ]
 ];

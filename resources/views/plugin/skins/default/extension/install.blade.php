@@ -67,7 +67,7 @@
                 <ul class="admin-tab-list">
                     <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::noCharge') }} <span class="xe-badge xe-primary">{{$storeExtensionCounts->free}}</span></a></li>
                     <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::charge') }} <span class="xe-badge xe-primary">{{$storeExtensionCounts->charge}}</span></a></li>
-                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::mySiteExtension') }} <span class="xe-badge xe-primary">{{$storeExtensionCounts->mySite}}</span></a></li>
+                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::selfInstall') }} {{xe_trans('xe::extension')}}<span class="xe-badge xe-primary">{{$storeExtensionCounts->mySite}}</span></a></li>
                 </ul>
                 <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>
