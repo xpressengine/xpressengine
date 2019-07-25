@@ -115,7 +115,11 @@ class ExtensionSettingsController extends Controller
         );
         $storeExtensions = $storeExtensionInformation->items;
         $storeExtensionCounts = $storeExtensionInformation->counts;
-        $extensionCategories = $pluginProvider->getPluginCategories('extension');
+        $extensionCategoriesResponse = $pluginProvider->getPluginCategories('extension');
+        $extensionCategories = [];
+        foreach ($extensionCategoriesResponse as $value => $extensionCategory) {
+            $extensionCategories[$value] = $extensionCategory;
+        }
 
         $items = new Collection($storeExtensions->data);
 

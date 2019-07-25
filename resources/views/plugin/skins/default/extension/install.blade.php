@@ -77,7 +77,13 @@
                 <div class="pull-right">
                     <div class="dropdown" style="display: inline-block">
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <span class="__xe_text">{{xe_trans('xe::category')}}</span> <span class="caret"></span>
+                            <span class="__xe_text">
+                                @if (Request::get('category', '') != '')
+                                    {{$extensionCategories[Request::get('category')]}}
+                                @else
+                                    {{xe_trans('xe::category')}}
+                                @endif
+                            </span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
                             <li><a href="#" class="__plugin-install-link" data-type="category" data-value="">{{xe_trans('xe::all')}}</a></li>
@@ -88,7 +94,13 @@
                     </div>
                     <div class="dropdown" style="display: inline-block">
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <span class="__xe_text">{{xe_trans('xe::order')}}</span> <span class="caret"></span>
+                            <span class="__xe_text">
+                                @if (Request::get('order_key', '') != '')
+                                    {{$orderTypes[Request::get('order_key')]['name']}}
+                                @else
+                                    {{xe_trans('xe::order')}}
+                                @endif
+                            </span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
                             @foreach ($orderTypes as $idx => $value)
