@@ -3357,5 +3357,29 @@ return [
     'mediaLibrary' => [
         'ko' => '미디어 라이브러리',
         'en' => 'Media library'
+    ],
+    'noCharge' => [
+        'ko' => '무료',
+        'en' => 'free'
+    ],
+    'charge' => [
+        'ko' => '유료',
+        'en' => 'a charge'
+    ],
+    'noExistExtension' => [
+        'ko' => '아직 등록된 익스텐션이 없습니다!',
+        'en' => 'No extensions are registered yet!'
+    ],
+    'noExistTheme' => [
+        'ko' => '아직 등록된 테마가 없습니다!',
+        'en' => 'No themes are registered yet!'
+    ],
+    'dependenciesUpdate' => [
+        'ko' => '의존성 갱신',
+        'en' => 'Update Dependencies'
+    ],
+    'selfInstall' => [
+        'ko' => '직접 설치한',
+        'en' => 'Self installed'
     ]
 ];

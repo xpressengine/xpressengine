@@ -30,9 +30,9 @@
                             </ul>
                         </div>
                         <div class="search-input-group">
-                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                            <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="q" value="">
                             <button class="btn-link">
-                                <i class="xi-close"></i><span class="sr-only">검색</span>
+                                <i class="xi-close"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                             </button>
                         </div>
                     </form>
@@ -86,9 +86,9 @@
                             </ul>
                         </div>
                         <div class="search-input-group">
-                            <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="q" value="">
+                            <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="q" value="">
                             <button class="btn-link">
-                                <i class="xi-close"></i><span class="sr-only">검색</span>
+                                <i class="xi-close"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                             </button>
                         </div>
                     </form>

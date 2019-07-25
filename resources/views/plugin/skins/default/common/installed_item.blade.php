@@ -75,7 +75,7 @@
             <form id="update" method="POST" action="{{ route('settings.plugins.renew', [$item->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
                 {{ csrf_field() }}
                 {{ method_field('PUT') }}
-                <button type="submit" class="xe-btn xe-btn-warning-outline">의존성 갱신</button>
+                <button type="submit" class="xe-btn xe-btn-warning-outline">{{xe_trans('xe::dependenciesUpdate')}}</button>
             </form>
         @endif
     </div>

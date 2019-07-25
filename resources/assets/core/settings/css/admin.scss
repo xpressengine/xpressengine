@@ -164,10 +164,18 @@ p.text {
 .admin-button--complete {
   background-color: #deebff;
   color: #505f79;
+  text-decoration: none;
 
   &:hover, &:hover:not([disabled]) {
     background-color: #deebff;
     color: #505f79;
+    text-decoration: none;
+  }
+
+  &:focus, &:focus:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+    text-decoration: none;
   }
 
   &:active, &:active:not([disabled]) {
@@ -180,9 +188,18 @@ p.text {
 .admin-button--active {
   background-color: #505f79;
   color: #fff;
+  text-decoration: none;
 
   &:hover, &:hover:not([disabled]) {
     background-color: #505f79;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &:focus, &:focus:not([disabled]) {
+    background-color: #505f79;
+    color: #fff;
+    text-decoration: none;
   }
 
   &:active, &:active:not([disabled]) {
@@ -598,7 +615,8 @@ aside {
   h2 {
     font-size: 26px;
     line-height: 31px;
-    color: #172b4d;
+    // color: #172b4d;
+    color: #344563;
 
     a {
       color: #2c2e37;
@@ -2445,16 +2463,20 @@ aside {
 @media (min-width: 768px) {
   /* tablet */
   .title-area {
-    padding-top: 80px;
-    padding-bottom: 40px;
+    // padding-top: 80px;
+    // padding-bottom: 40px;
+    padding-top: 36px;
+    padding-bottom: 28px;
 
     h2 {
-      font-size: 36px;
+      // font-size: 36px;
+      font-size: 28px;
       line-height: 36px;
 
       + small {
-        margin-top: 24px;
-        font-size: 16px;
+        // margin-top: 24px;
+        // font-size: 16px;
+        margin-top: 6px;
         line-height: 24px;
       }
     }
@@ -2833,6 +2855,7 @@ aside {
   .ct {
     .container-fluid {
       padding-left: 40px;
+      padding-right: 40px;
     }
   }
 

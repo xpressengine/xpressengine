@@ -93,6 +93,15 @@
         //   text-decoration: none;
         // }
         background-color: button-color($type, 'hoverBackgroundColor');
+        text-decoration: none;
+        color: button-color($type, 'defaultColor');
+      }
+
+      &:focus:not([disabled]),
+      &.focus:not([disabled]) {
+        background-color: button-color($type, 'hoverBackgroundColor');
+        text-decoration: none;
+        color: button-color($type, 'defaultColor');
       }
 
       &:disabled,

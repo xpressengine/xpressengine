@@ -120,7 +120,11 @@ class ThemeSettingsController extends Controller
         );
         $storeThemes = $storeThemeInformation->items;
         $storeThemeCounts = $storeThemeInformation->counts;
-        $themeCategories = $pluginProvider->getPluginCategories('theme');
+        $themeCategoriesResponse = $pluginProvider->getPluginCategories('theme');
+        $themeCategories = [];
+        foreach ($themeCategoriesResponse as $value => $themeCategory) {
+            $themeCategories[$value] = $themeCategory;
+        }
 
         $items = new Collection($storeThemes->data);
 

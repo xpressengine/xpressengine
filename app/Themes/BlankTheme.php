@@ -63,7 +63,7 @@ class BlankTheme extends AbstractTheme
      */
     public static function getTitle()
     {
-        return '테마 사용 안함';
+        return xe_trans('xe::theme') . ' ' . xe_trans('xe::disuse');
     }
 
     /**

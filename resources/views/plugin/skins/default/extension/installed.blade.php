@@ -58,22 +58,22 @@
                                             @if (Request::has('component'))
                                                 {{$componentTypes[Request::get('component')]}}
                                             @else
-                                                지원 컴포넌트
+                                                {{xe_trans('xe::supportingComponents')}}
                                             @endif
                                         </span>
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" data-value="">전체</a></li>
+                                        <li><a href="#" data-value="">{{xe_trans('xe::all')}}</a></li>
                                         @foreach ($componentTypes as $key => $component)
                                             <li @if (Request::get('component') == $key) class="active" @endif><a href="#" data-value="{{$key}}">{{$component}}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>
                                 <div class="search-input-group">
-                                    <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="query" value="{{Request::get('query')}}">
+                                    <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="query" value="{{Request::get('query')}}">
                                     <button class="btn-link">
-                                        <i class="xi-close"></i><span class="sr-only">검색</span>
+                                        <i class="xi-close"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
                             </div>

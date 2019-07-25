@@ -273,7 +273,7 @@ class PluginProvider
             $options
         );
 
-        if ($res->getStatusCode() != 200) {
+        if ($res->getStatusCode() == Response::HTTP_BAD_REQUEST) {
             throw new HttpException(403, xe_trans('xe::needSiteTokenToViewListOfPurchasedStore', [
                 'link' => sprintf('<a href="%s">%s</a>', route('settings.setting.edit'), xe_trans('xe::moveToSetting'))
             ]));
