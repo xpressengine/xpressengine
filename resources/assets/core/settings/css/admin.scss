@@ -164,10 +164,18 @@ p.text {
 .admin-button--complete {
   background-color: #deebff;
   color: #505f79;
+  text-decoration: none;
 
   &:hover, &:hover:not([disabled]) {
     background-color: #deebff;
     color: #505f79;
+    text-decoration: none;
+  }
+
+  &:focus, &:focus:not([disabled]) {
+    background-color: #deebff;
+    color: #505f79;
+    text-decoration: none;
   }
 
   &:active, &:active:not([disabled]) {
@@ -180,9 +188,18 @@ p.text {
 .admin-button--active {
   background-color: #505f79;
   color: #fff;
+  text-decoration: none;
 
   &:hover, &:hover:not([disabled]) {
     background-color: #505f79;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &:focus, &:focus:not([disabled]) {
+    background-color: #505f79;
+    color: #fff;
+    text-decoration: none;
   }
 
   &:active, &:active:not([disabled]) {
