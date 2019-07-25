@@ -43,7 +43,7 @@
                             </ul>
                         </div>
                         <div class="search-input-group">
-                            <input type="text" class="form-control" placeholder="검색어를 입력하세요"
+                            <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}"
                                @if (Request::has('query'))
                                     value="{{Request::get('query')}}" name="query"
                                @elseif (Request::has('authors'))
@@ -52,12 +52,12 @@
                                    value="{{Request::get('tags')}}" name="tags"
                                @endif>
                             <button class="btn-link">
-                                <i class="xi-search"></i><span class="sr-only">검색</span>
+                                <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                             </button>
                         </div>
                     </div>
                     @if (Request::get('sale_type') == 'my_site')
-                        <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" data-toggle="xe-page-modal" class="xu-button xu-button--default admin-button--active">테마 업로드</a>
+                        <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" data-toggle="xe-page-modal" class="xu-button xu-button--default admin-button--active">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</a>
                     @endif
                 </div>
             </div>
@@ -65,8 +65,8 @@
             <div class="panel admin-tab">
                 <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
                 <ul class="admin-tab-list">
-                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::무료') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->free}}</span></a></li>
-                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::유료') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->charge}}</span></a></li>
+                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::noCharge') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->free}}</span></a></li>
+                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::charge') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->charge}}</span></a></li>
                     <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::mySiteTheme') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->mySite}}</span></a></li>
                 </ul>
                 <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
@@ -77,10 +77,10 @@
                 <div class="pull-right">
                     <div class="dropdown" style="display: inline-block">
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <span class="__xe_text">카테고리</span> <span class="caret"></span>
+                            <span class="__xe_text">{{xe_trans('xe::category')}}</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
-                            <li><a href="#" class="__plugin-install-link" data-type="category" data-value="">전체</a></li>
+                            <li><a href="#" class="__plugin-install-link" data-type="category" data-value="">{{xe_trans('xe::all')}}</a></li>
                             @foreach ($themeCategories as $value => $category)
                                 <li @if (Request::get('category') == $value) class="active" @endif><a href="#" class="__plugin-install-link" data-type="category" data-value="{{$value}}">{{$category}}</a></li>
                             @endforeach
@@ -89,7 +89,7 @@
                     <div class="dropdown" style="display: inline-block">
                         <!-- [D] 버튼 보더와 배경색 제거를 위해 class="btn-default--transparent" 으로 버튼 스타일 추가 -->
                         <button type="button" class="btn btn-default--transparent dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <span class="__xe_text">정렬</span> <span class="caret"></span>
+                            <span class="__xe_text">{{xe_trans('xe::order')}}</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" style="overflow: auto; height: 200px;">
                             @foreach ($orderTypes as $idx => $value)
@@ -109,7 +109,7 @@
             </ul>
         @else
             @php
-                $message = '아직 등록된 테마가 없습니다!';
+                $message = xe_trans('xe::noExistTheme');
             @endphp
             @include($_skin::view('empty'))
         @endif

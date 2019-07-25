@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="pull-right">
-                        <span class="input-group-label">테마선택</span>
+                        <span class="input-group-label">{{xe_trans('xe::theme')}} {{xe_trans('xe::select')}}</span>
                         <div class="input-group search-group">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -75,7 +75,7 @@
                 <textarea class="form-control" rows="30" name="content" @if(request('view_origin') === 'Y') readonly="readonly" @endif>{{ old('content', $editFile['content']) }}</textarea>
 
                 <div class="pull-right" style="margin-top:10px;">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">위젯 추가</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">{{xe_trans('xe::addWidget')}}</button>
                     <button type="submit" class="btn btn-default">{{ xe_trans('xe::applyModified') }}</button>
                 </div>
             </form>

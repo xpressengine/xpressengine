@@ -55,9 +55,9 @@
                                     </ul>
                                 </div>
                                 <div class="search-input-group">
-                                    <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="query" value="{{ \Request::get('query') }}">
+                                    <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="query" value="{{ \Request::get('query') }}">
                                     <button class="btn-link">
-                                        <span class="sr-only">검색</span>
+                                        <span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
                             </div>
