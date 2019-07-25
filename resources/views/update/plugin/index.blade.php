@@ -4,12 +4,12 @@
     <div class="panel-body">
         <div>
             <p class="help-block">업데이트할 익스텐션이 없습니다.</p>
-            <a href="{{ route('settings.plugins.install.index') }}" >새 익스텐션 설치</a>
+            <a href="{{ route('settings.extension.install') }}" >새 익스텐션 설치</a>
         </div>
 
         <div>
             <p class="help-block">업데이트할 테마가 없습니다.</p>
-            <a href="{{ route('settings.plugins.install.index') }}" >새 테마 설치</a>
+            <a href="{{ route('settings.theme.install') }}" >새 테마 설치</a>
         </div>
     </div>
 </div>
