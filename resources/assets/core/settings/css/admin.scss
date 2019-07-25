@@ -615,7 +615,8 @@ aside {
   h2 {
     font-size: 26px;
     line-height: 31px;
-    color: #172b4d;
+    // color: #172b4d;
+    color: #344563;
 
     a {
       color: #2c2e37;
@@ -2466,12 +2467,13 @@ aside {
     padding-bottom: 40px;
 
     h2 {
-      font-size: 36px;
+      // font-size: 36px;
+      font-size: 28px;
       line-height: 36px;
 
       + small {
         margin-top: 24px;
-        font-size: 16px;
+        // font-size: 16px;
         line-height: 24px;
       }
     }
