@@ -2463,8 +2463,10 @@ aside {
 @media (min-width: 768px) {
   /* tablet */
   .title-area {
-    padding-top: 80px;
-    padding-bottom: 40px;
+    // padding-top: 80px;
+    // padding-bottom: 40px;
+    padding-top: 36px;
+    padding-bottom: 28px;
 
     h2 {
       // font-size: 36px;
@@ -2472,8 +2474,9 @@ aside {
       line-height: 36px;
 
       + small {
-        margin-top: 24px;
+        // margin-top: 24px;
         // font-size: 16px;
+        margin-top: 6px;
         line-height: 24px;
       }
     }
