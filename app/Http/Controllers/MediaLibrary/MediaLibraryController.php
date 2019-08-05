@@ -17,6 +17,7 @@ namespace App\Http\Controllers\MediaLibrary;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use XePresenter;
+use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 
@@ -186,5 +187,20 @@ class MediaLibraryController extends Controller
         $file = $this->handler->uploadFile($request);
 
         return XePresenter::makeApi([$file]);
+    }
+
+    /**
+     * @param string $fileId fileId
+     *
+     * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function download($fileId)
+    {
+        $mediaLibraryFile = $this->handler->getFileItem($fileId);
+        if ($mediaLibraryFile == null || $mediaLibraryFile->file == null) {
+            throw new NotFoundFileException;
+        }
+
+        return \XeStorage::download($mediaLibraryFile->file);
     }
 }

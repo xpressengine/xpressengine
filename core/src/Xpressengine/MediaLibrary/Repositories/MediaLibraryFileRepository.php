@@ -268,7 +268,8 @@ class MediaLibraryFileRepository
                 $fileItem->file->setAttribute('height', $media['meta']['height']);
             }
 
-            $fileItem->file->addVisible(['path', 'filename', 'url', 'width', 'height']);
+            $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
+            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'width', 'height']);
         }
     }
 
