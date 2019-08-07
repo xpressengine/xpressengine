@@ -183,7 +183,8 @@ class UserMigration extends Migration
     {
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
-            ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com", "joinable":true}'],
+            ['name' => 'user.common', 'vars' => '{"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","useCaptcha":false,"joinable":true}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -208,7 +209,7 @@ class UserMigration extends Migration
                 'description' => 'sub user group'
             ]
         );
-        $joinConfig = app('xe.config')->get('user.common');
+        $joinConfig = app('xe.config')->get('user.register');
 
         $joinConfig->set('joinGroup', $joinGroup->id);
         app('xe.config')->modify($joinConfig);
@@ -230,6 +231,10 @@ class UserMigration extends Migration
             return false;
         }
 
+        if ($this->checkExistRegisterConfig() == false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -244,6 +249,10 @@ class UserMigration extends Migration
     {
         if ($this->checkNeedMergeConfig() == true) {
             $this->mergeConfig();
+        }
+
+        if ($this->checkExistRegisterConfig() == false) {
+            $this->divideRegisterConfig();
         }
     }
 
@@ -276,5 +285,39 @@ class UserMigration extends Migration
 
         app('xe.config')->put('user.common', $commonConfigAttribute);
         app('xe.config')->remove($joinConfig);
+    }
+
+    /**
+     * check exist register config
+     *
+     * @return bool
+     */
+    private function checkExistRegisterConfig()
+    {
+        return app('xe.config')->get('user.register') !== null ? true : false;
+    }
+
+    /**
+     * divide from user.common to user.register
+     *
+     * @return void
+     */
+    private function divideRegisterConfig()
+    {
+        $commonConfig = app('xe.config')->get('user.common');
+        $originalCommonConfigAttribute = $commonConfig->getPureAll();
+
+        $commonConfigAttribute = ['webmasterName', 'webmasterEmail'];
+        $joinConfigAttribute = array_diff_key($originalCommonConfigAttribute, array_flip($commonConfigAttribute));
+
+        $newCommonConfigAttribute = [];
+        foreach ($commonConfigAttribute as $config) {
+            if (isset($originalCommonConfigAttribute[$config]) == true) {
+                $newCommonConfigAttribute[$config] = $originalCommonConfigAttribute[$config];
+            }
+        }
+
+        app('xe.config')->put('user.common', $newCommonConfigAttribute);
+        app('xe.config')->set('user.register', $joinConfigAttribute);
     }
 }

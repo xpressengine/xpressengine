@@ -55,7 +55,7 @@ class GroupController extends Controller
     {
         $groups = $this->groups->with('userCountRelation')->orderBy('created_at')->get();
 
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
         $joinGroup = $config->get('joinGroup');
 
         return XePresenter::make('user.settings.group.index', compact('groups', 'joinGroup'));
@@ -152,7 +152,7 @@ class GroupController extends Controller
 
         $groupId = $request->get('join_group');
 
-        $joinConfig = \app('xe.config')->get('user.common');
+        $joinConfig = \app('xe.config')->get('user.register');
 
         $joinConfig->set('joinGroup', $groupId);
         \app('xe.config')->modify($joinConfig);
@@ -175,7 +175,7 @@ class GroupController extends Controller
     {
         $groupIds = $request->get('id');
 
-        $joinConfig = \app('xe.config')->get('user.common');
+        $joinConfig = \app('xe.config')->get('user.register');
         $joinGroup = $joinConfig->get('joinGroup');
         $groups = $this->groups->query()->whereIn('id', $groupIds)->get();
 

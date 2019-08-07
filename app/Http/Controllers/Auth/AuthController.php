@@ -149,7 +149,7 @@ class AuthController extends Controller
         }
 
         // common config
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
 
         $loginRuleName = 'login';
 
@@ -255,7 +255,7 @@ class AuthController extends Controller
      */
     protected function checkCaptcha()
     {
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
                 throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::msgFailToPassCAPTCHA'));
