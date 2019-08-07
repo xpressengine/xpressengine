@@ -85,7 +85,7 @@ class SettingController extends Controller
         $inputs = $request->except('_token');
         $config = app('xe.config')->get('user.common');
 
-        if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
+        if (isset($inputs['useCaptcha']) && $inputs['useCaptcha'] === 'true' && !$captcha->available()) {
             throw new ConfigurationNotExistsException();
         }
 
