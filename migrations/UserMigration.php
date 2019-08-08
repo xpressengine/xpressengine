@@ -18,6 +18,8 @@ use Illuminate\Database\Schema\Blueprint;
 use DB;
 use Schema;
 use Xpressengine\Support\Migration;
+use Xpressengine\User\Models\User;
+use Xpressengine\User\UserRegisterHandler;
 
 /**
  * Class UserMigration
@@ -183,8 +185,8 @@ class UserMigration extends Migration
     {
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
-            ['name' => 'user.common', 'vars' => '{"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","useCaptcha":false,"joinable":true}'],
+            ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"with"}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -307,7 +309,7 @@ class UserMigration extends Migration
         $commonConfig = app('xe.config')->get('user.common');
         $originalCommonConfigAttribute = $commonConfig->getPureAll();
 
-        $commonConfigAttribute = ['webmasterName', 'webmasterEmail'];
+        $commonConfigAttribute = ['useCaptcha', 'webmasterName', 'webmasterEmail'];
         $joinConfigAttribute = array_diff_key($originalCommonConfigAttribute, array_flip($commonConfigAttribute));
 
         $newCommonConfigAttribute = [];
@@ -316,6 +318,15 @@ class UserMigration extends Migration
                 $newCommonConfigAttribute[$config] = $originalCommonConfigAttribute[$config];
             }
         }
+
+        if (isset($joinConfigAttribute['guard_forced']) && $joinConfigAttribute['guard_forced'] == true) {
+            $joinConfigAttribute['register_process'] = User::STATUS_PENDING_EMAIL;
+        } else {
+            $joinConfigAttribute['register_process'] = User::STATUS_ACTIVATED;
+        }
+        unset($joinConfigAttribute['guard_forced']);
+
+        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_WITH;
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $joinConfigAttribute);

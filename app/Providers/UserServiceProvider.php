@@ -40,6 +40,7 @@ use Xpressengine\User\Parts\DynamicFieldPart;
 use Xpressengine\User\Parts\RegisterFormPart;
 use Xpressengine\User\Parts\EmailVerifyPart;
 use Xpressengine\User\PasswordValidator;
+use Xpressengine\User\UserRegisterHandler;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -152,6 +153,8 @@ class UserServiceProvider extends ServiceProvider
 
         $this->registerTerms();
         $this->registerPasswordValidator();
+
+        $this->registerUserRegisterHandler();
     }
 
     /**
@@ -628,5 +631,18 @@ class UserServiceProvider extends ServiceProvider
                 return $skin->setView('edit')->setData(compact('user', 'fieldTypes'));
             }
         ]);
+    }
+
+    /**
+     * register UserRegisterHandler
+     *
+     * @return void
+     */
+    protected function registerUserRegisterHandler()
+    {
+        $this->app->singleton(UserRegisterHandler::class, function () {
+            return new UserRegisterHandler();
+        });
+        $this->app->alias(UserRegisterHandler::class, 'xe.user_register');
     }
 }

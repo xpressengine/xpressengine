@@ -27,7 +27,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::name') }}</label> <small>{{ xe_trans('xe::inputSiteNameDescription') }}</small>
-                                {!! uio('langText', ['langKey'=>$config->get('site_title', null), 'name'=>'site_title']) !!}
+                                {!! uio('langText', ['langKey'=>$siteConfig->get('site_title', null), 'name'=>'site_title']) !!}
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>{{ xe_trans('xe::favicon') }}</label> <small>{{ xe_trans('xe::siteSettingFaviconDescription') }}</small>
-                            {!! uio('formFile', ['name' => 'favicon', 'value' => $config->get('favicon'), 'width' => 80, 'height' => 80, 'types' => ['ico','png'], 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
+                            {!! uio('formFile', ['name' => 'favicon', 'value' => $siteConfig->get('favicon'), 'width' => 80, 'height' => 80, 'types' => ['ico','png'], 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
                         </div>
                         <div class="col-sm-6">
                             <label>{{ xe_trans('xe::favicon') }} {{ xe_trans('xe::preview') }}</label> <small>{{ xe_trans('xe::siteSettingFaviconPreviewDescription') }}</small>
@@ -186,6 +186,33 @@
                             </div>
                         @endif
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>{{xe_trans('xe::userDefaultSetting')}}</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="item-url">{{xe_trans('xe::useLoginCaptcha')}}</label>
+                    <div class="list-group-item">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="useCaptcha" value="true" @if($registerConfig->get('useCaptcha')) checked="checked" @endif @if ($captchaManager->available() != true) disabled @endif> {{xe_trans('xe::use')}}
+                            </label>
+                            <label>
+                                <input type="radio" name="useCaptcha" value="false" @if(!$registerConfig->get('useCaptcha')) checked="checked" @endif @if ($captchaManager->available() != true) disabled @endif> {{xe_trans('xe::disuse')}}
+                            </label>
+                        </div>
+                    </div>
+                    @if($captchaManager->available() !== true)
+                        <div class="alert alert-warning" role="alert" style="margin-top:10px;">
+                            {!! xe_trans('xe::masAlertCaptchaAtLogin') !!}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

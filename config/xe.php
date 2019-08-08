@@ -255,6 +255,12 @@ return [
                 'description' => '',
                 'ordering' => 100
             ],
+            'setting.register' => [
+                'title' => 'xe::registerSettings',
+                'display' => true,
+                'description' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
+                'ordering' => 200
+            ],
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,

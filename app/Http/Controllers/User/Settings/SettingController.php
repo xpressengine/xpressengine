@@ -90,7 +90,10 @@ class SettingController extends Controller
         }
 
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
-        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+
+        if (isset($inputs['guard_forced'])) {
+            $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+        }
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

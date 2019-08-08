@@ -23,6 +23,7 @@ use XeMedia;
 use XeSEO;
 use XeStorage;
 use XeSite;
+use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
@@ -53,11 +54,13 @@ class SettingsController extends Controller
      */
     public function editSetting()
     {
-        $config = app('xe.site')->getSiteConfig();
+        $siteConfig = app('xe.site')->getSiteConfig();
         $seoSetting = XeSEO::getSetting();
         $userConfig = app('xe.config')->get('user.common');
+        $registerConfig = app('xe.config')->get('user.register');
         $pluginConfig = app('xe.config')->get('plugin');
         $currentSite = \XeSite::getCurrentSite();
+        $captchaManager = app('xe.captcha');
 
         expose_trans('xe::browserTitle');
         expose_trans('xe::browserSubTitle');
@@ -68,12 +71,14 @@ class SettingsController extends Controller
         $langs['description'] = xe_trans($seoSetting->get('description', ''));
 
         return \XePresenter::make('settings.setting', compact(
-            'config',
+            'siteConfig',
             'seoSetting',
             'userConfig',
+            'registerConfig',
             'pluginConfig',
             'currentSite',
-            'langs'
+            'langs',
+            'captchaManager'
         ));
     }
 
@@ -101,6 +106,9 @@ class SettingsController extends Controller
 
         $pluginInstallInputs = $request->only(['site_token', 'composer_home']);
         $this->updatePluginInstallSetting($pluginInstallInputs);
+
+        $loginCaptchaInputs = $request->only(['useCaptcha']);
+        $this->updateLoginCaptcha($loginCaptchaInputs);
 
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
@@ -207,6 +215,24 @@ class SettingsController extends Controller
             $config->set('composer_home', $inputs['composer_home']);
         }
         app('xe.config')->modify($config);
+    }
+
+    protected function updateLoginCaptcha($inputs)
+    {
+        $captchaManager = app('xe.captcha');
+
+        if (isset($inputs['useCaptcha']) == false) {
+            return;
+        }
+
+        if ($inputs['useCaptcha'] === 'true' && !$captchaManager->available()) {
+            throw new ConfigurationNotExistsException();
+        }
+
+        $registerConfig = app('xe.config')->get('user.register');
+        $registerConfig->set('useCaptcha', $inputs['useCaptcha']);
+
+        app('xe.config')->modify($registerConfig);
     }
 
     /**

@@ -3381,5 +3381,13 @@ return [
     'selfInstall' => [
         'ko' => '직접 설치한',
         'en' => 'Self installed'
+    ],
+    'registerSettings' => [
+        'ko' => '가입 설정',
+        'en' => 'Register settings'
+    ],
+    'registerSettingsDescription' => [
+        'ko' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
+        'en' => 'You can manage the membership process and the membership registration form.'
     ]
 ];

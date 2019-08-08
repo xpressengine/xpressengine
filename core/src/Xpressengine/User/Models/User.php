@@ -97,17 +97,19 @@ class User extends DynamicModel implements
      */
     public static $displayField = 'display_name';
 
-
-    const STATUS_DENIED = 'denied';
-
     const STATUS_ACTIVATED = 'activated';
+    const STATUS_DENIED = 'denied';
+    const STATUS_PENDING_ADMIN = 'pending_admin';
+    const STATUS_PENDING_EMAIL = 'pending_email';
 
     /**
      * @var array
      */
     public static $status = [
         self::STATUS_DENIED,
-        self::STATUS_ACTIVATED
+        self::STATUS_ACTIVATED,
+        self::STATUS_PENDING_ADMIN,
+        self::STATUS_PENDING_EMAIL
     ];
 
     /**
@@ -384,7 +386,7 @@ class User extends DynamicModel implements
         if ($value === null) {
             return null;
         }
-        
+
         $at = $this->asDateTime($value);
         if ($at->timestamp <= 0) {
             return null;

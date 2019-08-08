@@ -1071,3 +1071,15 @@ Route::group(['prefix'=>'widgetbox'], function() {
 Route::group(['prefix' => 'captcha'], function () {
     Route::get('naver/reissue', ['as' => 'captcha.naver.reissue', 'uses' => 'CaptchaController@naverReissue']);
 });
+
+Route::settings('register', function () {
+    Route::get('/', [
+        'as' => 'settings.register.getSetting',
+        'uses' => 'RegisterSettingsController@editSetting',
+        'settings_menu' => 'setting.register'
+    ]);
+    Route::post('/', [
+        'as' => 'settings.register.postSetting',
+        'uses' => 'RegisterSettingsController@updateSetting'
+    ]);
+});
