@@ -97,9 +97,6 @@ class UserServiceProvider extends ServiceProvider
 
         $this->setProfileImageResolverOfUser();
 
-        // set config for validation of password, displayname
-        $this->configValidation();
-
         // register default user skin
         $this->registerDefaultSkins();
 
@@ -485,6 +482,9 @@ class UserServiceProvider extends ServiceProvider
      */
     private function extendValidator()
     {
+        // set config for validation of password, displayname
+        $this->configValidation();
+
         $this->app->resolving('validator', function ($validator) {
             // 도메인이 생략된 이메일 validation 추가
             $validator->extend(
