@@ -15,6 +15,7 @@
 namespace App\Providers;
 
 use App\Skins\Plugin\PluginSettingsSkin;
+use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\MetaFileReader;
@@ -57,9 +58,6 @@ class PluginServiceProvider extends ServiceProvider
             $app['events']->fire('booted.plugins', [$pluginHandler]);
         });
 
-        // register skin for Plugin settings page
-        $this->app->make('xe.pluginRegister')->add(PluginSettingsSkin::class);
-
         $this->registerSettingsPermissions();
     }
 
@@ -95,6 +93,9 @@ class PluginServiceProvider extends ServiceProvider
                 /** @var \Xpressengine\Register\Container $register */
                 $register = $app['xe.register'];
                 $pluginRegister = new $pluginRegister($register, 'plugins');
+
+                // register skin for Plugin settings page
+                $pluginRegister->add(PluginSettingsSkin::class);
 
                 return $pluginRegister;
             }
@@ -183,15 +184,17 @@ class PluginServiceProvider extends ServiceProvider
      */
     private function registerSettingsPermissions()
     {
-        $permissions = [
-            'plugin' => [
-                'title' => xe_trans('xe::plugin').' '.xe_trans('xe::manage'),
-                'tab' => xe_trans('xe::plugin')
-            ]
-        ];
-        $register = $this->app->make('xe.register');
-        foreach ($permissions as $id => $permission) {
-            $register->push('settings/permission', $id, $permission);
-        }
+        $this->app['events']->listen(RouteMatched::class, function ($event) {
+            $register = $this->app['xe.register'];
+            $permissions = [
+                'plugin' => [
+                    'title' => xe_trans('xe::plugin').' '.xe_trans('xe::manage'),
+                    'tab' => xe_trans('xe::plugin')
+                ]
+            ];
+            foreach ($permissions as $id => $permission) {
+                $register->push('settings/permission', $id, $permission);
+            }
+        });
     }
 }
