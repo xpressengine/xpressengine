@@ -570,7 +570,7 @@ class PluginHandler
             if (empty($plugin->getComponentList('theme') == false)) {
                 //플러그인에 컴포넌트가 2개 이상일 경우 스토어에 등록된 정보 확인해서 구분
                 if (count($plugin->getComponentList()) > 1) {
-                    $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+                    $storePlugin = $this->provider->find($plugin->getId());
                     if ($storePlugin == null || isset($storePlugin->id) == false) {
                         //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
                         continue;
@@ -613,7 +613,7 @@ class PluginHandler
                 continue;
             }
 
-            $storePlugin = app('xe.plugin.provider')->find($plugin->getId());
+            $storePlugin = $this->provider->find($plugin->getId());
             if ($storePlugin == null || isset($storePlugin->id) == false) {
                 //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
 //                continue;
