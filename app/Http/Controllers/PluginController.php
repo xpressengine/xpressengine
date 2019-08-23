@@ -42,6 +42,7 @@ class PluginController extends Controller
 
     /**
      * PluginController constructor.
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function __construct()
     {
@@ -61,6 +62,8 @@ class PluginController extends Controller
      * @param Request            $request request
      * @param PluginHandler      $handler PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function index(Request $request, PluginHandler $handler)
     {
@@ -100,6 +103,8 @@ class PluginController extends Controller
      * @param Request       $request request
      * @param PluginHandler $handler PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function getActivate(Request $request, PluginHandler $handler)
     {
@@ -120,6 +125,8 @@ class PluginController extends Controller
      * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
@@ -158,6 +165,8 @@ class PluginController extends Controller
      * @param Request       $request request
      * @param PluginHandler $handler PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function getDeactivate(Request $request, PluginHandler $handler)
     {
@@ -178,6 +187,8 @@ class PluginController extends Controller
      * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
@@ -217,6 +228,8 @@ class PluginController extends Controller
      * @param Operator      $operator Operator instance
      * @param PluginHandler $handler PluginHandler instance
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function download(Request $request, Operator $operator, PluginHandler $handler)
     {
@@ -267,6 +280,8 @@ class PluginController extends Controller
      * @param PluginProvider $provider PluginProvider instance
      * @param Operator       $operator Operator instance
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function install(Request $request, PluginHandler $handler, PluginProvider $provider, Operator $operator)
     {
@@ -305,6 +320,8 @@ class PluginController extends Controller
      * @param Request       $request request
      * @param PluginHandler $handler PluginHandler instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function getDelete(Request $request, PluginHandler $handler)
     {
@@ -371,6 +388,8 @@ class PluginController extends Controller
      * @param PluginHandler  $handler  PluginHandler instance
      * @param PluginProvider $provider PluginProvider instance
      * @return \Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
@@ -396,6 +415,8 @@ class PluginController extends Controller
      * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
@@ -419,6 +440,8 @@ class PluginController extends Controller
      * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
@@ -442,6 +465,8 @@ class PluginController extends Controller
      * @param InterceptionHandler $interceptionHandler InterceptionHandler instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
@@ -462,6 +487,8 @@ class PluginController extends Controller
      * Returns the list of component type.
      *
      * @return array
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     protected function getComponentTypes()
     {
@@ -488,6 +515,8 @@ class PluginController extends Controller
      * @param Operator      $operator Operator instance
      * @param string        $pluginId plugin name
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.4 instead use Plugin\PluginManageController
      */
     public function renewPlugin(PluginHandler $handler, Operator $operator, $pluginId)
     {
