@@ -14,14 +14,12 @@
 
 namespace Xpressengine\Plugin;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
@@ -826,7 +824,7 @@ class PluginHandler
         $extractPath = app_storage_path('plugin/' . $pluginName);
 
         if (!$this->checkExistAlreadyPlugin($pluginName)) {
-            throw new \Exception('Plugin already exists');
+            throw new \InvalidArgumentException('Plugin already exists');
         }
 
         try {
@@ -912,7 +910,7 @@ class PluginHandler
     {
         $zip = new ZipArchive();
         if (true !== $code = $zip->open($uploadFile)) {
-            throw new \Exception("Zip archive error [code: $code]");
+            throw new \RuntimeException("Zip archive error [code: $code]");
         }
         $zip->extractTo($path);
         $zip->close();
@@ -937,7 +935,7 @@ class PluginHandler
             return $this->searchPluginRootDirectory($list[0]);
         }
 
-        throw new \Exception('Unknown the plugin root');
+        throw new \RuntimeException('Unknown the plugin root');
     }
 
     /**
