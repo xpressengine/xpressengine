@@ -271,15 +271,13 @@ class PluginManageController extends Controller
             }
         }
 
-        $logFile = $this->prepareOperation($operator);
+        $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($pluginIds, $force, $logFile) {
-            Artisan::call('plugin:uninstall', [
-                'plugin' => $pluginIds,
-                '--force' => !!$force,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $this->runArtisan('plugin:uninstall', [
+            'plugin' => $pluginIds,
+            '--force' => !!$force,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -288,12 +286,14 @@ class PluginManageController extends Controller
     }
 
     /**
-     * @param Request  $request  request
-     * @param Operator $operator operator
+     * Update plugins.
      *
+     * @param Request       $request  request
+     * @param Operator      $operator Operator instance
+     * @param PluginHandler $handler  PluginHandler instance
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function download(Request $request, Operator $operator)
+    public function download(Request $request, Operator $operator, PluginHandler $handler)
     {
         if ($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
@@ -303,22 +303,30 @@ class PluginManageController extends Controller
 
         foreach ($plugins as $id => $info) {
             if (array_get($info, 'update', false)) {
+                if (!$handler->getPlugin($id)) {
+                    return back()->with('alert', [
+                        'type' => 'danger',
+                        'message' => xe_trans('xe::pluginNotFound', ['plugin' => $id])
+                    ]);
+                }
+
                 $plugins[$id] = $id.':'.array_get($info, 'version');
             }
         }
 
         if (empty($plugins)) {
-            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::noPluginsSelected')
+            ]);
         }
 
-        $logFile = $this->prepareOperation($operator);
+        $operator->setPluginMode(false)->save();
 
-        app()->terminating(function () use ($plugins, $logFile) {
-            Artisan::call('plugin:update', [
-                'plugin' => $plugins,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $this->runArtisan('plugin:update', [
+            'plugin' => $plugins,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
@@ -350,14 +358,14 @@ class PluginManageController extends Controller
             throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        $logFile = $this->prepareOperation($operator);
+        $pluginIds = array_pluck($pluginsData, 'plugin_id');
 
-        app()->terminating(function () use ($pluginIds, $logFile) {
-            Artisan::call('plugin:install', [
-                'plugin' => $pluginIds,
-                '--no-interaction' => true,
-            ], new StreamOutput(fopen(storage_path($logFile), 'a')));
-        });
+        $operator->setPluginMode(false)->save();
+
+        $this->runArtisan('plugin:install', [
+            'plugin' => $pluginIds,
+            '--no-interaction' => true,
+        ]);
 
         return redirect()->route('settings.operation.index')->with(
             'alert',
