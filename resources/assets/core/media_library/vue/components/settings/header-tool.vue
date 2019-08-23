@@ -8,27 +8,12 @@
     <!-- [D] 저장소명 적용 (PC 에서만 노출, 모바일은 aside 영역의 class="media-library-aside__mobile-button" 에 적용된 내용이 노출 됨) -->
     <h3 class="media-library-header__title">Main Assets</h3>
     <!-- [D] 모바일에서 검색버튼(class="media-library__button-icon--search") 클릭 시 class="search-open" 추가 -->
-    <div v-if="false" class="media-library__search">
+    <div class="media-library__search">
       <div class="media-library__input-group">
-        <input type="text" class="media-library__input-text" placeholder="미디어 검색...">
-        <button type="button" class="media-library__button-text-remove">
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
-            <defs>
-              <path id="icon-text-remove" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.674 13.104l-1.572 1.571-3.103-3.103-3.104 3.103-1.572-1.571L10.426 12 7.323 8.896l1.572-1.572 3.104 3.103 3.103-3.103 1.572 1.572L13.57 12l3.104 3.103v.001z"></path>
-            </defs>
-            <g fill="none" fill-rule="evenodd">
-              <path d="M0 0h24v24H0z"></path>
-              <mask id="icon-text-remove-mask" fill="#fff">
-                <use xlink:href="#icon-text-remove"></use>
-              </mask>
-              <g class="media-library__svg" fill="#424242" mask="url(#icon-text-remove-mask)">
-                <path d="M0 0h24v24H0z"></path>
-              </g>
-            </g>
-          </svg>
-        </button>
+        <input v-model="searchKeyword" @keyup.13="search" type="text" class="media-library__input-text" placeholder="미디어 검색...">
+        <button type="button" class="media-library__button-text-remove"></button>
       </div>
-      <button type="button" class="media-library__button media-library__button-icon media-library__button-icon--search">
+      <button @click="search" type="button" class="media-library__button media-library__button-icon media-library__button-icon--search">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="17" viewBox="0 0 17 17">
           <defs>
             <path id="a" d="M15.042 8.313a6.73 6.73 0 1 0-13.459 0 6.73 6.73 0 0 0 13.459 0zm-6.73 5.145a5.151 5.151 0 0 1-5.145-5.146 5.152 5.152 0 0 1 5.146-5.145 5.152 5.152 0 0 1 5.145 5.146 5.152 5.152 0 0 1-5.146 5.145zm4.741.735l1.137-1.137 3.216 3.217-1.136 1.137-3.217-3.217z"></path>
@@ -47,7 +32,7 @@
           </g>
         </svg>
       </button>
-      <button type="button" class="media-library__button media-library__button-search-cancel">취소</button>
+      <button @click="clearSearch" type="button" class="media-library__button media-library__button-search-cancel">취소</button>
     </div>
 
     <!--
@@ -61,7 +46,7 @@
           삭제
         </button>
         <div class="media-library__button-group">
-          <button v-if="false" type="button" class="media-library__button media-library__button--default">
+          <button type="button" class="media-library__button media-library__button--default">
             <span class="media-library__icon media-library__icon-move"></span>
             이동
           </button>
@@ -175,12 +160,23 @@
 </template>
 
 <script>
+import EventBus from '../eventBus'
+
 export default {
   name: 'SettingsHeaderTool',
   props: ['todo'],
   methods: {
     createFolder(event) {
       window.XE.post('/media_manager/folder', {
+        disk: 'media',
+        name: this.createFolderName,
+        parent_id: this.$store.getters['media/currentFolder'].id
+      }).then(response => {
+        this.$store.dispatch('media/addFolder', response.data[0]);
+      });
+    },
+    moveFolder (folder_id) {
+      window.XE.post(['media_library.move_folder', { folder_id }], {
         disk: 'media',
         name: this.createFolderName,
         parent_id: this.$store.getters['media/currentFolder'].id
@@ -195,8 +191,16 @@ export default {
       this.$root.clearSelectedMedia()
     },
     dialogCreateFolder () {
-      this.$root.showDialog('create-folder')
-    }
+      EventBus.$emit('dialog.open')
+      EventBus.$emit('dialog.open.createFolder')
+    },
+    search () {
+      this.$store.dispatch('media/setFilter', { keyword: this.searchKeyword })
+    },
+    clearSearch () {
+      this.searchKeyword = ''
+      this.$store.dispatch('media/setFilter', { keyword: null })
+    },
   },
   computed: {
     currentFolder: function() {
@@ -209,7 +213,8 @@ export default {
   data() {
     return {
       createFolderName: '',
-      csrfToken: XE.options.userToken
+      csrfToken: XE.options.userToken,
+      searchKeyword: '',
     };
   }
 };

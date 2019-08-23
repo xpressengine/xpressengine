@@ -2,7 +2,8 @@ import $ from 'jquery'
 import App from 'xe/app'
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import VueRouter from 'vue-router'
+import EventBus from './vue/components/eventBus'
+import MediaEditImageSlotBody from './vue/components/media/MediaEditImageSlotBody.vue'
 
 import { module as media } from './store'
 // import RouteMap from './route_map'
@@ -69,7 +70,8 @@ class MediaLibrary extends App {
       if (!$ground.length) {
         $('body').append('<div id="media-library">')
       }
-      window.XE.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
+      that.$$xe.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
+      that.$$xe.DynamicLoadManager.cssLoad('/resources/assets/node_modules/cropperjs/dist/cropper.min.css')
 
       const componentAppInstance = new Vue({
         el: '#media-library',
@@ -83,7 +85,9 @@ class MediaLibrary extends App {
             renderMode: 'inline',
             selectedMedia: [],
             showMedia: null,
-            dialog: null
+            dialog: null,
+            currentMedia: null,
+            showModal: false
           }
         },
         computed: {
@@ -93,16 +97,18 @@ class MediaLibrary extends App {
         },
         created: function () {
           this.renderMode = renderMode
+        },
+        mounted: function () {
+          this.$options._subscribeEvent()
 
           store.dispatch('media/loadData').then(() => {
-            // router.push({ name: 'home' })
-
             this.$emit('loaded')
+            EventBus.$emit('data.loaded')
 
             $(function () {
               if (typeof $.fn.fileupload !== 'undefined') {
                 $('.form-control--file').fileupload({
-                  url: '/media_library/file',
+                  url: that.$$xe.route('media_library.index'),
                   dataType: 'json',
                   sequentialUploads: true,
                   // maxChunkSize: 1000000,
@@ -119,6 +125,7 @@ class MediaLibrary extends App {
                     ]
                   },
                   add: function (e, data) {
+                    console.debug('image add data', data)
                     data.submit()
                   },
                   done: function (e, data) {
@@ -142,14 +149,18 @@ class MediaLibrary extends App {
         methods: {
           showDetailMedia (id) {
             this.showMedia = id
+            this.showModal = true
+            this.currentMedia = store.getters['media/media'](id)
             this.$emit('show-detail-media', id, store.getters['media/media'](id))
           },
           hideDetailMedia () {
             this.showMedia = null
+            this.currentMedia = null
+            this.showModal = false
             this.$emit('show-detail-media-closed')
           },
           createFolder (name, parent = null, disk = null) {
-            return that.$$xe.post('/media_library/folder', {
+            return that.$$xe.post('media_library.store_folder', {
               name: name,
               parent_id: parent || this.$store.getters['media/currentFolder'].id,
               disk: 'media'
@@ -167,7 +178,7 @@ class MediaLibrary extends App {
             $('.media-library-content-list > li').find('.media-library__input-checkbox').prop('checked', false)
           },
           deleteMedia (id) {
-            return that.$$xe.delete('/media_library', { target_ids: id })
+            return that.$$xe.delete('media_library.drop', { target_ids: id })
               .then(() => {
                 store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
               })
@@ -179,7 +190,7 @@ class MediaLibrary extends App {
           },
           remove () {
             if (this.selectedMedia.length) {
-              that.$$xe.delete('/media_library', { target_ids: this.selectedMedia })
+              that.$$xe.delete('media_library.drop', { target_ids: this.selectedMedia })
                 .then(() => {
                   this.selectedMedia.forEach(function (item) {
                     store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
@@ -197,9 +208,15 @@ class MediaLibrary extends App {
         },
         render (h) {
           return h(ComponentApp, {
-            props: {
-              renderMode
+            propsData: {
+              renderMode: this.renderMode,
+              currentMedia: this.currentMedia
             }
+          })
+        },
+        _subscribeEvent () {
+          EventBus.$on('modal.open', () => {
+
           })
         }
       })

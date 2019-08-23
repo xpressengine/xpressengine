@@ -1,5 +1,5 @@
 <template>
-  <li v-if="media.file" @dblclick="$root.showDetailMedia(media.id)" @click="selectMedia">
+  <li v-if="media.file" @dblclick="showMedia(media.id)" @click="selectMedia">
     <div class="media-library__input-group media-library-content-list__checkbox">
       <label class="media-library__label">
         <input type="checkbox" class="media-library__input-checkbox" />
@@ -44,6 +44,9 @@
 <script>
 import filesize from 'filesize'
 import moment from 'moment'
+import EventBus from './eventBus'
+
+import ModalSlotsDetailBody from './modal/slots/detail-body.vue'
 
 export default {
   props: ['media'],
@@ -63,14 +66,10 @@ export default {
         }
       }
     },
-    showMedia (media, event) {
-      event.preventDefault()
-      if (typeof media.id !== 'undefined') {
-        // this.$router.push({ path: `media_manager/show/${media.id}` })
-        $('#media-library-modal').modal('show')
-        $('#media-library-modal').one('hide.bs.modal', () => {
-          // console.debug('back')
-          // this.$router.go(-1)
+    showMedia (mediaId, event) {
+      if (typeof mediaId !== 'undefined') {
+        EventBus.$emit('modal.open', mediaId, {
+          body: ModalSlotsDetailBody
         })
       }
     }

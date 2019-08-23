@@ -2,22 +2,18 @@
 import SettingsHeaderTool from './settings/header-tool.vue'
 import MediaListContainer from './media-list-container.vue'
 import DiskList from './disk-list.vue'
-import DialogCreateFolder from './dialogs/create-folder.vue'
-import DialogDeleteItems from './dialogs/delete-media.vue'
 
 export default {
   props: ['mediaItems', 'folderList', 'pathItems'],
   components: {
     SettingsHeaderTool,
     MediaListContainer,
-    DiskList,
-    DialogCreateFolder,
-    DialogDeleteItems
+    DiskList
   },
   data() {
     return {}
   }
-};
+}
 </script>
 
 <template>
@@ -25,10 +21,10 @@ export default {
     <div class="media-library-upload">
       <form method="post" enctype="multipart/form-data">
         여기에 선택한 파일을 드래그해 업로드 하거나 파일을 선택하세요.
-        <br>
+        <br />
         <div class="media-library__button media-library__button--primary fileinput-button">
-            파일선택
-          <input type="file" name="file" multiple class="form-control--file">
+          파일선택
+          <input type="file" name="file" multiple class="form-control--file" />
         </div>
       </form>
     </div>
@@ -43,8 +39,5 @@ export default {
 
     <!-- [D] 딤드가 필요할 때는 해당 딤드 display: block 적용 -->
     <div class="media-library-dimmed" style="display: none;"></div>
-
-    <dialog-create-folder></dialog-create-folder>
-    <dialog-delete-items></dialog-delete-items>
   </div>
 </template>
