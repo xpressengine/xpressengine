@@ -184,6 +184,16 @@ class PluginHandler
     }
 
     /**
+     * private plugin directory 경로를 반환한다.
+     *
+     * @return string
+     */
+    public function getPrivatesDir()
+    {
+        return $this->app['path.privates'];
+    }
+
+    /**
      * plugin directory 경로를 지정한다.
      *
      * @param string $path 지정할 디렉토리 경로
@@ -799,6 +809,8 @@ class PluginHandler
     }
 
     /**
+     * Upload the plugin zip file
+     *
      * @param UploadedFile $uploadFile upload plugin file
      *
      * @return mixed
@@ -806,10 +818,6 @@ class PluginHandler
      */
     public function uploadPlugin(UploadedFile $uploadFile)
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = app('files');
-        $zip = new ZipArchive();
-
         $pluginName = str_replace(
             '.' . $uploadFile->getClientOriginalExtension(),
             "",
@@ -817,22 +825,20 @@ class PluginHandler
         );
         $extractPath = app_storage_path('plugin/' . $pluginName);
 
+        if (!$this->checkExistAlreadyPlugin($pluginName)) {
+            throw new \Exception('Plugin already exists');
+        }
+
         try {
-            $this->checkExistAlreadyPlugin($filesystem, $pluginName);
+            $this->removeGarageDirectory($extractPath);
 
-            $this->removeGarageDirectory($filesystem, $extractPath);
+            $this->extractZip($uploadFile, $extractPath);
+            $this->fixExtracted($extractPath);
+            $this->removeVendorDir($extractPath);
 
-            $extractFolder = $zip->open($uploadFile);
-            $zip->extractTo($extractPath);
-            $zip->close();
-
-            $this->fixExtracted($filesystem, $extractPath);
-            $this->checkExistRequireFiles($filesystem, $extractPath);
-            $this->removeVendorDir($filesystem, $extractPath);
-
-            $this->movePlugin($filesystem, $extractPath, $pluginName);
+            $this->movePlugin($extractPath, $pluginName);
         } catch (\Exception $e) {
-            $this->removeGarageDirectory($filesystem, $extractPath);
+            $this->removeGarageDirectory($extractPath);
 
             throw $e;
         }
@@ -841,112 +847,149 @@ class PluginHandler
     }
 
     /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
+     * Determine if given plugin name is already exists
+     *
+     * @param string $name target directory name
      *
      * @return bool
-     * @throws \Exception
      */
-    private function checkExistAlreadyPlugin(Filesystem $filesystem, $targetDir)
+    private function checkExistAlreadyPlugin($name)
     {
-        if ($filesystem->exists(app('path.privates') . DIRECTORY_SEPARATOR . $targetDir) == true) {
-            throw new \Exception('private exists');
-        }
-
-        if ($filesystem->exists(app('path.plugins') . DIRECTORY_SEPARATOR . $targetDir) == true) {
-            throw new \Exception('plugin exists');
+        foreach ([$this->getPrivatesDir(), $this->getPluginsDir()] as $path) {
+            if ($this->getFilesystem()->exists($path . DIRECTORY_SEPARATOR . $name) === true) {
+                return false;
+            }
         }
 
         return true;
     }
 
     /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
+     * Fix root path for the extracted plugin
      *
-     * @return void
-     */
-    private function fixExtracted(Filesystem $filesystem, $targetDir)
-    {
-        $filesystem->move($targetDir, $targetDir . '_temp');
-
-        $directory = $this->searchPluginRootDirectory($filesystem, $targetDir . '_temp');
-
-        $filesystem->move($directory, $targetDir . '/');
-
-        $filesystem->deleteDirectory($targetDir . '_temp');
-    }
-
-    /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
-     *
-     * @return void
-     */
-    private function removeGarageDirectory(Filesystem $filesystem, $targetDir)
-    {
-        $filesystem->deleteDirectory($targetDir);
-        $filesystem->deleteDirectory($targetDir . '_temp');
-    }
-
-    /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
-     *
-     * @return mixed
-     */
-    private function searchPluginRootDirectory(Filesystem $filesystem, $targetDir)
-    {
-        $list = $filesystem->directories($targetDir);
-
-        if (count($list) === 1) {
-            return $this->searchPluginRootDirectory($filesystem, $list[0]);
-        } else {
-            return $targetDir;
-        }
-    }
-
-    /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
-     *
-     * @return void
-     */
-    private function removeVendorDir(Filesystem $filesystem, $targetDir)
-    {
-        $filesystem->deleteDirectory($targetDir . '/vendor');
-    }
-
-    /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
+     * @param string $targetDir target directory name
      *
      * @return void
      * @throws \Exception
      */
-    private function checkExistRequireFiles(Filesystem $filesystem, $targetDir)
+    private function fixExtracted($targetDir)
     {
-        $requireFiles = [
-            'plugin.php',
-            'composer.json'
-        ];
+        $filesystem = $this->getFilesystem();
 
-        foreach ($requireFiles as $requireFile) {
-            if ($filesystem->exists($targetDir . DIRECTORY_SEPARATOR . $requireFile) == false) {
-                throw new \Exception('not exist');
-            }
-        }
+        $tempDir = $targetDir.'_temp';
+
+        $filesystem->move($targetDir, $tempDir);
+
+        $directory = $this->searchPluginRootDirectory($tempDir);
+
+        $filesystem->move($directory, $targetDir . '/');
+
+        $filesystem->deleteDirectory($tempDir);
     }
 
     /**
-     * @param Filesystem $filesystem filesystem object
-     * @param string     $targetDir  target directory name
-     * @param string     $pluginName plugin name
+     * Remove temporary directory for the uploaded plugin
+     *
+     * @param string $dir target directory name
      *
      * @return void
      */
-    private function movePlugin(Filesystem $filesystem, $targetDir, $pluginName)
+    private function removeGarageDirectory($dir)
     {
-        $filesystem->move($targetDir, app('path.privates') . DIRECTORY_SEPARATOR . $pluginName);
+        $this->getFilesystem()->deleteDirectory($dir);
+        $this->getFilesystem()->deleteDirectory($dir . '_temp');
+    }
+
+    /**
+     * Extract given uploaded zip file
+     *
+     * @param UploadedFile $uploadFile uploaded file
+     * @param string       $path       path
+     * @return void
+     * @throws \Exception
+     */
+    private function extractZip(UploadedFile $uploadFile, $path)
+    {
+        $zip = new ZipArchive();
+        if (true !== $code = $zip->open($uploadFile)) {
+            throw new \Exception("Zip archive error [code: $code]");
+        }
+        $zip->extractTo($path);
+        $zip->close();
+    }
+
+    /**
+     * Find root directory for the plugin
+     *
+     * @param string $targetDir target directory name
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private function searchPluginRootDirectory($targetDir)
+    {
+        if ($this->checkExistRequireFiles($targetDir)) {
+            return $targetDir;
+        }
+
+        $list = $this->getFilesystem()->directories($targetDir);
+        if (count($list) === 1) {
+            return $this->searchPluginRootDirectory($list[0]);
+        }
+
+        throw new \Exception('Unknown the plugin root');
+    }
+
+    /**
+     * Remove vendor directory
+     *
+     * @param string $path target directory name
+     *
+     * @return void
+     */
+    private function removeVendorDir($path)
+    {
+        $this->getFilesystem()->deleteDirectory($path . '/vendor');
+    }
+
+    /**
+     * Determine if necessary files exists
+     *
+     * @param string $targetDir target directory name
+     *
+     * @return bool
+     */
+    private function checkExistRequireFiles($targetDir)
+    {
+        foreach (['plugin.php', 'composer.json'] as $requireFile) {
+            if ($this->getFilesystem()->exists($targetDir.DIRECTORY_SEPARATOR.$requireFile) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Move the plugin to private plugin directory
+     *
+     * @param string $targetDir  target directory name
+     * @param string $pluginName plugin name
+     *
+     * @return void
+     */
+    private function movePlugin($targetDir, $pluginName)
+    {
+        $this->getFilesystem()->move($targetDir, $this->getPrivatesDir().DIRECTORY_SEPARATOR.$pluginName);
+    }
+
+    /**
+     * Return the filesystem instance
+     *
+     * @return Filesystem
+     */
+    protected function getFilesystem()
+    {
+        return $this->app['files'];
     }
 }
