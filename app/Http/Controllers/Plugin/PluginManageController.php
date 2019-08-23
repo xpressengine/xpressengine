@@ -299,9 +299,10 @@ class PluginManageController extends Controller
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
-        $plugins = $request->get('plugin');
+        $data = $request->get('plugin');
+        $plugins = [];
 
-        foreach ($plugins as $id => $info) {
+        foreach ($data as $id => $info) {
             if (array_get($info, 'update', false)) {
                 if (!$handler->getPlugin($id)) {
                     return back()->with('alert', [
