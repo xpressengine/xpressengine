@@ -17,7 +17,7 @@ namespace App\Providers;
 use App\ToggleMenus\User\ManageItem;
 use App\ToggleMenus\User\ProfileItem;
 use Closure;
-use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
@@ -97,12 +97,6 @@ class UserServiceProvider extends ServiceProvider
 
         $this->setProfileImageResolverOfUser();
 
-        // set config for validation of password, displayname
-        $this->configValidation();
-
-        // register validation extension for email prefix
-        $this->extendValidator();
-
         // register default user skin
         $this->registerDefaultSkins();
 
@@ -152,6 +146,9 @@ class UserServiceProvider extends ServiceProvider
 
         $this->registerTerms();
         $this->registerPasswordValidator();
+
+        // register validation extension for email prefix
+        $this->extendValidator();
     }
 
     /**
@@ -485,36 +482,38 @@ class UserServiceProvider extends ServiceProvider
      */
     private function extendValidator()
     {
-        /** @var Validator $validator */
-        $validator = $this->app['validator'];
+        // set config for validation of password, displayname
+        $this->configValidation();
 
-        // 도메인이 생략된 이메일 validation 추가
-        $validator->extend(
-            'email_prefix',
-            function ($attribute, $value, $parameters) {
-                if (!str_contains($value, '@')) {
-                    $value .= '@test.com';
+        $this->app->resolving('validator', function ($validator) {
+            // 도메인이 생략된 이메일 validation 추가
+            $validator->extend(
+                'email_prefix',
+                function ($attribute, $value, $parameters) {
+                    if (!str_contains($value, '@')) {
+                        $value .= '@test.com';
+                    }
+                    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
                 }
-                return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
-            }
-        );
+            );
 
-        // 표시이름 validation 추가
-        /** @var Closure $displayNameValidate */
-        $displayNameValidate = app('config')->get('xe.user.displayName.validate');
-        $validator->extend(
-            'display_name',
-            function ($attribute, $value, $parameters) use ($displayNameValidate) {
-                return $displayNameValidate($value);
-            },
-            xe_trans('xe::validationDisplayName')
-        );
+            // 표시이름 validation 추가
+            /** @var Closure $displayNameValidate */
+            $displayNameValidate = app('config')->get('xe.user.displayName.validate');
+            $validator->extend(
+                'display_name',
+                function ($attribute, $value, $parameters) use ($displayNameValidate) {
+                    return $displayNameValidate($value);
+                },
+                xe_trans('xe::validationDisplayName')
+            );
 
-        $validator->extend('password', function ($attribute, $value, $parameters) {
-            return $this->app['xe.password.validator']->handle($value);
-        });
-        $validator->replacer('password', function () {
-            return $this->app['xe.password.validator']->getMessage();
+            $validator->extend('password', function ($attribute, $value, $parameters) {
+                return $this->app['xe.password.validator']->handle($value);
+            });
+            $validator->replacer('password', function () {
+                return $this->app['xe.password.validator']->getMessage();
+            });
         });
     }
 
@@ -538,20 +537,22 @@ class UserServiceProvider extends ServiceProvider
      */
     private function registerSettingsPermissions()
     {
-        $permissions = [
-            'user.list' => [
-                'title' => xe_trans('xe::accessUserList'),
-                'tab' => xe_trans('xe::user')
-            ],
-            'user.edit' => [
-                'title' => xe_trans('xe::editUserInfo'),
-                'tab' => xe_trans('xe::user')
-            ]
-        ];
-        $register = $this->app->make('xe.register');
-        foreach ($permissions as $id => $permission) {
-            $register->push('settings/permission', $id, $permission);
-        }
+        $this->app['events']->listen(RouteMatched::class, function ($event) {
+            $register = $this->app['xe.register'];
+            $permissions = [
+                'user.list' => [
+                    'title' => xe_trans('xe::accessUserList'),
+                    'tab' => xe_trans('xe::user')
+                ],
+                'user.edit' => [
+                    'title' => xe_trans('xe::editUserInfo'),
+                    'tab' => xe_trans('xe::user')
+                ]
+            ];
+            foreach ($permissions as $id => $permission) {
+                $register->push('settings/permission', $id, $permission);
+            }
+        });
     }
 
     /**

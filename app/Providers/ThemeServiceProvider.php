@@ -50,10 +50,20 @@ class ThemeServiceProvider extends ServiceProvider
             /** @var ThemeHandler $themeHandler */
             $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
             $themeHandler->setCachePath(storage_path('app/theme/views'));
+            $themeHandler->setMobileResolver(function () use ($app) {
+                return $app['request']->isMobile();
+            });
+
+            AbstractTheme::setHandler($themeHandler);
 
             return $themeHandler;
         });
         $this->app->alias(ThemeHandler::class, 'xe.theme');
+
+        $this->app->resolving('xe.pluginRegister', function ($register, $app) {
+            $register->add($app['config']['xe.theme.blank']);
+            $register->add(ThemeSelect::class);
+        });
     }
 
     /**
@@ -63,17 +73,8 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // TODO: move code to valid location!!!
         // TODO: check permission!!
 //        $this->registerInterceptForThemePreview();
-
-        $this->registerBlankTheme();
-
-        $this->registerThemeListUIObject();
-
-        $this->registerMobileResolver();
-
-        $this->setThemeHandlerForTheme();
     }
 
 //    /**
@@ -108,51 +109,4 @@ class ThemeServiceProvider extends ServiceProvider
 //            }
 //        }
 //    }
-
-    /**
-     * Register the blank theme.
-     *
-     * @return void
-     */
-    protected function registerBlankTheme()
-    {
-        /** @var PluginRegister $registryManager */
-        $registryManager = $this->app['xe.pluginRegister'];
-        $blankThemeClass = $this->app['config']->get('xe.theme.blank');
-        $registryManager->add($blankThemeClass);
-    }
-
-    /**
-     * Register the ui object of theme selector.
-     *
-     * @return void
-     */
-    private function registerThemeListUIObject()
-    {
-        /** @var PluginRegister $registryManager */
-        $registryManager = $this->app['xe.pluginRegister'];
-        $registryManager->add(ThemeSelect::class);
-    }
-
-    /**
-     * Register the mobile detector.
-     *
-     * @return void
-     */
-    private function registerMobileResolver()
-    {
-        $this->app['xe.theme']->setMobileResolver(function () {
-            return app('request')->isMobile();
-        });
-    }
-
-    /**
-     * Set handler to the theme.
-     *
-     * @return void
-     */
-    private function setThemeHandlerForTheme()
-    {
-        AbstractTheme::setHandler($this->app->make('xe.theme'));
-    }
 }
