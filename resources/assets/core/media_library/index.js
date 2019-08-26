@@ -3,11 +3,12 @@ import App from 'xe/app'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import EventBus from './vue/components/eventBus'
-import MediaEditImageSlotBody from './vue/components/media/MediaEditImageSlotBody.vue'
 
 import { module as media } from './store'
 // import RouteMap from './route_map'
 import ComponentApp from './vue/app'
+
+import ComponentAttachment from './vue/attachment'
 
 Vue.use(Vuex)
 // Vue.use(VueRouter)
@@ -108,7 +109,7 @@ class MediaLibrary extends App {
             $(function () {
               if (typeof $.fn.fileupload !== 'undefined') {
                 $('.form-control--file').fileupload({
-                  url: that.$$xe.route('media_library.index'),
+                  url: that.$$xe.route('media_library.upload'),
                   dataType: 'json',
                   sequentialUploads: true,
                   // maxChunkSize: 1000000,
@@ -244,6 +245,23 @@ class MediaLibrary extends App {
 
         resolve(ddd)
       })
+    })
+  }
+
+  render (options) {
+    const a = new Vue({
+      el: '.ckeditor-fileupload-area',
+      components: {
+        ComponentAttachment
+      },
+      render (h) {
+        return h(ComponentAttachment, {
+          propsData: {
+            renderMode: this.renderMode,
+            currentMedia: this.currentMedia
+          }
+        })
+      }
     })
   }
 }
