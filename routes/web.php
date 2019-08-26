@@ -946,6 +946,10 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.update_file',
             'uses' => 'MediaLibrary\MediaLibraryController@updateFile'
         ]);
+        Route::post('/{file_id}/modify', [
+            'as' => 'media_library.modify_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@modifyFile'
+        ]);
         Route::post('/', [
             'as' => 'media_library.upload',
             'uses' => 'MediaLibrary\MediaLibraryController@upload'
