@@ -203,4 +203,9 @@ class MediaLibraryController extends Controller
 
         return \XeStorage::download($mediaLibraryFile->file);
     }
+
+    public function modifyFile(Request $request)
+    {
+
+    }
 }
