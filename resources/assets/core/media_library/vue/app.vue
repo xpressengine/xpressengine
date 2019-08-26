@@ -137,6 +137,5 @@ export default {
     </detail-modal>
 
     <dialog-container :media="media"></dialog-container>
-    <dialog-create-folder></dialog-create-folder>
   </div>
 </template>

@@ -161,6 +161,7 @@
 
 <script>
 import EventBus from '../eventBus'
+import DialogCreateFolder from '../dialogs/DialogCreateFolder.vue'
 
 export default {
   name: 'SettingsHeaderTool',
@@ -191,8 +192,7 @@ export default {
       this.$root.clearSelectedMedia()
     },
     dialogCreateFolder () {
-      EventBus.$emit('dialog.open')
-      EventBus.$emit('dialog.open.createFolder')
+      EventBus.$emit('dialog.open', DialogCreateFolder)
     },
     search () {
       this.$store.dispatch('media/setFilter', { keyword: this.searchKeyword })

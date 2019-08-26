@@ -159,16 +159,6 @@ class MediaLibrary extends App {
             this.showModal = false
             this.$emit('show-detail-media-closed')
           },
-          createFolder (name, parent = null, disk = null) {
-            return that.$$xe.post('media_library.store_folder', {
-              name: name,
-              parent_id: parent || this.$store.getters['media/currentFolder'].id,
-              disk: 'media'
-            })
-              .then((response) => {
-                this.$store.dispatch('media/loadData', { folder_id: response.data[0].parent_id })
-              })
-          },
           putSelectedMedia (item) {
             this.selectedMedia.push(item.media.id)
           },

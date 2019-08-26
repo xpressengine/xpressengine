@@ -2,25 +2,33 @@
   <div class="media-library-dialog-popup-content">
     <!-- header -->
     <div class="media-library-dialog-popup-header">
-      <h3 class="media-library-dialog-popup-header__title">
-        <span class="blind">dialog</span>
-      </h3>
+      <h3 class="media-library-dialog-popup-header__title">새 폴더</h3>
     </div>
 
     <!-- body -->
     <div class="media-library-dialog-popup-body">
       <div class="media-library__input-group-box">
-        slot:body
+        <span class="media-library__input-group-title">
+          <label for="createFolderName">폴더 이름</label>
+        </span>
+        <div class="media-library__input-group">
+          <input type="text" class="media-library__input-text" v-model="folderName" />
+        </div>
       </div>
     </div>
 
     <!-- footer -->
     <div class="media-library-dialog-popup-footer">
-        <button
-          @click="close"
-          type="button"
-          class="media-library__button media-library__button--subtle"
-        >취소</button>
+      <button
+        @click="close"
+        type="button"
+        class="media-library__button media-library__button--subtle"
+      >취소</button>
+      <button
+        @click="create"
+        type="button"
+        class="media-library__button media-library__button--subtle"
+      >만들기</button>
     </div>
   </div>
 </template>
@@ -31,24 +39,25 @@ import EventBus from '../eventBus'
 export default {
   data: function() {
     return {
-      name: null
+      folderName: ''
     }
   },
-  mounted() {
-    EventBus.$on('dialog.open.createFolder', () => {
-      EventBus.$emit('dialog.open', this)
-    })
-  },
+  mounted() {},
   methods: {
     close() {
       EventBus.$emit('dialog.close')
-      EventBus.$emit('dialog.close.createFolder')
     },
     create() {
-      this.$root.createFolder(this.name, this.$store.getters['media/currentFolder'].id).then(() => {
-        this.name = null
-        this.close()
-      })
+      this.$$xe.post('media_library.store_folder', {
+          name: this.folderName,
+          parent_id: parent || this.$store.getters['media/currentFolder'].id,
+          disk: 'media'
+        })
+        .then(response => {
+          this.folderName = ''
+          this.close()
+          this.$store.dispatch('media/loadData', { folder_id: response.data[0].parent_id })
+        })
     }
   }
 }
