@@ -550,12 +550,7 @@ class PluginManageController extends Controller
                 'name' => $pluginName,
                 '--no-interaction' => true
             ]);
-//            app()->terminating(function () use ($pluginName) {
-//                Artisan::call('plugin:private_install', [
-//                    'name' => $pluginName,
-//                    '--no-interaction' => true,
-//                ]);
-//            });
+
         } catch (\Exception $e) {
             return back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
