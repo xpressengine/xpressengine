@@ -57,9 +57,9 @@ class PluginProvider
     /**
      * search plugin by keyword
      *
-     * @param null $filters filters for searching
-     * @param int  $page    search result page number
-     * @param int  $count   limit
+     * @param array $filters filters for searching
+     * @param int   $page    search result page number
+     * @param int   $count   limit
      *
      * @return mixed|null
      */
@@ -90,8 +90,19 @@ class PluginProvider
         try {
             $response = $this->request(
                 $url,
-                compact('q', 'authors', 'tags', 'page', 'count', 'collection',
-                    'order', 'order_type', 'site_token', 'sale_type', 'category')
+                compact(
+                    'q',
+                    'authors',
+                    'tags',
+                    'page',
+                    'count',
+                    'collection',
+                    'order',
+                    'order_type',
+                    'site_token',
+                    'sale_type',
+                    'category'
+                )
             );
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
@@ -103,6 +114,12 @@ class PluginProvider
         return $response;
     }
 
+    /**
+     * Get category
+     *
+     * @param string $collection collection keyword
+     * @return mixed|null
+     */
     public function getPluginCategories($collection)
     {
         $url = 'categories';
