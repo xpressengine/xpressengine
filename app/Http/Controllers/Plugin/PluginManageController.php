@@ -530,10 +530,11 @@ class PluginManageController extends Controller
     /**
      * @param Request       $request       request
      * @param PluginHandler $pluginHandler plugin handler
+     * @param Operator      $operator      operator
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postUpload(Request $request, PluginHandler $pluginHandler)
+    public function postUpload(Request $request, PluginHandler $pluginHandler, Operator $operator)
     {
         $uploadFile = $request->file('plugin');
         if ($uploadFile == null) {
@@ -541,13 +542,15 @@ class PluginManageController extends Controller
         }
 
         try {
-            $pluginName =  $pluginHandler->uploadPlugin($uploadFile);
-            app()->terminating(function () use ($pluginName) {
-                Artisan::call('plugin:private_install', [
-                    'name' => $pluginName,
-                    '--no-interaction' => true,
-                ]);
-            });
+            $pluginName = $pluginHandler->uploadPlugin($uploadFile);
+
+            $operator->setPrivateMode(false)->save();
+
+            $this->runArtisan('plugin:private_install', [
+                'name' => $pluginName,
+                '--no-interaction' => true
+            ]);
+
         } catch (\Exception $e) {
             return back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
