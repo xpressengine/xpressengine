@@ -57,7 +57,7 @@ class MediaLibraryController extends Controller
 
         $returnValue['path'] = $this->handler->getFolderPath($targetFolderItem);
         $returnValue['folder'] = $this->handler->getFolderList($targetFolderItem, $request);
-        $returnValue['file'] = $this->handler->getFileList($targetFolderItem, $request);
+        $returnValue['file'] = $this->handler->getMediaLibraryFileList($targetFolderItem, $request);
 
         return XePresenter::makeApi($returnValue);
     }
@@ -139,7 +139,7 @@ class MediaLibraryController extends Controller
      */
     public function getFile(Request $request, $mediaLibraryFileId)
     {
-        $fileItem = $this->handler->getFileItem($mediaLibraryFileId);
+        $fileItem = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
 
         return XePresenter::makeApi([$fileItem]);
     }
@@ -167,7 +167,7 @@ class MediaLibraryController extends Controller
      */
     public function moveFile(Request $request)
     {
-        $this->handler->moveFile($request);
+        $this->handler->moveMediaLibraryFile($request);
 
         return XePresenter::makeApi([]);
     }
@@ -196,7 +196,7 @@ class MediaLibraryController extends Controller
      */
     public function download($mediaLibraryFileId)
     {
-        $mediaLibraryFile = $this->handler->getFileItem($mediaLibraryFileId);
+        $mediaLibraryFile = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
         if ($mediaLibraryFile == null || $mediaLibraryFile->file == null) {
             throw new NotFoundFileException;
         }

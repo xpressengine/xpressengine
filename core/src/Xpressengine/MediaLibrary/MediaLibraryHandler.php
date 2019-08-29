@@ -164,25 +164,25 @@ class MediaLibraryHandler
             if ($this->folders->query()->find($targetId) != null) {
                 $this->dropFolder($targetId);
             } else {
-                $this->dropFile($targetId);
+                $this->dropMediaLibraryFile($targetId);
             }
         }
     }
 
     /**
-     * @param string $fileId file id
+     * @param string $mediaLibraryFileId file id
      *
      * @return void
      * @throws \Exception
      */
-    protected function dropFile($fileId)
+    protected function dropMediaLibraryFile($mediaLibraryFileId)
     {
-        $fileItem = $this->files->query()->find($fileId);
-        if ($fileItem == null) {
+        $mediaLibraryFile = $this->files->query()->find($mediaLibraryFileId);
+        if ($mediaLibraryFile == null) {
             return;
         }
 
-        $this->files->delete($fileItem);
+        $this->files->delete($mediaLibraryFile);
     }
 
     /**
@@ -208,7 +208,7 @@ class MediaLibraryHandler
             }
 
             foreach ($folderItem->files as $file) {
-                $this->dropFile($file->id);
+                $this->dropMediaLibraryFile($file->id);
             }
 
             $parentFolderItem = $this->getFolderItem($folderItem->parent_id);
@@ -307,7 +307,7 @@ class MediaLibraryHandler
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getFileList(MediaLibraryFolder $folderItem, Request $request)
+    public function getMediaLibraryFileList(MediaLibraryFolder $folderItem, Request $request)
     {
         $attributes = $request->all();
 
@@ -337,34 +337,34 @@ class MediaLibraryHandler
     }
 
     /**
-     * @param string $fileId file id
+     * @param string $mediaLibraryFileId file id
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function getFileItem($fileId)
+    public function getMediaLibraryFileItem($mediaLibraryFileId)
     {
-        $fileItem = $this->files->query()->find($fileId);
-        if ($fileItem == null) {
+        $mediaLibraryFileItem = $this->files->query()->find($mediaLibraryFileId);
+        if ($mediaLibraryFileItem == null) {
             throw new NotFoundFileException();
         }
 
-        $this->files->setCommonFileVisible($fileItem);
+        $this->files->setCommonFileVisible($mediaLibraryFileItem);
 
-        return $fileItem;
+        return $mediaLibraryFileItem;
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId file id
      *
      * @return void
      */
-    public function updateFile(Request $request, $fileId)
+    public function updateFile(Request $request, $mediaLibraryFileId)
     {
-        $fileItem = $this->getFileItem($fileId);
+        $mediaLibraryFileItem = $this->getMediaLibraryFileItem($mediaLibraryFileId);
         $attribute = $request->only(['title', 'alt_text', 'caption', 'description']);
 
-        $this->files->update($fileItem, $attribute);
+        $this->files->update($mediaLibraryFileItem, $attribute);
     }
 
     /**
@@ -436,7 +436,7 @@ class MediaLibraryHandler
                 'ext' => $uploadFile->getClientOriginalExtension()
             ];
 
-            $fileItem = $this->files->storeItem($fileAttribute);
+            $mediaLibraryFileItem = $this->files->storeItem($fileAttribute);
         } catch (\Exception $e) {
             XeDB::rollback();
 
@@ -445,7 +445,7 @@ class MediaLibraryHandler
 
         XeDB::commit();
 
-        return $fileItem;
+        return $mediaLibraryFileItem;
     }
 
     /**
@@ -454,7 +454,7 @@ class MediaLibraryHandler
      * @return void
      * @throws \Exception
      */
-    public function moveFile(Request $request)
+    public function moveMediaLibraryFile(Request $request)
     {
         $targetFolder = $this->getFolderItem($request->get('folder_id', ''));
         $fileIds = $request->get('file_id', []);
@@ -465,7 +465,7 @@ class MediaLibraryHandler
         foreach ($fileIds as $fileId) {
             XeDB::beginTransaction();
             try {
-                $fileItem = $this->getFileItem($fileId);
+                $fileItem = $this->getMediaLibraryFileItem($fileId);
 
                 $this->files->update($fileItem, ['folder_id' => $targetFolder->id]);
             } catch (\Exception $e) {
