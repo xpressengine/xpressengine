@@ -279,9 +279,10 @@ if (function_exists('locale_url') === false) {
      * @package Xpressengine\Translation
      *
      * @param string $locale 국가 코드
+     * @param array  $params 추가할 파라메터
      * @return string
      */
-    function locale_url($locale)
+    function locale_url($locale, array $params = [])
     {
         $request = app('request');
         $queries = $request->query->all();
@@ -300,6 +301,8 @@ if (function_exists('locale_url') === false) {
             $url = $request->url();
             array_set($queries, '_l', $locale);
         }
+
+        $queries = array_merge($queries, $params);
 
         return $url.(count($queries) > 0 ? '?'.http_build_query($queries) : '');
     }
