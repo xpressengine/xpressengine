@@ -16,7 +16,6 @@ namespace App\Providers;
 
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\UIObject\UIObjectHandler;
 use App\UIObjects\Form\Form;
 use App\UIObjects\Form\FormCheckbox;
@@ -65,6 +64,10 @@ class UIObjectServiceProvider extends ServiceProvider
                 return $uiObjectHandler;
             }
         );
+
+        $this->app->resolving('xe.pluginRegister', function ($register) {
+            $this->registerBaseUIObject($register);
+        });
     }
 
     /**
@@ -74,7 +77,7 @@ class UIObjectServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerBaseUIObject();
+        //
     }
 
     /**
@@ -82,12 +85,8 @@ class UIObjectServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerBaseUIObject()
+    protected function registerBaseUIObject($register)
     {
-        // register base uiobjects
-        /** @var PluginRegister $register */
-        $register = $this->app['xe.pluginRegister'];
-
         $register->add(Form::class);
         $register->add(FormText::class);
         $register->add(FormPassword::class);
