@@ -132,27 +132,27 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  target file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function getFile(Request $request, $fileId)
+    public function getFile(Request $request, $mediaLibraryFileId)
     {
-        $fileItem = $this->handler->getFileItem($fileId);
+        $fileItem = $this->handler->getFileItem($mediaLibraryFileId);
 
         return XePresenter::makeApi([$fileItem]);
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  target file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function updateFile(Request $request, $fileId)
+    public function updateFile(Request $request, $mediaLibraryFileId)
     {
-        $this->handler->updateFile($request, $fileId);
+        $this->handler->updateFile($request, $mediaLibraryFileId);
 
         return XePresenter::makeApi([
             'message' => xe_trans('xe::fileInformationUpdateMessage')
@@ -190,13 +190,13 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * @param string $fileId fileId
+     * @param string $mediaLibraryFileId fileId
      *
      * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function download($fileId)
+    public function download($mediaLibraryFileId)
     {
-        $mediaLibraryFile = $this->handler->getFileItem($fileId);
+        $mediaLibraryFile = $this->handler->getFileItem($mediaLibraryFileId);
         if ($mediaLibraryFile == null || $mediaLibraryFile->file == null) {
             throw new NotFoundFileException;
         }

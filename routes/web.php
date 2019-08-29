@@ -938,15 +938,15 @@ Route::group(['prefix' => 'media_library'], function () {
     });
 
     Route::group(['prefix' => 'file'], function () {
-        Route::get('/{file_id}', [
+        Route::get('/{mediaLibraryFileId}', [
             'as' => 'media_library.get_file',
             'uses' => 'MediaLibrary\MediaLibraryController@getFile'
         ]);
-        Route::put('/{file_id}', [
+        Route::put('/{mediaLibraryFileId}', [
             'as' => 'media_library.update_file',
             'uses' => 'MediaLibrary\MediaLibraryController@updateFile'
         ]);
-        Route::post('/{file_id}/modify', [
+        Route::post('/{mediaLibraryFileId}/modify', [
             'as' => 'media_library.modify_file',
             'uses' => 'MediaLibrary\MediaLibraryController@modifyFile'
         ]);
@@ -958,7 +958,7 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
         ]);
-        Route::get('/{file_id}/download', [
+        Route::get('/{mediaLibraryFileId}/download', [
             'as' => 'media_library.download_file',
             'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);
