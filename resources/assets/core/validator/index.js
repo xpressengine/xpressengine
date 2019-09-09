@@ -414,7 +414,7 @@ class Validator extends App {
         const value = that.getValue($dst)
         if (!value) return
 
-        const pattern = /\w+@\w{2,}\.\w{2,}/
+        const pattern = /(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)/
 
         if (!value.match(pattern)) {
           that.error($dst, that.$$xe.Lang.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
