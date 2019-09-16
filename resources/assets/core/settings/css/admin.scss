@@ -35,6 +35,9 @@
 @import "component/variables";
 @import "component/button";
 
+// 관리자 세팅 페이지 개편
+@import "admin-new-style";
+
 /* 단일 클래스 스타일 */
 .text-align--center {text-align: center !important}
 .text-align--left {text-align: left !important}
@@ -1461,7 +1464,7 @@ aside {
     }
   }
 
-  
+
 }
 
 .xe-lypop-plugin {
@@ -1962,7 +1965,7 @@ aside {
     border-radius: 6px;
     box-sizing: border-box;
     background-color: #fff;
-    
+
 
     &:first-child {
       margin-top: 0;
@@ -2145,7 +2148,7 @@ aside {
 
   .list-card__link {
     width: 100%;
-    
+
     &:hover {
       text-decoration: none;
     }
@@ -2182,7 +2185,7 @@ aside {
   .list-card__link {
     display: block;
     width: 100%;
-    
+
     &:hover {
       text-decoration: none;
     }
@@ -2243,7 +2246,7 @@ aside {
       .admin-layer-plugin-popup-plugin__title-sub-text {
         overflow: hidden;
         height: 72px;
-        display:-webkit-box; 
+        display:-webkit-box;
         -webkit-line-clamp:3;
         -webkit-box-orient:vertical;
       }
@@ -2252,7 +2255,7 @@ aside {
     .admin-layer-plugin-popup-body {
       height: calc(100% - 308px);
     }
-  } 
+  }
 }
 
 .admin-layer-plugin-popup--plugin {
@@ -2810,7 +2813,7 @@ aside {
       .admin-layer-plugin-popup-body {
         height: calc(100% - 236px);
       }
-    } 
+    }
   }
 
   .admin-layer-plugin-popup--plugin {

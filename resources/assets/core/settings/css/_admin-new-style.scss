@@ -1,0 +1,340 @@
+.setting-area-group {
+  .setting-area {
+    padding: 24px 15px;
+    background-color: #fff;
+
+    + .setting-area {
+      margin-top: 8px;
+    }
+  }
+
+  .setting-area__header {
+    margin-bottom: 32px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dfe1e6;
+
+    &-title {
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+      letter-spacing: -0.04px;
+    }
+  }
+  
+  .setting-area__body {
+    .setting-box {
+      margin-bottom: 32px;
+
+      label {
+        margin-bottom: 8px;
+      }
+
+      .setting-box__sub-title {
+        display: inline-block;
+        margin: 0 0 8px;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: -0.04px;
+        color: #6b778c;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    .xu-label-checkradio__text {
+      color: #172b4d;
+    }
+
+    .setting-box__text-info {
+      margin: 0;
+      font-size: 12px;
+      line-height: 20px;
+      letter-spacing: -0.13px;
+      color: #6b778c;
+    }
+  }
+
+  .setting-area__footer {
+    
+  }
+
+  .setting-button-box {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+// 테이블
+.table-scroll {
+  overflow-x: auto;
+  min-height: 0.01%;  // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
+}
+
+// 회원가입 세팅 테이블
+.admin-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+
+  td, th {
+    height: 48px;
+    padding: 6px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: -0.04px;
+    color: #6b778c;
+  }
+
+  thead {
+    th {
+      height: auto;
+    }
+  }
+
+  tbody {
+    td, th {
+      border-bottom: 1px solid #ebecf0;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 400;
+      letter-spacing: -0.04px;
+      color: #172b4d;
+    }
+
+    tr {
+      &:hover {
+        background-color: #f4f5f7;
+      }
+    }
+  }
+
+  .admin-table__required {
+    color: #de3618;
+  }
+}
+
+// 회원가입 탭 테이블
+.admin-table__signup {
+  .col1 {
+    
+  }
+
+  .col2 {
+    width: 90px;
+    text-align: center;
+  }
+
+  .col3 {
+    width: 50px;
+    text-align: center;
+  }
+
+  .col4 {
+    width: 60px;
+    text-align: center;
+  }
+
+  thead {
+    th {
+      &:first-of-type {
+        padding-left: 24px;
+      }
+
+      &:last-of-type {
+        padding-right: 14px;
+      }
+    }
+  }
+
+  tbody {
+    th, td {
+      &:first-of-type {
+        padding-left: 24px;
+      }
+
+      &:last-of-type {
+        padding-right: 14px;
+      }
+    }
+  }
+}
+
+// sort 리스트 공통
+.sort-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    display: flex;
+    align-items: center;
+  }
+}
+
+// 사용자 정의 항목 추가 리스트 스타일
+.sort-list--custom-item {
+  // 사용자 정의 항목 추가 리스트 헤더 영역
+  &.sort-list--custom-item-header {
+    > li {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      border-bottom: 0 none;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    .sort-list__header-title {
+      flex: 1 1 auto;
+      padding-left: 36px;
+      color: #6b778c;
+    }
+  
+    .sort-list__header-text {
+      flex: 0 0 50px;
+      width: 50px;
+      text-align: center;
+      color: #6b778c;
+  
+      &.sort-list__header-text--empty {
+        flex: 0 0 100px;
+        width: 100px;
+      }
+    }
+  }
+
+  > li {
+    padding: 6px 10px 6px 0;
+    border-bottom: 1px solid #ebecf0;
+
+    // 드래그 시 스타일
+    &.ui-sortable-helper {
+      background-color: #fff;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      background-color: #f4f5f7;
+    }
+  }
+
+  .sort-list__handler {
+    flex: 0 0 36px;
+    width: 36px;
+  }
+
+  .sort-list__text {
+    flex: 1 1 auto;
+    // width: 100%;
+    margin: 0;
+  }
+
+  .sort-list__checkradio {
+    flex: 0 0 50px;
+    width: 50px;
+    text-align: center;
+  }
+
+  .sort-list__button {
+    flex: 0 0 50px;
+    width: 50px;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .container-fluid {
+    &.container-fluid--part {
+      overflow: hidden;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    &.container-fluid--all {
+      overflow: hidden;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .setting-area-group {
+    .setting-button-box {
+      margin: 16px 15px;
+  
+      a, button {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .setting-area-group {
+    .setting-area {
+      padding: 32px;
+
+      + .setting-area {
+        margin-top: 16px;
+      }
+    }
+  
+    .setting-area__header {
+      
+    }
+    
+    .setting-area__body {
+      
+    }
+  
+    .setting-area__footer {
+      
+    }
+  
+    .setting-button-box {
+  
+    }
+  }
+
+  // 회원가입 탭 테이블
+  .setting-table__signup {
+    .col1 {
+
+    }
+
+    .col2 {
+      width: 80px;
+      text-align: center;
+    }
+
+    .col3 {
+      width: 80px;
+      text-align: center;
+    }
+
+    .col4 {
+      width: 80px;
+      text-align: center;
+    }
+  }
+}
+
+@media (min-width: 1068px) {
+  .container-fluid {
+    &.container-fluid--part {
+      max-width: 960px;
+      margin: 0;
+    }
+  }
+}
