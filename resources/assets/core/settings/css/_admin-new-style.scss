@@ -22,13 +22,17 @@
       letter-spacing: -0.04px;
     }
   }
-  
+
   .setting-area__body {
     .setting-box {
       margin-bottom: 32px;
 
-      label {
+      .xu-label-checkradio {
         margin-bottom: 8px;
+
+        + .xu-label-checkradio {
+          margin-left: 24px;
+        }
       }
 
       .setting-box__sub-title {
@@ -59,7 +63,7 @@
   }
 
   .setting-area__footer {
-    
+
   }
 
   .setting-button-box {
@@ -121,7 +125,7 @@
 // 회원가입 탭 테이블
 .admin-table__signup {
   .col1 {
-    
+
   }
 
   .col2 {
@@ -199,13 +203,13 @@
       padding-left: 36px;
       color: #6b778c;
     }
-  
+
     .sort-list__header-text {
       flex: 0 0 50px;
       width: 50px;
       text-align: center;
       color: #6b778c;
-  
+
       &.sort-list__header-text--empty {
         flex: 0 0 100px;
         width: 100px;
@@ -252,6 +256,85 @@
   }
 }
 
+// ----- 약관 및 안내 ------
+// 약관 및 안내 sort-list
+.sort-list--button-type {
+  border: 1px solid #dfe1e6;
+
+  > li {
+    padding: 6px 12px 6px 4px;
+    border-bottom: 1px solid #dfe1e6;
+    background-color: #fff;
+
+    &:last-child {
+      border-bottom: 0 none;
+    }
+
+    &.on {
+      background-color: #2684ff;
+
+      .sort-list__handler {
+        i {
+          color: #fff;
+        }
+      }
+
+      .sort-list__button {
+        color: #fff;
+      }
+    }
+  }
+
+  .sort-list__button {
+    width: 100%;
+    padding: 8px 0;
+    border: 0 none;
+    background-color: transparent;
+    text-align: left;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.setting-terms__sort-list-button {
+  padding: 6px 0;
+  border: 1px solid #dfe1e6;
+  border-top: 0 none;
+  background-color: #fff;
+
+  .xu-button {
+    width: 100%;
+    padding-left: 16px;
+    text-align: left;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+// 약관 및 안내 컨텐츠 textarea 영역
+.setting-box__terms-content {
+  margin-top: -18px;
+
+  textarea {
+    height: 420px;
+  }
+}
+// ----- //약관 및 안내 ------
+
+// ----- 다국어 인풋 스타일 ------
+.setting-box {
+  .form-group {
+    label {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 600;
+      color: #6b778c;
+    }
+  }
+}
+// ----- //다국어 인풋 스타일 ------
 
 @media (max-width: 767px) {
   .container-fluid {
@@ -270,11 +353,17 @@
 
   .setting-area-group {
     .setting-button-box {
-      margin: 16px 15px;
-  
+       // margin: 16px 15px;
+      display: flex;
+      margin: 0 -4px;
+      padding: 0 15px 32px;
+      background-color: #fff;
+
       a, button {
-        display: block;
+        flex: 1;
         width: 100%;
+        margin: 0 4px;
+        padding: 0;
       }
     }
   }
@@ -289,21 +378,21 @@
         margin-top: 16px;
       }
     }
-  
+
     .setting-area__header {
-      
+
     }
-    
+
     .setting-area__body {
-      
+
     }
-  
+
     .setting-area__footer {
-      
+
     }
-  
+
     .setting-button-box {
-  
+
     }
   }
 
