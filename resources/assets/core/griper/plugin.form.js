@@ -3,11 +3,11 @@ import $ from 'jquery'
 
 const defaultOptions = {
   selectors: {
-    elementGroup: '.form-group',
-    errorText: '.__xe_error_text'
+    elGroup: '.xu-form-group, .form-group',
+    elMessage: '.xu-form-group__validation'
   },
   classes: {
-    message: ['error-text', '__xe_error_text']
+    message: ['xu-form-group__validation']
   },
   tags: {
     message: 'p'
@@ -47,6 +47,7 @@ export default class Form extends Plugin {
       // @deprecated
       this.$$app.form.fn = this.$$app.form.prototype = (function () {
         return {
+          message: that.message,
           constructor: that.$$app.form,
           options: that.options,
           getGroup: that.getGroup,
@@ -58,43 +59,77 @@ export default class Form extends Plugin {
     })
   }
 
+  /**
+   * 메시지 출력
+   */
+  message ($element, message, type = 'error', replace = true) {
+    this.putByElement($element, message, type, replace)
+    scrollToElement($element)
+  }
+
+  /**
+   * 메시지 삭제
+   */
+  // clear () {
+
+  // }
+
+  form ($element, message, type = 'error', replace = true) {
+    this.putByElement($element, message, type, replace)
+    scrollToElement($element)
+  }
+
+  /**
+   * @private
+   */
+  putByElement ($element, message, type, replace) {
+    let $elMessage = $element.closest(this.getGroup($element)).find(this.options.selectors.elMessage)
+
+    if (!replace || !$elMessage.length) {
+      $elMessage = this.put(this.getGroup($element), message, $element)
+    }
+
+    $elMessage
+      .attr('class', this.options.classes.message.join(' '))
+      .text(message)
+
+    if (type) {
+      $elMessage.addClass('xu-text--' + type)
+    }
+  }
+
+  put ($group, message, $element) {
+    var $elMessage = $('<' + this.options.tags.message + '>')
+      .addClass(this.options.classes.message.join(' '))
+      .text(message)
+
+    if ($group.length) {
+      $group.append($elMessage)
+    } else {
+      $element.after($elMessage)
+    }
+
+    return $elMessage
+  }
+
+  /**
+   * 옵션 지정
+   * @param {object} options
+   */
   setOption (options = {}) {
     Object.assign(this.optinos, options || {})
   }
 
-  form ($element, message) {
-    this.putByElement($element, message)
-    scrollToElement($element)
-  }
-
+  /**
+   * @private
+   * @param {jQuery} $element
+   */
   getGroup ($element) {
-    return $element.closest(this.options.selectors.elementGroup)
-  }
-
-  putByElement ($element, message) {
-    this.put(this.getGroup($element), message, $element)
-  }
-
-  put ($group, message, $element) {
-    if ($group.length) {
-      $group.append(
-        $('<' + this.options.tags.message + '>')
-          .addClass(this.options.classes.message.join(' '))
-          .text(message)
-      )
-      $group.addClass('xe-form-group--invalid')
-    } else {
-      $element.after(
-        $('<' + this.options.tags.message + '>')
-          .addClass(this.options.classes.message.join(' '))
-          .text(message)
-      )
-      $element.addClass('xe-form-control--invalid')
-    }
+    return $element.closest(this.options.selectors.elGroup)
   }
 
   clear ($form) {
-    $form.find(this.options.tags.message + this.options.selectors.errorText).remove()
+    $form.find(this.options.selectors.elMessage).remove()
     $form.find('.xe-form-group--invalid').removeClass('xe-form-group--invalid')
     $form.find('.xe-form-control--invalid').removeClass('xe-form-control--invalid')
   }

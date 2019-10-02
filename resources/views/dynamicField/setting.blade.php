@@ -38,7 +38,7 @@
     </table>
 
     <!-- Modal -->
-    <div class="xe-modal fade __xe_df_modal" role="dialog">
+    <div class="xe-modal __xe_df_modal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">

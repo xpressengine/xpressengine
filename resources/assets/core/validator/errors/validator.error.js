@@ -7,10 +7,11 @@ import XeError from 'xe/error'
  * @property {string} name
  */
 class ValidationError extends XeError {
-  constructor (message, request, responseData = null, responseHeaders = null) {
+  constructor (message, field = null) {
     super(message)
 
     this.name = this.constructor.name
+    this.field = field
   }
 }
 
