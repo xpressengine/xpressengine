@@ -1,77 +1,91 @@
-<table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;background:#F1F6FB">
-    <tr>
-        <td align="center">
-            <!-- 아웃룩용 max-width 핵 -->
-            <!--[if (gte mso 9)|(IE)]>
-            <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td width="600">
-            <![endif]-->
-            <div style="max-width:600px;margin:0 auto">
-                <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#F1F6FB;-webkit-text-size-adjust:100%;text-align:left">
+<!-- 공통 환경 구성 -->
+<table style="padding:0; margin:0; border:0; width:100%; border-spacing: 0; border-collapse:collapse; table-layout:fixed; color:#333; font-family:-apple system, BlinkMacSystemFont, 'San Francisco', 'Roboto', 'Segoe UI',  'Avenir LT Std', 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', 'Nanum Gothic', Dotum, 돋움, 'Helvetica Neue', sans-serif; font-size:15px; line-height:1.6em; letter-spacing:-.01em; word-break:break-all;">
+    <tbody style="padding:0; margin:0; border:0;">
+        <tr style="padding:0; margin:0; border:0;">
+            <td style="padding:0 10px; margin:0; border:0;">
+                <table style="padding:0; margin:0 auto; border:0; min-width:280px; max-width:536px; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
                     <tbody>
-                    <tr>
-                        <td height="50"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center">
-                            @section('header')
-                            <a href="{{ url('/') }}" target="_blank" style="text-decoration:none;font-family: NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#6f8dff;font-size:30px;letter-spacing:-1px">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a>
-                            @show
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="20"></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left;color:#2c2e37">
-                                <tbody>
-                                <tr>
-                                    <td height="35"></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 40px;line-height: 0;font-size: 0;background-color:#fff;">
-                                        &nbsp;
-                                    </td>
-                                    <td>
+                        <tr>
+                            <td>
+                                <!-- 이메일 레이아웃 -->
+                                <table style="padding:0; margin:0 auto; border:0; max-width:536px; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+                                    <tbody style="padding:0; margin:0; border:0;">
+                                        <tr style="padding:0; margin:0; border:0;">
+                                            <td style="padding:0; margin:0; border:0; width:100%; height:35px;"></td>
+                                        </tr>
+                                        <tr style="padding:0; margin:0; border:0;">
+                                            <td style="padding:0; margin:0; border:0; width:100%; height:25px; text-align: center;">
+
+                                                @section('header')
+                                                <a href="{{ url('/') }}" target="_blank" style="padding:0; margin:0; border:0; font-size:24px; color:#161616; text-decoration:none;">
+                                                    {{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}
+                                                </a>
+                                                @show
+
+                                            </td>
+                                        </tr>
+                                        <tr style="padding:0; margin:0; border:0;">
+                                            <td style="padding:16px 0 71px 0; margin:0; border:0; width:100%; height:10px;">
+                                                <hr style="margin:0; border:0; background:#DADCE0; height:1px;">
+                                            </td>
+                                        </tr>
+
                                         @section('content')
-                                            {!! $content or '' !!}
+                                        {!! $content or '' !!}
                                         @show
-                                    </td>
-                                    <td style="width: 40px;line-height: 0;font-size: 0;background-color:#fff;">
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td height="40"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="17"></td>
-                    </tr>
-                    <tr>
-                        <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#8e8e93;font-size:13px;text-align:center;line-height:13px;">
-                            @section('footer')
-                            <p>본 메일은 발신전용 입니다.</p>
-                            <p style="font-size: 12px;">Copyright © <a href="{{ url('/') }}" target="_blank" style="color:#6f8dff;text-decoration:none">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a> All Rights Reserved. Supported by <a href="https://xpressengine.io" target="_blank" style="color:#6f8dff;text-decoration:none">XE</a></p>
-                            @show
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="50"></td>
-                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-            </div>
-            <!--[if mso]>
             </td>
-            </tr>
-            </table>
-            <![endif]-->
-        </td>
-    </tr>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 푸터 -->
+<table style="padding:0; border:0; width:100%; border-spacing: 0; border-collapse:collapse; table-layout:fixed; color:#4a4a4a; font-family:'Malgun Gothic', sans-serif;">
+    <tbody style="padding:0; margin:0; border:0;">
+        <tr style="padding:0; margin:0; border:0;">
+            <td style="padding:0; margin:0; border:0;">
+                <table style="padding:0; margin:0; border:0; max-width:536px; width:100%; margin:0 auto; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+                    <tbody style="padding:0; margin:0; border:0;">
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:68px 0 28px 0; margin:0; border:0; width:100%; height:1px;">
+                                <hr style="margin:0; border:0; background:#DADCE0; height:1px;">
+                            </td>
+                        </tr>
+                        {{-- <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; text-align:center;">
+                                <a href="#"><img src="image/ico-xe.png" style="padding:0; margin:0 5px; border:0; width:36px; height:36px;" /></a>
+                                <a href="#"><img src="image/ico-facebook.png" style="padding:0; margin:0 5px; border:0; width:36px; height:36px;" /></a>
+                                <a href="#"><img src="image/ico-medium.png" style="padding:0; margin:0 5px; border:0; width:36px; height:36px;" /></a>
+                            </td>
+                        </tr> --}}
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; height:20px;"></td>
+                        </tr>
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; text-align:center;">
+                                <p style="padding:0; margin:0; border:0; font-size:13px; line-height:1.5em; color:#777;">본 메일은 발신 전용 메일입니다.</p>
+                            </td>
+                        </tr>
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; height:10px;"></td>
+                        </tr>
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; text-align:center;">
+                                <p style="padding:0; margin:0; border:0; font-size:13px; line-height:1.5em; color:#777;">Copyright &copy; {{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}. All Rights Reserved.</p>
+                            </td>
+                        </tr>
+                        <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border:0; width:100%; height:55px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
 </table>
