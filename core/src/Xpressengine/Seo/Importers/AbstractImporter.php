@@ -53,6 +53,13 @@ abstract class AbstractImporter
     protected $metaItems = [];
 
     /**
+     * property used meta items
+     *
+     * @var array
+     */
+    protected $properties = [];
+
+    /**
      * will be cut items name and length
      *
      * @var array
@@ -148,10 +155,17 @@ abstract class AbstractImporter
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
             $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
             $alias = $sequence ? $this->metaItems[$key] . $sequence : $this->metaItems[$key];
-            $this->frontend->meta($alias)
-                ->property($this->metaItems[$key])
-                ->content($content)
-                ->load();
+            if (in_array($key, $this->properties)) {
+                $this->frontend->meta($alias)
+                    ->property($this->metaItems[$key])
+                    ->content($content)
+                    ->load();
+            } else {
+                $this->frontend->meta($alias)
+                    ->name($this->metaItems[$key])
+                    ->content($content)
+                    ->load();
+            }
         }
     }
 

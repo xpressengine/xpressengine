@@ -41,10 +41,10 @@ class BasicImporterTest extends \PHPUnit\Framework\TestCase
         $frontend->shouldReceive('load');
 
         $frontend->shouldReceive('meta')->andReturnSelf();
-        $frontend->shouldReceive('property')->once()->with('keywords')->andReturnSelf();
+        $frontend->shouldReceive('name')->once()->with('keywords')->andReturnSelf();
         $frontend->shouldReceive('content')->once()->with('test,keyword')->andReturnSelf();
 
-        $frontend->shouldReceive('property')->once()->with('description')->andReturnSelf();
+        $frontend->shouldReceive('name')->once()->with('description')->andReturnSelf();
         $frontend->shouldReceive('content')->once()->with('sample description')->andReturnSelf();
 
         $instance->exec([
