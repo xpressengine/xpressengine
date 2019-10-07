@@ -294,9 +294,7 @@ if (function_exists('locale_url') === false) {
                 throw new \Exception("Unknown locale [$locale]");
             }
             $url = $request->getScheme().'://'.$domains[$locale].'/'.$request->path();
-            if (auth()->check()) {
-                array_set($queries, '_s', encrypt(session()->getId()));
-            }
+            array_set($queries, '_s', encrypt(session()->getId()));
         } else {
             $url = $request->url();
             array_set($queries, '_l', $locale);
