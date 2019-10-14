@@ -7,7 +7,7 @@
           "last 3 versions",
           "ie >= 9"
         ],
-        "useBuiltIns": "false",
+        "useBuiltIns": "usage",
         "corejs": {
           "version": 3
         }
