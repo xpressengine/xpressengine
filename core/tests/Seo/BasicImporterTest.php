@@ -26,11 +26,7 @@ class BasicImporterTest extends \PHPUnit\Framework\TestCase
 
         $frontend->shouldReceive('html')->once()->with('canonical')->andReturnSelf();
 
-//        $request->shouldReceive('fullUrl')->twice()->andReturn('http://domain.com');
-        $request->shouldReceive('getBaseUrl')->andReturn('');
-        $request->shouldReceive('getPathInfo')->andReturn('/path');
-        $request->shouldReceive('getQueryString')->andReturnNull();
-        $urlGenerator->shouldReceive('to')->twice()->with('/path')->andReturn('http://domain.com/path');
+        $request->shouldReceive('fullUrl')->twice()->andReturn('http://domain.com/path');
 
         $urlGenerator->shouldReceive('asset')->twice()->with('http://domain.com/path')
             ->andReturn('http://domain.com/path');

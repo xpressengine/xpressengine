@@ -74,7 +74,7 @@ class OpenGraphImporter extends AbstractImporter
      *
      * @var array
      */
-    protected $needHost = ['url', 'image'];
+    protected $needHost = ['image'];
 
 
     /**
