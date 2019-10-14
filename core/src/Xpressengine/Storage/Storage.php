@@ -510,6 +510,7 @@ class Storage
      * @return array
      *
      * @see \League\Flysystem\Util\MimeType::getExtensionToMimeTypeMap
+     * @deprecated since 3.0.5 instead use MimeFilter
      */
     public static function getExtensionToMimeTypeMap()
     {
@@ -691,6 +692,8 @@ class Storage
      *
      * @param array $map map array
      * @return void
+     *
+     * @deprecated since 3.0.5 instead use MimeFilter
      */
     public static function extendMimeMap(array $map)
     {
