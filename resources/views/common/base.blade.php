@@ -22,14 +22,15 @@
 
     <!-- JS at head.prepend -->
     <script>
-        var xeBaseURL = '{{  url()->to(null) }}'; // @DEPRECATED
+        var xeBaseURL = '{{  url()->to('/') }}'; // @DEPRECATED
     </script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script>
         if (window.XE) {
             XE.setup({
-                baseURL: '{{  url()->to(null) }}',
+                baseURL: '{{  url()->to('/') }}',
+                assetsURL: '{{  request()->root() }}',
                 userToken: '{!! csrf_token() !!}',
                 loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
                 useXeSpinner: true, // @DEPRECATED

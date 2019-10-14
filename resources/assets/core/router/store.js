@@ -8,6 +8,7 @@ export const STORE_ROUTES = 'STORE_ROUTES'
 
 const state = {
   origin: (window && window.location) ? window.location.origin : '',
+  assetsOrigin: (window && window.location) ? window.location.origin : '',
   fixedPrefix: 'plugin',
   settingsPrefix: 'settings',
   routes: {}
@@ -16,6 +17,9 @@ const state = {
 const getters = {
   origin: state => {
     return state.origin
+  },
+  assetsOrigin: state => {
+    return state.assetsOrigin
   }
 }
 
@@ -34,6 +38,7 @@ const actions = {
 const mutations = {
   [STORE_URL]: (state, payload) => {
     payload.origin = trimEnd(payload.origin, '/#? ')
+    payload.assetsOrigin = trimEnd(payload.assetsOrigin, '/#? ')
     state = Object.assign(state, payload)
   },
   [CHANGE_ORIGIN]: (state, origin) => {
