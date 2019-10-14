@@ -287,13 +287,13 @@ if (function_exists('locale_url') === false) {
         $request = app('request');
         $queries = $request->query->all();
         if (config('xe.lang.locale_type') === 'route') {
-            $url = $request->root().'/'.$locale.'/'.$request->path();
+            $url = $request->root().'/'.$locale.'/'.ltrim($request->path(), '/');
         } elseif (config('xe.lang.locale_type') === 'domain') {
             $domains = config('xe.lang.locale_domains');
             if (!isset($domains[$locale])) {
                 throw new \Exception("Unknown locale [$locale]");
             }
-            $url = $request->getScheme().'://'.$domains[$locale].'/'.$request->path();
+            $url = $request->getScheme().'://'.$domains[$locale].'/'.ltrim($request->path(), '/');
             array_set($queries, '_s', encrypt(session()->getId()));
         } else {
             $url = $request->url();
