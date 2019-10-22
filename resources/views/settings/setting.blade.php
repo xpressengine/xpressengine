@@ -174,17 +174,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>XE Store Token</label> <small>{{ xe_trans('xe::siteSettingInputTokenDescription') }}</small>
-                                {{ uio('formText', ['name'=>'site_token', 'value'=>old('site_token', $pluginConfig->get('site_token'))]) }}
+                                <input type="text" class="form-control" name="site_token" value="{{ $pluginConfig->get('site_token') }}">
                             </div>
                         </div>
-                        @if(!getenv('COMPOSER_HOME') && !getenv('HOME'))
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::composerHomeDir') }}</label> <small>{{ xe_trans('xe::descComposerHomeDir') }}</small>
-                                    {{ uio('formText', ['name'=>'composer_home', 'value'=>old('composer_home', $pluginConfig->get('composer_home'))]) }}
-                                </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::composerHomeDir') }}</label> <small>{{ xe_trans('xe::descComposerHomeDir') }}</small>
+                                <input type="text" class="form-control" name="composer_home" value="{{ $pluginConfig->get('composer_home') ?: (getenv('COMPOSER_HOME') ?: getenv('HOME')) }}">
                             </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
             </div>
