@@ -94,7 +94,6 @@ class ShareLocalizeSession
     {
         return $this->app['config']['xe.lang.locale_type'] === 'domain' &&
             $request->method() === 'GET' &&
-            $request->get('_s') &&
-            !$this->app['auth']->check();
+            $request->get('_s');
     }
 }

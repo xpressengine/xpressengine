@@ -203,7 +203,7 @@
                     </label>
                 </div>
                 <div class="xe-btn-group-all">
-                    <button class="__xe_saveBtn xe-btn xe-btn-primary">{{ xe_trans('xe::applyModified') }}</button>
+                    <button class="__xe_saveBtn xe-btn xe-btn-primary">{{ xe_trans('xe::confirm') }}</button>
                     <button class="__xe_cancelBtn xe-btn xe-btn-secondary">{{ xe_trans('xe::cancel') }}</button>
                 </div>
             </form>

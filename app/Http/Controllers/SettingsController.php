@@ -180,7 +180,14 @@ class SettingsController extends Controller
      */
     protected function updateWebmasterSetting($inputs)
     {
-        app('xe.config')->put('user.common', $inputs);
+        $userConfig = app('xe.config')->get('user.common');
+        foreach ($inputs as $key => $value) {
+            if (isset($userConfig[$key]) === true) {
+                $userConfig[$key] = $value;
+            }
+        }
+
+        app('xe.config')->modify($userConfig);
     }
 
     /**

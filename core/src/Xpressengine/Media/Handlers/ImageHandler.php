@@ -106,7 +106,8 @@ class ImageHandler extends AbstractHandler
             $file = $this->storage->find($originId);
             $parts = pathinfo($file->filename);
             if (isset($parts['extension']) && $parts['extension'] != '') {
-                $name = sprintf('%s.%s', $name, $parts['extension']);
+                $extension = $this->isAvailable($file->mime) ? $parts['extension'] : 'jpg';
+                $name = sprintf('%s.%s', $name, $extension);
             }
         }
         $file = $this->storage->create(
