@@ -186,14 +186,14 @@ export default {
       });
     },
     toggleAttachArea () {
-      $('.media-library__button-group--state-upload').removeClass('open')
+      $('.media-library').trigger('hide.mobilePanel')
       $('.media-library-upload').toggleClass('active');
     },
     clearSelected () {
       this.$root.clearSelectedMedia()
     },
     dialogCreateFolder () {
-      $('.media-library__button-group--state-upload').removeClass('open')
+      $('.media-library').trigger('hide.mobilePanel')
       EventBus.$emit('dialog.open', DialogCreateFolder)
     },
     search () {
@@ -205,6 +205,11 @@ export default {
     },
     showMobileUploadPanel () {
       $('.media-library__button-group--state-upload').addClass('open')
+      $('.media-library-dimmed').show();
+
+      $('.media-library').one('hide.mobilePanel', function () {
+        $('.media-library__button-group--state-upload').removeClass('open')
+      })
     }
   },
   computed: {

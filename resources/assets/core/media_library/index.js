@@ -105,6 +105,14 @@ class MediaLibrary extends App {
         mounted: function () {
           this.$options._subscribeEvent()
 
+          $('.media-library').on('hide.mobilePanel', function () {
+            $('.media-library-dimmed').hide()
+          })
+
+          $('.media-library').on('click', '.media-library-dimmed', function () {
+            $('.media-library').trigger('hide.mobilePanel')
+          })
+
           this.$on('init', () => {
             store.dispatch('media/loadData').then(() => {
               this.$emit('loaded')
@@ -130,7 +138,6 @@ class MediaLibrary extends App {
                       ]
                     },
                     add: function (e, data) {
-                      console.debug('image add data', data)
                       data.submit()
                     },
                     done: function (e, data) {
