@@ -5,7 +5,6 @@
   left: 0;
   width: 100%;
 
-
   &.sticky {
     position: fixed;
     top: 0;
@@ -50,8 +49,8 @@
       opacity: 0.9;
     }
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       top: 50%;
@@ -59,13 +58,13 @@
       background-color: $n0;
     }
 
-    &:before {
+    &::before {
       width: 1px;
       height: 16px;
       margin: -7px 0 0 1px;
     }
 
-    &:after {
+    &::after {
       width: 16px;
       height: 1px;
       margin: 0 0 0 -7px;
@@ -374,7 +373,14 @@
       }
 
       .media-library__button-icon--search {
-        display: none;
+        height: 48px;
+        color: #fff;
+        background-color: transparent;
+
+        &:hover,
+        &:focus {
+          background-color: transparent;
+        }
       }
 
       .media-library__button-search-cancel {
@@ -402,10 +408,13 @@
       display: none;
       width: 36px;
       height: 36px;
+      color: #505f79;
+      background-color: transparent;
 
       &.button-selected {
         display: block;
         border-radius: 0;
+        color: #505f79;
         background-color: transparent;
 
         .media-library__svg {
@@ -424,12 +433,7 @@
   }
 
   .media-library__button-icon {
-    height: 36px;
-    padding: 8px;
-    line-height: 36px;
-
     &.media-library__button-icon--search {
-      padding: 9px;
       background-color: transparent;
 
       &:hover {

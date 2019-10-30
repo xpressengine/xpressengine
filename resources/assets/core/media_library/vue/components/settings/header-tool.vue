@@ -14,23 +14,7 @@
         <button type="button" class="media-library__button-text-remove"></button>
       </div>
       <button @click="search" type="button" class="media-library__button media-library__button-icon media-library__button-icon--search">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="17" viewBox="0 0 17 17">
-          <defs>
-            <path id="a" d="M15.042 8.313a6.73 6.73 0 1 0-13.459 0 6.73 6.73 0 0 0 13.459 0zm-6.73 5.145a5.151 5.151 0 0 1-5.145-5.146 5.152 5.152 0 0 1 5.146-5.145 5.152 5.152 0 0 1 5.145 5.146 5.152 5.152 0 0 1-5.146 5.145zm4.741.735l1.137-1.137 3.216 3.217-1.136 1.137-3.217-3.217z"></path>
-          </defs>
-          <g fill="none" fill-rule="evenodd">
-            <path d="M-10-10h36v36h-36z"></path>
-            <g transform="translate(-1 -1)">
-              <path d="M0 0h19v19H0z"></path>
-              <mask id="b" fill="#fff">
-                <use xlink:href="#a"></use>
-              </mask>
-              <g fill="#505F79" mask="url(#b)">
-                <path d="M0 0h19v19H0z"></path>
-              </g>
-            </g>
-          </g>
-        </svg>
+        <i class="xi-search"></i>
       </button>
       <button @click="clearSearch" type="button" class="media-library__button media-library__button-search-cancel">취소</button>
     </div>
@@ -61,38 +45,12 @@
     <div class="media-library__button-group-radio">
       <!-- [D] 선택 시 class="button-selected" 추가 -->
       <!-- 카드형 버튼 -->
-      <button type="button" :class="{ 'media-library__button': true, 'button-selected': $parent.listType === 'card' }" @click="$parent.changeListType('card')">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="12" viewBox="0 0 15 12">
-          <defs>
-            <path id="icon-card" d="M0 0h3.947v5.25H0V0zm0 6.75h3.947V12H0V6.75zM5.526 0h3.948v5.25H5.526V0zm0 6.75h3.948V12H5.526V6.75zM11.053 0H15v5.25h-3.947V0zm0 6.75H15V12h-3.947V6.75z"></path>
-          </defs>
-          <g fill="none" fill-rule="evenodd">
-            <mask id="icon-card-mask" fill="#fff">
-              <use xlink:href="#icon-card"></use>
-            </mask>
-            <use fill="#B3BAC5" xlink:href="#icon-card"></use>
-            <g class="media-library__svg" fill="#505F79" mask="url(#icon-card-mask)">
-              <path d="M0 0h15v12H0z"></path>
-            </g>
-          </g>
-        </svg>
+      <button type="button" :class="{ 'media-library__button': true, 'media-library__button-icon': true, 'button-selected': $parent.listType === 'card' }" @click="$parent.changeListType()">
+        <i class="xi-view-module"></i>
       </button>
       <!-- 리스트형 버튼 -->
-      <button type="button" :class="{ 'media-library__button': true, 'button-selected': $parent.listType === 'list' }" @click="$parent.changeListType('list')">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="11" viewBox="0 0 16 11">
-          <defs>
-            <path id="icon-list" d="M4 0h12v2.2H4V0zm0 4.4h12v2.2H4V4.4zm0 4.4h12V11H4V8.8zM0 0h2.4v2.2H0V0zm0 4.4h2.4v2.2H0V4.4zm0 4.4h2.4V11H0V8.8z"></path>
-          </defs>
-          <g fill="none" fill-rule="evenodd">
-            <mask id="icon-list-mask" fill="#fff">
-              <use xlink:href="#icon-list"></use>
-            </mask>
-            <use fill="#505F79" xlink:href="#icon-list"></use>
-            <g class="media-library__svg" fill="#505F79" mask="url(#icon-list-mask)">
-              <path d="M0 0h16v11H0z"></path>
-            </g>
-          </g>
-        </svg>
+      <button type="button" :class="{ 'media-library__button': true, 'media-library__button-icon': true, 'button-selected': $parent.listType === 'list' }" @click="$parent.changeListType()">
+        <i class="xi-view-list"></i>
       </button>
     </div>
 
@@ -127,8 +85,8 @@
     -->
     <div class="media-library-content-sort">
       <!-- [D] 첫번째 클릭 오름차순 class="active-sort--up" 적용, 두번째 클릭 내림차순 class="active-sort--down" 적용, 항목 변경 시 두 클래스 삭제 -->
-      <button type="button" class="media-library-content__button-sort">
-        제목순
+      <button type="button" class="media-library-content__button-sort active-sort--up">
+        제목 순
         <span class="blind">리스트 정렬 버튼</span>
         <span class="media-library-sort-arrow">
           <span class="blind">정렬 화살표</span>
@@ -137,20 +95,20 @@
 
       <ul class="media-library-content-sort__list">
         <!-- [D] 버튼 선택 시 li 에 class="on" 추가 (체크 표시 노출 됨) -->
-        <li class="on">
-          <button type="button" class="media-library-content-sort__list-button">제목순</button>
+        <li :class="{ 'on': orderTarget === 3 }">
+          <button type="button" class="media-library-content-sort__list-button" data-order-target="3">제목 순</button>
         </li>
-        <li class>
-          <button type="button" class="media-library-content-sort__list-button">글쓴이순</button>
+        <li :class="{ 'on': orderTarget === 6 }">
+          <button type="button" class="media-library-content-sort__list-button" data-order-target="6">글쓴이 순</button>
         </li>
-        <li class>
-          <button type="button" class="media-library-content-sort__list-button">업로드 글순</button>
+        <li :class="{ 'on': orderTarget === 5 }">
+          <button type="button" class="media-library-content-sort__list-button" data-order-target="5">업로드 글 순</button>
         </li>
-        <li class>
-          <button type="button" class="media-library-content-sort__list-button">파일 크기순</button>
+        <li :class="{ 'on': orderTarget === 4 }">
+          <button type="button" class="media-library-content-sort__list-button" data-order-target="4">파일 크기 순</button>
         </li>
-        <li class>
-          <button type="button" class="media-library-content-sort__list-button">날짜순</button>
+        <li :class="{ 'on': orderTarget === 1 }">
+          <button type="button" class="media-library-content-sort__list-button" data-order-target="1">날짜 순</button>
         </li>
       </ul>
     </div>
@@ -165,7 +123,7 @@ import DialogCreateFolder from '../dialogs/DialogCreateFolder.vue'
 
 export default {
   name: 'SettingsHeaderTool',
-  props: ['todo'],
+  props: ['orderTarget', 'orderType'],
   methods: {
     createFolder(event) {
       window.XE.post('/media_manager/folder', {
@@ -197,10 +155,15 @@ export default {
       EventBus.$emit('dialog.open', DialogCreateFolder)
     },
     search () {
-      this.$store.dispatch('media/setFilter', { keyword: this.searchKeyword })
+      if (this.searchKeyword) {
+        this.$store.dispatch('media/setFilter', { keyword: this.searchKeyword })
+      } else {
+        $('.media-library__search').addClass('search-open')
+      }
     },
     clearSearch () {
       this.searchKeyword = ''
+      $('.media-library__search').removeClass('search-open')
       this.$store.dispatch('media/setFilter', { keyword: null })
     },
     showMobileUploadPanel () {
@@ -211,6 +174,8 @@ export default {
         $('.media-library__button-group--state-upload').removeClass('open')
       })
     }
+  },
+  mounted: function () {
   },
   computed: {
     currentFolder: function() {
@@ -224,7 +189,7 @@ export default {
     return {
       createFolderName: '',
       csrfToken: XE.options.userToken,
-      searchKeyword: '',
+      searchKeyword: ''
     };
   }
 };

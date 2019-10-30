@@ -88,7 +88,9 @@ class MediaLibrary extends App {
             showMedia: null,
             dialog: null,
             currentMedia: null,
-            showModal: false
+            showModal: false,
+            orderTarget: 1,
+            orderType: 'up'
           }
         },
         computed: {
@@ -269,7 +271,6 @@ class MediaLibrary extends App {
         }
       },
       mounted () {
-        console.debug('render mounted')
       },
       render (h) {
         return h(ComponentAttachment, {

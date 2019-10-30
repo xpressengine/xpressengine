@@ -149,6 +149,8 @@ export default {
     changeListType (type = null) {
       if (type) {
         this.listType = type
+      } else {
+        this.listType = (this.listType === 'list') ? 'card' : 'list'
       }
     },
     viewFolder (folderId) {
