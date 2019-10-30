@@ -57,7 +57,7 @@ export default {
     },
     editImage() {
       EventBus.$emit('modal.open', this.media.id, {
-        title: '이미지 편집',
+        headerTitle: '이미지 편집',
         body: MediaEditImageSlotBody,
         toolbar: MediaEditImageSlotToolbar,
         aside: MediaEditImageSlotAside

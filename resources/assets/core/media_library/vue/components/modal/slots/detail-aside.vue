@@ -92,7 +92,7 @@
     </div>
     <div class="media-library-layer-popup-detail-info-footer">
       <button @click="closeModal" type="button" class="media-library__button media-library__button--subtle">취소</button>
-      <button type="button" class="media-library__button media-library__button--primary">저장하기</button>
+      <button @click="save" type="button" class="media-library__button media-library__button--primary">저장하기</button>
     </div>
   </div>
 </template>
@@ -106,7 +106,30 @@ export default {
   methods: {
     closeModal () {
       EventBus.$emit('modal.close')
-    }
+    },
+    save () {
+      return new Promise((resolve, reject) => {
+        window.XE.put(['media_library.update_file', { mediaLibraryFileId: this.media.id }], {
+          file_id: this.media.id,
+          title: this.media.title,
+          caption: this.media.caption,
+          alt_text: this.media.alt_text,
+          description: this.media.description
+        })
+          .then((response) => {
+            XE.toast('success', response.data.message)
+            resolve()
+          })
+      })
+    },
+    urlCopy (e) {
+      $(e.target).select();
+      if (typeof document.execCommand === "function") {
+          document.execCommand('copy');
+      }else{ //ie 대응
+          window.clipboardData.setData('Text', this.media.file.url);
+      }
+    },
   },
   computed: {
     thumbnailUrl() {

@@ -11,7 +11,7 @@
             <span class="blind">레이어 팝업</span>
           </h3>
           <!-- [D] 모바일에서 class="media-library-layer-popup__button-close" 버튼 클릭 시 팝업 닫기 기능 적용 (PC 에서는 해당 버튼 숨겨짐) -->
-          <button type="button" class="media-library-layer-popup__button-close">
+          <button @click="closeModal" type="button" class="media-library-layer-popup__button-close">
             <span class="blind">파일 상세정보 레이어 팝업 닫기</span>
             <span class="media-library-layer-popup__button-close-image"></span>
           </button>
@@ -57,7 +57,12 @@ export default {
     nextMedia() {
       EventBus.$emit('modal.nextMedia')
     },
-    prevMedia() {}
+    prevMedia() {
+      EventBus.$emit('modal.prevMedia')
+    },
+    closeModal() {
+      EventBus.$emit('modal.close')
+    }
   },
   created: function() {
     EventBus.$on('modal.open', (mediaId, slots = {}, options = {}) => {

@@ -100,18 +100,18 @@
     <div class="media-library__button-group media-library__button-group--state-upload">
       <div class="media-library__button-group-inner">
         <button @click="dialogCreateFolder" type="button" class="media-library__button media-library__button--default">
-          <span class="media-library__icon media-library__icon-folder"></span>
+          <i class="xi-folder-o"></i>
           새폴더
         </button>
         <button @click="toggleAttachArea" type="button" class="media-library__button media-library__button--default">
-          <span class="media-library__icon media-library__icon-upload"></span>
+          <i class="xi-upload"></i>
           업로드
         </button>
       </div>
     </div>
 
     <!-- [D] 버튼 노출 시 class="open" 추가 (css 에니메이션 적용 되어 있음) -->
-    <button type="button" class="media-library-header-mobile-upload-button">
+    <button @click="showMobileUploadPanel" type="button" class="media-library-header-mobile-upload-button open">
       <span class="blind">모바일 화면 새폴더, 업로드 팝업 노출</span>
     </button>
     <!-- //모바일 플로팅 버튼 (새폴더, 업로드 노출) -->
@@ -186,12 +186,14 @@ export default {
       });
     },
     toggleAttachArea () {
+      $('.media-library__button-group--state-upload').removeClass('open')
       $('.media-library-upload').toggleClass('active');
     },
     clearSelected () {
       this.$root.clearSelectedMedia()
     },
     dialogCreateFolder () {
+      $('.media-library__button-group--state-upload').removeClass('open')
       EventBus.$emit('dialog.open', DialogCreateFolder)
     },
     search () {
@@ -201,6 +203,9 @@ export default {
       this.searchKeyword = ''
       this.$store.dispatch('media/setFilter', { keyword: null })
     },
+    showMobileUploadPanel () {
+      $('.media-library__button-group--state-upload').addClass('open')
+    }
   },
   computed: {
     currentFolder: function() {

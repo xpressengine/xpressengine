@@ -69,6 +69,7 @@ export default {
     showMedia (mediaId, event) {
       if (typeof mediaId !== 'undefined') {
         EventBus.$emit('modal.open', mediaId, {
+          headerTitle: '파일 상세정보',
           body: ModalSlotsDetailBody
         })
       }

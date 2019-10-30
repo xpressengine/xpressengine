@@ -4,6 +4,7 @@ const types = {
   SET_MEDIA_LIST: 'SET_MEDIA_LIST',
   SET_PATH: 'SET_PATH',
   SET_PAGINATE: 'SET_PAGINATE',
+  DELETE_FILE: 'DELETE_FILE',
   DELETE_FOLDER: 'DELETE_FOLDER',
   ADD_FOLDER: 'ADD_FOLDER',
   ADD_MEDIA: 'ADD_MEDIA',
@@ -125,6 +126,9 @@ const actions = {
   replaceMedia ({ commit }, payload) {
     commit(types.SET_MEDIA, payload)
   },
+  deleteMedia ({ commit }, payload) {
+    commit(types.DELETE_FILE, payload)
+  },
   viewFolder ({ dispatch, getters }, payload) {
     dispatch('setFilter', { folder_id: payload }).then(function () {
       return getters['parentFolder']
@@ -162,6 +166,9 @@ const mutations = {
   },
   [types.SET_PATH] (state, payload) {
     state.path = payload
+  },
+  [types.DELETE_FILE] (state, payload) {
+    state.media.splice(state.media.findIndex(item => item.id === payload), 1)
   },
   [types.DELETE_FOLDER] (state, payload) {
     state.folder.splice(state.folder.findIndex(item => item.id === payload), 1)

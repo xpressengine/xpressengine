@@ -51,6 +51,7 @@ export default {
     })
 
     EventBus.$on('photoeditor.complete', (payload) => {
+      this.modal.slots.headerTitle = '파일 상세보기'
       this.modal.slots.body = SlotDetailBody
       this.modal.slots.aside = SlotDetailAside
       this.modal.slots.toolbar = SlotDetailToolbar
@@ -78,6 +79,7 @@ export default {
       media: null,
       modal: {
         slots: {
+          headerTitle: '타이틀',
           body: SlotDetailBody,
           toolbar: SlotDetailToolbar,
           aside: SlotDetailAside
@@ -125,6 +127,9 @@ export default {
     <detail-container></detail-container>
 
     <detail-modal>
+      <template v-slot:headerTitle>
+        {{ modal.slots.headerTitle }}
+      </template>
       <template v-slot:toolbar>
         <component :is="modal.slots.toolbar" :media="media"></component>
       </template>

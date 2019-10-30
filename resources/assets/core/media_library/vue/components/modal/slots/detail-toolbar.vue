@@ -2,6 +2,7 @@
   <div class="media-library-layer-popup_button-box" style="display: flex;">
     <!-- 편집 -->
     <button
+      @click="editImage"
       type="button"
       class="media-library__button media-library__button--subtle media-library__button--icon"
     >
@@ -9,6 +10,7 @@
     </button>
     <!-- 다운로드 -->
     <button
+      @click="downloadAsset"
       type="button"
       class="media-library__button media-library__button--subtle media-library__button--icon"
     >
@@ -16,7 +18,7 @@
     </button>
     <!-- 삭제 -->
     <button
-      @click="remove"
+      @click="deleteFile"
       type="button"
       class="media-library__button media-library__button--subtle media-library__button--icon"
     >
@@ -47,10 +49,32 @@
 </template>
 
 <script>
+import EventBus from '../../eventBus'
+import MediaEditImageSlotBody from '../../media/MediaEditImageSlotBody.vue'
+import MediaEditImageSlotToolbar from '../../media/MediaEditImageSlotToolbar.vue'
+import MediaEditImageSlotAside from '../../media/MediaEditImageSlotAside.vue'
+import DialogDeleteFile from '../../dialogs/DialogDeleteFile.vue'
+
 export default {
   props: ['media'],
   data() {
     return {}
+  },
+  methods: {
+    editImage() {
+      EventBus.$emit('modal.open', this.media.id, {
+        headerTitle: '이미지 편집',
+        body: MediaEditImageSlotBody,
+        toolbar: MediaEditImageSlotToolbar,
+        aside: MediaEditImageSlotAside
+      })
+    },
+    downloadAsset() {
+      window.location.href = this.media.file.download_url
+    },
+    deleteFile() {
+      EventBus.$emit('dialog.open', DialogDeleteFile)
+    }
   }
 }
 </script>

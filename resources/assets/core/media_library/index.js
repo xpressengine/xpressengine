@@ -98,52 +98,54 @@ class MediaLibrary extends App {
         },
         created: function () {
           this.renderMode = renderMode
+          Promise.all([window.XE.Router, window.XE.Lang]).then(() => {
+            this.$emit('init')
+          })
         },
         mounted: function () {
           this.$options._subscribeEvent()
 
-          store.dispatch('media/loadData').then(() => {
-            this.$emit('loaded')
-            EventBus.$emit('data.loaded')
+          this.$on('init', () => {
+            store.dispatch('media/loadData').then(() => {
+              this.$emit('loaded')
+              EventBus.$emit('data.loaded')
 
-            $(function () {
-              if (typeof $.fn.fileupload !== 'undefined') {
-                $('.form-control--file').fileupload({
-                  url: that.$$xe.route('media_library.upload'),
-                  dataType: 'json',
-                  sequentialUploads: true,
-                  // maxChunkSize: 1000000,
-                  formData: () => {
-                    return [
-                      {
-                        name: '_token',
-                        value: that.$$xe.options.userToken
-                      },
-                      {
-                        name: 'folder_id',
-                        value: that.$$xe.config.getters['mediaLibrary/currentFolder'].id
-                      }
-                    ]
-                  },
-                  add: function (e, data) {
-                    console.debug('image add data', data)
-                    data.submit()
-                  },
-                  done: function (e, data) {
-                    $.each(data.result.files, function (index, file) {
-                      $('<p/>').text(file.name).appendTo(document.body)
-                    })
-                    // store.dispatch('media/addMedia', data.result)
-                    store.dispatch('media/loadData', () => {
-                      return {
-                        folder_id: that.$xe.config.getters['mediaLibrary/currentFolder'].id
-                      }
-                    })
-                  }
-                })
-              } else {
-                console.error('파일 업로더가 없음')
-              }
+              $(function () {
+                if (typeof $.fn.fileupload !== 'undefined') {
+                  $('.form-control--file').fileupload({
+                    url: window.XE.route('media_library.upload'),
+                    dataType: 'json',
+                    sequentialUploads: true,
+                    // maxChunkSize: 1000000,
+                    formData: () => {
+                      return [
+                        {
+                          name: '_token',
+                          value: window.XE.options.userToken
+                        },
+                        {
+                          name: 'folder_id',
+                          value: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                        }
+                      ]
+                    },
+                    add: function (e, data) {
+                      console.debug('image add data', data)
+                      data.submit()
+                    },
+                    done: function (e, data) {
+                      $.each(data.result.files, function (index, file) {
+                        $('<p/>').text(file.name).appendTo(document.body)
+                      })
+                      store.dispatch('media/loadData', {
+                        folder_id: window.XE.config.getters['mediaLibrary/currentFolder'].id
+                      })
+                    }
+                  })
+                } else {
+                  console.error('파일 업로더가 없음')
+                }
+              })
             })
           })
         },
@@ -254,15 +256,24 @@ class MediaLibrary extends App {
       components: {
         ComponentAttachment
       },
+      data: function () {
+        return {
+          files: []
+        }
+      },
+      mounted () {
+        console.debug('render mounted')
+      },
       render (h) {
         return h(ComponentAttachment, {
           propsData: {
-            renderMode: this.renderMode,
-            currentMedia: this.currentMedia
+            files: this.files
           }
         })
       }
     })
+
+    return this
   }
 }
 

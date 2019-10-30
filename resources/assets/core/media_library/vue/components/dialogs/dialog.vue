@@ -3,7 +3,7 @@
     <div class="media-library-dialog-popup-table">
       <div class="media-library-dialog-popup-table-cell">
         <div class="media-library-dialog-popup-content-box">
-          <component :is="slots.content"></component>
+          <component :is="slots.content" :media="media"></component>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@ export default {
   created: function() {
     console.debug('dialog created')
 
-    EventBus.$on('dialog.open', (component) => {
+    EventBus.$on('dialog.open', (component, payload) => {
       this.visible = true
       this.slots.content = component
     })
