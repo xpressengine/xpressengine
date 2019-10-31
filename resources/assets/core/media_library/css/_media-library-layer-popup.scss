@@ -148,7 +148,7 @@
   right: 0;
   padding: 20px;
   background-color: rgba(52, 61, 82, 0.6);
-  z-index: 1010;
+  z-index: 9999;
 
   .media-library-layer-popup-content {
     display: flex;
@@ -469,7 +469,7 @@
           &:hover {
             i {
               color: rgba(255, 255, 255, 1);
-            }  
+            }
           }
 
           i {
@@ -497,7 +497,7 @@
           &:hover {
             i {
               color: rgba(255, 255, 255, 1);
-            }  
+            }
           }
 
           i {
@@ -535,7 +535,7 @@
             margin: 0;
             padding: 0;
 
-            &:after {
+            &::after {
               content: '';
               display: block;
               clear: both;
@@ -588,7 +588,7 @@
               margin-top: 20px;
               padding-top: 20px;
 
-              &:before {
+              &::before {
                 content: '';
                 position: absolute;
                 top: 0;
@@ -1015,7 +1015,7 @@
             //   margin: 0;
             //   padding: 0;
 
-            //   &:after {
+            //   &::after {
             //     content: '';
             //     display: block;
             //     clear: both;
@@ -1053,7 +1053,7 @@
               padding: 0;
 
               + dl {
-                &:before {
+                &::before {
                   content: '';
                   left: -24px;
                   right: -24px;

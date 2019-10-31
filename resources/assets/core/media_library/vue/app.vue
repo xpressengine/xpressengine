@@ -98,7 +98,7 @@ export default {
       class="media-library-layer-popup media-library-layer-popup--media-library"
       tabindex="-1"
       role="dialog"
-      v-if="$props.renderMode === 'modal'"
+      v-if="$root.renderMode === 'modal'"
     >
       <div class="media-library-layer-popup-content">
         <div class="media-library-layer-popup-header">

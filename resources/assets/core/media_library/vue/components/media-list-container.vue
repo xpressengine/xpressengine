@@ -1,6 +1,6 @@
 <template>
   <div class="media-library-main">
-    <header-tool></header-tool>
+    <header-tool :orderTarget="$root.orderTarget" :orderType="$root.orderType"></header-tool>
 
     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
     <div class="media-library-content" style="display: block;">
