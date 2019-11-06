@@ -319,10 +319,10 @@ class MediaLibraryHandler
                 break;
             }
         }
-        if ($isSearchState == false) {
-            $attributes = ['folder_id' => $folderItem->id];
+        if ($isSearchState === false) {
+            $attributes['folder_id'] = $folderItem->id;
 
-            if ($request->has('per_page') == true) {
+            if ($request->has('per_page') === true) {
                 $attributes['per_page'] = $request->get('per_page');
             }
         }
