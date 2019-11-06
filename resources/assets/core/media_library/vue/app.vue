@@ -122,7 +122,8 @@ export default {
       </div>
     </div>
 
-    <main-container v-else></main-container>
+    <main-container v-else-if="$root.renderMode !== 'widget'"></main-container>
+    <div v-else></div>
 
     <detail-container></detail-container>
 

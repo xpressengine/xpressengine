@@ -182,7 +182,7 @@ export default {
     },
     save () {
       return new Promise((resolve, reject) => {
-        window.XE.put(['media_library.update_file', { file_id: this.media.id }], {
+        window.XE.put(['media_library.update_file', { mediaLibraryFileId: this.media.id }], {
           file_id: this.media.id,
           title: this.media.title,
           caption: this.media.caption,

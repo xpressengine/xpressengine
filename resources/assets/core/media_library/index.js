@@ -120,41 +120,9 @@ class MediaLibrary extends App {
               this.$emit('loaded')
               EventBus.$emit('data.loaded')
 
-              $(function () {
-                if (typeof $.fn.fileupload !== 'undefined') {
-                  $('.form-control--file').fileupload({
-                    url: window.XE.route('media_library.upload'),
-                    dataType: 'json',
-                    sequentialUploads: true,
-                    // maxChunkSize: 1000000,
-                    formData: () => {
-                      return [
-                        {
-                          name: '_token',
-                          value: window.XE.options.userToken
-                        },
-                        {
-                          name: 'folder_id',
-                          value: window.XE.config.getters['mediaLibrary/currentFolder'].id
-                        }
-                      ]
-                    },
-                    add: function (e, data) {
-                      data.submit()
-                    },
-                    done: function (e, data) {
-                      $.each(data.result.files, function (index, file) {
-                        $('<p/>').text(file.name).appendTo(document.body)
-                      })
-                      store.dispatch('media/loadData', {
-                        folder_id: window.XE.config.getters['mediaLibrary/currentFolder'].id
-                      })
-                    }
-                  })
-                } else {
-                  console.error('파일 업로더가 없음')
-                }
-              })
+              if (this.renderMode !== 'widget') {
+                that.setupDropzone($('.media-library .form-control--file'), { dropZone: $('.media-library .dropZone') })
+              }
             })
           })
         },
@@ -282,6 +250,52 @@ class MediaLibrary extends App {
     })
 
     return this
+  }
+
+  setupDropzone ($el, options) {
+    $(function () {
+      var setup = {
+        url: window.XE.route('media_library.upload'),
+        dataType: 'json',
+        sequentialUploads: true,
+        // maxChunkSize: 1000000,
+        formData: () => {
+          return [
+            {
+              name: '_token',
+              value: window.XE.options.userToken
+            },
+            {
+              name: 'folder_id',
+              value: window.XE.config.getters['mediaLibrary/currentFolder'].id
+            }
+          ]
+        },
+        add: function (e, data) {
+          console.debug('done', data)
+          data.submit()
+        },
+        done: function (e, data) {
+          $.each(data.result.files, function (index, file) {
+            $('<p/>').text(file.name).appendTo(document.body)
+            window.XE.MediaLibrary.$$emit('media.uploaded', file)
+          })
+          store.dispatch('media/loadData', {
+            folder_id: window.XE.config.getters['mediaLibrary/currentFolder'].id
+          }).then(() => {
+            window.XE.MediaLibrary.$$emit('media.uploaded', store.getters['media/media'](data.result[0].id))
+          })
+        }
+      }
+
+      $.extend(setup, options)
+
+      if (typeof $.fn.fileupload !== 'undefined') {
+        $el.fileupload(setup)
+      } else {
+        console.error('파일 업로더가 없음')
+      }
+    })
   }
 }
 

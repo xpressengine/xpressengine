@@ -198,7 +198,7 @@ export default {
 
 console.debug('this.$props.media.id', this.$props.media.id)
       XE.Request.axiosInstance.request({
-        url: window.XE.route('media_library.modify_file', { file_id: this.$props.media.id }),
+        url: window.XE.route('media_library.modify_file', { mediaLibraryFileId: this.$props.media.id }),
         data: formData,
         method: 'post',
         headers: {
