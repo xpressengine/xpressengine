@@ -604,7 +604,13 @@ class MediaLibraryHandler
             $originImage->meta->update($originImageMetaAttributes);
             $newImage->meta->update($newImageMetaAttributes);
 
-            $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
+            //이미지를 여러번 수정 하더라도 최초에 업로드한 파일만 저장
+            if ($originalMediaLibraryFile['origin_file_id'] === null) {
+                $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
+            } else {
+                //최초 수정한 파일이 아니면 변경 후 삭제 처리
+                \Storage::delete($newImage);
+            }
 
             XeDB::commit();
         } catch (\Exception $e) {
