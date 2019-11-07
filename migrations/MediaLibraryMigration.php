@@ -103,6 +103,10 @@ class MediaLibraryMigration extends Migration
             return false;
         }
 
+        if ($this->checkExistOriginFileIdColumn() == false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -111,7 +115,7 @@ class MediaLibraryMigration extends Migration
      *
      * @param string $installedVersion current version
      *
-     * @return mixed
+     * @return void
      */
     public function update($installedVersion = null)
     {
@@ -125,6 +129,10 @@ class MediaLibraryMigration extends Migration
 
         if ($this->checkExistRootFolder() == false) {
             $this->storeRootFolder();
+        }
+
+        if ($this->checkExistOriginFileIdColumn() == false) {
+            $this->createOriginFileIdColumn();
         }
     }
 
@@ -184,6 +192,18 @@ class MediaLibraryMigration extends Migration
                 $table->index('descendant');
             });
         }
+    }
+
+    private function checkExistOriginFileIdColumn()
+    {
+        return Schema::hasColumn($this->fileTableName, 'origin_file_id');
+    }
+
+    private function createOriginFileIdColumn()
+    {
+        Schema::table($this->fileTableName, function (Blueprint $table) {
+            $table->string('origin_file_id', 36)->nullable()->after('file_id');
+        });
     }
 
     private function checkExistConfig()

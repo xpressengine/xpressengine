@@ -184,7 +184,7 @@ class MediaLibraryController extends Controller
             throw new UploadFileNotExistException();
         }
 
-        $file = $this->handler->uploadFile($request);
+        $file = $this->handler->uploadMediaLibraryFile($request);
 
         return XePresenter::makeApi([$file]);
     }
@@ -204,8 +204,17 @@ class MediaLibraryController extends Controller
         return \XeStorage::download($mediaLibraryFile->file);
     }
 
-    public function modifyFile(Request $request)
+    public function modifyFile(Request $request, $originFileId)
     {
+        $originalMediaLibraryFileItem = $this->handler->getMediaLibraryFileItem($originFileId);
+        if ($request->file('file') == null) {
+            throw new UploadFileNotExistException();
+        }
 
+        $newImageFile = $this->handler->uploadModifyFile($request);
+
+        $this->handler->swapImageFile($originalMediaLibraryFileItem, $newImageFile);
+
+        return redirect()->back();
     }
 }

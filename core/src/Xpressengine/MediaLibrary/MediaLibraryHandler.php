@@ -20,12 +20,14 @@ use Xpressengine\Http\Request;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFolderException;
 use Xpressengine\MediaLibrary\Exceptions\UnableRootFolderException;
+use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFileRepository;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
 use XeDB;
 use XeStorage;
 use XeMedia;
+use Xpressengine\Storage\File;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
@@ -367,13 +369,52 @@ class MediaLibraryHandler
         $this->files->update($mediaLibraryFileItem, $attribute);
     }
 
+    public function uploadModifyFile(Request $request)
+    {
+        $uploadFile = $request->file('file');
+
+        $mediaLibraryConfig = config('xe.media.mediaLibrary');
+
+        //file size check
+        if ($mediaLibraryConfig['max_size'] != null && $mediaLibraryConfig['max_size'] != '' &&
+            $mediaLibraryConfig['max_size'] * 1024 * 1024 < $uploadFile->getSize()) {
+            throw new HttpException(
+                Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
+                xe_trans('xe::msgMaxFileSize', [
+                    'fileMaxSize' => $mediaLibraryConfig['max_size'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
+        }
+
+        //file extension check
+        $disallowExtensions = array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $mediaLibraryConfig['disallow_extensions']));
+
+        if (array_search('*', $disallowExtensions) === true
+            || in_array(strtolower($uploadFile->getClientOriginalExtension()), $disallowExtensions)) {
+            throw new HttpException(
+                Response::HTTP_NOT_ACCEPTABLE,
+                xe_trans('xe::msgImpossibleUploadingFiles', [
+                    'extensions' => $mediaLibraryConfig['disallow_extensions'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
+        }
+
+        $file = XeStorage::upload($uploadFile, 'public/media_library/modify', null, 'media');
+
+        return $file;
+    }
+
     /**
      * @param Request $request request
      *
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \Exception
      */
-    public function uploadFile(Request $request)
+    public function uploadMediaLibraryFile(Request $request)
     {
         XeDB::beginTransaction();
 
@@ -475,5 +516,113 @@ class MediaLibraryHandler
             }
             XeDB::commit();
         }
+    }
+
+    public function swapImageFile(MediaLibraryFile $originalMediaLibraryFile, File $newFile)
+    {
+        $imageHandler = XeMedia::image();
+
+        $originFile = $originalMediaLibraryFile->file;
+        $originImage = XeMedia::make($originFile);
+        $newImage = XeMedia::make($newFile);
+
+        $dirtyAttributes = $originFile->getDirty();
+        foreach ($dirtyAttributes as $key => $dirtyAttribute) {
+            if (isset($originFile->{$key}) === true) {
+                unset($originFile[$key]);
+            }
+        }
+
+        $newImageThumbnails = $imageHandler->getThumbnails($newImage);
+        $originImageThumbnails = $imageHandler->getThumbnails($originImage);
+
+        try {
+            XeDB::beginTransaction();
+
+            //기존 썸네일 파일 정보 교체
+            foreach ($originImageThumbnails as $originImageThumbnail) {
+                $originImageThumbnailCode = $originImageThumbnail->meta->code;
+
+                $newImageThumbnail = $newImageThumbnails->filter(
+                    function ($newImageThumbnail) use ($originImageThumbnailCode) {
+                        return $newImageThumbnail->meta->code === $originImageThumbnailCode;
+                    }
+                )->first();
+
+                if ($newImageThumbnail == null) {
+                    continue;
+                }
+
+                //파일 교체
+                $this->swapFile($originImageThumbnail, $newImageThumbnail);
+
+                $originImageThumbnailAttributes = array_diff_key(
+                    $originImageThumbnail->meta->getAttributes(),
+                    array_flip(['id', 'file_id'])
+                );
+
+                $newImageThumbnailAttributes = array_diff_key(
+                    $newImageThumbnail->meta->getAttributes(),
+                    array_flip(['id', 'file_id'])
+                );
+
+                $tempThumbnailAttributes = $originImageThumbnailAttributes;
+                $originImageThumbnailAttributes = $newImageThumbnailAttributes;
+                $newImageThumbnailAttributes = $tempThumbnailAttributes;
+
+                $newImageThumbnail->meta->update($newImageThumbnailAttributes);
+                $originImageThumbnail->meta->update($originImageThumbnailAttributes);
+            }
+
+            //파일 교체
+            $this->swapFile($originFile, $newFile);
+
+            //파일 정보 변경
+            $originFileSize = $originFile->getAttribute('size');
+            $newFileSize = $newFile->getAttribute('size');
+
+            $tempSize = $originFileSize;
+            $originFileSize = $newFileSize;
+            $newFileSize = $tempSize;
+
+            $originFile->update(['size' => $originFileSize]);
+            $newFile->update(['size' => $newFileSize]);
+
+            $originImageMetaAttributes = array_diff_key(
+                $originImage->meta->getAttributes(),
+                array_flip(['id', 'file_id'])
+            );
+            $newImageMetaAttributes = array_diff_key(
+                $newImage->meta->getAttributes(),
+                array_flip(['id', 'file_id'])
+            );
+
+            $tempImageMetaAttributes = $originImageMetaAttributes;
+            $originImageMetaAttributes = $newImageMetaAttributes;
+            $newImageMetaAttributes = $tempImageMetaAttributes;
+
+            $originImage->meta->update($originImageMetaAttributes);
+            $newImage->meta->update($newImageMetaAttributes);
+
+            $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
+
+            XeDB::commit();
+        } catch (\Exception $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+    }
+
+    private function swapFile($originFile, $newFile)
+    {
+        $originFilePath = config('filesystems.disks.' . $originFile->disk . '.root') . DIRECTORY_SEPARATOR . $originFile->path . DIRECTORY_SEPARATOR;
+        $newFilePath = config('filesystems.disks.' . $newFile->disk . '.root') . DIRECTORY_SEPARATOR . $newFile->path . DIRECTORY_SEPARATOR;
+
+        $tempFileName = app('xe.keygen')->generate();
+
+        rename($originFilePath . $originFile->filename, $newFilePath . $tempFileName);
+        rename($newFilePath . $newFile->filename, $originFilePath . $originFile->filename);
+        rename($newFilePath . $tempFileName, $newFilePath . $newFile->filename);
     }
 }
