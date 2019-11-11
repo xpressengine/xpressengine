@@ -486,6 +486,8 @@ class MediaLibraryHandler
 
         XeDB::commit();
 
+        $this->files->setCommonFileVisible($mediaLibraryFileItem);
+
         return $mediaLibraryFileItem;
     }
 
