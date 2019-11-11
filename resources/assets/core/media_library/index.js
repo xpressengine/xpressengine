@@ -149,9 +149,9 @@ class MediaLibrary extends App {
           },
           deleteMedia (id) {
             return that.$$xe.delete('media_library.drop', { target_ids: id })
-              .then(() => {
-                store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
-              })
+            .then(() => {
+              store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
+            })
           },
           removeSelectedMedia (item) {
             if (this.selectedMedia.length) {
@@ -161,12 +161,12 @@ class MediaLibrary extends App {
           remove () {
             if (this.selectedMedia.length) {
               that.$$xe.delete('media_library.drop', { target_ids: this.selectedMedia })
-                .then(() => {
-                  this.selectedMedia.forEach(function (item) {
-                    store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
-                  })
-                  this.selectedMedia = []
+              .then(() => {
+                this.selectedMedia.forEach(function (item) {
+                  store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
                 })
+                this.selectedMedia = []
+              })
             }
           },
           showDialog (dialog) {
@@ -252,7 +252,52 @@ class MediaLibrary extends App {
     return this
   }
 
+  createUploader ($el, data, options) {
+    var that = this
+    var formData = $.extend([], [{
+      'name': '_token',
+      'value': window.XE.options.userToken
+    }], data)
+
+    $(function () {
+      var setup = {
+        url: window.XE.route('media_library.upload'),
+        dataType: 'json',
+        sequentialUploads: true,
+        // maxChunkSize: 1000000,
+        formData: formData,
+        progressall: function (e, data) {
+          if (data.loaded === data.total) {
+            that.$$emit('done.progress', { data })
+          } else {
+            that.$$emit('update.progress', { data })
+          }
+        },
+        add: function (e, data) {
+          data.submit()
+        },
+        done: function (e, data) {
+          $.each(data.result.files, function (index, file) {
+            $('<p/>').text(file.name).appendTo(document.body)
+            window.XE.MediaLibrary.$$emit('media.uploaded', file)
+          })
+
+          that.$$emit('done.upload', { data })
+        }
+      }
+
+      $.extend(setup, options)
+
+      if (typeof $.fn.fileupload !== 'undefined') {
+        $el.fileupload(setup)
+      } else {
+        console.error('파일 업로더가 없음')
+      }
+    })
+  }
+
   setupDropzone ($el, options) {
+    var that = this
     $(function () {
       var setup = {
         url: window.XE.route('media_library.upload'),
@@ -271,8 +316,14 @@ class MediaLibrary extends App {
             }
           ]
         },
+        progressall: function (e, data) {
+          if (data.loaded === data.total) {
+            that.$$emit('done.progress', { data })
+          } else {
+            that.$$emit('update.progress', { data })
+          }
+        },
         add: function (e, data) {
-          console.debug('done', data)
           data.submit()
         },
         done: function (e, data) {
@@ -285,6 +336,7 @@ class MediaLibrary extends App {
           }).then(() => {
             window.XE.MediaLibrary.$$emit('media.uploaded', store.getters['media/media'](data.result[0].id))
           })
+          that.$$emit('done.upload', { data })
         }
       }
 
