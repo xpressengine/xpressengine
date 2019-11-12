@@ -254,10 +254,9 @@ class MediaLibrary extends App {
 
   createUploader ($el, data, options) {
     var that = this
-    var formData = $.extend([], [{
-      'name': '_token',
-      'value': window.XE.options.userToken
-    }], data)
+    var formData = $.extend({}, {
+      _token: window.XE.options.userToken
+    }, data)
 
     $(function () {
       var setup = {
@@ -277,12 +276,7 @@ class MediaLibrary extends App {
           data.submit()
         },
         done: function (e, data) {
-          $.each(data.result.files, function (index, file) {
-            $('<p/>').text(file.name).appendTo(document.body)
-            window.XE.MediaLibrary.$$emit('media.uploaded', file)
-          })
-
-          that.$$emit('done.upload', { data })
+          that.$$emit('done.upload', { file: data.result[0] })
         }
       }
 
