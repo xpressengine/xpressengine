@@ -62,6 +62,15 @@ class MediaLibraryController extends Controller
         return XePresenter::makeApi($returnValue);
     }
 
+    public function getUserFiles(Request $request)
+    {
+        $targetFolderItem = $this->handler->getFolderItem($request->get('folder_id', ''));
+
+        $userFiles = $this->handler->getMediaLibraryFileList($targetFolderItem, $request);
+
+        return XePresenter::makeApi(['file' => $userFiles]);
+    }
+
     /**
      * @param Request $request request
      *

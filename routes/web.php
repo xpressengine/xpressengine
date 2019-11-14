@@ -913,6 +913,10 @@ Route::group(['prefix' => 'media_library'], function () {
         'as' => 'media_library.index',
         'uses' => 'MediaLibrary\MediaLibraryController@index'
     ]);
+    Route::get('/get_user_files', [
+        'as' => 'media_library.get_user_files',
+        'uses' => 'MediaLibrary\MediaLibraryController@getUserFiles'
+    ]);
     Route::delete('/', [
         'as' => 'media_library.drop',
         'uses' => 'MediaLibrary\MediaLibraryController@drop'

@@ -159,23 +159,27 @@ class MediaLibraryFileRepository
      */
     protected function makeWhere($query, $attributes)
     {
-        if (isset($attributes['folder_id']) == true) {
+        if (isset($attributes['folder_id']) === true) {
             $query = $query->where('folder_id', $attributes['folder_id']);
         }
 
-        if (isset($attributes['startDate']) == true) {
+        if (isset($attributes['startDate']) === true) {
             $startDate = date('Y-m-d', strtotime($attributes['startDate']));
 
             $query = $query->where('updated_at', '>=', $startDate);
         }
 
-        if (isset($attributes['endDate']) == true) {
+        if (isset($attributes['endDate']) === true) {
             $endDate = date('Y-m-d', strtotime($attributes['endDate']));
 
             $query = $query->where('updated_at', '<=', $endDate);
         }
 
-        if (isset($attributes['keyword']) == true) {
+        if (isset($attributes['user_id']) === true) {
+            $query = $query->where('user_id', $attributes['user_id']);
+        }
+
+        if (isset($attributes['keyword']) === true) {
             $keyword = $attributes['keyword'];
 
             if (isset($attributes['target']) == false) {
