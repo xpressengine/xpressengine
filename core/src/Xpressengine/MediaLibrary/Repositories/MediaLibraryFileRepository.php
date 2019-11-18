@@ -38,6 +38,8 @@ class MediaLibraryFileRepository
     const ORDER_TYPE_UPDATED_DESC = 1;
     const ORDER_TYPE_CREATED_DESC = 2;
     const ORDER_TYPE_TITLE_ASC = 3;
+    const ORDER_TYPE_FILE_SIZE_DESC = 4;
+    const ORDER_TYPE_USER_NAME_ASC = 5;
 
     /**
      * @param array $attributes items attribute
@@ -227,6 +229,16 @@ class MediaLibraryFileRepository
 
             case self::ORDER_TYPE_TITLE_ASC:
                 $query = $query->orderBy('title', 'asc');
+                break;
+
+            case self::ORDER_TYPE_FILE_SIZE_DESC:
+                $query = $query->with('file')->join('files', 'files.id', '=', 'media_library_files.file_id')
+                    ->orderBy('files.size', 'desc');
+                break;
+
+            case self::ORDER_TYPE_USER_NAME_ASC:
+                $query = $query->with('user')->join('user', 'user.id', '=', 'media_library_files.user_id')
+                    ->orderBy('display_name', 'asc');
                 break;
         }
 
