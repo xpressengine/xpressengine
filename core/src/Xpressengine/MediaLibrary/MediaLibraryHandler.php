@@ -14,6 +14,8 @@
 
 namespace Xpressengine\MediaLibrary;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
@@ -43,6 +45,9 @@ use Xpressengine\Support\Tree\NodePositionTrait;
 class MediaLibraryHandler
 {
     use NodePositionTrait;
+
+    const MODE_ADMIN = 1;
+    const MODE_USER = 2;
 
     /** @var MediaLibraryFileRepository $files */
     protected $files;
@@ -249,15 +254,19 @@ class MediaLibraryHandler
     }
 
     /**
-     * @param MediaLibraryFolder $folderItem folder item
-     * @param Request            $request    request
+     * @param MediaLibraryFolder $targetFolderItem folder item
+     * @param Request            $request          request
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|Collection
      */
-    public function getFolderList(MediaLibraryFolder $folderItem, Request $request)
+    public function getFolderList(MediaLibraryFolder $targetFolderItem, Request $request)
     {
-        if ($request->get('keyword', '') == '') {
-            $folderList = $folderItem->getChildren();
+        if ($request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
+            return [];
+        }
+
+        if ($request->get('keyword', '') === '') {
+            $folderList = $targetFolderItem->getChildren();
         } else {
             $folderList = $this->folders->getFolderItems($request);
         }

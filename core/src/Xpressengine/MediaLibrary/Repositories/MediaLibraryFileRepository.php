@@ -15,7 +15,7 @@
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
-use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
+use Xpressengine\MediaLibrary\MediaLibraryHandler;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
@@ -161,26 +161,33 @@ class MediaLibraryFileRepository
      */
     protected function makeWhere($query, $attributes)
     {
-        if (isset($attributes['folder_id']) == true) {
+        if (isset($attributes['index_mode']) === false ||
+            $attributes['index_mode'] === MediaLibraryHandler::MODE_USER
+        ) {
+            $userId = auth()->user()->getId();
+            $query = $query->where('user_id', $userId);
+        }
+
+        if (isset($attributes['folder_id']) === true) {
             $query = $query->where('folder_id', $attributes['folder_id']);
         }
 
-        if (isset($attributes['startDate']) == true) {
+        if (isset($attributes['startDate']) === true) {
             $startDate = date('Y-m-d', strtotime($attributes['startDate']));
 
             $query = $query->where('updated_at', '>=', $startDate);
         }
 
-        if (isset($attributes['endDate']) == true) {
+        if (isset($attributes['endDate']) === true) {
             $endDate = date('Y-m-d', strtotime($attributes['endDate']));
 
             $query = $query->where('updated_at', '<=', $endDate);
         }
 
-        if (isset($attributes['keyword']) == true) {
+        if (isset($attributes['keyword']) === true) {
             $keyword = $attributes['keyword'];
 
-            if (isset($attributes['target']) == false) {
+            if (isset($attributes['target']) === false) {
                 $query = $query->where(function ($query) use ($keyword) {
                     $query->where('title', 'like', '%' . $keyword . '%')
                         ->orWhere('caption', 'like', '%' . $keyword . '%')
@@ -192,7 +199,7 @@ class MediaLibraryFileRepository
             }
         }
 
-        if (isset($attributes['mime']) == true) {
+        if (isset($attributes['mime']) === true) {
             $query = $query->whereHas('file', function ($query) use ($attributes) {
                 $query->where('mime', $attributes['mime']);
             });
