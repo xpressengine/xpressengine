@@ -44,6 +44,23 @@ class OpenGraphImporter extends AbstractImporter
     ];
 
     /**
+     * property used meta items
+     *
+     * @var array
+     */
+    protected $properties = [
+        'type',
+        'url',
+        'siteName',
+        'title',
+        'description',
+        'author',
+        'image',
+        'image_width',
+        'image_height'
+    ];
+
+    /**
      * will be cut items name and length
      *
      * @var array
@@ -57,7 +74,7 @@ class OpenGraphImporter extends AbstractImporter
      *
      * @var array
      */
-    protected $needHost = ['url', 'image'];
+    protected $needHost = ['image'];
 
 
     /**

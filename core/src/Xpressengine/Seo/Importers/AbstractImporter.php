@@ -53,6 +53,13 @@ abstract class AbstractImporter
     protected $metaItems = [];
 
     /**
+     * property used meta items
+     *
+     * @var array
+     */
+    protected $properties = [];
+
+    /**
      * will be cut items name and length
      *
      * @var array
@@ -118,16 +125,7 @@ abstract class AbstractImporter
      */
     protected function extractUrl(array $data)
     {
-        $url = isset($data['url']) ? $data['url'] : call_user_func(
-            function (UrlGenerator $urlGenerator, Request $request) {
-                $url = $urlGenerator->to($request->getBaseUrl().$request->getPathInfo());
-                $query = $request->getQueryString();
-
-                return $query ? $url . '?' . $query : $url;
-            },
-            static::$urlGenerator,
-            $this->request
-        );
+        $url = isset($data['url']) ? $data['url'] : $this->request->fullUrl();
 
         return htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
     }
@@ -146,12 +144,25 @@ abstract class AbstractImporter
 
         foreach ($contents as $content) {
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
-            $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
+
+            if ($key === 'url') {
+                $content = $this->prependHost($content, false);
+            } elseif (in_array($key, $this->needHost)) {
+                $content = $this->prependHost($content);
+            }
+
             $alias = $sequence ? $this->metaItems[$key] . $sequence : $this->metaItems[$key];
-            $this->frontend->meta($alias)
-                ->property($this->metaItems[$key])
-                ->content($content)
-                ->load();
+            if (in_array($key, $this->properties)) {
+                $this->frontend->meta($alias)
+                    ->property($this->metaItems[$key])
+                    ->content($content)
+                    ->load();
+            } else {
+                $this->frontend->meta($alias)
+                    ->name($this->metaItems[$key])
+                    ->content($content)
+                    ->load();
+            }
         }
     }
 
@@ -172,12 +183,13 @@ abstract class AbstractImporter
     /**
      * prepend host to url path
      *
-     * @param string $url url path
+     * @param string  $url     url path
+     * @param boolean $isAsset given param is the asset
      * @return string
      */
-    protected function prependHost($url)
+    protected function prependHost($url, $isAsset = true)
     {
-        return static::$urlGenerator->asset($url);
+        return $isAsset ? static::$urlGenerator->asset($url) : static::$urlGenerator->to($url);
     }
 
     /**

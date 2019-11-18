@@ -28,6 +28,7 @@ class Router extends App {
 
     return new Promise((resolve) => {
       this.baseURL = XE.options.baseURL
+      this.assetsURL = XE.options.assetsURL
       this.fixedPrefix = XE.options.fixedPrefix
       this.settingsPrefix = XE.options.settingsPrefix
       if (XE.options.routes) this.addRoutes(XE.options.routes)
@@ -35,6 +36,7 @@ class Router extends App {
       this.$$config.subscribe((mutation, state) => {
         if (mutation.type === `router/${STORE_URL}`) {
           this.baseURL = state.router.origin
+          this.assetsURL = state.router.assetsOrigin
           this.fixedPrefix = state.router.fixedPrefix
           this.settingsPrefix = state.router.settingsPrefix
         }
@@ -42,6 +44,7 @@ class Router extends App {
 
       this.$$config.dispatch('router/setUrl', {
         origin: XE.options.baseURL,
+        assetsOrigin: XE.options.assetsURL,
         fixedPrefix: XE.options.fixedPrefix,
         settingsPrefix: XE.options.settingsPrefix
       })
@@ -49,6 +52,7 @@ class Router extends App {
       XE.$$on('setup', (eventName, options) => {
         this.$$config.dispatch('router/setUrl', {
           origin: options.baseURL,
+          assetsOrigin: options.assetsURL,
           fixedPrefix: options.fixedPrefix,
           settingsPrefix: options.settingsPrefix
         })

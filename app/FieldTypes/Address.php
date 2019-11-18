@@ -110,7 +110,8 @@ class Address extends AbstractType
             $key = sprintf('%s_%s', $config->get('id'), $column->name);
 
             if (isset($params[$key]) && $params[$key] != '') {
-                $query = $query->where($key, 'like', '%' . $params[$key] . '%');
+                $columnName = $config->get('id') . '.' . $column->name;
+                $query = $query->where($columnName, 'like', '%' . $params[$key] . '%');
             }
         }
 

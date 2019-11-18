@@ -22,18 +22,19 @@
 
     <!-- JS at head.prepend -->
     <script>
-        var xeBaseURL = '{{  url()->to(null) }}'; // @DEPRECATED
+        var xeBaseURL = '{{ url('/') }}'; // @DEPRECATED
     </script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script>
         if (window.XE) {
             XE.setup({
-                baseURL: '{{  url()->to(null) }}',
+                baseURL: '{{  url('/') }}',
+                assetsURL: '{{  request()->root() }}',
                 userToken: '{!! csrf_token() !!}',
                 loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
                 useXeSpinner: true, // @DEPRECATED
-                locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
+                locale: '{{ app()->getLocale() }}',
                 defaultLocale: '{{ app('xe.translator')->getLocale() }}',
                 fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
                 @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))

@@ -24,7 +24,7 @@ class OpenGraphImporterTest extends \PHPUnit\Framework\TestCase
         $instance = new OpenGraphImporter($frontend, $urlRoot);
         OpenGraphImporter::setUrlGenerator($urlGenerator);
 
-        $urlGenerator->shouldReceive('asset')->once()->with('http://domain.com/path/name')
+        $urlGenerator->shouldReceive('to')->once()->with('http://domain.com/path/name')
             ->andReturn('http://domain.com/path/name');
 
         $frontend->shouldReceive('meta')->andReturnSelf();

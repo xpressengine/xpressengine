@@ -6,7 +6,7 @@
     "plugin"
   ],
   "license": "LGPL-3.0-or-later",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "xpressengine-plugin",
   "support": {
     "email": "input@your.email"

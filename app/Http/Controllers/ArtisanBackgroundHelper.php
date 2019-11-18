@@ -18,6 +18,7 @@ use Illuminate\Console\Application;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ProcessUtils;
 use Illuminate\Support\Str;
+use phpseclib\Net\SSH2;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
@@ -97,7 +98,14 @@ trait ArtisanBackgroundHelper
                 $commands[] = $this->buildProcessParameter($key, $value);
             }
         }
-        $commandLine = Application::formatCommandString(implode(' ', array_filter($commands))).' 2>&1 &';
+
+        $commandLine = Application::formatCommandString(implode(' ', array_filter($commands)));
+
+        if (windows_os()) {
+            $commandLine = 'start "" ' . $commandLine;
+        } else {
+            $commandLine = $commandLine . ' 2>&1 &';
+        }
 
         try {
             return (new Process($commandLine, base_path(), null, null, 3))->run();

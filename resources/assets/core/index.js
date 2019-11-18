@@ -5,6 +5,7 @@ import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
 import lodash from 'lodash'
+import qs from 'qs'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -376,12 +377,28 @@ class XE {
    * @param {object} options jQuery ajax options
    */
   ajax (url, options) {
+
     if (typeof url === 'object') {
       options = $.extend({}, this.Request.config, { headers: { 'X-CSRF-TOKEN': this.config.getters['request/xsrfToken'] } }, url)
       url = undefined
     } else {
       options = $.extend({}, options, this.Request.config, { headers: { 'X-CSRF-TOKEN': this.config.getters['request/xsrfToken'] } }, { url: url })
       url = undefined
+    }
+
+    if (
+      options.type == 'put'
+      || options.type == 'delete'
+      || options.method == 'put'
+      || options.method == 'delete'
+    ) {
+      if (typeof options.data === 'string') {
+        options.data = qs.parse(options.data)
+      }
+
+      options.data._method = options.type || options.method
+      options.data = qs.stringify(options.data)
+      options.type = options.method = 'post'
     }
 
     return $.ajax(url, options)

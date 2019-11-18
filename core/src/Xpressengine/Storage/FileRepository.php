@@ -84,7 +84,7 @@ class FileRepository
             $model->getFileableTable().'.file_id'
         )->where('fileable_id', $fileableId)->select(array_map(function ($column) use ($model) {
             return $model->getTable() . '.' . $column;
-        }, $columns))->get();
+        }, $columns))->orderBy($model->getFileableTable().'.created_at')->get();
     }
 
     /**

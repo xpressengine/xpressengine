@@ -134,7 +134,7 @@ export function asset (resourceUri) {
 
   // 절대 경로로 변경
   if (!isURL(resourceUri)) {
-    result = config.getters['router/origin']
+    result = config.getters['router/assetsOrigin']
 
     if (result.substr(-1) === '/') {
       result = result.substr(0, -1)
