@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $id = $widgetboxPrefix.$userId;
 
         $widgetbox = $handler->find($id);
-        if($widgetbox === null) {
+        if ($widgetbox === null) {
             $dashboard = $handler->find('dashboard');
             $widgetbox = $handler->create([
                 'id' => $id,
@@ -65,8 +65,6 @@ class DashboardController extends Controller
             ]);
             app('xe.permission')->register('widgetbox.' . $id, $grant);
         }
-
-        \XeFrontend::title('XpressEngine3 Settings');
 
         return \XePresenter::make('settings.dashboard', compact('widgetbox'));
     }

@@ -84,6 +84,8 @@ class SettingsMiddleware
             $request->session()->flash('bootfail', $errors);
         }
 
+        \XeFrontend::title(sprintf('%s %s', xe_trans(\XeFrontend::output('title')), xe_trans('xe::manage')));
+
         return $next($request);
     }
 
