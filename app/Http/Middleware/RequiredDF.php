@@ -37,14 +37,14 @@ class RequiredDF
      *
      * @param \Illuminate\Http\Request $request request
      * @param \Closure                 $next    to be called next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (
-            Auth::check() &&
+        if (Auth::check() &&
             !Auth::user()->isAdmin() &&
-            !$request->routeIs('auth.register.add', 'logout')
+            !$request->routeIs('auth.pending_admin', 'auth.pending_email', 'auth.register.add', 'logout')
         ) {
             $fields = XeDynamicField::gets('user');
 
@@ -59,7 +59,9 @@ class RequiredDF
             })->collapse()->filter(function ($rules) {
                 $rules = array_map('\Illuminate\Support\Str::snake', explode('|', $rules));
                 return in_array('required', $rules);
-            })->map(function () {return 'required';});
+            })->map(function () {
+                return 'required';
+            });
 
             if (Validator::make(Auth::user()->getAttributes(), $rules->all())->fails()) {
                 return redirect()->route('auth.register.add');

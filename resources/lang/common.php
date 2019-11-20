@@ -1409,6 +1409,7 @@ return [
     ],
     'registerByEmailConfirmDescription' => [
         'ko' => '이메일 인증을 통해 가입할 수 있습니다. 인증 코드를 전송받을 이메일 주소를 입력하세요.',
+        'en' => 'You can sign up through email authentication. Please enter the email address to which you will receive the authentication code.'
     ],
     'sendConfirmationEmail' => [
         'ko' => '인증 이메일 전송',
@@ -3389,5 +3390,57 @@ return [
     'registerSettingsDescription' => [
         'ko' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
         'en' => 'You can manage the membership process and the membership registration form.'
+    ],
+    'pending_admin' => [
+        'ko' => '관리자 승인 대기',
+        'en' => 'Wait for administrator approval'
+    ],
+    'pending_admin_description' => [
+        'ko' => '관리자 승인 후 가입',
+        'en' => 'Sign up after admin approval'
+    ],
+    'pending_email' => [
+        'ko' => '이메일 인증 대기',
+        'en' => 'Wait for email verification'
+    ],
+    'pending_email_description' => [
+        'ko' => '이메일 인증 후 가입',
+        'en' => 'Sign up after email verification'
+    ],
+    'goToHome' => [
+        'ko' => '홈으로',
+        'en' => 'Go to home'
+    ],
+    'waitingAdminApproval' => [
+        'ko' => '관리자 승인 대기중',
+        'en' => 'Waiting for Admin Approval'
+    ],
+    'beforeAdminApproval' => [
+        'ko' => '회원 가입 승인 전입니다.',
+        'en' => 'This is before you approve your membership.'
+    ],
+    'needAdminApprovalCanLogin' => [
+        'ko' => '관리자의 승인 후 로그인할 수 있습니다.',
+        'en' => 'You can log in after the administrator approves it.'
+    ],
+    'sendConfirmMail' => [
+        'ko' => '인증 메일 발송',
+        'en' => 'Send confirm mail.'
+    ],
+    'sendedRegisterConfirmMail' => [
+        'ko' => '가입하신 이메일로 가입 인증 메일을 발송했습니다.',
+        'en' => 'Sent you a sign-up authentication email with the email you signed up for.'
+    ],
+    'checkYourEmail' => [
+        'ko' => '이메일을 확인해주세요.',
+        'en' => 'Please check your e-mail.'
+    ],
+    'dontReceiveEmail' => [
+        'ko' => '이메일을 받지 못하셨나요?',
+        'en' => 'Didn\'t you get your e-mail?'
+    ],
+    'pending' => [
+        'ko' => '대기중',
+        'en' => 'Pending'
     ]
 ];

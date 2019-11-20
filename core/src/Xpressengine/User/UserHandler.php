@@ -17,6 +17,7 @@ namespace Xpressengine\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
+use Xpressengine\Config\ConfigManager;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
@@ -88,6 +89,11 @@ class UserHandler
     private $imageHandler;
 
     /**
+     * @var ConfigManager $configManager config manager
+     */
+    private $configManager;
+
+    /**
      * constructor.
      *
      * @param UserRepositoryInterface         $users         User 회원 저장소
@@ -98,6 +104,7 @@ class UserHandler
      * @param UserImageHandler                $imageHandler  image handler
      * @param Hasher                          $hasher        해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator     유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param ConfigManager                   $configManager ConfigManager
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -107,7 +114,8 @@ class UserHandler
         PendingEmailRepositoryInterface $pendingEmails,
         UserImageHandler $imageHandler,
         Hasher $hasher,
-        Validator $validator
+        Validator $validator,
+        ConfigManager $configManager
     ) {
         $this->users = $users;
         $this->accounts = $accounts;
@@ -117,6 +125,7 @@ class UserHandler
         $this->validator = $validator;
         $this->pendingEmails = $pendingEmails;
         $this->imageHandler = $imageHandler;
+        $this->configManager = $configManager;
     }
 
     /**
@@ -179,7 +188,7 @@ class UserHandler
     public function create(array $data)
     {
         $data['rating'] = $data['rating'] ?? Rating::USER;
-        $data['status'] = $data['status'] ?? User::STATUS_ACTIVATED;
+        $data['status'] = $data['status'] ?? $this->configManager->getVal('user.register.register_process', User::STATUS_ACTIVATED);
 
         $this->validateForCreate($data);
 

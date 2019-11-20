@@ -36,9 +36,8 @@ use Xpressengine\User\UserRegisterHandler;
                                         <label class="xu-label-checkradio">
                                             <input type="checkbox" name="joinable" value="true" @if ($config->get('joinable') == true) checked @endif>
                                             <span class="xu-label-checkradio__helper"></span>
-                                            <span class="xu-label-checkradio__text">로그인/회원 가입 사용</span>
+                                            <span class="xu-label-checkradio__text">{{xe_trans('xe::permitSignUp')}}</span>
                                         </label>
-                                        <p class="setting-box__text-info" style="padding-left: 24px;">로그인 및 회원 가입 버튼을 표시합니다.<br> 이를 해제하게되면 로그인, 회원가입 버튼이 표시되지 않으며, 페이지는 특정한 경로(예: 회원 권한이 필요한 메뉴에서 로그인)로 로그인 가능</p>
                                     </div>
                                 </div>
                             </div>

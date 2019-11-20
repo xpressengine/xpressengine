@@ -39,7 +39,7 @@ class UserRegisterHandler
 
     public function updateConfig($attribute)
     {
-        if (isset($attribute['joinable']) && $attribute['joinable'] == 'true') {
+        if (isset($attribute['joinable']) && $attribute['joinable'] === 'true') {
             $attribute['joinable'] = true;
         } else {
             $attribute['joinable'] = false;

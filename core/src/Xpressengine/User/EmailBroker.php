@@ -17,6 +17,7 @@ namespace Xpressengine\User;
 use Illuminate\Notifications\Notifiable;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Notifications\AddEmail;
+use Xpressengine\User\Notifications\RegisterEmailApprove;
 use Xpressengine\User\Notifications\RegisterConfirm;
 
 /**
@@ -47,12 +48,13 @@ class EmailBroker
     }
 
     /**
-     * 회원가입시 이메일 인증을 위한 이메일을 전송한다.
+     * 회원가입 전에 이메일 인증을 위한 이메일을 전송한다.
      *
      * @param EmailInterface $mail  전송할 이메일 정보
      * @param string         $token 회원가입 토큰 id
      *
      * @return void
+     * @deprecated since 3.0.8 회원가입 전 이메일 인증 기능 삭제
      */
     public function sendEmailForRegister(EmailInterface $mail, $token)
     {
@@ -80,6 +82,49 @@ class EmailBroker
             public function __invoke($token)
             {
                 $this->notify(new RegisterConfirm($this->mail, $token));
+            }
+
+            /**
+             * Get the notification routing information for the given driver.
+             *
+             * @param string $driver driver
+             * @return mixed
+             */
+            public function routeNotificationFor($driver)
+            {
+                return $this->mail->getAddress();
+            }
+        })($token);
+    }
+
+    /**
+     * @param EmailInterface $mail
+     */
+    public function sendEmailForRegisterApprove(EmailInterface $mail, $token)
+    {
+        (new class($mail) {
+            use Notifiable;
+
+            protected $mail;
+
+            /**
+             * constructor.
+             *
+             * @param EmailInterface $mail mail instance
+             */
+            public function __construct(EmailInterface $mail)
+            {
+                $this->mail = $mail;
+            }
+
+            /**
+             * Invoke the instance
+             *
+             * @return void
+             */
+            public function __invoke($token)
+            {
+                $this->notify(new RegisterEmailApprove($this->mail, $token));
             }
 
             /**

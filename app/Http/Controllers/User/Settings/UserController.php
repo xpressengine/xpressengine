@@ -51,7 +51,7 @@ class UserController extends Controller
     /**
      * UserController constructor.
      *
-     * @param UserHandler $handler
+     * @param UserHandler $handler user handler
      */
     public function __construct(UserHandler $handler)
     {
@@ -161,11 +161,7 @@ class UserController extends Controller
 
         $groupList = $this->handler->groups()->all();
         $groups = $this->getGroupInfo($groupList);
-
-        $status = [
-            ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
-        ];
+        $status = $this->getUserStatus();
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');
@@ -247,11 +243,7 @@ class UserController extends Controller
             $groups[$group->id]['checked'] = 'checked';
         }
 
-        $status = [
-            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
-        ];
-
+        $status = $this->getUserStatus();
         $status[$user->status]['selected'] = 'selected';
 
         // profileImage config
@@ -333,6 +325,27 @@ class UserController extends Controller
         XeDB::commit();
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    /**
+     * get user status list
+     *
+     * @return array
+     */
+    protected function getUserStatus()
+    {
+        return [
+            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            User::STATUS_PENDING_ADMIN => [
+                'value' => User::STATUS_PENDING_ADMIN,
+                'text' => xe_trans('xe::pending_admin')
+            ],
+            User::STATUS_PENDING_EMAIL => [
+                'value' => User::STATUS_PENDING_EMAIL,
+                'text' => xe_trans('xe::pending_email')
+            ]
+        ];
     }
 
     /**

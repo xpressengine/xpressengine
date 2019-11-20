@@ -65,6 +65,10 @@ class UserProvider extends EloquentUserProvider
             }
         }
 
+        if (isset($where['status']) == true) {
+            $where['status'] = is_array($where['status']) ? $where['status'] : [$where['status']];
+        }
+
         $user = null;
         $emailPrefix = null;
 
@@ -99,9 +103,18 @@ class UserProvider extends EloquentUserProvider
             if ($user !== null) {
                 // check other fields
                 foreach ($where as $key => $value) {
-                    if ($user->$key !== $value) {
-                        $user = null;
+                    if ($key === 'status') {
+                        if (in_array($user->status, $value)) {
+                            continue;
+                        }
+                    } else {
+                        if ($user->$key === $value) {
+                            continue;
+                        }
                     }
+
+                    $user = null;
+                    break;
                 }
             }
 
@@ -115,7 +128,11 @@ class UserProvider extends EloquentUserProvider
             // retrieve user without email
             foreach ($where as $key => $value) {
                 if (strpos($key, 'password') === false) {
-                    $query->where($key, $value);
+                    if ($key === 'status') {
+                        $query->whereIn($key, $value);
+                    } else {
+                        $query->where($key, $value);
+                    }
                 }
             }
             $user = $query->first();

@@ -209,7 +209,7 @@ class UserServiceProvider extends ServiceProvider
 
             $keygen = $app['xe.keygen'];
 
-            $expire = $app['config']->get('auth.register.expire', 60);
+            $expire = $app['config']->get('auth.register.expire', 10080);
 
             return new RegisterTokenRepository($connection, $keygen, $table, $expire);
         });
@@ -245,7 +245,8 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.pendingEmails'],
                 $app['xe.user.image'],
                 $app['hash'],
-                $app['validator']
+                $app['validator'],
+                $app['xe.config']
             );
             return $userHandler;
         });
@@ -599,6 +600,7 @@ class UserServiceProvider extends ServiceProvider
         RegisterFormPart::setSkinResolver($this->app['xe.skin']);
         RegisterFormPart::setContainer($this->app);
 
+        //TODO 이메일 인증 삭제
         UserHandler::addRegisterPart(EmailVerifyPart::class);
         UserHandler::addRegisterPart(DefaultPart::class);
         UserHandler::addRegisterPart(DynamicFieldPart::class);

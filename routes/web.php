@@ -77,6 +77,10 @@ Route::group(
         // Route::get('register/create', ['as' => 'auth.register.create', 'uses' => 'Auth\RegisterController@getRegisterForm']); // for create form
         Route::post('register', ['as' => 'auth.register.store', 'uses' => 'Auth\RegisterController@postRegister']); // for store
 
+        //pending_email approve
+        Route::post('send_approve_email', ['as' => 'auth.send_approve_email', 'uses' => 'Auth\RegisterController@getSendApproveEmail']);
+        Route::get('approve_email', ['as' => 'auth.approve_email', 'uses' => 'Auth\RegisterController@postApproveEmail']);
+
         Route::get('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@getRegisterAddInfo']);
         Route::post('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@postRegisterAddInfo']);
 
@@ -103,6 +107,10 @@ Route::group(
         // admin auth
         Route::get('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@getAdminAuth']);
         Route::post('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@postAdminAuth']);
+
+        // pending user
+        Route::get('/pending_admin', ['as' => 'auth.pending_admin', 'uses' => 'Auth\AuthController@pendingAdmin']);
+        Route::get('/pending_email', ['as' => 'auth.pending_email', 'uses' => 'Auth\AuthController@pendingEmail']);
     }
 );
 

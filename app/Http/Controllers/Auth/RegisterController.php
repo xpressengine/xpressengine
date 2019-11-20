@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeConfig;
@@ -27,11 +28,13 @@ use XeTheme;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserInterface;
 
 /**
  * Class RegisterController
@@ -91,7 +94,7 @@ class RegisterController extends Controller
      * Show the application registration form.
      *
      * @param Request $request request
-     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\Presentable
+     * @return \Xpressengine\Presenter\Presentable
      */
     public function getRegister(Request $request)
     {
@@ -102,14 +105,7 @@ class RegisterController extends Controller
             );
         }
 
-        $config = app('xe.config')->get('user.register');
-
-        // 가입 인증을 사용하지 않을 경우, 곧바로 회원가입 폼 출력
-        if (!$config->get('guard_forced', false) || $request->get('token')) {
-            return $this->getRegisterForm($request);
-        }
-
-        return \XePresenter::make('register.index');
+        return $this->getRegisterForm($request);
     }
 
     /**
@@ -148,6 +144,8 @@ class RegisterController extends Controller
      * @param RegisterTokenRepository $tokenRepository RegisterTokenRepository instance
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
+     *
+     * @deprecated since 3.0.8 회원가입 하기 전 이메일 인증 기능 삭제
      */
     public function postRegisterConfirm(Request $request, RegisterTokenRepository $tokenRepository)
     {
@@ -234,9 +232,24 @@ class RegisterController extends Controller
         }
         XeDB::commit();
 
+        //이메일 인증 후 가입 옵션을 사용 했을 때 회원가입 후 인증 메일 발송
+        if ($user->status === User::STATUS_PENDING_EMAIL) {
+            $this->sendApproveEmail($user);
+        }
+
         // login
-        if (app('config')->get('xe.user.registrationAutoLogin') == true) {
+        if (app('config')->get('xe.user.registrationAutoLogin') === true) {
             $this->auth->login($user);
+
+            switch ($user->status) {
+                case User::STATUS_PENDING_ADMIN:
+                    return redirect()->route('auth.pending_admin');
+                    break;
+
+                case User::STATUS_PENDING_EMAIL:
+                    return redirect()->route('auth.pending_email');
+                    break;
+            }
         }
 
         return redirect()->intended(($this->redirectPath()));
@@ -250,6 +263,86 @@ class RegisterController extends Controller
     protected function checkJoinable()
     {
         return XeConfig::getVal('user.register.joinable') === true;
+    }
+
+    /**
+     * 링크를 통해서 회원가입 시 사용하는 인증 메일 발송
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getSendApproveEmail(Request $request)
+    {
+        $address = $request->get('email');
+        $email = $this->handler->pendingEmails()->findByAddress($address);
+
+        $user = $email->user;
+        $this->handler->deleteEmail($email);
+
+        $this->sendApproveEmail($user);
+
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::msgEmailSendComplete')]);
+    }
+
+    /**
+     * 회원가입 인증 메일 발송
+     *
+     * @param UserInterface $user userItem
+     *
+     * @return void
+     */
+    protected function sendApproveEmail(UserInterface $user)
+    {
+        $tokenRepository = app('xe.user.register.tokens');
+
+        $mail = $this->handler->createEmail($user, ['address' => $user->email], false);
+        $token = $tokenRepository->create('register', ['email' => $user->email, 'user_id' => $user->id]);
+        $this->emailBroker->sendEmailForRegisterApprove($mail, $token);
+    }
+
+    /**
+     * 이메일을 통해 회원가입 이메일 인증 처리
+     *
+     * @param Request                 $request         request
+     * @param RegisterTokenRepository $tokenRepository register token repository
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
+    public function postApproveEmail(Request $request, RegisterTokenRepository $tokenRepository)
+    {
+        $tokenId = $request->get('token');
+        if (!$token = $tokenRepository->find($tokenId)) {
+            throw new HttpException(400, xe_trans('xe::msgTokenIsInvalid'));
+        }
+
+        $emailAddress = $token->email;
+        $email = $this->handler->pendingEmails()->findByAddress($emailAddress);
+
+        $code = $request->get('code');
+
+        XeDB::beginTransaction();
+        try {
+            //이메일 승인 처리
+            $this->emailBroker->confirmEmail($email, $code);
+
+            //회원 상태 변경
+            $user = $email->user;
+            $this->handler->update($user, ['status' => User::STATUS_ACTIVATED]);
+
+            //register token 삭제
+            $tokenRepository->delete($tokenId);
+        } catch (InvalidConfirmationCodeException $e) {
+            XeDB::rollback();
+            throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::invalidConfirmationCode'), $e);
+        } catch (Exception $e) {
+            XeDB::rollback();
+            throw $e;
+        }
+        XeDB::commit();
+
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::confirmed')]);
     }
 
     /**
