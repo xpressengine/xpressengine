@@ -40,14 +40,14 @@ class Term extends DynamicModel
      *
      * @var array
      */
-    protected $fillable = ['key', 'locale', 'title', 'content', 'order', 'is_enabled'];
+    protected $fillable = ['key', 'locale', 'title', 'content', 'description', 'order', 'is_enabled', 'is_require'];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = ['is_enabled' => 'bool'];
+    protected $casts = ['is_enabled' => 'bool', 'is_require' => 'bool'];
 
     /**
      * Indicates if the IDs are auto-incrementing.

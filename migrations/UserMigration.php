@@ -156,8 +156,10 @@ class UserMigration extends Migration
             $table->string('id', 36);
             $table->string('title');
             $table->string('content')->nullable();
+            $table->string('description')->nullable();
             $table->integer('order')->default(0);
             $table->boolean('is_enabled')->default(false);
+            $table->boolean('is_required')->default(true);
 
             $table->primary('id');
             $table->engine = "InnoDB";
@@ -174,6 +176,8 @@ class UserMigration extends Migration
 
             $table->index('user_id');
         });
+
+        $this->createUserTermAgreeTable();
     }
 
     /**
@@ -237,6 +241,14 @@ class UserMigration extends Migration
             return false;
         }
 
+        if ($this->checkNeedAddTermTableColumns() === false) {
+            return false;
+        }
+
+        if ($this->checkExistUserTermAgreeTable() === false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -256,6 +268,15 @@ class UserMigration extends Migration
         if ($this->checkExistRegisterConfig() == false) {
             $this->divideRegisterConfig();
         }
+
+        if ($this->checkNeedAddTermTableColumns() === false) {
+            $this->addTermTableColumns();
+            $this->updateOldTermsRequire();
+        }
+
+        if ($this->checkExistUserTermAgreeTable() === false) {
+            $this->createUserTermAgreeTable();
+        }
     }
 
     /**
@@ -265,7 +286,7 @@ class UserMigration extends Migration
      */
     private function checkNeedMergeConfig()
     {
-        return app('xe.config')->get('user.join') !== null ? true : false;
+        return app('xe.config')->get('user.join') !== null;
     }
 
     /**
@@ -330,5 +351,45 @@ class UserMigration extends Migration
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $joinConfigAttribute);
+    }
+
+    private function checkNeedAddTermTableColumns()
+    {
+        return Schema::hasColumn('user_terms', 'is_require') && Schema::hasColumn('user_terms', 'description');
+    }
+
+    private function addTermTableColumns()
+    {
+        Schema::table('user_terms', function (Blueprint $table) {
+            $table->string('description')->after('title')->nullable();
+            $table->boolean('is_require')->default(true)->nullable();
+        });
+    }
+
+    private function updateOldTermsRequire()
+    {
+        \DB::table('user_terms')->update(['is_require' => true]);
+    }
+
+    private function checkExistUserTermAgreeTable()
+    {
+        return Schema::hasTable('user_term_agrees');
+    }
+
+    private function createUserTermAgreeTable()
+    {
+        Schema::create('user_term_agrees', function (Blueprint $table) {
+            $table->string('id', 36);
+
+            $table->string('user_id', 36);
+            $table->string('term_id', 36);
+
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->unique(['user_id', 'term_id']);
+            $table->index('user_id');
+            $table->index('term_id');
+        });
     }
 }
