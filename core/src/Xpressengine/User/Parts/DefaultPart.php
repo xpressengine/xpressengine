@@ -56,7 +56,24 @@ class DefaultPart extends RegisterFormPart
         return [
             'email' => 'required|email',
             'display_name' => 'required',
-            'password' => 'required|confirmed|password',
+            'password' => 'required|password',
         ];
+    }
+
+    /**
+     * validate
+     * 기존에 존재하는 스킨에 비밀번호 확인 필드가 있는 경우를 대비해서 유효성 검사 조건 추가
+     *
+     * @return void
+     */
+    public function validate()
+    {
+        $rules = $this->rules();
+
+        if ($this->request->has('password_confirmation') === true) {
+            $rules['password'] .= '|confirmed';
+        }
+
+        $this->traitValidate($this->request, $rules);
     }
 }
