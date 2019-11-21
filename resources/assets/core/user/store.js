@@ -3,7 +3,8 @@ export const LOGOUT = 'LOGOUT'
 
 const state = {
   logged: false,
-  id: null
+  id: null,
+  rating: 'guest'
 }
 
 const getters = {
@@ -12,6 +13,9 @@ const getters = {
   },
   logged: state => {
     return state.logged
+  },
+  rating: state => {
+    return state.rating
   }
 }
 
@@ -28,10 +32,12 @@ const mutations = {
   [LOGIN]: (state, payload) => {
     state.id = payload.id
     state.logged = true
+    state.rating = payload.rating
   },
   [LOGOUT]: (state, payload) => {
     state.id = null
     state.logged = false
+    state.rating = 'guest'
   }
 }
 

@@ -33,6 +33,10 @@
                 assetsURL: '{{  request()->root() }}',
                 userToken: '{!! csrf_token() !!}',
                 loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
+                user: {
+                    id: '{{ Auth::user()->getId() }}',
+                    rating: '{{ Auth::user()->getRating() }}'
+                },
                 useXeSpinner: true, // @DEPRECATED
                 locale: '{{ app()->getLocale() }}',
                 defaultLocale: '{{ app('xe.translator')->getLocale() }}',

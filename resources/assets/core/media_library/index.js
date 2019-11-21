@@ -81,14 +81,19 @@ class MediaLibrary extends App {
         components: {
           App: ComponentApp
         },
+        // super|manager, user[, guest]
+        // disk, user
         data: function () {
           return {
             renderMode: 'inline',
+            importMode: 'embed',
+            listMode: 'user',
             selectedMedia: [],
             showMedia: null,
             dialog: null,
             currentMedia: null,
             showModal: false,
+            user: options.user || { id: null, rating: 'guest' },
             orderTarget: 1,
             orderType: 'up'
           }
@@ -99,6 +104,7 @@ class MediaLibrary extends App {
           }
         },
         created: function () {
+          console.debug('ML', this)
           this.renderMode = renderMode
           Promise.all([window.XE.Router, window.XE.Lang]).then(() => {
             this.$emit('init')
@@ -149,9 +155,9 @@ class MediaLibrary extends App {
           },
           deleteMedia (id) {
             return that.$$xe.delete('media_library.drop', { target_ids: id })
-            .then(() => {
-              store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
-            })
+              .then(() => {
+                store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
+              })
           },
           removeSelectedMedia (item) {
             if (this.selectedMedia.length) {
@@ -161,12 +167,12 @@ class MediaLibrary extends App {
           remove () {
             if (this.selectedMedia.length) {
               that.$$xe.delete('media_library.drop', { target_ids: this.selectedMedia })
-              .then(() => {
-                this.selectedMedia.forEach(function (item) {
-                  store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
+                .then(() => {
+                  this.selectedMedia.forEach(function (item) {
+                    store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
+                  })
+                  this.selectedMedia = []
                 })
-                this.selectedMedia = []
-              })
             }
           },
           showDialog (dialog) {
@@ -214,10 +220,12 @@ class MediaLibrary extends App {
   * @returns {Promise}
   */
   open (options) {
+    var config = {
+      renderMode: 'modal'
+    }
+    config = Object.assign(config, options)
     return new Promise((resolve) => {
-      this._componentBoot({
-        renderMode: 'modal'
-      }).then((ddd) => {
+      this._componentBoot(config).then((ddd) => {
         if (renderMode === 'modal') {
           $('#media-manager-modal-container').show()
         }
@@ -255,7 +263,8 @@ class MediaLibrary extends App {
   createUploader ($el, data, options) {
     var that = this
     var formData = $.extend({}, {
-      _token: window.XE.options.userToken
+      _token: window.XE.options.userToken,
+      instance_id: null
     }, data)
 
     $(function () {
