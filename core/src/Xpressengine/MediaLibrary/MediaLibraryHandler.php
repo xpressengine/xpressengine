@@ -233,6 +233,51 @@ class MediaLibraryHandler
         XeDB::commit();
     }
 
+    public function getInstanceFolderItem($instanceId)
+    {
+        $rootFolderItem = $this->folders->getRootFolderItem();
+
+        $menuItem = app('xe.menu')->items()->find($instanceId);
+        if ($menuItem !== null) {
+            $folderTitle = $menuItem['type'];
+
+            $folderItem = $this->folders->query()->where([['parent_id', $rootFolderItem->id], ['name', $folderTitle]])->first();
+            if ($folderItem === null) {
+                $folderItem = $this->storeInstanceFolderItem($rootFolderItem, $folderTitle);
+            }
+
+            return $folderItem;
+        } elseif (app('xe.config')->get('comment' . '.' . $instanceId) !== null) {
+            $folderTitle = 'comment';
+
+            $folderItem = $this->folders->query()->where([['parent_id', $rootFolderItem->id], ['name', $folderTitle]])->first();
+            if ($folderItem === null) {
+                $folderItem = $this->storeInstanceFolderItem($rootFolderItem, $folderTitle);
+            }
+
+            return $folderItem;
+        }
+
+        return $rootFolderItem;
+    }
+
+    private function storeInstanceFolderItem($parentFolderItem, $folderTitle)
+    {
+        $folderAttribute = [
+            'parent_id' => $parentFolderItem->id,
+            'disk' => $parentFolderItem->disk,
+            'name' => $folderTitle,
+        ];
+
+        $folderItem = $this->folders->storeItem($folderAttribute);
+
+        $folderItem->ancestors()->attach($folderItem->getKey(), [$folderItem->getDepthName() => 0]);
+        $this->linkHierarchy($folderItem, $parentFolderItem);
+        $this->setOrder($folderItem);
+
+        return $folderItem;
+    }
+
     /**
      * @param string $folderId folder id
      *
@@ -473,9 +518,14 @@ class MediaLibraryHandler
                 }
             }
 
-            $folderItem = $this->getFolderItem($request->get('folder_id', ''));
-            if ($folderItem == null) {
-                throw new NotFoundFolderException();
+            $folderItem = null;
+            if ($instanceId = $request->get('instance_id')) {
+                $folderItem = $this->getInstanceFolderItem($instanceId);
+            } else {
+                $folderItem = $this->getFolderItem($request->get('folder_id', ''));
+                if ($folderItem === null) {
+                    throw new NotFoundFolderException();
+                }
             }
 
             $fileAttribute = [
