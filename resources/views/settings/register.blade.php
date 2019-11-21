@@ -127,7 +127,7 @@ use Xpressengine\User\UserRegisterHandler;
                                     <div class="col-sm-9">
                                         <div class="xu-form-group" style="margin-bottom: 8px;">
                                             <div class="xu-form-group__box" style="width: 100%;">
-                                                <textarea name="@FIXME" value="@FIXME" class="xu-form-group__control" cols="33" rows="3" placeholder="예 : 아래 항목을 빠짐없이 입력해 주세요.">{{ $config->get('register_guide') }}</textarea>
+                                                <textarea name="register_guide" class="xu-form-group__control" cols="33" rows="3" placeholder="예 : 아래 항목을 빠짐없이 입력해 주세요.">{{ $config->get('register_guide') }}</textarea>
                                             </div>
                                         </div>
                                         <p class="setting-box__text-info">회원가입시 정보입력 단계 상단에 표시될 내용입니다. (여러줄 입력 가능)</p>
