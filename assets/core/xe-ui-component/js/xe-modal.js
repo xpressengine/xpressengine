@@ -180,7 +180,7 @@
       var doAnimate = $.support.transition && animate
 
       this.$backdrop = $(document.createElement('div'))
-        .addClass('xe-modal-backdrop ' + animate)
+        .addClass('xe-modal-backdrop fade ' + animate)
         .appendTo(this.$body)
 
       this.$element.on('click.dismiss.xe.modal', $.proxy(function (e) {
