@@ -540,8 +540,10 @@ hr {
       margin-top: 16px;
       margin-bottom: 16px;
     }
-  
+
     .xu-form-group {
+      margin-bottom: 0;
+
       + .xu-form-group {
         margin-top: 4px;
       }

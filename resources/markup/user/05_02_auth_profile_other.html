@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->    
+    <link rel="stylesheet" href="../../../assets/core/user/profile.css">    
+</head>
+<body>    
+    <div class="xe-container">
+        <div class="profile-wrap">
+            <h1 class="xe-sr-only">프로필정보</h1>
+            <div class="xe-profile">
+                <dl>
+                    <dt class="xe-sr-only">프로필 사진</dt>
+                    <dd class="profile-img"><img src="../../assets/core/user/img/default_avatar.jpg" width="120" height="120" alt="프로필사진"></dd>
+                    <dt class="xe-sr-only"><label for="nick">닉네임</label></dt>
+                    <dd class="input-nick"><input type="text" id="nick" value="Dave" readonly></dd>
+                    <dt class="xe-sr-only">그룹정보</dt>
+                    <dd class="text-gray">정회원, 준회원, 프로모션회원</dd>
+                    <dt class="xe-sr-only"><label for="intro">한줄소개</label></dt>
+                    <!--[D] 자기소개 입력글 중 URL이 포함된 경우 a링크 적용-->
+                    <dd class="input-intro"><p>한주간 인기 있었던 디자인 소식을 매주 발행합니다 :) 자세한 내용을 확인해 보세요! <a href="#">www.marob.com</a></p></dd>
+                    <dt class="xe-sr-only">연동한 소셜로그인 정보</dt>
+                    <dd class="connect-sns">
+                        <!--[D] sns 클릭 시 연동된 sns페이지로 이동 -->
+                        <a href="#"><i class="xi-twitter"></i></a>
+                        <a href="#"><i class="xi-github"></i></a>
+                    </dd>
+                </dl>
+                <div class="profile-btn-area">
+                    <button class="xe-btn xe-btn-primary-outline">Follow</button>
+                </div>
+                <div class="profile-btn-area">
+                    <button class="xe-btn xe-btn-primary">Following</button>
+                </div>
+            </div>
+            <div class="card-wrap">
+                <div class="xe-container">
+                    <div class="cont">
+                        <div class="xe-row">
+                            <div class="xe-col-sm-6">
+                                <div class="profile-card">
+                                    <div class="card-title">
+                                        <h2>Activity 카드 타이틀</h2>
+                                        <div class="right-menu"><a href="#" class="btn-card-more"><i class="xi-plus"><span class="xe-sr-only">더보기</span></i></a></div>
+                                    </div>
+                                    <div class="card-content">
+                                        <!-- 임시 카드컨텐츠-->
+                                        <div style="height:320px;background:url(sample/@tmp_card_cont.gif) 50% 0 no-repeat"></div>
+                                        <!-- //임시 카드컨텐츠-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="xe-col-sm-6">
+                                <div class="profile-card">
+                                    <div class="card-title">
+                                        <h2>Activity 카드 타이틀</h2>
+                                        <div class="right-menu"><a href="#" class="btn-card-more"><i class="xi-list-ul-l"><span class="xe-sr-only">더보기</span></i></a></div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div style="height:320px;background:url(sample/@tmp_card_cont.gif) 50% 0 no-repeat"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="xe-row">
+                            <div class="xe-col-sm-12">
+                                <div class="profile-card">
+                                    <div class="card-title">
+                                        <h2>Activity 카드 타이틀</h2>
+                                        <div class="right-menu long-text">
+                                            <!--텍스트 입력 영역, 버튼이 아닌 텍스트가 오는 경우 right-menu 부분에 long-text 클래스 추가-->
+                                            설명텍스트
+                                            <!--텍스트 입력 영역 -->
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div style="height:320px;background:url(sample/@tmp_card_cont2.gif) 50% 0 no-repeat"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                    
+    </div>       
+</body>
+</html>

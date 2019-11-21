@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+    
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin_menu.css">    
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>카테고리 편집</h2>
+                        <small>사이트 메뉴 구조를 구성하고 관리할 수 있습니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <!--게시판 카테고리 설정 영역 -->
+                <div class="panel board-category">
+                    <!--[D]  아이템 추가 버튼 클릭 시 .panel-heading에 open 클래스 추가-->
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">카테고리</h3>
+                        </div>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-primary"><i class="xi-plus"></i><span>아이템 추가</span></button>
+                        </div>
+                        <div class="panel panel-edit">
+                            <div class="panel-heading">
+                                <div class="pull-left">
+                                    <strong class="panel-title">아이템 생성</strong>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label>단어</label>
+                                    <div class="input-group">
+                                        <input type="text" id="item-title" class="form-control">
+                                        <span class="input-group-addon"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>설명</label>
+                                    <div class="input-group">
+                                        <textarea class="form-control" rows="3" cols="40"></textarea>
+                                        <span class="input-group-addon"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-default">닫기</button>
+                                    <button type="button" class="btn btn-primary">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="item-container">
+                            <li class="item">
+                                <div class="item-content">
+                                    <button class="btn handler">
+                                        <i class="xi-drag-vertical"></i>
+                                    </button>
+                                    <div class="item-info">
+                                        <i class="xi-paper"></i>
+                                        <strong>아이템 이름 1(한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임한줄 말줄임)</strong>
+                                    </div>
+                                    <div class="edit-btn-area">
+                                        <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                        <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="item">
+                                <div class="item-content">
+                                    <button class="btn handler">
+                                        <i class="xi-drag-vertical"></i>
+                                    </button>
+                                    <div class="item-info">
+                                        <i class="xi-paper"></i>
+                                        <strong>아이템 이름 2</strong>
+                                    </div>
+                                    <div class="edit-btn-area">
+                                        <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                        <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                    </div>
+                                </div>
+                                <ul class="item-container">
+                                    <li class="item open">
+                                        <div class="item-content">
+                                            <button class="btn handler">
+                                                <i class="xi-drag-vertical"></i>
+                                            </button>
+                                            <div class="item-info">
+                                                <i class="xi-paper"></i>
+                                                <strong>아이템 이름 2-1(편집, 추가 버튼 클릭 시 부모 li.item에 open 클래스 추가)</strong>
+                                            </div>
+                                            <div class="edit-btn-area">
+                                                <button type="button" class="btn on"><i class="xi-pen"></i></button>
+                                                <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                            </div>
+                                            <div class="panel panel-edit">
+                                                <div class="panel-heading">
+                                                    <div class="pull-left">
+                                                        <strong class="panel-title">아이템 편집</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+                                                        <label>단어</label>
+                                                        <div class="input-group">
+                                                            <input type="text" id="item-title" class="form-control">
+                                                            <span class="input-group-addon"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>설명</label>
+                                                        <div class="input-group">
+                                                            <textarea class="form-control" rows="3" cols="40"></textarea>
+                                                            <span class="input-group-addon"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer">
+                                                    <div class="pull-right">
+                                                        <button type="button" class="btn btn-default">삭제</button>
+                                                        <button type="button" class="btn btn-primary">저장</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="item-container">
+                                            <li class="item">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <strong>아이템 이름 2-2</strong>
+                                                    </div>
+                                                    <div class="edit-btn-area">
+                                                        <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                                        <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!--[D] 아이템 이동 시작 시 move 클래스 추가 -->
+                            <li class="item move">
+                                <div class="item-content">
+                                    <button class="btn handler">
+                                        <i class="xi-drag-vertical"></i>
+                                    </button>
+                                    <div class="item-info">
+                                        <i class="xi-paper"></i>
+                                        <strong>아이템 이름 3(드래그앤드랍 시작 시 부모 li.item에 move 클래스 추가) </strong>
+                                    </div>
+                                    <div class="edit-btn-area">
+                                        <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                        <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                    </div>
+                                </div>
+                                <ul class="item-container">
+                                    <li class="item">
+                                        <div class="item-content">
+                                            <button class="btn handler">
+                                                <i class="xi-drag-vertical"></i>
+                                            </button>
+                                            <div class="item-info">
+                                                <i class="xi-paper"></i>
+                                                <strong>아이템 이름 3-1</strong>
+                                            </div>
+                                            <div class="edit-btn-area">
+                                                <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                                <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <ul class="item-container">
+                                            <li class="item">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <strong>아이템 이름 3-2</strong>
+                                                    </div>
+                                                    <div class="edit-btn-area">
+                                                        <button type="button" class="btn"><i class="xi-pen"></i></button>
+                                                        <button type="button" class="btn"><i class="xi-plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!--[D] 아이템 이동 시작 시 자신을 복사하여 copy 클래스 추가 -->
+                            <li class="item copy">
+                                <div class="item-content">
+                                    <button class="btn handler">
+                                        <i class="xi-drag-vertical"></i>
+                                    </button>
+                                    <div class="item-info">
+                                        <i class="xi-paper"></i>
+                                        <strong>아이템 이름</strong>
+                                    </div>
+                                </div>
+                                <ul class="item-container">
+                                    <li class="item">
+                                        <div class="item-content">
+                                            <button class="btn handler">
+                                                <i class="xi-drag-vertical"></i>
+                                            </button>
+                                            <div class="item-info">
+                                                <i class="xi-paper"></i>
+                                                <strong>아이템 이름</strong>
+                                            </div>
+                                        </div>
+                                        <ul class="item-container">
+                                            <li class="item">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <strong>아이템 이름</strong>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+               <!--//게시판 아이템 설정 영역 -->
+               <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+    function loadCheckFunc(headUrl, asideUrl, footUrl) {
+        $('header').load( headUrl );
+        $('aside').load( asideUrl );
+        $('.footer').load( footUrl );
+    }
+    function init_include() {
+        loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+    }
+    init_include();
+    // 마크업 테스트코드
+    $( ".board-category> .panel-heading .pull-right .btn" ).click(function() {
+      $(this).parents(".panel-heading").toggleClass("open");
+    });
+
+    $( ".edit-btn-area .btn" ).click(function() {
+      $(this).parents(".item:eq(0)").toggleClass("open");
+      $(this).toggleClass("on");
+    });
+    // 마크업 테스트코드
+});
+</script>
+</body>
+</html>

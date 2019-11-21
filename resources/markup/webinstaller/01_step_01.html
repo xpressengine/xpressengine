@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>XE3 - Web installer</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="../../../assets/core/webinstaller/css/webinstaller.css" rel="stylesheet" media="all">
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <h1>
+                <a href="00_index.html"><i class="xi-xpressengine"></i><span class="brand-title"><span class="xe-sr-only">XE Web installer</span></span></a>
+            </h1>
+            <ul>
+                <!--[D] 해당 depth에서 li.on 추가 -->
+                <li><a href="00_index.html"><span class="xe-sr-only">start</span></a></li>
+                <li class="step1 on"><a href="01_step_01.html"><span class="xe-sr-only">step1</span></a></li>
+                <li class="step2"><a href="01_step_02.html"><span class="xe-sr-only">step2</span></a></li>
+                <li class="step3"><a href="01_step_03.html"><span class="xe-sr-only">step3</span></a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="install-container">
+        <div class="content">
+            <h2>시스템 검사</h2>
+            <ul class="system-check-list">
+                <!-- 검사 결과에 따라 li.pass, li.false 추가  -->
+                <li class="pass">
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">pass</strong>
+                        </span>
+                        <p>PHP version 5.4 or greater required</p>
+                    </div>
+                </li>
+                <li class="false">
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">false</strong>
+                        </span>
+                        <p>Test connection to the installation server</p>
+                        <strong>“.env”(home/vagrant/Code/xpressengine/installer/../env) fime</strong>
+                    </div>
+                </li>
+                <li class="pass">
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">ready</strong>
+                        </span>
+                        <p>Permission to write to directories and files</p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">ready</strong>
+                        </span>
+                        <p>PDO PHP Extension is required</p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">ready</strong>
+                        </span>
+                        <p>MCrypt PHP Extension is required</p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <span class="install-check">
+                            <strong class="xe-sr-only">ready</strong>
+                        </span>
+                        <p>Mbstring PHP Extension is required</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="btn-center">
+                <!--[D] 모든 항목 pass 시 btn-next로 변경, 버튼태그로 교체 가능  -->
+                <!-- <a href="#" class="btn-next"><span class="xe-sr-only">next</span></a> -->
+                <a href="#" class="btn-again"><span class="xe-sr-only">again</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="text-copy">
+            <span class="xe-sr-only">Copyright © XEHub</span>
+        </p>
+    </div>
+</body>
+</html>

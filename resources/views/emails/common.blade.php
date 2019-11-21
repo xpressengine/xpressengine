@@ -17,23 +17,25 @@
                                             <td style="padding:0; margin:0; border:0; width:100%; height:25px; text-align: center;">
 
                                                 @section('header')
-                                                <a href="{{ url('/') }}" target="_blank" style="padding:0; margin:0; border:0; font-size:24px; color:#161616; text-decoration:none;">
+                                                <a href="{{ url('/') }}" target="_blank" style="padding:0; margin:0; border:0; font-size:24px; font-weight:600; color:#161616; text-decoration:none;">
                                                     {{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}
                                                 </a>
                                                 @show
 
                                             </td>
                                         </tr>
-                                        <tr style="padding:0; margin:0; border:0;">
-                                            <td style="padding:16px 0 71px 0; margin:0; border:0; width:100%; height:10px;">
-                                                <hr style="margin:0; border:0; background:#DADCE0; height:1px;">
+                                        <tr style="padding:0;margin:0;border:0;">
+                                            <td style="padding:10px 0 20px 0;margin:0;border:0;width:100%;">
+                                                <hr style="margin:0;border:0;background:#DADCE0;height:1px;">
                                             </td>
                                         </tr>
-
-                                        @section('content')
-                                        {!! $content or '' !!}
-                                        @show
-
+                                        <tr style="padding:0;margin:0;border:0;">
+                                            <td style="padding:0;margin:0;border:0;width:100%;">
+                                            @section('content')
+                                            {!! $content or '' !!}
+                                            @show
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </td>
@@ -52,9 +54,9 @@
             <td style="padding:0; margin:0; border:0;">
                 <table style="padding:0; margin:0; border:0; max-width:536px; width:100%; margin:0 auto; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
                     <tbody style="padding:0; margin:0; border:0;">
-                        <tr style="padding:0; margin:0; border:0;">
-                            <td style="padding:68px 0 28px 0; margin:0; border:0; width:100%; height:1px;">
-                                <hr style="margin:0; border:0; background:#DADCE0; height:1px;">
+                        <tr style="padding:0;margin:0;border:0;">
+                            <td style="padding:20px 0 10px 0;margin:0;border:0;width:100%;height:1px;">
+                                <hr style="margin:0;border:0;background:#DADCE0;height:1px;">
                             </td>
                         </tr>
                         {{-- <tr style="padding:0; margin:0; border:0;">

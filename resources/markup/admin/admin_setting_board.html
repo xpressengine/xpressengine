@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+    
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">    
+    <link rel="stylesheet" href="../../../assets/core/theme/theme-select.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>게시판 설정</h2>
+                        <small>게시판 플러그인의 상세 설정 페이지입니다.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="panel-group">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h3 class="panel-title">게시판 상세 설정</h3>
+                            </div>
+                            <div class="pull-right">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle" aria-expanded="true"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">페널닫기</span></a>
+                            </div>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                <div class="checkbox font-size-large">
+                                    <label>
+                                        <input type="checkbox">
+                                        상위 테마로 지정하시겠습니까?
+                                    </label>
+                                </div>
+                                </div>
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">게시판 상세</h4>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>목록 수 <small>한 페이지에 표시될 글 수를 지정할 수 있습니다. </small></label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>새글 기준 시간<small> 단위: 시간 </small></label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>분류</label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control">
+                                                                <option>사용</option>
+                                                                <option>사용 안함</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-default pull-right">Category 설정</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>댓글</label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option>사용</option>
+                                                        <option>사용 안함</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>추천</label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option>사용</option>
+                                                        <option>사용 안함</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>비추천</label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option>사용</option>
+                                                        <option>사용 안함</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>익명글 사용</label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option>사용</option>
+                                                        <option>사용 안함</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="clearfix">
+                                                        <label>익명 이름 <small>Anonymity Description</small></label>
+                                                        <div class="checkbox pull-right">
+                                                            <label>
+                                                                <input type="checkbox">상위 설정에 따름
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <input type="text" class="form-control" placeholder="Anonymity">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">Create 권한</h4>
+                                        </div>
+                                        <div class="checkbox pull-right">
+                                            <label>
+                                                <input type="checkbox">상위 설정에 따름
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>평가권한</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio">슈퍼관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">일반관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">회원
+                                                </label>
+                                                <label>
+                                                    <input type="radio">비회원
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>포함할 그룹 또는 사용자</label>
+                                            <input type="text" class="form-control" placeholder="포함할 그룹이나 사용자를 입력하세요.">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>제외할 사용자</label>
+                                            <input type="text" class="form-control" placeholder="제외할 사용자를 입력하세요.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">Read 권한</h4>
+                                        </div>
+                                        <div class="checkbox pull-right">
+                                            <label>
+                                                <input type="checkbox">상위 설정에 따름
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>평가권한</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio">슈퍼관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">일반관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">회원
+                                                </label>
+                                                <label>
+                                                    <input type="radio">비회원
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>포함할 그룹 또는 사용자</label>
+                                            <input type="text" class="form-control" placeholder="포함할 그룹이나 사용자를 입력하세요.">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>제외할 사용자</label>
+                                            <input type="text" class="form-control" placeholder="제외할 사용자를 입력하세요.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">List 권한</h4>
+                                        </div>
+                                        <div class="checkbox pull-right">
+                                            <label>
+                                                <input type="checkbox">상위 설정에 따름
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>평가권한</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio">슈퍼관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">일반관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">회원
+                                                </label>
+                                                <label>
+                                                    <input type="radio">비회원
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>포함할 그룹 또는 사용자</label>
+                                            <input type="text" class="form-control" placeholder="포함할 그룹이나 사용자를 입력하세요.">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>제외할 사용자</label>
+                                            <input type="text" class="form-control" placeholder="제외할 사용자를 입력하세요.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">Manage 권한</h4>
+                                        </div>
+                                        <div class="checkbox pull-right">
+                                            <label>
+                                                <input type="checkbox">상위 설정에 따름
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>Manage 권한</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio">슈퍼관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">일반관리자
+                                                </label>
+                                                <label>
+                                                    <input type="radio">회원
+                                                </label>
+                                                <label>
+                                                    <input type="radio">비회원
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>포함할 그룹 또는 사용자</label>
+                                            <input type="text" class="form-control" placeholder="포함할 그룹이나 사용자를 입력하세요.">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>제외할 사용자</label>
+                                            <input type="text" class="form-control" placeholder="제외할 사용자를 입력하세요.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h4 class="panel-title">스킨 설정</h4>
+                            </div>
+                            <div class="pull-right">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right" aria-expanded="true"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                            </div>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
+                            <ul class="skin-setting-list">
+                                <!--[D] 스킨 선택 시  li에 .on 추가-->
+                                <li class="on">
+                                    <div class="skin-select-btn">
+                                        <!--[D] 스킨 선택 시  btn 클래스에 .on 추가-->
+                                        <!--[D] js추가: 버튼 마우스 오버 시 desktop, mobile 각각 버튼 클래스에 모두(열단위) .hover 추가-->
+                                        <button type="button" class="btn btn-default btn-sm on"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                    </div>
+                                    <div class="skin-select-btn">
+                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                    </div>
+                                    <div class="skin-desc">
+                                        <img src="http://placehold.it/128x90" alt="screenshot" class="hidden-xs">
+                                        <strong class="ellipsis">Alice Theme</strong>
+                                        <p class="ellipsis">theme description theme description theme descriptiontheme description theme description</p>
+                                        <div class="btn-right">
+                                            <button type="button" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></button>
+                                        </div>
+                                    </div>
+                                    <!--[D] 설정버튼 클릭 시 display:none/block로 처리 -->
+                                    <div class="panel-body" style="display:block">
+                                        <div class="form-group">
+                                            <label>사이트 제목</label>
+                                            <div class="input-group">
+                                                <input type="text" id="item-title" class="form-control" aria-describedby="basic-addon2">
+                                                <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>파비콘</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button">변경</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>홈메뉴 지정</label>
+                                            <select class="form-control">
+                                                <option>홈</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group clearfix">
+                                                <div class="pull-right">
+                                                <button type="button" class="btn btn-default">닫기</button>
+                                                <button type="button" class="btn btn-primary">저장</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skin-select-btn">
+                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                    </div>
+                                    <div class="skin-select-btn">
+                                        <button type="button" class="btn btn-default btn-sm on"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                    </div>
+                                    <div class="skin-desc">
+                                        <img src="http://placehold.it/128x90" alt="screenshot" class="hidden-xs">
+                                        <strong class="ellipsis">Alice Theme</strong>
+                                        <p class="ellipsis">theme description theme description theme descriptiontheme description theme description</p>
+                                        <div class="btn-right">
+                                            <button type="button" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skin-select-btn">
+                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                    </div>
+                                    <div class="skin-select-btn">
+                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                    </div>
+                                    <div class="skin-desc">
+                                        <img src="http://placehold.it/128x90" alt="screenshot" class="hidden-xs">
+                                        <strong class="ellipsis">Alice Theme</strong>
+                                        <p class="ellipsis">theme description theme description theme descriptiontheme description theme description</p>
+                                        <div class="btn-right">
+                                            <button type="button" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h3 class="panel-title">게시판 출력항목 설정</h3>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <!--[D] 항목설정 시 .multiple-select 추가-->
+                                    <div class="multiple-select">
+                                        <div class="clearfix">
+                                            <label>구성 및 순서</label>
+                                            <div class="checkbox pull-right">
+                                                <label>
+                                                    <input type="checkbox">상위 설정에 따름
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <select multiple class="form-control bg-gray" size="8">
+                                                <option>항목1</option>
+                                                <option>항목2</option>
+                                                <option>항목3</option>
+                                                <option>항목4</option>
+                                                <option>항목5</option>
+                                            </select>
+                                            <div class="pull-left">
+                                                <button type="button" class="btn btn-default">추가</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <select multiple class="form-control" size="8">
+                                                <option>항목1</option>
+                                                <option>항목2</option>
+                                                <option>항목3</option>
+                                                <option>항목4</option>
+                                                <option>항목5</option>
+                                            </select>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default">위로</button>
+                                                <button type="button" class="btn btn-default">아래로</button>
+                                                <button type="button" class="btn btn-default">삭제</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <!--[D] 항목설정 시 .multiple-select 추가-->
+                                    <div class="multiple-select">
+                                        <div class="clearfix">
+                                            <label>입력항목</label>
+                                            <div class="checkbox pull-right">
+                                                <label>
+                                                    <input type="checkbox">상위 설정에 따름
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <select multiple class="form-control" size="8">
+                                            <option>항목1</option>
+                                            <option>항목2</option>
+                                            <option>항목3</option>
+                                            <option>항목4</option>
+                                            <option>항목5</option>
+                                        </select>
+                                        <div class="pull-right">
+                                            <button type="button" class="btn btn-default">위로</button>
+                                            <button type="button" class="btn btn-default">아래로</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h4 class="panel-title">확장 필드</h4>
+                            </div>
+                            <div class="pull-right">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="btn-link panel-toggle pull-right" aria-expanded="true"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                            </div>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse in" aria-expanded="true">
+                            <div class="panel-heading">
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="xi-plus"></i><span>필드 추가</span></a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>ID</th>
+                                            <th>LABEL</th>
+                                            <th>TYPE</th>
+                                            <th>SKIN</th>
+                                            <th><span class="sr-only">설정</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>02</td>
+                                            <td>homeAddr</td>
+                                            <td>집주소</td>
+                                            <td>Address</td>
+                                            <td>Address default skin</td>
+                                            <td>
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-default">수정</button>
+                                                    <button type="button" class="btn btn-default">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>01</td>
+                                            <td>homeAddr</td>
+                                            <td>집주소</td>
+                                            <td>Address</td>
+                                            <td>Address default skin</td>
+                                            <td>
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-default">수정</button>
+                                                    <button type="button" class="btn btn-default">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h3 class="panel-title">댓글</h3>
+                            </div>
+                            <div class="pull-right">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapsefour" class="btn-link panel-toggle pull-right" aria-expanded="true"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                            </div>
+                        </div>
+                        <div id="collapsefour" class="panel-collapse collapse in" aria-expanded="true">
+                            <div class="panel-body">
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <div class="pull-left">
+                                            <h4 class="panel-title">기본설정</h4>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>댓글 수</label>
+                                                    <input type="text" class="form-control" value="20">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>승인 후 게시사용</label><br>
+                                                    <div class="xe-btn-toggle">
+                                                        <label>
+                                                        <span class="sr-only"><span class="sr-only">toggle</span></span>
+                                                        <input type="checkbox" checked="">
+                                                        <span class="toggle"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>정렬</label>
+                                                    <select class="form-control">
+                                                        <option>정순</option>
+                                                        <option>역순</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>비밀</label><br>
+                                                    <div class="xe-btn-toggle">
+                                                        <label>
+                                                        <span class="sr-only"><span class="sr-only">toggle</span></span>
+                                                        <input type="checkbox" checked="">
+                                                        <span class="toggle"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>삭제 방식</label>
+                                                    <select class="form-control">
+                                                        <option>일괄 삭제</option>
+                                                        <option>해당 글 가리기</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>추천</label><br>
+                                                    <div class="xe-btn-toggle">
+                                                        <label>
+                                                        <span class="sr-only"><span class="sr-only">toggle</span></span>
+                                                        <input type="checkbox" checked="">
+                                                        <span class="toggle"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>위지윅</label>
+                                                    <select class="form-control">
+                                                        <option>사용</option>
+                                                        <option>사용 안함</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>비추천</label><br>
+                                                    <div class="xe-btn-toggle">
+                                                        <label>
+                                                        <span class="sr-only"><span class="sr-only">toggle</span></span>
+                                                        <input type="checkbox" checked="">
+                                                        <span class="toggle"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <div class="pull-left">
+                                                    <h4 class="panel-title">댓글 작성 권한</h4>
+                                                </div>
+                                                <div class="checkbox pull-right">
+                                                    <label>
+                                                        <input type="checkbox">상위 설정에 따름
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <label>평가권한</label>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio">슈퍼관리자
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio">일반관리자
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio">회원
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio">비회원
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>포함할 그룹 또는 사용자</label>
+                                                    <input type="text" class="form-control" placeholder="포함할 그룹이나 사용자를 입력하세요.">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>제외할 사용자</label>
+                                                    <input type="text" class="form-control" placeholder="제외할 사용자를 입력하세요.">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="pull-right">
+                                            <button type="button" class="btn btn-primary">저장</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h4 class="panel-title">펼침 메뉴</h4>
+                            </div>
+                            <div class="pull-right">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" class="btn-link panel-toggle pull-right" aria-expanded="true"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                            </div>
+                        </div>
+                        <div id="collapseFive" class="panel-collapse collapse in" aria-expanded="true">
+                            <div class="table-responsive item-setting">
+                                <table class="table">
+                                    <colgroup>
+                                        <col width="200">
+                                        <col>
+                                        <col>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button class="btn handler"><i class="xi-drag-vertical"></i></button>
+                                                <em class="item-title">휴지통</em>
+                                            </td>
+                                            <td>
+                                                <span class="item-subtext">선택한 문서를 휴지통으로 보냅니다.</span>
+                                            </td>
+                                            <td>
+                                                <div class="xe-btn-toggle pull-right">
+                                                    <label>
+                                                    <span class="sr-only">toggle</span>
+                                                    <input type="checkbox" checked="">
+                                                    <span class="toggle"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button class="btn handler"><i class="xi-drag-vertical"></i></button>
+                                                <em class="item-title">신고</em>
+                                            </td>
+                                            <td>
+                                                <span class="item-subtext">선택한 문서를 신고합니다.</span>
+                                            </td>
+                                            <td>
+                                                <div class="xe-btn-toggle pull-right">
+                                                    <label>
+                                                    <span class="sr-only">toggle</span>
+                                                    <input type="checkbox" checked="">
+                                                    <span class="toggle"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button class="btn handler"><i class="xi-drag-vertical"></i></button>
+                                                <em class="item-title">댓글</em>
+                                            </td>
+                                            <td>
+                                                <span class="item-subtext">문서에 댓글로 의견을 나눌 수 있습니다.</span>
+                                            </td>
+                                            <td>
+                                                <div class="xe-btn-toggle pull-right">
+                                                    <label>
+                                                    <span class="sr-only">toggle</span>
+                                                    <input type="checkbox" checked="">
+                                                    <span class="toggle"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><i class="xi-close"></i></button>
+                <strong class="modal-title">카테고리 추가</strong>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-inline">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">Use
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">Required
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>TYPE</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>LABEL</label>
+                    <div class="input-group">
+                        <input type="text" id="item-title" class="form-control" aria-describedby="basic-addon2">
+                        <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="South korea xe-flag"></i>ko</span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>SKIN</label>
+                    <select class="form-control">
+                        <option>default</option>
+                    </select>
+                    <br>
+                    <button type="button" class="btn btn-default">Category 그룹 생성</button>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Category Skin Colorset 설정</label>
+                        <select class="form-control">
+                            <option>default</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+});
+</script>
+</body>
+</html>

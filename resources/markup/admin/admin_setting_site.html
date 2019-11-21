@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+    
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <link rel="stylesheet" href="../../../assets/core/theme/theme-select.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>기본 설정</h2>
+                        <small>사이트의 기본적인 것을 설정하는 페이지입니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-group">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <h3 class="panel-title">사이트 기본 설정</h3>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                                    </div>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                             <label>사이트 제목</label>
+                                             <input type="text" class="form-control" placeholder="XE3 관리자">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>파비콘</label>
+                                            <div class="list-group-item">
+                                                <input type="file">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>홈 메뉴 지정</label>
+                                            <select class="form-control">
+                                                <option value="">홈</option>
+                                                <option value="">게시판</option>
+                                                <option value="">포럼</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="pull-right">
+                                            <button type="button" class="btn btn-default btn-lg">취소</button>
+                                            <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <h3 class="panel-title">기본 테마 지정<small>테마를 미리 보고 클릭하여 선택할 수 있습니다.</small></h3>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                                    </div>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse in">
+                                    <ul class="theme-select-list">
+                                        <li>
+                                            <div class="theme-desc">
+                                                <img src="../../assets/core/common/img/default_image_196x140.jpg" alt="screenshot" class="hidden-xs">
+                                                <strong class="ellipsis">Alice Theme</strong>
+                                                <p>theme description theme description theme descriptiontheme description theme descriptiontheme description theme description theme descriptiontheme description theme descriptiontheme description theme description theme descriptiontheme description theme descriptiontheme description theme description theme descriptiontheme description theme description</p>
+                                                <div class="btn-right">
+                                                    <a href="#" class="btn btn-default">새 설정 추가</a>
+                                                    <a href="#" class="btn btn-primary">편집</a>
+                                                </div>
+                                            </div>
+                                            <ul>
+                                                <!--[D] 테마 선택 시  li에 .on 추가-->
+                                                <li class="on">
+                                                    <div class="skin-select-btn">
+                                                        <!--[D] 테마 선택 시  btn 클래스에 .on 추가-->
+                                                        <button type="button" class="btn btn-default btn-sm on"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">기본</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                                <li class="on">
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm on"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">메인 페이지용</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">서브 페이지용</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="theme-desc">
+                                                <img src="http://placehold.it/98x70" alt="screenshot" class="hidden-xs">
+                                                <strong class="ellipsis">Boram Theme</strong>
+                                                <p>theme description theme description theme descriptiontheme description theme description</p>
+                                                <div class="btn-right">
+                                                    <a href="#" class="btn btn-default">새 설정 추가</a>
+                                                    <a href="#" class="btn btn-primary">편집</a>
+                                                </div>
+                                            </div>
+                                            <ul>
+                                                <!--[D] 테마 선택 시  li에 .on 추가-->
+                                                <li>
+                                                    <div class="skin-select-btn">
+                                                        <!--[D] 스킨 선택 시  btn 클래스에 .on 추가-->
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">기본</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">메인 페이지용</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-tv visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Desktop</span></button>
+                                                    </div>
+                                                    <div class="skin-select-btn">
+                                                        <button type="button" class="btn btn-default btn-sm"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
+                                                    </div>
+                                                    <strong class="ellipsis">서브 페이지용</strong>
+                                                    <div class="btn-right">
+                                                        <a href="#" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">설정</span></a>
+                                                        <a href="#" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">미리보기</span></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+
+//read more js 테스트 코드
+
+  $(function () {
+      // Grab all the excerpt class
+      $('.theme-desc p').each(function () {
+
+          // Run formatWord function and specify the length of words display to viewer
+          $(this).html(formatWords($(this).html(), 10));
+
+          // Hide the extra words
+          $(this).children('span').hide();
+
+          // Apply click event to read more link
+      })
+
+      $('.theme-desc p .more_link').click(function () {
+          // Grab the hidden span and anchor
+          var more_text = $('.theme-desc p span.more_text');
+          var more_link = $('.theme-desc p .more_link');
+
+          // Toggle visibility using hasClass
+          // I know you can use is(':visible') but it doesn't work in IE8 somehow...
+          if (more_text.hasClass('hide')) {
+              more_text.show();
+              more_link.html(' ');
+              more_text.removeClass('hide');
+          } else {
+              more_text.hide();
+              more_link.html(' ...more');
+              more_text.addClass('hide');
+          }
+          return false;
+
+      });
+  });
+
+  // Accept a paragraph and return a formatted paragraph with additional html tags
+  function formatWords(sentence, show) {
+      // split all the words and store it in an array
+      var words = sentence.split(' ');
+      var new_sentence = '';
+      // loop through each word
+      for (i = 0; i < words.length; i++) {
+          // process words that will visible to viewer
+          if (i <= show) {
+              new_sentence += words[i] + ' ';
+
+              // process the rest of the words
+          } else {
+
+              // add a span at start
+              if (i == (show + 1)) new_sentence += '<span class="more_text hide">';
+              new_sentence += words[i] + ' ';
+
+              // close the span tag and add read more link in the very end
+              if (words[i+1] == null) new_sentence += '</span><a href="#" class="more_link"> ...more</a>';
+          }
+      }
+      return new_sentence;
+  }
+
+
+
+});
+</script>
+</body>
+</html>

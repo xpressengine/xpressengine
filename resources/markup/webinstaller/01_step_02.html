@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>XE3 - Web installer</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="../../../assets/core/webinstaller/css/webinstaller.css" rel="stylesheet" media="all">
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <h1>
+                <a href="00_index.html"><i class="xi-xpressengine"></i><span class="brand-title"><span class="xe-sr-only">XE Web installer</span></span></a>
+            </h1>
+            <ul>
+                <!--[D] 해당 depth에서 li.on 추가 -->
+                <li><a href="00_index.html"><span class="xe-sr-only">start</span></a></li>
+                <li class="step1"><a href="01_step_01.html"><span class="xe-sr-only">step1</span></a></li>
+                <li class="step2 on"><a href="01_step_02.html"><span class="xe-sr-only">step2</span></a></li>
+                <li class="step3"><a href="01_step_03.html"><span class="xe-sr-only">step3</span></a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="install-container">
+        <div class="content">
+            <h2>약관 동의</h2>
+            <textarea class="xe-form-control" rows="12" cols="40">이 문서는 정보 제공의 목적으로만 제공됩니다. `XEHub`는 이 문서에 수록된 정보의 완전성과
+정확성을 검증하기 위해 노력하였으나, 발생할 수 있는 내용상의 오류가 있거나 누락되었을 수 있습니다.
+이 문서의 사용이나 사용 결과에 따른 책임은 전적으로 사용자에게 있으며, `XEHub`는 이에 대해
+명시적 혹은 묵시적으로 어떠한 보증도 하지 않습니다.
+
+관련 URL 정보를 포함하여 이 문서에서 언급한 특정 소프트웨어 상품이나 제품은 해당 소유자가 속한
+현지 및 국내외 관련법을 따르며, 해당 법률을 준수하지 않음으로 인해 발생하는 모든 결과에 대한 책임은
+전적으로 사용자 자신에게 있습니다.
+
+`XEHub`는 이 문서의 내용을 예고 없이 변경할 수 있습니다.</textarea>
+            <div class="agree-area">
+                <label class="xe-label">
+                    <input type="checkbox">
+                    <span class="xe-input-helper"></span>
+                    <span class="xe-label-text">이용 약관을 모두 읽었으며, 이에 동의합니다.</span>
+                </label>
+            </div>
+            <div class="btn-center">
+                <a href="#" class="btn-next"><span class="xe-sr-only">next</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="text-copy">
+            <span class="xe-sr-only">Copyright © XEHub</span>
+        </p>
+    </div>
+</body>
+</html>

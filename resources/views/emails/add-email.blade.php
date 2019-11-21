@@ -1,46 +1,54 @@
 @extends('emails.common')
 
 @section('content')
-<tr style="padding:0; margin:0; border:0;">
-    <td style="padding:0; margin:0; border:0; width:100%;">
-        <h2 style="padding:0; margin:0 0 20px 0; border:0; font-size:28px; line-height:36px; font-weight:bold; letter-spacing:-0.01em; word-break:keep-all; color:#333; text-align:center;">{{ xe_trans('xe::emailConfirm') }}</h2>
-    </td>
-</tr>
+<table style="padding:0; margin:0 auto; border:0; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
+            <h2 style="padding:0; margin:0 0 20px 0; border:0; font-size:28px; line-height:36px; font-weight:bold; letter-spacing:-0.01em; word-break:keep-all; color:#333; text-align:center;">{{ xe_trans('xe::emailConfirm') }}</h2>
+        </td>
+    </tr>
 
-<tr style="padding:0; margin:0; border:0;">
-    <td style="padding:0; margin:0; border:0; width:100%;">
-        <p style="padding:0; margin:0; border:0;">
-            {!! xe_trans('xe::confirmEmailForAddEmailDescription') !!}
-        </p>
-    </td>
-</tr>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
+            <p style="padding:0; margin:0; border:0;">
+                {!! xe_trans('xe::confirmEmailForAddEmailDescription') !!}
+            </p>
+        </td>
+    </tr>
 
-<tr style="padding:0; margin:0; border:0;">
-    <td style="padding:40px 0 0; margin:0; border:0; width:100%;">
-        <table style="padding:0; margin:0 auto; border:0; max-width:536px; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
-            <tbody style="padding:0; margin:0; border:0;">
-                <tr style="padding:0; margin:0; border:0;">
-                    <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::email') }}</td>
-                    <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->address }}</td>
-                </tr>
-                <tr style="padding:0; margin:0; border:0;">
-                    <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::display_name') }}</td>
-                    <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->display_name }}</td>
-                </tr>
-                <tr style="padding:0; margin:0; border:0;">
-                        <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::confirmCode') }}</td>
-                        <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->confirmation_code }}</td>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:40px 0 0; margin:0; border:0; width:100%;">
+            <table style="padding:0; margin:0 auto; border:0; max-width:536px; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+                <tbody style="padding:0; margin:0; border:0;">
+                    <tr style="padding:0; margin:0; border:0;">
+                        <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::email') }}</td>
+                        <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->address }}</td>
                     </tr>
-            </tbody>
-        </table>
-    </td>
-</tr>
+                    <tr style="padding:0; margin:0; border:0;">
+                        <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::display_name') }}</td>
+                        <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->display_name }}</td>
+                    </tr>
+                    <tr style="padding:0; margin:0; border:0;">
+                            <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::confirmCode') }}</td>
+                            <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->confirmation_code }}</td>
+                        </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
 
-<tr>
-    <td style="padding:40px 0 0 0; margin:0; border:0; width:100%; text-align: center;">
-        <a href="" target="_blank" style="display:inline-block; padding:9px 52px; margin:0; border:0; border-radius: 3px; font-size:15px; color:#fff; text-decoration:none; text-align:center; background:#345bd9">{{ xe_trans('xe::confirmation') }}</a>
-    </td>
-</tr>
+    <tr>
+        <td style="padding:40px 0 0 0; margin:0; border:0; width:100%; text-align: center;">
+            <a href="" target="_blank" style="display:inline-block; padding:9px 52px; margin:0; border:0; border-radius: 3px; font-size:15px; color:#fff; text-decoration:none; text-align:center; background:#345bd9">{{ xe_trans('xe::confirmation') }}</a>
+        </td>
+    </tr>
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+</table>
 @endsection
 
 {{-- @section('content')

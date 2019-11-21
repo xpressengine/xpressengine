@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Toast</h2>
+            <p>
+                toast popup은 사용자 알림의 하나로 일정 시간 이후 자동으로 사라지는 형태이기 때문에 알림의 중요도가 낮거나 사용자 행위를 되돌릴 수 있을 경우에 사용 됩니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Example</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Examples</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        클래스로 구분하여 알림 상황에 맞는 toast popup을 사용합니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-example">
+                        <div class="xe-toast-container">
+                            <div class="xe-alert xe-fail">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                fail toast <a href="#"> Retry?</a>
+                            </div>
+                            <div class="xe-alert xe-positive">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                positive toast
+                            </div>
+                            <div class="xe-alert xe-danger">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                dager toast
+                            </div>
+                            <div class="xe-alert xe-success">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                success toast
+                            </div>
+                            <div class="xe-alert xe-warning">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                warning toast
+                            </div>
+                            <div class="xe-alert">
+                                <button type="button" class="xe-btn-alert-close"><i class="xi-close"></i><span class="xe-sr-only">toast close</span></button>
+                                basic toast
+                            </div>
+                        </div>
+                    </div>
+                    <pre><code class="language-markup">&lt;div class="xe-toast-container"&gt;
+    &lt;div class="xe-alert xe-fail"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        fail toast &lt;a href="#"&gt; Retry?&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="xe-alert xe-positive"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        positive toast
+    &lt;/div&gt;
+    &lt;div class="xe-alert xe-danger"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        dager toast
+    &lt;/div&gt;
+    &lt;div class="xe-alert xe-success"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        success toast
+    &lt;/div&gt;
+    &lt;div class="xe-alert xe-warning"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        warning toast
+    &lt;/div&gt;
+    &lt;div class="xe-alert"&gt;
+        &lt;button type="button" class="xe-btn-alert-close"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;span class="xe-sr-only"&gt;toast close&lt;/span&gt;&lt;/button&gt;
+        basic toast
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
