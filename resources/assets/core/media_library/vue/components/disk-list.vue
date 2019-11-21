@@ -8,7 +8,7 @@
       -->
       <div class="media-library-aside__content">
         <button type="button" class="media-library-aside__mobile-button">
-          Main Assets
+          내 최근 파일
           <span class="media-library-aside__mobile-button-icon">
             <i class="xi-angle-down-min"></i>
           </span>
@@ -16,17 +16,22 @@
         <ul class="media-library-aside__list">
           <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
           <li class="on">
-            <button type="button" class="media-library-aside__button">Main Assets</button>
-          </li>
-          <li>
-            <button type="button" class="media-library-aside__button">Common</button>
+            <button type="button" @click="viewDisk('media')" class="media-library-aside__button">Main Assets</button>
           </li>
         </ul>
+        <hr>
+        <a>내 최근 파일</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    viewDisk (disk) {
+      console.debug('viewDisk', disk, arguments)
+    }
+  }
+};
 </script>
