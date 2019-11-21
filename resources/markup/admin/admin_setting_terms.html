@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="../../../assets/core/xe-ui/css/xe-ui-without-base.css?1567582437" type="text/css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+
+    <!-- 다국어 input 스타일 -->
+    <link href="../../../assets/core/lang/langEditorBox.css?1568100839" type="text/css" rel="stylesheet" media="all">
+
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+
+    <script src="../../../assets/vendor/jqueryui/jquery-ui.min.js?1567582437"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="#">약관 및 안내</a></h2>
+                        <small>사용되는 약관을 수정 및 관리 할 수 있습니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- container-fluid--part (max-width: 960px, 설정 또는 서비스), container-fluid--all (max-width: none, 회원 또는 테마/익스텐션) -->
+            <div class="container-fluid container-fluid--all">
+                <div class="row">
+                    <div class="col-sm-3" style="margin-bottom: 8px;">
+                        <!-- 약관 항목 -->
+                        <!-- 드래그 리스트 -->
+                        <ul class="sort-list sort-list--button-type __ui-sortable">
+                            <!-- [D] class="sort-list__button" 클릭 시 해당 부모 영역 li 태그에 class="on" 추가 (버튼 클릭 시 선택 표시) -->
+                            <li>
+                                <div class="sort-list__handler">
+                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                        <span class="xu-button__icon">
+                                            <i class="xi-drag-vertical"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <button type="button" class="sort-list__button">이용약관</button>
+                            </li>
+                            <li class="on">
+                                <div class="sort-list__handler">
+                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                        <span class="xu-button__icon">
+                                            <i class="xi-drag-vertical"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <button type="button" class="sort-list__button">개인정보처리방침</button>
+                            </li>
+                            <li>
+                                <div class="sort-list__handler">
+                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                        <span class="xu-button__icon">
+                                            <i class="xi-drag-vertical"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <button type="button" class="sort-list__button">마케팅활용동의</button>
+                            </li>
+                            <li>
+                                <div class="sort-list__handler">
+                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                        <span class="xu-button__icon">
+                                            <i class="xi-drag-vertical"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <button type="button" class="sort-list__button">두줄이 넘어갈 경우에는 상하중앙정렬 상하중앙정렬 상하중앙정렬 상하중앙정렬</button>
+                            </li>
+                        </ul>
+
+                        <div class="setting-terms__sort-list-button">
+                            <button type="button" class="xu-button xu-button--link">
+                                <span class="xu-button__text">새 약관 만들기</span>
+                            </button>
+                        </div>
+                        <!-- //약관 항목 -->
+                    </div>
+
+                    <div class="col-sm-9">
+                        <div class="setting-area-group">
+                            <!-- 각 세팅 박스 -->
+                            <section class="setting-area">
+                                <div class="setting-area__body">
+                                    <div class="setting-box">
+
+                                        <div class="form-group">
+                                            <label>약관명</label>
+                                            <!-- UI 오브젝트 영역(input) -->
+                                            <div class="lang-editor-box" data-name="title" data-lang-key="" data-request-url="http://xe.hyeok.udd.kr/lang/lines" data-autocomplete="">
+                                                <div class="text">
+                                                    <input type="hidden" name="xe_use_request_preprocessor" value="Y">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/2/name" value="title">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/2/key" value="">
+
+                                                    <input type="hidden" name="title" value="">
+                                                    <div key="ko" class="input-group">
+                                                        <input type="text" class="form-control" id="input-2-ko" name="xe_lang_preprocessor://lang/seq/2/locale/ko" value="">
+                                                        <span class="input-group-addon">
+                                                            <span class="flag-code"><i class="ko xe-flag"></i>ko</span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="sub" style="display: block;">
+                                                        <div key="en" class="input-group">
+                                                            <input type="text" class="form-control" id="input-2-en" name="xe_lang_preprocessor://lang/seq/2/locale/en" value="">
+                                                            <span class="input-group-addon">
+                                                                <span class="flag-code"><i class="en xe-flag"></i>en</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- //UI 오브젝트 영역(input) -->
+                                        </div>
+
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <label class="xu-label-checkradio">
+                                            <input type="radio">
+                                            <span class="xu-label-checkradio__helper"></span>
+                                            <span class="xu-label-checkradio__text">사용 <span class="xu-label-checkradio__empase">(필수)</span></span>
+                                        </label>
+                                        <label class="xu-label-checkradio">
+                                            <input type="radio">
+                                            <span class="xu-label-checkradio__helper"></span>
+                                            <span class="xu-label-checkradio__text">사용 <span class="xu-label-checkradio__empase">(선택)</span></span>
+                                        </label>
+                                        <label class="xu-label-checkradio">
+                                            <input type="radio">
+                                            <span class="xu-label-checkradio__helper"></span>
+                                            <span class="xu-label-checkradio__text">사용안함</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="form-group">
+                                            <label>약관 설명</label>
+                                            <!-- UI 오브젝트 영역(textarea) -->
+                                            <div class="lang-editor-box" data-name="content" data-lang-key="" data-multiline="true" data-autocomplete="">
+                                                <div class="textarea">
+                                                    <input type="hidden" name="xe_use_request_preprocessor" value="Y">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/name" value="content">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/key" value="">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/multiline" value="true">
+                                                    <input type="hidden" name="content" value="">
+
+                                                    <div key="ko" class="input-group">
+                                                        <textarea class="form-control" id="input-3-ko" name="xe_lang_preprocessor://lang/seq/3/locale/ko"></textarea>
+                                                        <span class="input-group-addon">
+                                                            <span class="flag-code"><i class="ko xe-flag"></i>ko</span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="sub" style="display: block;">
+                                                        <div key="en" class="input-group">
+                                                            <textarea class="form-control" id="input-3-en" name="xe_lang_preprocessor://lang/seq/3/locale/en"></textarea>
+                                                            <span class="input-group-addon">
+                                                            <span class="flag-code"><i class="en xe-flag"></i>en</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- //UI 오브젝트 영역(textarea) -->
+                                        </div>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="setting-box__terms-content">
+                                            <!-- UI 오브젝트 영역(textarea) -->
+                                            <div class="lang-editor-box" data-name="content" data-lang-key="" data-multiline="true" data-autocomplete="">
+                                                <div class="textarea">
+                                                    <input type="hidden" name="xe_use_request_preprocessor" value="Y">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/name" value="content">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/key" value="">
+                                                    <input type="hidden" name="xe_lang_preprocessor://lang/seq/3/multiline" value="true">
+                                                    <input type="hidden" name="content" value="">
+
+                                                    <div key="ko" class="input-group">
+                                                        <textarea class="form-control" id="input-3-ko" name="xe_lang_preprocessor://lang/seq/3/locale/ko"></textarea>
+                                                        <span class="input-group-addon">
+                                                            <span class="flag-code"><i class="ko xe-flag"></i>ko</span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="sub" style="display: block;">
+                                                        <div key="en" class="input-group">
+                                                            <textarea class="form-control" id="input-3-en" name="xe_lang_preprocessor://lang/seq/3/locale/en"></textarea>
+                                                            <span class="input-group-addon">
+                                                            <span class="flag-code"><i class="en xe-flag"></i>en</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- //UI 오브젝트 영역(textarea) -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- 전체 페이지 버튼 영역 -->
+                            <!-- 약관 선택 시 노출 -->
+                            <div class="setting-button-box" style="text-align: right;">
+                                <!-- 삭제 버튼은 기본 제공 약관 외에 노출 (삭제버튼 필요 없을 경우 완전 날리고 저장하기 버튼 하나만 적용되면 됩니다. 모바일에서 flex 를 적용하여 개수에 따라 자동으로 노출) -->
+                                <button type="submit" class="xu-button xu-button--default">삭제</button>
+                                <button type="submit" class="xu-button xu-button--primary">저장하기</button>
+                            </div>
+
+                            <!-- 기본 제공 약관 노출 -->
+                            <div class="setting-button-box" style="text-align: right;">
+                                <!-- 삭제 버튼은 기본 제공 약관 외에 노출 (삭제버튼 필요 없을 경우 완전 날리고 저장하기 버튼 하나만 적용되면 됩니다. 모바일에서 flex 를 적용하여 개수에 따라 자동으로 노출) -->
+                                <button type="submit" class="xu-button xu-button--primary">저장하기</button>
+                            </div>
+
+                            <!-- 새약관 추가 시 노출 -->
+                            <div class="setting-button-box" style="text-align: right;">
+                                <button type="submit" class="xu-button xu-button--default">취소</button>
+                                <button type="submit" class="xu-button xu-button--primary">추가하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+    function loadCheckFunc(headUrl, asideUrl, footUrl) {
+        $('header').load( headUrl );
+        $('aside').load( asideUrl );
+        $('.footer').load( footUrl );
+    }
+    function init_include() {
+        loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+    }
+    init_include();
+
+    // sortable 한 table 구현해야 함
+    $(".__ui-sortable").sortable({
+        handle: '.__handler',
+        cancel: '',
+        // update: function( event, ui ) {
+        // },
+        // start: function(e, ui) {
+        //     // ui.placeholder.height(ui.helper.outerHeight());
+        //     // ui.placeholder.css("display", "table-row");
+        //     // ui.helper.css("display", "table-row");
+        // },
+        // stop: function(e, ui) {
+        //     // $(ui.item.context).css("display", "table-row");
+        // }
+    }).disableSelection();
+});
+</script>
+</body>
+</html>

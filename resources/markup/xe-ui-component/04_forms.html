@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Forms</h2>
+            <p>
+                form 구성요소를 구조화된 방식으로 표현합니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Basic</a></li>
+                <li><a href="#inline">Inline style</a></li>
+                <li><a href="#group">Group</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Basic</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        기본 폼 요소들은 넓이 값은 <code>100%</code> 이며 각 요소들 간에 최적의 여백을 위해 <code>.xe-form-group</code>로 그룹핑 합니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-form-group">
+                        <div class="xe-select-box xe-btn">
+                            <label>xe-select-box 1</label>
+                            <select>
+                            <option>xe-select-box 1</option>
+                            <option>xe-select-box 2</option>
+                            <option>xe-select-box 3</option>
+                            <option>xe-select-box 4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="xe-form-group">
+                        <input type="text" class="xe-form-control" id="xe-name" value="xe-form-control">
+                    </div>
+                    <label class="xe-label">
+                        <input type="checkbox">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">체크박스</span>
+                    </label>
+                    <button class="xe-btn xe-btn-primary">확인</button>
+                    <pre><code class="language-markup">&lt;div class="xe-form-group"&gt;
+    &lt;div class="xe-select-box xe-btn"&gt;
+        &lt;label&gt;xe-select-box 1&lt;/label&gt;
+        &lt;select&gt;
+        &lt;option&gt;xe-select-box 1&lt;/option&gt;
+        &lt;option&gt;xe-select-box 2&lt;/option&gt;
+        &lt;option&gt;xe-select-box 3&lt;/option&gt;
+        &lt;option&gt;xe-select-box 4&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="xe-form-group"&gt;
+    &lt;input type="text" class="xe-form-control" id="xe-name" value="xe-form-control"&gt;
+&lt;/div&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="checkbox"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;체크박스&lt;/span&gt;
+&lt;/label&gt;
+&lt;button class="xe-btn xe-btn-primary"&gt;확인&lt;/button&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#inline" name="inline">Inline Style</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        부모 구조에 <code>.xe-form-inline</code> 클래스를 추가하면 inline 스타일로 변경됩니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-form-inline">
+                        <div class="xe-form-group">
+                            <div class="xe-select-box xe-btn">
+                                <label>xe-select-box 1</label>
+                                <select>
+                                <option>xe-select-box 1</option>
+                                <option>xe-select-box 2</option>
+                                <option>xe-select-box 3</option>
+                                <option>xe-select-box 4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="xe-form-group">
+                            <input type="text" class="xe-form-control" id="xe-name" value="xe-form-control">
+                        </div>
+                        <label class="xe-label">
+                            <input type="checkbox">
+                            <span class="xe-input-helper"></span>
+                            <span class="xe-label-text">체크박스</span>
+                        </label>
+                        <button class="xe-btn xe-btn-primary">확인</button>
+                    </div>
+
+                    <pre><code class="language-markup">&lt;div class="xe-form-inline"&gt;
+    &lt;div class="xe-form-group"&gt;
+        &lt;div class="xe-select-box xe-btn"&gt;
+            &lt;label&gt;xe-select-box 1&lt;/label&gt;
+            &lt;select&gt;
+            &lt;option&gt;xe-select-box 1&lt;/option&gt;
+            &lt;option&gt;xe-select-box 2&lt;/option&gt;
+            &lt;option&gt;xe-select-box 3&lt;/option&gt;
+            &lt;option&gt;xe-select-box 4&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="xe-form-group"&gt;
+        &lt;input type="text" class="xe-form-control" id="xe-name" value="xe-form-control"&gt;
+    &lt;/div&gt;
+    &lt;label class="xe-label"&gt;
+        &lt;input type="checkbox"&gt;
+        &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+        &lt;span class="xe-label-text"&gt;체크박스&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;button class="xe-btn xe-btn-primary"&gt;확인&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#group" name="group">Group</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        부모에 <code>.xe-input-group</code> 클래스를 추가하면 그룹핑된 스타일로 변경됩니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-form-inline">
+                        <div class="xe-input-group">
+                            <span class="xe-input-group-btn">
+                                <button class="xe-btn xe-btn-primary" type="button">xe-btn</button>
+                            </span>
+                            <input type="text" class="xe-form-control" placeholder="xe-form-control">
+                        </div>
+                        <div class="xe-input-group">
+                            <input type="text" class="xe-form-control" placeholder="xe-form-control">
+                            <span class="xe-input-group-btn">
+                                <button class="xe-btn xe-btn-primary" type="button">xe-btn</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <pre><code class="language-markup">&lt;div class="xe-form-inline"&gt;
+    &lt;div class="xe-input-group"&gt;
+        &lt;span class="xe-input-group-btn"&gt;
+            &lt;button class="xe-btn xe-btn-primary" type="button"&gt;xe-btn&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;input type="text" class="xe-form-control" placeholder="xe-form-control"&gt;
+    &lt;/div&gt;
+    &lt;div class="xe-input-group"&gt;
+        &lt;input type="text" class="xe-form-control" placeholder="xe-form-control"&gt;
+        &lt;span class="xe-input-group-btn"&gt;
+            &lt;button class="xe-btn xe-btn-primary" type="button"&gt;xe-btn&lt;/button&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

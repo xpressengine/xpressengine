@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/core/user/setting.css">
+    <script src="sample/markup_test.js"></script>
+</head>
+<body>
+    <div class="xe-container">
+    <!--[D]  setting 영역-->
+        <div class="setting-wrap">
+            <div class="xe-container">
+                <div class="xe-row">
+                    <div class="side-menu xe-col-sm-3">
+                        <div class="menu-open">
+                            <button class="xe-menu-toggle" type="button">
+                            <span class="xe-sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar v2"></span>
+                            <span class="icon-bar"></span>
+                            </button>
+                            <p>계정설정</p>
+                        </div>
+                        <ul class="snb-list">
+                        <li class="on"><a href="#">계정 설정</a></li>
+                        <li><a href="#">알림 설정</a></li>
+                        <li><a href="#">게시글 설정</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="main-content xe-col-sm-9">
+                        <h1>개인정보 및 옵션 관리</h1>
+                        <p>개인정보를 관리할 수 있습니다. 이메일 주소, 닉네임, 외부로그인 등을 설정하여 계정에 저장할 데이터를 관리하고 개인정보를 보호할 수 있습니다.</p>
+                        <div class="setting-card">
+                            <h2>기본 설정</h2>
+                            <div class="setting-group" style="display:none">
+                            <!--[D] a 링크 클릭 시 뒤에 오는 setting-detail block 처리,같은 카드 내 block처리된 부분도 none 처리   -->
+                                <a href="#">
+                                    <div class="setting-left">
+                                        <!--[D] 변경내용 저장 후 변경 값으로 저장  -->
+                                        <p>이메일주소</p><em class="text-gray">lee.junnaa@gmail.com</em>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <p>메일 추가하기</p>
+                                    <em class="text-gray2">기본 이메일을 설정하고 관리할 수 있습니다. </em>
+                                    <!--[D] 체크 시 input-check에  on 클래스 추가-->
+                                    <div class="xe-form-inline">
+                                        <label class="xe-label">
+                                            <input type="radio">
+                                            <span class="xe-input-helper"></span>
+                                            <span class="xe-label-text">lee.junnaa@gmail.com</span>
+                                        </label>
+                                        <span class="dot"> · </span>
+                                        <button class="xe-btn xe-btn-link">삭제</button>
+                                    </div>
+                                    <div class="xe-form-inline">
+                                        <label class="xe-label">
+                                            <input type="radio">
+                                            <span class="xe-input-helper"></span>
+                                            <span class="xe-label-text">lee.junnaa2@gmail.com</span>
+                                        </label>
+                                        <span class="dot"> · </span>
+                                        <button class="xe-btn xe-btn-link">삭제</button>
+                                    </div>
+                                    <div class="xe-form-inline">
+                                        <label class="xe-label">
+                                            <input type="radio">
+                                            <span class="xe-input-helper"></span>
+                                            <span class="xe-label-text">lee.junnaa3@gmail.com</span>
+                                        </label>
+                                        <span class="dot"> · </span>
+                                        <button class="xe-btn xe-btn-link">삭제</button>
+                                    </div>
+
+                                </div>
+                                <!--[D] 잘못표기 시 클래스 wrong-input 추가-->
+                                <div class="setting-detail-content wrong-input">
+                                    <p>메일 추가하기</p>
+                                    <div class="xe-form-inline">
+                                        <div class="xe-form-group">
+                                            <input type="text" class="xe-form-control" id="xe-name" value="xe-form-control">
+                                        </div>
+                                        <button class="xe-btn xe-btn-primary-outline">저장</button>
+                                        <button class="xe-btn">취소</button>
+                                    </div>
+                                    <!-- 기본은 공백 <em class="text-message">&nbsp;</em>-->
+                                    <em class="text-message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>
+                                </div>
+                                <!--메일추가 이후 화면,<p>메일 추가하기</p> 텍스트는 유지 됨-->
+                                <div class="setting-detail-content">
+                                    <p>메일 추가하기</p>
+                                    <em class="text-gray3">인증코드를 확인하려면 <span class="text-gray">user@example.com</span>에서 이메일을 확인해 주세요.</em><br>
+                                    <div class="xe-form-inline">
+                                        <div class="xe-input-group">
+                                            <input type="text" class="xe-form-control">
+                                            <span class="xe-input-group-btn">
+                                                <button class="xe-btn xe-btn-secondary" type="button">확인</button>
+                                            </span>
+                                        </div>
+                                        <button class="btn xe-btn xe-btn-link">이메일 재전송</button>
+                                        <button class="btn xe-btn xe-btn-link">취소</button>
+                                    </div>
+                                    <em class="text-message">이메일 인증 확인 완료</em>
+                                </div>
+                                <!--//메일추가 이후 화면 -->
+                                <!--메일추가 이후 화면(잘못된 인증코드 입력)-->
+                                <div class="setting-detail-content wrong-input">
+                                    <p>메일 추가하기</p>
+                                    <em class="text-gray3">인증코드를 확인하려면 <span class="text-gray">user@example.com</span>에서 이메일을 확인해 주세요.</em><br>
+                                    <div class="xe-form-inline">
+                                        <div class="xe-input-group">
+                                            <input type="text" class="xe-form-control">
+                                            <span class="xe-input-group-btn">
+                                                <button class="xe-btn xe-btn-secondary" type="button">확인</button>
+                                            </span>
+                                        </div>
+                                        <span class="label-text">인증 코드가 재전송되었습니다.</span>
+                                        <button class="btn xe-btn xe-btn-link">취소</button>
+                                    </div>
+                                    <em class="text-message">잘못된 인증 코드입니다. 인증 코드를 확인하시고 다시 입력해주세요.</em>
+                                </div>
+                                <!--//메일추가 이후 화면 -->
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+
+                            <div class="setting-group" style="display:none">
+                                <a href="#">
+                                    <div class="setting-left">
+                                        <p>사용자이름</p>
+                                        <em class="text-gray">이준하</em>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="setting-group" style="">
+                            <!--[D] a 링크 클릭 시 뒤에 오는 setting-detail block 처리,같은 카드 내 block처리된 부분도 none 처리   -->
+                                <a href="#">
+                                    <div class="setting-left">
+                                        <!--[D] 변경내용 저장 후 변경 값으로 저장  -->
+                                        <p>이메일주소</p><em class="text-gray">lee.junnaa@gmail.com</em>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <p>사용자 이름 변경</p>
+                                    <em class="text-gray2">사용자 이름을 변경할 수 있습니다. ((5~20자의 한글,영문,숫자만 가능합니다.))</em>
+                                    <input type="text" class="xe-form-control">
+                                    <em class="text-message">현재 사용자 이름입니다.</em>
+                                 <!--   <em class="text-message">사용할 수 있는 사용자 이릅입니다.</em> -->
+                                 <!--   <em class="text-message">사용자 이름을 사용할 수 없습니다.</em> 부모클래스에 wrong-input 추가 -->
+                                </div>
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+
+                            <div class="setting-group" style="display:none">
+                                <a href="#">
+                                    <div class="setting-left">
+                                        <p>비밀번호</p>
+                                        <em class="text-gray">12일 전 변경됨.</em>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <p>비밀번호 변경</p>
+                                    <em class="text-gray2">8자리 이상의 영문 대/소문자, 숫자, 특수문자를 조합하여 사용합니다.</em>
+                                    <div class="password-content">
+                                        <p class="text-password">현재 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message">&nbsp;</em>
+                                    </div>
+                                    <div class="password-content">
+                                        <p class="text-password">새 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message">&nbsp;</em>
+                                    </div>
+                                    <div class="password-content">
+                                        <p class="text-password">새 비밀번호 확인</p>
+                                        <input type="password" class="xe-form-control">
+                                        <p class="text-message">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+                            <!--마크업 확인용도-->
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <div class="password-content">
+                                        <p class="text-password">현재 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message text-red">비밀번호가 너무 짧습니다.</em>
+                                    </div>
+                                    <div class="password-content">
+                                        <!--보안 상태 노출(입력시) -->
+                                        <p class="text-password">새 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message">비밀번호 보안 수준: <span class="text-red">약함</span> 보통 <span class="text-blue">높음</span></em>
+                                    </div>
+                                    <div class="password-content">
+                                        <!--상이한 비밀번호 입력시 -->
+                                        <p class="text-password">새 비밀번호 확인</p>
+                                        <input type="password" class="xe-form-control">
+                                        <p class="text-message text-red">확인을 위해 동일한 비밀번호를 입력해주세요.</p>
+                                    </div>
+                                </div>
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <div class="password-content wrong-input">
+                                        <!--저장 후 일치하지 않을 경우 메시지 -->
+                                        <p class="text-password">현재 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message text-red">비밀번호가 일치하지 않습니다. 다시 시도해 주세요.</em>
+                                    </div>
+                                    <div class="password-content wrong-input">
+                                        <!--저장 후 적합하지 않은 비밀번호의 경우 -->
+                                        <p class="text-password">새 비밀번호</p>
+                                        <input type="password" class="xe-form-control">
+                                        <em class="text-message">적합한 비밀번호가 아닙니다.</em>
+                                    </div>
+                                    <div class="password-content">
+                                        <p class="text-password">새 비밀번호 확인</p>
+                                        <input type="password" class="xe-form-control">
+                                        <p class="text-message text-blue">비밀번호 확인</p>
+                                    </div>
+                                </div>
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+                            <!--//마크업 확인용도-->
+                        </div>
+
+                        <div class="setting-card">
+                            <h2>수신 설정</h2>
+                            <div class="setting-group toggle-group">
+                                <div class="setting-group-content">
+                                    <div class="setting-left">
+                                        <p>메일링 가입</p><em class="text-gray">이메일로 새로운 소식과 알림 정보를 받아볼 수 있습니다. </em>
+                                    </div>
+                                    <div class="setting-right">
+                                        <div class="xe-btn-toggle">
+                                           <label>
+                                               <span class="sr-only"><span class="xe-sr-only">이메일링가입</span></span>
+                                               <input type="checkbox" checked="">
+                                               <span class="toggle"></span>
+                                           </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-group" style="display:none">
+                                <a href="#">
+                                    <div class="setting-left">
+                                        <p>쪽지 수신 </p>
+                                        <em class="text-gray">친구 쪽지만 수신합니다. </em>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <div class="setting-left">
+                                        <p>쪽지 수신 변경</p>
+                                        <em class="text-gray2">쪽지를 나에게 보낼 수 있는 사람을 설정할 수 있습니다.</em>
+                                    </div>
+                                <!--[D] a링크 클릭 시 slct_area에 open 클a래스 추가-->
+                                    <div class="xe-form-inline">
+                                        <div class="xe-dropdown">
+                                            <button class="xe-btn xe-btn-default" type="button" id="xe-dropdownMenu1" data-toggle="xe-dropdown" aria-expanded="true">전체수신</button>
+                                            <div class="xe-dropdown-menu">
+                                                <ul>
+                                                <li class="on"><a href="#">전체수신</a></li>
+                                                <li><a href="#">친구만</a></li>
+                                                <li><a href="#">수신거부</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--[D] 변경반영, 취소 없이 데이터가 바로 반영되는 영역의 경우 아래 버튼 노출-->
+                                    <button type="button" class="btn-setting-close"><i class="xi-close"></i><span class="xe-sr-only">닫기</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-card login-connect">
+                            <h2>외부 로그인 연결</h2>
+                            <div class="setting-group">
+                                <div class="setting-group-content">
+                                <!--[D] 계정 연결되어 있는 경우 on 클래스 추가-->
+                                    <div class="setting-left on">
+                                        <i class="xi-naver"></i>계정에 연결되어 있습니다.
+                                    </div>
+                                    <div class="setting-right">
+                                        <button class="xe-btn xe-btn-link">연결해제</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <div class="setting-group-content">
+                                    <div class="setting-left on">
+                                        <i class="xi-facebook"></i>계정에 연결되어 있습니다.
+                                    </div>
+                                    <div class="setting-right">
+                                        <button class="xe-btn xe-btn-link">연결해제</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <div class="setting-group-content">
+                                <!--[D] 계정 연결된 경우 setting-left 클래스 on추가 -->
+                                    <div class="setting-left">
+                                        <i class="xi-twitter"></i>트위터 계정에 연결할 수 있습니다.
+                                    </div>
+                                    <div class="setting-right">
+                                        <button class="xe-btn xe-btn-link">연결</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <div class="setting-group-content">
+                                    <div class="setting-left">
+                                        <i class="xi-github"></i>깃허브 계정에 연결할 수 있습니다.
+                                    </div>
+                                    <div class="setting-right">
+                                        <button class="xe-btn xe-btn-link">연결</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-card">
+                            <h2>계정 삭제</h2>
+                            <div class="setting-group setting-account">
+                                <div class="setting-group-content">
+                                    <div class="setting-left">
+                                        <p>계정을 삭제할 필요가 있습니까?</p>
+                                        <em class="text-gray">계정을 삭제하면 콘텐츠 접근이 제한되고 회원정보와 연계된 모든 데이터가 제거됩니다.</em>
+                                    </div>
+                                    <div class="setting-right">
+                                        <button class="xe-btn xe-btn-link text-blue">예. 삭제합니다.</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-detail">
+                                <div class="setting-detail-content">
+                                    <p>계정 삭제가 의미하는 내용</p>
+                                    <em class="text-gray">계정을 삭제하기 전에 아래의 약관을 읽어 보시기 바랍니다.</em>
+                                    <ul class="acount-list">
+                                    <li>계정 삭제 작업은 영구적이며 되돌릴 수 없습니다. 삭제하는 즉시 귀하의 계정에 액세스할 수 없게 됩니다. </li>
+                                    <li>귀하의 모든 콘텐츠가 삭제됩니다.</li>
+                                    <li>댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.</li>
+                                    <li>아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.</li>
+                                    </ul>
+                                    <label class="xe-label">
+                                        <input type="checkbox">
+                                        <span class="xe-input-helper"></span>
+                                        <span class="xe-label-text">약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.</span>
+                                    </label>
+                                </div>
+                                <div class="xe-btn-group-all">
+                                    <button class="xe-btn xe-btn-primary">변경내용 저장</button>
+                                    <button class="xe-btn xe-btn-secondary">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--//setting 영역-->
+    </div>    
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+    
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin_menu.css">    
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>아이템 편집</h2>
+                        <small>사이트 메뉴 구조를 구성하고 관리할 수 있습니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div class="pull-left">
+                                    <div class="input-group search-group">
+                                        <form>
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">제목 <span class="caret"></span></button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                <li class="active"><a href="#">제목</a></li>
+                                                <li><a href="#">제목+내용</a></li>
+                                                <li><a href="#">내용</a></li>
+                                                <li><a href="#">작성자</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="search-input-group">
+                                                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="검색어를 입력하세요.">
+                                                <button class="btn-link">
+                                                    <i class="xi-search"></i><span class="sr-only">검색</span>
+                                                </button>                                                
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-primary pull-right"><i class="xi-plus"></i>메뉴 추가</a>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="menu-content">
+                                    <div class="menu-type">
+                                        <div class="panel-heading">
+                                            <div class="pull-left">
+                                                <h3><i class="xi-folder"></i>메인 메뉴</h3>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="#" class="btn btn-primary"><i class="xi-plus"></i><span>아이템 추가</span></a>
+                                            </div>
+                                        </div>
+                                        <div class="item-container">
+                                            <!--[D] drag & drop 시작 시 해당 li에 move 클래스 추가 , 아이템 비활성 처리 시 off 클래스 추가-->
+                                            <div class="item">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <dl>
+                                                        <dt class="sr-only">아이템 타이틀</dt>
+                                                        <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역</a></dd>
+                                                        <dt class="sr-only">아이템url</dt>
+                                                        <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="btn-group pull-right">
+                                                        <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                        <!--[D] 홈으로 설정 시 버튼 클래스에 home-on 추가-->
+                                                        <button type="button" class="btn btn-link hidden-xs home-on"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                    </div>
+                                                    <!--[D] button.btn-more 클릭 시 none/block 처리, 모바일에서만 활성화-->
+                                                    <div class="visible-xs more-area" style="display:block">
+                                                        <button class="btn" type="button">홈으로 설정</button>
+                                                        <a href="#" class="btn">페이지 보기</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item move">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <dl>
+                                                        <dt class="sr-only">아이템 타이틀</dt>
+                                                        <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역</a></dd>
+                                                        <dt class="sr-only">아이템url</dt>
+                                                        <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="btn-group pull-right">
+                                                        <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                        <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="item-container">
+                                                    <div class="item">
+                                                        <div class="item-content">
+                                                            <button class="btn handler">
+                                                                <i class="xi-drag-vertical"></i>
+                                                            </button>
+                                                            <div class="item-info">
+                                                                <div class="item-group">
+                                                                    <i class="xi-paper"></i>
+                                                                    <dl>
+                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                    <dt class="sr-only">아이템url</dt>
+                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item-container">
+                                                            <div class="item off">
+                                                                <div class="item-content">
+                                                                    <button class="btn handler">
+                                                                        <i class="xi-drag-vertical"></i>
+                                                                    </button>
+                                                                    <div class="item-info">
+                                                                        <div class="item-group">
+                                                                            <i class="xi-paper"></i>
+                                                                            <dl>
+                                                                            <dt class="sr-only">아이템 타이틀</dt>
+                                                                            <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                            <dt class="sr-only">아이템url</dt>
+                                                                            <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="btn-group pull-right">
+                                                                        <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                        <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                                    </div>
+                                                                    <!--[D] button.btn-more 클릭 시 none/block 처리, 모바일에서만 활성화-->
+                                                                    <div class="visible-xs more-area" style="display:block">
+                                                                        <button class="btn" type="button">홈으로 설정</button>
+                                                                        <a href="#" class="btn">페이지 보기</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="item-container">
+                                                                    <div class="item">
+                                                                        <div class="item-content">
+                                                                            <button class="btn handler">
+                                                                                <i class="xi-drag-vertical"></i>
+                                                                            </button>
+                                                                            <div class="item-info">
+                                                                                <div class="item-group">
+                                                                                    <i class="xi-paper"></i>
+                                                                                    <dl>
+                                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                                    <dt class="sr-only">아이템url</dt>
+                                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                                    </dl>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="btn-group pull-right">
+                                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="menu-type">
+                                        <div class="panel-heading">
+                                            <div class="pull-left">
+                                                <h3><i class="xi-folder"></i>메인 메뉴</h3>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="#" class="btn btn-primary"><i class="xi-plus"></i><span>아이템 추가</span></a>
+                                            </div>
+                                        </div>
+                                        <div class="item-container">
+                                            <!--[D] 아이템 이동 시 이동 객체를 복사하여 copy클래스 추가-->
+                                            <div class="item copy">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <dl>
+                                                        <dt class="sr-only">아이템 타이틀</dt>
+                                                        <dd class="ellipsis">아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역</dd>
+                                                        <dt class="sr-only">아이템url</dt>
+                                                        <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="btn-group pull-right">
+                                                        <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                        <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="item-container">
+                                                    <div class="item">
+                                                        <div class="item-content">
+                                                            <button class="btn handler">
+                                                                <i class="xi-drag-vertical"></i>
+                                                            </button>
+                                                            <div class="item-info">
+                                                                <div class="item-group">
+                                                                    <i class="xi-paper"></i>
+                                                                    <dl>
+                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                    <dt class="sr-only">아이템url</dt>
+                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-container">
+                                                    <div class="item">
+                                                        <div class="item-content">
+                                                            <button class="btn handler">
+                                                                <i class="xi-drag-vertical"></i>
+                                                            </button>
+                                                            <div class="item-info">
+                                                                <div class="item-group">
+                                                                    <i class="xi-paper"></i>
+                                                                    <dl>
+                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                    <dt class="sr-only">아이템url</dt>
+                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="item-content">
+                                                    <button class="btn handler">
+                                                        <i class="xi-drag-vertical"></i>
+                                                    </button>
+                                                    <div class="item-info">
+                                                        <i class="xi-paper"></i>
+                                                        <dl>
+                                                        <dt class="sr-only">아이템 타이틀</dt>
+                                                        <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역아이템 이름 타이틀 영역</a></dd>
+                                                        <dt class="sr-only">아이템url</dt>
+                                                        <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="btn-group pull-right">
+                                                        <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                        <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="item-container">
+                                                    <div class="item copy">
+                                                        <div class="item-content">
+                                                            <button class="btn handler">
+                                                                <i class="xi-ellipsis-v"></i>
+                                                            </button>
+                                                            <div class="item-info">
+                                                                <div class="item-group">
+                                                                    <i class="xi-paper"></i>
+                                                                    <dl>
+                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                    <dt class="sr-only">아이템url</dt>
+                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-container">
+                                                    <div class="item move">
+                                                        <div class="item-content">
+                                                            <button class="btn handler">
+                                                                <i class="xi-drag-vertical"></i>
+                                                            </button>
+                                                            <div class="item-info">
+                                                                <div class="item-group">
+                                                                    <i class="xi-paper"></i>
+                                                                    <dl>
+                                                                    <dt class="sr-only">아이템 타이틀</dt>
+                                                                    <dd class="ellipsis"><a href="#">아이템 이름 타이틀 영역</a></dd>
+                                                                    <dt class="sr-only">아이템url</dt>
+                                                                    <dd class="text-blue ellipsis"><a href="#">/url_name</a><em>[Board]</em></dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>
+                                                                <button type="button" class="btn btn-link hidden-xs"><i class="xi-home"></i><span class="sr-only">홈으로 설정</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+               <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - 미디어매니저</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+
+    <!-- media library -->
+    <link rel="stylesheet" href="../../../assets/core/media_library/css/media-library.css">
+
+    <!-- tree -->
+    <script src="../../../assets/core/media_library/js/simpleTree.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../../assets/core/media_library/css/simpleTree.css">
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+
+    </header>
+    <aside class="settings-nav-sidebar transition">
+
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>미디어매니저</h2>
+                        <small>미디어매니저 페이지입니다.</small>
+                    </div>
+                </div>
+                <!-- 2019/06/12 관리자 페이지 개선으로 빵조각 영역 제거 됨
+                <div class="row locate">
+                    <div class="col-sm-12">
+                        <ul>
+                        <li><a href="#">Home</a><i class="xi-angle-right"></i></li>
+                        <li>미디어매니저</li>
+                        </ul>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- media-library 전체 영역 -->
+                        <div class="media-library">
+                            <!-- 업로드 노출 영역 -->
+                            <div class="media-library-upload">
+                                업로드 영역
+                            </div>
+                            <!-- //업로드 노출 영역 -->
+
+                            <!-- 좌측, 우측 컨텐츠 묶은 영역 -->
+                            <div class="media-library-box">
+                                <!-- [D] 저장소가 1개만 있을 경우 class="state-one" 추가 (화살표 노출 및 PC 에서 영역 제거) -->
+                                <div class="media-library-aside">
+                                    <!-- 2019/06/27 사용자 UI 팝업에서 저장소 영역 애니메이션 적용을 위해 class="media-library-aside-inner" 추가 됨(스타일 적용되어 있음) -->
+                                    <div class="media-library-aside-inner">
+                                        <h3 class="media-library-aside__title">저장소</h3>
+                                        <!-- 
+                                            [D] 저장소 메뉴 열릴 때(class="media-library-aside__mobile-button" 버튼 영역 클리 시) class="media-library-aside__content" 영역에 class="open" 추가 (화살표 방향 변경, 저장소 팝업 노출)
+                                        -->
+                                        <div class="media-library-aside__content ">
+                                            <button type="button" class="media-library-aside__mobile-button">
+                                                Main Assets 
+                                                <span class="media-library-aside__mobile-button-icon"><i class="xi-angle-down-min"></i></span>
+                                            </button>
+                                            <ul class="media-library-aside__list">
+                                                <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
+                                                <li class="on">
+                                                    <button type="button" class="media-library-aside__button">Main Assets</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="media-library-aside__button">Common</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media-library-main">
+                                    <!-- 우측 상단 영역 -->
+                                    <!-- 
+                                        [D] 모바일에서 스크롤 시 화면 위에 메뉴가 붙어서 노출되는 기능 적용하려면 스크롤 이동 시 특정 위치에서 class="sticky" 추가, 제거하면 됩니다. 
+                                        디자인 파일 : 리스트 타입 -> 스크롤 UI
+                                    -->
+                                    <div class="media-library-header">
+                                        <!-- [D] 저장소명 적용 (PC 에서만 노출, 모바일은 aside 영역의 class="media-library-aside__mobile-button" 에 적용된 내용이 노출 됨) -->
+                                        <h3 class="media-library-header__title">Main Assets</h3>
+                                        <!-- [D] 모바일에서 검색버튼(class="media-library__button-icon--search") 클릭 시 class="search-open" 추가 -->
+                                        <div class="media-library__search ">
+                                            <div class="media-library__input-group">
+                                                <input type="text" class="media-library__input-text" placeholder="미디어 검색...">
+                                                <button type="button" class="media-library__button-text-remove">
+                                                    <span class="media-library__button-text-remove-image"></span>
+                                                </button>
+                                            </div>
+                                            <button type="button" class="media-library__button media-library__button-icon media-library__button-icon--search">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="17" viewBox="0 0 17 17">
+                                                    <defs>
+                                                        <path id="a" d="M15.042 8.313a6.73 6.73 0 1 0-13.459 0 6.73 6.73 0 0 0 13.459 0zm-6.73 5.145a5.151 5.151 0 0 1-5.145-5.146 5.152 5.152 0 0 1 5.146-5.145 5.152 5.152 0 0 1 5.145 5.146 5.152 5.152 0 0 1-5.146 5.145zm4.741.735l1.137-1.137 3.216 3.217-1.136 1.137-3.217-3.217z"/>
+                                                    </defs>
+                                                    <g fill="none" fill-rule="evenodd">
+                                                        <path d="M-10-10h36v36h-36z"/>
+                                                        <g transform="translate(-1 -1)">
+                                                            <path d="M0 0h19v19H0z"/>
+                                                            <mask id="b" fill="#fff">
+                                                                <use xlink:href="#a"/>
+                                                            </mask>
+                                                            <g fill="#505F79" mask="url(#b)">
+                                                                <path d="M0 0h19v19H0z"/>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                            <button type="button" class="media-library__button media-library__button-search-cancel">취소</button>
+                                        </div>
+                                        <!-- 
+                                            [D] 하단 리스트에서 아이템 선택 시 class="media-library-header__button-box--state-item-check" 영역에 class="open" 적용,
+                                            PC 에서는 무조건 노출됨
+                                        -->
+                                        <div class="media-library-header__button-box media-library-header__button-box--state-item-check ">
+                                            <div class="media-library-header__button-box-inner">
+                                                <button type="button" class="media-library__button media-library__button--danger">
+                                                    <span class="media-library__icon media-library__icon-delete"></span>
+                                                    삭제
+                                                </button>
+                                                <div class="media-library__button-group">
+                                                    <button type="button" class="media-library__button media-library__button--default">
+                                                        <span class="media-library__icon media-library__icon-move"></span>
+                                                        이동
+                                                    </button>
+                                                    <button type="button" class="media-library__button media-library__button--default">
+                                                        <span class="media-library__icon media-library__icon-deselect"></span>
+                                                        선택해제
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="media-library__button-group-radio">
+                                            <!-- [D] 선택 시 class="button-selected" 추가 -->
+                                            <!-- 카드형 버튼 -->
+                                            <button type="button" class="media-library__button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="12" viewBox="0 0 15 12">
+                                                    <defs>
+                                                        <path id="icon-card" d="M0 0h3.947v5.25H0V0zm0 6.75h3.947V12H0V6.75zM5.526 0h3.948v5.25H5.526V0zm0 6.75h3.948V12H5.526V6.75zM11.053 0H15v5.25h-3.947V0zm0 6.75H15V12h-3.947V6.75z"/>
+                                                    </defs>
+                                                    <g fill="none" fill-rule="evenodd">
+                                                        <mask id="icon-card-mask" fill="#fff">
+                                                            <use xlink:href="#icon-card"/>
+                                                        </mask>
+                                                        <use fill="#B3BAC5" xlink:href="#icon-card"/>
+                                                        <g class="media-library__svg" fill="#505F79" mask="url(#icon-card-mask)">
+                                                            <path d="M0 0h15v12H0z"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                            <!-- 리스트형 버튼 -->
+                                            <button type="button" class="media-library__button button-selected">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="11" viewBox="0 0 16 11">
+                                                    <defs>
+                                                        <path id="icon-list" d="M4 0h12v2.2H4V0zm0 4.4h12v2.2H4V4.4zm0 4.4h12V11H4V8.8zM0 0h2.4v2.2H0V0zm0 4.4h2.4v2.2H0V4.4zm0 4.4h2.4V11H0V8.8z"/>
+                                                    </defs>
+                                                    <g fill="none" fill-rule="evenodd">
+                                                        <mask id="icon-list-mask" fill="#fff">
+                                                            <use xlink:href="#icon-list"/>
+                                                        </mask>
+                                                        <use fill="#505F79" xlink:href="#icon-list"/>
+                                                        <g class="media-library__svg" fill="#505F79" mask="url(#icon-list-mask)">
+                                                            <path d="M0 0h16v11H0z"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <!-- [D] 모바일에서 버튼 class="media-library-header-mobile-upload-button" (아래 html 구조에 있음) 클릭 시 class="open" 추가 -->
+                                        <div class="media-library__button-group media-library__button-group--state-upload">
+                                            <div class="media-library__button-group-inner">
+                                                <button type="button" class="media-library__button media-library__button--default">
+                                                    <span class="media-library__icon media-library__icon-folder"></span>
+                                                    새폴더
+                                                </button>
+                                                <button type="button" class="media-library__button media-library__button--default">
+                                                    <span class="media-library__icon media-library__icon-upload"></span>
+                                                    업로드
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- [D] 버튼 노출 시 class="open" 추가 (css 에니메이션 적용 되어 있음) -->
+                                        <button type="button" class="media-library-header-mobile-upload-button "><span class="blind">모바일 화면 새폴더, 업로드 팝업 노출</span></button>
+                                        <!-- //모바일 플로팅 버튼 (새폴더, 업로드 노출) -->
+    
+                                        <!-- 모바일 리스트 형에서 검색, sort 버튼 노출 영역 -->
+                                        <div class="media-library-header-mobile-search-area"></div>
+                                        <!-- 모바일 플로팅 버튼 (새폴더, 업로드 노출) -->
+
+                                        <!-- 리스트형 모바일에서 sort 팝업 노출 버튼 (모바일에서 fixed 적용 되어야 되어 class="media-library-header" 영역으로 이동) -->
+                                        <!-- 
+                                            [D] class="media-library-content__button-sort" 버튼 클릭 시 class="media-library-content-sort" 영역에 class="open" 추가 
+                                                그리고 딤드영역 적용을 위해 class="media-library-dimmed" 영역 display: block 적용
+                                        -->
+                                        <div class="media-library-content-sort ">
+                                            <!-- [D] 첫번째 클릭 오름차순 class="active-sort--up" 적용, 두번째 클릭 내림차순 class="active-sort--down" 적용, 항목 변경 시 두 클래스 삭제 -->
+                                            <button type="button" class="media-library-content__button-sort">
+                                                제목순 <span class="blind">리스트 정렬 버튼</span>
+                                                <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span>
+                                            </button>
+                                            <ul class="media-library-content-sort__list">
+                                                <!-- [D] 버튼 선택 시 li 에 class="on" 추가 (체크 표시 노출 됨) -->
+                                                <li class="on">
+                                                    <button type="button" class="media-library-content-sort__list-button">제목순</button>
+                                                </li>
+                                                <li class="">
+                                                    <button type="button" class="media-library-content-sort__list-button">글쓴이순</button>
+                                                </li>
+                                                <li class="">
+                                                    <button type="button" class="media-library-content-sort__list-button">업로드 글순</button>
+                                                </li>
+                                                <li class="">
+                                                    <button type="button" class="media-library-content-sort__list-button">파일 크기순</button>
+                                                </li>
+                                                <li class="">
+                                                    <button type="button" class="media-library-content-sort__list-button">날짜순</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- //리스트형 모바일에서 sort 팝업 노출 버튼 -->
+                                    </div>
+                                    <!-- //우측 상단 영역 -->
+                                    <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
+                                    <div class="media-library-content" style="display: block">
+                                        <h3 class="blind">파일정보 리스트형, 카드형</h3>
+                                        <!-- 리스트 - 카드형 -->
+                                        <div class="media-library-content__card-type">
+                                            <!-- 2019/06/14, 스타일 미적용, 스타일 적용 예정, html 도 변경 될 수 있음 -->
+                                            <div class="media-library-content-header">
+                                                <!-- [D] PC에서 노출되는 리스트형 상단 정렬 버튼, 클릭 시 해당 내용으로 정렬 됨 -->
+                                                <div class="media-library-content-header__title">
+                                                    <!-- [D] 첫번째 클릭 오름차순 class="active-sort--up" 적용, 두번째 클릭 내림차순 class="active-sort--down" 적용, 항목 변경 시 두 클래스 삭제 -->
+                                                    <button type="button" class="media-library-content-header__button">제목 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
+                                                <div class="media-library-content-header__writer">
+                                                    <button type="button" class="media-library-content-header__button">글쓴이 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
+                                                <div class="media-library-content-header__upload">
+                                                    <button type="button" class="media-library-content-header__button">업로드 글 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
+                                                <div class="media-library-content-header__size">
+                                                    <button type="button" class="media-library-content-header__button">파일 크기 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
+                                                <div class="media-library-content-header__date">
+                                                    <button type="button" class="media-library-content-header__button">날짜 <span class="media-library-sort-arrow"><span class="blind">정렬 화살표</span></span></button>
+                                                </div>
+                                                <div class="media-library-content-header__more"></div>
+                                            </div>
+                                            <div class="media-library-content-list-box">
+                                                <ul class="media-library-content-list">
+                                                    <!-- 
+                                                        [D] 리스트가 폴더일 때 class="media-library-content-list__item--folder" 추가,
+                                                            리스트가 상위폴더 일 때 class="media-library-content-list__item--folder-depth-up" 추가
+                                                    -->
+                                                    <li class="media-library-content-list__item--folder-depth-up">
+                                                        <!-- 
+                                                            [D] PC : li 영역 클릭 시 class="media-library__input-checkbox" 에 체크 적용 필요
+                                                                모바일 : 체크박스 영역을 체크해야 체크 되도록 라벨 영역의 크기를 줄여 좋았습니다.
+                                                        -->
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <!-- [D] 이미지 클래스 정보
+                                                                폴더 이미지 : class="media-library-content-list__icon-folder",
+                                                                기타 이미지 : class="media-library-content-list__icon-etc",
+                                                                미리보기 이미지 : class="media-library-content-list__icon-preview" jpg, png 같은 이미지는 썸네일 적용 (background-image 적용)
+                                                            -->
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <!-- 2019/06/28 카드형에서 말줄임 적용을 위해 span 태그 추가 -->
+                                                                    <span class="media-library-content-list__text-ellipsis">..</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text"></span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text"></span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text"></span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- [D] class="media-library__button-ellipsis" 버튼 클릭 시 class="media-library-content-list__more" 영역에 class="open" 추가 (말줄임 버튼 컬러 변경 및 팝업 노출) -->
+                                                        <div class="media-library-content-list__more open">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <!-- 
+                                                        [D] PC화면에서 리스트 클릭 시(li 클릭 시) class="active" 추가, class="active" 추가 될 때 class="media-library__input-checkbox" 체크박스에 체크 및 체크해제 적용!!
+                                                            PC화면에서 리스트 더블 클릭 시 편집하기 창 노출 
+    
+                                                        [D] 모바일화면에서 체크박스 선택 시 class="active" 추가, 체크박스 체크 및 해제 적용
+                                                            모바일화면에서 리스트 클릭 시 (li 클릭 시) 편집하기 창 노출
+                                                    -->
+                                                    <li class="media-library-content-list__item--folder active">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">board</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">-</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">10 개</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">-</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="active">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">제목제목제목제목제목제목제목제목제목</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__upload">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">페이지 말고 글인 경우에만 표시</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-etc"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="">
+                                                        <div class="media-library__input-group media-library-content-list__checkbox">
+                                                            <label class="media-library__label">
+                                                                <input type="checkbox" class="media-library__input-checkbox">
+                                                                <span class="media-library__input-helper"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="media-library-content-list__icon">
+                                                            <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" style="background-image: url(https://www.xpressengine.io/plugins/official_homepage/Components/Themes/ThemeV3/assets/img/img-spot.png)"></div>
+                                                        </div>
+                                                        <div class="media-library-content-list__content-box">
+                                                            <div class="media-library-content-list__title">
+                                                                <!-- 제목 텍스트 태그를 button 태그로 변경 -->
+                                                                <button type="button" class="media-library-content-list__text">
+                                                                    <span class="media-library-content-list__text-ellipsis">썸네일 이미지</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="media-library-content-list__writer">
+                                                                <span class="media-library-content-list__text">admin</span>
+                                                            </div>
+                                                            <!-- [D] 업로드 글 이 없을 경우 display: none 적용, pc 에서는 무조건 노출 되기 때문에 css 에서 display: block !important 적용 하였습니다. -->
+                                                            <div class="media-library-content-list__upload" style="display: none">
+                                                                <a href="#" class="media-library-content-list__text media-library-content-list__text-link">-</a>
+                                                            </div>
+                                                            <div class="media-library-content-list__size">
+                                                                <span class="media-library-content-list__text">999 MB</span>
+                                                            </div>
+                                                            <div class="media-library-content-list__date">
+                                                                <span class="media-library-content-list__text">2019.05.16</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-library-content-list__more ">
+                                                            <button type="button" class="media-library__button-ellipsis"><span class="blind">편집하기, 삭제 팝업 버튼</span></button>
+                                                            <ul class="media-library-content-list__more-list">
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button">편집하기</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="media-library-content-list__more-list-button media-library-content-list__more-list-button--delete">삭제</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- //리스트 - 카드형 -->
+    
+                                        <!-- 페이징, 게시판 페이징 가져와서 수정 (리스트형, 카드형 공통 페이징) -->
+                                        <div class="media-library-paging">
+                                            <h4 class="blind">데이터 페이징</h4>
+                                            <div class="media-library-paging__box media-library-paging__box--normal">
+                                                <a class="media-library-paging-item media-library-paging-item--prev" title="이전"><i class="xi-angle-left-min"></i></a>
+                                                <a href="#" class="media-library-paging-item media-library-paging-item--active ">1</a>
+                                                <a href="#" class="media-library-paging-item ">2</a>
+                                                <a href="#" class="media-library-paging-item media-library-paging-item--next" title="다음"><i class="xi-angle-right-min"></i></a>
+                                            </div>
+                                    
+                                            <div class="media-library-paging__box media-library-paging__box--simple">
+                                                <a class="media-library-paging-item media-library-paging-item--prev" title="이전"><i class="xi-angle-left-min"></i></a>
+                                                <span class="media-library-paging__box-items"><strong class="media-library-paging-item media-library-paging-item--active">1</strong> / <span class="media-library-paging-item">2</span></span>
+                                                <a href="#" class="media-library-paging-item media-library-paging-item--next" title="다음"><i class="xi-angle-right-min"></i></a>
+                                            </div>
+                                        </div>
+                                        <!-- //페이징 -->
+                                    </div>
+                                    <!-- //우측 중앙 영역 (리스트, 페이징 포함)-->
+
+                                    <!-- 
+                                        [D] 2019/06/18 검색 시 데이터 없을 경우 노출 
+                                        검색 시 데이터가 없을 경우 class="media-library-content" 영역 내 모든 데이터 대신 아래 내용 적용 (class="media-library-content-empty")
+                                    -->
+                                    <div class="media-library-content" style="display: none">
+                                        <div class="media-library-content-empty">
+                                            <div class="media-library-content-empty__image"></div>
+                                            <p class="media-library-content-empty__text">검색 결과에 해당하는 미디어가 없습니다. <br>단어의 철자가 올바른지 확인하거나 다른 키워드를 사용해보세요.</p>
+                                        </div>
+                                    </div>
+                                    <!-- //검색 시 데이터 없을 경우 노출 -->
+
+                                    <!-- 우측 하단 영역(폴더 빵조각) -->
+                                    <div class="media-library-breadcrumbs">
+                                        <h3 class="blind">현재 폴더 정보</h3>
+                                        <div class="media-library-breadcrumbs-info">
+                                            <span class="media-library-breadcrumbs-info__image"></span>
+                                            <a href="#" class="media-library-breadcrumbs-info__link">/ <span class="media-library-breadcrumbs-info__link-text">assets</span></a>
+                                            <a href="#" class="media-library-breadcrumbs-info__link">/ <span class="media-library-breadcrumbs-info__link-text">core</span></a>
+                                            <a href="#" class="media-library-breadcrumbs-info__link">/ <span class="media-library-breadcrumbs-info__link-text">media library</span></a>
+                                        </div>
+                                    </div>
+                                    <!-- //우측 하단 영역(폴더 빵조각) -->
+                                </div>
+                            </div>
+                            <!-- //좌측, 우측 컨텐츠 묶은 영역 -->
+                            <!-- [D] 딤드가 필요할 때는 해당 딤드 display: block 적용 -->
+                            <div class="media-library-dimmed" style="display: none"></div>
+                        </div>
+                        <!-- //media-library 전체 영역 -->
+
+                        <!-- 레이어 팝업(기본) - 새폴더 -->
+                        <div class="media-library-dialog-popup" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">새폴더 <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <div class="media-library__input-group-box">
+                                                    <label class="media-library__input-group-label">
+                                                        <span class="media-library__input-group-label-title">폴더 이름</span>
+                                                        <div class="media-library__input-group">        
+                                                            <input type="text" class="media-library__input-text">
+                                                            <button type="button" class="media-library__button-text-remove">
+                                                                <span class="media-library__button-text-remove-image"></span>
+                                                            </button>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <button type="button" class="media-library__button media-library__button--primary">
+                                                    만들기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업(기본) -->
+
+                        <!-- 레이어 팝업 - 삭제버튼 클릭 시 -->
+                        <div class="media-library-dialog-popup media-library-dialog-popup--delete" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">선택한 아이템을 삭제하시겠습니까? <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <p class="media-library-dialog-popup__text">선택한 아이템이 영구적으로 삭제됩니다.</p>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <button type="button" class="media-library__button media-library__button--danger">
+                                                    삭제
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업 - 삭제버튼 클릭 시 -->
+
+                        <!-- 레이어 팝업 - 파일 또는 폴더 이동 -->
+                        <div class="media-library-dialog-popup" style="display: none">
+                            <div class="media-library-dialog-popup-table">
+                                <div class="media-library-dialog-popup-table-cell">
+                                    <div class="media-library-dialog-popup-content-box">
+                                        <div class="media-library-dialog-popup-content">
+                                            <div class="media-library-dialog-popup-header">
+                                                <h3 class="media-library-dialog-popup-header__title">파일 또는 폴더 이동 <span class="blind">레이어 팝업</span></h3>
+                                            </div>
+                                            <div class="media-library-dialog-popup-body">
+                                                <div class="media-library__input-group-box">
+                                                    <label class="media-library__input-group-label">
+                                                        <span class="media-library__input-group-label-title">이동 할 폴더 검색</span>
+                                                        <div class="media-library__input-group">        
+                                                            <input type="text" id="mediaLibrarySimpleTreeSearch" class="media-library__input-text">
+                                                            <button type="button" class="media-library__button-text-remove">
+                                                                <span class="media-library__button-text-remove-image"></span>
+                                                            </button>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <div id="mediaLibrarySimpleTree" class="media-library-simple-tree"></div>
+                                            </div>
+                                            <div class="media-library-dialog-popup-footer">
+                                                <button type="button" class="media-library__button media-library__button--subtle">
+                                                    취소
+                                                </button>
+                                                <!-- [D] 폴더 선택 시 disabled 제거 -->
+                                                <button type="button" class="media-library__button media-library__button--primary" disabled>
+                                                    이동
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //레이어 팝업 - 파일 또는 폴더 이동 -->
+                     </div>
+                </div>
+                <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+    function loadCheckFunc(headUrl, asideUrl, footUrl) {
+        $('header').load( headUrl );
+        $('aside').load( asideUrl );
+        $('.footer').load( footUrl );
+    }
+    function init_include() {
+        loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+    }
+
+    init_include();
+
+    // simple tree 시작
+    var data = [
+        {
+            label: 'HTML',
+            value: 'html',
+            children: [
+                {
+                    label: 'HTML5',
+                    value: 'html5'
+                }, {
+                    label: 'XML',
+                    value: 'xml'
+                }
+            ]
+        }, {
+            label: 'JavaScript',
+            value: 'javaScript',
+            children: [
+                {
+                    label: 'XML',
+                    value: 'xml',
+                    children: [
+                        {
+                            label: 'React Native',
+                            value: 'reactnative'
+                        }
+                    ]
+                }, {
+                    label: 'Angular',
+                    value: 'angular'
+                }
+            ]
+        }
+        ];
+
+    var options = {
+        // Optionally provide here the jQuery element that you use as the search box for filtering the tree. simpleTree then takes control over the provided box, handling user input
+        searchBox: $('#mediaLibrarySimpleTreeSearch'),
+
+        // Search starts after at least 3 characters are entered in the search box
+        searchMinInputLength: 2,
+
+        // Number of pixels to indent each additional nesting level
+        indentSize: 25,
+
+        // Show child count badges?
+        childCountShow: true,
+
+        // Symbols for expanded and collapsed nodes that have child nodes
+        symbols: {
+            // collapsed: '▶',
+            // expanded: '▼'
+            collapsed: 'ㄴ',
+            expanded: 'ㄴ'
+        },
+
+        // these are the CSS class names used on various occasions. If you change these names, you also need to provide the corresponding CSS class
+        css: {
+            childrenContainer: 'simpleTree-childrenContainer',
+            childCountBadge: 'simpleTree-childCountBadge badge badge-pill badge-secondary',
+            highlight: 'simpleTree-highlight',
+            indent: 'simpleTree-indent',
+            label: 'simpleTree-label',
+            mainContainer: 'simpleTree-mainContainer',
+            nodeContainer: 'simpleTree-nodeContainer',
+            selected: 'simpleTree-selected',
+            toggle: 'simpleTree-toggle'
+        }
+    };
+
+    $('#mediaLibrarySimpleTree').simpleTree(options, data);
+    // simple tree 끝
+});
+</script>
+</body>
+</html>

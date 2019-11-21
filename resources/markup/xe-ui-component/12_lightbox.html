@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+    <script src="../../../assets/core/xe-ui-component/js/xe-lightbox.js"></script>
+    <style type="text/css">
+        .xe-example>.images>img{
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin:5px;
+        }
+    </style>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Lightbox</h2>
+            <p>
+                
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Example</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Example</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        
+                    </p>
+                </div>
+                <div class="xe-col-md-8">                    
+                    <pre><code class="language-markup"></code></pre>
+                    <div class="xe-example">
+                        <div class="images" data-toggle="xe-lightbox" data-selector="img">
+                           <img src="sample/img/@sample_img.jpg">
+                           <img src="sample/img/@sample_img2.jpg">
+                           <img src="sample/img/@sample_img3.jpg">
+                           <img src="sample/img/@sample_img4.jpg">
+                           <img src="sample/img/@sample_img5.jpg">
+                           <img src="sample/img/@sample_img6.jpg">
+                           <img src="sample/img/@sample_img7.jpg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    $('.images > img').lightbox();
+</script>
+</body>
+</html>

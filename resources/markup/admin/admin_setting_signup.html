@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="../../../assets/core/xe-ui/css/xe-ui-without-base.css?1567582437" type="text/css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+
+    <script src="../../../assets/vendor/jqueryui/jquery-ui.min.js?1567582437"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="#">가입 설정</a></h2>
+                        <small>회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- container-fluid--part (max-width: 960px, 설정 또는 서비스), container-fluid--all (max-width: none, 회원 또는 테마/익스텐션) -->
+            <div class="container-fluid container-fluid--part">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="setting-area-group">
+                            <!-- 각 세팅 박스 -->
+                            <section class="setting-area">
+                                <div class="setting-area__header">
+                                    <h3 class="setting-area__header-title">가입설정</h3>
+                                </div>
+                                <div class="setting-area__body">
+                                    <div class="setting-box">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4 class="setting-box__sub-title">가입설정</h4>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <label class="xu-label-checkradio">
+                                                    <input type="checkbox">
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                    <span class="xu-label-checkradio__text">로그인/회원 가입 사용</span>
+                                                </label>
+                                                <p class="setting-box__text-info" style="padding-left: 24px;">로그인 및 회원 가입 버튼을 표시합니다.<br> 이를 해제하게되면 로그인, 회원가입 버튼이 표시되지 않으며, 페이지는 특정한 경로(예: 회원 권한이 필요한 메뉴에서 로그인)로 로그인 가능</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4 class="setting-box__sub-title">가입절차</h4>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">자동가입</span>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">관리자 승인 후 가입</span>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">이메일 인증 후 가입</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4 class="setting-box__sub-title">약관동의</h4>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">가입시 약관 동의 단계 거치기(권장)</span>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">약관 동의 단계 대신 회원정보 입력 하단에 약관동의 문구 표시</span>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="radio">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">약관 동의를 사용하지 않음</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4 class="setting-box__sub-title">소셜 로그인 약관동의</h4>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div>
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">신규 회원인 경우 약관 동의 받기</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="setting-box">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4 class="setting-box__sub-title">가입안내</h4>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="xu-form-group" style="margin-bottom: 8px;">
+                                                    <div class="xu-form-group__box" style="width: 100%;">
+                                                        <textarea class="xu-form-group__control" cols="33" rows="3" placeholder="예 : 아래 항목을 빠짐없이 입력해 주세요."></textarea>
+                                                    </div>
+                                                </div>
+                                                <p class="setting-box__text-info">회원가입시 정보입력 단계 상단에 표시될 내용입니다. (여러줄 입력 가능)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="setting-area__footer">
+
+                                </div>
+                            </section>
+
+                            <section class="setting-area">
+                                <div class="setting-area__header">
+                                    <h3 class="setting-area__header-title">가입 폼 관리</h3>
+                                </div>
+                                <div class="setting-area__body">
+                                    <div class="table-scroll">
+                                        <table class="admin-table admin-table__signup">
+                                            <colgroup>
+                                                <col class="col1" />
+                                                <col class="col2" />
+                                                <col class="col3" />
+                                                <col class="col4" />
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>항목</th>
+                                                    <th class="text-align--center">로그인 계정</th>
+                                                    <th class="text-align--center">사용</th>
+                                                    <th class="text-align--center">필수</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>이메일 주소</td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="radio" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>아이디</td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="radio" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <!-- [D] disabled 해제 방법 : class="xu-label-checkradio--disabled" 제거, input에 disabled 속석 제거 -->
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>이름 <button type="submit" class="xu-button xu-button--default" style="margin-left: 12px;">수정</button></td>
+                                                    <td></td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <!-- 이름 수정 버튼 클릭 시 노출 -->
+                                                <tr>
+                                                    <td>
+                                                        <div class="xu-form-group" style="display: inline-block;">
+                                                            <div class="xu-form-group__box" style="width: 150px;">
+                                                                <input type="text" name="componentSingle1" class="xu-form-group__control" value="홍길동">
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="xu-button xu-button--link">
+                                                            <span class="xu-button__text">기본값으로</span>
+                                                        </button>
+                                                        <div style="padding-top: 8px;">
+                                                            <button type="button" class="xu-button xu-button--primary">
+                                                                <span class="xu-button__text">확인</span>
+                                                            </button>
+                                                            <button type="button" class="xu-button xu-button--link">
+                                                                <span class="xu-button__text">취소</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <!-- //이름 수정 버튼 클릭 시 노출 -->
+                                                <tr>
+                                                    <td>비밀번호 <button type="submit" class="xu-button xu-button--default" style="margin-left: 12px;">정책수정</button></td>
+                                                    <td></td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <!-- 비밀번호 정책수정 버튼 클릭 시 노출 -->
+                                                <tr>
+                                                    <td>
+                                                        비밀번호 <span class="admin-table__required">*</span>
+                                                        <div style="margin-top: 16px;">
+                                                            최소 비밀번호 글자 수
+                                                            <div class="xu-form-group" style="display: inline-block;">
+                                                                <div class="xu-form-group__box" style="width: 80px;">
+                                                                    <input type="text" name="" class="xu-form-group__control" value="6">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div style="margin-top: 16px;">
+                                                            <div>
+                                                                <label class="xu-label-checkradio">
+                                                                    <input type="checkbox" checked="checked">
+                                                                    <span class="xu-label-checkradio__helper"></span>
+                                                                    <span class="xu-label-checkradio__text">비밀번호에 숫자 포함</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="xu-label-checkradio">
+                                                                    <input type="checkbox" checked="checked">
+                                                                    <span class="xu-label-checkradio__helper"></span>
+                                                                    <span class="xu-label-checkradio__text">비밀번호에 대문자 포함</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="xu-label-checkradio">
+                                                                    <input type="checkbox" checked="checked">
+                                                                    <span class="xu-label-checkradio__helper"></span>
+                                                                    <span class="xu-label-checkradio__text">비밀번호에 특수문자 포함</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="xu-label-checkradio">
+                                                                    <input type="checkbox">
+                                                                    <span class="xu-label-checkradio__helper"></span>
+                                                                    <span class="xu-label-checkradio__text">반복 없는 비밀번호</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="xu-label-checkradio">
+                                                                    <input type="checkbox">
+                                                                    <span class="xu-label-checkradio__helper"></span>
+                                                                    <span class="xu-label-checkradio__text">선(-,–,—,_) 없는 비밀번호</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div style="padding-top: 8px;">
+                                                            <button type="button" class="xu-button xu-button--primary">
+                                                                <span class="xu-button__text">확인</span>
+                                                            </button>
+                                                            <button type="button" class="xu-button xu-button--link">
+                                                                <span class="xu-button__text">취소</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio">
+                                                            <input type="checkbox" name="">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-align--center">
+                                                        <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                            <input type="checkbox" name="" disabled="disabled">
+                                                            <span class="xu-label-checkradio__helper"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <!-- //비밀번호 정책수정 버튼 클릭 시 노출 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- 사용자 정의 항목 -->
+                                    <div style="margin-top: 26px;">
+                                        <!-- 드래그 리스트 항목 -->
+                                        <ul class="sort-list sort-list--custom-item sort-list sort-list--custom-item-header">
+                                            <li>
+                                                <div class="sort-list__header-title">사용자 정의 항목</div>
+                                                <div class="sort-list__header-text">사용</div>
+                                                <div class="sort-list__header-text">필수</div>
+                                                <div class="sort-list__header-text sort-list__header-text--empty"></div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- 드래그 리스트 -->
+                                        <ul class="sort-list sort-list--custom-item __ui-sortable">
+                                            <li>
+                                                <div class="sort-list__handler">
+                                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-drag-vertical"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <p class="sort-list__text">사용자 정의 항목 Label</p>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-pen"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-trash"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="sort-list__handler">
+                                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-drag-vertical"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <p class="sort-list__text">사용자 정의 항목 Label</p>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-pen"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-trash"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="sort-list__handler">
+                                                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-drag-vertical"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <p class="sort-list__text">두줄이 넘어갈 경우에는 상하중앙정렬 상하중앙정렬 상하중앙정렬 상하중앙정렬</p>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__checkradio">
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="">
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-pen"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="sort-list__button">
+                                                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                                                        <span class="xu-button__icon">
+                                                            <i class="xi-trash"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- //사용자 정의 항목 -->
+
+                                    <div>
+                                        <button type="button" class="xu-button xu-button--link" style="margin-top: 16px;">
+                                            <span class="xu-button__text">사용자 정의 항목 추가</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="setting-area__footer">
+
+                                </div>
+                            </section>
+
+                            <!-- 전체 페이지 버튼 영역 -->
+                            <div class="setting-button-box" style="text-align: right;">
+                                <button type="submit" class="xu-button xu-button--primary">저장하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+    function loadCheckFunc(headUrl, asideUrl, footUrl) {
+        $('header').load( headUrl );
+        $('aside').load( asideUrl );
+        $('.footer').load( footUrl );
+    }
+    function init_include() {
+        loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+    }
+    init_include();
+
+    // sortable 한 table 구현해야 함
+    $(".__ui-sortable").sortable({
+        handle: '.__handler',
+        cancel: '',
+        // update: function( event, ui ) {
+        // },
+        // start: function(e, ui) {
+        //     // ui.placeholder.height(ui.helper.outerHeight());
+        //     // ui.placeholder.css("display", "table-row");
+        //     // ui.helper.css("display", "table-row");
+        // },
+        // stop: function(e, ui) {
+        //     // $(ui.item.context).css("display", "table-row");
+        // }
+    }).disableSelection();
+});
+</script>
+</body>
+</html>
