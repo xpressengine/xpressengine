@@ -14,7 +14,9 @@
 
 namespace Xpressengine\User\Parts;
 
+use Xpressengine\Http\Request;
 use Xpressengine\User\Models\Term;
+use Xpressengine\User\UserRegisterHandler;
 
 /**
  * Class AgreementPart
@@ -36,6 +38,9 @@ class AgreementPart extends RegisterFormPart
 
     private $enabled;
 
+    /** @var bool $isUsePart 회원가입 설정에 따른 사용 여부 확인 */
+    private $isUsePart;
+
     /**
      * Indicates if the form part is implicit
      *
@@ -44,11 +49,38 @@ class AgreementPart extends RegisterFormPart
     protected static $implicit = true;
 
     /**
+     * AgreementPart constructor.
+     *
+     * @param Request $request request
+     */
+    public function __construct(Request $request)
+    {
+        $this->isUsePart = app('xe.config')->getVal(
+            'user.register.term_agree_type',
+            UserRegisterHandler::TERM_AGREE_WITH
+        ) === UserRegisterHandler::TERM_AGREE_WITH;
+
+        parent::__construct($request);
+    }
+
+    /**
      * The view for the form part
      *
      * @var string
      */
     protected static $view = 'register.forms.agreements';
+
+    /**
+     * @return \Illuminate\Support\HtmlString|string
+     */
+    public function render()
+    {
+        if ($this->isUsePart === false) {
+            return '';
+        }
+
+        return parent::render();
+    }
 
     /**
      * Get data for form part view
@@ -67,7 +99,7 @@ class AgreementPart extends RegisterFormPart
      */
     public function rules()
     {
-        if (count($this->getEnabled()) > 0) {
+        if ($this->isUsePart === true && count($this->getEnabled()) > 0) {
             return ['agree' => 'accepted'];
         }
 
