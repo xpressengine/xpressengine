@@ -377,7 +377,6 @@ class XE {
    * @param {object} options jQuery ajax options
    */
   ajax (url, options) {
-
     if (typeof url === 'object') {
       options = $.extend({}, this.Request.config, { headers: { 'X-CSRF-TOKEN': this.config.getters['request/xsrfToken'] } }, url)
       url = undefined
@@ -386,17 +385,18 @@ class XE {
       url = undefined
     }
 
-    if (
-      options.type == 'put'
-      || options.type == 'delete'
-      || options.method == 'put'
-      || options.method == 'delete'
-    ) {
+    var requestMethod = options.type || options.method
+
+    if (requestMethod === 'put' || requestMethod === 'delete') {
       if (typeof options.data === 'string') {
         options.data = qs.parse(options.data)
       }
 
-      options.data._method = options.type || options.method
+      if (typeof options.data === "undefined") {
+        options.data = {}
+      }
+
+      options.data._method = requestMethod
       options.data = qs.stringify(options.data)
       options.type = options.method = 'post'
     }
