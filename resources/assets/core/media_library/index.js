@@ -72,7 +72,6 @@ class MediaLibrary extends App {
         $('body').append('<div id="media-library">')
       }
       that.$$xe.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
-      that.$$xe.DynamicLoadManager.cssLoad('/resources/assets/node_modules/cropperjs/dist/cropper.min.css')
 
       const componentAppInstance = new Vue({
         el: '#media-library',

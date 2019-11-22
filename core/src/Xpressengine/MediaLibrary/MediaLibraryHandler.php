@@ -306,7 +306,7 @@ class MediaLibraryHandler
      */
     public function getFolderList(MediaLibraryFolder $targetFolderItem, Request $request)
     {
-        if ($request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
+        if ((int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
             return [];
         }
 

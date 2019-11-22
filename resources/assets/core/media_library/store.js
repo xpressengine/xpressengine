@@ -20,6 +20,13 @@ const initialFilter = {
 }
 
 const state = {
+  disk: [
+    {
+      title: 'Main Assets',
+      pathName: 'media',
+      rootFolder: null
+    }
+  ],
   path: [],
   folder: [],
   media: [],
@@ -28,6 +35,19 @@ const state = {
 }
 
 const getters = {
+  disk: state => (pathName = null) => {
+    if (pathName !== null) {
+      return state.disk.find(v => v.pathName === pathName)
+    }
+
+    return state.disk
+  },
+  currentDisk: state => {
+    state.disk.find(v => v.pathName === 'media') // @FIXME
+  },
+  currentRoot: state => {
+    return state.path[0]
+  },
   media: state => (id = null) => {
     if (id !== null) {
       return state.media.find(v => v.id === id)
@@ -144,6 +164,12 @@ const actions = {
       .then(() => {
         commit(types.DELETE_FOLDER, folderId)
       })
+  },
+  viewDisk ({ dispatch, getters }, payload) {
+    console.debug('viewDisk', getters['currentRoot'].id)
+    dispatch('setFilter', { folder_id: getters['currentRoot'].id }).then((a) => {
+      console.debug('viewDisk.then', a)
+    })
   }
 }
 

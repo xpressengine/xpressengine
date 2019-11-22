@@ -20,7 +20,7 @@
           </li>
         </ul>
         <hr>
-        <a>내 최근 파일</a>
+        <a @click="viewMyFiles">내 최근 파일</a>
       </div>
     </div>
   </div>
@@ -29,8 +29,12 @@
 <script>
 export default {
   methods: {
+    viewMyFiles () {
+      this.$store.dispatch('media/loadData', { index_mode: 2})
+    },
+
     viewDisk (disk) {
-      console.debug('viewDisk', disk, arguments)
+      this.$store.dispatch('media/loadData', { index_mode: 1})
     }
   }
 };
