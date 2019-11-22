@@ -1,6 +1,6 @@
 <template>
   <div class="media-library-main">
-    <header-tool :orderTarget="$root.orderTarget" :orderType="$root.orderType"></header-tool>
+    <header-tool :orderTarget="$root.orderTarget" :orderType="$root.orderType" :indexMode="indexMode"></header-tool>
 
     <!-- 우측 중앙 영역 (리스트, 페이징 포함)-->
     <div class="media-library-content" style="display: block;">
@@ -116,7 +116,7 @@
       <pagination></pagination>
     </div>
     <!-- //우측 중앙 영역 (리스트, 페이징 포함)-->
-    <path-breadcrumb :pathItems="pathItems"></path-breadcrumb>
+    <path-breadcrumb :pathItems="pathItems" :indexMode="indexMode"></path-breadcrumb>
   </div>
 </template>
 
@@ -142,6 +142,7 @@ export default {
         folder_id: null,
         page: 1
       },
+      indexMode: 2,
       parentFolder: {}
     };
   },
@@ -164,6 +165,7 @@ export default {
     }
   },
   mounted: function () {
+    this.indexMode = this.$store.getters['media/listMode']
     this.paginate = this.$store.getters['media/paginate']
     this.parentFolder = this.$store.getters['media/parentFolder']
 
@@ -171,6 +173,10 @@ export default {
       after: (action, state) => {
         if (action.type === 'media/loadData') {
           this.parentFolder = this.$store.getters['media/parentFolder']
+        }
+
+        if (action.type === 'media/changeListMode') {
+          this.indexMode = this.$store.getters['media/listMode']
         }
       }
     })

@@ -1,5 +1,5 @@
 <template>
-  <div class="media-library-breadcrumbs">
+  <div v-if="indexMode === 1" class="media-library-breadcrumbs">
       <h3 class="blind">현재 폴더 정보</h3>
       <div class="media-library-breadcrumbs-info">
           <span class="media-library-breadcrumbs-info__image"></span>
@@ -16,7 +16,7 @@ const types = {
 }
 
 export default {
-  props: ['pathItems'],
+  props: ['pathItems', 'indexMode'],
   components: {
     PathItem
   },

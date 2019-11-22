@@ -30,11 +30,11 @@
 export default {
   methods: {
     viewMyFiles () {
-      this.$store.dispatch('media/loadData', { index_mode: 2})
+      this.$store.dispatch('media/changeListMode', 2)
     },
 
     viewDisk (disk) {
-      this.$store.dispatch('media/loadData', { index_mode: 1})
+      this.$store.dispatch('media/changeListMode', 1)
     }
   }
 };

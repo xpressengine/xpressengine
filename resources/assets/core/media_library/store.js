@@ -8,8 +8,14 @@ const types = {
   DELETE_FOLDER: 'DELETE_FOLDER',
   ADD_FOLDER: 'ADD_FOLDER',
   ADD_MEDIA: 'ADD_MEDIA',
-  SET_MEDIA: 'SET_MEDIA'
+  SET_MEDIA: 'SET_MEDIA',
+  SET_LIST_MODE: 'SET_LIST_MODE'
 }
+
+export const LIST_MODE_ADMIN = 1
+export const LIST_MODE_USER = 2
+
+const FILTER_RESET = true
 
 /**
  * 필터 초기 값
@@ -20,6 +26,7 @@ const initialFilter = {
 }
 
 const state = {
+  listMode: LIST_MODE_USER,
   disk: [
     {
       title: 'Main Assets',
@@ -35,6 +42,9 @@ const state = {
 }
 
 const getters = {
+  listMode: state => {
+    return state.listMode
+  },
   disk: state => (pathName = null) => {
     if (pathName !== null) {
       return state.disk.find(v => v.pathName === pathName)
@@ -124,7 +134,11 @@ const getters = {
 }
 
 const actions = {
-  setFilter ({ commit, dispatch, state }, filter = {}, reset = false) {
+  changeListMode ({ commit, dispatch }, mode = LIST_MODE_USER) {
+    commit(types.SET_LIST_MODE, mode)
+    return dispatch('setFilter', { index_mode: mode }, FILTER_RESET)
+  },
+  setFilter ({ commit, dispatch, state }, filter = {}, reset = FILTER_RESET) {
     commit(types.SET_FILTER, filter, reset)
     return dispatch('loadData', state.filter)
   },
@@ -208,6 +222,9 @@ const mutations = {
   [types.SET_MEDIA] (state, payload) {
     const mediaIndex = state.media.findIndex(item => item.id === payload.id)
     state.media[mediaIndex] = Object.assign(state.media[mediaIndex], payload.data)
+  },
+  [types.SET_LIST_MODE] (state, mode = LIST_MODE_USER) {
+    state.listMode = mode
   }
 }
 

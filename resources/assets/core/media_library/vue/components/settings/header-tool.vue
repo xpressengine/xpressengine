@@ -30,7 +30,7 @@
           삭제
         </button>
         <div class="media-library__button-group">
-          <button type="button" class="media-library__button media-library__button--default">
+          <button v-if="indexMode === 1" type="button" class="media-library__button media-library__button--default">
             <span class="media-library__icon media-library__icon-move"></span>
             이동
           </button>
@@ -57,7 +57,7 @@
     <!-- [D] 모바일에서 버튼 class="media-library-header-mobile-upload-button" (아래 html 구조에 있음) 클릭 시 class="open" 추가 -->
     <div class="media-library__button-group media-library__button-group--state-upload">
       <div class="media-library__button-group-inner">
-        <button @click="dialogCreateFolder" type="button" class="media-library__button media-library__button--default">
+        <button v-if="indexMode === 1" @click="dialogCreateFolder" type="button" class="media-library__button media-library__button--default">
           <i class="xi-folder-o"></i>
           새폴더
         </button>
@@ -123,7 +123,7 @@ import DialogCreateFolder from '../dialogs/DialogCreateFolder.vue'
 
 export default {
   name: 'SettingsHeaderTool',
-  props: ['orderTarget', 'orderType'],
+  props: ['orderTarget', 'orderType', 'indexMode'],
   methods: {
     createFolder(event) {
       window.XE.post('/media_manager/folder', {

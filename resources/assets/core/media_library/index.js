@@ -22,8 +22,10 @@ const store = new Vuex.Store({
 // const router = new VueRouter(RouteMap)
 
 let renderMode = 'inline'
-
 let componentAppInstance = null
+
+const LIST_MODE_ADMIN = 1
+const LIST_MODE_USER = 2
 
 /**
 * @class 미디어 매니저
@@ -86,7 +88,7 @@ class MediaLibrary extends App {
           return {
             renderMode: 'inline',
             importMode: 'embed',
-            listMode: 'user',
+            listMode: LIST_MODE_USER,
             selectedMedia: [],
             showMedia: null,
             dialog: null,
