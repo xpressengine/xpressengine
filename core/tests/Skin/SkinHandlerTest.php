@@ -93,6 +93,7 @@ class SkinHandlerTest extends \PHPUnit\Framework\TestCase
         $store->shouldReceive('getConfigs')->withArgs([$key, 'module/pluginA@real/skin/test'])->andReturn(['config']);
         $this->handler->setStore($store);
 
+        $this->handler->setDefaultSkin($key, 'module/pluginA@real/skin/test');
         $skinObj = $this->handler->getAssigned($key, null);
         $this->assertInstanceOf('\Xpressengine\Skin\SkinEntity', $skinObj);
         $this->assertEquals(['config'], $this->getPropertyValue($skinObj, 'config'));
@@ -110,6 +111,7 @@ class SkinHandlerTest extends \PHPUnit\Framework\TestCase
         $store->shouldReceive('getConfigs')->withArgs([$key, 'module/pluginA@real/skin/test'])->andReturn(['config']);
         $this->handler->setStore($store);
 
+        $this->handler->setDefaultSkin($key, 'module/pluginA@real/skin/test');
         $skinObj = $this->handler->getAssigned($key, null);
         $this->assertInstanceOf('\Xpressengine\Skin\SkinEntity', $skinObj);
         $this->assertEquals(['config'], $this->getPropertyValue($skinObj, 'config'));

@@ -55,6 +55,11 @@ class SkinEntity implements Arrayable, Jsonable
     private $config;
 
     /**
+     * @var SkinEntity $defaultSkin
+     */
+    protected $defaultSkin;
+
+    /**
      * SkinEntity constructor.
      *
      * @param string $id     skin id
@@ -212,6 +217,11 @@ class SkinEntity implements Arrayable, Jsonable
             return $this->object;
         } else {
             $this->object = new $this->class($this->config);
+
+            if ($this->defaultSkin) {
+                $this->object->setDefaultSkin($this->defaultSkin->getObject());
+            }
+
             return $this->object;
         }
     }
@@ -255,5 +265,17 @@ class SkinEntity implements Arrayable, Jsonable
             'description' => $this->getDescription(),
             'screenshot' => $this->getScreenshot()
         ];
+    }
+
+    /**
+     * 기본 스킨을 주입
+     *
+     * @param SkinEntity $defaultSkin default skin entity
+     *
+     * @return void
+     */
+    public function setDefaultSkin(SkinEntity $defaultSkin)
+    {
+        $this->defaultSkin = $defaultSkin;
     }
 }

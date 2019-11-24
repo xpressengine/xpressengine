@@ -828,6 +828,8 @@ class PluginHandler
         }
 
         try {
+            $this->checkExistPrivateDirectory();
+
             $this->removeGarageDirectory($extractPath);
 
             $this->extractZip($uploadFile, $extractPath);
@@ -856,6 +858,22 @@ class PluginHandler
         foreach ([$this->getPrivatesDir(), $this->getPluginsDir()] as $path) {
             if ($this->getFilesystem()->exists($path . DIRECTORY_SEPARATOR . $name) === true) {
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if private directory exists and creates it if it does not exist.
+     *
+     * @return boolean
+     */
+    private function checkExistPrivateDirectory()
+    {
+        if (file_exists($this->getPrivatesDir()) === false || is_dir($this->getPrivatesDir()) === false) {
+            if (!mkdir($concurrentDirectory = $this->getPrivatesDir(), 0755, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
         }
 
