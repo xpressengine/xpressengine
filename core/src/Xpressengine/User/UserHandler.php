@@ -24,6 +24,7 @@ use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Models\User;
+use Xpressengine\User\Models\UserTermAgree;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -239,6 +240,17 @@ class UserHandler
                 ]
             );
             $user->accounts()->save($account);
+        }
+
+        // save term agree
+        if (isset($data['user_agree_terms'])) {
+            foreach ($data['user_agree_terms'] as $termId) {
+                $newTermAgree = new UserTermAgree();
+                $newTermAgree->fill([
+                    'user_id' => $user->id,
+                    'term_id' => $termId
+                ])->save();
+            }
         }
 
         return $user;

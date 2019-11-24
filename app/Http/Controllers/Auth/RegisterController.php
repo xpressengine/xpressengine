@@ -33,8 +33,10 @@ use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
+use Xpressengine\User\TermsHandler;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
+use Xpressengine\User\UserRegisterHandler;
 
 /**
  * Class RegisterController
@@ -66,6 +68,11 @@ class RegisterController extends Controller
     protected $emailBroker;
 
     /**
+     * @var TermsHandler
+     */
+    protected $termsHandler;
+
+    /**
      * redirect path
      *
      * @var string
@@ -80,6 +87,7 @@ class RegisterController extends Controller
         $this->auth = app('auth');
         $this->handler = app('xe.user');
         $this->emailBroker = app('xe.auth.email');
+        $this->termsHandler = app('xe.terms');
 
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
@@ -105,7 +113,55 @@ class RegisterController extends Controller
             );
         }
 
+        //약관을 회원정보 입력 전에 받는 경우 처리
+        $agreeType = app('xe.config')->getVal(
+            'user.register.term_agree_type',
+            UserRegisterHandler::TERM_AGREE_WITH
+        );
+        $terms = $this->termsHandler->fetchEnabled();
+
+        $isAllRequireTermAgree = true;
+        $requireTerms = $this->termsHandler->fetchRequireEnabled();
+        foreach ($requireTerms as $requireTerm) {
+            if ($request->has($requireTerm->id) === false) {
+                $isAllRequireTermAgree = false;
+                break;
+            }
+        }
+
+        if ($agreeType === UserRegisterHandler::TERM_AGREE_PRE &&
+            count($terms) > 0 &&
+            $isAllRequireTermAgree === false
+        ) {
+            return \XePresenter::make('register.agreement', compact('terms'));
+        }
+
         return $this->getRegisterForm($request);
+    }
+
+    /**
+     * 회원가입시 회원정보 입력 전에 약관 동의를 진행 할 경우 validation 처리
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postTermAgree(Request $request)
+    {
+        $terms = $this->termsHandler->fetchRequireEnabled();
+
+        $rule = [];
+        foreach ($terms as $term) {
+            $rule[$term->id] = 'bail|accepted';
+        }
+
+        $this->validate(
+            $request,
+            $rule,
+            ['*.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
+        );
+
+        return redirect()->route('auth.register', $request->except('_token'));
     }
 
     /**
@@ -133,6 +189,18 @@ class RegisterController extends Controller
         })->collapse()->all();
 
         XeFrontend::rule('join', $rules);
+
+        $userAgreeTerms = [];
+        $enableTerms = $this->termsHandler->fetchEnabled();
+        foreach ($enableTerms as $enableTerm) {
+            if ($request->has($enableTerm->id) === true) {
+                $userAgreeTerms[] = $enableTerm->id;
+            }
+        }
+
+        if (count($userAgreeTerms) > 0) {
+            $request->session()->put('user_agree_terms', $userAgreeTerms);
+        }
 
         return \XePresenter::make('register.create', compact('config', 'parts'));
     }
@@ -221,6 +289,18 @@ class RegisterController extends Controller
         $joinGroup = $config->get('joinGroup');
         if ($joinGroup !== null) {
             $userData['group_id'] = [$joinGroup];
+        }
+
+        if ($request->session()->has('user_agree_terms') === true) {
+            $userData['user_agree_terms'] = $request->session()->pull('user_agree_terms');
+        } elseif ($request->has('agree') === true) {
+            $enableTermIds = [];
+            $enableTerms = $this->termsHandler->fetchEnabled();
+            foreach ($enableTerms as $term) {
+                $enableTermIds[] = $term->id;
+            }
+
+            $userData['user_agree_terms'] = $enableTermIds;
         }
 
         XeDB::beginTransaction();

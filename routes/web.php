@@ -72,6 +72,9 @@ Route::group(
 
         // register
         Route::get('register', ['as' => 'auth.register', 'uses' => 'Auth\RegisterController@getRegister']); // for select method to confirm user
+        Route::post('term_agree', ['as' => 'auth.register.term_agree', 'uses' => 'Auth\RegisterController@postTermAgree']);
+
+        //deprecated 회원 가입 전 이메일 인증 기능 삭제됨
         Route::post('register/confirm', ['as' => 'auth.register.confirm', 'uses' => 'Auth\RegisterController@postRegisterConfirm']); // 인증 이메일 입력, 인증 코드 입력
 
         // Route::get('register/create', ['as' => 'auth.register.create', 'uses' => 'Auth\RegisterController@getRegisterForm']); // for create form

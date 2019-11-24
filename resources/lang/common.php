@@ -3442,5 +3442,25 @@ return [
     'pending' => [
         'ko' => '대기중',
         'en' => 'Pending'
+    ],
+    'require' => [
+        'ko' => '필수',
+        'en' => 'Require'
+    ],
+    'optional' => [
+        'ko' => '선택',
+        'en' => 'Optional'
+    ],
+    'viewContents' => [
+        'ko' => '내용보기',
+        'en' => 'View contents'
+    ],
+    'msgAgreeAllTerms' => [
+        'ko' => '필수약관, 선택약관에 모두 동의합니다',
+        'en' => 'I agree to the required and optional terms'
+    ],
+    'pleaseAcceptRequireTerms' => [
+        'ko' => '필수 약관을 모두 동의해 주세요.',
+        'en' => 'Please accept all required terms.'
     ]
 ];

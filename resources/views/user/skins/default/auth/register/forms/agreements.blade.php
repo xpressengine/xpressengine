@@ -1,20 +1,29 @@
 @if($terms->count() > 0)
-<label class="xe-label">
-    <input type="checkbox" name="agree" data-valid-name="{{xe_trans('xe::siteTermsUse')}}">
-    <span class="xe-input-helper"></span>
-    <span class="xe-label-text">
-        {!!
-            xe_trans('xe::msgAcceptTerms', ['terms' => call_user_func(function ($terms) {
-                $tags = [];
-                foreach ($terms as $term) {
-                    $tags[] = '<a href="'.route('auth.terms', $term->id).'" class="__xe_terms">'.xe_trans($term->title).'</a>';
-                }
-
-                return implode(', ', $tags);
-            }, $terms)])
-        !!}
-    </span>
-</label>
+    <div class="terms-box">
+        <label class="xu-label-checkradio">
+            <input type="checkbox">
+            <span class="xu-label-checkradio__helper"></span>
+            <span class="xu-label-checkradio__text">{{ xe_trans('xe::msgAgreeAllTerms') }}</span>
+        </label>
+        <ul class="terms-list">
+            @foreach ($terms as $term)
+                <li>
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" name="user_agree_terms[]" value="{{ $term->id }}">
+                        <span class="xu-label-checkradio__helper"></span>
+                        <span class="xu-label-checkradio__text">{{ xe_trans($term->title) }}
+                            @if ($term->isRequire() === true)
+                                <span class="xu-label-checkradio__empase">({{ xe_trans('xe::require') }})</span>
+                            @else
+                                <span class="xu-label-checkradio__empase">({{ xe_trans('xe::optional') }})</span>
+                            @endif
+                    </span>
+                    </label>
+                    <a href="{{ route('auth.terms', $term->id) }}" class="terms-list__term-button __xe_terms">{{ xe_trans('xe::viewContents') }}</a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 {{
 XeFrontend::html('auth.register.terms')->content("
 <script>
