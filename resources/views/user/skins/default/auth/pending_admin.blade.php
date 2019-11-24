@@ -1,3 +1,5 @@
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+
 <div class="theme_container">
     <div class="user user--signup-complete">
         <h2 class="user__title">{{ xe_trans('xe::waitingAdminApproval') }}</h2>

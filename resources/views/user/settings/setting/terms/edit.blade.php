@@ -1,3 +1,5 @@
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+
 <div class="panel-group">
     <div class="panel">
         <form method="post" action="{{ route('settings.user.setting.terms.update', $term->id) }}">
