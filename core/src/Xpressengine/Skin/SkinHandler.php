@@ -278,8 +278,19 @@ class SkinHandler
         // 선택된 스킨의 config 정보를 얻는다.
         $config = $this->store->getConfigs($storeKey, $skinId);
 
-        // 선택된 스킨을 생성하여 반환한다.
-        return $this->get($skinId, $config);
+        $skinEntity = $this->get($skinId, $config);
+
+        // 선택된 스킨이 기본 스킨이 아닐 경우 기본 스킨을 주입해서 반환
+        if ($skinId !== $this->defaultSkins[$target]) {
+            $defaultSkinId = $this->defaultSkins[$target];
+            $defaultSkinClass = $this->register->get($defaultSkinId);
+
+            $defaultSkin = new SkinEntity($defaultSkinId, $defaultSkinClass);
+
+            $skinEntity->setDefaultSkin($defaultSkin);
+        }
+
+        return $skinEntity;
     }
 
     /**

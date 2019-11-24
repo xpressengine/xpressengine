@@ -17,6 +17,7 @@ namespace Xpressengine\Skin;
 use Illuminate\Contracts\Support\Renderable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Plugin\SupportInfoTrait;
+use View;
 
 /**
  * 편의를 위해 AbstractSkin을 확장한 클래스. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -47,6 +48,11 @@ abstract class GenericSkin extends AbstractSkin
      * @var string
      */
     protected $file;
+
+    /**
+     * @var GenericSkin $defaultSkin
+     */
+    protected static $defaultSkin;
 
     /**
      * 스킨을 출력한다.
@@ -265,7 +271,24 @@ abstract class GenericSkin extends AbstractSkin
     public static function view($view)
     {
         $dir = static::$viewDir ? '.'.static::$viewDir : '';
+
+        $fileName = $view;
         $view = str_replace('/', '.', static::$path)."$dir.$view";
+
+        if (View::exists($view) === false && (static::class !== get_class(static::$defaultSkin))) {
+            $view = static::$defaultSkin::view($fileName);
+        }
+
         return $view;
+    }
+
+    /**
+     * 기본 스킨을 주입
+     *
+     * @param GenericSkin $skin default skin
+     */
+    public function setDefaultSkin(GenericSkin $skin)
+    {
+        static::$defaultSkin = $skin;
     }
 }
