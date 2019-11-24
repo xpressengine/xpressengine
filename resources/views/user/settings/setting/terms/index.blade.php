@@ -1,6 +1,5 @@
 {{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
 
-
 <div class="panel-group">
     <div class="panel">
 

@@ -10,13 +10,27 @@
                 </div>
             </div>
             <div class="panel-body">
-
                 <div class="panel">
-
                     <div class="panel-body">
                         <div class="form-group">
                             <label>{{ xe_trans('xe::title') }}</label>
                             {!! uio('langText', ['langKey'=> '', 'name'=>'title']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label class="xu-label-checkradio">
+                                <input type="radio" name="is_require" value="require" @if (old('is_require', 'require') === 'require') checked @endif>
+                                <span class="xu-label-checkradio__helper"></span>
+                                <span class="xu-label-checkradio__text">필수 약관</span>
+                            </label>
+                            <label class="xu-label-checkradio">
+                                <input type="radio" name="is_require" value="optional" @if (old('is_require', 'require') === 'optional') checked @endif>
+                                <span class="xu-label-checkradio__helper"></span>
+                                <span class="xu-label-checkradio__text">선택 약관</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ xe_trans('xe::description') }}</label>
+                            {!! uio('langText', ['langKey'=> '', 'name'=>'description']) !!}
                         </div>
                         <div class="form-group">
                             <label>{{ xe_trans('xe::content') }}</label>

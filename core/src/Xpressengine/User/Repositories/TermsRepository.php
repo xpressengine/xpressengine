@@ -61,6 +61,16 @@ class TermsRepository
     }
 
     /**
+     * Return enabled and requrie terms item
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function fetchRequireEnabled()
+    {
+        return $this->query()->where([['is_enabled', true], ['is_require', true]])->orderBy('order')->get();
+    }
+
+    /**
      * Create new item
      *
      * @param array $attributes attributes

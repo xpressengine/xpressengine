@@ -62,4 +62,14 @@ class Term extends DynamicModel
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * get is term require
+     *
+     * @return bool
+     */
+    public function isRequire()
+    {
+        return $this->getAttribute('is_require') === true;
+    }
 }
