@@ -354,16 +354,6 @@ Route::settings(
         Route::group(
             ['prefix' => 'setting'],
             function () {
-                Route::get('/', [
-                    'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@editSetting',
-                    'settings_menu' => 'user.setting.default',
-                ]);
-                Route::post('/', [
-                    'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@updateSetting',
-                ]);
-
                 Route::group(['prefix' => 'terms', 'settings_menu' => 'user.setting.terms'], function () {
 
                     Route::get('create', [

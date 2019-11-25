@@ -153,12 +153,6 @@ return [
                 'display' => true,
                 'ordering' => 400
             ],
-            'user.setting.default' => [
-                'title' => 'xe::defaultSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 100
-            ],
             'user.setting.terms' => [
                 'title' => 'xe::termsSettings',
                 'description' => '',

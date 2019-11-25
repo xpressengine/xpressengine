@@ -45,6 +45,8 @@ class UserRegisterHandler
             $attribute['joinable'] = false;
         }
 
+        $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
+
         foreach ($attribute as $key => $value) {
             $this->config->set($key, $value);
         }

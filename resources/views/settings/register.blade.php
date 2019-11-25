@@ -137,6 +137,16 @@ use Xpressengine\User\UserRegisterHandler;
                         </div>
                     </section>
 
+                    <section class="setting-area">
+                        <div class="setting-area__header">
+                            <h3 class="setting-area__header-title">가입폼 관리</h3>
+                        </div>
+
+                        <div class="setting-area__body">
+                            @include('user.settings.setting.forms')
+                        </div>
+                    </section>
+
                     <!-- 전체 페이지 버튼 영역 -->
                     <div class="setting-button-box" style="text-align: right;">
                         <button type="submit" class="xu-button xu-button--primary xu-button--large">{{ xe_trans('xe::save') }}</button>
