@@ -600,8 +600,6 @@ class UserServiceProvider extends ServiceProvider
         RegisterFormPart::setSkinResolver($this->app['xe.skin']);
         RegisterFormPart::setContainer($this->app);
 
-        //TODO 이메일 인증 삭제
-        UserHandler::addRegisterPart(EmailVerifyPart::class);
         UserHandler::addRegisterPart(DefaultPart::class);
         UserHandler::addRegisterPart(DynamicFieldPart::class);
         UserHandler::addRegisterPart(AgreementPart::class);
