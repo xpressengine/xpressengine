@@ -5,52 +5,48 @@
 
 
 <!-- 드래그 리스트 -->
-<ul class="sort-list sort-list--custom-item __ui-sortable">
-    @foreach($parts as $idx => $arr)
-        @foreach ($arr as $key => $part)
-            <li>
-                <div class="sort-list__handler">
-                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
-                        <span class="xu-button__icon">
-                            <i class="xi-drag-vertical"></i>
-                        </span>
-                    </button>
-                </div>
-                <p class="sort-list__text">{{ xe_trans($part::NAME) }} <small>{{ xe_trans($part::DESCRIPTION) }}</small></p>
-                <div class="sort-list__checkradio">
-                    <label class="xu-label-checkradio">
-                        <input type="checkbox" name="forms[{{ $key }}]" vlaue="on" @if($idx === 0) checked="checked" @endif>
-                        <span class="xu-label-checkradio__helper"></span>
-                    </label>
-                </div>
-                <div class="sort-list__checkradio">
-                    <label class="xu-label-checkradio">
-                        <input type="checkbox" name="@FIXME" vlaue="@FIXME">
-                        <span class="xu-label-checkradio__helper"></span>
-                    </label>
-                </div>
-                <div class="sort-list__button">
-                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __user-dfield-edit">
-                        <span class="xu-button__icon">
-                            <i class="xi-pen"></i>
-                        </span>
-                    </button>
-                </div>
-                <div class="sort-list__button">
-                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __user-dfield-delete">
-                        <span class="xu-button__icon">
-                            <i class="xi-trash"></i>
-                        </span>
-                    </button>
-                </div>
-            </li>
-        @endforeach
-    @endforeach
-</ul>
-
-
-
-
+{{--<ul class="sort-list sort-list--custom-item __ui-sortable">--}}
+{{--    @foreach($parts as $idx => $arr)--}}
+{{--        @foreach ($arr as $key => $part)--}}
+{{--            <li>--}}
+{{--                <div class="sort-list__handler">--}}
+{{--                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">--}}
+{{--                        <span class="xu-button__icon">--}}
+{{--                            <i class="xi-drag-vertical"></i>--}}
+{{--                        </span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <p class="sort-list__text">{{ xe_trans($part::NAME) }} <small>{{ xe_trans($part::DESCRIPTION) }}</small></p>--}}
+{{--                <div class="sort-list__checkradio">--}}
+{{--                    <label class="xu-label-checkradio">--}}
+{{--                        <input type="checkbox" name="forms[{{ $key }}]" vlaue="on" @if($idx === 0) checked="checked" @endif>--}}
+{{--                        <span class="xu-label-checkradio__helper"></span>--}}
+{{--                    </label>--}}
+{{--                </div>--}}
+{{--                <div class="sort-list__checkradio">--}}
+{{--                    <label class="xu-label-checkradio">--}}
+{{--                        <input type="checkbox" name="@FIXME" vlaue="@FIXME">--}}
+{{--                        <span class="xu-label-checkradio__helper"></span>--}}
+{{--                    </label>--}}
+{{--                </div>--}}
+{{--                <div class="sort-list__button">--}}
+{{--                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __user-dfield-edit">--}}
+{{--                        <span class="xu-button__icon">--}}
+{{--                            <i class="xi-pen"></i>--}}
+{{--                        </span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="sort-list__button">--}}
+{{--                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __user-dfield-delete">--}}
+{{--                        <span class="xu-button__icon">--}}
+{{--                            <i class="xi-trash"></i>--}}
+{{--                        </span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--            </li>--}}
+{{--        @endforeach--}}
+{{--    @endforeach--}}
+{{--</ul>--}}
 
 <div class="table-responsive item-setting">
     <table class="table table-sortable">
