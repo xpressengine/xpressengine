@@ -354,8 +354,7 @@ Route::settings(
         Route::group(
             ['prefix' => 'setting'],
             function () {
-                Route::group(['prefix' => 'terms', 'settings_menu' => 'user.setting.terms'], function () {
-
+                Route::group(['prefix' => 'terms', 'settings_menu' => 'setting.terms'], function () {
                     Route::get('create', [
                         'as' => 'settings.user.setting.terms.create',
                         'uses' => 'User\Settings\TermsController@create'

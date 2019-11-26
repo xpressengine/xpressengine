@@ -153,12 +153,6 @@ return [
                 'display' => true,
                 'ordering' => 400
             ],
-            'user.setting.terms' => [
-                'title' => 'xe::termsSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 200
-            ],
             'user.setting.skin' => [
                 'title' => 'xe::skinSettings',
                 'description' => '',
@@ -255,29 +249,35 @@ return [
                 'description' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
                 'ordering' => 200
             ],
+            'setting.terms' => [
+                'title' => 'xe::termsSettings',
+                'description' => '',
+                'display' => true,
+                'ordering' => 300
+            ],
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
                 'description' => '',
-                'ordering' => 300
+                'ordering' => 400
             ],
             'setting.admin-log' => [
                 'title' => 'xe::adminLog',
                 'display' => true,
                 'description' => '관리자 권한을 가진 회원이 실행한 작업을 볼 수 있습니다.',
-                'ordering' => 400
+                'ordering' => 500
             ],
             'setting.editor' => [
                 'title' => 'xe::editorSetting',
                 'display' => true,
                 'description' => '',
-                'ordering' => 500
+                'ordering' => 600
             ],
             'setting.media_library' => [
                 'title' => 'xe::media',
                 'display' => true,
                 'description' => '',
-                'ordering' => 600
+                'ordering' => 700
             ],
             'lang' => [
                 'title' => 'xe::multiLang',
