@@ -281,7 +281,7 @@ class SkinHandler
         $skinEntity = $this->get($skinId, $config);
 
         // 선택된 스킨이 기본 스킨이 아닐 경우 기본 스킨을 주입해서 반환
-        if ($skinId !== $this->defaultSkins[$target]) {
+        if (isset($this->defaultSkins[$target]) && $skinId !== $this->defaultSkins[$target]) {
             $defaultSkinId = $this->defaultSkins[$target];
             $defaultSkinClass = $this->register->get($defaultSkinId);
 
