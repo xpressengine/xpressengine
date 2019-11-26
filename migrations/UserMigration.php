@@ -353,11 +353,21 @@ class UserMigration extends Migration
         app('xe.config')->set('user.register', $joinConfigAttribute);
     }
 
+    /**
+     * Check need term table update
+     *
+     * @return bool
+     */
     private function checkNeedAddTermTableColumns()
     {
         return Schema::hasColumn('user_terms', 'is_require') && Schema::hasColumn('user_terms', 'description');
     }
 
+    /**
+     * Add term table description, is_require columns
+     *
+     * @return void
+     */
     private function addTermTableColumns()
     {
         Schema::table('user_terms', function (Blueprint $table) {
@@ -366,16 +376,31 @@ class UserMigration extends Migration
         });
     }
 
+    /**
+     * Old term update require
+     *
+     * @return void
+     */
     private function updateOldTermsRequire()
     {
         \DB::table('user_terms')->update(['is_require' => true]);
     }
 
+    /**
+     * Check exist user term agree table
+     *
+     * @return bool
+     */
     private function checkExistUserTermAgreeTable()
     {
         return Schema::hasTable('user_term_agrees');
     }
 
+    /**
+     * Create user term agree table
+     *
+     * @return void
+     */
     private function createUserTermAgreeTable()
     {
         Schema::create('user_term_agrees', function (Blueprint $table) {
