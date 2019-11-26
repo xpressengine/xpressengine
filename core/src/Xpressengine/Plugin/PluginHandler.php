@@ -495,9 +495,14 @@ class PluginHandler
      * @param PluginEntity $entity plugin
      * @param \Exception   $e      exception
      * @return void
+     * @throws \Exception
      */
     protected function handleError(PluginEntity $entity, \Exception $e)
     {
+        if ($this->app['config']['app.debug'] === true) {
+            throw $e;
+        }
+
         $this->errors[$entity->getId()] = [
             'entity' => $entity,
             'exception' => $e
