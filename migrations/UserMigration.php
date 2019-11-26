@@ -190,7 +190,7 @@ class UserMigration extends Migration
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"with"}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre"}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -347,7 +347,7 @@ class UserMigration extends Migration
         }
         unset($joinConfigAttribute['guard_forced']);
 
-        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_WITH;
+        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $joinConfigAttribute);
