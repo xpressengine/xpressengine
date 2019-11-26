@@ -787,6 +787,34 @@ Route::settings(
                     'as' => 'settings.plugins.manage.upload',
                     'uses' => 'Plugin\PluginManageController@postUpload'
                 ]);
+
+                Route::group(['prefix' => 'make'], function () {
+                    Route::get('plugin', [
+                        'as' => 'settings.plugins.manage.make.plugin',
+                        'uses' => 'Plugin\PluginManageController@getMakePlugin'
+                    ]);
+                    Route::post('plugin', [
+                        'as' => 'settings.plugins.manage.make.plugin',
+                        'uses' => 'Plugin\PluginManageController@makePlugin'
+                    ]);
+                    Route::get('theme', [
+                        'as' => 'settings.plugins.manage.make.theme',
+                        'uses' => 'Plugin\PluginManageController@getMakeTheme'
+                    ]);
+                    Route::post('theme', [
+                        'as' => 'settings.plugins.manage.make.theme',
+                        'uses' => 'Plugin\PluginManageController@makeTheme'
+                    ]);
+                    Route::get('skin', [
+                        'as' => 'settings.plugins.manage.make.skin',
+                        'uses' => 'Plugin\PluginManageController@getMakeSkin'
+                    ]);
+                    Route::post('skin', [
+                        'as' => 'settings.plugins.manage.make.skin',
+                        'uses' => 'Plugin\PluginManageController@makeSkin'
+                    ]);
+                });
+
             });
 
             Route::group(['prefix' => '{pluginId}'], function () {

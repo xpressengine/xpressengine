@@ -18,7 +18,6 @@ use App\Http\Controllers\ArtisanBackgroundHelper;
 use App\Http\Controllers\Controller;
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -559,5 +558,165 @@ class PluginManageController extends Controller
             'alert',
             ['type' => 'success', 'message' => xe_trans('xe::installingPlugin')]
         );
+    }
+
+    /**
+     * Show the create form for the new plugin.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function getMakePlugin()
+    {
+        return api_render('index.make-plugin', []);
+    }
+
+    /**
+     * Make new plugin.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makePlugin(Request $request, Operator $operator)
+    {
+        $this->validate($request, [
+            'name' => 'required|alpha_dash',
+            'vendor' => 'required|alpha_dash',
+        ]);
+
+        $parameters = [
+            'name' => $request->get('name'),
+            'vendor' => $request->get('vendor'),
+            '--no-interaction' => true,
+        ];
+        if ($ns = $request->get('namespace')) {
+            $parameters['--namespace'] = $ns;
+        }
+        if ($title = $request->get('title')) {
+            $parameters['--title'] = $title;
+        }
+
+        $operator->setPrivateMode(false)->save();
+
+        $this->runArtisan('make:plugin', $parameters);
+
+        return redirect()->route('settings.operation.index')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::startingOperation')]);
+    }
+
+    /**
+     * Show the create form for the new theme.
+     *
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function getMakeTheme(PluginHandler $handler)
+    {
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->fetchByInstallType('self-installed');
+
+        return api_render('index.make-theme', ['plugins' => $plugins]);
+    }
+
+    /**
+     * Make new theme.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeTheme(Request $request)
+    {
+        $this->validate($request, [
+            'plugin' => 'required',
+            'name' => 'required|alpha_dash',
+        ]);
+
+        $parameters = [
+            'plugin' => $request->get('plugin'),
+            'name' => $request->get('name'),
+            '--no-interaction' => true,
+        ];
+        if ($id = $request->get('id')) {
+            $parameters['--id'] = $id;
+        }
+        if ($path = $request->get('path')) {
+            $parameters['--path'] = $path;
+        }
+        if ($class = $request->get('class')) {
+            $parameters['--class'] = $class;
+        }
+        if ($title = $request->get('title')) {
+            $parameters['--title'] = $title;
+        }
+        if ($description = $request->get('description')) {
+            $parameters['--description'] = $description;
+        }
+
+        Artisan::call('make:theme', $parameters);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
+    }
+
+    /**
+     * Show the create form for the new skin.
+     *
+     * @param PluginHandler $handler PluginHandler instance
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function getMakeSkin(PluginHandler $handler)
+    {
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->fetchByInstallType('self-installed');
+
+        $targets = [];
+        foreach (['widget', 'module'] as $type) {
+            $targets = $targets + app('xe.register')->get($type);
+        }
+
+        return api_render('index.make-skin', ['plugins' => $plugins, 'targets' => $targets]);
+    }
+
+    /**
+     * Make new skin.
+     *
+     * @param Request $request request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeSkin(Request $request)
+    {
+        if ($request->get('target') === '__direct') {
+            $request->merge(['target' => $request->get('target_direct')]);
+        }
+
+        $this->validate($request, [
+            'plugin' => 'required',
+            'name' => 'required|alpha_dash',
+            'target' => 'required',
+        ]);
+
+        $parameters = [
+            'plugin' => $request->get('plugin'),
+            'name' => $request->get('name'),
+            'target' => $request->get('target'),
+            '--no-interaction' => true,
+        ];
+        if ($id = $request->get('id')) {
+            $parameters['--id'] = $id;
+        }
+        if ($path = $request->get('path')) {
+            $parameters['--path'] = $path;
+        }
+        if ($class = $request->get('class')) {
+            $parameters['--class'] = $class;
+        }
+        if ($title = $request->get('title')) {
+            $parameters['--title'] = $title;
+        }
+        if ($description = $request->get('description')) {
+            $parameters['--description'] = $description;
+        }
+
+        Artisan::call('make:skin', $parameters);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 }

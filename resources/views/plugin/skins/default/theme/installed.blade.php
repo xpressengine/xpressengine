@@ -24,7 +24,6 @@
 
                     <div class="pull-right text-align--right">
                         <div class="search-btn-group">
-                            <a href="{{route('settings.theme.install')}}" class="xe-btn xe-btn-install"><i class="xi-plus"></i>{{xe_trans('xe::installNewTheme')}}</a>
                             <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" class="xe-btn xe-btn-default" data-toggle="xe-page-modal">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</a>
                         </div>
 

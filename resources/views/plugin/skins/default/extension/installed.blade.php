@@ -23,7 +23,9 @@
                     </div>
                     <div class="pull-right text-align--right">
                         <div class="search-btn-group">
-                            <a href="{{route('settings.extension.install')}}" class="xe-btn xe-btn-install"><i class="xi-plus"></i>{{xe_trans('xe::installNewExtension')}}</a>
+                            <a href="{{ route('settings.plugins.manage.make.plugin') }}" class="xe-btn xe-btn-primary __xe_make_plugin"><i class="xi-puzzle"></i> {{ xe_trans('xe::plugin') }} {{ xe_trans('xe::create') }}</a>
+                            <a href="{{ route('settings.plugins.manage.make.theme') }}" class="xe-btn __xe_make_theme"><i class="xi-layout-snb-o"></i> {{ xe_trans('xe::theme') }} {{ xe_trans('xe::create') }}</a>
+                            <a href="{{ route('settings.plugins.manage.make.skin') }}" class="xe-btn __xe_make_skin"><i class="xi-paper-o"></i> {{ xe_trans('xe::skin') }} {{ xe_trans('xe::create') }}</a>
                             <a href="{{route('settings.plugins.manage.upload', ['type' => 'extension'])}}" class="btn btn-default" data-toggle="xe-page-modal">{{xe_trans('xe::extension')}} {{xe_trans('xe::upload')}}</a>
                         </div>
                         <form method="get" action="{{route('settings.extension.installed')}}">
