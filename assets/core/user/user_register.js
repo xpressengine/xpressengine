@@ -119,13 +119,13 @@ $(function ($) {
   var $items = $container.find('.__xe-register-aggrement--require,.__xe-register-aggrement--optional')
 
   $container.on('chnaged.register-aggrement', function () {
-    var requiredAll = true
-    $container.find('.__xe-register-aggrement--require').each(function () {
+    var checkedAll = true
+    $items.each(function () {
       if (!$(this).prop('checked')) {
-        requiredAll = false
+        checkedAll = false
       }
     })
-    $all.prop('checked', requiredAll)
+    $all.prop('checked', checkedAll)
   })
 
   $container.on('all.register-aggrement', function () {
