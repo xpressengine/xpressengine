@@ -159,7 +159,7 @@ class UserMigration extends Migration
             $table->string('description')->nullable();
             $table->integer('order')->default(0);
             $table->boolean('is_enabled')->default(false);
-            $table->boolean('is_required')->default(true);
+            $table->boolean('is_require')->default(true);
 
             $table->primary('id');
             $table->engine = "InnoDB";
