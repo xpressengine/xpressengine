@@ -11,15 +11,15 @@
             <legend>약관 동의</legend>
             <div class="user-terms">
                 <label class="xu-label-checkradio">
-                    <input type="checkbox" class="__xe-register-aggrement-all">
+                    <input type="checkbox" name="agree" class="__xe-register-aggrement-all">
                     <span class="xu-label-checkradio__helper"></span>
                     <span class="xu-label-checkradio__text">{{ xe_trans('xe::msgAgreeAllTerms') }}</span>
                 </label>
 
                 @foreach ($terms as $term)
-                    <div class="terms-box">
+                    <div class="terms-box xu-form-group">
                         <label class="xu-label-checkradio">
-                            <input type="checkbox" name="{{ $term->id }}" value="on" @if (old($term->id) == 'on') checked @endif class="__xe-register-aggrement--{{ $term->isRequire() ? 'require' : 'optional' }}">
+                            <input type="checkbox" name="{{ $term->id }}" value="on" @if (old($term->id) == 'on') checked @endif class="__xe-register-aggrement--{{ $term->isRequire() ? 'require' : 'optional' }}" @if($term->isRequire()) data-valid="required" required @endif>
                             <span class="xu-label-checkradio__helper"></span>
                             <span class="xu-label-checkradio__text">{{ xe_trans($term->title) }}
                                 @if ($term->isRequire() === true)
@@ -49,3 +49,12 @@
         </fieldset>
     </form>
 </div>
+
+<style>
+        .xu-label-checkradio input[type="checkbox"], .xu-label-checkradio input[type="radio"] {
+            opacity: 0;
+            width: unset;
+            height: unset;
+            left: unset;
+        }
+    </style>

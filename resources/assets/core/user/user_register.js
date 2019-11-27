@@ -1,7 +1,7 @@
 /* global $, XE */
 $(function () {
   var $container = $('.user--signup')
-  var $btnSubmit = $container.find('.__xe-register-submit')
+  var $form = $container.find('form')
   var patternNumber = /[0-9]/
   var patternUppercase = /[A-Z]/
   var patternSymbol = /[-_!@#$%^&*()+=|~`{}\[\]:";'<>?,.\/\\]/
@@ -16,9 +16,9 @@ $(function () {
     $container.find('input').on('focusin focusout', function () {
       var $this = $(this)
       var $form = $this.closest('form')
-      var filedName = $this.attr('name')
-      if (typeof XE.Validator.rules[$form.data('rule')][filedName] !== 'undefined') {
-        XE.Validator.validate($form, filedName, XE.Validator.rules[$form.data('rule')][filedName])
+      var fieldName = $this.attr('name')
+      if (typeof XE.Validator.rules[$form.data('rule')][fieldName] !== 'undefined') {
+        XE.Validator.validate($form, fieldName, XE.Validator.rules[$form.data('rule')][fieldName])
           .then(function () {
             // if (!$this.is('[name=email]') && !$this.is('[name=display_name]') && !$this.is('[name=password]')) {
             if (!$this.is('[name=password],[name=password_confirmation]')) {

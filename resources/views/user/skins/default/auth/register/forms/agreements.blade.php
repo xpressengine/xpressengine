@@ -4,15 +4,15 @@
 @if($terms->count() > 0)
     <div class="terms-box __xe-register-aggrements">
         <label class="xu-label-checkradio">
-            <input type="checkbox" class="__xe-register-aggrement-all">
+            <input type="checkbox" name="agree" class="__xe-register-aggrement-all">
             <span class="xu-label-checkradio__helper"></span>
             <span class="xu-label-checkradio__text">{{ xe_trans('xe::msgAgreeAllTerms') }}</span>
         </label>
-        <ul class="terms-list">
+        <ul class="terms-list xu-form-group">
             @foreach ($terms as $term)
                 <li>
                     <label class="xu-label-checkradio">
-                        <input type="checkbox" name="user_agree_terms[]" value="{{ $term->id }}" class="__xe-register-aggrement--{{ $term->isRequire() ? 'require' : 'optional' }}">
+                        <input type="checkbox" name="user_agree_terms[]" value="{{ $term->id }}" class="__xe-register-aggrement--{{ $term->isRequire() ? 'require' : 'optional' }}" @if($term->isRequire()) data-valid="required" required @endif>
                         <span class="xu-label-checkradio__helper"></span>
                         <span class="xu-label-checkradio__text">{{ xe_trans($term->title) }}
                             @if ($term->isRequire() === true)
@@ -40,4 +40,13 @@ XeFrontend::html('auth.register.terms')->content("
 </script>
 ")->load()
 }}
+
+<style>
+    .xu-label-checkradio input[type="checkbox"], .xu-label-checkradio input[type="radio"] {
+        opacity: 0;
+        width: unset;
+        height: unset;
+        left: unset;
+    }
+</style>
 @endif
