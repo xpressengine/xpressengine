@@ -13,7 +13,7 @@ $(function () {
   $('.xu-form-group').addClass('xu-form-group--large')
 
   function bindEvent () {
-    $container.find('input').on('focusin focusout', function () {
+    $container.find('input').on('focusout', function () {
       var $this = $(this)
       var $form = $this.closest('form')
       var fieldName = $this.attr('name')
@@ -28,7 +28,7 @@ $(function () {
       }
     })
 
-    $('[name=email]').on('focus change', function () {
+    $('[name=email]').on('focusout change', function () {
       var that = this
       var $this = $(this)
       var $form = $this.closest('form')
