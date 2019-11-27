@@ -190,7 +190,7 @@ class UserMigration extends Migration
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"with"}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre"}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -347,17 +347,27 @@ class UserMigration extends Migration
         }
         unset($joinConfigAttribute['guard_forced']);
 
-        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_WITH;
+        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $joinConfigAttribute);
     }
 
+    /**
+     * Check need term table update
+     *
+     * @return bool
+     */
     private function checkNeedAddTermTableColumns()
     {
         return Schema::hasColumn('user_terms', 'is_require') && Schema::hasColumn('user_terms', 'description');
     }
 
+    /**
+     * Add term table description, is_require columns
+     *
+     * @return void
+     */
     private function addTermTableColumns()
     {
         Schema::table('user_terms', function (Blueprint $table) {
@@ -366,16 +376,31 @@ class UserMigration extends Migration
         });
     }
 
+    /**
+     * Old term update require
+     *
+     * @return void
+     */
     private function updateOldTermsRequire()
     {
         \DB::table('user_terms')->update(['is_require' => true]);
     }
 
+    /**
+     * Check exist user term agree table
+     *
+     * @return bool
+     */
     private function checkExistUserTermAgreeTable()
     {
         return Schema::hasTable('user_term_agrees');
     }
 
+    /**
+     * Create user term agree table
+     *
+     * @return void
+     */
     private function createUserTermAgreeTable()
     {
         Schema::create('user_term_agrees', function (Blueprint $table) {

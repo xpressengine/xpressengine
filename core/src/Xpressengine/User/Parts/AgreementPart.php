@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Parts;
 
+use Illuminate\Support\Facades\Validator;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Models\Term;
 use Xpressengine\User\UserRegisterHandler;
@@ -60,6 +61,8 @@ class AgreementPart extends RegisterFormPart
             UserRegisterHandler::TERM_AGREE_WITH
         ) === UserRegisterHandler::TERM_AGREE_WITH;
 
+        $this->getEnabled();
+
         parent::__construct($request);
     }
 
@@ -93,20 +96,6 @@ class AgreementPart extends RegisterFormPart
     }
 
     /**
-     * Get validation rules of the form part
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        if ($this->isUsePart === true && count($this->getEnabled()) > 0) {
-            return ['agree' => 'accepted'];
-        }
-
-        return [];
-    }
-
-    /**
      * Get the terms of enabled
      *
      * @return Term[]
@@ -118,5 +107,56 @@ class AgreementPart extends RegisterFormPart
         }
 
         return $this->enabled;
+    }
+
+    /**
+     * 기존 스킨과 호환되도록 validation 정의
+     *
+     * @return array|void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function validate()
+    {
+        $rules = ['agree' => 'accepted'];
+        $requireTerms = $this->service('xe.terms')->fetchRequireEnabled();
+
+        if ($this->isUsePart === false || $this->enabled->count() === 0) {
+            $rules = [];
+        } elseif ($this->request->has('agree') === true) {
+            $rules['agree'] = 'accepted';
+        } else {
+            $request = $this->request;
+
+            if ($requireTerms->count() > 0) {
+                if ($request->has('user_agree_terms') === true) {
+                    $requireTermValidator = Validator::make(
+                        $request->all(),
+                        [],
+                        ['user_agree_terms.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
+                    );
+
+                    $requireTermValidator->sometimes(
+                        'user_agree_terms',
+                        'accepted',
+                        function ($input) use ($requireTerms) {
+                            $userAgreeTerms = $input['user_agree_terms'];
+
+                            foreach ($requireTerms as $requireTerm) {
+                                if (in_array($requireTerm->id, $userAgreeTerms) === false) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        }
+                    )->validate();
+
+                    $rules = [];
+                }
+            }
+        }
+
+        $this->traitValidate($this->request, $rules, ['*.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]);
     }
 }

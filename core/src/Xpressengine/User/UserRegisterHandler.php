@@ -32,11 +32,21 @@ class UserRegisterHandler
     const TERM_AGREE_WITH = 'with';
     const TERM_AGREE_NOT = 'not';
 
+    /**
+     * UserRegisterHandler constructor.
+     */
     public function __construct()
     {
         $this->config = app('xe.config')->get('user.register');
     }
 
+    /**
+     * update user register config
+     *
+     * @param array $attribute attribute
+     *
+     * @return void
+     */
     public function updateConfig($attribute)
     {
         if (isset($attribute['joinable']) && $attribute['joinable'] === 'true') {
