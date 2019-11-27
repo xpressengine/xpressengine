@@ -3462,5 +3462,17 @@ return [
     'pleaseAcceptRequireTerms' => [
         'ko' => '필수 약관을 모두 동의해 주세요.',
         'en' => 'Please accept all required terms.'
+    ],
+    'termAndInstructions' => [
+        'ko' => '약관 및 안내',
+        'en' => 'Terms and instructions'
+    ],
+    'themeDesign' => [
+        'ko' => '테마 디자인',
+        'en' => 'Theme design'
+    ],
+    'globalMenuSkin' => [
+        'ko' => '글로벌 메뉴 스킨',
+        'en' => 'Global menu skin'
     ]
 ];

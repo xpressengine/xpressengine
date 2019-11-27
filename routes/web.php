@@ -386,23 +386,23 @@ Route::settings(
                     ]);
                 });
 
-
+                //TODO 컨트롤러 역할 정리 필요
                 Route::get('skin', [
                     'as' => 'settings.user.setting.skin',
                     'uses' => 'User\Settings\SettingController@editSkin',
-                    'settings_menu' => 'user.setting.skin',
+                    'settings_menu' => 'theme.globalSkin',
                 ]);
 
                 Route::get('field', [
                     'as' => 'settings.user.setting.field',
                     'uses' => 'User\Settings\SettingController@editField',
-                    'settings_menu' => 'user.setting.field',
+                    'settings_menu' => 'user.field',
                 ]);
 
                 Route::get('togglemenu', [
                     'as' => 'settings.user.setting.menu',
                     'uses' => 'User\Settings\SettingController@editToggleMenu',
-                    'settings_menu' => 'user.setting.menu',
+                    'settings_menu' => 'user.menu',
                 ]);
             }
         );

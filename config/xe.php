@@ -147,29 +147,17 @@ return [
                 'display' => false,
                 'ordering' => 200
             ],
-            'user.setting' => [
-                'title' => 'xe::settings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 400
-            ],
-            'user.setting.skin' => [
-                'title' => 'xe::skinSettings',
+            'user.field' => [
+                'title' => 'xe::dynamicFieldSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 300
             ],
-            'user.setting.field' => [
-                'title' => 'xe::dynamicFieldSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 400
-            ],
-            'user.setting.menu' => [
+            'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 500
+                'ordering' => 400
             ],
             'contents' => [
                 'title' => 'xe::contents',
@@ -184,7 +172,7 @@ return [
                 'ordering' => 500
             ],
             'theme' => [
-                'title' => 'xe::theme',
+                'title' => 'xe::themeDesign',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
@@ -201,17 +189,23 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+            'theme.globalSkin' => [
+                'title' => 'xe::globalMenuSkin',
+                'description' => '',
+                'display' => true,
+                'ordering' => 300
+            ],
             'theme.setting' => [
                 'title' => 'xe::settingTheme',
                 'display' => true,
                 'description' => '',
-                'ordering' => 300
+                'ordering' => 400
             ],
             'theme.editor' => [
                 'title' => 'xe::themeEditor',
                 'display' => true,
                 'description' => '',
-                'ordering' => 400
+                'ordering' => 500
             ],
             'extension' => [
                 'title' => 'xe::extension',
@@ -250,7 +244,7 @@ return [
                 'ordering' => 200
             ],
             'setting.terms' => [
-                'title' => 'xe::termsSettings',
+                'title' => 'xe::termAndInstructions',
                 'description' => '',
                 'display' => true,
                 'ordering' => 300
