@@ -27,4 +27,17 @@
             @endforeach
         </ul>
     </div>
+{{
+XeFrontend::html('auth.register.terms')->content("
+<script>
+    $(function($) {
+        $('.__xe_terms').click(function (e) {
+            e.preventDefault();
+
+            XE.pageModal($(this).attr('href'));
+        });
+    });
+</script>
+")->load()
+}}
 @endif
