@@ -121,39 +121,37 @@ class AgreementPart extends RegisterFormPart
         $rules = ['agree' => 'accepted'];
         $requireTerms = $this->service('xe.terms')->fetchRequireEnabled();
 
-        if ($this->isUsePart === false || $this->enabled->count() === 0) {
+        if ($this->isUsePart === false || $this->enabled->count() === 0 || $requireTerms->count() === 0) {
             $rules = [];
         } elseif ($this->request->has('agree') === true) {
             $rules['agree'] = 'accepted';
         } else {
             $request = $this->request;
 
-            if ($requireTerms->count() > 0) {
-                if ($request->has('user_agree_terms') === true) {
-                    $requireTermValidator = Validator::make(
-                        $request->all(),
-                        [],
-                        ['user_agree_terms.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
-                    );
+            if (($requireTerms->count() > 0) && $request->has('user_agree_terms') === true) {
+                $requireTermValidator = Validator::make(
+                    $request->all(),
+                    [],
+                    ['user_agree_terms.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
+                );
 
-                    $requireTermValidator->sometimes(
-                        'user_agree_terms',
-                        'accepted',
-                        function ($input) use ($requireTerms) {
-                            $userAgreeTerms = $input['user_agree_terms'];
+                $requireTermValidator->sometimes(
+                    'user_agree_terms',
+                    'accepted',
+                    function ($input) use ($requireTerms) {
+                        $userAgreeTerms = $input['user_agree_terms'];
 
-                            foreach ($requireTerms as $requireTerm) {
-                                if (in_array($requireTerm->id, $userAgreeTerms) === false) {
-                                    return true;
-                                }
+                        foreach ($requireTerms as $requireTerm) {
+                            if (in_array($requireTerm->id, $userAgreeTerms) === false) {
+                                return true;
                             }
-
-                            return false;
                         }
-                    )->validate();
 
-                    $rules = [];
-                }
+                        return false;
+                    }
+                )->validate();
+
+                $rules = [];
             }
         }
 
