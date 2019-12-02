@@ -3482,5 +3482,9 @@ return [
     'continueRegister' => [
         'ko' => '회원가입 계속하기',
         'en' => 'Continue Member Registration'
+    ],
+    'postEmailConfirmMessage' => [
+        'ko' => '메일 인증이 완료되었습니다.<br/>:displayName님, 회원이 되신 것을 환영합니다.',
+        'en' => 'Your mail has been verified.<br/>:displayName, welcome.'
     ]
 ];

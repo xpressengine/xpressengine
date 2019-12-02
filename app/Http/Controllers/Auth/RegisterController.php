@@ -422,7 +422,7 @@ class RegisterController extends Controller
         }
         XeDB::commit();
 
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::confirmed')]);
+        return \XePresenter::make('confirm_email', compact('user'));
     }
 
     /**
