@@ -137,15 +137,211 @@ use Xpressengine\User\UserRegisterHandler;
                         </div>
                     </section>
 
+                    {{-- 기본 필드 & 확장 필드 --}}
                     <section class="setting-area">
                         <div class="setting-area__header">
                             <h3 class="setting-area__header-title">가입폼 관리</h3>
                         </div>
 
                         <div class="setting-area__body">
-                            @include('user.settings.setting.forms')
+                            <div class="table-scroll">
+                                {{-- 기본 필드 설정 --}}
+                                <table class="admin-table admin-table__signup">
+                                    <colgroup>
+                                        <col class="col1" />
+                                        <col class="col2" />
+                                        <col class="col3" />
+                                        <col class="col4" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>항목</th>
+                                            <th class="text-align--center">로그인 계정</th>
+                                            <th class="text-align--center">사용</th>
+                                            <th class="text-align--center">필수</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{-- 이메일 --}}
+                                        <tr>
+                                            <td>{{ xe_trans('xe::email') }}</td>
+                                            <td class="text-align--center">
+                                                <label class="xu-label-checkradio">
+                                                    <input type="radio" class="__user-register-id-type" name="@FIXME_RADIO_01" value="email"
+                                                        {{-- @FIXME --}}checked
+                                                    >
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+
+                                        {{-- 아이디 --}}
+                                        <tr>
+                                            <td>{{ xe_trans('xe::id') }}</td>
+                                            <td class="text-align--center">
+                                                <label class="xu-label-checkradio">
+                                                    <input type="radio" class="__user-register-id-type" name="@FIXME_RADIO_01" value="user_id"
+                                                        {{-- @FIXME checked--}}
+                                                    >
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                <!-- [D] disabled 해제 방법 : class="xu-label-checkradio--disabled" 제거 -->
+                                                <label class="xu-label-checkradio">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME"
+                                                        {{-- @FIXME checked --}}
+                                                    >
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                <label class="xu-label-checkradio">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME"
+                                                        {{-- @FIXME checked --}}
+                                                    >
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+
+                                        {{-- display name --}}
+                                        <tr>
+                                            <td>
+                                                {{ xe_trans('xe::display_name') }}
+                                                <button type="button" class="xu-button xu-button--default __btn-setting-display-name" style="margin-left: 12px;">수정</button>
+
+                                                <div class="__area-setting-display-name" style="display: none; padding: 18px 0;">
+                                                    {!! uio('langText', ['langKey' => 'xe::display_name', 'name'=>'display_name']) !!}
+
+                                                    <label class="xu-label-checkradio">
+                                                        <input type="checkbox" name="@FIXME" value="@FIXME"
+                                                            {{-- @FIXME checked --}}
+                                                        >
+                                                        <span class="xu-label-checkradio__helper"></span>
+                                                        <span class="xu-label-checkradio__text">중복 체크하기</span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+
+                                        {{-- password --}}
+                                        <tr>
+                                            <td>
+                                                {{ xe_trans('xe::password') }}
+                                                <button type="button" class="xu-button xu-button--default __btn-setting-password" style="margin-left: 12px;">정책수정</button>
+
+                                                <div class="__area-setting-password" style="display: none; padding: 18px 0;">
+                                                    최소 비밀번호 글자 수
+                                                    <div class="xu-form-group" style="display: inline-block;">
+                                                        <div class="xu-form-group__box" style="width: 80px;">
+                                                            <input type="text" name="@FIXME" value="@FIXME" class="xu-form-group__control" value="{{-- @FIXME value --}}6">
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin-top: 16px;">
+                                                        <div>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
+                                                                    {{-- @FIXME --}}checked
+                                                                >
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">비밀번호에 숫자 포함</span>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
+                                                                    {{-- @FIXME --}}checked
+                                                                >
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">비밀번호에 대문자 포함</span>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
+                                                                    {{-- @FIXME --}}checked
+                                                                >
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">비밀번호에 특수문자 포함</span>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
+                                                                    {{-- @FIXME checked --}}
+                                                                >
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">반복 없는 비밀번호</span>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
+                                                                    {{-- @FIXME checked --}}
+                                                                >
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">선(-,–,—,_) 없는 비밀번호</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                            <td class="text-align--center">
+                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" name="@FIXME"value="@FIXME" checked>
+                                                    <span class="xu-label-checkradio__helper"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 사용자 정의 항목 -->
+                            @include('user.settings.setting.dynamicFields')
                         </div>
                     </section>
+                    {{-- END:기본 필드 & 확장 필드 --}}
+
 
                     <!-- 전체 페이지 버튼 영역 -->
                     <div class="setting-button-box" style="text-align: right;">
