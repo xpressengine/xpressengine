@@ -156,7 +156,6 @@ use Xpressengine\User\UserRegisterHandler;
                                     <thead>
                                         <tr>
                                             <th>항목</th>
-                                            <th class="text-align--center">로그인 계정</th>
                                             <th class="text-align--center">사용</th>
                                             <th class="text-align--center">필수</th>
                                         </tr>
@@ -165,14 +164,6 @@ use Xpressengine\User\UserRegisterHandler;
                                         {{-- 이메일 --}}
                                         <tr>
                                             <td>{{ xe_trans('xe::email') }}</td>
-                                            <td class="text-align--center">
-                                                <label class="xu-label-checkradio">
-                                                    <input type="radio" class="__user-register-id-type" name="@FIXME_RADIO_01" value="email"
-                                                        {{-- @FIXME --}}checked
-                                                    >
-                                                    <span class="xu-label-checkradio__helper"></span>
-                                                </label>
-                                            </td>
                                             <td class="text-align--center">
                                                 {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
@@ -192,14 +183,6 @@ use Xpressengine\User\UserRegisterHandler;
                                         {{-- 아이디 --}}
                                         <tr>
                                             <td>{{ xe_trans('xe::id') }}</td>
-                                            <td class="text-align--center">
-                                                <label class="xu-label-checkradio">
-                                                    <input type="radio" class="__user-register-id-type" name="@FIXME_RADIO_01" value="user_id"
-                                                        {{-- @FIXME checked--}}
-                                                    >
-                                                    <span class="xu-label-checkradio__helper"></span>
-                                                </label>
-                                            </td>
                                             <td class="text-align--center">
                                                 <!-- [D] disabled 해제 방법 : class="xu-label-checkradio--disabled" 제거 -->
                                                 <label class="xu-label-checkradio">
@@ -237,7 +220,6 @@ use Xpressengine\User\UserRegisterHandler;
                                                     </label>
                                                 </div>
                                             </td>
-                                            <td></td>
                                             <td class="text-align--center">
                                                 {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
@@ -316,7 +298,6 @@ use Xpressengine\User\UserRegisterHandler;
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td></td>
                                             <td class="text-align--center">
                                                 {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">

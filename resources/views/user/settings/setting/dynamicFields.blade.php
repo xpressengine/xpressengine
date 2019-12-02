@@ -14,7 +14,6 @@
             <div class="sort-list__header-title">사용자 정의 항목</div>
             <div class="sort-list__header-text">사용</div>
             <div class="sort-list__header-text">필수</div>
-            <div class="sort-list__header-text sort-list__header-text--empty"></div>
         </li>
     </ul>
 
@@ -87,18 +86,6 @@
             </button>\
         </div>\
         <p class="sort-list__text"></p>\
-        <div class="sort-list__checkradio">\
-            <label class="xu-label-checkradio">\
-                <input type="checkbox" name="df_use">\
-                <span class="xu-label-checkradio__helper"></span>\
-            </label>\
-        </div>\
-        <div class="sort-list__checkradio">\
-            <label class="xu-label-checkradio">\
-                <input type="checkbox" name="df_required">\
-                <span class="xu-label-checkradio__helper"></span>\
-            </label>\
-        </div>\
         <div class="sort-list__button">\
             <button type="button" class="xu-button xu-button--subtle xu-button--icon">\
                 <span class="xu-button__icon">\
@@ -112,6 +99,18 @@
                     <i class="xi-trash"></i>\
                 </span>\
             </button>\
+        </div>\
+        <div class="sort-list__checkradio">\
+            <label class="xu-label-checkradio">\
+                <input type="checkbox" name="df_use">\
+                <span class="xu-label-checkradio__helper"></span>\
+            </label>\
+        </div>\
+        <div class="sort-list__checkradio">\
+            <label class="xu-label-checkradio">\
+                <input type="checkbox" name="df_required">\
+                <span class="xu-label-checkradio__helper"></span>\
+            </label>\
         </div>\
     </li>'
 </script>
