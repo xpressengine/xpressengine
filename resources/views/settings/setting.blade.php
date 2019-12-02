@@ -180,7 +180,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::composerHomeDir') }}</label> <small>{{ xe_trans('xe::descComposerHomeDir') }}</small>
-                                <input type="text" class="form-control" name="composer_home" value="{{ $pluginConfig->get('composer_home') ?: (getenv('COMPOSER_HOME') ?: getenv('HOME')) }}">
+                                <input type="text" class="form-control" name="composer_home" value="{{ $pluginConfig->get('composer_home') ?: (getenv('COMPOSER_HOME') ?: (getenv('HOME') ? rtrim(getenv('HOME'), '/') . '/.composer' : '')) }}">
                             </div>
                         </div>
                     </div>
