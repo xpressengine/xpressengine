@@ -3474,5 +3474,13 @@ return [
     'globalMenuSkin' => [
         'ko' => '글로벌 메뉴 스킨',
         'en' => 'Global menu skin'
+    ],
+    'registerEmailConfirmMessage' => [
+        'ko' => '회원가입을 위해 이메일 인증을 진행합니다.<br/>회원가입 계속하기 버튼을 눌러 주세요.',
+        'en' => 'Proceed with email verification for membership.</br>Please click the Continue Member Registration button.'
+    ],
+    'continueRegister' => [
+        'ko' => '회원가입 계속하기',
+        'en' => 'Continue Member Registration'
     ]
 ];

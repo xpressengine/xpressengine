@@ -81,6 +81,10 @@ class RegisterEmailApprove extends CustomizableMailNotification
      */
     public function getDefaultSubject($notifiable)
     {
-        return xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) . ' ' . xe_trans('xe::emailConfirm');
+        return sprintf(
+            '[%s] %s',
+            xe_trans(app('xe.site')->getSiteConfig()->get('site_title')),
+            xe_trans('xe::emailConfirm')
+        );
     }
 }

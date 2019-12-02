@@ -222,7 +222,7 @@ class AuthController extends Controller
      *
      * @param Request $request request
      *
-     * @return \Xpressengine\Presenter\Presentable
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Xpressengine\Presenter\Presentable
      */
     public function pendingAdmin(Request $request)
     {
@@ -242,7 +242,7 @@ class AuthController extends Controller
      *
      * @param Request $request request
      *
-     * @return \Xpressengine\Presenter\Presentable
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Xpressengine\Presenter\Presentable
      */
     public function pendingEmail(Request $request)
     {

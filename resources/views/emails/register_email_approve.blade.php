@@ -8,20 +8,18 @@
     <tr style="padding:0;margin:0;border:0;">
         <td style="padding:0;margin:0;border:0;width:100%;">
             <h2 style="padding:0;margin:0 0 20px 0;border:0;font-size:28px;line-height:36px;font-weight:bold;letter-spacing:-0.01em;word-break:keep-all;color:#333;text-align:center;">
-                이메일 인증
+                {{ xe_trans('xe::emailConfirm') }}
             </h2>
         </td>
     </tr>
     <tr style="padding:0;margin:0;border:0;">
         <td style="padding:0;margin:0;border:0;width:100%;">
-            <p style="padding:0;margin:0;border:0;text-align: center;">회원가입을 위해 이메일 인증을 진행합니다.</p>
-            <p style="padding:0;margin:0;border:0;text-align: center;">모든 기능을 이용하려면 반드시 이메일 인증을 완료해야 합니다.</p>
-            <p style="padding:0;margin:0;border:0;text-align: center;">아래 <span style="color:#345bd9;">인증 버튼</span>을 클릭하여 이메일 인증을 완료하세요.</p>
+            <p style="padding:0;margin:0;border:0;text-align: center;">{!! xe_trans('xe::registerEmailConfirmMessage') !!}</p>
         </td>
     </tr>
     <tr>
         <td style="padding:40px 0 0 0;margin:0;border:0;width:100%;text-align: center;">
-            <a href="{{ route('auth.approve_email', ['token' => $token->id, 'code' => $mail->confirmation_code]) }}" target="_blank" style="display:inline-block;padding:9px 52px;margin:0;border:0;border-radius: 3px;font-size:15px;color:#fff;text-decoration:none;text-align:center;background:#345bd9">{{ xe_trans('xe::confirmation') }}</a>
+            <a href="{{ route('auth.approve_email', ['token' => $token->id, 'code' => $mail->confirmation_code]) }}" target="_blank" style="display:inline-block;padding:9px 52px;margin:0;border:0;border-radius: 3px;font-size:15px;color:#fff;text-decoration:none;text-align:center;background:#345bd9">{{ xe_trans('xe::continueRegister') }}</a>
         </td>
     </tr>
     <tr style="padding:0;margin:0;border:0;">
