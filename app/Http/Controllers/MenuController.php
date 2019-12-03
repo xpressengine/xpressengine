@@ -342,16 +342,23 @@ class MenuController extends Controller
             $mobileTheme = null;
         }
 
+        $menu = XeMenu::menus()->find($menuId);
+
+        list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
+        $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
+
+        if (XeMenu::items()->query()->where('url', $url)->exists()) {
+            return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
+        }
+
         XeDB::beginTransaction();
         try {
-            $menu = XeMenu::menus()->find($menuId);
 
-            list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
             $itemInput['parent'] = $itemInput['parent'] === $menu->getKey() ? null : $itemInput['parent'];
 
             $item = XeMenu::createItem($menu, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
+                'url' => $url,
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
@@ -461,13 +468,19 @@ class MenuController extends Controller
             $mobileTheme = null;
         }
 
+        list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
+        $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
+
+        if (XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
+            return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
+        }
+
         XeDB::beginTransaction();
         try {
-            list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
 
             XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
+                'url' => $url,
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],

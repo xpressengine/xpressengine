@@ -3381,5 +3381,9 @@ return [
     'selfInstall' => [
         'ko' => '직접 설치한',
         'en' => 'Self installed'
-    ]
+    ],
+    'menuItemUrlAlreadyExists' => [
+        'ko' => '이미 사용중인 주소 입니다.',
+        'en' => 'Menu item url already exists.'
+    ],
 ];
