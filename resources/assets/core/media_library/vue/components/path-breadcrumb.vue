@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     view (event) {
-      this.$store.dispatch('media/setFilter', { folder_id: this.folder.id })
+      this.$store.dispatch('media/setFilter', { filter: {folder_id: this.folder.id} })
     }
   },
   mutations: {

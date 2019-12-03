@@ -6,7 +6,7 @@
   -->
   <div class="media-library-header">
     <!-- [D] 저장소명 적용 (PC 에서만 노출, 모바일은 aside 영역의 class="media-library-aside__mobile-button" 에 적용된 내용이 노출 됨) -->
-    <h3 class="media-library-header__title">Main Assets</h3>
+    <h3 class="media-library-header__title">{{ title }}</h3>
     <!-- [D] 모바일에서 검색버튼(class="media-library__button-icon--search") 클릭 시 class="search-open" 추가 -->
     <div class="media-library__search">
       <div class="media-library__input-group">
@@ -61,7 +61,7 @@
           <i class="xi-folder-o"></i>
           새폴더
         </button>
-        <button @click="toggleAttachArea" type="button" class="media-library__button media-library__button--default">
+        <button v-if="renderMode !== 'modal'" @click="toggleAttachArea" type="button" class="media-library__button media-library__button--default">
           <i class="xi-upload"></i>
           업로드
         </button>
@@ -123,7 +123,7 @@ import DialogCreateFolder from '../dialogs/DialogCreateFolder.vue'
 
 export default {
   name: 'SettingsHeaderTool',
-  props: ['orderTarget', 'orderType', 'indexMode'],
+  props: ['title', 'orderTarget', 'orderType', 'indexMode', 'renderMode'],
   methods: {
     createFolder(event) {
       window.XE.post('/media_manager/folder', {
@@ -156,7 +156,7 @@ export default {
     },
     search () {
       if (this.searchKeyword) {
-        this.$store.dispatch('media/setFilter', { keyword: this.searchKeyword })
+        this.$store.dispatch('media/setFilter', { filter: {keyword: this.searchKeyword} })
       } else {
         $('.media-library__search').addClass('search-open')
       }
@@ -164,7 +164,7 @@ export default {
     clearSearch () {
       this.searchKeyword = ''
       $('.media-library__search').removeClass('search-open')
-      this.$store.dispatch('media/setFilter', { keyword: null })
+      this.$store.dispatch('media/setFilter', { filter: {keyword: null} })
     },
     showMobileUploadPanel () {
       $('.media-library__button-group--state-upload').addClass('open')
@@ -176,6 +176,15 @@ export default {
     }
   },
   mounted: function () {
+    this.$store.watch((state, getters) => {
+      this.searchKeyword = this.$store.getters['media/filter'].keyword || ''
+    })
+
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === 'media/SET_PAGINATE') {
+        this.searchKeyword = this.$store.getters['media/filter'].keyword || ''
+      }
+    })
   },
   computed: {
     currentFolder: function() {

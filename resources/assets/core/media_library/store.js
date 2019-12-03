@@ -22,6 +22,7 @@ const FILTER_RESET = true
  */
 const initialFilter = {
   folder_id: null,
+  index_mode: 2,
   page: 1
 }
 
@@ -57,6 +58,9 @@ const getters = {
   },
   currentRoot: state => {
     return state.path[0]
+  },
+  filter: state => {
+    return state.filter
   },
   media: state => (id = null) => {
     if (id !== null) {
@@ -136,14 +140,18 @@ const getters = {
 const actions = {
   changeListMode ({ commit, dispatch }, mode = LIST_MODE_USER) {
     commit(types.SET_LIST_MODE, mode)
-    return dispatch('setFilter', { index_mode: mode }, FILTER_RESET)
+    return dispatch('setFilter', {
+      filter: { index_mode: mode },
+      reset: true
+    })
   },
-  setFilter ({ commit, dispatch, state }, filter = {}, reset = FILTER_RESET) {
-    commit(types.SET_FILTER, filter, reset)
+  setFilter ({ commit, dispatch, state }, payload = { filter: {}, reset: false }) {
+    commit(types.SET_FILTER, payload)
     return dispatch('loadData', state.filter)
   },
-  loadData ({ commit }, filter = {}) {
+  loadData ({ commit, state }, filter = {}) {
     return new Promise((resolve, reject) => {
+      filter.index_mode = state.listMode
       window.XE.get('media_library.index', filter)
         .then((response) => {
           commit(types.SET_FOLDER_LIST, response.data.folder)
@@ -164,7 +172,7 @@ const actions = {
     commit(types.DELETE_FILE, payload)
   },
   viewFolder ({ dispatch, getters }, payload) {
-    dispatch('setFilter', { folder_id: payload }).then(function () {
+    dispatch('setFilter', { filter: { folder_id: payload } }).then(function () {
       return getters['parentFolder']
     })
   },
@@ -180,19 +188,31 @@ const actions = {
       })
   },
   viewDisk ({ dispatch, getters }, payload) {
-    console.debug('viewDisk', getters['currentRoot'].id)
-    dispatch('setFilter', { folder_id: getters['currentRoot'].id }).then((a) => {
-      console.debug('viewDisk.then', a)
+    dispatch('setFilter', { filter: { folder_id: getters['currentRoot'].id } }).then((a) => {
     })
   }
 }
 
 const mutations = {
-  [types.SET_FILTER] (state, filter, reset = false) {
-    if (reset) {
-      state.filter = { ...initialFilter, ...filter }
+  [types.SET_FILTER] (state, payload) {
+    console.debug('types.SET_FILTER', payload.filter, payload.reset)
+
+    if (typeof payload.filter === 'undefined' || !payload.filter) {
+      payload.filter = {}
+    }
+
+    if (typeof payload.reset === 'undefined') {
+      payload.reset = false
+    }
+
+    if (payload.filter.index_mode) {
+      state.listMode = payload.filter.index_mode
+    }
+
+    if (payload.reset) {
+      state.filter = { ...initialFilter, ...payload.filter, index_mode: state.listMode }
     } else {
-      state.filter = { ...state.filter, ...filter }
+      state.filter = { ...state.filter, ...payload.filter }
     }
   },
   [types.SET_FOLDER_LIST] (state, payload) {

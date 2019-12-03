@@ -29,11 +29,15 @@ export default {
         mediaList.push(media)
       })
 
-      window.XE.MediaLibrary.$$emit('media.import', mediaList)
+      window.XE.MediaLibrary.$$emit('media.import', mediaList, {
+        importMode: this.$root.importMode
+      })
 
       if (this.$root.renderMode === 'modal') {
         $('#media-manager-modal-container').hide()
       }
+      this.$root.selectedMedia = []
+      $('.media-library .media-library-content-list .media-library__input-checkbox').prop('checked', false)
     }
   },
   mounted: function() {
@@ -95,14 +99,19 @@ export default {
     <div
       ref="app"
       id="media-manager-modal-container"
-      class="media-library-layer-popup media-library-layer-popup--media-library"
+      :class="{
+        'media-library-layer-popup': true,
+        'media-library-layer-popup--media-library': true,
+        'media-library-layer-popup--sidebar': $root.user.rating === 'super',
+        'media-library-layer-popup--upload': true
+      }"
       tabindex="-1"
       role="dialog"
       v-if="$root.renderMode === 'modal'"
     >
       <div class="media-library-layer-popup-content">
         <div class="media-library-layer-popup-header">
-          <h3 class="blind">미디어 라이브러리 레이어팝업</h3>
+          <h3 class="blind">미디어 라이브러리</h3>
         </div>
         <div class="media-library-layer-popup-body">
           <main-container></main-container>
@@ -121,9 +130,7 @@ export default {
         </div>
       </div>
     </div>
-
-    <main-container v-else-if="$root.renderMode !== 'widget'"></main-container>
-    <div v-else></div>
+    <main-container v-else></main-container>
 
     <detail-container></detail-container>
 

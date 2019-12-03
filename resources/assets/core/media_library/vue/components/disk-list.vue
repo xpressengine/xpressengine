@@ -8,19 +8,23 @@
       -->
       <div class="media-library-aside__content">
         <button type="button" class="media-library-aside__mobile-button">
-          내 최근 파일
           <span class="media-library-aside__mobile-button-icon">
             <i class="xi-angle-down-min"></i>
           </span>
         </button>
         <ul class="media-library-aside__list">
           <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
-          <li class="on">
-            <button type="button" @click="viewDisk('media')" class="media-library-aside__button">Main Assets</button>
+          <li :class="{ on: $props.listMode === 1 }">
+            <button type="button" @click="viewDisk('media', 'Main Assets')" class="media-library-aside__button">Main Assets</button>
           </li>
         </ul>
         <hr>
-        <a @click="viewMyFiles">내 최근 파일</a>
+        <ul class="media-library-aside__list">
+          <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
+          <li :class="{ on: $props.listMode === 2 }">
+            <button type="button" @click="viewMyFiles('내 최근 파일')" class="media-library-aside__button">내 최근 파일</button>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -28,14 +32,21 @@
 
 <script>
 export default {
+  props: ['listMode'],
+  data: () => {
+    return {
+    }
+  },
   methods: {
-    viewMyFiles () {
-      this.$store.dispatch('media/changeListMode', 2)
+    viewMyFiles (subject) {
+      this.$root.viewMyFiles(subject)
     },
 
-    viewDisk (disk) {
-      this.$store.dispatch('media/changeListMode', 1)
+    viewDisk (disk, subject) {
+      this.$root.viewDisk(disk, subject)
     }
+  },
+  created: function () {
   }
-};
+}
 </script>

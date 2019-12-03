@@ -218,8 +218,6 @@
 
 // === //레이어 팝업 - 내부 스크롤 타입 (꽉 차는 형태, 중앙 정렬 형태) ===
 
-
-
 // === 레이어팝업 (미디어 매니저, 편집 팝업) ===
 .media-library-layer-popup {
   // === 미디어 라이브러리 - 라이브러리 레이어 팝업 스타일 ===
@@ -251,8 +249,9 @@
           position: absolute;
           top: 79px;
           right: 0;
-          width: calc(100% - 180px);
-          height: calc(100% - 79px);
+          width: 100%;
+          height: 100px;
+          padding: 20px;
           z-index: 50;
 
           &.active {
@@ -264,6 +263,15 @@
       .media-library__button-menu-toggle {
         display: none;
       }
+    }
+  }
+
+  &--sidebar {
+    .media-library-upload {
+      width: calc(100% - 160px) !important;
+    }
+    .media-library-content {
+      margin-top: 100px;
     }
   }
   // === //미디어 라이브러리 - 라이브러리 레이어 팝업 스타일 ===
@@ -668,6 +676,12 @@
   // === //미디어 라이브러리 - 파일 상세 팝업 ===
 }
 // === //레이어팝업 (미디어 매니저, 편집 팝업) ===
+
+.dropzone--active {
+  .media-library-upload {
+    border-color: #007AFF;
+  }
+}
 
 /* mobile */
 @media (max-width: 768px) {

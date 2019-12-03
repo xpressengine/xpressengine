@@ -3,12 +3,11 @@ import App from 'xe/app'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import EventBus from './vue/components/eventBus'
+import _ from 'lodash'
 
 import { module as media } from './store'
 // import RouteMap from './route_map'
 import ComponentApp from './vue/app'
-
-import ComponentAttachment from './vue/attachment'
 
 Vue.use(Vuex)
 // Vue.use(VueRouter)
@@ -36,6 +35,7 @@ class MediaLibrary extends App {
     super()
 
     this.componentBooted = false
+    this.componentAppInstance = null
   }
 
   static appName () {
@@ -59,7 +59,10 @@ class MediaLibrary extends App {
   */
   _componentBoot (options) {
     if (this.componentBooted) {
-      return Promise.resolve(componentAppInstance)
+      _.forEach(options, (val, key) => {
+        this.componentAppInstance[key] = val
+      })
+      return Promise.resolve(this.componentAppInstance)
     }
 
     const that = this
@@ -75,28 +78,29 @@ class MediaLibrary extends App {
       }
       that.$$xe.DynamicLoadManager.cssLoad('/assets/core/media_library/css/media-library.css')
 
-      const componentAppInstance = new Vue({
+      that.componentAppInstance = new Vue({
         el: '#media-library',
         store,
-        // router,
         components: {
           App: ComponentApp
         },
-        // super|manager, user[, guest]
-        // disk, user
         data: function () {
           return {
+            headerTitle: '',
             renderMode: 'inline',
-            importMode: 'embed',
+            importMode: 'embed', // 'download', 'embed'
+            fileFilter: [], // array 'image', 'video'
             listMode: LIST_MODE_USER,
             selectedMedia: [],
             showMedia: null,
+            showUpload: false,
             dialog: null,
             currentMedia: null,
             showModal: false,
             user: options.user || { id: null, rating: 'guest' },
             orderTarget: 1,
-            orderType: 'up'
+            orderType: 'up',
+            ...options
           }
         },
         computed: {
@@ -105,8 +109,9 @@ class MediaLibrary extends App {
           }
         },
         created: function () {
-          console.debug('ML', this)
           this.renderMode = renderMode
+          this.headerTitle = (this.listMode === 1) ? 'Main Assets' : '내 최근 파일'
+
           Promise.all([window.XE.Router, window.XE.Lang]).then(() => {
             this.$emit('init')
           })
@@ -128,9 +133,15 @@ class MediaLibrary extends App {
               EventBus.$emit('data.loaded')
 
               if (this.renderMode !== 'widget') {
-                that.setupDropzone($('.media-library .form-control--file'), { dropZone: $('.media-library .dropZone') })
+                that.setupDropzone($('.media-library .form-control--file'), { dropZone: $('.media-library') })
               }
             })
+          })
+
+          this.$store.subscribe((mutation) => {
+            if (mutation.type === 'media/SET_FILTER') {
+              this.selectedMedia = []
+            }
           })
         },
         methods: {
@@ -153,6 +164,16 @@ class MediaLibrary extends App {
             this.selectedMedia = []
             $('.media-library-content-list > li').removeClass('active')
             $('.media-library-content-list > li').find('.media-library__input-checkbox').prop('checked', false)
+          },
+          viewMyFiles (subject) {
+            this.listMode = 2
+            this.headerTitle = subject
+            store.dispatch('media/changeListMode', 2)
+          },
+          viewDisk (disk, subject) {
+            this.listMode = 1
+            this.headerTitle = subject
+            store.dispatch('media/changeListMode', 1)
           },
           deleteMedia (id) {
             return that.$$xe.delete('media_library.drop', { target_ids: id })
@@ -192,13 +213,10 @@ class MediaLibrary extends App {
           })
         },
         _subscribeEvent () {
-          EventBus.$on('modal.open', () => {
-
-          })
         }
       })
 
-      resolve(componentAppInstance)
+      resolve(that.componentAppInstance)
     })
   }
 
@@ -226,39 +244,15 @@ class MediaLibrary extends App {
     }
     config = Object.assign(config, options)
     return new Promise((resolve) => {
-      this._componentBoot(config).then((ddd) => {
+      this._componentBoot(config).then((instance) => {
         if (renderMode === 'modal') {
           $('#media-manager-modal-container').show()
+          $('#media-manager-modal-container').find('.media-library-upload').addClass('active')
         }
 
-        resolve(ddd)
+        resolve(instance)
       })
     })
-  }
-
-  render (options) {
-    const a = new Vue({
-      el: '.ckeditor-fileupload-area',
-      components: {
-        ComponentAttachment
-      },
-      data: function () {
-        return {
-          files: []
-        }
-      },
-      mounted () {
-      },
-      render (h) {
-        return h(ComponentAttachment, {
-          propsData: {
-            files: this.files
-          }
-        })
-      }
-    })
-
-    return this
   }
 
   createUploader ($el, data, options) {
@@ -277,16 +271,19 @@ class MediaLibrary extends App {
         formData: formData,
         progressall: function (e, data) {
           if (data.loaded === data.total) {
-            that.$$emit('done.progress', { data })
+            that.$$emit('done.progress.editor', { data })
           } else {
-            that.$$emit('update.progress', { data })
+            that.$$emit('update.progress.editor', { data })
           }
         },
         add: function (e, data) {
           data.submit()
         },
         done: function (e, data) {
-          that.$$emit('done.upload', { file: data.result[0] })
+          that.$$emit('done.upload.editor', {
+            file: data.result[0],
+            form: data.form
+          })
         }
       }
 
@@ -301,7 +298,9 @@ class MediaLibrary extends App {
   }
 
   setupDropzone ($el, options) {
+    console.debug('setupDropzone')
     var that = this
+    var $dropZone = $('.media-library')
     $(function () {
       var setup = {
         url: window.XE.route('media_library.upload'),
@@ -328,6 +327,7 @@ class MediaLibrary extends App {
           }
         },
         add: function (e, data) {
+          console.debug('dropzone', data)
           data.submit()
         },
         done: function (e, data) {
@@ -340,9 +340,26 @@ class MediaLibrary extends App {
           }).then(() => {
             window.XE.MediaLibrary.$$emit('media.uploaded', store.getters['media/media'](data.result[0].id))
           })
-          that.$$emit('done.upload', { data })
+          that.$$emit('done.upload', data.result[0])
+        },
+        dropZone: $dropZone,
+        dragover: function () {
+          that.$$emit('on.dropzone')
+        },
+        dragleave: function () {
+          that.$$emit('off.dropzone')
+        },
+        drop: function () {
+          that.$$emit('off.dropzone')
         }
       }
+
+      that.$$on('on.dropzone', function () {
+        $dropZone.addClass('dropzone--active')
+      })
+      that.$$on('off.dropzone', function () {
+        $dropZone.removeClass('dropzone--active')
+      })
 
       $.extend(setup, options)
 

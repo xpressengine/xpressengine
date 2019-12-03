@@ -24,6 +24,11 @@ export default {
   },
   computed: {
     pathName ({ $props }) {
+      let pathname = $props.path.name
+      if (pathname === '/') {
+        $props.path.name = '/root'
+      }
+
       return $props.path.name
     },
   }
