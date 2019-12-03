@@ -395,7 +395,7 @@ class UserHandler
         }
 
         $displayNameRules = ['display_name'];
-        if (app('xe.config')->getVal('user.register.check_duplicate_display_name') === true) {
+        if (app('xe.config')->getVal('user.register.display_name_unique') === true) {
             $displayNameRules[] = Rule::unique('user')->where(function ($query) use ($user) {
                 if ($user) {
                     $query->where('id', '!=', $user->getId());

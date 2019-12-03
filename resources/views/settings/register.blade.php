@@ -216,9 +216,9 @@ use Xpressengine\User\UserRegisterHandler;
                                                     {!! uio('langText', ['langKey' => 'xe::display_name', 'name'=>'display_name']) !!}
 
                                                     <label class="xu-label-checkradio">
-                                                        <input type="checkbox" name="check_duplicate_display_name" value="true" @if ($config->get('check_duplicate_display_name') == true) checked @endif>
+                                                        <input type="checkbox" name="display_name_unique" value="true" @if ($config->get('display_name_unique') === true) checked @endif>
                                                         <span class="xu-label-checkradio__helper"></span>
-                                                        <span class="xu-label-checkradio__text">중복 체크하기</span>
+                                                        <span class="xu-label-checkradio__text">중복 가입 방지</span>
                                                     </label>
                                                 </div>
                                             </td>

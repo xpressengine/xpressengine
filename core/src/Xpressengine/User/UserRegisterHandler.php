@@ -55,11 +55,11 @@ class UserRegisterHandler
             $attribute['joinable'] = false;
         }
 
-        if (isset($attribute['check_duplicate_display_name']) &&
-            $attribute['check_duplicate_display_name'] === 'true') {
-            $attribute['check_duplicate_display_name'] = true;
+        if (isset($attribute['display_name_unique']) &&
+            $attribute['display_name_unique'] === 'true') {
+            $attribute['display_name_unique'] = true;
         } else {
-            $attribute['check_duplicate_display_name'] = false;
+            $attribute['display_name_unique'] = false;
         }
 
         $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
