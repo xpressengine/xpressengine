@@ -190,7 +190,7 @@ class UserMigration extends Migration
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre"}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","check_duplicate_display_name":true}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -277,6 +277,9 @@ class UserMigration extends Migration
         if ($this->checkExistUserTermAgreeTable() === false) {
             $this->createUserTermAgreeTable();
         }
+
+        //TODO 실행 조건 추가
+        $this->deleteDisplayNameUnique();
     }
 
     /**
@@ -317,7 +320,7 @@ class UserMigration extends Migration
      */
     private function checkExistRegisterConfig()
     {
-        return app('xe.config')->get('user.register') !== null ? true : false;
+        return app('xe.config')->get('user.register') !== null;
     }
 
     /**
@@ -331,26 +334,27 @@ class UserMigration extends Migration
         $originalCommonConfigAttribute = $commonConfig->getPureAll();
 
         $commonConfigAttribute = ['useCaptcha', 'webmasterName', 'webmasterEmail'];
-        $joinConfigAttribute = array_diff_key($originalCommonConfigAttribute, array_flip($commonConfigAttribute));
+        $registerConfigAttribute = array_diff_key($originalCommonConfigAttribute, array_flip($commonConfigAttribute));
 
         $newCommonConfigAttribute = [];
         foreach ($commonConfigAttribute as $config) {
-            if (isset($originalCommonConfigAttribute[$config]) == true) {
+            if (isset($originalCommonConfigAttribute[$config]) === true) {
                 $newCommonConfigAttribute[$config] = $originalCommonConfigAttribute[$config];
             }
         }
 
-        if (isset($joinConfigAttribute['guard_forced']) && $joinConfigAttribute['guard_forced'] == true) {
-            $joinConfigAttribute['register_process'] = User::STATUS_PENDING_EMAIL;
+        if (isset($registerConfigAttribute['guard_forced']) && $registerConfigAttribute['guard_forced'] === true) {
+            $registerConfigAttribute['register_process'] = User::STATUS_PENDING_EMAIL;
         } else {
-            $joinConfigAttribute['register_process'] = User::STATUS_ACTIVATED;
+            $registerConfigAttribute['register_process'] = User::STATUS_ACTIVATED;
         }
-        unset($joinConfigAttribute['guard_forced']);
+        unset($registerConfigAttribute['guard_forced']);
 
-        $joinConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
+        $registerConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
+        $registerConfigAttribute['check_duplicate_display_name'] = false;
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
-        app('xe.config')->set('user.register', $joinConfigAttribute);
+        app('xe.config')->set('user.register', $registerConfigAttribute);
     }
 
     /**
@@ -416,5 +420,20 @@ class UserMigration extends Migration
             $table->index('user_id');
             $table->index('term_id');
         });
+    }
+
+    /**
+     * display_name field unique 삭제
+     *
+     * @return void
+     */
+    private function deleteDisplayNameUnique()
+    {
+        try {
+            Schema::table('user', function (Blueprint $table) {
+                $table->dropUnique('user_display_name_unique');
+            });
+        } catch (\Exception $e) {
+        }
     }
 }

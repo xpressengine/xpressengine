@@ -552,14 +552,7 @@ class RegisterController extends Controller
 
         $valid = true;
         try {
-            $this->validate($request, [ 'display_name' => 'display_name' ]);
-
-            // 존재하는 display_name이 있는지 확인
-            try {
-                $this->validate($request, [ 'display_name' => Rule::unique('user', 'display_name') ]);
-            } catch (\Exception $e) {
-                throw new DisplayNameAlreadyExistsException();
-            }
+            $this->handler->validateDisplayName($displayName);
         } catch (DisplayNameAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();

@@ -144,6 +144,10 @@ use Xpressengine\User\UserRegisterHandler;
                         </div>
 
                         <div class="setting-area__body">
+                            @include('user.settings.setting.forms')
+                        </div>
+
+                        <div class="setting-area__body">
                             <div class="table-scroll">
                                 {{-- 기본 필드 설정 --}}
                                 <table class="admin-table admin-table__signup">
@@ -212,9 +216,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                     {!! uio('langText', ['langKey' => 'xe::display_name', 'name'=>'display_name']) !!}
 
                                                     <label class="xu-label-checkradio">
-                                                        <input type="checkbox" name="@FIXME" value="@FIXME"
-                                                            {{-- @FIXME checked --}}
-                                                        >
+                                                        <input type="checkbox" name="check_duplicate_display_name" value="true" @if ($config->get('check_duplicate_display_name') == true) checked @endif>
                                                         <span class="xu-label-checkradio__helper"></span>
                                                         <span class="xu-label-checkradio__text">중복 체크하기</span>
                                                     </label>

@@ -381,7 +381,8 @@ class UserHandler
     }
 
     /**
-     * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름이 형식검사와 중복검사를 병행한다.
+     * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름 형식검사 및 옵션에 따른 중복검사를 병행한다.
+     * 3.0.8 버전부터 중복 허용 가능 옵션 추가
      *
      * @param string             $name 유효성 검사를 할 표시이름
      * @param UserInterface|null $user user object
@@ -393,17 +394,18 @@ class UserHandler
             $name = null;
         }
 
+        $displayNameRules = ['display_name'];
+        if (app('xe.config')->getVal('user.register.check_duplicate_display_name') === true) {
+            $displayNameRules[] = Rule::unique('user')->where(function ($query) use ($user) {
+                if ($user) {
+                    $query->where('id', '!=', $user->getId());
+                }
+            });
+        }
+
         $this->validator->make(
             ['display_name' => $name],
-            ['display_name' => [
-                'display_name',
-                'required',
-                Rule::unique('user')->where(function ($query) use ($user) {
-                    if ($user) {
-                        $query->where('id', '!=', $user->getId());
-                    }
-                })
-            ]]
+            ['display_name' => $displayNameRules]
         )->validate();
 
         return true;
