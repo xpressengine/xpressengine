@@ -36,8 +36,8 @@ export default {
       if (this.$root.renderMode === 'modal') {
         $('#media-manager-modal-container').hide()
       }
-      this.$root.selectedMedia = []
-      $('.media-library .media-library-content-list .media-library__input-checkbox').prop('checked', false)
+
+      this.$root.clearSelectedMedia()
     }
   },
   mounted: function() {

@@ -140,7 +140,7 @@ class MediaLibrary extends App {
 
           this.$store.subscribe((mutation) => {
             if (mutation.type === 'media/SET_FILTER') {
-              this.selectedMedia = []
+              this.clearSelectedMedia()
             }
           })
         },
@@ -287,7 +287,7 @@ class MediaLibrary extends App {
         }
       }
 
-      $.extend(setup, options)
+      setup = { ...setup, ...options }
 
       if (typeof $.fn.fileupload !== 'undefined') {
         $el.fileupload(setup)

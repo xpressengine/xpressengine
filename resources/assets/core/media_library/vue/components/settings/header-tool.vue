@@ -30,7 +30,7 @@
           삭제
         </button>
         <div class="media-library__button-group">
-          <button v-if="indexMode === 1" type="button" class="media-library__button media-library__button--default">
+          <button v-if="false" type="button" class="media-library__button media-library__button--default">
             <span class="media-library__icon media-library__icon-move"></span>
             이동
           </button>

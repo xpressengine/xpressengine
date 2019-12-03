@@ -86,7 +86,7 @@ export default {
       return filesize($props.media.file.size)
     },
     date ({ $props }) {
-      return moment($props.created_at).format('L')
+      return moment($props.media.updated_at).format('L')
     }
   }
 }
