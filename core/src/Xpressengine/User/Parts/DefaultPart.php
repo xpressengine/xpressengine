@@ -46,7 +46,7 @@ class DefaultPart extends RegisterFormPart
      *
      * @var string
      */
-    protected static $view = 'register.forms.default';
+    protected static $view = 'register.forms.new_default';
 
     /**
      * Get validation rules of the form part
@@ -55,11 +55,17 @@ class DefaultPart extends RegisterFormPart
      */
     public function rules()
     {
-        return [
+        $rules = [
             'email' => 'required|email',
-            'display_name' => 'required',
+            'login_id' => 'required|login_id',
             'password' => 'required|password',
         ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**

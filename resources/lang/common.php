@@ -905,6 +905,10 @@ return [
         'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
         'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
     ],
+    'validationLoginId' => [
+        'ko' => '아이디는 5~20자의 영문 소문자, 대쉬(-), 언더스코어(_)만 사용 가능하고, 처음과 마지막에는 영문 소문자와 숫자만 가능합니다.',
+        'en' => 'You can only use 5 ~ 20 lowercase letters, dash (-), and underscore (_).'
+    ],
     'interfaceNotImplemented' => [
         'ko' => '":className" 클래스는 반드시 \Xpressengine\Plugin\ComponentInterface를 구현해야 합니다',
         'en' => '":className" class must implements \Xpressengine\Plugin\ComponentInterface.',
@@ -1716,6 +1720,10 @@ return [
     'enterEmail' => [
         'ko' => '이메일을 입력하세요.',
         'en' => 'Please enter email.',
+    ],
+    'enterId' => [
+        'ko' => '아이디를 입력하세요.',
+        'en' => 'Please enter ID.',
     ],
     'owner' => [
         'ko' => '소유자',

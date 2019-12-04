@@ -18,6 +18,8 @@
                                         {!! XeUI::formText(['id'=>'__xe_displayName', 'label'=>xe_trans(app('xe.config')->getVal('user.register.display_name_caption')), 'placeholder'=>xe_trans('xe::enterDisplayName', ['displayNameCaption' => xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))]), 'value'=> old('display_name'), 'name'=>'display_name']) !!}
                                         {{-- email --}}
                                         {!! XeUI::formText(['id'=>'__xe_email', 'label'=>xe_trans('xe::email'), 'placeholder'=>xe_trans('xe::enterEmail'), 'value'=> old('email'), 'name'=>'email']) !!}
+                                        {{-- loginId --}}
+                                        {!! XeUI::formText(['id'=>'__xe_loginId', 'label'=>xe_trans('xe::id'), 'placeholder'=>xe_trans('xe::enterId'), 'value'=> old('login_id'), 'name'=>'login_id']) !!}
                                         {{-- password --}}
                                         {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'password', 'autocomplete'=>"new-password"]) !!}
                                 </div>

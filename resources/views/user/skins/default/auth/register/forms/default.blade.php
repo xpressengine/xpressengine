@@ -1,3 +1,5 @@
+{{-- deprecated since 3.0.8 instead use new_default.blade.php --}}
+
 @inject('passwordValidator', 'xe.password.validator')
 
 {{-- email --}}

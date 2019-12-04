@@ -24,6 +24,8 @@
                                 <div id="__xe_emailSetting" data-user-id="{{ $user->id }}" data-email="{{ $user->email }}"></div>
                             </div>
 
+                            {!! uio('formText', ['id'=>'__xe_loginId', 'label'=>xe_trans('xe::id'), 'placeholder'=>xe_trans('xe::enterId'), 'value'=> $user->login_id, 'name'=>'login_id']) !!}
+
                             {{-- introduction --}}
                             {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>xe_trans('xe::introduction'), 'placeholder'=>xe_trans('xe::enterIntroduction'), 'value'=> $user->introduction, 'name'=>'introduction']) !!}
 

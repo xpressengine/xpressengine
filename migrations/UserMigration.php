@@ -17,6 +17,7 @@ namespace Xpressengine\Migrations;
 use Illuminate\Database\Schema\Blueprint;
 use DB;
 use Schema;
+use XeLang;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\UserRegisterHandler;
@@ -260,6 +261,10 @@ class UserMigration extends Migration
             return false;
         }
 
+        if ($this->checkExistUserLoginIdColumn() === false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -291,6 +296,12 @@ class UserMigration extends Migration
 
         //TODO 실행 조건 추가
         $this->deleteDisplayNameUnique();
+
+        if ($this->checkExistUserLoginIdColumn() === false) {
+            $this->createUserLoginIdColumn();
+            $this->migrationLoginIdColumn();
+            $this->setLoginIdColumnUnique();
+        }
     }
 
     /**
@@ -457,5 +468,60 @@ class UserMigration extends Migration
             });
         } catch (\Exception $e) {
         }
+    }
+
+    /**
+     * User 테이블에 login_id 컬럼이 존재 여부 확인
+     *
+     * @return bool
+     */
+    private function checkExistUserLoginIdColumn()
+    {
+        return Schema::hasColumn('user', 'login_id');
+    }
+
+    /**
+     * User 테이블에 login_id 컬럼 생성
+     *
+     * @return void
+     */
+    private function createUserLoginIdColumn()
+    {
+        Schema::table('user', function (Blueprint $table) {
+            $table->string('login_id')->after('email');
+        });
+    }
+
+    /**
+     * user email에서 계정을 login_id로 update
+     * 중복된 login_id는 확인해서 login_id 뒤에 index를 붙임
+     *
+     * @return void
+     */
+    private function migrationLoginIdColumn()
+    {
+        \DB::table('user')->update(['login_id' =>  \DB::raw("REPLACE(SUBSTRING_INDEX(email, '@', 1), '.', '')")]);
+
+        $duplicateEmails = \DB::table('user')->select('login_id')
+            ->groupBy('login_id')->havingRaw('count(login_id) > 1')->get();
+        foreach ($duplicateEmails as $duplicateEmail) {
+            $duplicateUsers = User::where('login_id', $duplicateEmail->login_id)->orderBy('created_at')->get();
+            foreach ($duplicateUsers as $index => $duplicateUser) {
+                $duplicateUser->login_id .= ($index + 1);
+                $duplicateUser->save();
+            }
+        }
+    }
+
+    /**
+     * login_id 업데이트 후 unique 지정
+     *
+     * @return void
+     */
+    private function setLoginIdColumnUnique()
+    {
+        Schema::table('user', function (Blueprint $table) {
+            $table->unique('login_id');
+        });
     }
 }

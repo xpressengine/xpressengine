@@ -166,7 +166,7 @@ class AuthController extends Controller
         $loginRuleName = 'login';
 
         XeFrontend::rule($loginRuleName, [
-            'email' => 'required|email_prefix',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -183,7 +183,7 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email_prefix',
+            'email' => 'required',
             'password' => 'required'
         ]);
 

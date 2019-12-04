@@ -58,6 +58,7 @@ class User extends DynamicModel implements
 
     protected $fillable = [
         'email',
+        'login_id',
         'display_name',
         'password',
         'rating',
@@ -239,6 +240,10 @@ class User extends DynamicModel implements
     public function getDisplayName()
     {
         $field = static::$displayField;
+        if (app('xe.config')->getVal('user.register.use_display_name') === false) {
+            $field = 'login_id';
+        }
+
         return $this->getAttribute($field);
     }
 
