@@ -28,6 +28,12 @@ use Xpressengine\User\UserHandler;
  */
 class RegisterSettingsController extends Controller
 {
+    /**
+     * @param Request     $request     request
+     * @param UserHandler $userHandler user handler
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
     public function editSetting(Request $request, UserHandler $userHandler)
     {
         $config = app('xe.config')->get('user.register');
@@ -35,12 +41,17 @@ class RegisterSettingsController extends Controller
         $parts = $userHandler->getRegisterParts();
         $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
-        $parts = collect($parts)->partition(function ($part, $key) use ($activated) {
+        list($activateParts, $deactivateParts) = collect($parts)->partition(function ($part, $key) use ($activated) {
             return in_array($key, $activated) || $part::isImplicit();
         });
-        $parts->splice(0, 1, [array_merge(array_flip($activated), $parts->first()->all())]);
 
-        return \XePresenter::make('settings.register', compact('config', 'parts'));
+        $parts = $activateParts->union($deactivateParts);
+
+        $parts = $parts->filter(function ($part, $key) {
+            return $part::isDetailSetting() === false;
+        });
+
+        return \XePresenter::make('settings.register', compact('config', 'parts', 'activated'));
     }
 
     /**

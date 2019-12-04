@@ -144,10 +144,6 @@ use Xpressengine\User\UserRegisterHandler;
                         </div>
 
                         <div class="setting-area__body">
-                            @include('user.settings.setting.forms')
-                        </div>
-
-                        <div class="setting-area__body">
                             <div class="table-scroll">
                                 {{-- 기본 필드 설정 --}}
                                 <table class="admin-table admin-table__signup">
@@ -169,16 +165,14 @@ use Xpressengine\User\UserRegisterHandler;
                                         <tr>
                                             <td>{{ xe_trans('xe::email') }}</td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
@@ -188,19 +182,14 @@ use Xpressengine\User\UserRegisterHandler;
                                         <tr>
                                             <td>{{ xe_trans('xe::id') }}</td>
                                             <td class="text-align--center">
-                                                <!-- [D] disabled 해제 방법 : class="xu-label-checkradio--disabled" 제거 -->
-                                                <label class="xu-label-checkradio">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME"
-                                                        {{-- @FIXME checked --}}
-                                                    >
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
                                             <td class="text-align--center">
-                                                <label class="xu-label-checkradio">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME"
-                                                        {{-- @FIXME checked --}}
-                                                    >
+                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
@@ -252,63 +241,37 @@ use Xpressengine\User\UserRegisterHandler;
                                                     <div style="margin-top: 16px;">
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
-                                                                    {{-- @FIXME --}}checked
-                                                                >
+                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
                                                                 <span class="xu-label-checkradio__helper"></span>
                                                                 <span class="xu-label-checkradio__text">비밀번호에 숫자 포함</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
-                                                                    {{-- @FIXME --}}checked
-                                                                >
+                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
                                                                 <span class="xu-label-checkradio__helper"></span>
                                                                 <span class="xu-label-checkradio__text">비밀번호에 대문자 포함</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
-                                                                    {{-- @FIXME --}}checked
-                                                                >
+                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
                                                                 <span class="xu-label-checkradio__helper"></span>
                                                                 <span class="xu-label-checkradio__text">비밀번호에 특수문자 포함</span>
-                                                            </label>
-                                                        </div>
-                                                        <div>
-                                                            <label class="xu-label-checkradio">
-                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
-                                                                    {{-- @FIXME checked --}}
-                                                                >
-                                                                <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">반복 없는 비밀번호</span>
-                                                            </label>
-                                                        </div>
-                                                        <div>
-                                                            <label class="xu-label-checkradio">
-                                                                <input type="checkbox"name="@FIXME" value="@FIXME"
-                                                                    {{-- @FIXME checked --}}
-                                                                >
-                                                                <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">선(-,–,—,_) 없는 비밀번호</span>
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME"value="@FIXME" checked>
+                                                    <input type="checkbox" checked>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
@@ -319,6 +282,10 @@ use Xpressengine\User\UserRegisterHandler;
 
                             <!-- 사용자 정의 항목 -->
                             @include('user.settings.setting.dynamicFields')
+
+                            <div class="setting-area__body">
+                                @include('user.settings.setting.forms')
+                            </div>
                         </div>
                     </section>
                     {{-- END:기본 필드 & 확장 필드 --}}

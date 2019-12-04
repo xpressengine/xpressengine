@@ -44,6 +44,8 @@ class DynamicFieldPart extends RegisterFormPart
      */
     protected static $implicit = true;
 
+    protected static $detailSetting = true;
+
     /**
      * The view for the form part
      *

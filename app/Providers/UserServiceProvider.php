@@ -601,7 +601,6 @@ class UserServiceProvider extends ServiceProvider
         RegisterFormPart::setContainer($this->app);
 
         UserHandler::addRegisterPart(DefaultPart::class);
-        UserHandler::addRegisterPart(DynamicFieldPart::class);
         UserHandler::addRegisterPart(AgreementPart::class);
         UserHandler::addRegisterPart(CaptchaPart::class);
     }
