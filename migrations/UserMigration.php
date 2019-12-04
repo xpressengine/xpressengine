@@ -45,9 +45,9 @@ class UserMigration extends Migration
             $table->engine = "InnoDB";
 
             $table->string('id', 36)->comment('user ID');
-            $table->string('display_name', 255)->unique()->comment('display name.');
+            $table->string('display_name', 255)->comment('display name.');
             $table->string('email', 255)->nullable()->comment('email');
-            $table->string('login_id', 255)->comment('id');
+            $table->string('login_id', 255)->unique()->comment('id');
             $table->string('password', 255)->nullable()->comment('password');
             $table->string('rating', 15)->default('user')->comment('user rating. guest/user/manager/super');
             $table->string('status', 20)->comment('account status. activated/deactivated');
