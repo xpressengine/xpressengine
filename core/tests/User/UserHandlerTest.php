@@ -77,6 +77,7 @@ namespace Xpressengine\Tests\User {
                 ])->andReturn($user);
 
             $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -131,6 +132,7 @@ namespace Xpressengine\Tests\User {
                 ->andReturnNull();
 
             $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -187,6 +189,7 @@ namespace Xpressengine\Tests\User {
                 ->andReturnNull();
 
             $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -224,6 +227,7 @@ namespace Xpressengine\Tests\User {
                 ->andReturn($user);
 
             $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -286,6 +290,7 @@ namespace Xpressengine\Tests\User {
                 ])->andReturn($user);
 
             $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
