@@ -180,7 +180,7 @@
 </div>
 <div class="footer">
     <p class="text-copy">
-        &copy; 2019 엑스이허브 Co.
+        &copy; 2019 엑스이허브(주)
     </p>
 </div>
 
