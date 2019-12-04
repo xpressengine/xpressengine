@@ -59,7 +59,7 @@ use Xpressengine\User\Models\User;
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <span class="__xe_selectedKeyfield">
                                             @if(Request::get('keyfield')==='display_name')
-                                                {{xe_trans('xe::name')}}
+                                                {{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}
                                             @elseif(Request::get('keyfield')==='email')
                                                 {{xe_trans('xe::email')}}
                                             @else
@@ -69,7 +69,7 @@ use Xpressengine\User\Models\User;
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}</a></li>
                                             <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
                                         </ul>
                                     </div>
@@ -101,7 +101,7 @@ use Xpressengine\User\Models\User;
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
-                            <th scope="col">{{xe_trans('xe::name')}}</th>
+                            <th scope="col">{{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}</th>
                             <th scope="col">{{xe_trans('xe::account')}}</th>
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>

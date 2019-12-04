@@ -202,6 +202,8 @@ class UserMigration extends Migration
      */
     public function init()
     {
+        $registerConfig = app('xe.config')->get('user.register');
+
         // add default user groups
         $joinGroup = app('xe.user')->groups()->create(
             [
@@ -215,10 +217,19 @@ class UserMigration extends Migration
                 'description' => 'sub user group'
             ]
         );
-        $joinConfig = app('xe.config')->get('user.register');
+        $registerConfig->set('joinGroup', $joinGroup->id);
 
-        $joinConfig->set('joinGroup', $joinGroup->id);
-        app('xe.config')->modify($joinConfig);
+        $displayNameCaption = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "닉네임";
+            if ($locale != 'ko') {
+                $value = "Nickname";
+            }
+            XeLang::save($displayNameCaption, $locale, $value);
+        }
+        $registerConfig->set('display_name_caption', $displayNameCaption);
+
+        app('xe.config')->modify($registerConfig);
 
         // set admin's group
         auth()->user()->joinGroups($joinGroup);
@@ -353,6 +364,16 @@ class UserMigration extends Migration
         $registerConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
         $registerConfigAttribute['display_name_unique'] = true;
         $registerConfigAttribute['use_display_name'] = true;
+
+        $displayNameCaption = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "닉네임";
+            if ($locale != 'ko') {
+                $value = "Nickname";
+            }
+            XeLang::save($displayNameCaption, $locale, $value);
+        }
+        $registerConfigAttribute['display_name_caption'] = $displayNameCaption;
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $registerConfigAttribute);

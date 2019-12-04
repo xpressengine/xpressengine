@@ -198,11 +198,11 @@ use Xpressengine\User\UserRegisterHandler;
                                         {{-- display name --}}
                                         <tr>
                                             <td>
-                                                {{ xe_trans('xe::display_name') }}
+                                                {{ xe_trans($config->get('display_name_caption')) }}
                                                 <button type="button" class="xu-button xu-button--default __btn-setting-display-name" style="margin-left: 12px;">수정</button>
 
                                                 <div class="__area-setting-display-name" style="display: none; padding: 18px 0;">
-                                                    {!! uio('langText', ['langKey' => 'xe::display_name', 'name'=>'display_name']) !!}
+                                                    {!! uio('langText', ['langKey' => $config->get('display_name_caption'), 'name' => 'display_name_caption']) !!}
 
                                                     <label class="xu-label-checkradio">
                                                         <input type="checkbox" name="display_name_unique" @if ($config->get('display_name_unique') === true) checked @endif>
