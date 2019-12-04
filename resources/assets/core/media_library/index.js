@@ -63,6 +63,11 @@ class MediaLibrary extends App {
       _.forEach(options, (val, key) => {
         this.componentAppInstance[key] = val
       })
+
+      if (options.importMode) {
+        store.dispatch('media/changeImportMode', options.importMode)
+      }
+
       return Promise.resolve(this.componentAppInstance)
     }
 
@@ -89,9 +94,9 @@ class MediaLibrary extends App {
           return {
             headerTitle: '',
             renderMode: 'inline',
-            importMode: 'embed', // 'download', 'embed'
+            importMode: options.importMode || 'download', // 'download', 'embed'
             fileFilter: [], // array 'image', 'video'
-            listMode: LIST_MODE_USER,
+            listMode: options.listMode || LIST_MODE_ADMIN,
             selectedMedia: [],
             showMedia: null,
             showUpload: false,
@@ -112,6 +117,8 @@ class MediaLibrary extends App {
         created: function () {
           this.renderMode = renderMode
           this.headerTitle = (this.listMode === 1) ? 'Main Assets' : '내 최근 파일'
+          store.commit('media/SET_IMPORT_MODE', this.importMode)
+          store.commit('media/SET_LIST_MODE', this.listMode)
 
           Promise.all([window.XE.Router, window.XE.Lang]).then(() => {
             this.$emit('init')
@@ -129,7 +136,8 @@ class MediaLibrary extends App {
           })
 
           this.$on('init', () => {
-            store.dispatch('media/loadData').then(() => {
+            store.dispatch('media/loadData', { fileFilter: this.importMode }).then(() => {
+              this.clearSelectedMedia()
               this.$emit('loaded')
               EventBus.$emit('data.loaded')
 
@@ -246,9 +254,9 @@ class MediaLibrary extends App {
   */
   open (options) {
     var config = {
-      renderMode: 'modal'
+      renderMode: 'modal',
+      ...options
     }
-    config = Object.assign(config, options)
     return new Promise((resolve) => {
       this._componentBoot(config).then((instance) => {
         if (renderMode === 'modal') {

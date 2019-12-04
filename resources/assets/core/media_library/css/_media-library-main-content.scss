@@ -226,7 +226,7 @@
       .media-library-content-list__icon-thumb {
         position: relative;
         margin: 0 15px 0 46px;
-        background: url('../img/icon-file.png') center center;
+        // background: url('../img/icon-file.png') center center;
         background-size: cover;
       }
     }
@@ -399,7 +399,7 @@
 
   // 폴더, 썸네일 외 모든 곳 적용
   .media-library-content-list__icon-etc {
-    background-image: url(../img/icon-list-etc.svg);
+    background-image: url(../img/icon-file.png);
   }
 
   // 폴더 이미지
@@ -588,7 +588,7 @@
 
   // 폴더, 썸네일 외 모든 곳 적용
   .media-library-content-list__icon-etc {
-    background-image: url(../img/icon-list-etc.svg);
+    background-image: url(../img/icon-file.png);
   }
 
   // 폴더 이미지
@@ -1128,7 +1128,7 @@
       background-position: 0 0;
       background-repeat: no-repeat;
       background-size: 40px 40px;
-      background-image: url('../img/icon-file.png');
+      // background-image: url('../img/icon-file.png');
     }
 
     // 폴더, 썸네일 외 모든 곳 적용

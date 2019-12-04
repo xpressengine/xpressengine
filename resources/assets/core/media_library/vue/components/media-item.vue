@@ -11,7 +11,8 @@
       <div
         :class="{
           'media-library-content-list__icon-thumb': true,
-          'media-library-content-list__icon-preview': preview
+          'media-library-content-list__icon-preview': preview,
+          'media-library-content-list__icon-etc': !preview
         }"
         :style="{ 'background-image': thumbnailBackground }">{{ (!preview) ? ext : '' }}</div>
     </div>

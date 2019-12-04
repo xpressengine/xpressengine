@@ -11,8 +11,11 @@ const types = {
   ADD_FOLDER: 'ADD_FOLDER',
   ADD_MEDIA: 'ADD_MEDIA',
   SET_MEDIA: 'SET_MEDIA',
-  SET_LIST_MODE: 'SET_LIST_MODE'
+  SET_LIST_MODE: 'SET_LIST_MODE',
+  SET_IMPORT_MODE: 'SET_IMPORT_MODE'
 }
+
+const embedFilter = ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%']
 
 export const LIST_MODE_ADMIN = 1
 export const LIST_MODE_USER = 2
@@ -25,11 +28,13 @@ const FILTER_RESET = true
 const initialFilter = {
   folder_id: null,
   index_mode: 2,
-  page: 1
+  page: 1,
+  mime: null
 }
 
 const state = {
   listMode: LIST_MODE_USER,
+  importMode: 'download',
   disk: [
     {
       title: 'Main Assets',
@@ -147,6 +152,18 @@ const actions = {
       reset: true
     })
   },
+  changeImportMode ({ state, commit, dispatch }, mode = 'embed') {
+    if (state.importMode !== mode) {
+      commit(types.SET_IMPORT_MODE, mode)
+      const mime = (mode === 'embed') ? ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%'] : null
+
+      return dispatch('setFilter', {
+        filter: {
+          mime: mime
+        }
+      })
+    }
+  },
   setFilter ({ commit, dispatch, state }, payload = { filter: {}, reset: false }) {
     commit(types.SET_FILTER, payload)
     return dispatch('loadData', state.filter)
@@ -154,6 +171,15 @@ const actions = {
   loadData ({ commit, state }, filter = {}) {
     return new Promise((resolve, reject) => {
       filter.index_mode = state.listMode
+      console.debug('loadData', filter)
+
+      if (state.importMode === 'embed') {
+        filter.mime = ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%']
+      } else {
+        filter.mime = null
+      }
+      console.debug('store loadData', state, filter)
+
       window.XE.get('media_library.index', filter)
         .then((response) => {
           commit(types.SET_FOLDER_LIST, response.data.folder)
@@ -197,8 +223,6 @@ const actions = {
 
 const mutations = {
   [types.SET_FILTER] (state, payload) {
-    console.debug('types.SET_FILTER', payload.filter, payload.reset)
-
     if (typeof payload.filter === 'undefined' || !payload.filter) {
       payload.filter = {}
     }
@@ -255,6 +279,10 @@ const mutations = {
   },
   [types.SET_LIST_MODE] (state, mode = LIST_MODE_USER) {
     state.listMode = mode
+  },
+  [types.SET_IMPORT_MODE] (state, mode = 'embed') {
+    console.debug('SET_IMPORT_MODE', mode)
+    state.importMode = mode
   }
 }
 
