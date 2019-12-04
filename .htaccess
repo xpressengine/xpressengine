@@ -6,13 +6,14 @@
     RewriteEngine On
 
     # Deny hidden files(.*)
-    RedirectMatch 403 ^/\.(.*)
-
-    ##
-    ## You may need to uncomment the following line for some hosting environments,
-    ## if you have installed to a subdirectory, enter the name here also.
-    ##
-    # RewriteBase /
+    # ignores '.well-known/*'
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^\.well-known/.+$ - [L]
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} !-f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d [OR]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^\. - [L,R=404]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -39,6 +40,8 @@
     RewriteRule ^favicon.*$ - [L]
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^robots.txt$ - [L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^[a-zA-Z0-9]+\.html?$ - [L]
 
     # Standard routes
     RewriteRule ^ index.php [L]
