@@ -7,7 +7,7 @@
   left: 0;
   right: 0;
   background-color: rgba(52, 61, 82, 0.6);
-  z-index: 1010;
+  z-index: 2010;
 
   .media-library-dialog-popup-table {
     display: table;
@@ -148,7 +148,7 @@
   right: 0;
   padding: 20px;
   background-color: rgba(52, 61, 82, 0.6);
-  z-index: 9999;
+  z-index: 2010;
 
   .media-library-layer-popup-content {
     display: flex;
@@ -967,6 +967,14 @@
           .media-library-layer-popup-detail-view__image-box {
             flex: 1;
             position: relative;
+            background: url('../img/icon-file.png') center no-repeat;
+
+            p {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              color: #fff;
+            }
           }
 
           .media-library-layer-popup-detail-view__button-left {

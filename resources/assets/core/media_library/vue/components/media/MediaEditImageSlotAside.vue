@@ -54,6 +54,7 @@
           <dd>
             <div class="media-library-layer-popup-detail-info-content__description-box">
               <p
+                v-if="false"
                 class="media-library-layer-popup-detail-info-content__description-text"
               >픽셀 사이즈를 입력해서 이미지를 자를 수 있습니다. 이미지를 클릭하고 드래그하세요.</p>
             </div>
@@ -66,6 +67,7 @@
                 class="media-library__input-text"
                 id="mediaLibraryDetailImageCut"
                 style="width: 80px;"
+                disabled
               />
             </div>
             <span class="media-library-layer-popup-detail-info-content__etc-text">x</span>
@@ -76,6 +78,7 @@
                 type="text"
                 class="media-library__input-text"
                 style="width: 80px;"
+                disabled
               />
             </div>
           </dd>
@@ -118,6 +121,10 @@ export default {
         this.cropLeft = payload.left
         this.cropTop = payload.top
       }
+    })
+
+    EventBus.$on('saved.photoeditor', payload => {
+      EventBus.$emit('photoeditor.complete')
     })
 
     EventBus.$on('photoeditor.modeCommand', payload => {

@@ -8,12 +8,15 @@
           class="media-library-layer-popup-detail-view__button-left"
         >
           <i class="xi-angle-left-min">
-            <span class="blind">이전 이미지 보기</span>
+            <span class="blind">이전 파일 보기</span>
           </i>
         </button>
 
-        <div class="media-library-layer-popup-detail-view__image-box">
+        <div v-if="isMedia" class="media-library-layer-popup-detail-view__image-box">
           <img :src="thumbnailUrl" class="media-library-layer-popup-detail-view__image" />
+        </div>
+        <div v-if="!isMedia" class="media-library-layer-popup-detail-view__image-box">
+          <p>{{ media.file.clientname }}</p>
         </div>
 
         <button
@@ -22,11 +25,12 @@
           class="media-library-layer-popup-detail-view__button-right"
         >
           <i class="xi-angle-right-min">
-            <span class="blind">다음 이미지 보기</span>
+            <span class="blind">다음 파일 보기</span>
           </i>
         </button>
 
         <button
+          v-if="editable"
           @click="editImage"
           type="button"
           class="media-library-layer-popup-detail-view__button-update"
@@ -65,7 +69,14 @@ export default {
     }
   },
   computed: {
+    isMedia () {
+      return this.editable
+    },
+    editable () {
+      return ['gif', 'png', 'jpeg', 'jpg'].includes(this.$props.media.ext)
+    },
     thumbnailUrl() {
+      console.debug('this.$props.media', this.$props.media)
       return this.$props.media.objectURL || this.$props.media.file.url
     }
   }

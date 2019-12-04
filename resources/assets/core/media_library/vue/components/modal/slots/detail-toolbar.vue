@@ -2,6 +2,7 @@
   <div class="media-library-layer-popup_button-box" style="display: flex;">
     <!-- 편집 -->
     <button
+      v-if="editable"
       @click="editImage"
       type="button"
       class="media-library__button media-library__button--subtle media-library__button--icon"
@@ -75,6 +76,11 @@ export default {
     deleteFile() {
       EventBus.$emit('dialog.open', DialogDeleteFile)
     }
+  },
+  computed: {
+    editable () {
+      return ['gif', 'png', 'jpeg', 'jpg'].includes(this.$props.media.ext)
+    },
   }
 }
 </script>

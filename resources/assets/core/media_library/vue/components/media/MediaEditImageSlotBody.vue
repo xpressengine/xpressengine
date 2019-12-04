@@ -196,7 +196,6 @@ export default {
       let formData = new FormData()
       formData.append('file', blob, 'test.jpg')
 
-console.debug('this.$props.media.id', this.$props.media.id)
       XE.Request.axiosInstance.request({
         url: window.XE.route('media_library.modify_file', { mediaLibraryFileId: this.$props.media.id }),
         data: formData,
@@ -206,7 +205,8 @@ console.debug('this.$props.media.id', this.$props.media.id)
           'Content-Type': `multipart/form-data`
         }
       }).then(res => {
-        console.debug('res', res.data, res)
+        EventBus.$emit('photoeditor.complete')
+        XE.toast('success', '저장했습니다.')
       })
     })
   },

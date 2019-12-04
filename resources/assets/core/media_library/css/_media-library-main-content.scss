@@ -1,5 +1,15 @@
 .media-library-content {
-
+  .media-library-content-list__icon-thumb {
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 11px;
+    font-family: Roboto, sans-serif;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+  }
 }
 
 // 리스트 타입
@@ -216,6 +226,8 @@
       .media-library-content-list__icon-thumb {
         position: relative;
         margin: 0 15px 0 46px;
+        background: url('../img/icon-file.png') center center;
+        background-size: cover;
       }
     }
 
@@ -379,6 +391,7 @@
   .media-library-content-list__icon-thumb {
     width: 32px;
     height: 32px;
+    line-height: 40px;
     background-position: 0 0;
     background-repeat: no-repeat;
     background-size: 32px 32px;
@@ -567,6 +580,7 @@
     width: 40px;
     height: 40px;
     margin: -20px 0 0 -20px;
+    line-height: 48px;
     background-position: 0 0;
     background-repeat: no-repeat;
     background-size: 40px 40px;
@@ -1114,6 +1128,7 @@
       background-position: 0 0;
       background-repeat: no-repeat;
       background-size: 40px 40px;
+      background-image: url('../img/icon-file.png');
     }
 
     // 폴더, 썸네일 외 모든 곳 적용

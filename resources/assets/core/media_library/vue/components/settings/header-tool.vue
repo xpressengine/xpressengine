@@ -25,7 +25,7 @@
     -->
     <div v-if="$root.selectedMedia && $root.selectedMedia.length" class="media-library-header__button-box media-library-header__button-box--state-item-check open">
       <div class="media-library-header__button-box-inner">
-        <button @click="$root.remove()" type="button" class="media-library__button media-library__button--danger">
+        <button @click="$root.removeConfirm()" type="button" class="media-library__button media-library__button--danger">
           <span class="media-library__icon media-library__icon-delete"></span>
           삭제
         </button>

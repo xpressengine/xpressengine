@@ -8,6 +8,7 @@ import _ from 'lodash'
 import { module as media } from './store'
 // import RouteMap from './route_map'
 import ComponentApp from './vue/app'
+import DialogDeleteFile from './vue/components/dialogs/DialogDeleteFile.vue'
 
 Vue.use(Vuex)
 // Vue.use(VueRouter)
@@ -179,12 +180,16 @@ class MediaLibrary extends App {
             return that.$$xe.delete('media_library.drop', { target_ids: id })
               .then(() => {
                 store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === id), 1)
+                window.XE.toast('success', '삭제했습니다.')
               })
           },
           removeSelectedMedia (item) {
             if (this.selectedMedia.length) {
               this.selectedMedia.splice(this.selectedMedia.findIndex(v => item.media.id === v), 1)
             }
+          },
+          removeConfirm () {
+            EventBus.$emit('dialog.open', DialogDeleteFile)
           },
           remove () {
             if (this.selectedMedia.length) {
@@ -227,7 +232,8 @@ class MediaLibrary extends App {
   show () {
     return new Promise((resolve) => {
       this._componentBoot({
-        renderMode: 'inline'
+        renderMode: 'inline',
+        listMode: 1
       }).then((ddd) => {
         resolve(ddd)
       })
@@ -284,6 +290,9 @@ class MediaLibrary extends App {
             file: data.result[0],
             form: data.form
           })
+        },
+        fail: function (e, data) {
+          console.debug('fail', data)
         }
       }
 

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const types = {
   SET_FILTER: 'SET_FILTER',
   SET_FOLDER_LIST: 'SET_FOLDER_LIST',
@@ -228,7 +230,15 @@ const mutations = {
     state.path = payload
   },
   [types.DELETE_FILE] (state, payload) {
-    state.media.splice(state.media.findIndex(item => item.id === payload), 1)
+    let target = payload
+
+    if (!Array.isArray(target)) {
+      target = [target]
+    }
+
+    _.forEach(target, (id) => {
+      state.media.splice(state.media.findIndex(item => item.id === id), 1)
+    })
   },
   [types.DELETE_FOLDER] (state, payload) {
     state.folder.splice(state.folder.findIndex(item => item.id === payload), 1)

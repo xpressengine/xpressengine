@@ -39,18 +39,27 @@ export default {
     return {}
   },
   mounted() {
-    console.debug('', this.media, this)
+    console.debug('dia mounted', this.media, this)
   },
   methods: {
     close() {
       EventBus.$emit('dialog.close')
     },
     deleteFile() {
-      window.XE.delete('media_library.drop', { target_ids: this.media.id })
+      let target_ids = []
+
+      if (this.media && this.media.id) {
+        target_ids.push(this.media.id)
+      } else {
+        target_ids = [...this.$root.selectedMedia]
+      }
+
+      console.debug('delete file', target_ids, this.media, this.$root.selectedMedia)
+      window.XE.delete('media_library.drop', { target_ids: target_ids })
         .then(() => {
           EventBus.$emit('dialog.close')
           EventBus.$emit('modal.close')
-          this.$store.dispatch('media/deleteMedia', this.media.id)
+          this.$store.dispatch('media/deleteMedia', target_ids)
         })
     }
   }

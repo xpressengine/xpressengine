@@ -6,9 +6,16 @@
         <span class="media-library__input-helper"></span>
       </label>
     </div>
+
     <div class="media-library-content-list__icon">
-      <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" :style="{ 'background-image': 'url(' + thumbnailUrl + ')' }"></div>
+      <div
+        :class="{
+          'media-library-content-list__icon-thumb': true,
+          'media-library-content-list__icon-preview': preview
+        }"
+        :style="{ 'background-image': thumbnailBackground }">{{ (!preview) ? ext : '' }}</div>
     </div>
+
     <div class="media-library-content-list__content-box">
       <div class="media-library-content-list__title">
         <button type="button" class="media-library-content-list__text">
@@ -76,8 +83,25 @@ export default {
     }
   },
   computed: {
+    ext ({ $props }) {
+      return $props.media.ext
+    },
+    preview () {
+      return !!this.thumbnailUrl
+    },
     thumbnailUrl({ $props }) {
+      if (typeof $props.media.file.url === 'undefined') {
+        return false
+      }
+
       return $props.media.file.url
+    },
+    thumbnailBackground({ $props }) {
+      if (!!this.thumbnailUrl) {
+        return `url('${$props.media.file.url}')`
+      }
+
+      return false
     },
     userName({ $props }) {
       return $props.media.user.display_name
