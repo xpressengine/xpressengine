@@ -302,6 +302,8 @@ return [
             'validate' => null
         ],
 
+        //deprecated since 3.0.8
+        //관리자 페이지->설정->가입 설정->비밀번호 정책 수정 기능으로 대체
         'password' => [
             'default' => 'normal',
             'levels' => [

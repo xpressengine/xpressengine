@@ -235,27 +235,27 @@ use Xpressengine\User\UserRegisterHandler;
                                                     최소 비밀번호 글자 수
                                                     <div class="xu-form-group" style="display: inline-block;">
                                                         <div class="xu-form-group__box" style="width: 80px;">
-                                                            <input type="text" name="@FIXME" value="@FIXME" class="xu-form-group__control" value="{{-- @FIXME value --}}6">
+                                                            <input type="text" class="xu-form-group__control" name="password_rules[min]" value="{{ $passwordMinLength }}">
                                                         </div>
                                                     </div>
                                                     <div style="margin-top: 16px;">
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                                <input type="checkbox" name="password_rules[numeric]" @if (in_array('numeric', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
                                                                 <span class="xu-label-checkradio__text">비밀번호에 숫자 포함</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                                <input type="checkbox" name="password_rules[alpha]" @if (in_array('alpha', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">비밀번호에 대문자 포함</span>
+                                                                <span class="xu-label-checkradio__text">비밀번호에 문자 포함</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
-                                                                <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                                <input type="checkbox" name="password_rules[special_char]" @if (in_array('special_char', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
                                                                 <span class="xu-label-checkradio__text">비밀번호에 특수문자 포함</span>
                                                             </label>

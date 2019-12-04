@@ -60,6 +60,16 @@ class UserRegisterHandler
 
         $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
 
+        $passwordRules = '';
+        foreach ($attribute['password_rules'] as $rule => $value) {
+            if ($rule === 'min') {
+                $rule .= ':' . $value;
+            }
+
+            $passwordRules .= $rule . '|';
+        }
+        $attribute['password_rules'] = rtrim($passwordRules, '|');
+
         foreach ($attribute as $key => $value) {
             $this->config->set($key, $value);
         }

@@ -56,8 +56,6 @@ class PasswordValidator
      */
     public function handle($password, $level = null)
     {
-        $level = $level ?: $this->getDefaultLevel();
-
         $rule = $this->getRule($level);
 
         if (is_string($rule)) {
@@ -252,8 +250,6 @@ class PasswordValidator
      */
     public function getMessage($level = null)
     {
-        $level = $level ?: $this->getDefaultLevel();
-
         $rule = $this->getRule($level);
 
         if (is_string($rule)) {
@@ -302,13 +298,15 @@ class PasswordValidator
      */
     public function getRule($level)
     {
-        return $this->app['config']["xe.user.password.levels.{$level}"];
+        return $this->app['xe.config']->getVal('user.register.password_rules');
     }
 
     /**
      * Get the default level name.
      *
      * @return string
+     *
+     * @deprecated since 3.0.8 instead use user.register.password_rules config
      */
     public function getDefaultLevel()
     {

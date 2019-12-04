@@ -51,7 +51,21 @@ class RegisterSettingsController extends Controller
             return $part::isDetailSetting() === false;
         });
 
-        return \XePresenter::make('settings.register', compact('config', 'parts', 'activated'));
+        $passwordRules = explode('|', $config->get('password_rules'));
+        $passwordMinLength = array_filter($passwordRules, function ($rule) {
+            return strpos($rule, 'min:') !== false;
+        });
+
+        if (count($passwordMinLength) > 0) {
+            list($rule, $passwordMinLength) = explode(':', $passwordMinLength[0], 2);
+        } else {
+            $passwordMinLength = 6;
+        }
+
+        return \XePresenter::make(
+            'settings.register',
+            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength')
+        );
     }
 
     /**
@@ -63,6 +77,8 @@ class RegisterSettingsController extends Controller
      */
     public function updateSetting(Request $request)
     {
+        $this->validate($request, ['password_rules.min' => 'required|numeric|min:4']);
+
         $inputs = $request->except('_token');
         app('xe.user_register')->updateConfig($inputs);
 

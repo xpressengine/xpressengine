@@ -192,7 +192,7 @@ class UserMigration extends Migration
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -386,6 +386,9 @@ class UserMigration extends Migration
             XeLang::save($displayNameCaption, $locale, $value);
         }
         $registerConfigAttribute['display_name_caption'] = $displayNameCaption;
+
+        $passwordRuleLevel = app('config')->get('xe.user.password.default');
+        $registerConfigAttribute['password_rules'] = app('config')->get("xe.user.password.levels.{$passwordRuleLevel}");
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $registerConfigAttribute);
