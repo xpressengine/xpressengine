@@ -1,0 +1,437 @@
+/* 호스팅 컨트롤 패널 - 좌측 메뉴 영역 */
+.admin-page-wrap {
+  .admin-page-side-menu {
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: -240px;
+    width: 240px;
+    height: 100%;
+    -webkit-transition: left 0.3s ease;
+    -moz-transition: left 0.3s ease;
+    transition: left 0.3s ease;
+    background-color: hsl(225, 5%, 15%);
+    z-index: 110;
+
+    &.menu-open {
+      left: 0;
+
+      .admin-page-dimmed {
+        visibility: visible;
+        opacity: 1;
+        left: 0;
+        transition: opacity, 0.3s ease-in-out, left 0.3s step-start;
+      }
+    }
+
+    .xu-dropdown-menu {
+      word-break: break-all;
+    }
+
+    .admin-page-side-menu-inner {
+      position: relative;
+      height: 100%;
+      z-index: 110;
+    }
+
+    // 상단 메뉴 제목 영역
+    .admin-page-side-menu-title {
+      position: relative;
+      border-bottom: 1px solid rgba(216, 216, 216, 0.1);
+
+      .admin-page-side-menu-title__link-box {
+        position: relative;
+        padding: 12px 56px 12px 24px;
+
+        &::after {
+          content: '';
+          display: block;
+          clear: both;
+        }
+      }
+
+      .admin-page-side-menu-title__link {
+        display: inline-block;
+        font-size: 17px;
+        line-height: 24px;
+        font-weight: 600;
+        vertical-align: top;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.9);
+
+        &:hover,
+        &:focus {
+          color: #fff;
+        }
+
+        &.admin-page-side-menu-title__link--logo {
+          float: left;
+          margin-right: 8px;
+
+          i {
+            font-size: 30px;
+            vertical-align: top;
+          }
+        }
+
+        &.admin-page-side-menu-title__link--text {
+          overflow: hidden;
+          display: block;
+          line-height: 32px
+        }
+      }
+
+      .admin-page-side-menu-title__link-icon {
+        position: absolute;
+        top: 17px;
+        right: 20px;
+
+        i {
+          font-size: 24px;
+          color: #fff;
+        }
+      }
+
+      // 드롭다운
+      .admin-page-side-menu-title__lang-dropdown {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 32px;
+        height: 32px;
+
+        &.admin-page-side-menu-title__lang-dropdown--open {
+          .admin-page-side-menu-title__lang-list {
+            display: block;
+          }
+        }
+
+        .admin-page-side-menu-title__lang-button {
+          width: 32px;
+          height: 32px;
+          padding: 8px 4px;
+          border: 0 none;
+          background-color: transparent;
+
+          i {
+            margin: 0;
+            vertical-align: top;
+          }
+        }
+
+        .admin-page-side-menu-title__lang-list {
+          display: none;
+          position: absolute;
+          right: 0;
+          width: 84px;
+          margin: 0;
+          padding: 10px 10px 10px 16px;
+          border: 1px solid #979797;
+          border-radius: 3px;
+          list-style: none;
+          z-index: 10;
+          background-color: #fff;
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            border: 5px solid transparent;
+            border-bottom-color: #fff;
+          }
+
+          &::after {
+            content: '';
+          }
+
+          > li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            &.on {
+              .admin-page-side-menu-title__lang-link {
+                color: #345bd9;
+              }
+            }
+          }
+
+          .admin-page-side-menu-title__lang-link {
+            display: block;
+            font-size: 14px;
+            line-height: 28px;
+            text-decoration: none;
+            color: #172b4d;
+
+            &:hover {
+              color: #345bd9;
+            }
+          }
+        }
+      }
+      // //드롭다운
+    }
+
+    // --- 메뉴 리스트 1,2,3 뎁스 ---
+    .admin-page-menu {
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        > li {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+
+          .admin-page-menu__link {
+            position: relative;
+            display: block;
+            padding: 10px 45px 9px 56px;
+            font-size: 15px;
+            line-height: 24px;
+            font-weight: 500;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+
+            &:hover,
+            &:focus {
+              background-color: #303135;
+            }
+
+            .admin-page-menu__link-icon {
+              position: absolute;
+              top: 12px;
+              left: 22px;
+              font-size: 20px;
+              vertical-align: top;
+            }
+
+            .admin-page-menu__link-icon--arrow {
+              display: none;
+              position: absolute;
+              top: 15px;
+              right: 24px;
+              font-size: 14px;
+              vertical-align: top;
+              transition: transform 0.2s ease-out;
+              color: rgba(255, 255, 255, 0.3);
+            }
+          }
+
+          // 현재 메뉴 컬러 변경
+          &.on {
+            > .admin-page-menu__link {
+              background-color: #404145;
+              color: #fff;
+            }
+          }
+
+          &.open {
+            > .admin-page-menu__link {
+              .admin-page-menu__link-icon--arrow {
+                transform: rotate(90deg);
+              }
+            }
+          }
+        }
+      }
+
+      // 1뎁스
+      .admin-page-menu-list {
+        padding: 20px 0;
+
+        ul {
+          display: none;
+        }
+      }
+
+      .admin-page-menu-list__depth-list--second {
+        .admin-page-menu__link {
+          color: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      .admin-page-menu-list__depth-list--third {
+        > li {
+          .admin-page-menu__link {
+            padding-left: 76px;
+          }
+        }
+      }
+    }
+    // --- //메뉴 리스트 1,2,3 뎁스 ---
+
+  }
+
+  .admin-page-dimmed {
+    // display: none;
+    // position: fixed;
+    // top: 0;
+    // right: 0;
+    // left: 0;
+    // bottom: 0;
+    // z-index: 100;
+    // background: rgba(0, 0, 0, 0.32);
+    // opacity: 0.5;
+    // cursor: default;
+
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.32);
+    z-index: 100;
+    transition: opacity, 0.3s ease-in-out, left 0.3s step-end;
+    opacity: 0;
+  }
+}
+
+.admin-page-user-info-box {
+  width: 100%;
+  padding: 18px 16px;
+
+  .admin-page-user-info {
+    position: relative;
+    display: block;
+  }
+
+  .admin-page-user-info__button {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .admin-page-user-info__image {
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    border-radius: 32px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 32px 32px;
+    background-color: transparent;
+
+    i {
+      font-size: 32px;
+      vertical-align: top;
+      color: #fff;
+    }
+  }
+
+  .admin-page-user-info__name {
+    overflow: hidden;
+    min-height: 32px;
+
+    .admin-page-user-info__name-text {
+      display: block;
+      overflow: hidden;
+      font-size: 15px;
+      line-height: 32px;
+      color: rgba(255, 255, 255, 0.9);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+  }
+}
+
+/* 호스팅에서만 사용된 영역 */
+.admin-page-account-change {
+  position: relative;
+  padding: 16px 24px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background-color: rgba(216, 216, 216, 0.1)
+  }
+
+  .admin-page-account-change-info {
+    display: block;
+  }
+
+  .admin-page-account-change-info__button {
+    position: relative;
+    width: 100%;
+    border: 0 none;
+    padding: 0 30px 0 40px;
+    line-height: 20px;
+    white-space: normal;
+    text-align: left;
+    cursor: pointer;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .admin-page-account-change__button-icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -10px;
+    font-size: 20px;
+    vertical-align: top;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .admin-page-account-change__button-icon--arrow {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    margin-top: -7px;
+    vertical-align: top;
+    color: #fff;
+  }
+
+  .admin-page-account-change-info__name {
+    display: block;
+    padding: 0 0 4px;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 500;
+    word-break: break-all;
+    color: #fff;
+  }
+
+  .admin-page-account-change-info__text {
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: left;
+    vertical-align: top;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+/* //호스팅에서만 사용된 영역 */
+
+@include pc {
+  .admin-page-wrap {
+    .admin-page-side-menu {
+      left: 0;
+    }
+  }
+}

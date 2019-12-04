@@ -1,0 +1,71 @@
+/* 호스팅 컨트롤 패널 - 컨텐츠 타이틀 영역 */
+.admin-page-title {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 1px 2px 0 #dfe1e6;
+  -webkit-transition: left 0.3s ease;
+  -moz-transition: left 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  background-color: #fff;
+  z-index: 10;
+
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  &.sticky {
+    box-shadow: 0 2px 5px 0 #c1c7d0;
+  }
+
+  .admin-page-title__menu-button {
+    float: left;
+    width: 36px;
+    height: 36px;
+    margin: 9px 10px 10px 10px;
+    padding: 0;
+    border:0 none;
+    background-image: url(../img/icon-hamburger.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 22px 14px;
+    background-color: transparent;
+  }
+
+  .admin-page-title__title {
+    float: left;
+    margin: 0;
+    padding: 16px 10px 16px 0;
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.12px;
+    color: #202020;
+  }
+
+  .admin-page-title__button-box {
+    float: right;
+    padding: 8px 10px;
+
+    .admin-page-title__button {
+      margin: 2px 0;
+    }
+  }
+}
+
+
+@include pc {
+  .admin-page-title {
+    width: calc(100% - 240px);
+
+    .admin-page-title__title {
+      padding-left: 32px;
+    }
+
+    .admin-page-title__menu-button {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,56 @@
+
+/* reset */
+.reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reset-button {
+  button {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  *:focus {
+    outline: 0;
+  }
+}
+
+/* blind */
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  width: 1px;
+  height: 1px
+}
+
+// @include mobile {
+@media (max-width: 768px) {
+  .blind-mobile {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    width: 1px;
+    height: 1px
+  }
+}
+
+.clearfix {
+  zoom: 1;
+  clear: both;
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.text-required {
+  color: $medium-pink;
+}

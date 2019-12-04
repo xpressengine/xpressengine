@@ -1,0 +1,83 @@
+/* ellipsis */
+@mixin ellipsis ($maxheight, $fontsize, $fontweight, $lineheight, $webkitline) {
+  max-height: $maxheight;
+  font-size: $fontsize;
+  font-weight: $fontweight;
+  line-height: $lineheight;
+  -webkit-line-clamp: $webkitline;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+@mixin ellipsis-1line ($fontsize, $lineheight) {
+  font-size: $fontsize;
+  line-height: $lineheight;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin dimmed-gradient ($start, $opacity-top, $opacity-bottom) {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(to $start, rgba(0, 0, 0, $opacity-top), rgba(0, 0, 0, $opacity-bottom));
+}
+
+@mixin thumbnail-dimmed {
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+}
+
+/* thumbnail background */
+%thumbnail-background {
+  background-size: cover;
+  background-position: 50% 50%;
+  background-image: url('../../../../assets/core/common/img/default_image_1200x800.jpg');
+}
+
+@mixin float-turn-off {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+/* break point */
+@mixin pc-wide {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin pc {
+  @media (min-width: 992px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
