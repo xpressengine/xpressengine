@@ -216,23 +216,21 @@ use Xpressengine\User\UserRegisterHandler;
                                                     {!! uio('langText', ['langKey' => 'xe::display_name', 'name'=>'display_name']) !!}
 
                                                     <label class="xu-label-checkradio">
-                                                        <input type="checkbox" name="display_name_unique" value="true" @if ($config->get('display_name_unique') === true) checked @endif>
+                                                        <input type="checkbox" name="display_name_unique" @if ($config->get('display_name_unique') === true) checked @endif>
                                                         <span class="xu-label-checkradio__helper"></span>
                                                         <span class="xu-label-checkradio__text">중복 가입 방지</span>
                                                     </label>
                                                 </div>
                                             </td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
-                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                <label class="xu-label-checkradio">
+                                                    <input type="checkbox" name="use_display_name" @if ($config->get('use_display_name') === true) checked @endif>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
                                             <td class="text-align--center">
-                                                {{-- 필수항목. checked, --disabled 고정 값 임 --}}
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" name="@FIXME" value="@FIXME" checked>
+                                                    <input type="checkbox"  @if ($config->get('use_display_name') === true) checked @endif>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>

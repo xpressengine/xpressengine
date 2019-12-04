@@ -55,12 +55,8 @@ class UserRegisterHandler
             $attribute['joinable'] = false;
         }
 
-        if (isset($attribute['display_name_unique']) &&
-            $attribute['display_name_unique'] === 'true') {
-            $attribute['display_name_unique'] = true;
-        } else {
-            $attribute['display_name_unique'] = false;
-        }
+        $attribute['display_name_unique'] = isset($attribute['display_name_unique']);
+        $attribute['use_display_name'] = isset($attribute['use_display_name']);
 
         $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
 
