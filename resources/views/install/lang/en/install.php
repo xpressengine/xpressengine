@@ -3,7 +3,7 @@
 return [
     'localeExpression' => 'English',
     'checkForInstall' => 'Check your server status for XE installation.',
-    
+
     'systemCheck' => 'System check',
     'checkPHPVersion' => 'Check PHP version.',
     'checkDirPermission' => 'Check directory permission.',
@@ -36,6 +36,7 @@ return [
     'inputDBPassword' => 'Input database password.',
     'inputDBPrefix' => 'Input database table prefix.',
     'inputAdminEmail' => 'Input email address.',
+    'inputAdminID' => 'Input ID.',
     'inputAdminName' => 'Input the name for display.',
     'inputAdminPassword' => 'Input password.',
     'reInputAdminPassword' => 'Input password again.',

@@ -36,6 +36,7 @@ return [
     'inputDBPassword' => '비밀번호를 입력하세요.',
     'inputDBPrefix' => '테이블 접두어를 입력하세요.',
     'inputAdminEmail' => '이메일을 입력하세요.',
+    'inputAdminID' => '아이디를 입력하세요.',
     'inputAdminName' => '화면에 표시될 이름을 입력하세요.',
     'inputAdminPassword' => '비밀번호를 입력하세요.',
     'reInputAdminPassword' => '비밀번호를 재입력하세요.',

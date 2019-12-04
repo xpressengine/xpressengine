@@ -96,6 +96,7 @@ class XeInstall extends Command
         ],
         'admin' => [
             'email' => null,
+            'login_id' => null,
             'password' => null,
             'display_name' => 'admin',
         ],
@@ -863,10 +864,22 @@ class XeInstall extends Command
             return $email;
         });
 
+        $adminInfo['login_id'] = $this->askValidation('ID', $adminInfo['login_id'], function ($loginId) {
+            $validate = \Validator::make(
+                ['login_id' => $loginId],
+                ['login_id' => 'required']
+            );
+            if ($validate->fails()) {
+                throw new \Exception('Invalid ID.');
+            }
+
+            return $loginId;
+        });
+
         // displayName
-        $adminInfo['display_name'] = $this->askValidation('Name', $adminInfo['display_name'], function ($displayName) {
+        $adminInfo['display_name'] = $this->askValidation('Nickname', $adminInfo['display_name'], function ($displayName) {
             if (strlen(trim($displayName)) === 0) {
-                throw new \Exception('Input Name');
+                throw new \Exception('Input Nickname');
             }
 
             return $displayName;
