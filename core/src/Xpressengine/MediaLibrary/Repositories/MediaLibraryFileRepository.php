@@ -201,7 +201,11 @@ class MediaLibraryFileRepository
 
         if (isset($attributes['mime']) === true) {
             $query = $query->whereHas('file', function ($query) use ($attributes) {
-                $query->where('mime', $attributes['mime']);
+                $query->where(function ($query) use ($attributes) {
+                    foreach($attributes['mime'] as $attr) {
+                        $query->orWhere('mime', 'like', $attr);
+                    }
+                });
             });
         }
 
