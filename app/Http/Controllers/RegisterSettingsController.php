@@ -62,9 +62,11 @@ class RegisterSettingsController extends Controller
             $passwordMinLength = 6;
         }
 
+        $dynamicFields = app('xe.dynamicField')->gets('user');
+
         return \XePresenter::make(
             'settings.register',
-            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength')
+            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength', 'dynamicFields')
         );
     }
 

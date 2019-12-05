@@ -19,6 +19,44 @@
 
     <!-- 드래그 리스트 -->
     <ul class="sort-list sort-list--custom-item __user-dfield-items">
+        @foreach ($dynamicFields as $dynamicField)
+            <li>
+                <div class="sort-list__handler">
+                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                    <span class="xu-button__icon">
+                        <i class="xi-drag-vertical"></i>
+                    </span>
+                    </button>
+                </div>
+                <p class="sort-list__text">{{ xe_trans($dynamicField->getConfig()->get('label')) }}</p>
+                <div class="sort-list__button">
+                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                    <span class="xu-button__icon">
+                        <i class="xi-pen"></i>
+                    </span>
+                    </button>
+                </div>
+                <div class="sort-list__button">
+                    <button type="button" class="xu-button xu-button--subtle xu-button--icon">
+                    <span class="xu-button__icon">
+                        <i class="xi-trash"></i>
+                    </span>
+                    </button>
+                </div>
+                <div class="sort-list__checkradio">
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" name="df_use" @if ($dynamicField->getConfig()->get('use') === true) checked @endif>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                </div>
+                <div class="sort-list__checkradio">
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" name="df_required" @if ($dynamicField->getConfig()->get('required') === true) checked @endif>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                </div>
+            </li>
+        @endforeach
     </ul>
 
     <div>
