@@ -23,10 +23,6 @@
                     </div>
 
                     <div class="pull-right text-align--right">
-                        <div class="search-btn-group">
-                            <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" class="xe-btn xe-btn-default" data-toggle="xe-page-modal">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</a>
-                        </div>
-
                         <form method="get" action="{{ route('settings.theme.installed') }}">
                             <div class="input-group search-group">
                                 <input type="hidden" name="status" value="{{\Request::get('status')}}">

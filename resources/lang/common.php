@@ -3386,4 +3386,8 @@ return [
         'ko' => '이미 사용중인 주소 입니다.',
         'en' => 'Menu item url already exists.'
     ],
+    'purchased' => [
+        'ko' => '구매한',
+        'en' => 'Purchased'
+    ]
 ];
