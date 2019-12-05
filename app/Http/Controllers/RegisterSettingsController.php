@@ -13,6 +13,7 @@
  */
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Collection;
 use Xpressengine\Http\Request;
 use Xpressengine\User\UserHandler;
 
@@ -58,7 +59,11 @@ class RegisterSettingsController extends Controller
             $passwordMinLength = 6;
         }
 
-        $dynamicFields = app('xe.dynamicField')->gets('user');
+        $dynamicFieldSortKeys = $config->get('dynamic_fields');
+        $dynamicFields = Collection::make(app('xe.dynamicField')->gets('user'))
+            ->sortBy(function ($field) use ($dynamicFieldSortKeys) {
+                return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
+            });
 
         return \XePresenter::make(
             'settings.register',

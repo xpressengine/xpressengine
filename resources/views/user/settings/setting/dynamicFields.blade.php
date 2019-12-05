@@ -45,7 +45,7 @@
                 </div>
                 <div class="sort-list__checkradio">
                     <label class="xu-label-checkradio">
-                        <input type="checkbox" name="df_use" @if ($dynamicField->getConfig()->get('use') === true) checked @endif>
+                        <input type="checkbox" name="dynamic_fields[{{ $dynamicField->getConfig()->get('id') }}] " @if ($dynamicField->getConfig()->get('use') === true) checked @endif>
                         <span class="xu-label-checkradio__helper"></span>
                     </label>
                 </div>

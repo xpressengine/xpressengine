@@ -34,7 +34,7 @@ use Xpressengine\User\UserRegisterHandler;
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="xu-label-checkradio">
-                                            <input type="checkbox" name="joinable" value="true" @if ($config->get('joinable') == true) checked @endif>
+                                            <input type="checkbox" name="joinable" @if ($config->get('joinable') == true) checked @endif>
                                             <span class="xu-label-checkradio__helper"></span>
                                             <span class="xu-label-checkradio__text">{{xe_trans('xe::permitSignUp')}}</span>
                                         </label>

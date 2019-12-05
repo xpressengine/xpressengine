@@ -376,6 +376,7 @@ class UserMigration extends Migration
         $registerConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
         $registerConfigAttribute['display_name_unique'] = true;
         $registerConfigAttribute['use_display_name'] = true;
+        $registerConfigAttribute['dynamic_fields'] = array_keys(app('xe.dynamicField')->gets('user'));
 
         $displayNameCaption = XeLang::genUserKey();
         foreach (XeLang::getLocales() as $locale) {
