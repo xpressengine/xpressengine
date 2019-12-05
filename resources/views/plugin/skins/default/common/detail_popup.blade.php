@@ -1,4 +1,3 @@
-
 <div class="admin-layer-plugin-popup admin-layer-plugin-popup--plugin" style="display: block">
     <div class="admin-layer-plugin-popup-content">
         <div class="admin-layer-plugin-popup-header">
@@ -8,16 +7,6 @@
                 <h3 class="admin-layer-plugin-popup-plugin__title">{{$storePluginItem->title . ' v' . $storePluginItem->latest_release->version}}</h3>
             </div>
             <p class="admin-layer-plugin-popup-plugin__title-sub-text">{{$storePluginItem->latest_release->description}}</p>
-            <div class="admin-layer-plugin-popup-plugin__button-box">
-                <button type="button" class="xu-button xu-button--default admin-button--complete">{{xe_trans('xe::installed')}}</button>
-                @if ($pluginEntity != null)
-                    @if ($pluginEntity->isActivated() == true)
-                        <a href="{{ route('settings.plugins.manage.deactivate') }}" class="xu-button xu-button--default admin-button--disabled __xe_deactivate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::deactivation') }}</a>
-                    @else
-                        <a href="{{ route('settings.plugins.manage.activate') }}" class="xu-button xu-button--default admin-button--active __xe_activate_plugin" data-plugin-id="{{ $pluginEntity->getId() }}">{{ xe_trans('xe::activation') }}</a>
-                    @endif
-                @endif
-            </div>
         </div>
         <div class="admin-layer-plugin-popup-body">
             <iframe src="{{'https://store.xehub.io/plugins/' . $storePluginItem->plugin_id . '/iframe'}}" id="iframeStore" class="admin-layer-plugin-popup__iframe" width="100%" height="100%"></iframe>
