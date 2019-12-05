@@ -2,9 +2,43 @@
 $(function () {
   var $container = $('.user--signup')
   var $form = $container.find('form')
-  var patternNumber = /[0-9]/
-  var patternUppercase = /[A-Z]/
-  var patternSymbol = /[-_!@#$%^&*()+=|~`{}\[\]:";'<>?,.\/\\]/
+  var langs = {
+    'min': '6글자 이상 입력',
+    'numeric': '비밀번호에 숫자 포함',
+    'alpha': '비밀번호에 문자 포함',
+    'special_char': '비밀번호에 특수문자 포함'
+  }
+  var evaluator = {
+    min: function (val) {
+      return (val.length >= 6) ? 'success' : 'error'
+    },
+    numeric: function (val) {
+      return (val.search(/[0-9]/) !== -1) ? 'success' : 'error'
+    },
+    alpha: function (val) {
+      return (val.search(/[a-z]/i) !== -1) ? 'success' : 'error'
+    },
+    special_char: function (val) {
+      return (val.search(/[-_!@#$%^&*()+=|~`{}\[\]:";'<>?,.\/\\]/) !== -1) ? 'success' : 'error'
+    }
+  }
+  var passwordRules = (function () {
+    var rules = new String(window.XE.options.passwordRules) || 'min:6'
+    rules = rules.split('|')
+
+    XE._.forEach(rules, function (rule, key) {
+      rule = rule.split(':')
+      var type = rule.shift()
+      rules[key] = {
+        type: type,
+        options: rule,
+        message: langs[type]
+      }
+    })
+
+    return rules
+  })()
+  console.debug('passwordRules', passwordRules)
 
   if ($container.length) {
     bindEvent()
@@ -76,30 +110,21 @@ $(function () {
       if ($this.is('[name=password_confirmation]')) {
         XE.Griper.form.fn.message($this, '비밀번호를 한 번 더 입력해주세요', result.confirmation, false)
       } else {
-        XE.Griper.form.fn.message($this, '6글자 이상 입력', result.len, false)
-        XE.Griper.form.fn.message($this, '비밀번호에 숫자 포함', result.number, false)
-        // XE.Griper.form.fn.message($this, '비밀번호에 대문자 포함', result.upper, false)
-        // XE.Griper.form.fn.message($this, '비밀번호에 특수문자 포함', result.symbol, false)
+        XE._.forEach(passwordRules, function (rule) {
+          XE.Griper.form.fn.message($this, rule.message, result[rule.type], false)
+        })
       }
     })
   }
 
   function validatePassword (val) {
     var result = {
-      len: null,
-      number: null,
-      upper: null,
-      symbol: null,
       confirmation: null
     }
 
-    if (val.length !== 0) {
-      result.len = (val.length >= 6) ? 'success' : 'error'
-      result.number = (val.search(patternNumber) !== -1) ? 'success' : 'error'
-      result.upper = (val.search(patternUppercase) !== -1) ? 'success' : 'error'
-      result.symbol = (val.search(patternSymbol) !== -1) ? 'success' : 'error'
-      result.confirmation = ($('[name=password]').val() === $('[name=password_confirmation]').val()) ? 'success' : 'error'
-    }
+    XE._.forEach(passwordRules, function (item) {
+      result[item.type] = (val) ? evaluator[item.type](val) : null
+    })
 
     return result
   }
