@@ -57,7 +57,7 @@
                                     <input type="hidden" name="component" value="{{\Request::get('component')}}">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="selected-type">
-                                            @if (Request::has('component'))
+                                            @if (Request::get('component', null) !== null)
                                                 {{$componentTypes[Request::get('component')]}}
                                             @else
                                                 {{xe_trans('xe::supportingComponents')}}
