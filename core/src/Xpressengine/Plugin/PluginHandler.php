@@ -576,14 +576,6 @@ class PluginHandler
                 continue;
             }
 
-            // 플러그인에 테마가 아닌 컴포넌트가 존재시 스토어에 확인
-            if (count($plugin->getComponentList()) > count($plugin->getComponentList('theme'))) {
-                $storePlugin = $this->provider->find($plugin->getId());
-                if ($storePlugin && $storePlugin->is_theme === false) {
-                    continue;
-                }
-            }
-
             $themes[] = $plugin;
         }
 
@@ -608,8 +600,7 @@ class PluginHandler
         foreach ($allPlugins as $plugin) {
             // 총 컴포넌트 수가 테마의 숫자와 같으면 테마로 분류
             // 나머지 경우 모두 extenstion 으로 노출
-            if (
-                !empty($plugin->getComponentList('theme')) &&
+            if (!empty($plugin->getComponentList('theme')) &&
                 count($plugin->getComponentList()) === count($plugin->getComponentList('theme'))
             ) {
                 continue;
