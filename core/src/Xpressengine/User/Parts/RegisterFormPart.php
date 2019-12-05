@@ -143,14 +143,6 @@ abstract class RegisterFormPart
     }
 
     /**
-     * @return bool
-     */
-    public static function isDetailSetting()
-    {
-        return static::$detailSetting;
-    }
-
-    /**
      * Get data for form part view
      *
      * @return array

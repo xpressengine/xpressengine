@@ -49,8 +49,6 @@ class AgreementPart extends RegisterFormPart
      */
     protected static $implicit = true;
 
-    protected static $detailSetting = true;
-
     /**
      * AgreementPart constructor.
      *

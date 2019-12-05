@@ -47,10 +47,6 @@ class RegisterSettingsController extends Controller
 
         $parts = $activateParts->union($deactivateParts);
 
-        $parts = $parts->filter(function ($part, $key) {
-            return $part::isDetailSetting() === false;
-        });
-
         $passwordRules = explode('|', $config->get('password_rules'));
         $passwordMinLength = array_filter($passwordRules, function ($rule) {
             return strpos($rule, 'min:') !== false;

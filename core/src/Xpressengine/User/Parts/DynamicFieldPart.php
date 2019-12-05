@@ -26,8 +26,6 @@ use Xpressengine\DynamicField\AbstractType;
  * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
- *
- * @deprecated since 3.0.8
  */
 class DynamicFieldPart extends RegisterFormPart
 {
@@ -43,8 +41,6 @@ class DynamicFieldPart extends RegisterFormPart
      * @var bool
      */
     protected static $implicit = true;
-
-    protected static $detailSetting = true;
 
     /**
      * The view for the form part
