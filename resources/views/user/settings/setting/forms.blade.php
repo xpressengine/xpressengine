@@ -13,7 +13,8 @@
             <div class="sort-list__checkradio">
                 @if($part::isImplicit())
                     <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                        <input type="checkbox" name="forms[{{ $key }}]" checked="checked" disabled />
+                        <input type="hidden" value="on" name="forms[{{ $key }}]">
+                        <input type="checkbox" checked="checked" disabled />
                         <span class="xu-label-checkradio__helper"></span>
                     </label>
                 @else
