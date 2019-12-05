@@ -11,14 +11,17 @@
             </div>
             <p class="sort-list__text">{{ xe_trans($part::NAME) }} <small>{{ xe_trans($part::DESCRIPTION) }}</small></p>
             <div class="sort-list__checkradio">
-                <label class="xu-label-checkradio">
-                    @if($part::isImplicit())
+                @if($part::isImplicit())
+                    <label class="xu-label-checkradio xu-label-checkradio--disabled">
                         <input type="checkbox" name="forms[{{ $key }}]" checked="checked" disabled />
-                    @else
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @else
+                    <label class="xu-label-checkradio">
                         <input type="checkbox" name="forms[{{ $key }}]" value="on" @if(in_array($key, $activated)) checked="checked" @endif />
-                    @endif
-                    <span class="xu-label-checkradio__helper"></span>
-                </label>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @endif
             </div>
         </li>
     @endforeach
