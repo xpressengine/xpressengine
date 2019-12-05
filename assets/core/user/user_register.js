@@ -3,14 +3,22 @@ $(function () {
   var $container = $('.user--signup')
   var $form = $container.find('form')
   var langs = {
-    'min': '6글자 이상 입력',
-    'numeric': '비밀번호에 숫자 포함',
-    'alpha': '비밀번호에 문자 포함',
-    'special_char': '비밀번호에 특수문자 포함'
+    'min': XE._.template('<%= options[0] %>글자 이상 입력'),
+    'numeric': function () {
+      return '비밀번호에 숫자 포함'
+    },
+    'alpha': function () {
+      return '비밀번호에 문자 포함'
+    },
+    'special_char': function () {
+      return '비밀번호에 특수문자 포함'
+    }
   }
   var evaluator = {
     min: function (val) {
-      return (val.length >= 6) ? 'success' : 'error'
+      var item = XE._.find(passwordRules, function (o) { return o.type === 'min' })
+      var min = Number(item.options[0])
+      return (val.length >= min) ? 'success' : 'error'
     },
     numeric: function (val) {
       return (val.search(/[0-9]/) !== -1) ? 'success' : 'error'
@@ -23,7 +31,7 @@ $(function () {
     }
   }
   var passwordRules = (function () {
-    var rules = new String(window.XE.options.passwordRules) || 'min:6'
+    var rules = String(window.XE.options.passwordRules) || 'min:6'
     rules = rules.split('|')
 
     XE._.forEach(rules, function (rule, key) {
@@ -32,13 +40,12 @@ $(function () {
       rules[key] = {
         type: type,
         options: rule,
-        message: langs[type]
+        message: langs[type]({ options: rule })
       }
     })
 
     return rules
   })()
-  console.debug('passwordRules', passwordRules)
 
   if ($container.length) {
     bindEvent()
