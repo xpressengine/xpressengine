@@ -3389,5 +3389,13 @@ return [
     'purchased' => [
         'ko' => '구매한',
         'en' => 'Purchased'
+    ],
+    'active' => [
+        'ko' => '활성',
+        'en' => 'Active'
+    ],
+    'deactive' => [
+        'ko' => '비활성',
+        'en' => 'Deactive'
     ]
 ];

@@ -1367,6 +1367,58 @@ aside {
   }
 }
 
+.admin-tab-info {
+  .admin-tab-info-list {
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 0 23px;
+    padding: 0;
+    border-bottom: 1px solid #D6D9DF;
+    list-style: none;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    > li {
+      display: inline-block;
+      margin: 0;
+      list-style: none;
+      .admin-tab-info-list__link {
+        position: relative;
+        display: inline-block;
+        padding: 12px 24px;
+        border: 0 none;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        background-color: transparent;
+        color: #42526E;
+        &:hover,
+        &:focus {
+          color: #345BD9;
+        }
+        .admin-tab-info-list__count {
+          color: #345BD9;
+        }
+      }
+      &.on {
+        .admin-tab-info-list__link {
+          color: #345BD9;
+          &::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #345BD9;
+          }
+        }
+      }
+    }
+  }
+}
+
 .admin-nav {
   margin: 0 -15px;
   padding: 12px 20px;
@@ -1461,7 +1513,7 @@ aside {
     }
   }
 
-  
+
 }
 
 .xe-lypop-plugin {
@@ -1962,7 +2014,7 @@ aside {
     border-radius: 6px;
     box-sizing: border-box;
     background-color: #fff;
-    
+
 
     &:first-child {
       margin-top: 0;
@@ -2145,7 +2197,7 @@ aside {
 
   .list-card__link {
     width: 100%;
-    
+
     &:hover {
       text-decoration: none;
     }
@@ -2182,7 +2234,7 @@ aside {
   .list-card__link {
     display: block;
     width: 100%;
-    
+
     &:hover {
       text-decoration: none;
     }
@@ -2243,7 +2295,7 @@ aside {
       .admin-layer-plugin-popup-plugin__title-sub-text {
         overflow: hidden;
         height: 72px;
-        display:-webkit-box; 
+        display:-webkit-box;
         -webkit-line-clamp:3;
         -webkit-box-orient:vertical;
       }
@@ -2252,7 +2304,7 @@ aside {
     .admin-layer-plugin-popup-body {
       height: calc(100% - 308px);
     }
-  } 
+  }
 }
 
 .admin-layer-plugin-popup--plugin {
@@ -2810,7 +2862,7 @@ aside {
       .admin-layer-plugin-popup-body {
         height: calc(100% - 236px);
       }
-    } 
+    }
   }
 
   .admin-layer-plugin-popup--plugin {
