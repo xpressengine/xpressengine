@@ -58,12 +58,12 @@
                         </div>
                         <div class="search-input-group">
                             <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}"
-                               @if (Request::has('query'))
-                                    value="{{Request::get('query')}}" name="query"
-                               @elseif (Request::has('authors'))
+                               @if (Request::has('authors'))
                                    value="{{Request::get('authors')}}" name="authors"
                                @elseif (Request::has('tags'))
                                    value="{{Request::get('tags')}}" name="tags"
+                               @else (Request::has('query'))
+                                   value="{{Request::get('query')}}" name="query"
                                @endif>
                             <button class="btn-link">
                                 <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
