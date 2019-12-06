@@ -300,7 +300,6 @@ class MediaLibrary extends App {
           })
         },
         fail: function (e, data) {
-          console.debug('fail', data)
         }
       }
 
@@ -315,7 +314,6 @@ class MediaLibrary extends App {
   }
 
   setupDropzone ($el, options) {
-    console.debug('setupDropzone')
     var that = this
     var $dropZone = $('.media-library')
     $(function () {
@@ -344,7 +342,6 @@ class MediaLibrary extends App {
           }
         },
         add: function (e, data) {
-          console.debug('dropzone', data)
           data.submit()
         },
         done: function (e, data) {
