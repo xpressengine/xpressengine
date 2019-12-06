@@ -2045,8 +2045,8 @@ return [
         'en' => 'Composer home directory',
     ],
     'descComposerHomeDir' => [
-        'ko' => '플러그인을 설치할 때 컴포저를 사용합니다. 서버에 설치한 컴포저의 홈디렉토리를 지정하셔야 정상적으로 설치됩니다.',
-        'en' => 'Use the composer when installing the plugin. You need to specify the home directory of the Composer installed on the server.',
+        'ko' => '플러그인을 설치할 때 컴포저를 사용합니다. 컴포저 캐시를 생성하기 위한 디렉토리를 지정하세요.',
+        'en' => 'Use the composer when installing the plugin. Specify a directory to create the composer cache.',
     ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
