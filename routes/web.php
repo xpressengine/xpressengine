@@ -959,28 +959,36 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.update_folder',
             'uses' => 'MediaLibrary\MediaLibraryController@updateFolder'
         ]);
-        Route::put('/{folder_id}/move', [
+        Route::post('/{folder_id}/move', [
             'as' => 'media_library.move_folder',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFolder'
         ]);
     });
 
     Route::group(['prefix' => 'file'], function () {
-        Route::get('/{file_id}', [
+        Route::get('/{mediaLibraryFileId}', [
             'as' => 'media_library.get_file',
             'uses' => 'MediaLibrary\MediaLibraryController@getFile'
         ]);
-        Route::put('/{file_id}/update', [
+        Route::put('/{mediaLibraryFileId}', [
             'as' => 'media_library.update_file',
             'uses' => 'MediaLibrary\MediaLibraryController@updateFile'
+        ]);
+        Route::post('/{mediaLibraryFileId}/modify', [
+            'as' => 'media_library.modify_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@modifyFile'
         ]);
         Route::post('/', [
             'as' => 'media_library.upload',
             'uses' => 'MediaLibrary\MediaLibraryController@upload'
         ]);
-        Route::put('/move', [
+        Route::post('/move', [
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
+        ]);
+        Route::get('/{mediaLibraryFileId}/download', [
+            'as' => 'media_library.download_file',
+            'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);
     });
 });

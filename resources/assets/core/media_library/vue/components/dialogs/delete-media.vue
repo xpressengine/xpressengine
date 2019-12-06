@@ -36,6 +36,7 @@ export default {
       this.$root.dialog = null;
     },
     deleteItems() {
+      this.$root.remove()
     }
   }
 };

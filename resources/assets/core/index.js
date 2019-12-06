@@ -5,7 +5,6 @@ import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
 import lodash from 'lodash'
-import qs from 'qs'
 
 // internal libraries
 import * as $$ from 'xe/utils'
@@ -344,8 +343,8 @@ class XE {
     if (config.ruleSet) {
       this.config.dispatch('validator/setRuleSet', config.ruleSet)
     }
-    if (config.loginUserId) {
-      this.config.dispatch('user/login', { id: config.loginUserId })
+    if (config.user) {
+      this.config.dispatch('user/login', config.user)
     }
   }
 

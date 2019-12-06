@@ -413,6 +413,7 @@ abstract class AbstractEditor implements ComponentInterface
                 'download_url' => $this->urls->route('editor.file.download', $routeParam),
                 'destroy_url' => $this->urls->route('editor.file.destroy', $routeParam),
             ],
+            'instanceId' => $this->instanceId,
             'suggestion' => [
                 'hashtag_api' => $this->urls->route('editor.hashTag'),
                 'mention_api' => $this->urls->route('editor.mention'),

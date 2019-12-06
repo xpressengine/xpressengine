@@ -1,14 +1,22 @@
 <template>
-  <li v-if="media.file" @dblclick="$root.showDetailMedia(media.id)" @click="selectMedia">
+  <li v-if="media.file" @dblclick="showMedia(media.id)" @click="selectMedia">
     <div class="media-library__input-group media-library-content-list__checkbox">
       <label class="media-library__label">
         <input type="checkbox" class="media-library__input-checkbox" />
         <span class="media-library__input-helper"></span>
       </label>
     </div>
+
     <div class="media-library-content-list__icon">
-      <div class="media-library-content-list__icon-thumb media-library-content-list__icon-preview" :style="{ 'background-image': 'url(' + thumbnailUrl + ')' }"></div>
+      <div
+        :class="{
+          'media-library-content-list__icon-thumb': true,
+          'media-library-content-list__icon-preview': preview,
+          'media-library-content-list__icon-etc': !preview
+        }"
+        :style="{ 'background-image': thumbnailBackground }">{{ (!preview) ? ext : '' }}</div>
     </div>
+
     <div class="media-library-content-list__content-box">
       <div class="media-library-content-list__title">
         <button type="button" class="media-library-content-list__text">
@@ -44,6 +52,9 @@
 <script>
 import filesize from 'filesize'
 import moment from 'moment'
+import EventBus from './eventBus'
+
+import ModalSlotsDetailBody from './modal/slots/detail-body.vue'
 
 export default {
   props: ['media'],
@@ -63,21 +74,35 @@ export default {
         }
       }
     },
-    showMedia (media, event) {
-      event.preventDefault()
-      if (typeof media.id !== 'undefined') {
-        // this.$router.push({ path: `media_manager/show/${media.id}` })
-        $('#media-library-modal').modal('show')
-        $('#media-library-modal').one('hide.bs.modal', () => {
-          // console.debug('back')
-          // this.$router.go(-1)
+    showMedia (mediaId, event) {
+      if (typeof mediaId !== 'undefined') {
+        EventBus.$emit('modal.open', mediaId, {
+          headerTitle: '파일 상세정보',
+          body: ModalSlotsDetailBody
         })
       }
     }
   },
   computed: {
+    ext ({ $props }) {
+      return $props.media.ext
+    },
+    preview () {
+      return !!this.thumbnailUrl
+    },
     thumbnailUrl({ $props }) {
+      if (typeof $props.media.file.url === 'undefined') {
+        return false
+      }
+
       return $props.media.file.url
+    },
+    thumbnailBackground({ $props }) {
+      if (!!this.thumbnailUrl) {
+        return `url('${$props.media.file.url}')`
+      }
+
+      return false
     },
     userName({ $props }) {
       return $props.media.user.display_name
@@ -86,7 +111,7 @@ export default {
       return filesize($props.media.file.size)
     },
     date ({ $props }) {
-      return moment($props.created_at).format('L')
+      return moment($props.media.updated_at).format('L')
     }
   }
 }

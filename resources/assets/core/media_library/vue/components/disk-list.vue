@@ -8,18 +8,21 @@
       -->
       <div class="media-library-aside__content">
         <button type="button" class="media-library-aside__mobile-button">
-          Main Assets
           <span class="media-library-aside__mobile-button-icon">
             <i class="xi-angle-down-min"></i>
           </span>
         </button>
         <ul class="media-library-aside__list">
           <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
-          <li class="on">
-            <button type="button" class="media-library-aside__button">Main Assets</button>
+          <li :class="{ on: $props.listMode === 1 }">
+            <button type="button" @click="viewDisk('media', 'Main Assets')" class="media-library-aside__button">Main Assets</button>
           </li>
-          <li>
-            <button type="button" class="media-library-aside__button">Common</button>
+        </ul>
+        <hr>
+        <ul class="media-library-aside__list">
+          <!-- [D] 선택 되어져 있는 저장소 li 태그에 class="on" 추가 -->
+          <li :class="{ on: $props.listMode === 2 }">
+            <button type="button" @click="viewMyFiles('내 최근 파일')" class="media-library-aside__button">내 최근 파일</button>
           </li>
         </ul>
       </div>
@@ -28,5 +31,22 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ['listMode'],
+  data: () => {
+    return {
+    }
+  },
+  methods: {
+    viewMyFiles (subject) {
+      this.$root.viewMyFiles(subject)
+    },
+
+    viewDisk (disk, subject) {
+      this.$root.viewDisk(disk, subject)
+    }
+  },
+  created: function () {
+  }
+}
 </script>

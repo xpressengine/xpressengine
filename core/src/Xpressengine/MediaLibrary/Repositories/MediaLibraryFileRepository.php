@@ -15,7 +15,7 @@
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
-use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
+use Xpressengine\MediaLibrary\MediaLibraryHandler;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
@@ -38,6 +38,8 @@ class MediaLibraryFileRepository
     const ORDER_TYPE_UPDATED_DESC = 1;
     const ORDER_TYPE_CREATED_DESC = 2;
     const ORDER_TYPE_TITLE_ASC = 3;
+    const ORDER_TYPE_FILE_SIZE_DESC = 4;
+    const ORDER_TYPE_USER_NAME_ASC = 5;
 
     /**
      * @param array $attributes items attribute
@@ -159,26 +161,33 @@ class MediaLibraryFileRepository
      */
     protected function makeWhere($query, $attributes)
     {
-        if (isset($attributes['folder_id']) == true) {
+        if (isset($attributes['index_mode']) === false ||
+            $attributes['index_mode'] === MediaLibraryHandler::MODE_USER
+        ) {
+            $userId = auth()->user()->getId();
+            $query = $query->where('user_id', $userId);
+        }
+
+        if (isset($attributes['folder_id']) === true) {
             $query = $query->where('folder_id', $attributes['folder_id']);
         }
 
-        if (isset($attributes['startDate']) == true) {
+        if (isset($attributes['startDate']) === true) {
             $startDate = date('Y-m-d', strtotime($attributes['startDate']));
 
             $query = $query->where('updated_at', '>=', $startDate);
         }
 
-        if (isset($attributes['endDate']) == true) {
+        if (isset($attributes['endDate']) === true) {
             $endDate = date('Y-m-d', strtotime($attributes['endDate']));
 
             $query = $query->where('updated_at', '<=', $endDate);
         }
 
-        if (isset($attributes['keyword']) == true) {
+        if (isset($attributes['keyword']) === true) {
             $keyword = $attributes['keyword'];
 
-            if (isset($attributes['target']) == false) {
+            if (isset($attributes['target']) === false) {
                 $query = $query->where(function ($query) use ($keyword) {
                     $query->where('title', 'like', '%' . $keyword . '%')
                         ->orWhere('caption', 'like', '%' . $keyword . '%')
@@ -190,9 +199,13 @@ class MediaLibraryFileRepository
             }
         }
 
-        if (isset($attributes['mime']) == true) {
+        if (isset($attributes['mime']) === true) {
             $query = $query->whereHas('file', function ($query) use ($attributes) {
-                $query->where('mime', $attributes['mime']);
+                $query->where(function ($query) use ($attributes) {
+                    foreach($attributes['mime'] as $attr) {
+                        $query->orWhere('mime', 'like', $attr);
+                    }
+                });
             });
         }
 
@@ -223,6 +236,16 @@ class MediaLibraryFileRepository
 
             case self::ORDER_TYPE_TITLE_ASC:
                 $query = $query->orderBy('title', 'asc');
+                break;
+
+            case self::ORDER_TYPE_FILE_SIZE_DESC:
+                $query = $query->with('file')->join('files', 'files.id', '=', 'media_library_files.file_id')
+                    ->orderBy('files.size', 'desc');
+                break;
+
+            case self::ORDER_TYPE_USER_NAME_ASC:
+                $query = $query->with('user')->join('user', 'user.id', '=', 'media_library_files.user_id')
+                    ->orderBy('display_name', 'asc');
                 break;
         }
 
@@ -268,7 +291,8 @@ class MediaLibraryFileRepository
                 $fileItem->file->setAttribute('height', $media['meta']['height']);
             }
 
-            $fileItem->file->addVisible(['path', 'filename', 'url', 'width', 'height']);
+            $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
+            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'width', 'height']);
         }
     }
 

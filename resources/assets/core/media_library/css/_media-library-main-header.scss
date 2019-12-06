@@ -4,7 +4,6 @@
   top: 0;
   left: 0;
   width: 100%;
-  
 
   &.sticky {
     position: fixed;
@@ -50,8 +49,8 @@
       opacity: 0.9;
     }
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       top: 50%;
@@ -59,13 +58,13 @@
       background-color: $n0;
     }
 
-    &:before {
+    &::before {
       width: 1px;
       height: 16px;
       margin: -7px 0 0 1px;
     }
 
-    &:after {
+    &::after {
       width: 16px;
       height: 1px;
       margin: 0 0 0 -7px;
@@ -274,13 +273,13 @@
         letter-spacing: -0.01px;
         background-color: $n0;
         text-align: left;
-  
+
         &:focus {
           box-shadow: none;
           background-color: $b100;
         }
       }
-      
+
       .media-library__icon {
         display: inline-block;
         width: 20px;
@@ -291,13 +290,17 @@
         background-size: 20px 20px;
         vertical-align: -4px;
       }
-  
+
       .media-library__icon-folder {
-        background-image: url(../img/icon-check.svg);
+        i {
+          display: inline;
+        }
       }
-  
+
       .media-library__icon-upload {
-        background-image: url(../img/icon-check.svg);
+        i {
+          display: inline;
+        }
       }
     }
 
@@ -346,7 +349,7 @@
         .media-library__button-text-remove {
           top: 6px;
           right: 0;
-    
+
           .media-library__button-text-remove-image {
             background-image: url(../img/icon-input-close-white.svg);
           }
@@ -366,11 +369,18 @@
         &::placeholder {
           color: $n0;
           opacity: 1;
-        }        
+        }
       }
 
       .media-library__button-icon--search {
-        display: none;
+        height: 48px;
+        color: #fff;
+        background-color: transparent;
+
+        &:hover,
+        &:focus {
+          background-color: transparent;
+        }
       }
 
       .media-library__button-search-cancel {
@@ -398,10 +408,13 @@
       display: none;
       width: 36px;
       height: 36px;
+      color: #505f79;
+      background-color: transparent;
 
       &.button-selected {
         display: block;
         border-radius: 0;
+        color: #505f79;
         background-color: transparent;
 
         .media-library__svg {
@@ -420,12 +433,7 @@
   }
 
   .media-library__button-icon {
-    height: 36px;
-    padding: 8px;
-    line-height: 36px;
-
     &.media-library__button-icon--search {
-      padding: 9px;
       background-color: transparent;
 
       &:hover {
@@ -508,7 +516,7 @@
 
   .media-library-header__button-box--state-item-check {
     display: block;
-    
+
     .media-library__icon {
       display: none;
     }
