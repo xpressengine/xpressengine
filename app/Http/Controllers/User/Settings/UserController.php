@@ -51,7 +51,7 @@ class UserController extends Controller
     /**
      * UserController constructor.
      *
-     * @param UserHandler $handler
+     * @param UserHandler $handler user handler
      */
     public function __construct(UserHandler $handler)
     {
@@ -161,11 +161,7 @@ class UserController extends Controller
 
         $groupList = $this->handler->groups()->all();
         $groups = $this->getGroupInfo($groupList);
-
-        $status = [
-            ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
-        ];
+        $status = $this->getUserStatus();
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');
@@ -183,12 +179,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate($request, [
+        $rules = [
             'email' => 'email|required',
-            'display_name' => 'required',
+            'login_id' => 'required|login_id',
             'password' => 'required|password',
-        ]);
+        ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         $userData = $request->except('_token');
         $userData['emailConfirmed'] = 1;
@@ -247,11 +248,7 @@ class UserController extends Controller
             $groups[$group->id]['checked'] = 'checked';
         }
 
-        $status = [
-            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
-        ];
-
+        $status = $this->getUserStatus();
         $status[$user->status]['selected'] = 'selected';
 
         // profileImage config
@@ -278,7 +275,7 @@ class UserController extends Controller
      * Update user.
      *
      * @param Request $request request
-     * @param string  $id
+     * @param string  $id      user id
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -293,13 +290,18 @@ class UserController extends Controller
             throw $e;
         }
 
-        // default validation
-        $this->validate($request, [
+        $rules = [
             'email' => 'email',
-            'display_name' => 'required',
+            'login_id' => 'required|login_id',
             'rating' => 'required',
             'status' => 'required',
-        ]);
+        ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         if ($user->isAdmin() &&
             ($request->get('status') === User::STATUS_DENIED || $request->get('rating') !== Rating::SUPER)
@@ -333,6 +335,27 @@ class UserController extends Controller
         XeDB::commit();
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    /**
+     * get user status list
+     *
+     * @return array
+     */
+    protected function getUserStatus()
+    {
+        return [
+            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            User::STATUS_PENDING_ADMIN => [
+                'value' => User::STATUS_PENDING_ADMIN,
+                'text' => xe_trans('xe::pending_admin')
+            ],
+            User::STATUS_PENDING_EMAIL => [
+                'value' => User::STATUS_PENDING_EMAIL,
+                'text' => xe_trans('xe::pending_email')
+            ]
+        ];
     }
 
     /**

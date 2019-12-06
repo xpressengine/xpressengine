@@ -53,10 +53,12 @@ class SettingController extends Controller
      * @param UserHandler    $handler UserHandler instance
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
+     *
+     * @deprecated since 3.0.8 instead use RegisterSettingsController@editSetting
      */
     public function editSetting(CaptchaManager $captcha, UserHandler $handler)
     {
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
 
         $parts = $handler->getRegisterParts();
         $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
@@ -79,18 +81,23 @@ class SettingController extends Controller
      * @param CaptchaManager $captcha CaptchaManager instance
      *
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated since 3.0.8 instead use RegisterSettingsController@updateSetting
      */
     public function updateSetting(Request $request, CaptchaManager $captcha)
     {
         $inputs = $request->except('_token');
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
 
         if (isset($inputs['useCaptcha']) && $inputs['useCaptcha'] === 'true' && !$captcha->available()) {
             throw new ConfigurationNotExistsException();
         }
 
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
-        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+
+        if (isset($inputs['guard_forced'])) {
+            $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+        }
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);
@@ -153,7 +160,7 @@ class SettingController extends Controller
      */
     public function editJoin(CaptchaManager $captcha, UserHandler $handler)
     {
-        $config = app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.register');
 
         $parts = $handler->getRegisterParts();
         $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
@@ -183,7 +190,7 @@ class SettingController extends Controller
 
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
 
-        $config = app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.register');
 
         $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
 

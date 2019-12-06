@@ -1,5 +1,5 @@
 <div class="xe-form-group xe-dynamicField">
-    <label class="__xe_df __xe_df_address __xe_df_address_{{$config->get('id')}}">{{xe_trans($config->get('label'))}}</label>
+    <label class="xu-form-group__label __xe_df __xe_df_address __xe_df_address_{{$config->get('id')}}">{{xe_trans($config->get('label'))}}</label>
     @if ($config->get('skinDescription') !== '')<small>{{$config->get('skinDescription')}}</small>@endif
     <div class="xe-form-inline">
         <input type="text" name="{{$key['postcode']}}" placeholder="{{xe_trans('xe::postCode')}}" readonly="readonly" class="xe-form-control" value="{{$data['postcode']}}" data-valid-name="{{ xe_trans('xe::postCode') }}">

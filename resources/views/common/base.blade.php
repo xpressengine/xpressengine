@@ -42,7 +42,8 @@
                 @endif
                 routes: {!! XeFrontend::output('route') !!},
                 ruleSet: {!! XeFrontend::output('rule') !!},
-                translation: {!! XeFrontend::output('translation') !!}
+                translation: {!! XeFrontend::output('translation') !!},
+                passwordRules: '{!! app('xe.config')->getVal('user.register.password_rules') !!}'
             });
         }
     </script>

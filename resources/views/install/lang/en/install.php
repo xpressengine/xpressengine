@@ -36,6 +36,7 @@ return [
     'inputDBPassword' => 'Input database password.',
     'inputDBPrefix' => 'Input database table prefix.',
     'inputAdminEmail' => 'Input email address.',
+    'inputAdminID' => 'Input ID.',
     'inputAdminName' => 'Input the name for display.',
     'inputAdminPassword' => 'Input password.',
     'reInputAdminPassword' => 'Input password again.',

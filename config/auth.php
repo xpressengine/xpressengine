@@ -116,7 +116,7 @@ return [
 
     'register' => [
         'table'  => 'user_register_token',
-        'expire' => 60,
+        'expire' => 10080,
     ],
 
     'admin' => [

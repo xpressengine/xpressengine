@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>다국어 설정</h2>
+                        <small>다국어를 설정할 수 있는 페이지입니다.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-group">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <h3 class="panel-title">다국어 입력</h3>
+                                    </div>
+                                </div>
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <div class="btn-group btn-fillter" role="group">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                            <li class="active"><a href="#">전체</a></li>
+                                            <li><a href="#">board</a></li>
+                                            <li><a href="#">comment_service</a></li>
+                                            <li><a href="#">user</a></li>
+                                            <li><a href="#">xe</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <div class="input-group search-group">
+                                            <form>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">이름 <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                    <li class="active"><a href="#">이름</a></li>
+                                                    <li><a href="#">이메일</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="search-input-group">
+                                                    <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="검색어를 입력하세요.">
+                                                    <button class="btn-link">
+                                                        <i class="xi-search"></i><span class="sr-only">검색</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                        <div class="input-group clearfix">
+                                            <button type="button" class="btn btn-primary pull-right"><i class="xi-download"></i>저장</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="item-title">board : addon</label>
+                                        <div class="input-group">
+                                            <input type="text" id="item-title" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                                            <span class="input-group-addon" id="basic-addon2"><span class="flag-code"><i class="south korea xe-flag"></i>kr</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="pull-left">
+                                        <nav>
+                                            <ul class="pagination">
+                                            <li>
+                                                <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">«</span>
+                                                </a>
+                                            </li>
+                                            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li>
+                                                <a href="#" aria-label="Next">
+                                                <span aria-hidden="true">»</span>
+                                                </a>
+                                            </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <!-- [D] 페이지 별로 전체 저장이 가능 할 경우 아래 버튼으로 대체함
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-default btn-lg">취소</button>
+                                        <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+});
+</script>
+</body>
+</html>

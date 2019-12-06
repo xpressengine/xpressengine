@@ -129,7 +129,7 @@ hr {
 }
 
 .user {
-  max-width: 330px;
+  max-width: 343px;
   margin: 0 auto;
   padding: 32px 5px 24px;
   color: #2c2e37;
@@ -421,4 +421,288 @@ hr {
 .info em.info-title {
   display: inline-block;
   margin-bottom: 8px;
+}
+
+// 회원가입 개편 스타일 적용 (2019/09/10)
+.user {
+  // 회원가입 노출 사이즈
+  &.user--signup {
+    max-width: 460px;
+  }
+
+  // 가입 완료 (가입완료, 인증메일발송, 인증완료)
+  &.user--signup-complete {
+    .button-box {
+      text-align: center;
+    }
+
+    .user__text {
+      margin-bottom: 40px;
+    }
+
+    .user__text-resend {
+      margin: 0 0 16px;
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 600;
+      text-align: center;
+      color: #6b778c;
+    }
+  }
+
+  // 버튼 링크로 적용 시 color 값 변경되지 않도록 기본값 적용
+  a.xu-button--default {
+    color: #505f79;
+  }
+
+  a.xu-button--primary {
+    color: #fff;
+  }
+
+  a.xu-button--link {
+    color: #345bd9;
+  }
+
+  a.xu-button--subtle {
+    color: #344563;
+  }
+
+  a.xu-button--subtle-link {
+    color: #6b778c;
+  }
+
+  a.xu-button--warning {
+    color: #fff;
+  }
+
+  a.xu-button--danger {
+    color: #fff;
+  }
+
+  .user__title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+    letter-spacing: -0.24px;
+    text-align: center;
+    color: #172b4d;
+  }
+
+  .user__text {
+    max-width: 335px;
+    margin: 16px auto 0;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: #6b778c;
+  }
+
+  .auth-user__text {
+    margin: 32px 0 0;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 600;
+    text-align: center;
+    color: #6b778c;
+  }
+
+  .auth-user__text a {
+    margin-left: 4px;
+    font-weight: 600;
+    color: #345bd9;
+  }
+
+  // 버튼 스타일 다른것 대응
+  .user__button-default,
+  a.user__button-default {
+    background-color: #a5adba;
+    color: #fff;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: #a5adba;
+      color: #fff;
+    }
+  }
+
+  // 로그인 스타일
+  .user-login {
+    margin-top: 24px;
+
+    .xu-form-group__input-box {
+      width: 100%;
+    }
+
+    .xu-label-checkradio {
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    .xu-form-group {
+      margin-bottom: 0;
+
+      + .xu-form-group {
+        margin-top: 4px;
+      }
+    }
+
+    // 텍스트 우측 (비밀번호 찾기)
+    .user-login-link {
+      font-weight: 600;
+      color: #345bd9;
+    }
+
+    .user-login-link--right {
+      float: right;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .user-login__button {
+      clear: both;
+      margin-top: 16px;
+    }
+  }
+
+  // 회원가입 스타일
+  .user-signup {
+    margin-top: 32px;
+
+    .xu-form-group__input-box {
+      width: 100%;
+    }
+
+    .user-signup__button-signup {
+      margin-top: 40px;
+    }
+
+    .terms-box {
+      margin-top: 32px;
+    }
+  }
+
+  // 로그인 하단 약관 리스트
+  .terms-list {
+    margin: 17px 0 0;
+    padding-left: 30px;
+    list-style: none;
+
+    > li {
+      margin: 7px 0 0;
+      padding: 0;
+      line-height: 20px;
+      list-style: none;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+
+      .xu-label-checkradio {
+        margin: 0;
+      }
+    }
+
+    .terms-list__term-button {
+      float: right;
+      margin-right: 30px;
+      padding: 0;
+      border: 0 none;
+      font-size: 14px;
+      line-height: 20px;
+      text-decoration: underline;
+      cursor: pointer;
+      background-color: transparent;
+      color: #345bd9;
+    }
+  }
+
+  // 약관동의 스타일
+  .user-terms {
+    margin-top: 33px;
+
+    .xu-form-group__textarea-box {
+      width: 100%;
+    }
+
+    .xu-form-group__textarea {
+      height: 110px;
+    }
+
+    .button-box {
+      margin-top: 32px;
+    }
+
+    .user-terms__button-cancel {
+      background-color: #a5adba;
+      color: #fff;
+    }
+  }
+
+  .terms-box {
+    margin-top: 23px;
+    margin-bottom: 24px;
+
+    .xu-label-checkradio {
+      margin-bottom: 6px;
+    }
+
+    .terms-content {
+      overflow-y: auto;
+      width: 100%;
+      height: 110px;
+      padding: 5px 8px;
+      border: 1px solid #d4d5dc;
+      border-radius: 3px;
+      font-size: 14px;
+      line-height: 20px;
+      background-color: #fafbfc;
+      color: #a5adba;
+
+      p {
+        margin: 0 0 24px;
+      }
+    }
+  }
+
+  // 하단 버튼 2개 이상일 때 감싸는 영역
+  .button-box {
+    &.button-box--type2 {
+      margin-left: -3px;
+      margin-right: -3px;
+
+      a, button {
+        float: left;
+        width: calc(50% - 6px);
+        margin: 0 3px;
+      }
+    }
+
+    &.button-box--type3 {
+      margin-left: -3px;
+      margin-right: -3px;
+
+      a, button {
+        float: left;
+        width: calc(33.3333% - 6px);
+        margin: 0 3px;
+      }
+    }
+
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  }
 }

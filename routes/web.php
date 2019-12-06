@@ -72,10 +72,17 @@ Route::group(
 
         // register
         Route::get('register', ['as' => 'auth.register', 'uses' => 'Auth\RegisterController@getRegister']); // for select method to confirm user
+        Route::post('term_agree', ['as' => 'auth.register.term_agree', 'uses' => 'Auth\RegisterController@postTermAgree']);
+
+        //deprecated 회원 가입 전 이메일 인증 기능 삭제됨
         Route::post('register/confirm', ['as' => 'auth.register.confirm', 'uses' => 'Auth\RegisterController@postRegisterConfirm']); // 인증 이메일 입력, 인증 코드 입력
 
         // Route::get('register/create', ['as' => 'auth.register.create', 'uses' => 'Auth\RegisterController@getRegisterForm']); // for create form
         Route::post('register', ['as' => 'auth.register.store', 'uses' => 'Auth\RegisterController@postRegister']); // for store
+
+        //pending_email approve
+        Route::post('send_approve_email', ['as' => 'auth.send_approve_email', 'uses' => 'Auth\RegisterController@getSendApproveEmail']);
+        Route::get('approve_email', ['as' => 'auth.approve_email', 'uses' => 'Auth\RegisterController@postApproveEmail']);
 
         Route::get('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@getRegisterAddInfo']);
         Route::post('register/add', ['as' => 'auth.register.add', 'uses' => 'Auth\RegisterController@postRegisterAddInfo']);
@@ -103,6 +110,10 @@ Route::group(
         // admin auth
         Route::get('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@getAdminAuth']);
         Route::post('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@postAdminAuth']);
+
+        // pending user
+        Route::get('/pending_admin', ['as' => 'auth.pending_admin', 'uses' => 'Auth\AuthController@pendingAdmin']);
+        Route::get('/pending_email', ['as' => 'auth.pending_email', 'uses' => 'Auth\AuthController@pendingEmail']);
     }
 );
 
@@ -343,18 +354,7 @@ Route::settings(
         Route::group(
             ['prefix' => 'setting'],
             function () {
-                Route::get('/', [
-                    'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@editSetting',
-                    'settings_menu' => 'user.setting.default',
-                ]);
-                Route::post('/', [
-                    'as' => 'settings.user.setting',
-                    'uses' => 'User\Settings\SettingController@updateSetting',
-                ]);
-
-                Route::group(['prefix' => 'terms', 'settings_menu' => 'user.setting.terms'], function () {
-
+                Route::group(['prefix' => 'terms', 'settings_menu' => 'setting.terms'], function () {
                     Route::get('create', [
                         'as' => 'settings.user.setting.terms.create',
                         'uses' => 'User\Settings\TermsController@create'
@@ -386,23 +386,23 @@ Route::settings(
                     ]);
                 });
 
-
+                //TODO 컨트롤러 역할 정리 필요
                 Route::get('skin', [
                     'as' => 'settings.user.setting.skin',
                     'uses' => 'User\Settings\SettingController@editSkin',
-                    'settings_menu' => 'user.setting.skin',
+                    'settings_menu' => 'theme.globalSkin',
                 ]);
 
                 Route::get('field', [
                     'as' => 'settings.user.setting.field',
                     'uses' => 'User\Settings\SettingController@editField',
-                    'settings_menu' => 'user.setting.field',
+                    'settings_menu' => 'user.field',
                 ]);
 
                 Route::get('togglemenu', [
                     'as' => 'settings.user.setting.menu',
                     'uses' => 'User\Settings\SettingController@editToggleMenu',
-                    'settings_menu' => 'user.setting.menu',
+                    'settings_menu' => 'user.menu',
                 ]);
             }
         );
@@ -1098,4 +1098,16 @@ Route::group(['prefix'=>'widgetbox'], function() {
 
 Route::group(['prefix' => 'captcha'], function () {
     Route::get('naver/reissue', ['as' => 'captcha.naver.reissue', 'uses' => 'CaptchaController@naverReissue']);
+});
+
+Route::settings('register', function () {
+    Route::get('/', [
+        'as' => 'settings.register.getSetting',
+        'uses' => 'RegisterSettingsController@editSetting',
+        'settings_menu' => 'setting.register'
+    ]);
+    Route::post('/', [
+        'as' => 'settings.register.postSetting',
+        'uses' => 'RegisterSettingsController@updateSetting'
+    ]);
 });

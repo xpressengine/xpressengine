@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+    <header>
+    </header>
+    <aside class="transition">
+    </aside>
+    <div id="content" class="transition">
+        <div class="ct">
+            <div class="title-area container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>그룹</h2>
+                        <small>회원의 그룹을 관리하는 페이지입니다.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-group">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <h3 class="panel-title">그룹 관리<small>3개의 그룹이 존재합니다.</small></h3>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-primary"><i class="xi-plus"></i><span>새그룹 추가</span></a>
+                                    </div>
+                                </div>
+
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-default">선택그룹 삭제</button>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                  <table class="table">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col"><input type="checkbox"></th>
+                                      <th scope="col">그룹명</th>
+                                      <th scope="col">설명</th>
+                                      <th scope="col">기본그룹</th>
+                                      <th scope="col">관리</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td><input type="checkbox"></td>
+                                          <td>관리자</td>
+                                          <td>사이트를 관리할 수 있는 권한을 가진자들의 그룹입니다.</td>
+                                          <td><input type="radio"></td>
+                                          <td><button type="button" class="btn btn-default">관리</button></td>
+                                      </tr>
+                                      <tr>
+                                          <td><input type="checkbox"></td>
+                                          <td>준회원</td>
+                                          <td>회원가입 후 기본적으로 준회원이 됩니다.</td>
+                                          <td><input type="radio"></td>
+                                          <td><button type="button" class="btn btn-default">관리</button></td>
+                                      </tr>
+                                      <tr>
+                                          <td><input type="checkbox"></td>
+                                          <td>정회원</td>
+                                          <td>여러가지 활동을 통해 정회원이 될 수 있습니다.</td>
+                                          <td><input type="radio"></td>
+                                          <td><button type="button" class="btn btn-default">관리</button></td>
+                                      </tr>
+                                      <tr>
+                                          <td><input type="checkbox"></td>
+                                          <td><input type="text" class="form-control" value="VIP"></td>
+                                          <td><input type="text" class="form-control" value="특별한 회원만을 모십니다."></td>
+                                          <td><input type="radio"></td>
+                                          <td><button type="button" class="btn btn-default btn-lg">취소</button></td>
+                                      </tr>
+                                  </tbody>
+                                  </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-primary btn-lg">저장</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <!--//어드민 컨텐츠 영역 -->
+             </div>
+        </div>
+    </div>
+    <div class="footer transition">
+
+    </div>
+</div>
+<div class="dim"></div>
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+});
+</script>
+</body>
+</html>

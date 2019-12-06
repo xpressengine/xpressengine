@@ -26,6 +26,8 @@ use Xpressengine\Http\Request;
  * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
+ *
+ * @deprecated since 3.0.8 회원가입 전 이메일 인증 기능 삭제
  */
 class EmailVerifyPart extends RegisterFormPart
 {
@@ -142,7 +144,8 @@ class EmailVerifyPart extends RegisterFormPart
      */
     protected function isEnabled()
     {
-        return $this->service('xe.config')->get('user.common')->get('guard_forced', false);
+//        return $this->service('xe.config')->get('user.register')->get('guard_forced', false);
+        return false;
     }
 
     /**

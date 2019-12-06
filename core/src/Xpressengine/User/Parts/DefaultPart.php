@@ -44,7 +44,7 @@ class DefaultPart extends RegisterFormPart
      *
      * @var string
      */
-    protected static $view = 'register.forms.default';
+    protected static $view = 'register.forms.new_default';
 
     /**
      * Get validation rules of the form part
@@ -53,10 +53,33 @@ class DefaultPart extends RegisterFormPart
      */
     public function rules()
     {
-        return [
+        $rules = [
             'email' => 'required|email',
-            'display_name' => 'required',
-            'password' => 'required|confirmed|password',
+            'login_id' => 'required|login_id',
+            'password' => 'required|password',
         ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * validate
+     * 기존에 존재하는 스킨에 비밀번호 확인 필드가 있는 경우를 대비해서 유효성 검사 조건 추가
+     *
+     * @return void
+     */
+    public function validate()
+    {
+        $rules = $this->rules();
+
+        if ($this->request->has('password_confirmation') === true) {
+            $rules['password'] .= '|confirmed';
+        }
+
+        $this->traitValidate($this->request, $rules);
     }
 }

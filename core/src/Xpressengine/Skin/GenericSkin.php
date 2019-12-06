@@ -275,7 +275,9 @@ abstract class GenericSkin extends AbstractSkin
         $fileName = $view;
         $view = str_replace('/', '.', static::$path)."$dir.$view";
 
-        if (View::exists($view) === false && (static::class !== get_class(static::$defaultSkin))) {
+        if (View::exists($view) === false &&
+            (static::$defaultSkin && static::class !== get_class(static::$defaultSkin))
+        ) {
             $view = static::$defaultSkin::view($fileName);
         }
 

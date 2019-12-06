@@ -1,5 +1,4 @@
 import App from 'xe/app'
-// import griper from 'xe/common/js/griper'
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import * as $$ from 'xe/utils'
@@ -11,8 +10,8 @@ import PluginMarker from './marker'
 const originalRules = {}
 
 /**
- * @class
- */
+* @class
+*/
 class Validator extends App {
   constructor () {
     super()
@@ -528,12 +527,18 @@ class Validator extends App {
       $(() => {
         $('form[data-rule]').each(function () {
           const rule = that.$$config.getters['validator/rule']($(this).data('rule'))
+          const $form = $(this)
           if (rule) {
             that.setRules(rule.ruleName, rule.rules)
           }
-          getForm(this).$$on('submit', function (eventName, { element, event }) {
+          getForm($form).$$on('submit', function (eventName, { element, event }) {
+            event.preventDefault()
             try {
-              that.check($(element))
+              const check = that.check($(element))
+              check.then(() => {
+                this.submit()
+                return Promise.resolve()
+              }, () => {})
             } catch (e) {
               event.preventDefault()
               return Promise.reject(e)
@@ -659,11 +664,33 @@ class Validator extends App {
     const ruleName = this.getRuleName($form)
     const rules = this.rules[ruleName]
     const elements = this.getTargetElements($form)
+    const result = []
+
+    that.errorClear($form)
+
     elements.each(function () {
       const name = $(this).attr('name')
       const rule = rules[name]
-      that.validate($form, $(this).attr('name'), rule)
+      const ddd = that.validate($form, $(this).attr('name'), rule)
+      ddd.then(() => {}).catch((e) => {
+        const form = getForm($form)
+        form.$$emit('xe.validation.faield', { field: e.field }) // @DEPRECATED 오타. 3.1.0 제거 예정
+        form.$$emit('xe.validation.failed', { field: e.field })
+      })
+      result.push(ddd)
     })
+
+    Promise.all(result)
+      .then(() => {
+      })
+      .catch((e) => {
+        $form.data('valid-result', false)
+        const form = getForm($form)
+        form.$$emit('xe.validation.failed', { field: e.filed }) // @DEPRECATED 오타. 3.1.0 제거 예정
+        form.$$emit('xe.validation.failed', { field: e.field })
+      })
+
+    return Promise.all(result)
   }
 
   /**
@@ -712,6 +739,7 @@ class Validator extends App {
   * @throws {ValidationError} validation 실패시
   */
   validate ($form, name, rule) {
+    const validateResult = []
     let parts = rule.split('|')
     let that = this
 
@@ -721,31 +749,31 @@ class Validator extends App {
       const [evaluatorName, options] = part.split(':')
 
       if (typeof that.evaluator[evaluatorName] === 'function') {
-        that.errorClear($form)
+        // that.errorClear($form)
         const $field = $form.find(`[name="${name}"]`)
         const result = that.evaluator[evaluatorName]($field, options)
 
-        try {
-          if (result instanceof Promise) {
+        if (result instanceof Promise) {
+          validateResult.push(new Promise((resolve, reject) => {
             result.then(res => {
-              if (res === false) {
+              if (res === false || (res && res.valid === false)) {
                 $form.data('valid-result', false)
-                throw new ValidationError('Validation error.')
+                reject(new ValidationError('Validation error.', $field))
+              } else {
+                resolve()
               }
-            })
-          } else if (result === false) {
-            $form.data('valid-result', false)
-            throw new ValidationError('Validation error.')
-          }
-        } catch (error) {
-          if (error instanceof ValidationError) {
-            const form = getForm($form)
-            form.$$emit('xe.validation.faield', { field: $field })
-            throw new ValidationError('Validation error.')
-          }
+            }).catch(() => {})
+          }))
+        } else if (result === false || (result && result.valid === false)) {
+          $form.data('valid-result', false)
+          validateResult.push(Promise.reject(new ValidationError('Validation error.', $field)))
         }
       }
     })
+
+    // validateResult.then(() => {}).catch((e) => {})
+
+    return Promise.all(validateResult)
   }
 
   /**

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Dropdowns</h2>
+            <p>
+                옵션 리스트 중 값을 선택하는 용도로 사용 됩니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Example</a></li>
+                <li><a href="#outline-off">Outline-off</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Examples</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        사용자의 쓰임에 따라 dropdown을 선택하여 이용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <label class="example-label">Basic select</label>
+                    <p>
+                        브라우져 기본 <code>&lt;select&gt;</code>로 열리게 되어 모바일에서도 사용성을 높여주며 option 선택 시 자바스크립트 코드와 함께 실행됩니다.
+                    </p>
+                    <div class="xe-select-box xe-btn">
+                        <label>xe-select-box 1</label>
+                        <select>
+                        <option>xe-select-box 1</option>
+                        <option>xe-select-box 2</option>
+                        <option>xe-select-box 3</option>
+                        <option>xe-select-box 4</option>
+                        </select>
+                    </div>
+                    <pre><code class="language-markup">&lt;div class="xe-select-box xe-btn"&gt;
+    &lt;label&gt;xe-select-box 1&lt;/label&gt;
+    &lt;select&gt;
+    &lt;option&gt;xe-select-box 1&lt;/option&gt;
+    &lt;option&gt;xe-select-box 2&lt;/option&gt;
+    &lt;option&gt;xe-select-box 3&lt;/option&gt;
+    &lt;option&gt;xe-select-box 4&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+                    <label class="example-label">Dropdown</label>
+                    <p>
+                        data 속성을 통해서, 드롭다운 부모 목록 항목에 <code>.open</code> 클래스 토글링으로 드롭다운 메뉴를 토글합니다.
+                    </p>
+                    <div class="xe-dropdown">
+                        <button class="xe-btn" type="button" data-toggle="xe-dropdown">xe-dropdown 1</button>
+                        <ul class="xe-dropdown-menu">
+                            <li class="on"><a href="#">xe-dropdown 1</a></li>
+                            <li><a href="#">xe-dropdown 2</a></li>
+                            <li><a href="#">xe-dropdown 3</a></li>
+                            <li><a href="#">xe-dropdown 4</a></li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-markup">&lt;div class="xe-dropdown"&gt;
+    &lt;button class="xe-btn" type="button" data-toggle="xe-dropdown"&gt;xe-dropdown 1&lt;/button&gt;
+    &lt;ul class="xe-dropdown-menu"&gt;
+        &lt;li&gt;&lt;a href="#" class="on"&gt;xe-dropdown 1&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 2&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 3&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 4&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+                    <label class="example-label">Label select</label>
+                    <p>
+                        2개 이상의 option을 선택할 수 있으며, option 리스트가 많은 경우를 대비하여 검색 기능을 제공합니다.
+                    </p>
+                    <div class="xe-select-label">
+                        <div class="label-input">
+                            <ul>
+                                <li>
+                                    <span class="label-choice">ie9<button type="button"><i class="xi-close"></i></button></span>
+                                </li>
+                                <li>
+                                    <span class="label-choice">safari<button type="button"><i class="xi-close"></i></button></span>
+                                </li>
+                                <li>
+                                    <span class="label-choice">chrome<button type="button"><i class="xi-close"></i></button></span>
+                                </li>
+                                <li><input type="text" class="search-label"></li>
+                            </ul>
+                        </div>
+                        <div class="label-list">
+                            <div class="label-division">
+                                <strong>그룹핑 제목(그룹이 하나일 경우 제외)</strong>
+                                <ul>
+                                    <li><a href="#">IE9</a></li>
+                                    <li><a href="#">IE10</a></li>
+                                </ul>
+                            </div>
+                            <div class="label-division">
+                                <strong>그룹핑 제목(그룹이 하나일 경우 제외)</strong>
+                                <ul>
+                                    <li><a href="#">safari</a></li>
+                                    <li><a href="#">chrome</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                        <pre><code class="language-markup">&lt;div class="xe-select-label"&gt;
+    &lt;div class="label-input"&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;span class="label-choice"&gt;ie9&lt;button type="button"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/span&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;span class="label-choice"&gt;safari&lt;button type="button"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/span&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;span class="label-choice"&gt;chrome&lt;button type="button"&gt;&lt;i class="xi-close"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/span&gt;
+            &lt;/li&gt;
+            &lt;li&gt;&lt;input type="text" class="search-label"&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class="label-list"&gt;
+        &lt;div class="label-division"&gt;
+            &lt;strong&gt;그룹핑 제목(그룹이 하나일 경우 제외)&lt;/strong&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#"&gt;IE9&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#"&gt;IE10&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class="label-division"&gt;
+            &lt;strong&gt;그룹핑 제목(그룹이 하나일 경우 제외)&lt;/strong&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#"&gt;safari&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#"&gt;chrome&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#outline-off" name="outline-off">Outline-off</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        <code>.outline-off</code> 클래스를 추가하여 BG 없어 border로만 이루어져 있는 dropdown 스타일을 사용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-select-box xe-btn outline-off">
+                        <label>xe-select-box 1</label>
+                        <select>
+                        <option>xe-select-box 1</option>
+                        <option>xe-select-box 2</option>
+                        <option>xe-select-box 3</option>
+                        <option>xe-select-box 4</option>
+                        </select>
+                    </div>
+                    <div class="xe-dropdown outline-off">
+                        <button class="xe-btn" type="button" data-toggle="xe-dropdown">xe-dropdown 1</button>
+                        <ul class="xe-dropdown-menu">
+                            <li class="on"><a href="#">xe-dropdown 1</a></li>
+                            <li><a href="#">xe-dropdown 2</a></li>
+                            <li><a href="#">xe-dropdown 3</a></li>
+                            <li><a href="#">xe-dropdown 4</a></li>
+                        </ul>
+                    </div>
+
+                    <pre><code class="language-markup">&lt;div class="xe-select-box xe-btn outline-off"&gt;
+    &lt;label&gt;xe-select-box 1&lt;/label&gt;
+    &lt;select&gt;
+    &lt;option&gt;xe-select-box 1&lt;/option&gt;
+    &lt;option&gt;xe-select-box 2&lt;/option&gt;
+    &lt;option&gt;xe-select-box 3&lt;/option&gt;
+    &lt;option&gt;xe-select-box 4&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+
+&lt;div class="xe-dropdown outline-off"&gt;
+    &lt;button class="xe-btn" type="button" data-toggle="xe-dropdown"&gt;xe-dropdown 1&lt;/button&gt;
+    &lt;ul class="xe-dropdown-menu"&gt;
+    &lt;li&gt;&lt;a href="#" class="on"&gt;xe-dropdown 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;xe-dropdown 4&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

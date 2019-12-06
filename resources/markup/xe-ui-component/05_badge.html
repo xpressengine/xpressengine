@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Badge</h2>
+            <p>
+                카테고리, 읽지 않은 알림 수 등 특정 항목을 강조 시 badge를 사용합니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Examples</a></li>
+                <li><a href="#sizes">Badge sizes</a></li>
+                <li><a href="#outline">Outline Badge</a></li>
+                <li><a href="#empty">Empty Badge</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Examples</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        상활 별 클래스에 맞게 구분하여 badge를 이용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-form-group">
+                       <div class="xe-badge xe-primary">xe-primary</div>
+                       <div class="xe-badge xe-success">xe-success</div>
+                       <div class="xe-badge xe-positive">xe-positive</div>
+                       <div class="xe-badge xe-warning">xe-warning</div>
+                       <div class="xe-badge xe-danger">xe-danger</div>
+                       <div class="xe-badge xe-fail">xe-fail</div>
+                       <div class="xe-badge xe-black">xe-black</div>
+                   </div>
+                   <pre><code class="language-markup">&lt;div class="xe-form-group"&gt;
+    &lt;div class="xe-badge xe-primary"&gt;xe-primary&lt;/div&gt;
+    &lt;div class="xe-badge xe-success"&gt;xe-success&lt;/div&gt;
+    &lt;div class="xe-badge xe-positive"&gt;xe-positive&lt;/div&gt;
+    &lt;div class="xe-badge xe-warning"&gt;xe-warning&lt;/div&gt;
+    &lt;div class="xe-badge xe-danger"&gt;xe-danger&lt;/div&gt;
+    &lt;div class="xe-badge xe-fail"&gt;xe-fail&lt;/div&gt;
+    &lt;div class="xe-badge xe-black"&gt;xe-black&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#sizes" name="sizes">Badge sizes</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        클래스에 따라 버튼 크기를 조절할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-form-group">
+                       <div class="xe-badge xe-primary">default</div>
+                       <div class="xe-badge xe-success">default</div>
+                       <div class="xe-badge xe-positive">default</div>
+                       <div class="xe-badge xe-warning">default</div>
+                       <div class="xe-badge xe-danger">default</div>
+                       <div class="xe-badge xe-fail">default</div>
+                       <div class="xe-badge xe-black">default</div>
+                   </div>
+                   <div class="xe-form-group">
+                       <div class="xe-badge xe-primary medium">medium</div>
+                       <div class="xe-badge xe-success medium">medium</div>
+                       <div class="xe-badge xe-positive medium">medium</div>
+                       <div class="xe-badge xe-warning medium">medium</div>
+                       <div class="xe-badge xe-danger medium">medium</div>
+                       <div class="xe-badge xe-fail medium">medium</div>
+                       <div class="xe-badge xe-black medium">medium</div>
+                   </div>
+                   <div class="xe-form-group">
+                       <div class="xe-badge xe-primary large">large</div>
+                       <div class="xe-badge xe-success large">large</div>
+                       <div class="xe-badge xe-positive large">large</div>
+                       <div class="xe-badge xe-warning large">large</div>
+                       <div class="xe-badge xe-danger large">large</div>
+                       <div class="xe-badge xe-fail large">large</div>
+                       <div class="xe-badge xe-black large">large</div>
+                   </div>
+                   <pre><code class="language-markup">&lt;div class="xe-form-group"&gt;
+    &lt;div class="xe-badge xe-primary"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-success"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-positive"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-warning"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-danger"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-fail"&gt;default&lt;/div&gt;
+    &lt;div class="xe-badge xe-black"&gt;default&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="xe-form-group"&gt;
+    &lt;div class="xe-badge xe-primary medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-success medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-positive medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-warning medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-danger medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-fail medium"&gt;medium&lt;/div&gt;
+    &lt;div class="xe-badge xe-black medium"&gt;medium&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="xe-form-group"&gt;
+    &lt;div class="xe-badge xe-primary large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-success large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-positive large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-warning large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-danger large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-fail large"&gt;large&lt;/div&gt;
+    &lt;div class="xe-badge xe-black large"&gt;large&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#outline" name="outline">Outline badge</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        <code>.*-outline</code> 클래스 통해 BG 없어 border로만 이루어져 있는 버튼 스타일을 사용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-badge xe-primary-outline">xe-primary-outline</div>
+                    <div class="xe-badge xe-success-outline">xe-success-outline</div>
+                    <div class="xe-badge xe-positive-outline">xe-positive-outline</div>
+                    <div class="xe-badge xe-warning-outline">xe-warning-outline</div>
+                    <div class="xe-badge xe-danger-outline">xe-danger-outline</div>
+                    <div class="xe-badge xe-fail-outline">xe-fail-outline</div>
+                    <div class="xe-badge xe-black-outline">xe-black-outline</div>
+                    <pre><code class="language-markup">&lt;div class="xe-badge xe-primary-outline"&gt;xe-primary-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-success-outline"&gt;xe-success-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-positive-outline"&gt;xe-positive-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-warning-outline"&gt;xe-warning-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-danger-outline"&gt;xe-danger-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-fail-outline"&gt;xe-fail-outline&lt;/div&gt;
+&lt;div class="xe-badge xe-black-outline"&gt;xe-black-outline&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+            <h3><a href="#empty" name="empty">Empty badge</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        텍스트 없이 원형의 비어있는 형태로 활용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-badge xe-primary empty"></div>
+                    <div class="xe-badge xe-success empty"></div>
+                    <div class="xe-badge xe-positive empty"></div>
+                    <div class="xe-badge xe-warning empty"></div>
+                    <div class="xe-badge xe-danger empty"></div>
+                    <div class="xe-badge xe-fail empty"></div>
+                    <div class="xe-badge xe-black empty"></div>
+                    <pre><code class="language-markup">&lt;div class="xe-badge xe-primary empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-success empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-positive empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-warning empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-danger empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-fail empty"&gt;&lt;/div&gt;
+&lt;div class="xe-badge xe-black empty"&gt;&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

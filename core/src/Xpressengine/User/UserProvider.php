@@ -65,6 +65,10 @@ class UserProvider extends EloquentUserProvider
             }
         }
 
+        if (isset($where['status']) == true) {
+            $where['status'] = is_array($where['status']) ? $where['status'] : [$where['status']];
+        }
+
         $user = null;
         $emailPrefix = null;
 
@@ -73,20 +77,9 @@ class UserProvider extends EloquentUserProvider
             $email = $where['email'];
             unset($where['email']);
 
-            // only prefix given
+            //login_id를 사용해서 로그인
             if (!str_contains($email, '@')) {
-                $emailPrefix = $email;
-
-                $query = $query->whereHas(
-                    'emails',
-                    function ($q) use ($emailPrefix) {
-                        $q->where('address', 'like', $emailPrefix.'@%');
-                    }
-                )->get();
-
-                if (count($query) === 1) {
-                    $user = $query->first();
-                }
+                $user = $query->where('login_id', $email)->first();
             } else {
                 $user = $query->whereHas(
                     'emails',
@@ -99,9 +92,18 @@ class UserProvider extends EloquentUserProvider
             if ($user !== null) {
                 // check other fields
                 foreach ($where as $key => $value) {
-                    if ($user->$key !== $value) {
-                        $user = null;
+                    if ($key === 'status') {
+                        if (in_array($user->status, $value)) {
+                            continue;
+                        }
+                    } else {
+                        if ($user->$key === $value) {
+                            continue;
+                        }
                     }
+
+                    $user = null;
+                    break;
                 }
             }
 
@@ -115,7 +117,11 @@ class UserProvider extends EloquentUserProvider
             // retrieve user without email
             foreach ($where as $key => $value) {
                 if (strpos($key, 'password') === false) {
-                    $query->where($key, $value);
+                    if ($key === 'status') {
+                        $query->whereIn($key, $value);
+                    } else {
+                        $query->where($key, $value);
+                    }
                 }
             }
             $user = $query->first();

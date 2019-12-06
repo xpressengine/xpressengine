@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Responsive utilities</h2>
+            <p>
+                분기 지점에 따라 컨텐츠를 토글링 하기 위해 사용합니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#utilities">Responsive utilities</a></li>
+            </ul>
+
+            <h3><a href="#utilities" name="utilities">Responsive utilities</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        클래스를 통해 컨텐츠를 토글링하며 조합하여 이용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-example">
+                        <div class="xe-table-responsive">
+                            <table class="xe-table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            매우 작은 기기
+                                            <small>모바일폰 (&lt;768px)</small>
+                                        </th>
+                                        <th>
+                                            작은 기기
+                                            <small>태블릿 (≥768px)</small>
+                                        </th>
+                                        <th>
+                                            중간 기기
+                                            <small>데스크탑 (≥992px)</small>
+                                        </th>
+                                        <th>
+                                            큰 기기
+                                            <small>데스크탑 (≥1200px)</small>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>.xe-visible-xs-*</code></th>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-visible-sm-*</code></th>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-visible-md-*</code></th>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-visible-lg-*</code></th>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>.xe-hidden-xs</code></th>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-hidden-sm</code></th>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-hidden-md</code></th>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                        <td class="is-visible">보임</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>.xe-hidden-lg</code></th>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-visible">보임</td>
+                                        <td class="is-hidden">숨겨짐</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

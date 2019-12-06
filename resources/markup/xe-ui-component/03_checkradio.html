@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Checkbox &amp; Radio Inputs</h2>
+            <p>
+                XE3에서 기본으로 사용하는 Checkbox &amp; Radio Inputs에 대한 예시입니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#example">Example</a></li>
+            </ul>
+            <h3><a href="#example" name="example">Examples</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        별도의 js 및 이미지 없이 스타일링이 적용된  Checkbox &amp; Radio Inputs을 이용할 수 있습니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <label class="example-label">Checkbox</label>
+                    <label class="xe-label">
+                        <input type="checkbox">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">체크박스</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="checkbox" checked="checked">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">체크박스(checked)</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="checkbox" disabled="disabled">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">체크박스(disabled)</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="checkbox" disabled="disabled" checked="checked">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">체크박스(checked + disabled)</span>
+                    </label>
+
+                    <pre><code class="language-markup">&lt;label class="xe-label"&gt;
+    &lt;input type="checkbox"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;체크박스&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="checkbox" checked="checked"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;체크박스(checked)&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="checkbox" disabled="disabled"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;체크박스(disabled)&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="checkbox" disabled="disabled" checked="checked"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;체크박스(checked + disabled)&lt;/span&gt;
+&lt;/label&gt;
+                    </code></pre>
+
+                    <label class="example-label">Radio</label>
+                    <label class="xe-label">
+                        <input type="radio">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">라디오</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="radio" checked="checked">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">라디오(checked)</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="radio" disabled="disabled">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">라디오(disabled)</span>
+                    </label>
+                    <label class="xe-label">
+                        <input type="radio" disabled="disabled" checked="checked">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">라디오(checked + disabled)</span>
+                    </label>
+                    <pre><code class="language-markup">&lt;label class="xe-label"&gt;
+    &lt;input type="radio"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;라디오&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="radio" checked="checked"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;라디오(checked)&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="radio" disabled="disabled"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;라디오(disabled)&lt;/span&gt;
+&lt;/label&gt;
+&lt;label class="xe-label"&gt;
+    &lt;input type="radio" disabled="disabled" checked="checked"&gt;
+    &lt;span class="xe-input-helper"&gt;&lt;/span&gt;
+    &lt;span class="xe-label-text"&gt;라디오(checked + disabled)&lt;/span&gt;
+&lt;/label&gt;</pre></code>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

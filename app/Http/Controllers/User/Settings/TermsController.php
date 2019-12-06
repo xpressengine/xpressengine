@@ -70,7 +70,9 @@ class TermsController extends Controller
         $last = app('xe.terms')->lastOrder();
         app('xe.terms')->create([
             'title' => $request->get('title'),
+            'description' => $request->get('description'),
             'content' => $request->get('content'),
+            'is_require' => $request->get('is_require') === 'require',
             'order' => $last ? $last + 1 : 0
         ]);
 
@@ -111,7 +113,9 @@ class TermsController extends Controller
 
         app('xe.terms')->update($term, [
             'title' => $request->get('title'),
+            'description' => $request->get('description'),
             'content' => $request->get('content'),
+            'is_require' => $request->get('is_require') === 'require'
         ]);
 
         return redirect()->route('settings.user.setting.terms.index')->with('alert', [

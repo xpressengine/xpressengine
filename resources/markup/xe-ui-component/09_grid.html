@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>Grid</h2>
+            <p>
+                반응형 웹을 체계적이고 쉽게 구현하기 위해 그리드 시스템을 이용합니다.
+            </p>
+            <ul class="index-list">
+                <li><a href="#option">Grid option</a></li>
+            </ul>
+            <h3><a href="#option" name="option">Grid option</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                        다양한 기기를 대응하기 위해 분기 지점을 세분화합니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <div class="xe-example">
+                        <div class="xe-table-responsive">
+                            <table class="xe-table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            매우 작은 기기
+                                            <small>모바일폰 (&lt;768px)</small>
+                                        </th>
+                                        <th>
+                                            작은 기기
+                                            <small>태블릿 (≥768px)</small>
+                                        </th>
+                                        <th>
+                                            중간 기기
+                                            <small>데스크탑 (≥992px)</small>
+                                        </th>
+                                        <th>
+                                            큰 기기
+                                            <small>데스크탑 (≥1200px)</small>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">그리드 적용</th>
+                                        <td>항상</td>
+                                        <td colspan="3">분기점보다 크면 적용 </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">콘테이너 너비</th>
+                                        <td>없음 (auto)</td>
+                                        <td>750px</td>
+                                        <td>970px</td>
+                                        <td>1170px</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">클래스 접두사</th>
+                                        <td><code>.xe-col-xs-</code></td>
+                                        <td><code>.xe-col-sm-</code></td>
+                                        <td><code>.xe-col-md-</code></td>
+                                        <td><code>.xe-col-lg-</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">컬럼 수</th>
+                                        <td colspan="4">12</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">컬럼 너비</th>
+                                        <td class="text-muted">Auto</td>
+                                        <td>~62px</td>
+                                        <td>~81px</td>
+                                        <td>~97px</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">사이 너비</th>
+                                        <td colspan="4">30px (컬럼의 양쪽에 15px 씩)</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">중첩</th>
+                                        <td colspan="4">예</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">오프셋</th>
+                                        <td colspan="4">예</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">컬럼 순서정하기</th>
+                                        <td colspan="4">예</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

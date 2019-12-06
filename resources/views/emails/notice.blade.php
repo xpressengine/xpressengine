@@ -1,23 +1,23 @@
 @extends('emails.common')
 
 @section('content')
-    <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left">
-        <tbody>
+<table style="padding:0; margin:0 auto; border:0; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
+            <h2 style="padding:0; margin:0 0 20px 0; border:0; font-size:28px; line-height:36px; font-weight:bold; letter-spacing:-0.01em; word-break:keep-all; color:#333; text-align:center;">{!! $title !!}</h2>
+        </td>
+    </tr>
 
-        <tr>
-            <td style="font-family: NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:30px;letter-spacing:-1px">
-                {!! $title !!}
-            </td>
-        </tr>
-        <tr>
-            <td height="47"></td>
-        </tr>
-        <tr>
-            <td height="5"></td>
-        </tr>
-        <tr>
-            <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#8e8e93;font-size:13px;text-align:left;line-height:21px;">{!! $contents !!}</td>
-        </tr>
-        </tbody>
-    </table>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
+            <p style="padding:0; margin:0; border:0; text-align: center;">{!! $contents !!}</p>
+        </td>
+    </tr>
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+</table>
 @endsection

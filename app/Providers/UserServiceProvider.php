@@ -40,6 +40,7 @@ use Xpressengine\User\Parts\DynamicFieldPart;
 use Xpressengine\User\Parts\RegisterFormPart;
 use Xpressengine\User\Parts\EmailVerifyPart;
 use Xpressengine\User\PasswordValidator;
+use Xpressengine\User\UserRegisterHandler;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -147,6 +148,8 @@ class UserServiceProvider extends ServiceProvider
         $this->registerTerms();
         $this->registerPasswordValidator();
 
+        $this->registerUserRegisterHandler();
+
         // register validation extension for email prefix
         $this->extendValidator();
     }
@@ -206,7 +209,7 @@ class UserServiceProvider extends ServiceProvider
 
             $keygen = $app['xe.keygen'];
 
-            $expire = $app['config']->get('auth.register.expire', 60);
+            $expire = $app['config']->get('auth.register.expire', 10080);
 
             return new RegisterTokenRepository($connection, $keygen, $table, $expire);
         });
@@ -242,7 +245,8 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.pendingEmails'],
                 $app['xe.user.image'],
                 $app['hash'],
-                $app['validator']
+                $app['validator'],
+                $app['xe.config']
             );
             return $userHandler;
         });
@@ -458,8 +462,25 @@ class UserServiceProvider extends ServiceProvider
                 }
                 return preg_match('/^[\pL\pM\pN][. \pL\pM\pN_-]*[\pL\pM\pN]$/u', $value);
             });
+
+            app('config')->set('xe.user.loginId.validate', function ($value) {
+                if (str_contains($value, " ")) {
+                    return false;
+                }
+
+                $length = strlen($value);
+                if ($length < 5 || $length > 20) {
+                    return false;
+                }
+
+                return preg_match('/[a-z0-9][a-z0-9-_][a-z0-9-_][a-z0-9-_]+[a-z0-9]+/', $value);
+            });
         } else {
             app('config')->set('xe.user.displayName.validate', function ($value) {
+                return true;
+            });
+
+            app('config')->set('xe.user.loginId.validate', function ($value) {
                 return true;
             });
         }
@@ -482,21 +503,9 @@ class UserServiceProvider extends ServiceProvider
      */
     private function extendValidator()
     {
-        // set config for validation of password, displayname
         $this->configValidation();
 
         $this->app->resolving('validator', function ($validator) {
-            // 도메인이 생략된 이메일 validation 추가
-            $validator->extend(
-                'email_prefix',
-                function ($attribute, $value, $parameters) {
-                    if (!str_contains($value, '@')) {
-                        $value .= '@test.com';
-                    }
-                    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
-                }
-            );
-
             // 표시이름 validation 추가
             /** @var Closure $displayNameValidate */
             $displayNameValidate = app('config')->get('xe.user.displayName.validate');
@@ -505,7 +514,20 @@ class UserServiceProvider extends ServiceProvider
                 function ($attribute, $value, $parameters) use ($displayNameValidate) {
                     return $displayNameValidate($value);
                 },
-                xe_trans('xe::validationDisplayName')
+                xe_trans(
+                    'xe::validationDisplayName',
+                    ['attribute' => xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))]
+                )
+            );
+
+            //loginId validation 추가
+            $loginIdValidate = app('config')->get('xe.user.loginId.validate');
+            $validator->extend(
+                'login_id',
+                function ($attribute, $value, $parameters) use ($loginIdValidate) {
+                    return $loginIdValidate($value);
+                },
+                xe_trans('xe::validationLoginId')
             );
 
             $validator->extend('password', function ($attribute, $value, $parameters) {
@@ -596,7 +618,6 @@ class UserServiceProvider extends ServiceProvider
         RegisterFormPart::setSkinResolver($this->app['xe.skin']);
         RegisterFormPart::setContainer($this->app);
 
-        UserHandler::addRegisterPart(EmailVerifyPart::class);
         UserHandler::addRegisterPart(DefaultPart::class);
         UserHandler::addRegisterPart(DynamicFieldPart::class);
         UserHandler::addRegisterPart(AgreementPart::class);
@@ -629,5 +650,18 @@ class UserServiceProvider extends ServiceProvider
                 return $skin->setView('edit')->setData(compact('user', 'fieldTypes'));
             }
         ]);
+    }
+
+    /**
+     * register UserRegisterHandler
+     *
+     * @return void
+     */
+    protected function registerUserRegisterHandler()
+    {
+        $this->app->singleton(UserRegisterHandler::class, function () {
+            return new UserRegisterHandler();
+        });
+        $this->app->alias(UserRegisterHandler::class, 'xe.user_register');
     }
 }

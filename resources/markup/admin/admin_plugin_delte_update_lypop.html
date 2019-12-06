@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+    
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/core/settings/css/admin.css">
+    <script src="../../../assets/core/settings/js/tab.js"></script>
+    <script src="../../../assets/core/settings/js/admin.bundle.js"></script>
+</head>
+<!--[D] 사이드 메뉴 감출 시 sidebar-collapse 클래스 추가-->
+<body>
+<div class="admin-wrap">
+  <header>
+  </header>
+  <aside class="transition">
+  </aside>
+  <div class="footer transition">
+    
+  </div>
+</div>
+<!-- [D] 팝업은 아래를 사용해주세요 -->
+
+<div class="xe-modal fade in" id="Modal" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1060; display: block;">
+  <div class="xe-modal-dialog">
+    <div class="xe-modal-content">
+      <div class="xe-modal-header">
+        <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
+        <strong class="xe-modal-title">플러그인 삭제</strong>
+      </div>
+      <div class="xe-modal-body">
+        <div class="xe-lypop-plugin">
+          <p class="xe-lypop-plugin-text">아래 플러그인을 삭제합니다. <br class="xe-hidden-lg xe-hidden-md"> 플러그인을 삭제할 경우, <br class="xe-hidden-md xe-hidden-sm"> 플러그인에 의해 생성된 데이터를 복구할 수 없으며 플러그인의 소스코드 역시 삭제됩니다. <br> 삭제하시겠습니까?</p>
+          <div class="xe-lypop-plugin-check">
+            <dl>
+              <dt>활성화 플러그인</dt>
+              <dd>
+                <label class="xe-label">
+                  <input type="checkbox">
+                  <span class="xe-input-helper"></span>
+                  <div class="xe-label-text">Alice Theme<b>(alice)</b></div>
+                </label>
+              </dd>
+              <dd>
+                <label class="xe-label">
+                  <input type="checkbox">
+                  <span class="xe-input-helper"></span>
+                  <div class="xe-label-text"><span>플러그인명이 길때는 플러그인명이 길때는 플러그인명이 길때는플러그인플러그인명이 길때는플러그인</span><b>(comment)</b></div>
+                </label>
+              </dd>
+              <dt>비활성화 플러그인</dt>
+              <dd>
+                <label class="xe-label">
+                  <input type="checkbox">
+                  <span class="xe-input-helper"></span>
+                  <div class="xe-label-text">Ck Editor<b>(ckeditor)</b></div>
+                </label>
+              </dd>
+            </dl>
+            
+          </div>
+        </div>
+      </div>
+      <div class="xe-modal-footer">
+        <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">취소</button>
+        <button type="button" class="xe-btn xe-btn-primary" data-dismiss="xe-modal">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [D] 보기용 임시 스타일입니다. -->
+<div style="margin-top: 50px;"></div>
+
+<div class="xe-modal fade in" id="Modal" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1060; display: block;">
+  <div class="xe-modal-dialog">
+    <div class="xe-modal-content">
+      <div class="xe-modal-header">
+        <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
+        <strong class="xe-modal-title">플러그인 업데이트</strong>
+      </div>
+      <div class="xe-modal-body">
+        <div class="xe-lypop-plugin">
+          <p class="xe-lypop-plugin-text">
+            아래 플러그인을 업데이트 합니다. <br> 업데이트 하는 플러그인에서 의존하는 다른 플러그인이 같이 설치될 수 있습니다. <br> 업데이트 과정은 수분 이상 소요될 수 있습니다.<br class="xe-hidden-lg xe-hidden-md"> 업데이트 하시겠습니까?
+          <div class="xe-lypop-plugin-check version">
+            <label class="xe-label">
+              <input type="checkbox">
+              <span class="xe-input-helper"></span>
+              <div class="xe-label-text"><span>플러그인명</span><b>(comment)</b>
+                <dl>
+                  <dt class="xe-sr-only">현제 버전</dt>
+                  <dd>ver.0.9.11 <i class="xi-long-arrow-right"></i></dd>
+                  <dt class="xe-sr-only">다음버전</dt>
+                  <dd>ver.0.9.12</dd>
+                </dl>
+              </div>
+            </label>
+            <label class="xe-label">
+              <input type="checkbox">
+              <span class="xe-input-helper"></span>
+              <div class="xe-label-text"><span>플러그인명이 길때는 플러그인명이 길때는 플러그인명이 길때는플러그인플러그인명이 길때는플러그인</span><b>(comment)</b> <br>
+                <dl>
+                  <dt class="xe-sr-only">현제 버전</dt>
+                  <dd>ver.0.9.11 <i class="xi-long-arrow-right"></i></dd>
+                  <dt class="xe-sr-only">다음버전</dt>
+                  <dd>ver.0.9.12</dd>
+                </dl>
+              </div>
+            </label>
+            <label class="xe-label">
+              <input type="checkbox">
+              <span class="xe-input-helper"></span>
+              <div class="xe-label-text"><span>플러그인명</span><b>(comment)</b> <br>
+                <dl>
+                  <dt class="xe-sr-only">현제 버전</dt>
+                  <dd>ver.0.9.11 <i class="xi-long-arrow-right"></i></dd>
+                  <dt class="xe-sr-only">다음버전</dt>
+                  <dd>ver.0.9.12</dd>
+                </dl>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="xe-modal-footer">
+        <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">취소</button>
+        <button type="button" class="xe-btn xe-btn-primary" data-dismiss="xe-modal">업데이트</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 50px;"></div>
+
+<div class="xe-modal fade in" id="Modal" style="overflow: auto; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1060; display: block;">
+  <div class="xe-modal-dialog xe-modal-plugin-detail">
+    <div class="xe-modal-content">
+      <div class="xe-modal-header">
+        <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
+        <strong class="xe-modal-title">플러그인 상세</strong>
+      </div>
+      <div class="xe-modal-body">
+        
+        
+        <div class="plugin-detail">
+          <div class="xe-row">
+            <div class="xe-col-md-9">
+              <div class="plugin-title">
+                <div class="plugin-img">
+                  <img src="sample/@tmp_plugin.jpg" width="160" height="160" alt="plugin thumbnail">
+                </div>
+                <div class="plugin-summary">
+                  <h2>플러그인 제목 - Plugin Title<span class="xe-badge xe-danger">거절됨</span></h2>
+                  <dl class="plugin-install">
+                    <dt class="xe-sr-only">설치 명령어</dt>
+                    <dd>php artisan plugin : <span class="plugin-install-link">install board</span></dd>
+                  </dl>
+                </div>
+                <div class="plugin-summary v2">
+                  <dl class="plugin-count">
+                    <dt class="xe-sr-only">좋아요</dt>
+                    <dd>
+                      <!-- [D]  좋아요 클릭 시 .on 추가-->
+                      <a href="#" class="btn-like ing"><i class="xi-heart-o"></i><i class="xi-heart"></i>9,999</a>
+                    </dd>
+                    <dt class="xe-sr-only">다운로드수</dt>
+                    <dd><i class="xi-arrow-bottom"></i>9,999</dd>
+                    <dt class="xe-sr-only">구매 수</dt>
+                    <dd><i class="xi-cart-o"></i>9,999</dd>
+                    <dt class="xe-sr-only"></dt>
+                    <dd><a href="#" class="btn-plugin-download"><i class="xi-save"></i>Alice Theme v.0.9.1</a><span class="text-gray">(1.5mb)</span></dd>
+                  </dl>
+                  <p class="desc">여기는 내용이 들어가는 부분입니다. 기재는 Docummentation 기반으로 내용을 받아오며, 모바일의 경우 설명 부분이 첫 한단락만 노출되고 <span class="more_text hide" style="display: none;">‘더보기’를 누르면 전체 내용을 볼 수 있습니다. 첫 단락에는 플러그인의 주요 기능과 설명, 마케팅면의 메시지를 쓸 것을 권장합니다. This is part of the contents from entering. When the substrate is received by the information-based Documentation, in the case of mobile explain part is exposed to only the first one, you can view the entire contents of the lock, press the "More". First paragraph, it is recommended to write the message and a description of the main features, the marketing side of the plug. </span><a href="#" class="more_link"> ...더보기</a></p>
+                </div>
+                
+              </div>
+              <div class="plugin-content">
+                <div class="plugin-tabs is-ended">
+                  <nav>
+                    <ul class="plugin-tabs-navigation">
+                      <li><a data-content="details" href="#0">상세정보</a></li>
+                      <li><a data-content="review" href="#0">검토</a></li>
+                      <li><a data-content="forum" href="#0">리뷰</a></li>
+                      <li><a data-content="updates" class="selected" href="#0">업데이트 기록</a></li>
+                    </ul> <!-- plugin-tabs-navigation -->
+                  </nav>
+                  <ul class="plugin-tabs-content">
+                    <li class="plugin-tabs-content-item " data-content="details">
+                      <div class="plugin-document">
+                        <div class="screenshot-box">
+                          <h3>스크린샷(6)</h3>
+                          <p class="plugin-desc">
+                            <button type="button" title="open file dialog"><i class="xi-camera xe-visible-xs xe-visible-sm"></i><span class="xe-visible-md xe-visible-lg">파일 선택</span></button><em>파일형식</em> BMP, GIF, PNG <em>최대 파일 크기</em>5MB
+                          </p>
+                          <div class="screenshot xe-example">
+                            <div class="images">
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin3.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin4.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin3.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin3.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin4.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                              <div class="images_wrap">
+                                <img src="sample/@tmp_plugin3.jpg" alt="plugin screenshot">
+                                <button type="button" class="btn-images-remove"><i class="xi-close-thin"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="view">
+                          <img src="sample/@tmp_plugin4.jpg" alt="plugin screenshot">
+                          <h3>단락 부제목(h3)</h3>
+                          <ul>
+                            <li>대시 보드에서 확장을 다운로드</li>
+                            <li>새로운&gt; 업로드 추가&gt; 플러그인으로 이동하여 다운로드 한 ZIP 파일을 선택</li>
+                            <li>지금 설치를 클릭 한 다음 활성화</li>
+                            <li>컴포넌트명 ＞ 설정 ＞ 소셜 로그인 으로 이동 후 플러그인을 구성하려면 다음 절을 참조하십시오.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                    
+                    <li class="plugin-tabs-content-item " data-content="review">
+                      <div class="plugin-manage">
+                        <div class="xe-row">
+                          <div class="xe-col-sm-12">
+                            <div class="plugin-info v2">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <th>플러그인</th>
+                                    <td>게시판 ver 0.1.1</td>
+                                  </tr>
+                                  <tr>
+                                    <th>검토 결과</th>
+                                    <td class="xo-text-blue">통과</td>
+                                  </tr>
+                                  <tr>
+                                    <th>검토 일시</th>
+                                    <td>2016.2.14</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <div class="xe-col-sm-12">
+                            <div class="xe-table-responsive">
+                              <table class="xe-table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">검토항목</th>
+                                    <th scope="col">검토일시</th>
+                                    <th scope="col">결과</th>
+                                    <th scope="col">상세</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>composer.json 포멧 검사</td>
+                                    <td>2016-03-18 17:54:54</td>
+                                    <td class="xo-text-blue">통과</td>
+                                    <td>composer.json파일 형식 검사를 통과했습니다</td>
+                                  </tr>
+                                  <tr>
+                                    <td>composer.json 포멧 검사</td>
+                                    <td>2016-03-18 17:54:54</td>
+                                    <td class="xo-text-red">실패</td>
+                                    <td>composer.json파일 형식 검사를 통과했습니다</td>
+                                  </tr>
+                                  <tr>
+                                    <td>composer.json 포멧 검사</td>
+                                    <td>2016-03-18 17:54:54</td>
+                                    <td class="xo-text-red">실패</td>
+                                    <td>composer.json파일 형식 검사를 실패했습니다.<button type="button" class="result-toggle"><span>자세히 보기</span><span>접기</span></button></td>
+                                  </tr>
+                                  <tr class="report-result">
+                                    <td colspan="4">
+                                      <div class="report-result-content">
+                                        <ul>
+                                          <li>php : 12</li>
+                                          <li>xml : 70</li>
+                                          <li>html : 36</li>
+                                          <li>js : 45</li>
+                                          <li>php : 15</li>
+                                        </ul>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </li>
+                    
+                    <li class="plugin-tabs-content-item " data-content="forum">
+                      <h2 class="xe-sr-only">리뷰 영역</h2>
+                      <section class="comment-write">
+                        <h3 class="xe-sr-only">리뷰 입력 영역</h3>
+                        <p class="comment-write-title">이 플러그인이 유용했나요?</p>
+                        <div class="xe-star-point">
+                          <h4 class="xe-sr-only">별점</h4>
+                          <ul>
+                            <!-- [D] 활성화시 li에  active 클래스 추가 부탁드립니다. -->
+                            <li class="active">
+                              <button>
+                                <span class="xe-sr-only">1</span>
+                                <i class="xi-star"></i>
+                                <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                              </button>
+                            </li>
+                            <li class="active">
+                              <button>
+                                <span class="xe-sr-only">2</span>
+                                <i class="xi-star"></i>
+                                <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                              </button>
+                            </li>
+                            <li class="">
+                              <button>
+                                <span class="xe-sr-only">3</span>
+                                <i class="xi-star"></i>
+                                <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                              </button>
+                            </li>
+                            <li class="">
+                              <button>
+                                <span class="xe-sr-only">4</span>
+                                <i class="xi-star"></i>
+                                <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                              </button>
+                            </li>
+                            <li class="">
+                              <button>
+                                <span class="xe-sr-only">5</span>
+                                <i class="xi-star"></i>
+                                <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="comment-write-input">
+                          <div class="markdown-btn">
+                            <button type="button" class="active xe-btn-review">작성하기</button>
+                            <button type="button" class="xe-btn-view">미리보기</button>
+                          </div>
+                          <div class="markdown-editor">
+                            <textarea class="markdown-input" placeholder="리뷰를 입력해주세요" style="display: block;"></textarea>
+                            <div class="markdown-preview markdown" style="display: none;">
+                              마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성
+                            </div>
+                            <p class="markdown-caption"><a href="https://guides.github.com/features/mastering-markdown/" target="_blank">마크다운 문법</a>으로 작성해주세요.</p>
+                          </div>
+                          
+                        </div>
+                        <div class="comment-write-btn">
+                          <button type="submit" class="xe-btn xe-btn-primary">등록</button>
+                        </div>
+                      </section>
+                      <section class="comment-list">
+                        <h3 class="xe-sr-only">리뷰 리스트 영역</h3>
+                        <ul>
+                          <li>
+                            <div class="comment-list-left xe-hidden-xs">
+                              <div class="comment-list-pic">
+                                <!-- <img src="#" width="80" height="80" alt="사용자 이미지"> -->
+                              </div>
+                            </div>
+                            <div class="comment-list-right">
+                              <div class="xe-star-point">
+                                <h4 class="xe-sr-only">별점</h4>
+                                <ul>
+                                  <!-- [D] 활성화시 li에  active 클래스 추가 부탁드립니다. -->
+                                  <li class="">
+                                    <span class="xe-sr-only">1</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">2</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">3</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">4</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">5</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="comment-list-infor">
+                                <h4 class="xe-sr-only">작성자 정보</h4>
+                                <span class="comment-list-infor-id">한글*****</span>
+                                <time class="comment-list-infor-date">2017.01.09 23:54</time>
+                              </div>
+                              <div class="comment-list-btn">
+                                <h4 class="xe-sr-only">글관련 버튼</h4>
+                                <button><i class="xi-pen"><span class="xe-sr-only">수정</span></i></button>
+                                <button><i class="xi-close"><span class="xe-sr-only">삭제</span></i></button>
+                              </div>
+                              <p class="comment-list-text">리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 </p>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="comment-list-left xe-hidden-xs">
+                              <div class="comment-list-pic"></div>
+                            </div>
+                            <div class="comment-list-right">
+                              <div class="xe-star-point">
+                                <h4 class="xe-sr-only">별점</h4>
+                                <ul>
+                                  <!-- [D] 활성화시 li에  active 클래스 추가 부탁드립니다. -->
+                                  <li class="">
+                                    <span class="xe-sr-only">1</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">2</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">3</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">4</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">5</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="comment-list-infor">
+                                <h4 class="xe-sr-only">작성자 정보</h4>
+                                <span class="comment-list-infor-id">myvio*****</span>
+                                <time class="comment-list-infor-date">2017.01.09 23:54</time>
+                              </div>
+                              <div class="comment-list-btn">
+                                <h4 class="xe-sr-only">글관련 버튼</h4>
+                                <button class="comment-list-btn-modify"><i class="xi-pen"><span class="xe-sr-only">수정</span></i></button>
+                                <button class="comment-list-btn-remove"><i class="xi-close"><span class="xe-sr-only">삭제</span></i></button>
+                              </div>
+                              <p class="comment-list-text">리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 </p>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="comment-list-left xe-hidden-xs">
+                              <div class="comment-list-pic"></div>
+                            </div>
+                            <div class="comment-list-right">
+                              <div class="xe-star-point">
+                                <h4 class="xe-sr-only">별점</h4>
+                                <ul>
+                                  <!-- [D] 활성화시 li에  active 클래스 추가 부탁드립니다. -->
+                                  <li class="">
+                                    <span class="xe-sr-only">1</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">2</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">3</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">4</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                  <li class="">
+                                    <span class="xe-sr-only">5</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="comment-list-infor">
+                                <h4 class="xe-sr-only">작성자 정보</h4>
+                                <span class="comment-list-infor-id">myvio*****</span>
+                                <time class="comment-list-infor-date">@2017.01.09 23:54</time>
+                              </div>
+                              <div class="comment-list-btn">
+                                <h4 class="xe-sr-only">글관련 버튼</h4>
+                                <button class="comment-list-btn-modify"><i class="xi-pen"><span class="xe-sr-only">수정</span></i></button>
+                                <button class="comment-list-btn-remove"><i class="xi-close"><span class="xe-sr-only">삭제</span></i></button>
+                              </div>
+                              <p class="comment-list-text">리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 리뷰 </p>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="comment-list-btn-more">
+                          <button class="xe-btn xe-btn-link">더보기</button>
+                        </div>
+                      </section>
+                    </li>
+                    
+                    <li class="plugin-tabs-content-item selected" data-content="updates">
+                      <div class="plugin-update">
+                        <div class="plugin-update-article">
+                          <strong>2.6.1</strong>
+                          <em>업데이트 2017.02.18.</em>
+                          <ul>
+                            <li>새로운 단축키 막대의 포멧 도구에 빠르게 접근 가능</li>
+                          </ul>
+                          <button type="button" class="xe-btn xe-btn-modify">수정</button>
+                        </div>
+                        <div class="plugin-update-article">
+                          <strong>2.6</strong>
+                          <em>업데이트 2017.02.17.</em>
+                          <ul>
+                            <li>새로운 단축키 막대의 포멧 도구에 빠르게 접근 가능</li>
+                            <li>새로운 단축키 막대의 포멧 도구에 빠르게 접근 가능</li>
+                            <li>새로운 단축키 막대의 포멧 도구에 빠르게 접근 가능</li>
+                          </ul>
+                        </div>
+                        <div class="plugin-update-article">
+                          <strong>2.5</strong>
+                          <em>업데이트 2015.11.5</em>
+                          <p>일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그 일반문장 p태그</p>
+                          <a href="#">링크의 경우</a>
+                        </div>
+                        <div class="plugin-update-article">
+                          <strong>2.4</strong>
+                          <em>업데이트 2015.11.5</em>
+                          <section class="comment-write">
+                            <h3 class="xe-sr-only">리뷰 입력 영역</h3>
+                            <p class="comment-write-title">이 플러그인이 유용했나요?</p>
+                            <div class="xe-star-point">
+                              <h4 class="xe-sr-only">별점</h4>
+                              <ul>
+                                <!-- [D] 활성화시 li에  active 클래스 추가 부탁드립니다. -->
+                                <li class="active">
+                                  <button>
+                                    <span class="xe-sr-only">1</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </button>
+                                </li>
+                                <li class="active">
+                                  <button>
+                                    <span class="xe-sr-only">2</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </button>
+                                </li>
+                                <li class="">
+                                  <button>
+                                    <span class="xe-sr-only">3</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </button>
+                                </li>
+                                <li class="">
+                                  <button>
+                                    <span class="xe-sr-only">4</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </button>
+                                </li>
+                                <li class="">
+                                  <button>
+                                    <span class="xe-sr-only">5</span>
+                                    <i class="xi-star"></i>
+                                    <i class="xi-star-o"><span class="xe-sr-only">점 활성화</span></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="comment-write-input">
+                              <div class="markdown-btn">
+                                <button type="button" class="active xe-btn-review">리뷰쓰기</button>
+                                <button type="button" class="xe-btn-view">미리보기</button>
+                              </div>
+                              <div class="markdown-editor">
+                                <textarea class="markdown-input" placeholder="리뷰를 입력해주세요" style="display: block;"></textarea>
+                                <div class="markdown-preview markdown" style="display: none;">
+                                  마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성 마크다운 문법으로 작성
+                                </div>
+                                <p class="markdown-caption"><a href="https://guides.github.com/features/mastering-markdown/" target="_blank">마크다운 문법</a>으로 작성해주세요.</p>
+                              </div>
+                              
+                            </div>
+                            <div class="comment-write-btn">
+                              <button type="submit" class="xe-btn xe-btn-primary">등록</button>
+                              <button type="button" class="xe-btn xe-btn-secondary xe-hidden-xs xe-hidden-sm">미리보기</button>
+                            </div>
+                          </section>
+                        </div>
+                      </div>
+                    </li> <!-- plugin-tabs-content -->
+                  </ul>
+                </div> <!-- plugin-tabs -->
+              </div>
+            </div>
+            <div class="xe-col-md-3">
+              <ul class="second-info">
+                <li>
+                  <h3 class="xe-sr-only">비활성화 / 활성화 선택</h3>
+                  <!-- [D] 활성화시 active 클래스 부탁드립니다. -->
+                  <button type="button" class="xe-btn xe-btn-primary-outline btn-plugin-active active">
+                    <span class="text-install"><i class="xi-wrench"></i>설치하기</span>
+                    <span class="text-deactive">비활성화</span>
+                  </button>
+                </li>
+                <li>
+                  <h3>플러그인 제작자</h3>
+                  <ul class="dev-list">
+                    <li>
+                      <img src="sample/@img_developer.jpg" width="40" height="40" alt="플러그인 제작자">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">저작자저작자저작자저작자저작자저작자 이름</a>
+                        <a href="#">17 plugins</a>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">제작자 삭제</span></button>
+                      </div>
+                    </li>
+                    <li>
+                      <img src="sample/@img_developer.jpg" width="40" height="40" alt="플러그인 제작자">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">저작자 이름</a>
+                        <a href="#">17 plugins</a>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">제작자 삭제</span></button>
+                      </div>
+                    </li>
+                    <li>
+                      <img src="sample/@img_developer.jpg" width="40" height="40" alt="플러그인 제작자">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">저작자저작자저작자저작 이름</a>
+                        <a href="#">17 plugins</a>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">제작자 삭제</span></button>
+                      </div>
+                    </li>
+                  </ul>
+                  <a href="#" class="link-more">...더보기</a>
+                </li>
+                <li>
+                  <h3>정보</h3>
+                  <table class="info-table">
+                    <tbody><tr>
+                      <th>버전</th>
+                      <td>3.8.8</td>
+                    </tr>
+                    <tr>
+                      <th>등록일</th>
+                      <td>2015.12.30</td>
+                    </tr>
+                    <tr>
+                      <th>업데이트</th>
+                      <td>2016.2.14</td>
+                    </tr>
+                    <tr>
+                      <th>버전<br>요구사항</th>
+                      <td>1.2 or higher</td>
+                    </tr>
+                    <tr>
+                      <th>호환<br>플러그인</th>
+                      <td>
+                        <a href="#" class="link-plugin">Plugin Title 2.4.x</a>
+                        <a href="#" class="link-plugin">Plugin Title 2.3.x</a>
+                        <a href="#" class="link-plugin">Plugin Title 2.2.x</a>
+                        <a href="#" class="link-plugin">Plugin Title 2.1.x</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>브라우져<br>지원</th>
+                      <td class="text-gray">IE9, IE10, IE11, Firefox, Safari, Opera, Chrome, Edge</td>
+                    </tr>
+                  </tbody></table>
+                </li>
+                <li>
+                  <h3>태그</h3>
+                  <ul class="tag-list">
+                    <li><a href="#">#모듈</a></li>
+                    <li><a href="#">app</a></li>
+                    <li><a href="#">##experience design</a></li>
+                    <li><a href="#">#xe3</a></li>
+                    <li><a href="#">#레이아웃</a></li>
+                    <li><a href="#">#알림</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>지원 컴포넌트</h3>
+                  <ul class="component-list">
+                    <li><a href="#" class="xe-badge xe-danger">skin</a></li>
+                    <li><a href="#" class="xe-badge xe-warning">Settings Skin</a></li>
+                    <li><a href="#" class="xe-badge xe-success">Module</a></li>
+                    <li><a href="#" class="xe-badge xe-fail">Ui Object</a></li>
+                    <li><a href="#" class="xe-badge xe-positive">Widget</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <h3 class="xe-visible-md xe-visible-lg">개발자의 자료 더보기</h3>
+                  <a href="#" class="link-more v2 xe-visible-md xe-visible-lg">더보기</a>
+                  <h3 class="xe-hidden-md xe-hidden-lg">제작자 플러그인</h3>
+                  <a href="#" class="link-more v2 xe-hidden-md xe-hidden-lg">전체보기</a>
+                  <ul class="dev-list v2 xe-visible-md xe-visible-lg">
+                    <li>
+                      <img src="sample/@tmp_plugin2.jpg" width="60" height="60" alt="plugin thumbnail">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">플러그인 이름 플러그인 이름 플러그인 이름</a>
+                        <a href="#">17 plugins</a>
+                      </div>
+                    </li>
+                    <li>
+                      <img src="sample/@tmp_plugin2.jpg" width="60" height="60" alt="plugin thumbnail">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">플러그인 이름 플러그인 이름 플러그인 이름</a>
+                        <a href="#">17 plugins</a>
+                      </div>
+                    </li>
+                    <li>
+                      <img src="sample/@tmp_plugin2.jpg" width="60" height="60" alt="plugin thumbnail">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">플러그인 이름 플러그인 이름 플러그인 이름</a>
+                        <a href="#">17 plugins</a>
+                      </div>
+                    </li>
+                    <li>
+                      <img src="sample/@tmp_plugin2.jpg" width="60" height="60" alt="plugin thumbnail">
+                      <div class="dev-info">
+                        <a href="#" class="link-dev">플러그인 이름 플러그인 이름 플러그인 이름</a>
+                        <a href="#">17 plugins</a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+        </div><!-- //plugin-detail -->
+        
+        
+        
+        
+        
+        
+      </div><!-- //xe-modal-body -->
+    </div><!-- //xe-modal-content -->
+  </div> <!-- //xe-modal-dialog -->
+</div><!-- //xe-modal -->
+
+
+
+<script>
+$(document).ready(function() {
+function loadCheckFunc(headUrl, asideUrl, footUrl) {
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
+}
+function init_include() {
+    loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
+}
+init_include();
+
+var tabs = $('.plugin-content .plugin-tabs');
+
+tabs.each(function(){
+    var tab = $(this),
+        tabItems = tab.find('ul.plugin-tabs-navigation'),
+        tabContentWrapper = tab.children('ul.plugin-tabs-content'),
+        tabNavigation = tab.find('nav');
+
+    tabItems.on('click', 'a', function(event){
+        event.preventDefault();
+        var selectedItem = $(this);
+        if( !selectedItem.hasClass('selected') ) {
+            var selectedTab = selectedItem.data('content'),
+                selectedContent = tabContentWrapper.find('li[data-content="'+selectedTab+'"]'),
+                slectedContentHeight = selectedContent.innerHeight();
+
+            tabItems.find('a.selected').removeClass('selected');
+            selectedItem.addClass('selected');
+            selectedContent.addClass('selected').siblings('li').removeClass('selected');
+            //animate tabContentWrapper height when content changes
+            tabContentWrapper.animate({
+                'height': slectedContentHeight
+            }, 200);
+        }
+    });
+
+    //hide the .plugin-tabs::after element when tabbed navigation has scrolled to the end (mobile version)
+    checkScrolling(tabNavigation);
+    tabNavigation.on('scroll', function(){
+        checkScrolling($(this));
+    });
+});
+
+$(window).on('resize', function(){
+    tabs.each(function(){
+        var tab = $(this);
+        checkScrolling(tab.find('nav'));
+        tab.find('.plugin-tabs-content').css('height', 'auto');
+    });
+});
+
+function checkScrolling(tabs){
+    var totalTabWidth = parseInt(tabs.children('.plugin-tabs-navigation').width()),
+        tabsViewport = parseInt(tabs.width());
+    if( tabs.scrollLeft() >= totalTabWidth - tabsViewport) {
+        tabs.parent('.plugin-tabs').addClass('is-ended');
+    } else {
+        tabs.parent('.plugin-tabs').removeClass('is-ended');
+    }
+}
+
+
+});
+</script>
+</body>
+</html>

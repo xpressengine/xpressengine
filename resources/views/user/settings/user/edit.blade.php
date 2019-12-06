@@ -16,13 +16,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 {{-- displayName --}}
-                                {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> $user->display_name, 'name'=>'display_name']) !!}
+                                {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans(app('xe.config')->getVal('user.register.display_name_caption')), 'placeholder'=>xe_trans('xe::enterDisplayName', ['displayNameCaption' => xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))]), 'value'=> $user->display_name, 'name'=>'display_name']) !!}
                             </div>
                             <div class="form-group">
                                 <label>{{xe_trans('xe::email')}}</label>
                                 {{-- email --}}
                                 <div id="__xe_emailSetting" data-user-id="{{ $user->id }}" data-email="{{ $user->email }}"></div>
                             </div>
+
+                            {!! uio('formText', ['id'=>'__xe_loginId', 'label'=>xe_trans('xe::id'), 'placeholder'=>xe_trans('xe::enterId'), 'value'=> $user->login_id, 'name'=>'login_id']) !!}
 
                             {{-- introduction --}}
                             {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>xe_trans('xe::introduction'), 'placeholder'=>xe_trans('xe::enterIntroduction'), 'value'=> $user->introduction, 'name'=>'introduction']) !!}

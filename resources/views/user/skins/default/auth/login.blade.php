@@ -1,41 +1,45 @@
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+
 <!-- 로그인 폼  -->
 <div class="user">
-    <h1>{{xe_trans('xe::doLogin')}}</h1>
-    <form action="{{ route('login') }}" method="post" {{--data-rule="{{ $loginRuleName }}"--}}>
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <h2 class="user__title">{{ xe_trans('xe::doLogin') }}</h2>
+
+    <form action="{{ route('login') }}" method="post">
+        {{ csrf_field() }}
         <fieldset>
-            <legend>{{xe_trans('xe::doLogin')}}</legend>
-            <div class="auth-group {{--wrong--}}">
-                <label for="name" class="xe-sr-only">{{xe_trans('xe::email')}}</label>
-                <input name="email" type="text" id="name" class="xe-form-control" value="{{ old('email') }}" placeholder="{{xe_trans('xe::email')}}">
-                {{--<em class="text-message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>--}}
-            </div>
-            <div class="auth-group">
-                <label for="pwd" class="xe-sr-only">{{xe_trans('xe::password')}}</label>
-                <input name="password" type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}" autocomplete="off">
-                <p><a href="{{ route('auth.reset') }}" class="xe-pull-right">{{xe_trans('xe::forgotPassword')}}</a></p>
-            </div>
-            <label class="xe-label xe-input-group">
-                <input type="checkbox" class="__xe_keep_login" id="chk" name="remember">
-                <span class="xe-input-helper"></span>
-                <span class="xe-label-text">{{xe_trans('xe::keepLogin')}}</span>
-            </label>
-            <!--[D] 체크 시 하단메시지 노출-->
+            <legend>{{ xe_trans('xe::doLogin') }}</legend>
+            <div class="user-login">
+                <div class="xu-form-group xu-form-group--large">
+                    <input type="text" name="email" class="xu-form-group__control" placeholder="{{ xe_trans('xe::email') }}" value="{{ old('email') }}">
+                </div>
+                <div class="xu-form-group xu-form-group--large">
+                    <input type="password" name="password" class="xu-form-group__control" id="password" placeholder="{{ xe_trans('xe::password') }}">
+                </div>
+                <label class="xu-label-checkradio xu-label-checkradio--small">
+                    <input type="checkbox" class="__xe_keep_login">
+                    <span class="xu-label-checkradio__helper"></span>
+                    <span class="xu-label-checkradio__text">{{ xe_trans('xe::keepLogin') }}</span>
+                </label>
+                <!--[D] 체크 시 하단메시지 노출-->
             <p class="auth-noti" id="__xe_infoRemember" style="display: none;">
-                {{xe_trans('xe::keepLoginDescription')}}
-            </p>
+                    {{xe_trans('xe::keepLoginDescription')}}
+                </p>
 
+                <a href="{{ route('auth.reset') }}" class="user-login-link user-login-link--right">{{ xe_trans('xe::forgotPassword') }}</a>
 
+                {{-- recaptcha--}}
+                @if ($config['useCaptcha'] === true)
+                    {!! uio('captcha') !!}
+                @endif
 
-            {{-- recaptcha--}}
-            @if($config['useCaptcha'] === true)
-                {!! uio('captcha') !!}
-            @endif
-
-            <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{xe_trans('xe::login')}}</button>
+                <button type="submit" class="xu-button xu-button--primary xu-button--block xu-button--large user-login__button">
+                    <span class="xu-button__text">{{ xe_trans('xe::login') }}</span>
+                </button>
+            </div>
         </fieldset>
     </form>
-    <p class="auth-text">{{xe_trans('xe::signUpSite')}} <a href="{{ route('auth.register') }}">{{xe_trans('xe::signUp')}}</a></p>
+
+    <p class="auth-user__text">{{ xe_trans('xe::signUpSite') }} <a href="{{ route('auth.register') }}">{{ xe_trans('xe::signUp') }}</a></p>
 </div>
 <!-- //로그인 폼  -->
 
@@ -43,11 +47,10 @@
     $(function($) {
         $('.__xe_keep_login').change(function() {
             if(this.checked) {
-                $('#__xe_infoRemember').slideDown();
+                $('#__xe_infoRemember').slideDown('fast');
             } else {
-                $('#__xe_infoRemember').slideUp();
+                $('#__xe_infoRemember').slideUp('fast');
             }
         })
     });
-
 </script>")->load()  !!}

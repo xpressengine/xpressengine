@@ -1,3 +1,5 @@
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+
 <!--회원가입하기 기본폼 -->
 <div class="user">
     <h1>{{xe_trans('xe::signUp')}}</h1>

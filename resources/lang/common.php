@@ -905,6 +905,10 @@ return [
         'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
         'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
     ],
+    'validationLoginId' => [
+        'ko' => '아이디는 5~20자의 영문 소문자, 대쉬(-), 언더스코어(_)만 사용 가능하고, 처음과 마지막에는 영문 소문자와 숫자만 가능합니다.',
+        'en' => 'You can only use 5 ~ 20 lowercase letters, dash (-), and underscore (_).'
+    ],
     'interfaceNotImplemented' => [
         'ko' => '":className" 클래스는 반드시 \Xpressengine\Plugin\ComponentInterface를 구현해야 합니다',
         'en' => '":className" class must implements \Xpressengine\Plugin\ComponentInterface.',
@@ -1409,6 +1413,7 @@ return [
     ],
     'registerByEmailConfirmDescription' => [
         'ko' => '이메일 인증을 통해 가입할 수 있습니다. 인증 코드를 전송받을 이메일 주소를 입력하세요.',
+        'en' => 'You can sign up through email authentication. Please enter the email address to which you will receive the authentication code.'
     ],
     'sendConfirmationEmail' => [
         'ko' => '인증 이메일 전송',
@@ -1715,6 +1720,10 @@ return [
     'enterEmail' => [
         'ko' => '이메일을 입력하세요.',
         'en' => 'Please enter email.',
+    ],
+    'enterId' => [
+        'ko' => '아이디를 입력하세요.',
+        'en' => 'Please enter ID.',
     ],
     'owner' => [
         'ko' => '소유자',
@@ -3385,5 +3394,113 @@ return [
     'deactive' => [
         'ko' => '비활성',
         'en' => 'Deactive'
-    ]
+    ],
+    'registerSettings' => [
+        'ko' => '가입 설정',
+        'en' => 'Register settings'
+    ],
+    'registerSettingsDescription' => [
+        'ko' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
+        'en' => 'You can manage the membership process and the membership registration form.'
+    ],
+    'pending_admin' => [
+        'ko' => '관리자 승인 대기',
+        'en' => 'Wait for administrator approval'
+    ],
+    'pending_admin_description' => [
+        'ko' => '관리자 승인 후 가입',
+        'en' => 'Sign up after admin approval'
+    ],
+    'pending_email' => [
+        'ko' => '이메일 인증 대기',
+        'en' => 'Wait for email verification'
+    ],
+    'pending_email_description' => [
+        'ko' => '이메일 인증 후 가입',
+        'en' => 'Sign up after email verification'
+    ],
+    'goToHome' => [
+        'ko' => '홈으로',
+        'en' => 'Go to home'
+    ],
+    'waitingAdminApproval' => [
+        'ko' => '관리자 승인 대기중',
+        'en' => 'Waiting for Admin Approval'
+    ],
+    'beforeAdminApproval' => [
+        'ko' => '회원 가입 승인 전입니다.',
+        'en' => 'This is before you approve your membership.'
+    ],
+    'needAdminApprovalCanLogin' => [
+        'ko' => '관리자의 승인 후 로그인할 수 있습니다.',
+        'en' => 'You can log in after the administrator approves it.'
+    ],
+    'sendConfirmMail' => [
+        'ko' => '인증 메일 발송',
+        'en' => 'Send confirm mail.'
+    ],
+    'sendedRegisterConfirmMail' => [
+        'ko' => '가입하신 이메일로 가입 인증 메일을 발송했습니다.',
+        'en' => 'Sent you a sign-up authentication email with the email you signed up for.'
+    ],
+    'checkYourEmail' => [
+        'ko' => '이메일을 확인해주세요.',
+        'en' => 'Please check your e-mail.'
+    ],
+    'dontReceiveEmail' => [
+        'ko' => '이메일을 받지 못하셨나요?',
+        'en' => 'Didn\'t you get your e-mail?'
+    ],
+    'pending' => [
+        'ko' => '대기중',
+        'en' => 'Pending'
+    ],
+    'require' => [
+        'ko' => '필수',
+        'en' => 'Require'
+    ],
+    'optional' => [
+        'ko' => '선택',
+        'en' => 'Optional'
+    ],
+    'viewContents' => [
+        'ko' => '내용보기',
+        'en' => 'View contents'
+    ],
+    'msgAgreeAllTerms' => [
+        'ko' => '필수약관, 선택약관에 모두 동의합니다',
+        'en' => 'I agree to the required and optional terms'
+    ],
+    'pleaseAcceptRequireTerms' => [
+        'ko' => '필수 약관을 모두 동의해 주세요.',
+        'en' => 'Please accept all required terms.'
+    ],
+    'termAndInstructions' => [
+        'ko' => '약관 및 안내',
+        'en' => 'Terms and instructions'
+    ],
+    'themeDesign' => [
+        'ko' => '테마 디자인',
+        'en' => 'Theme design'
+    ],
+    'globalMenuSkin' => [
+        'ko' => '글로벌 메뉴 스킨',
+        'en' => 'Global menu skin'
+    ],
+    'registerEmailConfirmMessage' => [
+        'ko' => '회원가입을 위해 이메일 인증을 진행합니다.<br/>회원가입 계속하기 버튼을 눌러 주세요.',
+        'en' => 'Proceed with email verification for membership.</br>Please click the Continue Member Registration button.'
+    ],
+    'continueRegister' => [
+        'ko' => '회원가입 계속하기',
+        'en' => 'Continue Member Registration'
+    ],
+    'postEmailConfirmMessage' => [
+        'ko' => '메일 인증이 완료되었습니다.<br/>:displayName님, 회원이 되신 것을 환영합니다.',
+        'en' => 'Your mail has been verified.<br/>:displayName, welcome.'
+    ],
+    'enterDisplayName' => [
+        'ko' => ':displayNameCaption을(를) 입력하세요.',
+        'en' => 'Please enter :displayNameCaption.',
+    ],
 ];

@@ -139,6 +139,7 @@ class InstallController extends Controller
             array_merge($request->all(), ['web_url' => $url]),
             [
                 'admin_email' => 'required|email',
+                'admin_login_id' => 'required',
                 'admin_password' => 'required|confirmed',
                 'admin_password_confirmation' => 'required',
                 'database_name' => 'required',
@@ -161,6 +162,7 @@ class InstallController extends Controller
             ],
             'admin' => [
                 'email' => $request->get('admin_email'),
+                'login_id' => $request->get('admin_login_id'),
                 'password' => $request->get('admin_password'),
                 'display_name' => $request->get('admin_display_name') ?: 'admin',
             ],

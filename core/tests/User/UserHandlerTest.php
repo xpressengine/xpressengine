@@ -22,6 +22,7 @@ namespace Xpressengine\Tests\User {
     use Illuminate\Support\Fluent;
     use Illuminate\Support\MessageBag;
     use Mockery;
+    use Xpressengine\Config\ConfigManager;
     use Xpressengine\Register\Container;
     use Xpressengine\User\Models\User;
     use Xpressengine\User\Rating;
@@ -51,8 +52,11 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $hasher */
             $hasher = $this->getHasher();
             $hasher->shouldReceive('make')->once()->with('secret')->andReturn('encrypted');
+
+            $configManager = $this->getConfigManager();
+
             /** @var Mockery\MockInterface $handler */
-            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher);
+            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher, null, $configManager);
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
@@ -72,6 +76,9 @@ namespace Xpressengine\Tests\User {
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
 
+            $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
+
             $this->assertEquals($user, $handler->create($data));
         }
 
@@ -80,8 +87,11 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $hasher */
             $hasher = $this->getHasher();
             $hasher->shouldReceive('make')->once()->with('secret')->andReturn('encrypted');
+
+            $configManager = $this->getConfigManager();
+
             /** @var Mockery\MockInterface $handler */
-            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher);
+            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher, null, $configManager);
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
@@ -120,6 +130,9 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with('baz')
                 ->andReturnNull();
+
+            $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -129,8 +142,11 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $hasher */
             $hasher = $this->getHasher();
             $hasher->shouldReceive('make')->once()->with('secret')->andReturn('encrypted');
+
+            $configManager = $this->getConfigManager();
+
             /** @var Mockery\MockInterface $handler */
-            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher);
+            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher, null, $configManager);
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
@@ -172,6 +188,9 @@ namespace Xpressengine\Tests\User {
                 ->with('baz')
                 ->andReturnNull();
 
+            $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
+
             $this->assertEquals($user, $handler->create($data));
         }
 
@@ -180,8 +199,11 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $hasher */
             $hasher = $this->getHasher();
             $hasher->shouldReceive('make')->once()->with('secret')->andReturn('encrypted');
+
+            $configManager = $this->getConfigManager();
+
             /** @var Mockery\MockInterface $handler */
-            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher);
+            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher, null, $configManager);
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
@@ -204,6 +226,9 @@ namespace Xpressengine\Tests\User {
                 ])
                 ->andReturn($user);
 
+            $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
+
             $this->assertEquals($user, $handler->create($data));
         }
 
@@ -212,8 +237,11 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $hasher */
             $hasher = $this->getHasher();
             $hasher->shouldReceive('make')->once()->with('secret')->andReturn('encrypted');
+
+            $configManager = $this->getConfigManager();
+
             /** @var Mockery\MockInterface $handler */
-            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher);
+            $handler = $this->getHandlerMock(null,null,null,null,null,null,$hasher, null, $configManager);
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
@@ -260,6 +288,9 @@ namespace Xpressengine\Tests\User {
                     'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
+
+            $configManager->shouldReceive('getVal')->with('user.register.register_process', User::STATUS_ACTIVATED)->andReturn(User::STATUS_ACTIVATED);
+            $configManager->shouldReceive('getVal')->with('user.register.use_display_name')->andReturn(true);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -312,7 +343,7 @@ namespace Xpressengine\Tests\User {
          * @param null $imageHandler
          * @param null $hasher
          * @param null $validator
-         * @param null $container
+         * @param null $configManager
          *
          * @return UserHandler
          */
@@ -325,7 +356,7 @@ namespace Xpressengine\Tests\User {
             $imageHandler = null,
             $hasher = null,
             $validator = null,
-            $container = null
+            $configManager = null
         ) {
             if ($users === null) {
                 /** @var UserRepositoryInterface $users */
@@ -359,9 +390,9 @@ namespace Xpressengine\Tests\User {
                 /** @var Factory $validator */
                 $validator = $this->getValidator();
             }
-            if ($container === null) {
-                /** @var Container $container */
-                $container = $this->getContainer();
+            if ($configManager === null) {
+                /** @var ConfigManager $configManager */
+                $configManager = $this->getConfigManager();
             }
 
             $handler = new UserHandler(
@@ -373,8 +404,7 @@ namespace Xpressengine\Tests\User {
                 $imageHandler,
                 $hasher,
                 $validator,
-                $container,
-                true
+                $configManager
             );
             return $handler;
         }
@@ -391,7 +421,7 @@ namespace Xpressengine\Tests\User {
             $imageHandler = null,
             $hasher = null,
             $validator = null,
-            $container = null
+            $configManager = null
         ) {
             if ($users === null) {
                 /** @var UserRepositoryInterface $users */
@@ -425,9 +455,9 @@ namespace Xpressengine\Tests\User {
                 /** @var Factory $validator */
                 $validator = $this->getValidator();
             }
-            if ($container === null) {
-                /** @var Container $container */
-                $container = $this->getContainer();
+            if ($configManager === null) {
+                /** @var ConfigManager $configManager */
+                $configManager = $this->getConfigManager();
             }
 
             $handler = Mockery::mock(UserHandler::class, [
@@ -439,9 +469,9 @@ namespace Xpressengine\Tests\User {
                 $imageHandler,
                 $hasher,
                 $validator,
-                $container,
-                true
+                $configManager
             ])->makePartial();
+
             return $handler;
         }
 
@@ -485,9 +515,9 @@ namespace Xpressengine\Tests\User {
             return Mockery::mock(Factory::class);
         }
 
-        protected function getContainer()
+        protected function getConfigManager()
         {
-            return Mockery::mock(Container::class);
+            return Mockery::mock(ConfigManager::class);
         }
 
         protected function getImageHander()
@@ -529,6 +559,5 @@ namespace Xpressengine\Tests\User {
         {
             return Mockery::mock('\Illuminate\Database\Eloquent\Builder');
         }
-
     }
 }

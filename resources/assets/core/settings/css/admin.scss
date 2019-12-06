@@ -35,6 +35,9 @@
 @import "component/variables";
 @import "component/button";
 
+// 관리자 세팅 페이지 개편
+@import "admin-new-style";
+
 /* 단일 클래스 스타일 */
 .text-align--center {text-align: center !important}
 .text-align--left {text-align: left !important}

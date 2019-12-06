@@ -56,8 +56,12 @@ class DynamicFieldPart extends RegisterFormPart
      */
     protected function data()
     {
+        $useDynamicFields = app('xe.config')->getVal('user.register.dynamic_fields');
+
         $fields = Collection::make($this->getFields())->filter(function ($field) {
             return $field->isEnabled();
+        })->sortBy(function ($field) use ($useDynamicFields) {
+            return array_search($field->getConfig()->get('id'), $useDynamicFields);
         });
 
         return compact('fields');

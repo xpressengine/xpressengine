@@ -17,12 +17,14 @@ namespace Xpressengine\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
+use Xpressengine\Config\ConfigManager;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Models\User;
+use Xpressengine\User\Models\UserTermAgree;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -88,6 +90,11 @@ class UserHandler
     private $imageHandler;
 
     /**
+     * @var ConfigManager $configManager config manager
+     */
+    private $configManager;
+
+    /**
      * constructor.
      *
      * @param UserRepositoryInterface         $users         User 회원 저장소
@@ -98,6 +105,7 @@ class UserHandler
      * @param UserImageHandler                $imageHandler  image handler
      * @param Hasher                          $hasher        해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator     유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param ConfigManager                   $configManager ConfigManager
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -107,7 +115,8 @@ class UserHandler
         PendingEmailRepositoryInterface $pendingEmails,
         UserImageHandler $imageHandler,
         Hasher $hasher,
-        Validator $validator
+        Validator $validator,
+        ConfigManager $configManager
     ) {
         $this->users = $users;
         $this->accounts = $accounts;
@@ -117,6 +126,7 @@ class UserHandler
         $this->validator = $validator;
         $this->pendingEmails = $pendingEmails;
         $this->imageHandler = $imageHandler;
+        $this->configManager = $configManager;
     }
 
     /**
@@ -179,7 +189,10 @@ class UserHandler
     public function create(array $data)
     {
         $data['rating'] = $data['rating'] ?? Rating::USER;
-        $data['status'] = $data['status'] ?? User::STATUS_ACTIVATED;
+        $data['status'] = $data['status'] ?? $this->configManager->getVal('user.register.register_process', User::STATUS_ACTIVATED);
+        if ($this->configManager->getVal('user.register.use_display_name') === false && isset($data['display_name']) === false) {
+            $data['display_name'] = $data['login_id'];
+        }
 
         $this->validateForCreate($data);
 
@@ -232,6 +245,17 @@ class UserHandler
             $user->accounts()->save($account);
         }
 
+        // save term agree
+        if (isset($data['user_agree_terms'])) {
+            foreach ($data['user_agree_terms'] as $termId) {
+                $newTermAgree = new UserTermAgree();
+                $newTermAgree->fill([
+                    'user_id' => $user->id,
+                    'term_id' => $termId
+                ])->save();
+            }
+        }
+
         return $user;
     }
 
@@ -246,6 +270,10 @@ class UserHandler
      */
     public function update(UserInterface $user, $userData)
     {
+        if ($this->configManager->getVal('user.register.use_display_name') === false && $userData['display_name'] === null) {
+            $userData['display_name'] = $userData['login_id'];
+        }
+
         $this->validateForUpdate($user, $userData);
 
         // encrypt password
@@ -342,6 +370,10 @@ class UserHandler
             $this->validateEmail($data['email']);
         }
 
+        if (isset($data['login_id'])) {
+            $this->validateLoginId($data['login_id']);
+        }
+
         // displayName 검사
         $this->validateDisplayName($data['display_name']);
 
@@ -360,10 +392,12 @@ class UserHandler
     }
 
     /**
-     * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름이 형식검사와 중복검사를 병행한다.
+     * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름 형식검사 및 옵션에 따른 중복검사를 병행한다.
+     * 3.0.8 버전부터 중복 허용 가능 옵션 추가
      *
      * @param string             $name 유효성 검사를 할 표시이름
      * @param UserInterface|null $user user object
+     *
      * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
     public function validateDisplayName($name, UserInterface $user = null)
@@ -372,17 +406,46 @@ class UserHandler
             $name = null;
         }
 
+        $displayNameRules = ['display_name'];
+        if (app('xe.config')->getVal('user.register.display_name_unique') === true) {
+            $displayNameRules[] = Rule::unique('user')->where(function ($query) use ($user) {
+                if ($user) {
+                    $query->where('id', '!=', $user->getId());
+                }
+            });
+        }
+
         $this->validator->make(
             ['display_name' => $name],
-            ['display_name' => [
-                'display_name',
-                'required',
-                Rule::unique('user')->where(function ($query) use ($user) {
-                    if ($user) {
-                        $query->where('id', '!=', $user->getId());
-                    }
-                })
-            ]]
+            ['display_name' => $displayNameRules]
+        )->validate();
+
+        return true;
+    }
+
+    /**
+     * LoginId에 대한 유효성 검사
+     *
+     * @param string             $loginId 유효성 검사를 할 LoginId
+     * @param UserInterface|null $user    user object
+     *
+     * @return bool
+     */
+    public function validateLoginId($loginId, UserInterface $user = null)
+    {
+        $rules = [
+            'required',
+            'login_id',
+            Rule::unique('user')->where(function ($query) use ($user) {
+                if ($user) {
+                    $query->where('id', '!=', $user->getId());
+                }
+            })
+        ];
+
+        $this->validator->make(
+            ['login_id' => $loginId],
+            ['login_id' => $rules]
         )->validate();
 
         return true;
@@ -427,6 +490,12 @@ class UserHandler
         if (array_get($data, 'display_name') !== null) {
             if (strcmp($user->display_name, $data['display_name']) !== 0) {
                 $this->validateDisplayName($data['display_name'], $user);
+            }
+        }
+
+        if (array_get($data, 'login_id') !== null) {
+            if (strcmp($user->login_id, $data['login_id']) !== 0) {
+                $this->validateLoginId($data['login_id'], $user);
             }
         }
 

@@ -1,87 +1,50 @@
 @extends('emails.common')
 
 @section('content')
-    <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left">
-        <tbody>
+<table style="padding:0; margin:0 auto; border:0; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
 
-        <tr>
-            <td style="font-family: NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:30px;letter-spacing:-1px">
-                {{xe_trans('xe::emailConfirm')}}
-            </td>
-        </tr>
-        <tr>
-            <td height="47"></td>
-        </tr>
-        <tr>
-            <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:16px">
-                {!!  xe_trans('xe::confirmEmailForRegisterDescription') !!}
-            </td>
-        </tr>
-        <tr>
-            <td height="5"></td>
-        </tr>
-        <tr>
-            <td>
-                <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;-webkit-text-size-adjust:100%;text-align:left;border:1px solid #EDF0F2">
-                    <tbody>
-                    <tr>
-                        <td height="20" colspan="3"></td>
+            <h2 style="padding:0; margin:0 0 20px 0; border:0; font-size:28px; line-height:36px; font-weight:bold; letter-spacing:-0.01em; word-break:keep-all; color:#161616;">회원가입을 축하드립니다</h2>
+        </td>
+    </tr>
+
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%; color:#313131;">
+            <p style="padding:0; margin:0; border:0;">안녕하세요. 회원가입을 진심으로 환영합니다 :)</p>
+            <p style="padding:0; margin:0; border:0;">회원님의 가입정보는 다음과 같습니다.</p>
+        </td>
+    </tr>
+
+    <tr style="padding:0; margin:0; border:0;">
+        <td style="padding:0; margin:0; border:0; width:100%;">
+
+            <h3 style="margin:0; padding:40px 0 16px 0; font-size:15px; color:#313131;"><i style="display:inline-block; width:5px; height:5px; background-color:#313131; margin:0 16px 0 0; vertical-align:2px;"></i>가입 정보</h3>
+
+            <table style="padding:0; margin:0 auto; border:0; max-width:536px; width:100%; background:#fff; border-spacing:0; border-collapse:collapse; table-layout:fixed;">
+                <tbody style="padding:0; margin:0; border:0;">
+                    <tr style="padding:0; margin:0; border:0;">
+                        <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::email') }}</td>
+                        <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->address }}</td>
                     </tr>
-                    <tr>
-                        <td width="20" style="line-height: 0;font-size: 0;background-color:#fff;">
-                            &nbsp;
-                        </td>
-                        <td>
-                            <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;-webkit-text-size-adjust:100%;text-align:left">
-                                <tbody>
-                                <tr>
-                                    <th width="80" style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;font-size:13px;text-align:left;color:#8e8e93;font-weight:normal;vertical-align:top;line-height:21px;">{{ xe_trans('xe::account').' '.xe_trans('xe::email') }}</th>
-                                    <td style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#2c2e37;font-size:13px;text-align:left;word-break: break-all;vertical-align:top;line-height:21px;">{{ $mail->address }}</td>
-                                </tr>
-                                <tr>
-                                    <th width="80" style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;font-size:13px;text-align:left;color:#8e8e93;font-weight:normal;vertical-align:top;line-height:21px;">{{ xe_trans('xe::confirmCode') }}</th>
-                                    <td style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#2c2e37;font-size:13px;text-align:left;word-break: break-all;vertical-align:top;line-height:21px;"><span style="color:#6f8dff;">{{ $mail->confirmation_code }}</span></td>
-                                </tr>
-                                <td height="35">
-                                </td>
-                                <tr>
-                                    <td colspan="2" align="center">
-                                        <!--[D]  텍스트 사이즈에 따라 width 변경해야 함 or 300px 미만의 넉넉한 사이즈로 지정-->
-                                        <div style="display:inline-block;width:150px;max-width:100%;vertical-align:top; margin:0 auto">
-                                            <table style="table-layout:fixed;width:100%;text-align:center" border="0" cellpadding="0" cellspacing="0">
-                                                <tbody>
-                                                <tr>
-                                                    <td style="padding:0">
-                                                        <table style="table-layout:fixed;width:100%;background:#6F8DFF" border="0" cellpadding="0" cellspacing="0">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td height="42" style="text-align:center">
-                                                                    <a href="{{ route('auth.register', ['token' => $token->id, 'code' => $mail->confirmation_code]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::continueSigningUp') }}</a>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td width="20" style="line-height: 0;font-size: 0;background-color:#fff;">
-                            &nbsp;
-                        </td>
+                    <tr style="padding:0; margin:0; border:0;">
+                        <td style="padding:0; margin:0; border: solid 1px #e5e5e5; width:120px; height:35px; background-color:#f4f5f7; text-align:center; font-size:14px;">{{ xe_trans('xe::display_name') }}</td>
+                        <td style="padding:0 0 0 20px; border: solid 1px #e5e5e5; border-left:none;">{{ $mail->display_name }}</td>
                     </tr>
-                    <tr>
-                        <td height="10" colspan="3"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:64px 0 0 0; margin:0; border:0; width:100%; text-align:center;">
+            <a href="{{ url('/') }}" target="_blank" style="display:inline-block; min-width:176px; padding:14px 52px; margin:0; border:0; border-radius: 3px; font-size:15px; color:#fff; text-decoration:none; text-align:center; background:#345bd9">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a>
+        </td>
+    </tr>
+    <tr style="padding:0;margin:0;border:0;">
+        <td style="padding:0;margin:0;border:0;width:100%;height:52px;"></td>
+    </tr>
+</table>
 @endsection

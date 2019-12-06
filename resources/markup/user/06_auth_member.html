@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>XpressEngine - PHP Open Source CMS</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css" rel="stylesheet" media="all">
+
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/vendor.js" type="text/javascript"></script>
+    <script src="../../../assets/common.js" type="text/javascript"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js" type="text/javascript"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../../assets/core/user/auth.css">
+</head>
+
+<body>
+<!-- 로그인 폼  -->
+<div class="user">
+    <h1>계정에 로그인</h1>
+    <form action="">
+        <fieldset>
+        <legend>로그인</legend>
+            <div class="auth-group wrong-input">
+                <label for="name" class="xe-sr-only">이메일 주소 / 사용자 이름</label>
+                <input type="text" id="name" class="xe-form-control" placeholder="이메일 주소 / 사용자 이름">
+                <em class="text-message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>
+            </div>
+            <div class="auth-group">
+                <label for="pwd" class="xe-sr-only">비밀번호</label>
+                <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호">
+            </div>
+            <div class="xe-input-group">
+                <!--[D] 로그인 유지가 기본인 경우 inpuit에 "disabled="disabled"추가-->
+                <!--[D] 다른 xe-input-group과 다르게 label(for=""), input(id="")  같은 값으로 매칭-->
+                <div class="xe-form-inline">
+                    <label class="xe-label">
+                        <input type="checkbox">
+                        <span class="xe-input-helper"></span>
+                        <span class="xe-label-text">로그인 유지하기</span>
+                    </label>
+                    <a href="#" class="pull-right">암호를 잊었습니까?</a>
+                </div>
+                <!--[D] 체크 시 하단메시지 노출-->
+                <div class="auth-noti">
+                    <p>브라우저를 닫더라도 로그인이 계속 유지될 수 있습니다. 로그인 유지 기능을 사용할 경우 다음 접속부터는 로그인할 필요가 없습니다. 단, 게임방, 학교 등 공공장소에서 이용 시 개인정보가 유출될 수 있으니 꼭 로그아웃을 해주세요.</p>
+                </div>
+            </div>
+            <div class="g-recaptcha" data-sitekey="6LcsHgkTAAAAAKutnB70Jr_w7xRX5XhBWd_A1yub"></div>
+            <button class="xe-btn xe-btn-primary xe-btn-block">로그인</button>
+        </fieldset>
+    </form>
+    <div class="hr">
+        <p class="text-hr"><span>or</span></p>
+    </div>
+    <div class="auth-sns">
+        <ul>
+        <li class="sns-facebook"><a href="#"><i class="xi-facebook"></i></a></li>
+        <li class="sns-twitter"><a href="#"><i class="xi-twitter"></i></a></li>
+        <li class="sns-naver"><a href="#"><i class="xi-naver"></i></a></li>
+        <li class="sns-google"><a href="#"><i class="xi-google-plus"></i></a></li>
+        <li class="sns-github"><a href="#"><i class="xi-github"></i></a></li>
+        <li class="sns-line"><a href="#"><i class="xi-line-messenger"></i></a></li>
+        </ul>
+    </div>
+    <p class="auth-text">아직 회원이 아닙니까? <a href="#">회원가입하기</a></p>
+</div>
+<!-- //로그인 폼  -->
+<!--소셜로그인-->
+<div class="user">
+    <div class="auth-sns v2">
+        <h1>계정에 로그인</h1>
+        <ul>
+        <li class="sns-facebook"><a href="#"><i class="xi-facebook"></i>페이스북 계정으로 로그인</a></li>
+        <li class="sns-twitter"><a href="#"><i class="xi-twitter"></i>트위터 계정으로 로그인</a></li>
+        <li class="sns-naver"><a href="#"><i class="xi-naver"></i>네이버 계정으로 로그인</a></li>
+        <li class="sns-google"><a href="#"><i class="xi-google-plus"></i>구글 계정으로 로그인</a></li>
+        <li class="sns-github"><a href="#"><i class="xi-github"></i>깃허브 계정으로 로그인</a></li>
+        </ul>
+        <a href="#" class="xe-btn xe-btn-link xe-btn-block">이메일로 로그인하기</a>
+    </div>
+</div>
+<!--//소셜로그인-->
+<!--회원가입하기 기본폼 -->
+<div class="user">
+    <h1>회원 가입하기</h1>
+    <form action="">
+        <fieldset>
+        <legend>회원가입</legend>
+            <div class="auth-group">
+                <label for="email" class="xe-sr-only">이메일 주소</label>
+                <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소">
+            </div>
+            <div class="auth-group">
+                <label for="name" class="xe-sr-only">사용자 이름</label>
+                <input type="text" id="name" class="xe-form-control" placeholder="사용자 이름">
+            </div>
+            <div class="auth-group">
+                <label for="pwd" class="xe-sr-only">비밀번호</label>
+                <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호">
+            </div>
+            <div class="auth-group">
+                <label for="pwd2" class="xe-sr-only">비밀번호 다시 입력</label>
+                <input type="password" id="pwd2" class="xe-form-control" placeholder="비밀번호 다시 입력">
+            </div>
+            <label class="xe-label">
+                <input type="checkbox">
+                <span class="xe-input-helper"></span>
+                <span class="xe-label-text"><a href="#">이용 약관</a> 및 <a href="#">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.</span>
+            </label>
+            <div class="g-recaptcha" data-sitekey="6LcsHgkTAAAAAKutnB70Jr_w7xRX5XhBWd_A1yub"></div>
+            <button class="xe-btn xe-btn-primary xe-btn-block">가입하기</button>
+        </fieldset>
+    </form>
+    <p class="auth-text">이미 계정이 있습니까? <a href="#">로그인</a></p>
+</div>
+<!--// 회원가입하기 기본폼 -->
+<!--회원가입하기 기본폼 -->
+<div class="user">
+    <h1>회원 가입하기</h1>
+    <form action="">
+        <fieldset>
+        <legend>회원가입</legend>
+            <div class="auth-group wrong-input">
+                <label for="email" class="xe-sr-only">이메일 주소</label>
+                <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소">
+                <em class="text-message">잘못된 이메일 형식입니다.</em>
+            </div>
+            <div class="auth-group wrong-input">
+                <label for="name" class="xe-sr-only">사용자 이름</label>
+                <input type="text" id="name" class="xe-form-control" placeholder="사용자 이름">
+                <em class="text-message">사용자 이름을 사용할 수 없습니다.</em>
+               <!-- <em class="text-message">사용할 수 있는 사용자 이름입니다.</em> -->
+            </div>
+            <div class="auth-group">
+                <label for="pwd" class="xe-sr-only">비밀번호</label>
+                <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호">
+                <em class="text-message">비밀번호는 6자리 이상이며 영문, 숫자, 특수문자를 포함하여야 합니다.</em>
+                <!-- <em class="text-message">올바른 비밀번호가 아닙니다.</em> -->
+            </div>
+            <div class="auth-group success-input">
+                <label for="pwd2" class="xe-sr-only">비밀번호 다시 입력</label>
+                <input type="password" id="pwd2" class="xe-form-control" placeholder="비밀번호 다시 입력">
+                <!-- 버튼 on 클래스로 아이콘 스타일 제어 -->
+                <button class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>
+                <em class="text-message">비밀번호 확인</em>
+                <!-- <em class="text-message">비밀번호가 일치하지 않습니다.</em> -->
+            </div>
+            <div class="xe-input-group">
+                <label class="xe-label">
+                    <input type="checkbox">
+                    <span class="xe-input-helper"></span>
+                    <span class="xe-label-text"><a href="#">이용 약관</a> 및 <a href="#">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.</span>
+                </label>
+                <!--[D] 동의 및체크 시 아래 메시지 노출-->
+                <div class="auth-noti txt_red">
+                    <p>계속하려면 이용 약관 및 개인정보 보호정책을 읽었으며 이에 동의한다는 의사 표시로 확인란을 선택해야 합니다.</p>
+                </div>
+            </div>
+            <div class="g-recaptcha" data-sitekey="6LcsHgkTAAAAAKutnB70Jr_w7xRX5XhBWd_A1yub"></div>
+            <button class="xe-btn xe-btn-primary xe-btn-block">가입하기</button>
+        </fieldset>
+    </form>
+    <p class="auth-text">이미 계정이 있습니까? <a href="#">로그인</a></p>
+</div>
+<!--// 회원가입하기 기본폼 -->
+<!--회원가입 항목 추가 예시, 그리드 사용위해 max-width값을 420px로 조정되어 클래스 v2추가 -->
+<div class="user v2">
+    <form action="">
+        <fieldset>
+        <legend>회원가입</legend>
+            <div class="xe-container-fluid">
+                <h1>회원 가입하기</h1>
+                <div class="xe-row">
+                    <div class="xe-col-sm-6">
+                        <div class="auth-group">
+                            <label for="frst_name" class="xe-sr-only">First name</label>
+                            <input type="text" id="frst_name" class="xe-form-control" placeholder="First name">
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-6">
+                        <div class="auth-group">
+                            <label for="last_name" class="xe-sr-only">Last name</label>
+                            <input type="text" id="last_name" class="xe-form-control" placeholder="Last name">
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <div class="auth-group">
+                            <label for="email" class="xe-sr-only">이메일 주소</label>
+                            <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소">
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <div class="auth-group">
+                            <label for="pwd" class="xe-sr-only">비밀번호</label>
+                            <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호">
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <div class="auth-group">
+                            <label for="pwd2" class="xe-sr-only">비밀번호 다시 입력</label>
+                            <input type="password" id="pwd2" class="xe-form-control" placeholder="비밀번호 다시 입력">
+                            <!--[D] on 클래스 추가 시 아이콘 변경-->
+                            <button class="btn-eye"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <div class="xe-select-box xe-btn">
+                            <label>Korea.South</label>
+                            <select>
+                            <option selected="selected">Korea.South</option>
+                            <option>Japan</option>
+                            <option>China</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="xe-row">
+                    <p class="row-title">Date of birth<i class="xi-info-o"></i></p>
+                    <div class="xe-col-sm-4">
+                        <div class="xe-select-box xe-btn">
+                            <label>year</label>
+                            <select>
+                            <option selected="selected">year</option>
+                            <option>year</option>
+                            <option>year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-4">
+                        <div class="xe-select-box xe-btn">
+                            <label>Month</label>
+                            <select>
+                            <option selected="selected">Month</option>
+                            <option>Month</option>
+                            <option>Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-4">
+                        <div class="xe-select-box xe-btn">
+                            <label>day</label>
+                            <select>
+                            <option selected="selected">day</option>
+                            <option>day</option>
+                            <option>day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <em class="text-message">We collect your date of birth for account authentication and recovery purposes, and to ensure age-appropriate access to content. We values your privacy and trust.  For more information, please visit our <a href="#">Privacy Center.</a></em>
+                    </div>
+                    <div class="xe-col-sm-12">
+                        <label class="xe-label">
+                            <input type="checkbox">
+                            <span class="xe-input-helper"></span>
+                            <span class="xe-label-text"><a href="#">이용 약관</a> 및 <a href="#">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.</span>
+                        </label>
+                        <div class="g-recaptcha" data-sitekey="6LcsHgkTAAAAAKutnB70Jr_w7xRX5XhBWd_A1yub"></div>
+                        <button class="xe-btn xe-btn-primary xe-btn-block">Sign up</button>
+                        <p class="auth-text">Already have an account?  <a href="#">Sign up</a></p>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<!--// 회원가입 항목 추가 예시 -->
+<!-- 비밀번호 찾기 1step, 비밀번호 찾기 시 find-password 클래스 추가 인풋간 간격 넓어짐(제외가능)-->
+<div class="user find-password">
+    <h1>비밀번호를 잊으셨습니까?</h1>
+    <p class="sub-text">우선 계정에 등록된 이메일 주소를 입력하여 신원을 확인해 주세요.</p>
+    <form action="">
+        <fieldset>
+        <legend>비밀번호 찾기</legend>
+            <div class="auth-group wrong-input">
+                <label for="email" class="xe-sr-only">이메일 주소</label>
+                <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소">
+                <em class="text-message">이메일을 입력하세요.</em>
+            </div>
+            <button class="xe-btn xe-btn-primary xe-btn-block">다음</button>
+        </fieldset>
+    </form>
+    <a href="#" class="xe-btn xe-btn-link xe-btn-block">로그인으로 돌아기기</a>
+</div>
+<!-- // 비밀번호 찾기 1step-->
+
+<!-- 비밀번호 찾기 2step-->
+<div class="user find-password">
+    <h1>이메일 확인</h1>
+    <div class="info">
+        <p><em>lee_junha@naver.com</em>이 계정과 연계된 경우, 암호를 새로 만드는 방법에 대한 지침이 포함된 메일을 수신하게 됩니다.</p>
+        <em class="info-title">이메일을 수신하지 못했습니까?</em><br>
+        <p>accounts-noreply@xpressengine.com으로부터 수신된 메시지에 대해 스팸 또는 벌크 폴더를 확인하십시오.</p>
+    </div>
+    <a href="#" class="xe-btn xe-btn-link xe-btn-block">로그인으로 돌아기기</a>
+</div>
+<!-- // 비밀번호 찾기 2step-->
+<!-- 비밀번호 찾기 3step-->
+<div class="user find-password">
+    <h1>비밀번호 변경</h1>
+    <p class="sub-text">다음에 대한 암호 재설정을 요청하였습니다. <em>lee_junha@naver.com</em></p>
+    <form action="">
+        <fieldset>
+        <legend>비밀번호 찾기</legend>
+            <div class="auth-group wrong-input">
+                <label for="pwd" class="xe-sr-only">비밀번호</label>
+                <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호">
+                <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>
+            </div>
+            <div class="auth-group wrong-input">
+                <label for="pwd2" class="xe-sr-only">비밀번호 다시 입력</label>
+                <input type="password" id="pwd2" class="xe-form-control" placeholder="비밀번호 다시 입력">
+                <button class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>
+                <em class="text-message">비밀번호가 일치하지 않습니다.</em>
+                <em class="text-message normal">비밀번호는 6자리 이상이며 영문, 숫자, 특수문자를 포함하여야 합니다.</em>
+            </div>
+            <button class="xe-btn xe-btn-primary xe-btn-block">비밀번호 변경</button>
+        </fieldset>
+    </form>
+</div>
+<!-- // 비밀번호 찾기 3step-->
+<!-- 비밀번호 찾기 4step-->
+<div class="user find-password">
+    <h1>비밀번호 변경이 완료되었습니다.</h1>
+    <div class="info">
+        <p>보안상의 목적으로 해당 변경에 대한 확인용 이메일이 귀하의 계정으로 전송되었습니다.</p>
+    </div>
+    <a href="#" class="xe-btn xe-btn-link xe-btn-block">로그인으로 돌아기기</a>
+</div>
+<!-- // 비밀번호 찾기 4step-->
+</body>
+</html>

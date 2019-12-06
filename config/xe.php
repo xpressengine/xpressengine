@@ -147,41 +147,17 @@ return [
                 'display' => false,
                 'ordering' => 200
             ],
-            'user.setting' => [
-                'title' => 'xe::settings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 400
-            ],
-            'user.setting.default' => [
-                'title' => 'xe::defaultSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 100
-            ],
-            'user.setting.terms' => [
-                'title' => 'xe::termsSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 200
-            ],
-            'user.setting.skin' => [
-                'title' => 'xe::skinSettings',
+            'user.field' => [
+                'title' => 'xe::dynamicFieldSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 300
             ],
-            'user.setting.field' => [
-                'title' => 'xe::dynamicFieldSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 400
-            ],
-            'user.setting.menu' => [
+            'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 500
+                'ordering' => 400
             ],
             'contents' => [
                 'title' => 'xe::contents',
@@ -196,7 +172,7 @@ return [
                 'ordering' => 500
             ],
             'theme' => [
-                'title' => 'xe::theme',
+                'title' => 'xe::themeDesign',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
@@ -213,17 +189,23 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+            'theme.globalSkin' => [
+                'title' => 'xe::globalMenuSkin',
+                'description' => '',
+                'display' => true,
+                'ordering' => 300
+            ],
             'theme.setting' => [
                 'title' => 'xe::settingTheme',
                 'display' => true,
                 'description' => '',
-                'ordering' => 300
+                'ordering' => 400
             ],
             'theme.editor' => [
                 'title' => 'xe::themeEditor',
                 'display' => true,
                 'description' => '',
-                'ordering' => 400
+                'ordering' => 500
             ],
             'extension' => [
                 'title' => 'xe::extension',
@@ -255,29 +237,41 @@ return [
                 'description' => '',
                 'ordering' => 100
             ],
+            'setting.register' => [
+                'title' => 'xe::registerSettings',
+                'display' => true,
+                'description' => '회원가입에 관한 허용 및 절차, 회원가입 폼 관리를 할 수 있습니다.',
+                'ordering' => 200
+            ],
+            'setting.terms' => [
+                'title' => 'xe::termAndInstructions',
+                'description' => '',
+                'display' => true,
+                'ordering' => 300
+            ],
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
                 'description' => '',
-                'ordering' => 300
+                'ordering' => 400
             ],
             'setting.admin-log' => [
                 'title' => 'xe::adminLog',
                 'display' => true,
                 'description' => '관리자 권한을 가진 회원이 실행한 작업을 볼 수 있습니다.',
-                'ordering' => 400
+                'ordering' => 500
             ],
             'setting.editor' => [
                 'title' => 'xe::editorSetting',
                 'display' => true,
                 'description' => '',
-                'ordering' => 500
+                'ordering' => 600
             ],
             'setting.media_library' => [
                 'title' => 'xe::media',
                 'display' => true,
                 'description' => '',
-                'ordering' => 600
+                'ordering' => 700
             ],
             'lang' => [
                 'title' => 'xe::multiLang',
@@ -308,6 +302,8 @@ return [
             'validate' => null
         ],
 
+        //deprecated since 3.0.8
+        //관리자 페이지->설정->가입 설정->비밀번호 정책 수정 기능으로 대체
         'password' => [
             'default' => 'normal',
             'levels' => [

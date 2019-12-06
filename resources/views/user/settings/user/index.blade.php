@@ -31,6 +31,8 @@ use Xpressengine\User\Models\User;
                                 <li @if(!Request::get('status')) class="active" @endif><a href="{{ route('settings.user.index', Request::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
                                 <li @if(Request::get('status') === User::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
                                 <li @if(Request::get('status') === User::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
+                                <li @if(Request::get('status') === User::STATUS_PENDING_ADMIN) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_PENDING_ADMIN] )) }}">{{xe_trans('xe::pending_admin')}}</a></li>
+                                <li @if(Request::get('status') === User::STATUS_PENDING_EMAIL) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_PENDING_EMAIL] )) }}">{{xe_trans('xe::pending_email')}}</a></li>
                                 <li class="divider"></li>
                                 <li><strong>{{xe_trans('xe::group')}}</strong></li>
                                 <li @if(!Request::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
@@ -57,7 +59,7 @@ use Xpressengine\User\Models\User;
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <span class="__xe_selectedKeyfield">
                                             @if(Request::get('keyfield')==='display_name')
-                                                {{xe_trans('xe::name')}}
+                                                {{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}
                                             @elseif(Request::get('keyfield')==='email')
                                                 {{xe_trans('xe::email')}}
                                             @else
@@ -67,7 +69,7 @@ use Xpressengine\User\Models\User;
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}</a></li>
                                             <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
                                         </ul>
                                     </div>
@@ -99,7 +101,7 @@ use Xpressengine\User\Models\User;
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
-                            <th scope="col">{{xe_trans('xe::name')}}</th>
+                            <th scope="col">{{xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))}}</th>
                             <th scope="col">{{xe_trans('xe::account')}}</th>
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
@@ -148,10 +150,12 @@ use Xpressengine\User\Models\User;
                                 @endif
                             </td>
                             <td>
-                                @if($user->status === User::STATUS_DENIED)
-                                <label class="label label-danger">{{xe_trans('xe::rejected')}}</label>
+                                @if ($user->status === User::STATUS_ACTIVATED)
+                                    <label class="label label-green">{{xe_trans('xe::permitted')}}</label>
+                                @elseif ($user->status === User::STATUS_PENDING_ADMIN || $user->status === User::STATUS_PENDING_EMAIL)
+                                    <label class="label label-blue">{{ xe_trans('xe::pending') }}</label>
                                 @else
-                                <label class="label label-green">{{xe_trans('xe::permitted')}}</label>
+                                    <label class="label label-danger">{{xe_trans('xe::rejected')}}</label>
                                 @endif
                             </td>
                             <td><a href="{{ route('settings.user.edit', ['id' => $user->getId()]) }}" class="btn btn-default">{{xe_trans('xe::management')}}</a></td>

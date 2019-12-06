@@ -157,7 +157,11 @@
                     <td><input type="text" class="xe-form-control" name="admin_email" placeholder="{{ trans('xe::install.inputAdminEmail') }}"></td>
                 </tr>
                 <tr>
-                    <th scope="row">Display Name</th>
+                    <th scope="row">ID</th>
+                    <td><input type="text" class="xe-form-control" name="admin_login_id" placeholder="{{ trans('xe::install.inputAdminID') }}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Nickname</th>
                     <td><input type="text" class="xe-form-control" name="admin_display_name" placeholder="{{ trans('xe::install.inputAdminName') }}(default: admin)"></td>
                 </tr>
                 <tr>

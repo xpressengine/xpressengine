@@ -78,8 +78,18 @@ class AuthController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('auth', ['only' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
-        $this->middleware('guest', ['except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
+        $this->middleware(
+            'auth',
+            [
+                'only' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth', 'pendingAdmin', 'pendingEmail']
+            ]
+        );
+        $this->middleware(
+            'guest',
+            [
+                'except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth', 'pendingAdmin', 'pendingEmail']
+            ]
+        );
     }
 
     /**
@@ -113,7 +123,7 @@ class AuthController extends Controller
 
         $email = $this->handler->pendingEmails()->findByAddress($address);
 
-        if($email === null) {
+        if ($email === null) {
             // todo: change exception to http exception
             throw new PendingEmailNotExistsException();
         }
@@ -141,20 +151,22 @@ class AuthController extends Controller
      */
     public function getLogin(Request $request)
     {
-        $redirectUrl = $request->get('redirectUrl',
-            $request->session()->pull('url.intended') ?: url()->previous());
+        $redirectUrl = $request->get(
+            'redirectUrl',
+            $request->session()->pull('url.intended') ?: url()->previous()
+        );
 
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
         }
 
         // common config
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
 
         $loginRuleName = 'login';
 
         XeFrontend::rule($loginRuleName, [
-            'email' => 'required|email_prefix',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -171,7 +183,7 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email_prefix',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -181,15 +193,68 @@ class AuthController extends Controller
 
         $credentials['email'] = trim($credentials['email']);
 
-        $credentials['status'] = User::STATUS_ACTIVATED;
+        $credentials['status'] = [User::STATUS_ACTIVATED, User::STATUS_PENDING_ADMIN, User::STATUS_PENDING_EMAIL];
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
-            return redirect()->intended($this->redirectPath());
+            $user = \Auth::user();
+
+            switch ($user->status) {
+                case User::STATUS_PENDING_ADMIN:
+                    return redirect()->route('auth.pending_admin');
+                    break;
+
+                case User::STATUS_PENDING_EMAIL:
+                    return redirect()->route('auth.pending_email');
+                    break;
+
+                default:
+                    return redirect()->intended($this->redirectPath());
+            }
         }
 
         return redirect()->back()
             ->withInput($request->only('email', 'remember'))
             ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgAccountNotFoundOrDisabled')]);
+    }
+
+    /**
+     * 관리자 승인 대기 상태인 회원이 로그인 했을 떄 처리
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Xpressengine\Presenter\Presentable
+     */
+    public function pendingAdmin(Request $request)
+    {
+        $user = $this->auth->user();
+        if ($user->getStatus() === User::STATUS_ACTIVATED) {
+            return redirect('/');
+        }
+
+        $this->auth->logout();
+        $request->session()->invalidate();
+
+        return XePresenter::make('pending_admin');
+    }
+
+    /**
+     * 이메일 인증 대기 상태인 회원이 로그인 했을 떄 처리
+     *
+     * @param Request $request request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Xpressengine\Presenter\Presentable
+     */
+    public function pendingEmail(Request $request)
+    {
+        $user = $this->auth->user();
+        if ($user->getStatus() === User::STATUS_ACTIVATED) {
+            return redirect('/');
+        }
+
+        $this->auth->logout();
+        $request->session()->invalidate();
+
+        return XePresenter::make('pending_email', compact('user'));
     }
 
     /**
@@ -255,7 +320,7 @@ class AuthController extends Controller
      */
     protected function checkCaptcha()
     {
-        $config = app('xe.config')->get('user.common');
+        $config = app('xe.config')->get('user.register');
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
                 throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::msgFailToPassCAPTCHA'));
