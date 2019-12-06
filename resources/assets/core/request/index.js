@@ -179,7 +179,6 @@ class Request extends App {
     if (typeof data === 'string') {
       return data
     } else {
-      console.debug('prepareDate', stringify(data))
       return stringify(data)
     }
   }

@@ -171,14 +171,12 @@ const actions = {
   loadData ({ commit, state }, filter = {}) {
     return new Promise((resolve, reject) => {
       filter.index_mode = state.listMode
-      console.debug('loadData', filter)
 
       if (state.importMode === 'embed') {
         filter.mime = ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%']
       } else {
         filter.mime = null
       }
-      console.debug('store loadData', state, filter)
 
       window.XE.get('media_library.index', filter)
         .then((response) => {
@@ -281,7 +279,6 @@ const mutations = {
     state.listMode = mode
   },
   [types.SET_IMPORT_MODE] (state, mode = 'embed') {
-    console.debug('SET_IMPORT_MODE', mode)
     state.importMode = mode
   }
 }

@@ -32,8 +32,6 @@ export default {
     }
   },
   created: function() {
-    console.debug('dialog created')
-
     EventBus.$on('dialog.open', (component, payload) => {
       this.visible = true
       this.slots.content = component

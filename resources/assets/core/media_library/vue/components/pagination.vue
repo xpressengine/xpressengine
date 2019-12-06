@@ -45,13 +45,11 @@ export default {
   mounted: function () {
     this.$store.watch((state, getters) => {
       this.paginate = this.$store.getters['media/paginate']
-      console.debug('watch this.paginate', this.paginate.current)
     })
 
     this.$store.subscribe((mutation) => {
       if (mutation.type === 'media/SET_PAGINATE') {
         this.paginate = this.$store.getters['media/paginate']
-        console.debug('subscribe this.paginate', this.paginate.current)
       }
     })
   }

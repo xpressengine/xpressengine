@@ -38,9 +38,6 @@ export default {
   data: function() {
     return {}
   },
-  mounted() {
-    console.debug('dia mounted', this.media, this)
-  },
   methods: {
     close() {
       EventBus.$emit('dialog.close')
@@ -54,7 +51,6 @@ export default {
         target_ids = [...this.$root.selectedMedia]
       }
 
-      console.debug('delete file', target_ids, this.media, this.$root.selectedMedia)
       window.XE.delete('media_library.drop', { target_ids: target_ids })
         .then(() => {
           EventBus.$emit('dialog.close')

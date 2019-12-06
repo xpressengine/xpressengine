@@ -76,7 +76,6 @@ export default {
       return ['gif', 'png', 'jpeg', 'jpg'].includes(this.$props.media.ext)
     },
     thumbnailUrl() {
-      console.debug('this.$props.media', this.$props.media)
       return this.$props.media.objectURL || this.$props.media.file.url
     }
   }

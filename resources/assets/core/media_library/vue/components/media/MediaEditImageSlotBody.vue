@@ -48,7 +48,6 @@ export default {
 
       canvas.toBlob(blob => {
         const objectURL = URL.createObjectURL(blob)
-        console.debug('commandRotate', objectURL)
       })
     },
     completeCrop() {
@@ -67,7 +66,6 @@ export default {
         this.cropper.destroy()
         this.cropper = null
         this.modeCommand = null
-        console.debug('this.$props.media', this.$props.media.objectURL)
       })
 
       EventBus.$emit('photoeditor.modeCommand', {
@@ -183,7 +181,6 @@ export default {
       canvas.toBlob(blob => {
         const objectURL = URL.createObjectURL(blob)
         document.getElementById('image-preview').src = objectURL
-        console.debug('commandRotate', objectURL)
       })
     })
 

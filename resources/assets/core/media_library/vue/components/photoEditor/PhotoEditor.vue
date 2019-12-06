@@ -8,18 +8,13 @@ import _ from 'lodash'
 
 export default {
   props: ['media'],
-  created: function() {
-    console.debug('created photoeditor')
-  },
   mounted: function() {
     const that = this
 
     EventBus.$on('photoeditor.command', function(command, args) {
-      console.debug('@photoeditor.command', commnad, args)
     })
 
     EventBus.$on('photoeditor.save', function(command, args) {
-      console.debug('@photoeditor.save', commnad, args)
     })
   },
   data: function() {
