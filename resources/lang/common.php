@@ -1952,18 +1952,6 @@ return [
         'ko' => '계정 삭제 작업은 영구적이며 되돌릴 수 없습니다. 삭제하는 즉시 귀하의 계정에 액세스할 수 없게 됩니다.',
         'en' => 'Account deletion is permanent and irreversible. As soon as you remove you will not be able to access your account.',
     ],
-    'accountDeleteCaution2' => [
-        'ko' => '귀하의 모든 콘텐츠가 삭제됩니다.',
-        'en' => 'All of your content will be deleted.',
-    ],
-    'accountDeleteCaution3' => [
-        'ko' => '댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.',
-        'en' => 'All information, including comments, messages, discussion posts, etc. will be deleted.',
-    ],
-    'accountDeleteCaution4' => [
-        'ko' => '아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.',
-        'en' => 'No one will again be able to access your account information and posts.',
-    ],
     'agreeAccountDeleteCaution' => [
         'ko' => '약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.',
         'en' => 'I agree to the terms and conditions and we will permanently delete my account.',

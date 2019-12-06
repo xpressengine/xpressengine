@@ -191,9 +191,6 @@
                     <em class="text-gray">{{xe_trans('xe::accountDeleteCautionDescription')}}</em>
                     <ul class="acount-list">
                         <li>{{xe_trans('xe::accountDeleteCaution1')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution2')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution3')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution4')}}</li>
                     </ul>
                     <label class="xe-label">
                         <input type="checkbox" id="__xe_chkLeave" name="confirm_leave" value="Y">
