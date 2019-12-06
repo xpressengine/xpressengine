@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Plugin;
 
+use Composer\Json\JsonFile;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
@@ -801,16 +803,12 @@ class PluginHandler
      */
     public function uploadPlugin(UploadedFile $uploadFile)
     {
-        $pluginName = str_replace(
+        $originalDirectoryName = str_replace(
             '.' . $uploadFile->getClientOriginalExtension(),
             "",
             $uploadFile->getClientOriginalName()
         );
-        $extractPath = app_storage_path('plugin/' . $pluginName);
-
-        if (!$this->checkExistAlreadyPlugin($pluginName)) {
-            throw new \InvalidArgumentException('Plugin already exists');
-        }
+        $extractPath = app_storage_path('plugin/' . $originalDirectoryName);
 
         try {
             $this->checkExistPrivateDirectory();
@@ -821,6 +819,11 @@ class PluginHandler
             $this->fixExtracted($extractPath);
             $this->removeVendorDir($extractPath);
 
+            $pluginName = $this->getPluginName($extractPath);
+            if (!$this->checkExistAlreadyPlugin($pluginName)) {
+                throw new \InvalidArgumentException('Plugin already exists');
+            }
+
             $this->movePlugin($extractPath, $pluginName);
         } catch (\Exception $e) {
             $this->removeGarageDirectory($extractPath);
@@ -829,6 +832,32 @@ class PluginHandler
         }
 
         return $pluginName;
+    }
+
+    /**
+     * Get plugin name
+     *
+     * @param string $targetDir target directory name
+     *
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    private function getPluginName($targetDir)
+    {
+        $composerString = $this->getFilesystem()->get($targetDir . '/composer.json');
+
+        $pluginInformation = JsonFile::parseJson($composerString);
+
+        if (isset($pluginInformation['name']) === false) {
+            throw new \InvalidArgumentException('Plugin name not exists');
+        }
+
+        $pluginNamePrefix = 'xpressengine-plugin/';
+        if (strpos($pluginInformation['name'], $pluginNamePrefix) === false) {
+            throw new \InvalidArgumentException('Plugin name is invalid');
+        }
+
+        return str_replace($pluginNamePrefix, '', $pluginInformation['name']);
     }
 
     /**
