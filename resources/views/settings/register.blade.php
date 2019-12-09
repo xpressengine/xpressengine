@@ -201,9 +201,9 @@ use Xpressengine\User\UserRegisterHandler;
                                         </tr>
 
                                         {{-- display name --}}
-                                        <tr>
+                                        <tr class="__regsetting-displayname-wrap">
                                             <td>
-                                                <div class="__regsetting-displayname-wrap">
+                                                <div>
                                                     <div class="__regsetting-displayname">
                                                         <span class="__regsetting-display-caption">{{ xe_trans($config->get('display_name_caption')) }}</span>
                                                         <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">{{ xe_trans('xe::modify') }}</button>
@@ -221,7 +221,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                                 <span class="xu-label-checkradio__text">{{ xe_trans('xe::displayNameUnique') }}</span>
                                                             </label>
 
-                                                            <div>
+                                                            <div style="margin-top: 16px;">
                                                                 <button type="button" class="xu-button xu-button--primary __regsetting-displayname-midify">{{ xe_trans('xe::confirm') }}</button>
                                                                 <button type="button" class="xu-button xu-button--subtle __regsetting-displayname-reset">{{ xe_trans('xe::cancel') }}</button>
                                                             </div>
