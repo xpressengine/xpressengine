@@ -322,6 +322,23 @@ $(function ($) {
       this.$modal.xeModal('hide')
     },
     deleteField: function (id) {
+      if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
+        return
+      }
+
+      var $row = $('[data-field-id=' + id + ']')
+      var params = { group: this.group, databaseName: this.options.databaseDriver, id: id }
+
+      window.XE.ajax({
+        context: this.$listContainer[0],
+        type: 'post',
+        dataType: 'json',
+        data: params,
+        url: window.XE.route('manage.dynamicField.destroy'),
+        success: function (response) {
+          $row.remove()
+        }
+      })
     },
     useToggleField: function (id, typeId, skinId, value) {
       value = (value === true) ? 'true' : 'false'

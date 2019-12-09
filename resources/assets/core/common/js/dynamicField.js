@@ -413,5 +413,7 @@ export default DynamicField
 
 // @FIXME
 var instance = new DynamicField()
-instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
-instance.getList()
+if (typeof window.dynamicFieldData !== 'undefined' && typeof window.dynamicFieldData.group !== 'undefined' && typeof window.dynamicFieldData.databaseName !== 'undefined') {
+  instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
+  instance.getList()
+}

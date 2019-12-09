@@ -151,12 +151,6 @@ return [
                 'display' => false,
                 'ordering' => 200
             ],
-            'user.field' => [
-                'title' => 'xe::dynamicFieldSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 300
-            ],
             'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',

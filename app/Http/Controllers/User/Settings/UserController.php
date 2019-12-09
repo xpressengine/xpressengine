@@ -98,15 +98,15 @@ class UserController extends Controller
         }
 
         // resolve search keyword
-        // keyfield가 지정되지 않을 경우 email, display_name를 대상으로 검색함
-        $field = $request->get('keyfield') ?: 'email,display_name';
+        // keyfield가 지정되지 않을 경우 email, display_name, login_id를 대상으로 검색함
+        $field = $request->get('keyfield') ?: 'email,display_name,login_id';
 
         if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(
                 function (Builder $q) use ($field, $keyword) {
                     foreach (explode(',', $field) as $f) {
                         $q->orWhere($f, 'like', '%'.$keyword.'%');
-                    };
+                    }
                 }
             );
         }
@@ -135,7 +135,13 @@ class UserController extends Controller
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allUserCount', 'ratings'));
+
+        $config = app('xe.config')->get('user.register');
+
+        return XePresenter::make(
+            'user.settings.user.index',
+            compact('users', 'groups', 'selectedGroup', 'allUserCount', 'ratings', 'config')
+        );
     }
 
     /**

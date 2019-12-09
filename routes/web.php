@@ -392,13 +392,6 @@ Route::settings(
                     'uses' => 'User\Settings\SettingController@editSkin',
                     'settings_menu' => 'theme.globalSkin',
                 ]);
-
-                Route::get('field', [
-                    'as' => 'settings.user.setting.field',
-                    'uses' => 'User\Settings\SettingController@editField',
-                    'settings_menu' => 'user.field',
-                ]);
-
                 Route::get('togglemenu', [
                     'as' => 'settings.user.setting.menu',
                     'uses' => 'User\Settings\SettingController@editToggleMenu',

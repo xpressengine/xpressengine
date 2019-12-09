@@ -31,7 +31,7 @@ use Xpressengine\User\UserRegisterHandler;
                             <div class="setting-box">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h4 class="setting-box__sub-title">가입설정</h4>
+                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::registerSettings') }}</h4>
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="xu-label-checkradio">
@@ -47,7 +47,7 @@ use Xpressengine\User\UserRegisterHandler;
                             <div class="setting-box">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h4 class="setting-box__sub-title">가입절차</h4>
+                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::registerProcess') }}</h4>
                                     </div>
                                     <div class="col-sm-9">
                                         <div>
@@ -56,7 +56,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{ User::STATUS_ACTIVATED }}"
                                                 @if ($config->get('register_process') == User::STATUS_ACTIVATED) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">자동가입</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::authRegister') }}</span>
                                             </label>
                                         </div>
                                         <div>
@@ -65,7 +65,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{ User::STATUS_PENDING_ADMIN }}"
                                                 @if ($config->get('register_process') == User::STATUS_PENDING_ADMIN) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">관리자 승인 후 가입</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::pending_admin_description') }}</span>
                                             </label>
                                         </div>
                                         <div>
@@ -74,7 +74,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{ User::STATUS_PENDING_EMAIL }}"
                                                 @if ($config->get('register_process') == User::STATUS_PENDING_EMAIL) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">이메일 인증 후 가입</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::pending_email_description') }}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@ use Xpressengine\User\UserRegisterHandler;
                             <div class="setting-box">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h4 class="setting-box__sub-title">약관동의</h4>
+                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::termAgreeProcess') }}</h4>
                                     </div>
                                     <div class="col-sm-9">
                                         <div>
@@ -94,7 +94,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{UserRegisterHandler::TERM_AGREE_PRE}}"
                                                 @if ($config->get('term_agree_type') == UserRegisterHandler::TERM_AGREE_PRE) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">가입시 약관 동의 단계 거치기(권장)</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::termAgreeTypePre') }}</span>
                                             </label>
                                         </div>
                                         <div>
@@ -103,7 +103,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{UserRegisterHandler::TERM_AGREE_WITH}}"
                                                 @if ($config->get('term_agree_type') == UserRegisterHandler::TERM_AGREE_WITH) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">약관 동의 단계 대신 회원정보 입력 하단에 약관동의 문구 표시</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::termAgreeTypeWith') }}</span>
                                             </label>
                                         </div>
                                         <div>
@@ -112,7 +112,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 value="{{UserRegisterHandler::TERM_AGREE_NOT}}"
                                                 @if ($config->get('term_agree_type') == UserRegisterHandler::TERM_AGREE_NOT) checked @endif>
                                                 <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text">약관 동의를 사용하지 않음</span>
+                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::disableTermAgree') }}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -123,15 +123,15 @@ use Xpressengine\User\UserRegisterHandler;
                             <div class="setting-box">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h4 class="setting-box__sub-title">가입안내</h4>
+                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::registerGuide') }}</h4>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="xu-form-group" style="margin-bottom: 8px;">
                                             <div class="xu-form-group__box" style="width: 100%;">
-                                                <textarea name="register_guide" class="xu-form-group__control" cols="33" rows="3" placeholder="예 : 아래 항목을 빠짐없이 입력해 주세요.">{{ $config->get('register_guide') }}</textarea>
+                                                <textarea name="register_guide" class="xu-form-group__control" cols="33" rows="3" placeholder="{{ xe_trans('xe::registerGuideExample') }}">{{ $config->get('register_guide') }}</textarea>
                                             </div>
                                         </div>
-                                        <p class="setting-box__text-info">회원가입시 정보입력 단계 상단에 표시될 내용입니다. (여러줄 입력 가능)</p>
+                                        <p class="setting-box__text-info">{{ xe_trans('xe::registerGuideDescription') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@ use Xpressengine\User\UserRegisterHandler;
                     {{-- 기본 필드 & 확장 필드 --}}
                     <section class="setting-area">
                         <div class="setting-area__header">
-                            <h3 class="setting-area__header-title">가입폼 관리</h3>
+                            <h3 class="setting-area__header-title">{{ xe_trans('xe::manegeRegisterForm') }}</h3>
                         </div>
 
                         <div class="setting-area__body">
@@ -156,9 +156,9 @@ use Xpressengine\User\UserRegisterHandler;
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th>항목</th>
-                                            <th class="text-align--center">사용</th>
-                                            <th class="text-align--center">필수</th>
+                                            <th>{{ xe_trans('xe::item') }}</th>
+                                            <th class="text-align--center">{{ xe_trans('xe::use') }}</th>
+                                            <th class="text-align--center">{{ xe_trans('xe::require') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -202,7 +202,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 <div class="__regsetting-displayname-wrap">
                                                     <div class="__regsetting-displayname">
                                                         <span class="__regsetting-display-caption">{{ xe_trans($config->get('display_name_caption')) }}</span>
-                                                        <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">수정</button>
+                                                        <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">{{ xe_trans('modify') }}</button>
                                                     </div>
 
                                                     <div class="__regsetting-displayname-editform" style="display: none;">
@@ -243,7 +243,7 @@ use Xpressengine\User\UserRegisterHandler;
                                         <tr>
                                             <td>
                                                 {{ xe_trans('xe::password') }}
-                                                <button type="button" class="xu-button xu-button--default __btn-setting-password" style="margin-left: 12px;">정책수정</button>
+                                                <button type="button" class="xu-button xu-button--default __btn-setting-password" style="margin-left: 12px;">{{ xe_trans('xe::policy') }} {{ xe_trans('xe::modify') }}</button>
 
                                                 <div class="__area-setting-password" style="display: none; padding: 18px 0;">
                                                     최소 비밀번호 글자 수
@@ -296,21 +296,18 @@ use Xpressengine\User\UserRegisterHandler;
 
                             <!-- 사용자 정의 항목 -->
                             @include('user.settings.setting.dynamicFields')
-
-
                         </div>
                     </section>
                     {{-- END:기본 필드 & 확장 필드 --}}
 
                     <section class="setting-area">
                         <div class="setting-area__header">
-                            <h3 class="setting-area__header-title">고급 설정</h3>
+                            <h3 class="setting-area__header-title">{{ xe_trans('xe::advancedSetting') }}</h3>
                         </div>
                         <div class="setting-area__body">
                             @include('user.settings.setting.forms')
                         </div>
                     </section>
-
 
                     <!-- 전체 페이지 버튼 영역 -->
                     <div class="setting-button-box" style="text-align: right;">

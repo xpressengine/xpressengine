@@ -3503,4 +3503,60 @@ return [
         'ko' => ':displayNameCaption을(를) 입력하세요.',
         'en' => 'Please enter :displayNameCaption.',
     ],
+    'registerProcess' => [
+        'ko' => '가입 절차',
+        'en' => 'Register process'
+    ],
+    'termAgreeProcess' => [
+        'ko' => '약관동의',
+        'en' => 'Accept Terms'
+    ],
+    'termAgreeTypePre' => [
+        'ko' => '가입시 약관 동의 단계 거치기(권장)',
+        'en' => 'Go through the terms of the agreement when signing up (recommended)'
+    ],
+    'termAgreeTypeWith' => [
+        'ko' => '약관 동의 단계 대신 회원정보 입력 하단에 약관동의 문구 표시',
+        'en' => 'Show terms and conditions at the bottom of the member information instead of accepting the terms'
+    ],
+    'disableTermAgree' => [
+        'ko' => '약관 동의를 사용하지 않음.',
+        'en' => 'Disable Terms Agree'
+    ],
+    'registerGuide' => [
+        'ko' => '가입안내',
+        'en' => 'Registration guide'
+    ],
+    'registerGuideExample' => [
+        'ko' => '예 : 아래 항목을 빠짐없이 입력해 주세요.',
+        'en' => 'Example: Please complete the fields below.'
+    ],
+    'registerGuideDescription' => [
+        'ko' => '회원가입시 정보입력 단계 상단에 표시될 내용입니다. (여러줄 입력 가능)',
+        'en' => 'This is the content to be displayed at the top of the information input step when registering. (Multiple lines can be entered)'
+    ],
+    'policy' => [
+        'ko' => '정책',
+        'en' => 'Policy'
+    ],
+    'authRegister' => [
+        'ko' => '자동가입',
+        'en' => 'Auth register'
+    ],
+    'item' => [
+        'ko' => '항목',
+        'en' => 'Item'
+    ],
+    'manegeRegisterForm' => [
+        'ko' => '가입폼 관리',
+        'en' => 'Subscription form management'
+    ],
+    'advancedSetting' => [
+        'ko' => '고급 설정',
+        'en' => 'Advanced settings'
+    ],
+    'customItems' => [
+        'ko' => '사용자 정의 항목',
+        'en' => 'Custom items'
+    ]
 ];

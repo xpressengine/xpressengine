@@ -222,22 +222,6 @@ class SettingController extends Controller
     }
 
     /**
-     * edit Field setting
-     *
-     * @return \Xpressengine\Presenter\Presentable
-     */
-    public function editField()
-    {
-        $connection = $this->users->getConnection();
-        $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
-
-        return XePresenter::make(
-            'user.settings.setting.field',
-            compact('dynamicFieldSection')
-        );
-    }
-
-    /**
      * edit ToggleMenu setting
      *
      * @return \Xpressengine\Presenter\Presentable

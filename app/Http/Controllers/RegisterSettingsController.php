@@ -48,7 +48,9 @@ class RegisterSettingsController extends Controller
             return in_array($key, $activated) || $part::isImplicit();
         });
 
-        $parts = $activateParts->union($deactivateParts);
+        $parts = $activateParts->sortBy(function ($part, $key) use ($activated) {
+            return array_search($key, $activated);
+        })->union($deactivateParts);
 
         $passwordRules = explode('|', $config->get('password_rules'));
         $passwordMinLength = array_filter($passwordRules, function ($rule) {
@@ -74,17 +76,25 @@ class RegisterSettingsController extends Controller
         $registerHandler = $dynamicFieldHandler->getRegisterHandler();
         $types = $registerHandler->getTypes($dynamicFieldHandler);
         $fieldTypes = [];
-        foreach ($types as $types) {
-            $fieldTypes[] = $types;
+        foreach ($types as $type) {
+            $fieldTypes[] = $type;
         }
 
         $connection = $userHandler->getConnection();
         $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
 
-
         return \XePresenter::make(
             'settings.register',
-            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength', 'dynamicFields', 'fieldTypes', 'dynamicFieldSection')
+            compact(
+                'config',
+                'parts',
+                'activated',
+                'passwordRules',
+                'passwordMinLength',
+                'dynamicFields',
+                'fieldTypes',
+                'dynamicFieldSection'
+            )
         );
     }
 
