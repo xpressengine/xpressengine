@@ -19,6 +19,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
+    # allow for phpMyAdmin
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^phpMyAdmin/.* - [L]
+
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^index.php$ - [L]
     RewriteCond %{REQUEST_FILENAME} -f
