@@ -44,6 +44,11 @@ abstract class GenericTheme extends AbstractTheme
     protected static $viewsDir = "views";
 
     /**
+     * @var array 테마 render 할 때 구현체에서 변수를 추가로 넘길 수 있도록
+     */
+    protected $data = [];
+
+    /**
      * 이 테마가 설정페이지를 제공하는 테마인지 조회한다.
      *
      * @return bool
@@ -66,7 +71,9 @@ abstract class GenericTheme extends AbstractTheme
 
         $view = $this->view($this->info('view', 'theme'));
 
-        return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme'));
+        $data = $this->data;
+
+        return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme', 'data'));
     }
 
     /**
@@ -213,6 +220,40 @@ abstract class GenericTheme extends AbstractTheme
                 app('xe.storage')->delete($oldFile);
             }
         }
+    }
+
+    /**
+     * get data
+     *
+     * @param string $key key name
+     * @return mixed
+     */
+    public function getData($key)
+    {
+        return $this->data[$key];
+    }
+
+    /**
+     * set data
+     *
+     * @param string $key  key name
+     * @param mixed $value value
+     * @return void
+     */
+    public function setDAta($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * remove data
+     *
+     * @param string $key key name
+     * @return void
+     */
+    public function removeData($key)
+    {
+        unset($this->data[$key]);
     }
 
     /**
