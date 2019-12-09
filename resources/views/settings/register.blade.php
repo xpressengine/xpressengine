@@ -214,12 +214,12 @@ use Xpressengine\User\UserRegisterHandler;
                                                             <label class="xu-label-checkradio">
                                                                 <input type="checkbox" name="display_name_unique" @if ($config->get('display_name_unique') === true) checked data-origin-checked="true" @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">중복 가입 방지</span>
+                                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::displayNameUnique') }}</span>
                                                             </label>
 
                                                             <div>
-                                                                <button type="button" class="xu-button xu-button--primary __regsetting-displayname-midify">확인</button>
-                                                                <button type="button" class="xu-button xu-button--subtle __regsetting-displayname-reset">취소</button>
+                                                                <button type="button" class="xu-button xu-button--primary __regsetting-displayname-midify">{{ xe_trans('xe::confirm') }}</button>
+                                                                <button type="button" class="xu-button xu-button--subtle __regsetting-displayname-reset">{{ xe_trans('xe::cancel') }}</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -246,7 +246,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 <button type="button" class="xu-button xu-button--default __btn-setting-password" style="margin-left: 12px;">{{ xe_trans('xe::policy') }} {{ xe_trans('xe::modify') }}</button>
 
                                                 <div class="__area-setting-password" style="display: none; padding: 18px 0;">
-                                                    최소 비밀번호 글자 수
+                                                    {{ xe_trans('xe::minimumPasswordLength') }}
                                                     <div class="xu-form-group" style="display: inline-block;">
                                                         <div class="xu-form-group__box" style="width: 80px;">
                                                             <input type="text" class="xu-form-group__control" name="password_rules[min]" value="{{ $passwordMinLength }}">
@@ -257,21 +257,21 @@ use Xpressengine\User\UserRegisterHandler;
                                                             <label class="xu-label-checkradio">
                                                                 <input type="checkbox" name="password_rules[numeric]" @if (in_array('numeric', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">비밀번호에 숫자 포함</span>
+                                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::passwordIncludeNumber') }}</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
                                                                 <input type="checkbox" name="password_rules[alpha]" @if (in_array('alpha', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">비밀번호에 문자 포함</span>
+                                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::passwordIncludeCharacter') }}</span>
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <label class="xu-label-checkradio">
                                                                 <input type="checkbox" name="password_rules[special_char]" @if (in_array('special_char', $passwordRules)) checked @endif>
                                                                 <span class="xu-label-checkradio__helper"></span>
-                                                                <span class="xu-label-checkradio__text">비밀번호에 특수문자 포함</span>
+                                                                <span class="xu-label-checkradio__text">{{ xe_trans('xe::passwordIncludeSpecialCharacter') }}</span>
                                                             </label>
                                                         </div>
                                                     </div>

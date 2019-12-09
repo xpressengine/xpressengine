@@ -3558,5 +3558,25 @@ return [
     'customItems' => [
         'ko' => '사용자 정의 항목',
         'en' => 'Custom items'
+    ],
+    'displayNameUnique' => [
+        'ko' => '중복 가입 방지',
+        'en' => 'Avoid duplicate subscriptions'
+    ],
+    'minimumPasswordLength' => [
+        'ko' => '최소 비밀번호 글자 수',
+        'en' => 'Minimum password character'
+    ],
+    'passwordIncludeNumber' => [
+        'ko' => '비밀번호에 숫자 포함',
+        'en' => 'Password contains numbers'
+    ],
+    'passwordIncludeCharacter' => [
+        'ko' => '비밀번호에 문자 포함',
+        'en' => 'Password contains character'
+    ],
+    'passwordIncludeSpecialCharacter' => [
+        'ko' => '비밀번호에 특수문자 포험',
+        'en' => 'Password contains special character'
     ]
 ];
