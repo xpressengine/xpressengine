@@ -390,6 +390,9 @@ class UserMigration extends Migration
 
         $passwordRuleLevel = app('config')->get('xe.user.password.default');
         $registerConfigAttribute['password_rules'] = app('config')->get("xe.user.password.levels.{$passwordRuleLevel}");
+        if (isset($registerConfigAttribute['secureLevel']) === true) {
+            unset($registerConfigAttribute['secureLevel']);
+        }
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $registerConfigAttribute);
