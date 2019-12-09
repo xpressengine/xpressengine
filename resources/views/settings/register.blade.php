@@ -6,6 +6,10 @@ use Xpressengine\User\UserRegisterHandler;
 {{ XeFrontend::css('assets/core/settings/css/admin.css')->load() }}
 {{ XeFrontend::js('assets/core/settings/js/register.js')->appendTo('head')->load() }}
 
+@expose_trans('xe::passwordIncludeNumber')
+@expose_trans('xe::passwordIncludeCharacter')
+@expose_trans('xe::passwordIncludeSpecialCharacter')
+
 @section('page_title')
 <h2>{{ xe_trans('xe::registerSettings') }}</h2>
 @endsection
@@ -326,14 +330,14 @@ use Xpressengine\User\UserRegisterHandler;
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="xe-modal">&times;</button>
-                <h4 class="modal-title">{{xe_trans('xe::dynamicField')}}</h4>
+                <h4 class="modal-title">{{xe_trans('xe::customItems')}}</h4>
             </div>
             <div class="modal-body">
                 <p><!-- form --></p>
             </div>
             <div class="xe-modal-footer">
                 <button type="button" class="xe-btn xe-btn-secondary __xe-udfield-modal-close" data-dismiss="xe-modal">{{xe_trans('xe::cancel')}}</button>
-                <button type="button" class="xe-btn xe-btn-primary __xe-udfield-modal-submit">{{xe_trans('xe::submit')}}</button>
+                <button type="button" class="xe-btn xe-btn-primary __xe-udfield-modal-submit">{{xe_trans('xe::save')}}</button>
             </div>
         </div>
     </div>

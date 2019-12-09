@@ -1,17 +1,21 @@
 /* global $, XE */
 $(function () {
   var $container = $('.user--signup')
-  var $form = $container.find('form')
   var langs = {
-    'min': XE._.template('<%= options[0] %>글자 이상 입력'),
+    'min': function (rule) {
+      console.debug('rule', rule)
+      return XE.Lang.trans('xe::validatorMin', {
+        charCount: rule.options[0]
+      })
+    },
     'numeric': function () {
-      return '비밀번호에 숫자 포함'
+      return XE.Lang.trans('xe::passwordIncludeNumber')
     },
     'alpha': function () {
-      return '비밀번호에 문자 포함'
+      return XE.Lang.trans('xe::passwordIncludeCharacter')
     },
     'special_char': function () {
-      return '비밀번호에 특수문자 포함'
+      return XE.Lang.trans('xe::passwordIncludeSpecialCharacter')
     }
   }
   var evaluator = {
@@ -40,7 +44,7 @@ $(function () {
       rules[key] = {
         type: type,
         options: rule,
-        message: langs[type]({ options: rule })
+        message: langs[type]({ type: type, options: rule })
       }
     })
 
