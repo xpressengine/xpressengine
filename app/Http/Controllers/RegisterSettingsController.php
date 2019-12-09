@@ -14,8 +14,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
+use App\Http\Sections\DynamicFieldSection;
 use Xpressengine\Http\Request;
 use Xpressengine\User\UserHandler;
+use XeFrontend;
 
 /**
  * Class SettingController
@@ -65,9 +67,24 @@ class RegisterSettingsController extends Controller
                 return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
             });
 
+        /**
+         * @var \Xpressengine\DynamicField\RegisterHandler $registerHandler
+         */
+        $dynamicFieldHandler = app('xe.dynamicField');
+        $registerHandler = $dynamicFieldHandler->getRegisterHandler();
+        $types = $registerHandler->getTypes($dynamicFieldHandler);
+        $fieldTypes = [];
+        foreach ($types as $types) {
+            $fieldTypes[] = $types;
+        }
+
+        $connection = $userHandler->getConnection();
+        $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
+
+
         return \XePresenter::make(
             'settings.register',
-            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength', 'dynamicFields')
+            compact('config', 'parts', 'activated', 'passwordRules', 'passwordMinLength', 'dynamicFields', 'fieldTypes', 'dynamicFieldSection')
         );
     }
 
