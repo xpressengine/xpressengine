@@ -76,353 +76,351 @@ $(function () {
   // end:display_name
 })
 
-$(function ($) {
-  $.widget('xe.userRegisterDynamicFiled', {
-    // default options
-    options: {
-      group: null,
-      databaseDriver: null,
-      classess: {
-        itemContainer: '__udfield-items',
-        item: '__udfield-item',
-        btnAdd: '__udfield-add',
-        btnEdit: '__udfield-btn-edit',
-        btnDelete: '__udfield-btn-delete',
-        useToggle: '__udfield-use',
-        requireToggle: '__udfield-require',
-        modal: '__xe-udfield-modal',
-        form: '__xe-udfield-form',
-        modalClose: '__xe-udfield-modal-close',
-        formSubmit: '__xe-udfield-modal-submit'
-      }
-    },
-    _create: function () {
-      this.$listContainer = this.element.find('.' + this.options.classess.itemContainer)
-      this.group = this.options.group
-      this.databaseDriver = this.options.databaseDriver
-    },
-    _init: function () {
-      var that = this
+$.widget('xe.userRegisterDynamicFiled', {
+  // default options
+  options: {
+    group: null,
+    databaseDriver: null,
+    classess: {
+      itemContainer: '__udfield-items',
+      item: '__udfield-item',
+      btnAdd: '__udfield-add',
+      btnEdit: '__udfield-btn-edit',
+      btnDelete: '__udfield-btn-delete',
+      useToggle: '__udfield-use',
+      requireToggle: '__udfield-require',
+      modal: '__xe-udfield-modal',
+      form: '__xe-udfield-form',
+      modalClose: '__xe-udfield-modal-close',
+      formSubmit: '__xe-udfield-modal-submit'
+    }
+  },
+  _create: function () {
+    this.$listContainer = this.element.find('.' + this.options.classess.itemContainer)
+    this.group = this.options.group
+    this.databaseDriver = this.options.databaseDriver
+  },
+  _init: function () {
+    var that = this
 
-      this.$modal = $('.' + this.options.classess.modal)
-      this.$form = $('.' + this.options.classess.form)
+    this.$modal = $('.' + this.options.classess.modal)
+    this.$form = $('.' + this.options.classess.form)
 
-      this.itemArrange()
+    this.itemArrange()
 
-      // add
-      this.element.on('click', '.' + this.options.classess.btnAdd, function () {
-        that.newField()
-      })
+    // add
+    this.element.on('click', '.' + this.options.classess.btnAdd, function () {
+      that.newField()
+    })
 
-      // edit
-      this.element.on('click', '.' + this.options.classess.btnEdit, function () {
-        that.editField(that.getFieldId(this))
-      })
+    // edit
+    this.element.on('click', '.' + this.options.classess.btnEdit, function () {
+      that.editField(that.getFieldId(this))
+    })
 
-      // store
-      this.$modal.on('click', '.' + this.options.classess.formSubmit, function () {
-        that.store()
-      })
+    // store
+    this.$modal.on('click', '.' + this.options.classess.formSubmit, function () {
+      that.store()
+    })
 
-      // delete
-      this.element.on('click', '.' + this.options.classess.btnDelete, function () {
-        that.deleteField(that.getFieldId(this))
-      })
+    // delete
+    this.element.on('click', '.' + this.options.classess.btnDelete, function () {
+      that.deleteField(that.getFieldId(this))
+    })
 
-      // toggle use
-      this.element.on('change', '.' + this.options.classess.useToggle, function () {
-        that.useToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
-      })
+    // toggle use
+    this.element.on('change', '.' + this.options.classess.useToggle, function () {
+      that.useToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
+    })
 
-      // require use
-      this.element.on('change', '.' + this.options.classess.requireToggle, function () {
-        that.requireToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
-      })
+    // require use
+    this.element.on('change', '.' + this.options.classess.requireToggle, function () {
+      that.requireToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
+    })
 
-      this.$modal.on('change', '.__xe_type_id', function (e) {
-        var form = $(this).closest('form')
+    this.$modal.on('change', '.__xe_type_id', function (e) {
+      var form = $(this).closest('form')
 
-        var select = form.find('[name="skinId"]')
-        select.find('option').remove()
-        select.prop('disabled', true)
-
-        that.getSkinOption(form)
-      })
-
-      this.$modal.on('change', '.__xe_skin_id', function (e) {
-        var form = $(this).closest('form')
-        that.getAdditionalConfigure(form)
-      })
-
-      this.$modal.on('click', '.__xe_checkbox-config', function (e) {
-        var $target = $(e.target)
-        var form = $(this).closest('form')
-        form.find('[name="' + $target.data('name') + '"]').val($target.prop('checked') == true ? 'true' : 'false')
-      })
-    },
-    getFieldId: function ($el) {
-      var fieldId = null
-
-      if (!($el instanceof jQuery)) {
-        $el = $($el)
-      }
-
-      if ($el.is('.' + this.options.classess.item)) {
-        fieldId = $el.data('field-id')
-      } else {
-        fieldId = $el.closest('.' + this.options.classess.item).data('field-id')
-      }
-
-      return fieldId
-    },
-    getFieldTypeId: function ($el) {
-      var fieldId = null
-
-      if (!($el instanceof jQuery)) {
-        $el = $($el)
-      }
-
-      if ($el.is('.' + this.options.classess.item)) {
-        fieldId = $el.data('field-typeid')
-      } else {
-        fieldId = $el.closest('.' + this.options.classess.item).data('field-typeid')
-      }
-
-      return fieldId
-    },
-    getFieldSkinId: function ($el) {
-      var fieldId = null
-
-      if (!($el instanceof jQuery)) {
-        $el = $($el)
-      }
-
-      if ($el.is('.' + this.options.classess.item)) {
-        fieldId = $el.data('field-skinid')
-      } else {
-        fieldId = $el.closest('.' + this.options.classess.item).data('field-skinid')
-      }
-
-      return fieldId
-    },
-    itemArrange: function () {
-      this.element.find('.' + this.options.classess.item).each(function () {
-        // var $item = $(this)
-      })
-    },
-    editField: function (id) {
-      var that = this
-      XE.get('manage.dynamicField.getEditInfo', {
-        group: this.group,
-        id: id
-      })
-        .then(function (res) {
-          var data = res.data
-          var $form = that.$form.clone()
-          that.$modal.xeModal('show').show()
-          that.$modal.find('.modal-body').html($form)
-          that.$modal.find('.__xe-udfield-form').show()
-          that.$modal.find('form').data('isEdit', '1')
-          that.$modal.find('form').attr('action', window.XE.route('manage.dynamicField.update'))
-
-          $form.find('[name="id"]').val(data.config.id).prop('readonly', true)
-          $form.find('[name="typeId"] option').each(function () {
-            var $option = $(this)
-            if ($option.val() == data.config.typeId) {
-              $option.prop('selected', true)
-            }
-          })
-
-          var $langBox = $form.find('.dynamic-lang-editor-box')
-          $langBox.addClass('lang-editor-box')
-
-          $langBox.each(function (idx, element) {
-            $(element).data('lang-key', data.config[$(element).data('name')])
-            window.langEditorBoxRender($(element)) // FIXME
-          })
-
-          // @FIXME
-          $form.find('[name="use"]').val(that.checkBox(data.config.use) ? 'true' : 'false')
-          $form.find('[name="required"]').val(that.checkBox(data.config.required) ? 'true' : 'false')
-          $form.find('[name="sortable"]').val(that.checkBox(data.config.sortable) ? 'true' : 'false')
-          $form.find('[name="searchable"]').val(that.checkBox(data.config.searchable) ? 'true' : 'false')
-
-          $form.find('[data-name="use"]').prop('checked', that.checkBox(data.config.use))
-          $form.find('[data-name="required"]').prop('checked', that.checkBox(data.config.required))
-          $form.find('[data-name="searchable"]').prop('checked', that.checkBox(data.config.searchable))
-
-          that.getSkinOption($form)
-        })
-    },
-    newField: function () {
-      var $form = this.$form.clone()
-      this.$modal.xeModal('show').show()
-      this.$modal.find('.modal-body').html($form)
-      this.$modal.find('.__xe-udfield-form').show()
-      this.$modal.find('form').data('isEdit', '0')
-      this.$modal.find('form').attr('action', window.XE.route('manage.dynamicField.store'))
-
-      var $langBox = $form.find('.dynamic-lang-editor-box')
-      $langBox.addClass('lang-editor-box')
-
-      $langBox.each(function (idx, element) {
-        // $(element).data('lang-key', data.config[$(element).data('name')])
-        window.langEditorBoxRender($(element)) // FIXME
-      })
-    },
-    updateAttribute: function (id, typeId, skinId, config) {
-      var data = {
-        group: this.group,
-        id: id,
-        typeId: typeId,
-        skinId: skinId
-      }
-      XE._.assign(data, config)
-
-      XE.post('manage.dynamicField.update', data)
-        .then(function (res) {
-        })
-    },
-    store: function () {
-      var $form = this.$modal.find('form')
-      var that = this
-
-      try {
-        this.validateCheck($form)
-      } catch (e) {
-        return
-      }
-
-      var params = $form.serialize()
-
-      window.XE.ajax({
-        context: this.$modal.find('.modal-body')[0],
-        type: 'post',
-        dataType: 'json',
-        data: params,
-        url: $form.attr('action'),
-        success: function (res) {
-          var $row = $('[data-field-id=' + res.id + ']')
-          if ($row.length) {
-            $row.find('.__udfield-use').prop('checked', res.use)
-            $row.find('.__udfield-require').prop('checked', res.required)
-          } else {
-            var compile = XE._.template('<li class="__udfield-item" data-field-id="<%= id %>" data-field-typeid="<%= typeId %>" data-field-skinid="<%= skinId %>"><div class="sort-list__handler"><button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler"><span class="xu-button__icon"><i class="xi-drag-vertical"></i></span></button></div><p class="sort-list__text"><%= label %></p><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-edit"><span class="xu-button__icon"><i class="xi-pen"></i></span></button></div><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-delete"><span class="xu-button__icon"><i class="xi-trash"></i></span></button></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-use" name="dynamic_fields[<%= id %>]" <% use ? "checked" : null %>><span class="xu-label-checkradio__helper"></span></label></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-require" name="df_required[<%= id %>]" <% use ? "checked" : null %>><span class="xu-label-checkradio__helper"></span></label></div></li>')
-            var html = compile(res)
-            $('.__udfield-items').append(html)
-          }
-
-          that.close()
-        }
-      })
-    },
-    close: function () {
-      var form = this.$modal.find('form')
-      form.remove()
-      this.$modal.xeModal('hide')
-    },
-    deleteField: function (id) {
-      if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
-        return
-      }
-
-      var $row = $('[data-field-id=' + id + ']')
-      var params = { group: this.group, databaseName: this.options.databaseDriver, id: id }
-
-      window.XE.ajax({
-        context: this.$listContainer[0],
-        type: 'post',
-        dataType: 'json',
-        data: params,
-        url: window.XE.route('manage.dynamicField.destroy'),
-        success: function (response) {
-          $row.remove()
-        }
-      })
-    },
-    useToggleField: function (id, typeId, skinId, value) {
-      value = (value === true) ? 'true' : 'false'
-      this.updateAttribute(id, typeId, skinId, {
-        use: value
-      })
-    },
-    requireToggleField: function (id, typeId, skinId, value) {
-      value = (value === true) ? 'true' : 'false'
-      this.updateAttribute(id, typeId, skinId, {
-        required: value
-      })
-    },
-    checkBox: function (data) {
-      // @FIXME
-      var checked = false
-      if (data == undefined) {
-        checked = false
-      } else if (data == 'false') {
-        checked = false
-      } else if (data == 'true') {
-        checked = true
-      } else if (data == true) {
-        checked = true
-      }
-
-      return checked
-    },
-    getSkinOption: function (form) {
-      var params = form.serialize()
-      var that = this
-
-      form.find('.__xe_additional_configure').html('')
-      if (form.find('[name="typeId"]').val() == '') {
-        return
-      }
-
-      window.XE.ajax({
-        context: that.$modal.find('.modal-body')[0],
-        type: 'get',
-        dataType: 'json',
-        data: params,
-        url: window.XE.route('manage.dynamicField.getSkinOption'),
-        success: function (response) {
-          that.skinOptions(form, response.skins, response.skinId)
-        }
-      })
-    },
-    skinOptions: function (form, skins, selected) {
       var select = form.find('[name="skinId"]')
       select.find('option').remove()
+      select.prop('disabled', true)
 
-      for (var key in skins) {
-        var option = $('<option>').attr('value', key).text(skins[key])
-        select.append(option)
-      }
+      that.getSkinOption(form)
+    })
 
-      if (selected != undefined && selected != '') {
-        select.val(selected)
-      }
+    this.$modal.on('change', '.__xe_skin_id', function (e) {
+      var form = $(this).closest('form')
+      that.getAdditionalConfigure(form)
+    })
 
-      select.prop('disabled', false)
+    this.$modal.on('click', '.__xe_checkbox-config', function (e) {
+      var $target = $(e.target)
+      var form = $(this).closest('form')
+      form.find('[name="' + $target.data('name') + '"]').val($target.prop('checked') == true ? 'true' : 'false')
+    })
+  },
+  getFieldId: function ($el) {
+    var fieldId = null
 
-      this.getAdditionalConfigure(form)
-    },
-    getAdditionalConfigure: function ($form) {
-      const params = {}
-      $form.serializeArray().forEach((item) => {
-        params[item.name] = item.value
-      })
-
-      window.XE.get('manage.dynamicField.getAdditionalConfigure', params, { headers: { 'X-XE-Async-Expose': true } })
-        .then(response => {
-          $form.find('.__xe_additional_configure').html(response.data.result)
-        })
-    },
-    validateCheck: function ($form) {
-      XE.Validator.check($form)
-    },
-    _destroy: function () {
-    },
-    _setOptions: function () {
-    },
-    _setOption: function (key, value) {
+    if (!($el instanceof jQuery)) {
+      $el = $($el)
     }
-  })
+
+    if ($el.is('.' + this.options.classess.item)) {
+      fieldId = $el.data('field-id')
+    } else {
+      fieldId = $el.closest('.' + this.options.classess.item).data('field-id')
+    }
+
+    return fieldId
+  },
+  getFieldTypeId: function ($el) {
+    var fieldId = null
+
+    if (!($el instanceof jQuery)) {
+      $el = $($el)
+    }
+
+    if ($el.is('.' + this.options.classess.item)) {
+      fieldId = $el.data('field-typeid')
+    } else {
+      fieldId = $el.closest('.' + this.options.classess.item).data('field-typeid')
+    }
+
+    return fieldId
+  },
+  getFieldSkinId: function ($el) {
+    var fieldId = null
+
+    if (!($el instanceof jQuery)) {
+      $el = $($el)
+    }
+
+    if ($el.is('.' + this.options.classess.item)) {
+      fieldId = $el.data('field-skinid')
+    } else {
+      fieldId = $el.closest('.' + this.options.classess.item).data('field-skinid')
+    }
+
+    return fieldId
+  },
+  itemArrange: function () {
+    this.element.find('.' + this.options.classess.item).each(function () {
+      // var $item = $(this)
+    })
+  },
+  editField: function (id) {
+    var that = this
+    XE.get('manage.dynamicField.getEditInfo', {
+      group: this.group,
+      id: id
+    })
+      .then(function (res) {
+        var data = res.data
+        var $form = that.$form.clone()
+        that.$modal.xeModal('show').show()
+        that.$modal.find('.modal-body').html($form)
+        that.$modal.find('.__xe-udfield-form').show()
+        that.$modal.find('form').data('isEdit', '1')
+        that.$modal.find('form').attr('action', window.XE.route('manage.dynamicField.update'))
+
+        $form.find('[name="id"]').val(data.config.id).prop('readonly', true)
+        $form.find('[name="typeId"] option').each(function () {
+          var $option = $(this)
+          if ($option.val() == data.config.typeId) {
+            $option.prop('selected', true)
+          }
+        })
+
+        var $langBox = $form.find('.dynamic-lang-editor-box')
+        $langBox.addClass('lang-editor-box')
+
+        $langBox.each(function (idx, element) {
+          $(element).data('lang-key', data.config[$(element).data('name')])
+          window.langEditorBoxRender($(element)) // FIXME
+        })
+
+        // @FIXME
+        $form.find('[name="use"]').val(that.checkBox(data.config.use) ? 'true' : 'false')
+        $form.find('[name="required"]').val(that.checkBox(data.config.required) ? 'true' : 'false')
+        $form.find('[name="sortable"]').val(that.checkBox(data.config.sortable) ? 'true' : 'false')
+        $form.find('[name="searchable"]').val(that.checkBox(data.config.searchable) ? 'true' : 'false')
+
+        $form.find('[data-name="use"]').prop('checked', that.checkBox(data.config.use))
+        $form.find('[data-name="required"]').prop('checked', that.checkBox(data.config.required))
+        $form.find('[data-name="searchable"]').prop('checked', that.checkBox(data.config.searchable))
+
+        that.getSkinOption($form)
+      })
+  },
+  newField: function () {
+    var $form = this.$form.clone()
+    this.$modal.xeModal('show').show()
+    this.$modal.find('.modal-body').html($form)
+    this.$modal.find('.__xe-udfield-form').show()
+    this.$modal.find('form').data('isEdit', '0')
+    this.$modal.find('form').attr('action', window.XE.route('manage.dynamicField.store'))
+
+    var $langBox = $form.find('.dynamic-lang-editor-box')
+    $langBox.addClass('lang-editor-box')
+
+    $langBox.each(function (idx, element) {
+      // $(element).data('lang-key', data.config[$(element).data('name')])
+      window.langEditorBoxRender($(element)) // FIXME
+    })
+  },
+  updateAttribute: function (id, typeId, skinId, config) {
+    var data = {
+      group: this.group,
+      id: id,
+      typeId: typeId,
+      skinId: skinId
+    }
+    XE._.assign(data, config)
+
+    XE.post('manage.dynamicField.update', data)
+      .then(function (res) {
+      })
+  },
+  store: function () {
+    var $form = this.$modal.find('form')
+    var that = this
+
+    try {
+      this.validateCheck($form)
+    } catch (e) {
+      return
+    }
+
+    var params = $form.serialize()
+
+    window.XE.ajax({
+      context: this.$modal.find('.modal-body')[0],
+      type: 'post',
+      dataType: 'json',
+      data: params,
+      url: $form.attr('action'),
+      success: function (res) {
+        var $row = $('[data-field-id=' + res.id + ']')
+        if ($row.length) {
+          $row.find('.__udfield-use').prop('checked', res.use)
+          $row.find('.__udfield-require').prop('checked', res.required)
+        } else {
+          var compile = XE._.template('<li class="__udfield-item" data-field-id="<%= id %>" data-field-typeid="<%= typeId %>" data-field-skinid="<%= skinId %>"><div class="sort-list__handler"><button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler"><span class="xu-button__icon"><i class="xi-drag-vertical"></i></span></button></div><p class="sort-list__text"><%= label %></p><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-edit"><span class="xu-button__icon"><i class="xi-pen"></i></span></button></div><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-delete"><span class="xu-button__icon"><i class="xi-trash"></i></span></button></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-use" name="dynamic_fields[<%= id %>]" <% use ? "checked" : null %>><span class="xu-label-checkradio__helper"></span></label></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-require" name="df_required[<%= id %>]" <% use ? "checked" : null %>><span class="xu-label-checkradio__helper"></span></label></div></li>')
+          var html = compile(res)
+          $('.__udfield-items').append(html)
+        }
+
+        that.close()
+      }
+    })
+  },
+  close: function () {
+    var form = this.$modal.find('form')
+    form.remove()
+    this.$modal.xeModal('hide')
+  },
+  deleteField: function (id) {
+    if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
+      return
+    }
+
+    var $row = $('[data-field-id=' + id + ']')
+    var params = { group: this.group, databaseName: this.options.databaseDriver, id: id }
+
+    window.XE.ajax({
+      context: this.$listContainer[0],
+      type: 'post',
+      dataType: 'json',
+      data: params,
+      url: window.XE.route('manage.dynamicField.destroy'),
+      success: function (response) {
+        $row.remove()
+      }
+    })
+  },
+  useToggleField: function (id, typeId, skinId, value) {
+    value = (value === true) ? 'true' : 'false'
+    this.updateAttribute(id, typeId, skinId, {
+      use: value
+    })
+  },
+  requireToggleField: function (id, typeId, skinId, value) {
+    value = (value === true) ? 'true' : 'false'
+    this.updateAttribute(id, typeId, skinId, {
+      required: value
+    })
+  },
+  checkBox: function (data) {
+    // @FIXME
+    var checked = false
+    if (data == undefined) {
+      checked = false
+    } else if (data == 'false') {
+      checked = false
+    } else if (data == 'true') {
+      checked = true
+    } else if (data == true) {
+      checked = true
+    }
+
+    return checked
+  },
+  getSkinOption: function (form) {
+    var params = form.serialize()
+    var that = this
+
+    form.find('.__xe_additional_configure').html('')
+    if (form.find('[name="typeId"]').val() == '') {
+      return
+    }
+
+    window.XE.ajax({
+      context: that.$modal.find('.modal-body')[0],
+      type: 'get',
+      dataType: 'json',
+      data: params,
+      url: window.XE.route('manage.dynamicField.getSkinOption'),
+      success: function (response) {
+        that.skinOptions(form, response.skins, response.skinId)
+      }
+    })
+  },
+  skinOptions: function (form, skins, selected) {
+    var select = form.find('[name="skinId"]')
+    select.find('option').remove()
+
+    for (var key in skins) {
+      var option = $('<option>').attr('value', key).text(skins[key])
+      select.append(option)
+    }
+
+    if (selected != undefined && selected != '') {
+      select.val(selected)
+    }
+
+    select.prop('disabled', false)
+
+    this.getAdditionalConfigure(form)
+  },
+  getAdditionalConfigure: function ($form) {
+    var params = {}
+    $form.serializeArray().forEach(function (item) {
+      params[item.name] = item.value
+    })
+
+    window.XE.get('manage.dynamicField.getAdditionalConfigure', params, { headers: { 'X-XE-Async-Expose': true } })
+      .then(function (response) {
+        $form.find('.__xe_additional_configure').html(response.data.result)
+      })
+  },
+  validateCheck: function ($form) {
+    XE.Validator.check($form)
+  },
+  _destroy: function () {
+  },
+  _setOptions: function () {
+  },
+  _setOption: function (key, value) {
+  }
 })
