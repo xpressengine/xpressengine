@@ -2626,8 +2626,8 @@ return [
         'en' => 'CAPTCHA',
     ],
     'descCaptcha' => [
-        'ko' => '캡차 문자 입력 폼입니다.',
-        'en' => 'This is a CAPTCHA.',
+        'ko' => 'CAPTCHA 입력 폼입니다. CAPTCHA 설정이 정상적으로 되어 있어야 사용 할 수 있습니다.',
+        'en' => 'This is a CAPTCHA. CAPTCHA setting should be done properly before use.',
     ],
     'msgFailToPassCAPTCHA' => [
         'ko' => '자동입력 방지 기능을 통과하지 못했습니다.',

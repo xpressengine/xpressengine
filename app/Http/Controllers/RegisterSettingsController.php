@@ -59,7 +59,7 @@ class RegisterSettingsController extends Controller
             $passwordMinLength = 6;
         }
 
-        $dynamicFieldSortKeys = $config->get('dynamic_fields');
+        $dynamicFieldSortKeys = $config->get('dynamic_fields', []);
         $dynamicFields = Collection::make(app('xe.dynamicField')->gets('user'))
             ->sortBy(function ($field) use ($dynamicFieldSortKeys) {
                 return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
