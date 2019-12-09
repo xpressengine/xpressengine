@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
             // \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
+            \App\Http\Middleware\HttpProtocol::class,
             \App\Http\Middleware\RequiredDF::class,
             \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
             \App\Http\Middleware\LangPreprocessor::class,
