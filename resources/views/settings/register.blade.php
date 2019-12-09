@@ -206,7 +206,7 @@ use Xpressengine\User\UserRegisterHandler;
                                                 <div class="__regsetting-displayname-wrap">
                                                     <div class="__regsetting-displayname">
                                                         <span class="__regsetting-display-caption">{{ xe_trans($config->get('display_name_caption')) }}</span>
-                                                        <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">{{ xe_trans('modify') }}</button>
+                                                        <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">{{ xe_trans('xe::modify') }}</button>
                                                     </div>
 
                                                     <div class="__regsetting-displayname-editform" style="display: none;">
