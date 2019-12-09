@@ -266,12 +266,10 @@ class XE {
           return Promise.resolve()
         })
         this.Request.$$on('sucess', (eventName, options) => {
-          console.debug('succ options.container', options.container)
           Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
           return Promise.resolve()
         })
         this.Request.$$on('error', (eventName, error) => {
-          console.debug('error options.container', options.container)
           Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
 
           let errorMessage = ''
