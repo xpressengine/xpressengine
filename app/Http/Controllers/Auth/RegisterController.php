@@ -180,6 +180,8 @@ class RegisterController extends Controller
 
         $parts = collect($parts)->filter(function ($part, $key) use ($activated) {
             return in_array($key, $activated) || $part::isImplicit();
+        })->sortBy(function ($part, $key) use ($activated) {
+            return array_search($key, $activated);
         })->map(function ($part) use ($request) {
             return new $part($request);
         });
