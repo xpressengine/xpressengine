@@ -250,8 +250,12 @@ class DynamicFieldController extends Controller
         $row['typeName'] = $fieldType->name();
         $row['skinName'] = $fieldSkin->name();
 
-        $multiLang = $translator->getPreprocessorValues($inputs, session()->get('locale'));
-        $row['label'] = $multiLang['label'];
+        if (isset($inputs['label']) === true) {
+            $multiLang = $translator->getPreprocessorValues($inputs, session()->get('locale'));
+            $row['label'] = $multiLang['label'];
+        } else {
+            $row['label'] = xe_trans($row['label']);
+        }
 
         return XePresenter::makeApi($row);
     }
