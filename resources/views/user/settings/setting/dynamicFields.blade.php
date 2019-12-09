@@ -10,7 +10,7 @@
     <!-- 드래그 리스트 항목 -->
     <ul class="sort-list sort-list--custom-item sort-list sort-list--custom-item-header">
         <li>
-            <div class="sort-list__header-title">{{ xe_trans('customItems') }}</div>
+            <div class="sort-list__header-title">{{ xe_trans('xe::customItems') }}</div>
             <div class="sort-list__header-text">{{ xe_trans('xe::use') }}</div>
             <div class="sort-list__header-text">{{ xe_trans('xe::require') }}</div>
         </li>
@@ -60,7 +60,7 @@
 
     <div>
         <button type="button" class="xu-button xu-button--link __udfield-add" style="margin-top: 16px;">
-            <span class="xu-button__text">{{ xe_trans('xe::customItems') }} {{ xe_trans('add') }}</span>
+            <span class="xu-button__text">{{ xe_trans('xe::customItems') }} {{ xe_trans('xe::add') }}</span>
         </button>
     </div>
 </div>
