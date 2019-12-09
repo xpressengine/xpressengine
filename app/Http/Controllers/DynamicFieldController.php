@@ -164,7 +164,7 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = DynamicFieldSection::getRules();
+        $rules = DynamicFieldSection::getCreateRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
         $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
@@ -217,7 +217,7 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = DynamicFieldSection::getRules();
+        $rules = DynamicFieldSection::getUpdateRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
         $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());

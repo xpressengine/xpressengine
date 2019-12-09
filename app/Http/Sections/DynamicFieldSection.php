@@ -66,17 +66,30 @@ class DynamicFieldSection extends Section
     }
 
     /**
-     * form validation rules
+     * form create validation rules
      *
      * @return array
      */
-    public static function getRules()
+    public static function getCreateRules()
     {
         return [
             'typeId' => 'Required',
             'id' => 'Required|df_id|Between:2,20',
             'label' => 'LangRequired',
             'skinId' => 'Required',
+        ];
+    }
+
+    /**
+     * form update validation rules
+     *
+     * @return array
+     */
+    public static function getUpdateRules()
+    {
+        return [
+            'typeId' => 'Required',
+            'id' => 'Required|df_id|Between:2,20',
         ];
     }
 
@@ -114,7 +127,7 @@ class DynamicFieldSection extends Section
             $fieldTypes[] = $types;
         }
 
-        XeFrontend::rule('dynamicFieldSection', static::getRules());
+        XeFrontend::rule('dynamicFieldSection', static::getCreateRules());
         XeFrontend::translation(['xe::validation.df_id']);
 
         // 다국어 입력 필드
