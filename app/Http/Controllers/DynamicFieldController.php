@@ -22,6 +22,7 @@ use App\Http\Sections\DynamicFieldSection;
 use XeDB;
 use XeFrontend;
 use Xpressengine\Translation\Translator;
+use function Matrix\add;
 
 /**
  * Class DynamicFieldController
@@ -86,8 +87,7 @@ class DynamicFieldController extends Controller
          */
         $configHandler = $dynamicField->getConfigHandler();
         $skinId = '';
-        if (
-            $request->get('id') != null &&
+        if ($request->get('id') != null &&
             $config = $configHandler->get($request->get('group'), $request->get('id'))
         ) {
             $skinId = $config->get('skinId');
@@ -139,7 +139,6 @@ class DynamicFieldController extends Controller
         return XePresenter::makeApi([
             'result' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
         ]);
-
     }
 
     /**
@@ -164,12 +163,18 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = DynamicFieldSection::getCreateRules();
+        $fieldCreateRules = DynamicFieldSection::getCreateRules();
+        $this->validate($request->instance(), $fieldCreateRules);
+
+        $additionalRules = [];
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
-        $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
-
-        $this->validate($request->instance(), $rules);
+        $additionalRules = array_merge(
+            $additionalRules,
+            $fieldType->getSettingsRules(),
+            $fieldSkin->getSettingsRules()
+        );
+        $this->validate($request->instance(), $additionalRules);
 
         $configHandler = $dynamicField->getConfigHandler();
 
@@ -180,7 +185,6 @@ class DynamicFieldController extends Controller
 
         $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->create($config);
-
 
         $row = $config->getPureAll();
 
@@ -217,12 +221,18 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = DynamicFieldSection::getUpdateRules();
+        $fieldUpdateRules = DynamicFieldSection::getUpdateRules();
+        $this->validate($request->instance(), $fieldUpdateRules);
+
+        $additionalRules = [];
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
-        $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
-
-        $this->validate($request->instance(), $rules);
+        $additionalRules = array_merge(
+            $additionalRules,
+            $fieldType->getSettingsRules(),
+            $fieldSkin->getSettingsRules()
+        );
+        $this->validate($request->instance(), $additionalRules);
 
         $configHandler = $dynamicField->getConfigHandler();
 
