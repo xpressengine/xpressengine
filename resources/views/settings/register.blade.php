@@ -4,6 +4,7 @@ use Xpressengine\User\UserRegisterHandler;
 ?>
 {{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
 {{ XeFrontend::css('assets/core/settings/css/admin.css')->load() }}
+{{ XeFrontend::js('assets/core/settings/js/register.js')->appendTo('head')->load() }}
 
 @section('page_title')
 <h2>{{ xe_trans('xe::registerSettings') }}</h2>
@@ -198,17 +199,30 @@ use Xpressengine\User\UserRegisterHandler;
                                         {{-- display name --}}
                                         <tr>
                                             <td>
-                                                {{ xe_trans($config->get('display_name_caption')) }}
-                                                <button type="button" class="xu-button xu-button--default __btn-setting-display-name" style="margin-left: 12px;">수정</button>
+                                                <div class="__regsetting-displayname-wrap">
+                                                    <div class="__regsetting-displayname">
+                                                        <span class="__regsetting-display-caption">{{ xe_trans($config->get('display_name_caption')) }}</span>
+                                                        <button type="button" class="xu-button xu-button--default __regsetting-displayname-editbtn" style="margin-left: 12px;">수정</button>
+                                                    </div>
 
-                                                <div class="__area-setting-display-name" style="display: none; padding: 18px 0;">
-                                                    {!! uio('langText', ['langKey' => $config->get('display_name_caption'), 'name' => 'display_name_caption']) !!}
+                                                    <div class="__regsetting-displayname-editform" style="display: none;">
+                                                        <div class="__area-setting-display-name" style="padding: 18px 0;">
+                                                            <div style="width: 200px;">
+                                                                {!! uio('langText', ['langKey' => $config->get('display_name_caption'), 'name' => 'display_name_caption']) !!}
+                                                            </div>
 
-                                                    <label class="xu-label-checkradio">
-                                                        <input type="checkbox" name="display_name_unique" @if ($config->get('display_name_unique') === true) checked @endif>
-                                                        <span class="xu-label-checkradio__helper"></span>
-                                                        <span class="xu-label-checkradio__text">중복 가입 방지</span>
-                                                    </label>
+                                                            <label class="xu-label-checkradio">
+                                                                <input type="checkbox" name="display_name_unique" @if ($config->get('display_name_unique') === true) checked data-origin-checked="true" @endif>
+                                                                <span class="xu-label-checkradio__helper"></span>
+                                                                <span class="xu-label-checkradio__text">중복 가입 방지</span>
+                                                            </label>
+
+                                                            <div>
+                                                                <button type="button" class="xu-button xu-button--primary __regsetting-displayname-midify">확인</button>
+                                                                <button type="button" class="xu-button xu-button--subtle __regsetting-displayname-reset">취소</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="text-align--center">
@@ -219,7 +233,7 @@ use Xpressengine\User\UserRegisterHandler;
                                             </td>
                                             <td class="text-align--center">
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox"  @if ($config->get('use_display_name') === true) checked @endif>
+                                                    <input type="checkbox" name="require_display_name" @if ($config->get('use_display_name') === true) checked @endif>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
@@ -283,12 +297,19 @@ use Xpressengine\User\UserRegisterHandler;
                             <!-- 사용자 정의 항목 -->
                             @include('user.settings.setting.dynamicFields')
 
-                            <div class="setting-area__body">
-                                @include('user.settings.setting.forms')
-                            </div>
+
                         </div>
                     </section>
                     {{-- END:기본 필드 & 확장 필드 --}}
+
+                    <section class="setting-area">
+                        <div class="setting-area__header">
+                            <h3 class="setting-area__header-title">고급 설정</h3>
+                        </div>
+                        <div class="setting-area__body">
+                            @include('user.settings.setting.forms')
+                        </div>
+                    </section>
 
 
                     <!-- 전체 페이지 버튼 영역 -->
@@ -301,50 +322,130 @@ use Xpressengine\User\UserRegisterHandler;
     </div>
 </div>
 
+<!-- Modal -->
+<div class="xe-modal __xe-udfield-modal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="xe-modal">&times;</button>
+                <h4 class="modal-title">{{xe_trans('xe::dynamicField')}}</h4>
+            </div>
+            <div class="modal-body">
+                <p><!-- form --></p>
+            </div>
+            <div class="xe-modal-footer">
+                <button type="button" class="xe-btn xe-btn-secondary __xe-udfield-modal-close" data-dismiss="xe-modal">{{xe_trans('xe::cancel')}}</button>
+                <button type="button" class="xe-btn xe-btn-primary __xe-udfield-modal-submit">{{xe_trans('xe::submit')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="__xe-udfield-form" action="{{ route('manage.dynamicField.store') }}" style="display:none" data-rule="dynamicFieldSection">
+    <input type="hidden" name="group" value="user" />
+    <div class="step">
+        <div class="form-group">
+            <label for="">{{xe_trans('xe::type')}}</label>
+            <select name="typeId" class="form-control __xe_type_id">
+                <option value="">{{xe_trans('xe::select')}}</option>
+                @foreach($fieldTypes as $fieldType)
+                <option value="{{ $fieldType::getId() }}">{{ $fieldType->name() }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="">{{xe_trans('xe::id')}}</label>
+            <small>{{xe_trans('xe::dynamicFieldIdDescription')}}</small>
+            <input type="text" name="id" class="form-control">
+        </div>
+    </div>
+    <div class="step">
+        <div class="form-group">
+            <label for="">{{xe_trans('xe::label')}}</label>
+            <small>{{xe_trans('xe::dynamicFieldLabelDescription')}}</small>
+            <div class="dynamic-lang-editor-box" data-name="label" data-lang-key="" data-valid-name="Label"></div>
+        </div>
+        <div class="form-group">
+            <label for="">{{xe_trans('xe::dynamicFieldLabelDetailTitle')}}</label>
+            <small>{{xe_trans('xe::dynamicFieldLabelDetailDescription')}}</small>
+            <div class="dynamic-lang-editor-box" data-name="placeholder" data-lang-key="" data-valid-name="placeholder"></div>
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="use" value="true" />
+            <input type="hidden" name="required" value="true" />
+            <input type="hidden" name="sortable" value="true" />
+            <input type="hidden" name="searchable" value="true" />
+            <div class="checkbox mg-reset mg-bottom">
+                <label>
+                    <input type="checkbox" class="__xe_checkbox-config" data-name="use" checked="checked"/>
+                    {{xe_trans('xe::use')}}
+                </label>
+                <small>{{xe_trans('xe::dynamicFieldUseDescription')}}</small>
+            </div>
+            <div class="checkbox mg-reset mg-bottom">
+                <label>
+                    <input type="checkbox" class="__xe_checkbox-config" data-name="required" checked="checked"/>
+                    {{xe_trans('xe::inputRequired')}}
+                </label>
+                <small>{{xe_trans('xe::dynamicFieldRequiredDescription')}}</small>
+            </div>
+            <div class="checkbox mg-reset mg-bottom">
+                <label>
+                    <input type="checkbox" class="__xe_checkbox-config" data-name="searchable" checked="checked"/>
+                    {{xe_trans('xe::searchable')}}
+                </label>
+                <small>{{xe_trans('xe::dynamicFieldSearchableDescription')}}</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="">Skin</label>
+            <select name="skinId" class="form-control __xe_skin_id" disabled="disabled">
+                <option value="">Select Type for getting skin options</option>
+            </select>
+        </div>
+    </div>
+    <div class="step __xe_additional_configure">
+    </div>
+</form>
+
+@expose_route('manage.dynamicField.index')
+@expose_route('manage.dynamicField.store')
+@expose_route('manage.dynamicField.update')
+@expose_route('manage.dynamicField.getEditInfo')
+@expose_route('manage.dynamicField.destroy')
+@expose_route('manage.dynamicField.getSkinOption')
+@expose_route('manage.dynamicField.getAdditionalConfigure')
+
 <script>
-    $(function () {
-        $('.container-fluid .container-fluid').parent('.container-fluid').removeClass('container-fluid')
+    // var dynamicFieldData = {
+    //     group: "user",
+    //     databaseName: "mysql"
+    // };
 
-        // --disabled 체크박스의 해제 제한
-        $('.admin-table__signup').on('click change', '.xu-label-checkradio--disabled input:checkbox', function () {
-            return false
-        })
-
-        // 이름, 패스워드 정책 수정 영역
-        var $areaSettingDisplayName = $('.__area-setting-display-name')
-        var $areaSettingPassword = $('.__area-setting-password')
-        $('.__btn-setting-display-name').on('click', function () {
-            $areaSettingDisplayName.toggle()
-        })
-        $('.__btn-setting-password').on('click', function () {
-            $areaSettingPassword.toggle()
-        })
-
-        // 이메일|아이디 이벤트
-        var $registerTypes = $('.__user-register-id-type')
-        $registerTypes.on('change', toggleRegisterType)
-
-        // 이메일, 아이디 항목 변경 시 토글
-        function toggleRegisterType (e) {
-            var $this = $(this)
-            var type = $this.val()
-
-            $registerTypes.each(function () {
-                var $field = $(this)
-                var fieldValue = $field.val()
-                var $row = $(this).closest('tr')
-
-                if ($this.is(this)) {
-                    $row.find('[type=checkbox]')
-                        .prop('checked', true)
-                        .closest('.xu-label-checkradio')
-                        .addClass('xu-label-checkradio--disabled')
-                } else if( fieldValue === 'user_id') {
-                    $row.find('[type=checkbox]')
-                        .closest('.xu-label-checkradio')
-                        .removeClass('xu-label-checkradio--disabled')
-                }
-            })
+    // 누적된 룰을 제거하고, 새로운 룰만 추가
+    XE.Validator.$$on('setRules', function (eventName, ruleName, rules, additional, origin, reassign) {
+        if (ruleName === 'dynamicFieldSection') {
+            reassign($.extend({}, origin, additional))
         }
     })
+
+    $(function () {
+        $('#__xe_container_DF_setting_user').userRegisterDynamicFiled({
+            group: 'user',
+            databaseType: 'mysql'
+        })
+
+        XE.Validator.put('df_id', function ($dst, parameters) {
+            var value = $dst.val();
+
+            var pattern = /^[a-zA-Z]+([a-zA-Z0-9_]+)?[a-zA-Z0-9]+$/;
+            if (value && !value.match(pattern)) {
+                XE.Validator.error($dst, XE.Lang.trans('xe::validation.df_id', {attribute: $dst.data('valid-name') || $dst.attr('name')}));
+                return false;
+            }
+
+            return true;
+        });
+    });
 </script>

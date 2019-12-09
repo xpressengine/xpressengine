@@ -58,14 +58,6 @@ abstract class RegisterFormPart
     protected static $implicit = false;
 
     /**
-     * 가입 설정 가입폼관리 항목에 출력 여부
-     * ex) DefaultPart, AgreementPart 등 가입폼관리가 아닌 별도 설정이 필요할 경우 사용
-     *
-     * @var bool
-     */
-    protected static $detailSetting = false;
-
-    /**
      * The view for the form part
      *
      * @var string
@@ -140,6 +132,16 @@ abstract class RegisterFormPart
     public static function isImplicit()
     {
         return static::$implicit;
+    }
+
+    /**
+     * 동적으로 상태를 확인해서 사용 가능 한 part인지 반환
+     *
+     * @return bool
+     */
+    public static function isAvailable()
+    {
+        return true;
     }
 
     /**

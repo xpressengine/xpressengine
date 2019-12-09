@@ -1,6 +1,6 @@
 {{ XeFrontend::js('/assets/core/common/js/dynamicField.js')->appendTo('body')->load() }}
 
-<div id="__xe_container_DF_setting_{{$group}}" class="table-responsive">
+<div id="__xe_container_DF_setting_{{$group}}" class="table-responsive" data-form=".__xe_add_form">
     <div class="pull-right">
         <button class="btn btn-primary __xe_btn_add" data-toggle="xe-modal">{{xe_trans('xe::add')}}</button>
     </div>
@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody class="__xe_tbody">
-        <tr class="__xe_row" style="display:none">
+        <tr class="__xe_row __dynamic-field-row" style="display:none">
             <td scope="row">#</td>
             <td class="__xe_column_id"></td>
             <td class="__xe_column_label"></td>

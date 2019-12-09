@@ -11,10 +11,15 @@
             </div>
             <p class="sort-list__text">{{ xe_trans($part::NAME) }} <small>{{ xe_trans($part::DESCRIPTION) }}</small></p>
             <div class="sort-list__checkradio">
-                @if($part::isImplicit())
+                @if ($part::isImplicit())
                     <label class="xu-label-checkradio xu-label-checkradio--disabled">
                         <input type="hidden" value="on" name="forms[{{ $key }}]">
                         <input type="checkbox" checked="checked" disabled />
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @elseif ($part::isAvailable() === false)
+                    <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                        <input type="checkbox" disabled />
                         <span class="xu-label-checkradio__helper"></span>
                     </label>
                 @else
