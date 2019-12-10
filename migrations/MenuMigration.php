@@ -72,6 +72,7 @@ class MenuMigration extends Migration
             $table->text('description')->nullable()->comment('menu description. It can be code of translation information.');
             $table->string('target')->comment('HTML <a> tag target attribute value');
             $table->string('type')->comment('Module Type. Module ID of registered this menu item.');
+            $table->string('menu_image_id', 36)->nullable()->comment('menu item image');
             $table->string('basic_image_id', 36)->nullable()->comment('image menu item setting');
             $table->string('hover_image_id', 36)->nullable()->comment('image menu item setting');
             $table->string('selected_image_id', 36)->nullable()->comment('image menu item setting');
@@ -94,7 +95,6 @@ class MenuMigration extends Migration
             $table->string('descendant')->comment('child menu item ID');
             $table->integer('depth')->comment('depth');
         });
-
     }
 
     /**
@@ -137,6 +137,54 @@ class MenuMigration extends Migration
         //for together
         $this->widgetPageModuleMenuSetup($mainMenu);
         $this->boardModuleMenuSetup($mainMenu);
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if ($this->checkExistMenuImageColumn() === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if ($this->checkExistMenuImageColumn() === false) {
+            $this->createMenuImageColumn();
+        }
+    }
+
+    /**
+     * check exist menu_item table menu_image_id column
+     *
+     * @return bool
+     */
+    private function checkExistMenuImageColumn()
+    {
+        return Schema::hasColumn('menu_item', 'menu_image_id');
+    }
+
+    /**
+     * create menu_item table menu_image_id column
+     *
+     * @return  void
+     */
+    private function createMenuImageColumn()
+    {
+        Schema::table('menu_item', function (Blueprint $table) {
+            $table->string('menu_image_id', 36)->nullable()->after('type');
+        });
     }
 
     /**

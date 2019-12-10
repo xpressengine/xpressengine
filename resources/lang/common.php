@@ -3598,5 +3598,13 @@ return [
     'menuTitle' => [
         'ko' => '타이틀',
         'en' => 'Title'
+    ],
+    'menuImage' => [
+        'ko' => '메뉴 대표이미지',
+        'en' => 'Featured Image'
+    ],
+    'menuImageSpecDescription' => [
+        'ko' => '권장 해상도: 1200x630 / 최소 200x200 / JPEG, PNG',
+        'en' => 'Recommended resolution: 1200x630 / 200x200 minimum / JPEG, PNG'
     ]
 ];

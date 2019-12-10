@@ -353,7 +353,6 @@ class MenuController extends Controller
 
         XeDB::beginTransaction();
         try {
-
             $itemInput['parent'] = $itemInput['parent'] === $menu->getKey() ? null : $itemInput['parent'];
 
             $item = XeMenu::createItem($menu, [
@@ -369,6 +368,7 @@ class MenuController extends Controller
 
             // link image 등록
             XeMenu::updateItem($item, [
+                $this->getItemImageKeyName('menuImage') => $this->registerItemImage($request, $item, 'menuImage'),
                 $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
                 $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
                 $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
@@ -379,7 +379,6 @@ class MenuController extends Controller
 
             XeMenu::setMenuItemTheme($item, $desktopTheme, $mobileTheme);
             $this->permissionRegisterGrant(XeMenu::permKeyString($item), null, $menu->site_key);
-
         } catch (Exception $e) {
             XeDB::rollback();
             $request->flash();
@@ -485,6 +484,7 @@ class MenuController extends Controller
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
                 'activated' => array_get($itemInput, 'itemActivated', '0'),
+                $this->getItemImageKeyName('menuImage') => $this->registerItemImage($request, $item, 'menuImage'),
                 $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
                 $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
                 $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
@@ -510,7 +510,7 @@ class MenuController extends Controller
 
     /**
      * Determine if the given keyword is available for url
-     * 
+     *
      * @param string $keyword url name
      * @return string
      */

@@ -84,6 +84,13 @@
                         </select>
                     </div>
 
+                <div class="form-group">
+                    <label>{{ xe_trans('xe::menuImage') }}<br>
+                        <small>{{xe_trans('xe::menuImageSpecDescription')}}</small>
+                    </label>
+                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'menuImage']) !!}
+                </div>
+
                     <div class="form-group">
                         <label>
                             {{ xe_trans('xe::menu') }} {{ xe_trans('xe::image') }}
