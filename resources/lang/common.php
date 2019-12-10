@@ -1104,8 +1104,8 @@ return [
         'en' => 'Enter the description for item'
     ],
     'itemTargetDescription' => [
-        'ko' => '메뉴 아이템을 클릭하였을 때 창을 이동하는 옵션입니다.',
-        'en' => 'Select Item Link Open Option'
+        'ko' => '메뉴를 클릭하였을 때 창을 이동하는 옵션입니다.',
+        'en' => 'Select Link Open Option'
     ],
     'itemTargetOption_sameFrame' => [
         'ko' => '현재창에서 열기',
@@ -1123,9 +1123,9 @@ return [
         'ko' => '최상위 프레임에서 열기',
         'en' => 'Top Frame'
     ],
-    'linkImageDescription' => [
-        'ko' => '사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.',
-        'en' => 'Register image for site navigation'
+    'menuImageDescription' => [
+        'ko' => '텍스트 메뉴명 대신 이미지를 출력합니다.',
+        'en' => 'Print images instead of text menu names.'
     ],
     'deleteMenu' => [
         'ko' => '메뉴 삭제하기',
@@ -3582,5 +3582,21 @@ return [
     'passwordIncludeSpecialCharacter' => [
         'ko' => '비밀번호에 특수문자 포함',
         'en' => 'Password contains special character'
+    ],
+    'image' => [
+        'ko' => '이미지',
+        'en' => 'Image'
+    ],
+    'page' => [
+        'ko' => '페이지',
+        'en' => 'Page'
+    ],
+    'link' => [
+        'ko' => '링크',
+        'en' => 'Link'
+    ],
+    'menuTitle' => [
+        'ko' => '타이틀',
+        'en' => 'Title'
     ]
 ];

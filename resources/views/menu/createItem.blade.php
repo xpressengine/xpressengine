@@ -23,8 +23,8 @@
 
             <div class="panel-body" id="collapseOne">
                 <div class="form-group">
-                    <label for="item-active">Item Activated<br><small>{{xe_trans('xe::itemActivatedDescription')}}</small></label>
-
+                    <label for="item-active">{{ xe_trans('xe::menu') }} {{ xe_trans('xe::activation') }}<br>
+                        <small>{{xe_trans('xe::itemActivatedDescription')}}</small></label>
                     <div class="xe-btn-toggle pull-right">
                         <label>
                             <span class="sr-only"><span class="sr-only">{{xe_trans('xe::activation')}}</span></span>
@@ -35,9 +35,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="item-url">
-                        Item URL
-                    </label>
+                    <label for="item-url">URL</label>
                     <div class="input-group">
                         @if($menuType::isRouteAble())
                             <span class="input-group-addon" id="basic-addon1">/</span>
@@ -46,7 +44,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="item-title">Item Title</label>
+                    <label for="item-title">{{ xe_trans('xe::menuTitle') }}</label>
                     <input type="hidden" name="itemOrdering" value="0" readonly/>
                     <div class="row">
                         <div class="col-sm-4">
@@ -65,12 +63,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="item-description">Item Description</label>
+                    <label for="item-description">{{ xe_trans('xe::page') }} {{ xe_trans('xe::description') }}</label>
                     <textarea name="itemDescription" id="item-description" class="form-control" rows="3"placeholder="{{xe_trans('xe::itemDescriptionPlaceHolder')}}"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="item-target">Item Target<br><small>{{xe_trans('xe::itemTargetDescription')}}</small></label>
-
+                    <label for="item-target">{{ xe_trans('xe::link') }} {{ xe_trans('xe::option') }}<br><small>{{xe_trans('xe::itemTargetDescription')}}</small></label>
                         <select name="itemTarget" class="form-control">
                             <option value="_self" selected>
                                 {{xe_trans('xe::itemTargetOption_sameFrame')}}
@@ -89,8 +86,8 @@
 
                     <div class="form-group">
                         <label>
-                            Link image
-                            <small>{{ xe_trans('xe::linkImageDescription') }}</small>
+                            {{ xe_trans('xe::menu') }} {{ xe_trans('xe::image') }}
+                            <small>{{ xe_trans('xe::menuImageDescription') }}</small>
                         </label>
 
                         <div class="well">
