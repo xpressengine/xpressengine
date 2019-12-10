@@ -270,10 +270,6 @@ class UserHandler
      */
     public function update(UserInterface $user, $userData)
     {
-        if ($this->configManager->getVal('user.register.use_display_name') === false && $userData['display_name'] === null) {
-            $userData['display_name'] = $userData['login_id'];
-        }
-
         $this->validateForUpdate($user, $userData);
 
         // encrypt password
