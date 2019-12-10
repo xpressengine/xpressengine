@@ -5,6 +5,7 @@ import moment from 'moment'
 import URI from 'urijs'
 import config from 'xe/config'
 import lodash from 'lodash'
+import qs from 'qs'
 
 // internal libraries
 import * as $$ from 'xe/utils'
