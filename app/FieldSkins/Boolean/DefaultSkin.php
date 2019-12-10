@@ -59,4 +59,19 @@ class DefaultSkin extends AbstractSkin
     {
         return [];
     }
+
+    /**
+     * @param array $args args
+     *
+     * @return string
+     */
+    public function search(array $args)
+    {
+        $dataKey = $this->config->get('id') . '_boolean';
+        if (isset($args[$dataKey]) === true) {
+            $args[$dataKey] = (int)$args[$dataKey];
+        }
+
+        return parent::search($args);
+    }
 }
