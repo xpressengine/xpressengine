@@ -3423,9 +3423,9 @@ return [
         'ko' => '홈으로',
         'en' => 'Go to home'
     ],
-    'waitingAdminApproval' => [
-        'ko' => '관리자 승인 대기중',
-        'en' => 'Waiting for Admin Approval'
+    'waitingApproval' => [
+        'ko' => '가입 승인 대기중',
+        'en' => 'Pending approval to join'
     ],
     'beforeAdminApproval' => [
         'ko' => '회원 가입 승인 전입니다.',
