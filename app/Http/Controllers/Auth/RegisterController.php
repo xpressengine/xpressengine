@@ -204,6 +204,10 @@ class RegisterController extends Controller
             $request->session()->put('user_agree_terms', $userAgreeTerms);
         }
 
+        expose_trans('xe::passwordIncludeNumber');
+        expose_trans('xe::passwordIncludeCharacter');
+        expose_trans('xe::passwordIncludeSpecialCharacter');
+
         return \XePresenter::make('register.create', compact('config', 'parts'));
     }
 
