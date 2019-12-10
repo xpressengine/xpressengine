@@ -3,7 +3,6 @@ $(function () {
   var $container = $('.user--signup')
   var langs = {
     'min': function (rule) {
-      console.debug('rule', rule)
       return XE.Lang.trans('xe::validatorMin', {
         charCount: rule.options[0]
       })
