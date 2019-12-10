@@ -3556,8 +3556,12 @@ return [
         'en' => 'Advanced settings'
     ],
     'customItems' => [
-        'ko' => '사용자 정의 항목',
+        'ko' => '사용자정의 항목',
         'en' => 'Custom items'
+    ],
+    'descCustomItems' => [
+        'ko' => '추가된 사용자정의 항목들의 입력 폼입니다.',
+        'en' => 'Input form for added custom items.'
     ],
     'displayNameUnique' => [
         'ko' => '중복 가입 방지',
@@ -3576,7 +3580,7 @@ return [
         'en' => 'Password contains character'
     ],
     'passwordIncludeSpecialCharacter' => [
-        'ko' => '비밀번호에 특수문자 포험',
+        'ko' => '비밀번호에 특수문자 포함',
         'en' => 'Password contains special character'
     ]
 ];

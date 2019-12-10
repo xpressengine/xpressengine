@@ -31,9 +31,9 @@ class DynamicFieldPart extends RegisterFormPart
 {
     const ID = 'dynamic-fields';
 
-    const NAME = 'xe::additionalInfo';
+    const NAME = 'xe::customItems';
 
-    const DESCRIPTION = 'xe::descAdditionalInfo';
+    const DESCRIPTION = 'xe::descCustomItems';
 
     /**
      * Indicates if the form part is implicit

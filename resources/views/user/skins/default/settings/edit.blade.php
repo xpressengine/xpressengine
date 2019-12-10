@@ -154,7 +154,7 @@
 
 @if($fieldTypes)
 <div class="setting-card">
-    <h2>{{ xe_trans('xe::additionalInfo') }}</h2>
+    <h2>{{ xe_trans('xe::customItems') }}</h2>
     @foreach($fieldTypes as $id => $fieldType)
 
         <div class="__xe_setting __xe_settingAddition __xe_settingAddition-{{ $id }}">
