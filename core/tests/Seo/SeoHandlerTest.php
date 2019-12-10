@@ -80,7 +80,8 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
         $menuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
         $presenter->shouldReceive('getInstanceConfig')->once()->andReturn($instanceConfig);
         $instanceConfig->shouldReceive('getMenuItem')->once()->andReturn($menuItem);
-        $menuItem->shouldReceive('menuImage')->once()->andReturn('/path/to/site/image');
+        $menuItem->shouldReceive('hasMacro')->andReturn(false);
+        $menuItem->shouldReceive('getAttribute')->with('menuImage')->andReturn('/path/to/site/image');
 
         $setting->shouldReceive('getSiteImage')->once()->andReturn('/path/to/site/image');
 
