@@ -64,10 +64,13 @@ class RegisterSettingsController extends Controller
         }
 
         $dynamicFieldSortKeys = $config->get('dynamic_fields', []);
-        $dynamicFields = Collection::make(app('xe.dynamicField')->gets('user'))
-            ->sortBy(function ($field) use ($dynamicFieldSortKeys) {
-                return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
+        list($activateDynamicFields, $deActivateDynamicFields) = Collection::make(app('xe.dynamicField')->gets('user'))
+            ->partition(function ($field, $key) use ($dynamicFieldSortKeys) {
+                return in_array($key, $dynamicFieldSortKeys);
             });
+        $dynamicFields = $activateDynamicFields->sortBy(function ($field, $key) use ($dynamicFieldSortKeys) {
+            return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
+        })->union($deActivateDynamicFields);
 
         /**
          * @var \Xpressengine\DynamicField\RegisterHandler $registerHandler
