@@ -113,6 +113,8 @@ class RegisterController extends Controller
             );
         }
 
+        $request->session()->forget('user_agree_terms');
+
         //약관을 회원정보 입력 전에 받는 경우 처리
         $agreeType = app('xe.config')->getVal(
             'user.register.term_agree_type',
@@ -129,9 +131,11 @@ class RegisterController extends Controller
             }
         }
 
-        if ($agreeType === UserRegisterHandler::TERM_AGREE_PRE &&
-            count($terms) > 0 &&
-            $isAllRequireTermAgree === false
+        if ($agreeType === UserRegisterHandler::TERM_AGREE_PRE && count($terms) > 0 &&  //가입 정보 이전에 약관 동의 출력 여부
+            (
+                $isAllRequireTermAgree === false || //필수 조건이 있는데 선택 안했을 경우
+                ($requireTerms->count() === 0 && $request->session()->has('pass_agree') === false))
+                //약관에 선택 약관만 존재하는데 session에 약관 동의에 대한 데이터가 없을 경우
         ) {
             return \XePresenter::make('register.agreement', compact('terms'));
         }
@@ -160,6 +164,8 @@ class RegisterController extends Controller
             $rule,
             ['*.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
         );
+
+        $request->session()->flash('pass_agree');
 
         return redirect()->route('auth.register', $request->except('_token'));
     }
