@@ -3606,5 +3606,17 @@ return [
     'menuImageSpecDescription' => [
         'ko' => '권장 해상도: 1200x630 / 최소 200x200 / JPEG, PNG',
         'en' => 'Recommended resolution: 1200x630 / 200x200 minimum / JPEG, PNG'
+    ],
+    'autoRegisterDescription' => [
+        'ko' => '가입 즉시 승인 과정 없이 가입됩니다.',
+        'en' => 'Sign up immediately without signing up.'
+    ],
+    'pendingAdminDescription' => [
+        'ko' => '가입신청 후 로그아웃 처리되며, 운영자가 회원목록에서 가입승인을 할 때 까지 로그인이 불가합니다.',
+        'en' => 'After registering, you will be logged out. You will not be able to log in until the administrator approves your membership.'
+    ],
+    'pendingEmailDescription' => [
+        'ko' => '가입신청 후 이메일 인증 메일을 발송합니다. 이메일 인증 링크를 클릭해서 인증할 때까지 로그인이 제한됩니다.',
+        'en' => 'After registering, we will send you an email verification email. Your login will be restricted until you verify by clicking the email verification link.'
     ]
 ];

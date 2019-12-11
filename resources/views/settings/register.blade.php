@@ -51,7 +51,31 @@ use Xpressengine\User\UserRegisterHandler;
                             <div class="setting-box">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::registerProcess') }}</h4>
+                                        <h4 class="setting-box__sub-title">{{ xe_trans('xe::registerProcess') }}
+                                            <button type="button" class="setting-box__sub-title-more-info-button" data-toggle="popover" data-popover-content="#popoverSingupProcess" data-placement="bottom">
+                                                <i class="xi-help-o"></i>
+                                            </button>
+                                            <div id="popoverSingupProcess" style="display: none;">
+                                                <div class="popover-body">
+                                                    <div class="setting-box__popover-content">
+                                                        <ul class="setting-box__popover-content-list">
+                                                            <li>
+                                                                <strong class="setting-box__popover-title">{{ xe_trans('xe::authRegister') }}</strong>
+                                                                <p class="setting-box__popover-text">{{ xe_trans('xe::autoRegisterDescription') }}</p>
+                                                            </li>
+                                                            <li>
+                                                                <strong class="setting-box__popover-title">{{ xe_trans('xe::pending_admin_description') }}</strong>
+                                                                <p class="setting-box__popover-text">{{ xe_trans('xe::pendingAdminDescription') }}</p>
+                                                            </li>
+                                                            <li>
+                                                                <strong class="setting-box__popover-title">{{ xe_trans('xe::pending_email_description') }}</strong>
+                                                                <p class="setting-box__popover-text">{{ xe_trans('xe::pendingEmailDescription') }}</p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h4>
                                     </div>
                                     <div class="col-sm-9">
                                         <div>
@@ -447,6 +471,27 @@ use Xpressengine\User\UserRegisterHandler;
             }
 
             return true;
+        });
+
+        $("[data-toggle=popover]").popover({
+            html : true,
+            content: function() {
+                var content = $(this).attr("data-popover-content");
+                return $(content).children(".popover-body").html();
+            },
+            title: function() {
+                var titleResult = '';
+                var title = $(this).attr("data-popover-content");
+                var titleLength = $(title).children(".popover-heading").length;
+
+                if(titleLength > 0) {
+                    titleResult = $(title).children(".popover-heading").html();
+                } else {
+                    titleResult = '';
+                }
+
+                return titleResult;
+            }
         });
     });
 </script>
