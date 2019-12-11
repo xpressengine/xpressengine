@@ -411,7 +411,7 @@ class RegisterController extends Controller
         XeDB::beginTransaction();
         try {
             //이메일 승인 처리
-            $this->emailBroker->confirmEmail($email, $code);
+            $this->emailBroker->approvalEmail($email, $code);
 
             //회원 상태 변경
             $user = $email->user;
