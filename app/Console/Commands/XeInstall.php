@@ -96,7 +96,7 @@ class XeInstall extends Command
         ],
         'admin' => [
             'email' => null,
-            'login_id' => null,
+            'login_id' => 'admin',
             'password' => null,
             'display_name' => 'admin',
         ],
@@ -865,14 +865,6 @@ class XeInstall extends Command
         });
 
         $adminInfo['login_id'] = $this->askValidation('ID', $adminInfo['login_id'], function ($loginId) {
-            $validate = \Validator::make(
-                ['login_id' => $loginId],
-                ['login_id' => 'required']
-            );
-            if ($validate->fails()) {
-                throw new \Exception('Invalid ID.');
-            }
-
             return $loginId;
         });
 
@@ -929,6 +921,10 @@ class XeInstall extends Command
         $config['rating'] = 'super';
         $config['status'] = 'activated';
         $config['emailConfirmed'] = true;
+
+        if (isset($config['login_id']) === false) {
+            $config['login_id'] = 'admin';
+        }
 
         // create admin account
         /** @var UserHandler $userHandler */

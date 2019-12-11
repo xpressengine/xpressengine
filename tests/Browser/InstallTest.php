@@ -38,7 +38,7 @@ class InstallTest extends DuskTestCase
 
             // 약관 동의
             $browser->pause(1000);
-            $browser->press('.step2 a');;
+            $browser->press('.step2 a');
             $browser->waitForText('약관');
             $browser->assertSee('약관');
             $browser->press('.agree-area .xe-label-text');
@@ -51,6 +51,7 @@ class InstallTest extends DuskTestCase
                 ->type('database_user_name', env('DB_USERNAME', 'xe_test'))
                 ->type('database_password', env('DB_PASSWORD', 'xe_test'))
                 ->type('admin_email', 'admin@admin.net')
+                ->type('admin_login_id', 'admin')
                 ->type('admin_display_name', 'admin')
                 ->type('admin_password', 'admin')
                 ->type('admin_password_confirmation', 'admin');
