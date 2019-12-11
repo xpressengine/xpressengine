@@ -178,7 +178,7 @@ class SeoHandler
         }
 
         $menuItem = $this->presenter->getInstanceConfig()->getMenuItem();
-        if ($image = $menuItem->menuImage) {
+        if ($menuItem && $image = $menuItem->menuImage) {
             $data['images'][] = $image;
         }
 
