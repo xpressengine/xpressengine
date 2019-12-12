@@ -84,6 +84,15 @@
         </div>
     </div>
 
+    <div class="setting-group">
+        <div class="setting-detail">
+            <div class="setting-detail-content">
+                <p>{{ xe_trans('xe::id') }}</p>
+                <em class="text-gray2" style="margin-bottom: 0px;">{{ $user->login_id }}</em>
+            </div>
+        </div>
+    </div>
+
     <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
         <div class="setting-group">
             <a href="#" class="__xe_editBtn">
