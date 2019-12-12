@@ -73,6 +73,15 @@ abstract class GenericTheme extends AbstractTheme
 
         $data = $this->data;
 
+        $configHeaderHtml = xe_trans($config->get('_configHeaderHtml', ''));
+        if ($configHeaderHtml != '') {
+            app('xe.frontend')->html('generic.theme.header')->content($configHeaderHtml)->appendTo('head')->load();
+        }
+        $configFooterHtml = xe_trans($config->get('_configFooterHtml', ''));
+        if ($configHeaderHtml != '') {
+            app('xe.frontend')->html('generic.theme.footer')->content($configFooterHtml)->appendTo('body')->load();
+        }
+
         return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme', 'data'));
     }
 

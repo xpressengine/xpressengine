@@ -3618,5 +3618,21 @@ return [
     'pendingEmailDescription' => [
         'ko' => '가입신청 후 이메일 인증 메일을 발송합니다. 이메일 인증 링크를 클릭해서 인증할 때까지 로그인이 제한됩니다.',
         'en' => 'After registering, we will send you an email verification email. Your login will be restricted until you verify by clicking the email verification link.'
+    ],
+    'headerHtml' => [
+        'ko' => '헤더 스크립트',
+        'en' => 'Header script'
+    ],
+    'headerHtmlDescription' => [
+        'ko' => 'HTML <head>...</head> 사이에 들어가는 코드를 직접 입력할 수 있습니다. 예) <script>, <style>, <meta>',
+        'en' => 'You can enter the code directly between the HTML <head> ... </ head>. Ex) <script>, <style>, <meta>'
+    ],
+    'footerHtml' => [
+        'ko' => '푸터 스크립트',
+        'en' => 'Footer script'
+    ],
+    'footerHtmlDescription' => [
+        'ko' => 'BODY 태그 닫기 전에 코드를 추가할 수 있습니다.',
+        'en' => 'You can add code before closing the BODY tag.'
     ]
 ];

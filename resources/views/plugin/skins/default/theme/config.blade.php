@@ -31,6 +31,32 @@
 
             {!! $theme->renderSetting() !!}
 
+            <div class="panel-group">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::headerHtml')}} <small>{{xe_trans('xe::headerHtmlDescription')}}</small></label>
+                                    </div>
+                                    {!! uio('langTextArea', ['placeholder'=>'', 'langKey'=>Request::old('_configHeaderHtml', $config->get('_configHeaderHtml')), 'name'=>'_configHeaderHtml']) !!}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <label>{{xe_trans('xe::footerHtml')}} <small>{{xe_trans('xe::footerHtmlDescription')}}</small></label>
+                                    </div>
+                                    {!! uio('langTextArea', ['placeholder'=>'', 'langKey'=>Request::old('_configFooterHtml', $config->get('_configFooterHtml')), 'name'=>'_configFooterHtml']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{ csrf_field() }}
             {{ method_field('put') }}
 
