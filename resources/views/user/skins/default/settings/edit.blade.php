@@ -1,4 +1,7 @@
 @inject('passwordValidator', 'xe.password.validator')
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+{{ XeFrontend::js('assets/core/user/user_register.js')->load() }}
+
 <h1>{{ xe_trans('xe::privateInfoAndOptionSettings') }}</h1>
 <p>{{xe_trans('xe::privateInfoAndOptionSettingsDescription')}}</p>
 <div class="setting-card">
@@ -141,12 +144,12 @@
                     <input type="password" class="xe-form-control" name="current_password">
                     <em class="text-message">&nbsp;</em>
                 </div>
-                <div class="password-content __xe_newPassword">
+                <div class="password-content xu-form-group __xe_newPassword">
                     <p class="txt_pw">{{ xe_trans('xe::newPassword') }}</p>
                     <input type="password" class="xe-form-control" name="password">
                     <em class="text-message">&nbsp;</em>
                 </div>
-                <div class="password-content __xe_passwordConfirm">
+                <div class="password-content xu-form-group __xe_passwordConfirm">
                     <p class="txt_pw">{{ xe_trans('xe::newPasswordConfirm') }}</p>
                     <input type="password" class="xe-form-control" name="password_confirmation">
                     <p class="text-message">&nbsp;</p>

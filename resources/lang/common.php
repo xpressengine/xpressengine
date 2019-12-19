@@ -573,6 +573,10 @@ return [
         'ko' => '새 비밀번호 확인',
         'en' => 'New Password Confirm',
     ],
+    'enterPasswordConfirmation' => [
+        'ko' => '비밀번호 확인을 입력하세요.',
+        'en' => 'Please enter password confirmation.'
+    ],
     'identification' => [
         'ko' => '신원 확인',
         'en' => 'Identification',

@@ -1,6 +1,6 @@
 /* global $, XE */
 $(function () {
-  var $container = $('.user--signup')
+  var $container = $('.user--signup, .user--reset-password, .__xe_settingPassword')
   var langs = {
     'min': function (rule) {
       return XE.Lang.trans('xe::validatorMin', {
@@ -61,7 +61,7 @@ $(function () {
       var $this = $(this)
       var $form = $this.closest('form')
       var fieldName = $this.attr('name')
-      if (typeof XE.Validator.rules[$form.data('rule')][fieldName] !== 'undefined') {
+      if ($form.data('rule') && typeof XE.Validator.rules[$form.data('rule')][fieldName] !== 'undefined') {
         XE.Validator.validate($form, fieldName, XE.Validator.rules[$form.data('rule')][fieldName])
           .then(function () {
             // if (!$this.is('[name=email]') && !$this.is('[name=display_name]') && !$this.is('[name=password]')) {
@@ -91,24 +91,6 @@ $(function () {
         }, function () { })
     })
 
-    // $('[name=display_name]').on('focus change', function () {
-    //   var that = this
-    //   var $this = $(this)
-    //   var $form = $this.closest('form')
-
-    //   XE.Validator.validate($form, 'display_name', 'required')
-    //     .then(function () {
-    //       $this.closest('.xu-form-group').find('.xu-form-group__validation').remove()
-
-    //       if ($this.val().length) {
-    //         checkDuplicate('name', 'display_name', $this.val())
-    //           .then(function (result) {
-    //             XE.Griper.form.fn.message($this, result.data.message, (result.data.valid) ? 'success' : 'error')
-    //           }, function (e) {})
-    //       }
-    //     }, function () {})
-    // })
-
     $('[name=password],[name=password_confirmation]').on('focusin focusout keyup change', function (e) {
       var $this = $(this)
 
@@ -118,7 +100,8 @@ $(function () {
       var result = validatePassword(String($this.val()))
 
       if ($this.is('[name=password_confirmation]')) {
-        XE.Griper.form.fn.message($this, '비밀번호를 한 번 더 입력해주세요', result.confirmation, false)
+        var confirmation = ($container.find('[name=password]').val() === $container.find('[name=password_confirmation]').val()) ? 'success' : 'error'
+        XE.Griper.form.fn.message($this, XE.Lang.trans('xe::enterPasswordConfirmation'), confirmation)
       } else {
         XE._.forEach(passwordRules, function (rule) {
           XE.Griper.form.fn.message($this, rule.message, result[rule.type], false)

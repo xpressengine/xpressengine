@@ -126,6 +126,12 @@ class UserController extends Controller
         $selectedSection['selected'] = true;
         $tabContent = $content instanceof \Closure ? $content($user) : $content;
 
+        expose_trans('xe::validatorMin');
+        expose_trans('xe::passwordIncludeNumber');
+        expose_trans('xe::passwordIncludeCharacter');
+        expose_trans('xe::passwordIncludeSpecialCharacter');
+        expose_trans('xe::enterPasswordConfirmation');
+
         return XePresenter::make('index', compact('user', 'menus', 'tabContent'));
     }
 

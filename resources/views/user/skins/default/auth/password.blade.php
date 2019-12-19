@@ -1,5 +1,5 @@
 {{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
-{{ XeFrontend::js('assets/core/user/user_reset_password.js')->load() }}
+{{ XeFrontend::js('assets/core/user/user_register.js')->load() }}
 
 <div class="user user--reset-password">
     @if(Session::get('status') !== 'passwords.reset')
@@ -45,3 +45,19 @@
         <a href="{{ route('login') }}" class="xu-button xu-button--primary">{{ xe_trans('xe::login') }}</a>
     @endif
 </div>
+
+<script>
+    $(function () {
+        $('.__xe-toggle-password').on('click', function () {
+            var $self = $(this)
+            var $prev = $self.prev()
+            if ($prev.attr('type') === 'password') {
+                $prev.attr('type', 'text')
+                $self.find('i').addClass('xi-eye-off').removeClass('xi-eye')
+            } else {
+                $prev.attr('type', 'password')
+                $self.find('i').addClass('xi-eye').removeClass('xi-eye-off')
+            }
+        })
+    })
+</script>
