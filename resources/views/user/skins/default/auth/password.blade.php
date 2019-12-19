@@ -27,6 +27,16 @@
                 </div>
             </div>
 
+            <div class="xu-form-group">
+                <label class="xu-form-group__label">{{ xe_trans('xe::passwordConfirm') }}</label>
+                <div class="xu-form-group__box xu-form-group__box--icon-right">
+                    <input type="password" class="xu-form-group__control" placeholder="{{ xe_trans('xe::passwordConfirm' )}}" name="password_confirmation"  data-valid-name="{{ xe_trans('xe::passwordConfirm') }}">
+                    <button type="button" class="xu-form-group__icon __xe-toggle-password">
+                        <i class="xi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
             <button type="submit" class="xe-btn xe-btn-primary">{{ xe_trans('xe::changePassword') }}</button>
         </form>
     @else
