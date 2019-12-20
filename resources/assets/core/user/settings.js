@@ -278,11 +278,20 @@ window.jQuery(function ($) {
         var currentPassword = this.ui.inputCurrent.val()
         var password = this.ui.inputNew.val()
         var passwordConfirmation = this.ui.inputConfirm.val()
-        if (!this.validated || !this.beforeCheck()) {
+        var validated = (currentPassword && passwordConfirmation && password && password === passwordConfirmation)
+        var _this = this
+        if (!validated || !this.beforeCheck()) {
+          if (!currentPassword) {
+            this.ui.inputCurrent.focus()
+          } else if (!password) {
+            this.ui.inputNew.focus()
+          } else {
+            this.ui.inputConfirm.focus()
+          }
           return
         }
 
-        XE.ajax({
+        window.XE.ajax({
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',
@@ -347,36 +356,36 @@ window.jQuery(function ($) {
           return
         }
 
-        _this = this
-        XE.ajax(
-          {
-            url: this.options.checkUrl,
-            type: 'POST',
-            dataType: 'json',
-            data: { password: input },
-            success: function (data, textStatus, jqXHR) {
-              if (data.valid) {
-                _this.setSecureLevel(data.level)
-                _this.checkConfirm()
-                _this.validated = true
-              } else {
-                _this.setStatus(_this.ui.newBox, false, data.message)
-                _this.validated = false
-              }
-            }
-          }
-        )
+        // _this = this
+        // XE.ajax(
+        //   {
+        //     url: this.options.checkUrl,
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     data: { password: input },
+        //     success: function (data, textStatus, jqXHR) {
+        //       if (data.valid) {
+        //         _this.setSecureLevel(data.level)
+        //         _this.checkConfirm()
+        //         _this.validated = true
+        //       } else {
+        //         _this.setStatus(_this.ui.newBox, false, data.message)
+        //         _this.validated = false
+        //       }
+        //     }
+        //   }
+        // )
       },
 
       checkConfirm: function () {
-        var input = this.ui.inputNew.val()
-        var input2 = this.ui.inputConfirm.val()
+        // var input = this.ui.inputNew.val()
+        // var input2 = this.ui.inputConfirm.val()
 
-        if (input != input2) {
-          _this.setStatus(_this.ui.confirmBox, false, '확인을 위해 동일한 비밀번호를 입력해주세요')
-        } else {
-          _this.setStatus(_this.ui.confirmBox, true, '비밀번호 확인')
-        }
+        // if (input != input2) {
+        //   _this.setStatus(_this.ui.confirmBox, false, '확인을 위해 동일한 비밀번호를 입력해주세요')
+        // } else {
+        //   _this.setStatus(_this.ui.confirmBox, true, '비밀번호 확인')
+        // }
       }
 
     }

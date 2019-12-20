@@ -1513,14 +1513,17 @@ return [
         'ko' => '비밀번호 보안 수준',
         'en' => 'Password strength'
     ],
+    // @deprecated passwordStrengthWeakDescription
     'passwordStrengthWeakDescription' => [
         'ko' => '비밀번호는 4자 이상이어야 합니다.',
         'en' => 'Passwords must be at least 4 characters.',
     ],
+    // @deprecated passwordStrengthNormalDescription
     'passwordStrengthNormalDescription' => [
         'ko' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least six characters long and must contain letters and numbers.',
     ],
+    // @deprecated passwordStrengthStrongDescription
     'passwordStrengthStrongDescription' => [
         'ko' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',

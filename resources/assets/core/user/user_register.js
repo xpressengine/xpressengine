@@ -100,7 +100,7 @@ $(function () {
       var result = validatePassword(String($this.val()))
 
       if ($this.is('[name=password_confirmation]')) {
-        var confirmation = ($container.find('[name=password]').val() === $container.find('[name=password_confirmation]').val()) ? 'success' : 'error'
+        var confirmation = ($container.find('[name=password_confirmation]').val() && $container.find('[name=password]').val() === $container.find('[name=password_confirmation]').val()) ? 'success' : 'error'
         XE.Griper.form.fn.message($this, XE.Lang.trans('xe::enterPasswordConfirmation'), confirmation)
       } else {
         XE._.forEach(passwordRules, function (rule) {
