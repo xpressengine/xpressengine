@@ -3088,6 +3088,10 @@ return [
         'ko' => '메타 태그의 Description 항목에 입력될 사이트 설명을 입력해주세요.',
         'en' => 'Please enter a description of the site to be entered in the Description field of the meta tag.'
     ],
+    'siteSettingKeywordDescription' => [
+        'ko' => '메타 태그의 Keyword 항목에 입력될 사이트 키워드를 입력해주세요.',
+        'en' => 'Please enter a keyword of the site to be entered in the Keyword field of the meta tag.'
+    ],
     'siteSettingImageDescription' => [
         'ko' => 'SNS 또는 외부 페이지에 링크시 보여질 대표 이미지를 업로드해주세요. (1200*630, 600*315, 200*200)',
         'en' => 'Please upload a representative image to be displayed when linking to SNS or an external page. (1200 * 630, 600 * 315, 200 * 200)'

@@ -165,7 +165,7 @@ class SeoHandler
         $data['title'] = $this->makeTitle($item);
         $data['description'] = $item ? $item->getDescription()
             : $this->translator->trans($this->setting->get('description'));
-        $data['keywords'] = $item ? $item->getKeyword() : $this->setting->get('keywords');
+        $data['keywords'] = $item ? $item->getKeyword() : $this->translator->trans($this->setting->get('keywords'));
         $data['author'] = $item ? $item->getAuthor() : '';
         $data['images'] = $item ? $item->getImages() : [];
 
