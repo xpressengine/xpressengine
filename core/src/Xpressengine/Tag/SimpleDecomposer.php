@@ -112,7 +112,7 @@ class SimpleDecomposer implements Decomposer
             return null;
         }
 
-        $h = ord($ch[0]);
+        $h = ord($ch{0});
 
         if ($h <= 0x7F) {
             return $h;
@@ -121,13 +121,13 @@ class SimpleDecomposer implements Decomposer
             return null;
         }
         if ($h <= 0xDF && $len>1) {
-            return ($h & 0x1F) <<  6 | (ord($ch[1]) & 0x3F);
+            return ($h & 0x1F) <<  6 | (ord($ch{1}) & 0x3F);
         }
         if ($h <= 0xEF && $len>2) {
-            return ($h & 0x0F) << 12 | (ord($ch[1]) & 0x3F) << 6 | (ord($ch[1]) & 0x3F);
+            return ($h & 0x0F) << 12 | (ord($ch{1}) & 0x3F) << 6 | (ord($ch{2}) & 0x3F);
         }
         if ($h <= 0xF4 && $len>3) {
-            return ($h & 0x0F) << 18 | (ord($ch[1]) & 0x3F) << 12 | (ord($ch[2]) & 0x3F) << 6 | (ord($ch[3]) & 0x3F);
+            return ($h & 0x0F) << 18 | (ord($ch{1}) & 0x3F) << 12 | (ord($ch{2}) & 0x3F) << 6 | (ord($ch{3}) & 0x3F);
         }
     }
 }
