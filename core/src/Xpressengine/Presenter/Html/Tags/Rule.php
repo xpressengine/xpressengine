@@ -115,13 +115,13 @@ class Rule
                 list($method, $parameter) = ValidationRuleParser::parse($item);
                 $method = snake_case($method);
                 if (count($parameter)) {
-                    $parameter = implode($parameter, ',');
-                    $item = implode(compact('method', 'parameter'), ':');
+                    $parameter = implode(',', $parameter);
+                    $item = implode(':', compact('method', 'parameter'));
                 } else {
                     $item = $method;
                 }
             }
-            $rule = implode($rule, '|');
+            $rule = implode('|', $rule);
         });
 
         $this->ruleName = $ruleName;

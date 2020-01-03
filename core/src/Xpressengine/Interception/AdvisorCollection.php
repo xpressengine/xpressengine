@@ -180,7 +180,8 @@ class AdvisorCollection
         if (isset($this->advisorMap->$alias)) {
             foreach ($this->advisorMap->$alias as $method => $value) {
                 foreach ($value->advisorArr as $advisor) {
-                    $this->advisorMap->$class->$method->advisorArr[] = $advisor;
+                    $box = $this->getPointCutBox($class, $method);
+                    $box->advisorArr[] = $advisor;
                 }
             }
             unset($this->advisorMap->$alias);

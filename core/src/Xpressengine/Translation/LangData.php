@@ -38,7 +38,7 @@ class LangData
         foreach (array_dot($data) as $key => $value) {
             $arrKey = explode('.', $key);
             $locale = array_pop($arrKey);
-            $item = implode($arrKey, '.');
+            $item = implode('.', $arrKey);
             $this->setLine($item, $locale, $value);
         }
     }
