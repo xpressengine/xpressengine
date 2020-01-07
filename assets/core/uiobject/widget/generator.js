@@ -40,11 +40,12 @@
         _this.on('change', selectWidget, function () {
           var widget = this.value
           var url = $('.widget-skins').data('url')
+          var code = $('.widget-skins').data('code')
 
           $('.widget-form').empty()
 
           if (widget) {
-            XE.page(url + '?widget=' + widget, '.widget-skins')
+            XE.page(url + '?widget=' + widget + '&code=' + code, '.widget-skins')
           } else {
             $('.widget-skins').empty()
             $('.__xe_widget_code').val('')

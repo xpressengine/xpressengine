@@ -82,10 +82,11 @@ class WidgetController extends Controller
         ]);
 
         $widget = $request->get('widget');
-
+        $code = $request->get('code');
+        $code = json_dec($code, true);
         $skins = $skinHandler->getList($widget);
 
-        return api_render('widget.skins', compact('widget', 'skins'));
+        return api_render('widget.skins', compact('widget', 'skins', 'code'));
     }
 
     /**
@@ -96,7 +97,7 @@ class WidgetController extends Controller
      * @param SkinHandler   $skinHandler   SkinHandler instance
      * @return \Xpressengine\Presenter\Presentable
      */
-    public function form(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    public function form(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
         $this->validate($request, [
             'widget' => 'required',
@@ -105,8 +106,15 @@ class WidgetController extends Controller
         $widget = $request->get('widget');
         $skin = $request->get('skin');
 
+        $code = $request->get('code');
         // widget form
-        $widgetForm = $widgetHandler->setup($widget);
+        try {
+            $inputs = json_dec($code, true);
+        } catch (JsonException $e) {
+            $inputs = $widgetParser->parseCode($code);
+        }
+
+        $widgetForm = $widgetHandler->setup($widget, $inputs);
 
         // skin form
         $skinForm = null;
@@ -115,7 +123,9 @@ class WidgetController extends Controller
             $skinForm = $skin->renderSetting();
         }
 
-        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
+        $title = array_get($inputs, '@attributes.title', '');
+
+        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title'));
     }
 
     /**
@@ -165,7 +175,7 @@ class WidgetController extends Controller
         $skin = $skinHandler->get($skin);
         $skinForm = $skin->renderSetting($inputs);
 
-        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
+        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm', 'code'));
     }
 
     /**
