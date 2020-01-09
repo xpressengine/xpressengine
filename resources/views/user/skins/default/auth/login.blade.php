@@ -10,7 +10,7 @@
             <legend>{{ xe_trans('xe::doLogin') }}</legend>
             <div class="user-login">
                 <div class="xu-form-group xu-form-group--large">
-                    <input type="text" name="email" class="xu-form-group__control" placeholder="{{ xe_trans('xe::email') }}" value="{{ old('email') }}">
+                    <input type="text" name="email" class="xu-form-group__control" placeholder="{{ xe_trans('xe::id') }} {{ xe_trans('xe::or') }} {{ xe_trans('xe::email') }}" value="{{ old('email') }}">
                 </div>
                 <div class="xu-form-group xu-form-group--large">
                     <input type="password" name="password" class="xu-form-group__control" id="password" placeholder="{{ xe_trans('xe::password') }}">

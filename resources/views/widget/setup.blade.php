@@ -6,7 +6,7 @@
         </div>
 
         {{-- select skin --}}
-        <div class="widget-skins" data-url="{{route('settings.widget.skin')}}">
+        <div class="widget-skins" data-url="{{route('settings.widget.skin')}}" data-code="{{json_enc($code)}}">
             @if(isset($skins))
             @include('widget.skins', ['setup' => true])
             @endif

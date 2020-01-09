@@ -573,6 +573,10 @@ return [
         'ko' => '새 비밀번호 확인',
         'en' => 'New Password Confirm',
     ],
+    'enterPasswordConfirmation' => [
+        'ko' => '비밀번호 확인을 입력하세요.',
+        'en' => 'Please enter password confirmation.'
+    ],
     'identification' => [
         'ko' => '신원 확인',
         'en' => 'Identification',
@@ -1509,14 +1513,17 @@ return [
         'ko' => '비밀번호 보안 수준',
         'en' => 'Password strength'
     ],
+    // @deprecated passwordStrengthWeakDescription
     'passwordStrengthWeakDescription' => [
         'ko' => '비밀번호는 4자 이상이어야 합니다.',
         'en' => 'Passwords must be at least 4 characters.',
     ],
+    // @deprecated passwordStrengthNormalDescription
     'passwordStrengthNormalDescription' => [
         'ko' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least six characters long and must contain letters and numbers.',
     ],
+    // @deprecated passwordStrengthStrongDescription
     'passwordStrengthStrongDescription' => [
         'ko' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',
@@ -3080,6 +3087,10 @@ return [
     'siteSettingSiteDescription' => [
         'ko' => '메타 태그의 Description 항목에 입력될 사이트 설명을 입력해주세요.',
         'en' => 'Please enter a description of the site to be entered in the Description field of the meta tag.'
+    ],
+    'siteSettingKeywordDescription' => [
+        'ko' => '메타 태그의 Keyword 항목에 입력될 사이트 키워드를 입력해주세요.',
+        'en' => 'Please enter a keyword of the site to be entered in the Keyword field of the meta tag.'
     ],
     'siteSettingImageDescription' => [
         'ko' => 'SNS 또는 외부 페이지에 링크시 보여질 대표 이미지를 업로드해주세요. (1200*630, 600*315, 200*200)',

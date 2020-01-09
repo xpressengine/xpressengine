@@ -323,6 +323,9 @@ abstract class GenericTheme extends AbstractTheme
     public static function asset($path, $secure = null)
     {
         $path = static::getPath().'/assets/'.$path;
+        if (app('xe.theme')->hasCache(realpath($path))) {
+            $path = str_replace(public_path(), '', app('xe.theme')->getCachePath(realpath($path)));
+        }
         return asset($path, $secure);
     }
 
@@ -342,8 +345,8 @@ abstract class GenericTheme extends AbstractTheme
         view()->composer(
             $view,
             function (\Illuminate\View\View $viewObj) use ($handler) {
-                if ($handler->hasCache($viewObj->getPath())) {
-                    $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+                if ($handler->hasCache(realpath($viewObj->getPath()))) {
+                    $viewObj->setPath($handler->getCachePath(realpath($viewObj->getPath())));
                 }
             }
         );

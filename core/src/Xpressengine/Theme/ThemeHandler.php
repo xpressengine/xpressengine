@@ -139,7 +139,13 @@ class ThemeHandler
      */
     public function getCachePath($path)
     {
-        $cachePath = $this->cachePath.'/'.md5($path);
+        $parts = pathinfo($path);
+        if ($parts['extension'] != 'php') {
+            $cachePath = storage_path('app/public/assets').'/'.md5($path).'.'.$parts['extension'];
+        } else {
+            $cachePath = $this->cachePath.'/'.md5($path);
+        }
+
         return $cachePath;
     }
 

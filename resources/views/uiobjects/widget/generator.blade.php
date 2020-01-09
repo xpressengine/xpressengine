@@ -1,7 +1,8 @@
 <div class="widget-generator" id="{{$id}}">
     <div class="widget-inputs" data-url="{{route('settings.widget.setup')}}">
 
-        @include('widget.setup')
+        {{--javascript 에서 그리기 때문에 미리 불러올 필요 없음--}}
+        {{--@include('widget.setup')--}}
 
     </div>
 

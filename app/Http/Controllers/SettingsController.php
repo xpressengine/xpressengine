@@ -98,7 +98,7 @@ class SettingsController extends Controller
         $siteInputs = $request->only(['site_address']);
         $this->updateSite($siteInputs);
 
-        $seoSettingInputs = $request->only(['mainTitle', 'subTitle', 'description', 'siteImage']);
+        $seoSettingInputs = $request->only(['mainTitle', 'subTitle', 'description', 'keywords', 'siteImage']);
         $this->updateSEOSetting($seoSettingInputs);
 
         $webmasterInputs = $request->only(['webmasterName', 'webmasterEmail']);
