@@ -55,6 +55,7 @@ class CategoryMigration extends Migration
             $table->integer('parent_id')->nullable()->comment('parent ID. parent category item ID.');
             $table->string('word', 250)->comment('string of category item. It can be code of translation information.');
             $table->text('description')->comment('description of category item. It can be code of translation information.');
+            $table->string('image_id', 36)->comment('image id')->nullable();
             $table->integer('ordering')->default(0)->comment('ordering number of category item sort.');
 
             $table->index('category_id');
@@ -73,6 +74,56 @@ class CategoryMigration extends Migration
             $table->unique(['ancestor', 'descendant']);
             $table->index('ancestor');
             $table->index('descendant');
+        });
+    }
+
+    /**
+     * Check updated
+     *
+     * @param null|string $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if ($this->checkExistCategoryItemImageIdColumn() === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param null|string $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if ($this->checkExistCategoryItemImageIdColumn() === false) {
+            $this->createCategoryItemImageIdColumn();
+        }
+    }
+
+    /**
+     * Check exist category_item table image_id column
+     *
+     * @return bool
+     */
+    private function checkExistCategoryItemImageIdColumn()
+    {
+        return Schema::hasColumn('category_item', 'image_id');
+    }
+
+    /**
+     * Create category_item table image_id column
+     *
+     * @return void
+     */
+    private function createCategoryItemImageIdColumn()
+    {
+        Schema::table('category_item', function (Blueprint $table) {
+            $table->string('image_id', 36)->nullable()->after('description');
         });
     }
 }
