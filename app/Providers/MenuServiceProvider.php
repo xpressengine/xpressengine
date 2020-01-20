@@ -110,7 +110,9 @@ class MenuServiceProvider extends ServiceProvider
         $this->app->singleton(MenuHandler::class, function ($app) {
             $generator = new IdentifierGenerator($app['xe.keygen']);
 
-            return new MenuHandler(
+            $proxyHandler = $app['xe.interception']->proxy(MenuHandler::class);
+
+            return new $proxyHandler(
                 new MenuRepository($generator),
                 new MenuItemRepository($generator, $app['events']),
                 $app['xe.config'],
