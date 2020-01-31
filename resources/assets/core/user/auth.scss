@@ -451,6 +451,14 @@ hr {
     }
   }
 
+  .float-clear {
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  }
+
   // 버튼 링크로 적용 시 color 값 변경되지 않도록 기본값 적용
   a.xu-button--default {
     color: #505f79;
