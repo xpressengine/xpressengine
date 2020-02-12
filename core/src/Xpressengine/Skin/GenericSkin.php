@@ -55,6 +55,23 @@ abstract class GenericSkin extends AbstractSkin
     protected static $defaultSkin;
 
     /**
+     * 스킨에 data를 지정할 때 기본 스킨이 있을 경우 기본 스킨에도 같은 data를 지정해서 추가한 스킨에 출력할 파일이 없을 경우
+     * 기본 스킨이 정상적으로 동작할 수 있도록 한다.
+     *
+     * @param mixed $data 지정할 데이터
+     *
+     * @return AbstractSkin
+     */
+    public function setData($data)
+    {
+        if (static::$defaultSkin && static::class !== get_class(static::$defaultSkin)) {
+            static::$defaultSkin->setData($data);
+        }
+
+        return parent::setData($data);
+    }
+
+    /**
      * 스킨을 출력한다.
      * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.
      *
@@ -73,9 +90,15 @@ abstract class GenericSkin extends AbstractSkin
 
         if (method_exists($this, $method)) {
             return $this->$method($view);
-        } else {
-            return $this->renderBlade($view);
         }
+
+        if (View::exists(self::view($view)) === false &&
+            (static::$defaultSkin && static::class !== get_class(static::$defaultSkin))
+        ) {
+            return static::$defaultSkin->setView($view)->render();
+        }
+
+        return $this->renderBlade($view);
     }
 
     /**
@@ -270,16 +293,8 @@ abstract class GenericSkin extends AbstractSkin
      */
     public static function view($view)
     {
-        $dir = static::$viewDir ? '.'.static::$viewDir : '';
-
-        $fileName = $view;
-        $view = str_replace('/', '.', static::$path)."$dir.$view";
-
-        if (View::exists($view) === false &&
-            (static::$defaultSkin && static::class !== get_class(static::$defaultSkin))
-        ) {
-            $view = static::$defaultSkin::view($fileName);
-        }
+        $dir = static::$viewDir ? '.' . static::$viewDir : '';
+        $view = str_replace('/', '.', static::$path) . "$dir.$view";
 
         return $view;
     }
@@ -288,6 +303,8 @@ abstract class GenericSkin extends AbstractSkin
      * 기본 스킨을 주입
      *
      * @param GenericSkin $skin default skin
+     *
+     * @return void
      */
     public function setDefaultSkin(GenericSkin $skin)
     {
