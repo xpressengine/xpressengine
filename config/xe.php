@@ -421,6 +421,7 @@ return [
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
+            'formMedialibraryImage' => 'uiobject/xpressengine@formMedialibraryImage',
             'formColorpicker' => 'uiobject/xpressengine@formColorpicker',
             'formMenu' => 'uiobject/xpressengine@menuSelect',
             'formLangText' => 'uiobject/xpressengine@formLangText',

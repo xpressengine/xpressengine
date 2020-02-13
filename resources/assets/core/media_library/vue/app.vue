@@ -33,6 +33,10 @@ export default {
         importMode: this.$root.importMode
       })
 
+      if (typeof this.$root.selected === 'function') {
+        this.$root.selected(mediaList)
+      }
+
       if (this.$root.renderMode === 'modal') {
         $('#media-manager-modal-container').hide()
       }
