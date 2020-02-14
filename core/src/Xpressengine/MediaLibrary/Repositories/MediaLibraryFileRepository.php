@@ -297,21 +297,24 @@ class MediaLibraryFileRepository
     }
 
     /**
-     * @param Model $item item
+     * @param Model $mediaLibraryFileItem item
      *
      * @return void
      * @throws \Exception
      */
-    public function delete(Model $item)
+    public function delete(Model $mediaLibraryFileItem)
     {
         \XeDB::beginTransaction();
 
         try {
-            $realFile = $item->file;
+            $file = $mediaLibraryFileItem->file;
 
-            $this->traitDelete($item);
+            \XeStorage::unbind($mediaLibraryFileItem->id, $file, true);
+            if ($originFile = $mediaLibraryFileItem->originFile) {
+                \XeStorage::unBind($mediaLibraryFileItem->id, $originFile, true);
+            }
 
-            \XeStorage::delete($realFile);
+            $this->traitDelete($mediaLibraryFileItem);
         } catch (\Exception $e) {
             \XeDB::rollback();
 

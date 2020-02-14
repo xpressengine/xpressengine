@@ -431,7 +431,7 @@ class MediaLibraryHandler
         $this->files->update($mediaLibraryFileItem, $attribute);
     }
 
-    public function uploadModifyFile(Request $request)
+    public function uploadModifyFile(Request $request, $mediaLibraryFile)
     {
         $uploadFile = $request->file('file');
 
@@ -466,6 +466,7 @@ class MediaLibraryHandler
         }
 
         $file = XeStorage::upload($uploadFile, 'public/media_library/modify', null, 'media');
+        XeStorage::bind($mediaLibraryFile->id, $file);
 
         return $file;
     }
@@ -545,6 +546,8 @@ class MediaLibraryHandler
             ];
 
             $mediaLibraryFileItem = $this->files->storeItem($fileAttribute);
+
+            XeStorage::bind($mediaLibraryFileItem->id, $file);
         } catch (\Exception $e) {
             XeDB::rollback();
 
@@ -678,7 +681,7 @@ class MediaLibraryHandler
                 $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
             } else {
                 //최초 수정한 파일이 아니면 변경 후 삭제 처리
-                \Storage::delete($newImage);
+                XeStorage::unBind($originalMediaLibraryFile['id'], $newImage, true);
             }
 
             XeDB::commit();
