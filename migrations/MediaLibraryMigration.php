@@ -16,6 +16,8 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 
+use XeStorage;
+use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\Support\Migration;
 use Schema;
@@ -91,23 +93,71 @@ class MediaLibraryMigration extends Migration
      */
     public function checkUpdated($installedVersion = null)
     {
-        if ($this->checkExistConfig() == false) {
+        if ($this->checkExistConfig() === false) {
             return false;
         }
 
-        if ($this->checkExistTables() == false) {
+        if ($this->checkExistTables() === false) {
             return false;
         }
 
-        if ($this->checkExistRootFolder() == false) {
+        if ($this->checkExistRootFolder() === false) {
             return false;
         }
 
-        if ($this->checkExistOriginFileIdColumn() == false) {
+        if ($this->checkExistOriginFileIdColumn() === false) {
+            return false;
+        }
+
+        if ($this->checkAllFileHasUseCount() === false) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * 미디어라이브러리를 통해서 업로드 된 모든 file이 use_count를 가지고 있는지 확인
+     *
+     * @return bool
+     */
+    private function checkAllFileHasUseCount()
+    {
+        if (MediaLibraryFile::whereHas('file', function ($query) {
+            $query->where('use_count', 0);
+        })->exists() === true) {
+            return false;
+        }
+
+        if (MediaLibraryFile::whereHas('originFile', function ($query) {
+                $query->where('use_count', 0);
+        })->exists() === true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 미디어라이브러리 파일이 가지고 있는 모든 file의 use_count를 업데이트
+     *
+     * @return void
+     */
+    private function updateFileUseCount()
+    {
+        $fileUpdateMediaLibraryFiles = MediaLibraryFile::whereHas('file', function ($query) {
+            $query->where('use_count', 0);
+        })->get();
+        foreach ($fileUpdateMediaLibraryFiles as $mediaLibraryFile) {
+            XeStorage::bind($mediaLibraryFile->id, $mediaLibraryFile->file);
+        }
+
+        $originFileUpdateMediaLibraryFiles = MediaLibraryFile::whereHas('originFile', function ($query) {
+            $query->where('use_count', 0);
+        })->get();
+        foreach ($originFileUpdateMediaLibraryFiles as $mediaLibraryFile) {
+            XeStorage::bind($mediaLibraryFile->id, $mediaLibraryFile->originFile);
+        }
     }
 
     /**
@@ -119,20 +169,24 @@ class MediaLibraryMigration extends Migration
      */
     public function update($installedVersion = null)
     {
-        if ($this->checkExistConfig() == false) {
+        if ($this->checkExistConfig() === false) {
             $this->storeConfig();
         }
 
-        if ($this->checkExistTables() == false) {
+        if ($this->checkExistTables() === false) {
             $this->createTables();
         }
 
-        if ($this->checkExistRootFolder() == false) {
+        if ($this->checkExistRootFolder() === false) {
             $this->storeRootFolder();
         }
 
-        if ($this->checkExistOriginFileIdColumn() == false) {
+        if ($this->checkExistOriginFileIdColumn() === false) {
             $this->createOriginFileIdColumn();
+        }
+
+        if ($this->checkAllFileHasUseCount() === false) {
+            $this->updateFileUseCount();
         }
     }
 
