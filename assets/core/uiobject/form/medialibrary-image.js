@@ -11,8 +11,8 @@
       files: [],
       image: null,
       templates: {
-        previewContainer: '<ul class="ml-image__preview"></ul>',
-        previewItem: '<li class="ml-image__preview-item"><input type="hidden" class="ml-image__field" name="image[]"><img class="ml-image__preview-image" /><button type="button" class="ml-image__remove"><i class="xi-close-circle"></i></button></li>'
+        // previewContainer: '<ul class="xeuio-ml__preview"></ul>',
+        previewItem: '<li class="xeuio-ml__preview-item"><input type="hidden" class="xeuio-ml__field" name="image[]"><img class="xeuio-ml__preview-image" /><button type="button" class="xeuio-ml__button xeuio-ml__remove"><i class="xi-close-circle"></i></button></li>'
       }
     },
 
@@ -20,23 +20,23 @@
     _create: function () {
       var that = this
 
-      $(this.element).on('click', '.ml-image__add', function () {
+      $(this.element).on('click', '.xeuio-ml__add', function () {
         that._importFile()
       })
-      $(this.element).on('click', '.ml-image__remove', function () {
+      $(this.element).on('click', '.xeuio-ml__remove', function () {
         that._removeFile($(this).closest('li').find('input').val())
       })
 
       this._refresh()
     },
-    _init: function () {
-      console.debug('@_init')
-    },
 
     // Called when created, and later when changing options
     _refresh: function () {
-      console.debug('@_refresh')
       this._renderList()
+
+      if (this.options.field && $(this.options.field).length) {
+        $(this.options.field).val(this.options.files[0].file_id)
+      }
     },
 
     _importFile: function () {
@@ -76,15 +76,15 @@
         var $item = $(that.options.templates.previewItem)
         var fieldValue = (that.options.valueTarget === 'file_id') ? file.fileId() : file.mediaId()
 
-        $item.find('.ml-image__preview-image').attr('src', file.previewUrl())
-        $item.find('.ml-image__field')
+        $item.find('.xeuio-ml__preview-image').attr('src', file.previewUrl())
+        $item.find('.xeuio-ml__field')
           .attr('name', that.options.name)
           .val(fieldValue)
 
         $tempEl.append($item)
       })
 
-      $(this.element).find('.ml-image__preview').empty().append($tempEl.find('li'))
+      $(this.element).find('.xeuio-ml__preview').empty().append($tempEl.find('li'))
     },
 
     _addFiles: function (files) {
