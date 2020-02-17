@@ -11,6 +11,7 @@
         var options = {
             valueTarget: 'file_id',
             name: '{{ array_get($args, 'name', 'image[]') }}', // field name
+            limit: '{{ array_get($args, 'limit', 0) }}',
             @if(array_get($args, 'files')) files: {!! json_encode(array_get($args, 'files', [])) !!}, @endif
             @if(array_get($args, 'field')) field: '{{ array_get($args, 'field') }}', @endif
         }

@@ -6,7 +6,7 @@
       name: 'image[]',
       seq: 0,
       preview: true,
-      max: 1,
+      limit: 0,
       typeFilter: 'image/*',
       files: [],
       image: null,
@@ -26,6 +26,8 @@
       $(this.element).on('click', '.xeuio-ml__remove', function () {
         that._removeFile($(this).closest('li').find('input').val())
       })
+
+      this.options.limit = Number(this.options.limit)
 
       this._refresh()
     },
@@ -95,12 +97,29 @@
     },
 
     _addFile: function (file) {
+      var that = this
       console.debug('@_addFile', this, file)
+
+      // 파일 수 제한
+      if (that.options.limit) {
+        if (that.options.limit === 1) {
+          that.options.files = [file]
+        } else if (that.options.files.length >= that.options.limit) {
+          return
+        }
+      }
+
       this.options.files.push(file)
     },
 
     _getFiles: function () {
+      var that = this
       var files = []
+
+      if (that.options.limit) {
+        that.options.files.splice(0, that.options.limit)
+      }
+
       _.forEach(this.options.files, function (item) {
         files.push(new FileItem(item))
       })
