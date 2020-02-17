@@ -37,7 +37,9 @@
       this._renderList()
 
       if (this.options.field && $(this.options.field).length) {
-        $(this.options.field).val(this.options.files[0].file_id)
+        if (this.options.files[0]) {
+          $(this.options.field).val(_.get(this.options.files[0], 'file_id', null))
+        }
       }
     },
 
@@ -117,7 +119,7 @@
       var files = []
 
       if (that.options.limit) {
-        that.options.files.splice(0, that.options.limit)
+        that.options.files.slice(0, that.options.limit)
       }
 
       _.forEach(this.options.files, function (item) {
