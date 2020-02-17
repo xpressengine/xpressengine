@@ -12,7 +12,8 @@
       image: null,
       templates: {
         // previewContainer: '<ul class="xeuio-ml__preview"></ul>',
-        previewItem: '<li class="xeuio-ml__preview-item"><input type="hidden" class="xeuio-ml__field" name="image[]"><img class="xeuio-ml__preview-image" /><button type="button" class="xeuio-ml__button xeuio-ml__remove"><i class="xi-close-circle"></i></button></li>'
+        previewItem: '<li class="xeuio-ml__preview-item"><input type="hidden" class="xeuio-ml__field" name="image[]"><img class="xeuio-ml__preview-image" /><button type="button" class="xeuio-ml__button xeuio-ml__remove">삭제</button></li>',
+        addItem: '<li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>'
       }
     },
 
@@ -88,6 +89,10 @@
         $tempEl.append($item)
       })
 
+      if (!that.options.limit || fileList.length < that.options.limit) {
+        $tempEl.append($(that.options.templates.addItem))
+      }
+
       $(this.element).find('.xeuio-ml__preview').empty().append($tempEl.find('li'))
     },
 
@@ -119,7 +124,7 @@
       var files = []
 
       if (that.options.limit) {
-        that.options.files.slice(0, that.options.limit)
+        that.options.files = that.options.files.slice(0, that.options.limit)
       }
 
       _.forEach(this.options.files, function (item) {
