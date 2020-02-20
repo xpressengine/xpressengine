@@ -1,53 +1,55 @@
-<div class="row">
-    <div class="col-sm-12">
-        <div class="panel-group">
-        <form id="__xe_fList" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::groupManagement')}}<small>{{xe_trans('xe::groupManagementSummary', ['count' => $groups->count()])}}</small></h3>
-                    </div>
-                    <div class="pull-right">
-                        <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewGroup')}}</span></a>
-                    </div>
-                </div>
-
-                <div class="panel-heading">
-                    <div class="pull-left">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="__xe_remove btn btn-default">{{xe_trans('xe::deleteSelected')}}</button>
+<div class="container-fluid container-fluid--part">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel-group">
+            <form id="__xe_fList" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{xe_trans('xe::groupManagement')}}<small>{{xe_trans('xe::groupManagementSummary', ['count' => $groups->count()])}}</small></h3>
+                        </div>
+                        <div class="pull-right">
+                            <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewGroup')}}</span></a>
                         </div>
                     </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
-                            <th scope="col">{{xe_trans('xe::groupName')}}</th>
-                            <th scope="col">{{xe_trans('xe::description')}}</th>
-                            <th scope="col">{{xe_trans('xe::defaultGroup')}}</th>
-                            <th scope="col">{{xe_trans('xe::groupUserCount')}}</th>
-                            <th scope="col">{{xe_trans('xe::management')}}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($groups as $group)
+
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="__xe_remove btn btn-default">{{xe_trans('xe::deleteSelected')}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td><input type="checkbox" name="id[]" @if($joinGroup === $group->id) disabled="disabled" @endif value="{{ $group->id }}" class="__xe_checkbox" /></td>
-                                <td>{{ $group->name }}</td>
-                                <td>{{ $group->description }}</td>
-                                <td><input class="__xe_check_join_group" name="join_group" type="radio" value="{{ $group->id }}" @if($joinGroup === $group->id) checked="checked" @endif ></td>
-                                <td>{{ $group->count }}</td>
-                                <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default">{{ xe_trans('xe::management') }}</a></td>
+                                <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
+                                <th scope="col">{{xe_trans('xe::groupName')}}</th>
+                                <th scope="col">{{xe_trans('xe::description')}}</th>
+                                <th scope="col">{{xe_trans('xe::defaultGroup')}}</th>
+                                <th scope="col">{{xe_trans('xe::groupUserCount')}}</th>
+                                <th scope="col">{{xe_trans('xe::management')}}</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($groups as $group)
+                                <tr>
+                                    <td><input type="checkbox" name="id[]" @if($joinGroup === $group->id) disabled="disabled" @endif value="{{ $group->id }}" class="__xe_checkbox" /></td>
+                                    <td>{{ $group->name }}</td>
+                                    <td>{{ $group->description }}</td>
+                                    <td><input class="__xe_check_join_group" name="join_group" type="radio" value="{{ $group->id }}" @if($joinGroup === $group->id) checked="checked" @endif ></td>
+                                    <td>{{ $group->count }}</td>
+                                    <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default">{{ xe_trans('xe::management') }}</a></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </form>
             </div>
-        </form>
         </div>
     </div>
 </div>
