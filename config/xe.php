@@ -419,6 +419,7 @@ return [
             'formTextarea' => 'uiobject/xpressengine@formTextArea',
             'formSelect' => 'uiobject/xpressengine@formSelect',
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
+            'formRadio' => 'uiobject/xpressengine@formRadio',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
             'formMedialibraryImage' => 'uiobject/xpressengine@formMedialibraryImage',
