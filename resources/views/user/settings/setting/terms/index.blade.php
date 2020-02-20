@@ -1,4 +1,5 @@
 {{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js')->load() }}
 
 <div class="panel-group">
     <div class="panel">
@@ -21,6 +22,8 @@
                                 <span ><input type="checkbox" name="id[]" value="{{ $item->id }}"></span>
                                 <em class="item-title"><a href="{{ route('settings.user.setting.terms.edit', $item->id) }}">{{ xe_trans($item->title) }}</a></em>
                                 <div class="xe-btn-toggle pull-right">
+                                    <button type="button" class="xe-btn xe-btn-sm __clipboard-copy" data-clipboard-text="{{ route('terms', $item->id) }}">주소 복사</button>
+                                    <a href="{{ route('terms', $item->id) }}" class="xe-btn xe-btn-sm" target="_blank">미리보기</a>
                                     <label>
                                         <span class="sr-only">toggle</span>
                                         <input type="checkbox" name="enable[]" value="{{ $item->id }}" {{$item->is_enabled ? 'checked' : ''}}>
@@ -47,7 +50,7 @@
 </div>
 
 
-<script type="text/javascript">
+<script>
     $(function() {
         $(".item-setting").sortable({
             handle: '.handler',
@@ -71,5 +74,7 @@
             $('#index_form').attr('action', '{{ route('settings.user.setting.terms.enable') }}');
             $('#index_form').submit();
         });
+
+        clipboard = new ClipboardJS('.__clipboard-copy');
     });
 </script>
