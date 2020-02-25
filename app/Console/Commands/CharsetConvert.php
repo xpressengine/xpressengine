@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Facades\XeDB;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
 
 class CharsetConvert extends Command
 {
