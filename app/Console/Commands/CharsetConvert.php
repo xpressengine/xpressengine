@@ -46,10 +46,10 @@ class CharsetConvert extends Command
         $charset = $this->argument('charset');
         $collation = $this->argument('collation');
 
-        // XpressEngine과 연결돤 데이터베이스의 charset 변경
+        // XpressEngine과 연결된 데이터베이스의 문자셋 변경
         XeDB::unprepared("ALTER SCHEMA {$database} DEFAULT CHARACTER SET {$charset} DEFAULT COLLATE {$collation};");
 
-        // 데이터베이스에 속한 테이블의 charset 변경
+        // 데이터베이스에 속한 테이블의 문자셋 변경
         $tables = XeDB::select("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = '{$database}'");
         $tables = array_map(function ($value) {
             return (array)$value;
