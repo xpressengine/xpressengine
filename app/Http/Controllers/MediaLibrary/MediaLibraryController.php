@@ -211,7 +211,7 @@ class MediaLibraryController extends Controller
             throw new UploadFileNotExistException();
         }
 
-        $newImageFile = $this->handler->uploadModifyFile($request);
+        $newImageFile = $this->handler->uploadModifyFile($request, $originalMediaLibraryFileItem);
 
         $this->handler->swapImageFile($originalMediaLibraryFileItem, $newImageFile);
 

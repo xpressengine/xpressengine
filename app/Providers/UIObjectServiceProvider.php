@@ -19,6 +19,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\UIObject\UIObjectHandler;
 use App\UIObjects\Form\Form;
 use App\UIObjects\Form\FormCheckbox;
+use App\UIObjects\Form\FormRadio;
 use App\UIObjects\Form\FormFile;
 use App\UIObjects\Form\FormImage;
 use App\UIObjects\Form\FormMediaLibraryImage;
@@ -94,6 +95,7 @@ class UIObjectServiceProvider extends ServiceProvider
         $register->add(FormTextArea::class);
         $register->add(FormSelect::class);
         $register->add(FormCheckbox::class);
+        $register->add(FormRadio::class);
         $register->add(FormImage::class);
         $register->add(FormMediaLibraryImage::class);
         $register->add(FormFile::class);

@@ -2911,6 +2911,10 @@ aside {
     .container-fluid {
       padding-left: 40px;
       padding-right: 40px;
+
+      .container-fluid--part {
+        padding: 0;
+      }
     }
   }
 

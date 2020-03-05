@@ -93,6 +93,7 @@ class FormMediaLibraryImage extends AbstractUIObject
         ];
 
         $stylesheets = [
+            'assets/core/uiobject/form/medialibrary-image.css',
             'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
             'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',
         ];

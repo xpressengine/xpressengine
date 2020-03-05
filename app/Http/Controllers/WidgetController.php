@@ -83,7 +83,12 @@ class WidgetController extends Controller
 
         $widget = $request->get('widget');
         $code = $request->get('code');
-        $code = json_dec($code, true);
+        try {
+            $code = json_dec($code, true);
+        } catch (JsonException $e) {
+            $code = null;
+        }
+
         $skins = $skinHandler->getList($widget);
 
         return api_render('widget.skins', compact('widget', 'skins', 'code'));

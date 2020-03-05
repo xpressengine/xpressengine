@@ -48,6 +48,14 @@ class MediaLibraryFile extends DynamicModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function originFile()
+    {
+        return $this->hasOne(File::class, 'id', 'origin_file_id');
+    }
+
+    /**
      * @return string
      */
     public function getTitleAttribute()
