@@ -136,6 +136,11 @@ class Form extends AbstractUIObject
                 $value = array_get($values, $name);
             }
 
+            // default value
+            if (!isset($value) && isset($arg['value'])) {
+                $value = $arg['value'];
+            }
+
             $arg['name'] = $name;
 
             $type = array_get($arg, '_type');

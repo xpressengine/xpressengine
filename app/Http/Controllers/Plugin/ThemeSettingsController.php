@@ -358,11 +358,26 @@ class ThemeSettingsController extends Controller
             ]);
         }
 
+        foreach($files as $file => &$item) {
+            $filePath = realpath($item);
+            $ext = last(explode('.', $file));
+
+            if (str_contains($file, '.blade.php')) {
+                $ext = 'blade.php';
+            }
+
+            $item = [
+                'path' => $item,
+                'ext' => $ext,
+                'hasCache' => $themeHandler->hasCache($filePath)
+            ];
+        }
+
         if ($fileName === null) {
             $fileName = key($files);
         }
 
-        $filePath = realpath($files[$fileName]);
+        $filePath = realpath($files[$fileName]['path']);
 
         $editFile = [
             'fileName' => $fileName,

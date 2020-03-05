@@ -279,9 +279,10 @@ window.jQuery(function ($) {
         var password = this.ui.inputNew.val()
         var passwordConfirmation = this.ui.inputConfirm.val()
         var validated = (currentPassword && passwordConfirmation && password && password === passwordConfirmation)
+        var $this = this.$element
         var _this = this
         if (!validated || !this.beforeCheck()) {
-          if (!currentPassword) {
+          if ($this.find('[name=current_password]').length && !currentPassword) {
             this.ui.inputCurrent.focus()
           } else if (!password) {
             this.ui.inputNew.focus()

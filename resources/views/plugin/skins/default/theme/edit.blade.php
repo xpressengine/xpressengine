@@ -1,3 +1,21 @@
+{{
+    app('xe.frontend')->js([
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/addon/runmode/runmode.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/addon/runmode/colorize.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/xml/xml.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/javascript/javascript.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/css/css.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/htmlmixed/htmlmixed.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/addon/selection/active-line.min.js',
+    ])->load()
+}}
+{{
+    app('xe.frontend')->css([
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/theme/dracula.min.css',
+    ])->load()
+}}
 @section('page_title')
     <h2>{{ xe_trans('xe::themeEditor') }}</h2>
 @stop
@@ -48,9 +66,9 @@
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked" style="margin-bottom: 10px;">
-                @foreach($files as $name => $path)
+                @foreach($files as $name => $file)
                 <li role="presentation" @if($name === $editFile['fileName'])class="active"@endif>
-                    <a href="{{ route('settings.theme.edit', ['theme' => $theme->getId(), 'file' => $name]) }}">{{ $name }}</a>
+                    <a href="{{ route('settings.theme.edit', ['theme' => $theme->getId(), 'file' => $name]) }}">{{ $name }} @if($file['hasCache'])<br><em class="xe-text-normal"><i class="xi-library-books"></i>{{ xe_trans('xe::edited') }}</em>@endif</a>
                 </li>
                 @endforeach
             </ul>
@@ -72,7 +90,7 @@
                 <input type="hidden" name="theme" value="{{ $theme->getId() }}">
                 <input type="hidden" name="file" value="{{ $editFile['fileName'] }}">
 
-                <textarea class="form-control" rows="30" name="content" @if(request('view_origin') === 'Y') readonly="readonly" @endif>{{ old('content', $editFile['content']) }}</textarea>
+                <textarea id="code" class="form-control" rows="30" name="content" @if(request('view_origin') === 'Y') readonly="readonly" @endif>{{ old('content', $editFile['content']) }}</textarea>
 
                 <div class="pull-right" style="margin-top:10px;">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">{{xe_trans('xe::addWidget')}}</button>
@@ -127,6 +145,14 @@
     @endif
 @endif
 
+@php
+    $codemirrorMode = 'htmlmixed';
+    $ext = $files[$editFile['fileName']]['ext'];
+    if ($ext === 'css') {
+        $codemirrorMode = 'css';
+    }
+@endphp
+
 {!!
     XeFrontend::html('theme.insert-widget')->content("
     <script>
@@ -144,7 +170,22 @@
 
                 });
             })
+            var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+                mode: '{$codemirrorMode}',
+                theme: 'dracula',
+                viewportMargin: Infinity,
+                styleActiveLine: true,
+                lineNumbers: true,
+                lineWrapping: true,
+                tabSize: 2,
+            })
         });
     </script>
     ")->load();
 !!}
+
+<style>
+.CodeMirror {
+    height: auto;
+}
+</style>

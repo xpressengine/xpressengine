@@ -139,11 +139,13 @@
             <div class="setting-detail-content">
                 <p>{{ xe_trans('xe::changePassword') }}</p>
                 <em class="text-gray2">{{ $passwordValidator->getMessage() }}</em>
-                <div class="password-content __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
-                    <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
-                    <input type="password" class="xe-form-control" name="current_password">
-                    <em class="text-message">&nbsp;</em>
-                </div>
+                @if($user->password)
+                    <div class="password-content __xe_currentPassword">
+                        <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
+                        <input type="password" class="xe-form-control" name="current_password">
+                        <em class="text-message">&nbsp;</em>
+                    </div>
+                @endif
                 <div class="password-content xu-form-group __xe_newPassword">
                     <p class="txt_pw">{{ xe_trans('xe::newPassword') }}</p>
                     <input type="password" class="xe-form-control" name="password">
