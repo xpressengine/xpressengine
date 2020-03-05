@@ -162,7 +162,7 @@ class MediaLibraryFileRepository
     protected function makeWhere($query, $attributes)
     {
         if (isset($attributes['index_mode']) === false ||
-            $attributes['index_mode'] === MediaLibraryHandler::MODE_USER
+            (int)$attributes['index_mode'] === MediaLibraryHandler::MODE_USER
         ) {
             $userId = auth()->user()->getId();
             $query = $query->where('user_id', $userId);
