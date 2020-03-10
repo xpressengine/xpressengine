@@ -116,7 +116,8 @@ class Handler extends ExceptionHandler
     protected function prepareException(Exception $e)
     {
         if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
+            $e = new NotFoundHttpException('xe::pageNotFound', $e);
+//            $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof NotFoundHttpException) {
             $e = new NotFoundHttpException('xe::pageNotFound', $e);
         } elseif ($e instanceof AuthorizationException) {
