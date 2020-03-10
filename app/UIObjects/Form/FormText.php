@@ -72,6 +72,9 @@ class FormText extends AbstractUIObject
                 case 'id':
                     $label->attr('for', $arg);
                     // pass to default
+                case 'value':
+                    $input->attr($key, e($arg, false));
+                    break;
                 default:
                     $input->attr($key, $arg);
                     break;
