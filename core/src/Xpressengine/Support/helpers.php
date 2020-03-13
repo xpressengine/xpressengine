@@ -788,3 +788,91 @@ if (!function_exists('purify')) {
     }
 
 }
+
+if (!function_exists('xe_error')) {
+    /**
+     * @param string $message    error message
+     * @param int    $statusCode error status code
+     * @return void
+     * @throws \Xpressengine\Support\Exceptions\XpressengineException
+     */
+    function xe_error($message = null, $statusCode = 500)
+    {
+        $exception = new \Xpressengine\Support\Exceptions\HttpXpressengineException(
+            [], $statusCode
+        );
+        $exception->setMessage($message);
+        throw $exception;
+    }
+}
+
+if (!function_exists('config_file_generate')) {
+    /**
+     * Generate a config file.
+     *
+     * @param string $key  key name
+     * @param array  $data data
+     * @return void
+     */
+    function config_file_generate($key, array $data)
+    {
+        $dir = config_path() . '/' . env('APP_ENV', 'production');
+        $filesystem = app('files');
+        if (!$filesystem->isDirectory($dir)) {
+            return $filesystem->makeDirectory($dir);
+        }
+
+        $data = encode_arr2str($data);
+
+        $file = $dir . "/{$key}.php";
+        file_put_contents($file, '<?php' . str_repeat(PHP_EOL, 2) . 'return [' . PHP_EOL . $data . '];' . PHP_EOL);
+    }
+}
+
+if (!function_exists('encode_arr2str')) {
+    /**
+     * Encode array to string.
+     *
+     * @param array $arr   array
+     * @param int   $depth depth
+     * @return string
+     */
+    function encode_arr2str(array $arr, $depth = 0)
+    {
+        $output = '';
+
+        foreach ($arr as $key => $val) {
+            if (is_array($val)) {
+                $output .= str_indent($depth) . "'{$key}' => " . '[' . PHP_EOL . encode_arr2str($val, $depth + 1) . str_indent($depth) . '],' . PHP_EOL;
+            } else {
+                if (is_bool($val)) {
+                    $val = $val ? 'true' : 'false';
+                } elseif (!is_int($val)) {
+                    $val = "'{$val}'";
+                }
+                $output .= str_indent($depth) . "'{$key}' => " . $val .',' . PHP_EOL;
+            }
+        }
+
+        return $output;
+    }
+}
+
+
+if (!function_exists('str_indent')) {
+    /**
+     * Get indent.
+     *
+     * @param int $depth depth
+     * @return string
+     */
+    function str_indent($depth, $len = 4)
+    {
+        $indent = '';
+        for ($a = 0; $a <= $depth; $a++) {
+            $indent .= str_repeat(' ', $len);
+        }
+
+        return $indent;
+    }
+}
