@@ -20,8 +20,8 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testImport()
     {
-        list($importers, $setting, $translator, $frontend) = $this->getMocks();
-        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend])
+        list($importers, $setting, $translator, $frontend, $presenter) = $this->getMocks();
+        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend, $presenter])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -48,8 +48,8 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testResolveData()
     {
-        list($importers, $setting, $translator, $frontend) = $this->getMocks();
-        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend])
+        list($importers, $setting, $translator, $frontend, $presenter) = $this->getMocks();
+        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend, $presenter])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -76,6 +76,13 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
 
         $translator->shouldReceive('trans')->once()->with('site name')->andReturn('site name');
 
+        $instanceConfig = m::mock('Xpressengine\Config\ConfigEntity');
+        $menuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
+        $presenter->shouldReceive('getInstanceConfig')->once()->andReturn($instanceConfig);
+        $instanceConfig->shouldReceive('getMenuItem')->once()->andReturn($menuItem);
+        $menuItem->shouldReceive('hasMacro')->andReturn(false);
+        $menuItem->shouldReceive('getAttribute')->with('menuImage')->andReturn('/path/to/site/image');
+
         $setting->shouldReceive('getSiteImage')->once()->andReturn('/path/to/site/image');
 
         $data = $this->invokeMethod($instance, 'resolveData', [$mockItem]);
@@ -87,7 +94,7 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('sample description', $data['description']);
         $this->assertEquals('test,sample', $data['keywords']);
         $this->assertFalse(isset($data['author']));
-        $this->assertEquals(2, count($data['images']));
+        $this->assertEquals(3, count($data['images']));
 
         $this->assertEquals([
                 'url' => '/path/to/item/image',
@@ -99,8 +106,8 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testMakeTitle()
     {
-        list($importers, $setting, $translator, $frontend) = $this->getMocks();
-        $instance = new SeoHandler($importers, $setting, $translator, $frontend);
+        list($importers, $setting, $translator, $frontend, $presenter) = $this->getMocks();
+        $instance = new SeoHandler($importers, $setting, $translator, $frontend, $presenter);
 
         $mockItem = m::mock('Xpressengine\Seo\SeoUsable');
         $mockItem->shouldReceive('getTitle')->once()->andReturn('item title');
@@ -138,7 +145,8 @@ class SeoHandlerTest extends \PHPUnit\Framework\TestCase
             ],
             m::mock('Xpressengine\Seo\Setting'),
             m::mock('Xpressengine\Translation\Translator'),
-            m::mock('Xpressengine\Presenter\Html\FrontendHandler')
+            m::mock('Xpressengine\Presenter\Html\FrontendHandler'),
+            m::mock('Xpressengine\Presenter\Presenter')
         ];
     }
 }

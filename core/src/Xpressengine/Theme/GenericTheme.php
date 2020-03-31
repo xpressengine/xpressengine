@@ -44,6 +44,11 @@ abstract class GenericTheme extends AbstractTheme
     protected static $viewsDir = "views";
 
     /**
+     * @var array 테마 render 할 때 구현체에서 변수를 추가로 넘길 수 있도록
+     */
+    protected $data = [];
+
+    /**
      * 이 테마가 설정페이지를 제공하는 테마인지 조회한다.
      *
      * @return bool
@@ -66,7 +71,18 @@ abstract class GenericTheme extends AbstractTheme
 
         $view = $this->view($this->info('view', 'theme'));
 
-        return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme'));
+        $data = $this->data;
+
+        $configHeaderHtml = xe_trans($config->get('_configHeaderHtml', ''));
+        if ($configHeaderHtml != '') {
+            app('xe.frontend')->html('generic.theme.header')->content($configHeaderHtml)->appendTo('head')->load();
+        }
+        $configFooterHtml = xe_trans($config->get('_configFooterHtml', ''));
+        if ($configHeaderHtml != '') {
+            app('xe.frontend')->html('generic.theme.footer')->content($configFooterHtml)->appendTo('body')->load();
+        }
+
+        return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme', 'data'));
     }
 
     /**
@@ -216,6 +232,40 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
+     * get data
+     *
+     * @param string $key key name
+     * @return mixed
+     */
+    public function getData($key)
+    {
+        return $this->data[$key];
+    }
+
+    /**
+     * set data
+     *
+     * @param string $key  key name
+     * @param mixed $value value
+     * @return void
+     */
+    public function setDAta($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * remove data
+     *
+     * @param string $key key name
+     * @return void
+     */
+    public function removeData($key)
+    {
+        unset($this->data[$key]);
+    }
+
+    /**
      * 삭제할 테마 설정에서 업로드했던 파일들을 삭제한다.
      *
      * @param ConfigEntity $config config data
@@ -273,6 +323,9 @@ abstract class GenericTheme extends AbstractTheme
     public static function asset($path, $secure = null)
     {
         $path = static::getPath().'/assets/'.$path;
+        if (app('xe.theme')->hasCache(realpath($path))) {
+            $path = str_replace(public_path(), '', app('xe.theme')->getCachePath(realpath($path)));
+        }
         return asset($path, $secure);
     }
 
@@ -292,8 +345,8 @@ abstract class GenericTheme extends AbstractTheme
         view()->composer(
             $view,
             function (\Illuminate\View\View $viewObj) use ($handler) {
-                if ($handler->hasCache($viewObj->getPath())) {
-                    $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+                if ($handler->hasCache(realpath($viewObj->getPath()))) {
+                    $viewObj->setPath($handler->getCachePath(realpath($viewObj->getPath())));
                 }
             }
         );

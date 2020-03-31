@@ -161,6 +161,7 @@ class InstallController extends Controller
             ],
             'admin' => [
                 'email' => $request->get('admin_email'),
+                'login_id' => $request->get('admin_login_id') ?: 'admin',
                 'password' => $request->get('admin_password'),
                 'display_name' => $request->get('admin_display_name') ?: 'admin',
             ],

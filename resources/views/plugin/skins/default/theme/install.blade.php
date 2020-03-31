@@ -14,6 +14,20 @@
             <input type="hidden" value="{{Request::get('order_key', '')}}" name="order_key">
             <input type="hidden" value="{{Request::get('target', '')}}" name="target">
 
+            <div class="admin-tab-info">
+                <ul class="admin-tab-info-list">
+                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif">
+                        <a href="#" class="__plugin-install-link admin-tab-info-list__link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::noCharge') }} <span class="admin-tab-info-list__count">{{$storeThemeCounts->free}}</span></a>
+                    </li>
+                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif">
+                        <a href="#" class="__plugin-install-link admin-tab-info-list__link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::charge') }} <span class="admin-tab-info-list__count">{{$storeThemeCounts->charge}}</span></a>
+                    </li>
+                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif">
+                        <a href="#" class="__plugin-install-link admin-tab-info-list__link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::purchased') }} {{xe_trans('xe::extension')}} <span class="admin-tab-info-list__count">{{$storeThemeCounts->mySite}}</span></a>
+                    </li>
+                </ul>
+            </div>
+
             <div class="panel-heading">
                 <div class="search-group-box">
                     <div class="input-group search-group">
@@ -44,32 +58,22 @@
                         </div>
                         <div class="search-input-group">
                             <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}"
-                               @if (Request::has('query'))
-                                    value="{{Request::get('query')}}" name="query"
-                               @elseif (Request::has('authors'))
+                               @if (Request::has('authors'))
                                    value="{{Request::get('authors')}}" name="authors"
                                @elseif (Request::has('tags'))
                                    value="{{Request::get('tags')}}" name="tags"
+                               @else (Request::has('query'))
+                                   value="{{Request::get('query')}}" name="query"
                                @endif>
                             <button class="btn-link">
                                 <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                             </button>
                         </div>
+                        <div class="input-group-btn">
+                            <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" data-toggle="xe-page-modal" class="xu-button xu-button--default admin-button--active">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</a>
+                        </div>
                     </div>
-                    @if (Request::get('sale_type') == 'my_site')
-                        <a href="{{route('settings.plugins.manage.upload', ['type' => 'theme'])}}" data-toggle="xe-page-modal" class="xu-button xu-button--default admin-button--active">{{xe_trans('xe::theme')}} {{xe_trans('xe::upload')}}</a>
-                    @endif
                 </div>
-            </div>
-
-            <div class="panel admin-tab">
-                <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
-                <ul class="admin-tab-list">
-                    <li class="free @if (Request::get('sale_type', 'free') == 'free') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'free'}}">{{ xe_trans('xe::noCharge') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->free}}</span></a></li>
-                    <li class="charge @if (Request::get('sale_type') == 'charge') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'charge'}}">{{ xe_trans('xe::charge') }} <span class="xe-badge xe-primary">{{$storeThemeCounts->charge}}</span></a></li>
-                    <li class="my_site @if (Request::get('sale_type') == 'my_site') on @endif"><a href="#" class="__plugin-install-link" data-type="sale_type" data-value="{{'my_site'}}">{{ xe_trans('xe::selfInstall') }} {{xe_trans('xe::theme')}}<span class="xe-badge xe-primary">{{$storeThemeCounts->mySite}}</span></a></li>
-                </ul>
-                <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>
 
             <h3 class="blind">테마 카드 리스트</h3>

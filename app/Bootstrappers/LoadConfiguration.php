@@ -76,7 +76,7 @@ class LoadConfiguration extends BaseLoadConfiguration
         $ignoreCount = strlen($env) + 1;
         foreach ($filesByEnv as $key => $path) {
             $key = substr($key, $ignoreCount);
-            $origin = $repository->get($key);
+            $origin = $repository->get($key, []);
 
             $repository->set($key, array_replace_recursive($origin, require $path));
         }

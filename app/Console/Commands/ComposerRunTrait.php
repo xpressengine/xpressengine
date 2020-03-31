@@ -43,6 +43,15 @@ trait ComposerRunTrait
     protected function prepareComposer()
     {
         if (!ini_get('allow_url_fopen')) {
+            $key = 'xe';
+            $config = [];
+            $file = sprintf( '%s/%s/%s.php', config_path(), env('APP_ENV', 'production'), $key);
+            if (file_exists($file) == true) {
+                $config = include($file);
+            }
+            array_set($config, 'console_allow_url_fopen', false);
+            config_file_generate($key, $config);
+
             throw new \Exception(
                 'allow_url_fopen is turned off. allow_url_fopen must be enabled in php.ini for executing this command.'
             );

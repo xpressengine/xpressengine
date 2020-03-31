@@ -114,7 +114,7 @@ taskFixStyle.description = '.scss 자동 교정'
 const taskSass = function () {
   return gulp.src(['./core/**/*.scss', ...ignore])
     .pipe($.if(generateSourceMaps, $.sourcemaps.init()))
-    .pipe($.sass({ outputStyle: 'compressed' }).on('error', $.sass.logError))
+    .pipe($.sass({ outputStyle: 'compressed', includePaths: ['node_modules'] }).on('error', $.sass.logError))
     .pipe($.autoprefixer({
       cascade: false
     }))

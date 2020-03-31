@@ -573,6 +573,10 @@ return [
         'ko' => '새 비밀번호 확인',
         'en' => 'New Password Confirm',
     ],
+    'enterPasswordConfirmation' => [
+        'ko' => '비밀번호 확인을 입력하세요.',
+        'en' => 'Please enter password confirmation.'
+    ],
     'identification' => [
         'ko' => '신원 확인',
         'en' => 'Identification',
@@ -905,6 +909,10 @@ return [
         'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
         'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
     ],
+    'validationLoginId' => [
+        'ko' => '아이디는 5~20자의 영문 소문자, 대쉬(-), 언더스코어(_)만 사용 가능하고, 처음과 마지막에는 영문 소문자와 숫자만 가능합니다.',
+        'en' => 'You can only use 5 ~ 20 lowercase letters, dash (-), and underscore (_).'
+    ],
     'interfaceNotImplemented' => [
         'ko' => '":className" 클래스는 반드시 \Xpressengine\Plugin\ComponentInterface를 구현해야 합니다',
         'en' => '":className" class must implements \Xpressengine\Plugin\ComponentInterface.',
@@ -1100,8 +1108,8 @@ return [
         'en' => 'Enter the description for item'
     ],
     'itemTargetDescription' => [
-        'ko' => '메뉴 아이템을 클릭하였을 때 창을 이동하는 옵션입니다.',
-        'en' => 'Select Item Link Open Option'
+        'ko' => '메뉴를 클릭하였을 때 창을 이동하는 옵션입니다.',
+        'en' => 'Select Link Open Option'
     ],
     'itemTargetOption_sameFrame' => [
         'ko' => '현재창에서 열기',
@@ -1119,9 +1127,9 @@ return [
         'ko' => '최상위 프레임에서 열기',
         'en' => 'Top Frame'
     ],
-    'linkImageDescription' => [
-        'ko' => '사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.',
-        'en' => 'Register image for site navigation'
+    'menuImageDescription' => [
+        'ko' => '텍스트 메뉴명 대신 이미지를 출력합니다.',
+        'en' => 'Print images instead of text menu names.'
     ],
     'deleteMenu' => [
         'ko' => '메뉴 삭제하기',
@@ -1505,14 +1513,17 @@ return [
         'ko' => '비밀번호 보안 수준',
         'en' => 'Password strength'
     ],
+    // @deprecated passwordStrengthWeakDescription
     'passwordStrengthWeakDescription' => [
         'ko' => '비밀번호는 4자 이상이어야 합니다.',
         'en' => 'Passwords must be at least 4 characters.',
     ],
+    // @deprecated passwordStrengthNormalDescription
     'passwordStrengthNormalDescription' => [
         'ko' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least six characters long and must contain letters and numbers.',
     ],
+    // @deprecated passwordStrengthStrongDescription
     'passwordStrengthStrongDescription' => [
         'ko' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.',
         'en' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',
@@ -1716,6 +1727,10 @@ return [
     'enterEmail' => [
         'ko' => '이메일을 입력하세요.',
         'en' => 'Please enter email.',
+    ],
+    'enterId' => [
+        'ko' => '아이디를 입력하세요.',
+        'en' => 'Please enter ID.',
     ],
     'owner' => [
         'ko' => '소유자',
@@ -1953,18 +1968,6 @@ return [
         'ko' => '계정 삭제 작업은 영구적이며 되돌릴 수 없습니다. 삭제하는 즉시 귀하의 계정에 액세스할 수 없게 됩니다.',
         'en' => 'Account deletion is permanent and irreversible. As soon as you remove you will not be able to access your account.',
     ],
-    'accountDeleteCaution2' => [
-        'ko' => '귀하의 모든 콘텐츠가 삭제됩니다.',
-        'en' => 'All of your content will be deleted.',
-    ],
-    'accountDeleteCaution3' => [
-        'ko' => '댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.',
-        'en' => 'All information, including comments, messages, discussion posts, etc. will be deleted.',
-    ],
-    'accountDeleteCaution4' => [
-        'ko' => '아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.',
-        'en' => 'No one will again be able to access your account information and posts.',
-    ],
     'agreeAccountDeleteCaution' => [
         'ko' => '약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.',
         'en' => 'I agree to the terms and conditions and we will permanently delete my account.',
@@ -2046,8 +2049,8 @@ return [
         'en' => 'Composer home directory',
     ],
     'descComposerHomeDir' => [
-        'ko' => '플러그인을 설치할 때 컴포저를 사용합니다. 서버에 설치한 컴포저의 홈디렉토리를 지정하셔야 정상적으로 설치됩니다.',
-        'en' => 'Use the composer when installing the plugin. You need to specify the home directory of the Composer installed on the server.',
+        'ko' => '플러그인을 설치할 때 컴포저를 사용합니다. 컴포저 캐시를 생성하기 위한 디렉토리를 지정하세요.',
+        'en' => 'Use the composer when installing the plugin. Specify a directory to create the composer cache.',
     ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
@@ -2630,8 +2633,8 @@ return [
         'en' => 'CAPTCHA',
     ],
     'descCaptcha' => [
-        'ko' => '캡차 문자 입력 폼입니다.',
-        'en' => 'This is a CAPTCHA.',
+        'ko' => 'CAPTCHA 입력 폼입니다. CAPTCHA 설정이 정상적으로 되어 있어야 사용 할 수 있습니다.',
+        'en' => 'This is a CAPTCHA. CAPTCHA setting should be done properly before use.',
     ],
     'msgFailToPassCAPTCHA' => [
         'ko' => '자동입력 방지 기능을 통과하지 못했습니다.',
@@ -3085,6 +3088,10 @@ return [
         'ko' => '메타 태그의 Description 항목에 입력될 사이트 설명을 입력해주세요.',
         'en' => 'Please enter a description of the site to be entered in the Description field of the meta tag.'
     ],
+    'siteSettingKeywordDescription' => [
+        'ko' => '메타 태그의 Keyword 항목에 입력될 사이트 키워드를 입력해주세요.',
+        'en' => 'Please enter a keyword of the site to be entered in the Keyword field of the meta tag.'
+    ],
     'siteSettingImageDescription' => [
         'ko' => 'SNS 또는 외부 페이지에 링크시 보여질 대표 이미지를 업로드해주세요. (1200*630, 600*315, 200*200)',
         'en' => 'Please upload a representative image to be displayed when linking to SNS or an external page. (1200 * 630, 600 * 315, 200 * 200)'
@@ -3383,6 +3390,22 @@ return [
         'ko' => '직접 설치한',
         'en' => 'Self installed'
     ],
+    'menuItemUrlAlreadyExists' => [
+        'ko' => '이미 사용중인 주소 입니다.',
+        'en' => 'Menu item url already exists.'
+    ],
+    'purchased' => [
+        'ko' => '구매한',
+        'en' => 'Purchased'
+    ],
+    'active' => [
+        'ko' => '활성',
+        'en' => 'Active'
+    ],
+    'deactive' => [
+        'ko' => '비활성',
+        'en' => 'Deactive'
+    ],
     'registerSettings' => [
         'ko' => '가입 설정',
         'en' => 'Register settings'
@@ -3411,9 +3434,9 @@ return [
         'ko' => '홈으로',
         'en' => 'Go to home'
     ],
-    'waitingAdminApproval' => [
-        'ko' => '관리자 승인 대기중',
-        'en' => 'Waiting for Admin Approval'
+    'waitingApproval' => [
+        'ko' => '가입 승인 대기중',
+        'en' => 'Pending approval to join'
     ],
     'beforeAdminApproval' => [
         'ko' => '회원 가입 승인 전입니다.',
@@ -3486,5 +3509,141 @@ return [
     'postEmailConfirmMessage' => [
         'ko' => '메일 인증이 완료되었습니다.<br/>:displayName님, 회원이 되신 것을 환영합니다.',
         'en' => 'Your mail has been verified.<br/>:displayName, welcome.'
+    ],
+    'enterDisplayName' => [
+        'ko' => ':displayNameCaption을(를) 입력하세요.',
+        'en' => 'Please enter :displayNameCaption.',
+    ],
+    'registerProcess' => [
+        'ko' => '가입 절차',
+        'en' => 'Register process'
+    ],
+    'termAgreeProcess' => [
+        'ko' => '약관동의',
+        'en' => 'Accept Terms'
+    ],
+    'termAgreeTypePre' => [
+        'ko' => '가입시 약관 동의 단계 거치기(권장)',
+        'en' => 'Go through the terms of the agreement when signing up (recommended)'
+    ],
+    'termAgreeTypeWith' => [
+        'ko' => '약관 동의 단계 대신 회원정보 입력 하단에 약관동의 문구 표시',
+        'en' => 'Show terms and conditions at the bottom of the member information instead of accepting the terms'
+    ],
+    'disableTermAgree' => [
+        'ko' => '약관 동의를 사용하지 않음.',
+        'en' => 'Disable Terms Agree'
+    ],
+    'registerGuide' => [
+        'ko' => '가입안내',
+        'en' => 'Registration guide'
+    ],
+    'registerGuideExample' => [
+        'ko' => '예 : 아래 항목을 빠짐없이 입력해 주세요.',
+        'en' => 'Example: Please complete the fields below.'
+    ],
+    'registerGuideDescription' => [
+        'ko' => '회원가입시 정보입력 단계 상단에 표시될 내용입니다. (여러줄 입력 가능)',
+        'en' => 'This is the content to be displayed at the top of the information input step when registering. (Multiple lines can be entered)'
+    ],
+    'policy' => [
+        'ko' => '정책',
+        'en' => 'Policy'
+    ],
+    'authRegister' => [
+        'ko' => '자동가입',
+        'en' => 'Auth register'
+    ],
+    'item' => [
+        'ko' => '항목',
+        'en' => 'Item'
+    ],
+    'manegeRegisterForm' => [
+        'ko' => '가입폼 관리',
+        'en' => 'Subscription form management'
+    ],
+    'advancedSetting' => [
+        'ko' => '고급 설정',
+        'en' => 'Advanced settings'
+    ],
+    'customItems' => [
+        'ko' => '사용자정의 항목',
+        'en' => 'Custom items'
+    ],
+    'descCustomItems' => [
+        'ko' => '추가된 사용자정의 항목들의 입력 폼입니다.',
+        'en' => 'Input form for added custom items.'
+    ],
+    'displayNameUnique' => [
+        'ko' => '중복 가입 방지',
+        'en' => 'Avoid duplicate subscriptions'
+    ],
+    'minimumPasswordLength' => [
+        'ko' => '최소 비밀번호 글자 수',
+        'en' => 'Minimum password character'
+    ],
+    'passwordIncludeNumber' => [
+        'ko' => '비밀번호에 숫자 포함',
+        'en' => 'Password contains numbers'
+    ],
+    'passwordIncludeCharacter' => [
+        'ko' => '비밀번호에 문자 포함',
+        'en' => 'Password contains character'
+    ],
+    'passwordIncludeSpecialCharacter' => [
+        'ko' => '비밀번호에 특수문자 포함',
+        'en' => 'Password contains special character'
+    ],
+    'image' => [
+        'ko' => '이미지',
+        'en' => 'Image'
+    ],
+    'page' => [
+        'ko' => '페이지',
+        'en' => 'Page'
+    ],
+    'link' => [
+        'ko' => '링크',
+        'en' => 'Link'
+    ],
+    'menuTitle' => [
+        'ko' => '타이틀',
+        'en' => 'Title'
+    ],
+    'menuImage' => [
+        'ko' => '메뉴 대표이미지',
+        'en' => 'Featured Image'
+    ],
+    'menuImageSpecDescription' => [
+        'ko' => '권장 해상도: 1200x630 / 최소 200x200 / JPEG, PNG',
+        'en' => 'Recommended resolution: 1200x630 / 200x200 minimum / JPEG, PNG'
+    ],
+    'autoRegisterDescription' => [
+        'ko' => '가입 즉시 승인 과정 없이 가입됩니다.',
+        'en' => 'Sign up immediately without signing up.'
+    ],
+    'pendingAdminDescription' => [
+        'ko' => '가입신청 후 로그아웃 처리되며, 운영자가 회원목록에서 가입승인을 할 때 까지 로그인이 불가합니다.',
+        'en' => 'After registering, you will be logged out. You will not be able to log in until the administrator approves your membership.'
+    ],
+    'pendingEmailDescription' => [
+        'ko' => '가입신청 후 이메일 인증 메일을 발송합니다. 이메일 인증 링크를 클릭해서 인증할 때까지 로그인이 제한됩니다.',
+        'en' => 'After registering, we will send you an email verification email. Your login will be restricted until you verify by clicking the email verification link.'
+    ],
+    'headerHtml' => [
+        'ko' => '헤더 스크립트',
+        'en' => 'Header script'
+    ],
+    'headerHtmlDescription' => [
+        'ko' => 'HTML <head>...</head> 사이에 들어가는 코드를 직접 입력할 수 있습니다. 예) <script>, <style>, <meta>',
+        'en' => 'You can enter the code directly between the HTML <head> ... </ head>. Ex) <script>, <style>, <meta>'
+    ],
+    'footerHtml' => [
+        'ko' => '푸터 스크립트',
+        'en' => 'Footer script'
+    ],
+    'footerHtmlDescription' => [
+        'ko' => 'BODY 태그 닫기 전에 코드를 추가할 수 있습니다.',
+        'en' => 'You can add code before closing the BODY tag.'
     ]
 ];

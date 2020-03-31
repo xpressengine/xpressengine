@@ -33,6 +33,10 @@
                 assetsURL: '{{  request()->root() }}',
                 userToken: '{!! csrf_token() !!}',
                 loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
+                user: {
+                    id: '{{ Auth::user()->getId() }}',
+                    rating: '{{ Auth::user()->getRating() }}'
+                },
                 useXeSpinner: true, // @DEPRECATED
                 locale: '{{ app()->getLocale() }}',
                 defaultLocale: '{{ app('xe.translator')->getLocale() }}',
@@ -42,7 +46,8 @@
                 @endif
                 routes: {!! XeFrontend::output('route') !!},
                 ruleSet: {!! XeFrontend::output('rule') !!},
-                translation: {!! XeFrontend::output('translation') !!}
+                translation: {!! XeFrontend::output('translation') !!},
+                passwordRules: '{!! app('xe.config')->getVal('user.register.password_rules') !!}'
             });
         }
     </script>

@@ -70,10 +70,14 @@ class MediaLibrarySettingsController extends Controller
     public function contents()
     {
         XeFrontend::js([
-            'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+            'assets/vendor/jqueryui/jquery-ui.min.js',
             'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
             'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-        ])->before('assets/core/editor/editor.bundle.js')->load();
+        ])->load();
+
+        XeFrontend::css([
+            'assets/vendor/jqueryui/jquery-ui.min.css'
+        ])->load();
 
         return \XePresenter::make('mediaLibrary.contents');
     }

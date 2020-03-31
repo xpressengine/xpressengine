@@ -16,11 +16,15 @@ var DynamicField = function () {
    * @param {string} databaseName
    */
   this.init = function (group, databaseName) {
+    if (!group || !databaseName) {
+      return
+    }
+
     this.group = group
     this.databaseName = databaseName
     this.containerName = '__xe_container_DF_setting_' + group
     this.$container = $('#' + this.containerName)
-    this.$container.$form = this.$container.find('.__xe_add_form')
+    this.$container.$form = this.$container.find('.__xe_add_form') || $(this.$container.data('form'))
     this.$container.$modal = this.$container.find('.__xe_df_modal')
     this.$container.$modal.$body = this.$container.$modal.find('.modal-body')
     this.validator = new Validator()
@@ -117,6 +121,9 @@ var DynamicField = function () {
    * group 리스트를 요청한다.
    */
   this.getList = function () {
+    if (!this.group) {
+      return
+    }
     var params = { group: this.group }
     var that = this
 
@@ -184,8 +191,8 @@ var DynamicField = function () {
    * @param {jQuery} o
    */
   this.edit = function (o) {
-    var tr = $(o).closest('tr')
-    var id = tr.data('id')
+    var row = $(o).closest('tr, .__dynamic-field-row')
+    var id = row.data('id')
     var form = this.formClone()
 
     form.data('isEdit', '1')
@@ -203,6 +210,7 @@ var DynamicField = function () {
       data: params,
       url: window.XE.route('manage.dynamicField.getEditInfo'),
       success: function (response) {
+        console.debug('form', form)
         form.find('[name="id"]').val(response.config.id).prop('readonly', true)
         form.find('[name="typeId"] option').each(function () {
           var $option = $(this)
@@ -405,5 +413,7 @@ export default DynamicField
 
 // @FIXME
 var instance = new DynamicField()
-instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
-instance.getList()
+if (typeof window.dynamicFieldData !== 'undefined' && typeof window.dynamicFieldData.group !== 'undefined' && typeof window.dynamicFieldData.databaseName !== 'undefined') {
+  instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
+  instance.getList()
+}

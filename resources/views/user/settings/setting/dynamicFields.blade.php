@@ -5,112 +5,62 @@
 @expose_route('manage.dynamicField.getSkinOption')
 @expose_route('manage.dynamicField.getAdditionalConfigure')
 
-
 <!-- 사용자 정의 항목 -->
-<div style="margin-top: 26px;">
+<div style="margin-top: 26px;" id="__xe_container_DF_setting_user">
     <!-- 드래그 리스트 항목 -->
     <ul class="sort-list sort-list--custom-item sort-list sort-list--custom-item-header">
         <li>
-            <div class="sort-list__header-title">사용자 정의 항목</div>
-            <div class="sort-list__header-text">사용</div>
-            <div class="sort-list__header-text">필수</div>
+            <div class="sort-list__header-title">{{ xe_trans('xe::customItems') }}</div>
+            <div class="sort-list__header-text">{{ xe_trans('xe::use') }}</div>
+            <div class="sort-list__header-text">{{ xe_trans('xe::require') }}</div>
         </li>
     </ul>
 
     <!-- 드래그 리스트 -->
-    <ul class="sort-list sort-list--custom-item __user-dfield-items">
+    <ul class="sort-list sort-list--custom-item __udfield-items">
+        @foreach ($dynamicFields as $dynamicField)
+            <li class="__udfield-item" data-field-id="{{ $dynamicField->getConfig()->get('id') }}" data-field-typeid="{{ $dynamicField->getConfig()->get('typeId') }}" data-field-skinid="{{ $dynamicField->getConfig()->get('skinId') }}">
+                <div class="sort-list__handler">
+                    <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">
+                    <span class="xu-button__icon">
+                        <i class="xi-drag-vertical"></i>
+                    </span>
+                    </button>
+                </div>
+                <p class="sort-list__text">{{ xe_trans($dynamicField->getConfig()->get('label')) }}</p>
+                <div class="sort-list__button">
+                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-edit">
+                    <span class="xu-button__icon">
+                        <i class="xi-pen"></i>
+                    </span>
+                    </button>
+                </div>
+                <div class="sort-list__button">
+                    <button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-delete">
+                    <span class="xu-button__icon">
+                        <i class="xi-trash"></i>
+                    </span>
+                    </button>
+                </div>
+                <div class="sort-list__checkradio">
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" class="__udfield-use" name="dynamic_fields[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('use') === true) checked @endif>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                </div>
+                <div class="sort-list__checkradio">
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" class="__udfield-require" name="df_required[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('required') === true) checked @endif>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                </div>
+            </li>
+        @endforeach
     </ul>
 
     <div>
-        <button type="button" class="xu-button xu-button--link __xe_btn_add" style="margin-top: 16px;">
-            <span class="xu-button__text">사용자 정의 항목 추가</span>
+        <button type="button" class="xu-button xu-button--link __udfield-add" style="margin-top: 16px;">
+            <span class="xu-button__text">{{ xe_trans('xe::customItems') }} {{ xe_trans('xe::add') }}</span>
         </button>
     </div>
 </div>
-
-
-
-
-<!-- Modal -->
-<div class="xe-modal __xe_df_modal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="xe-modal">&times;</button>
-                <h4 class="modal-title">{{xe_trans('xe::dynamicField')}}</h4>
-            </div>
-            <div class="modal-body">
-                <p><!-- form --></p>
-            </div>
-            <div class="xe-modal-footer">
-                <button type="button" class="xe-btn xe-btn-secondary __xe_btn_close" data-dismiss="xe-modal">{{xe_trans('xe::cancel')}}</button>
-                <button type="button" class="xe-btn xe-btn-primary __xe_btn_submit">{{xe_trans('xe::submit')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        var that = this
-        var data = { group: 'user' }
-
-        XE.get('manage.dynamicField.index', data)
-            .then(function (result) {
-                console.debug('result', result)
-                for (var i in result.data.list) {
-                    drawDynamicFieldItem(result.data.list[i])
-                }
-            })
-    })
-
-    function drawDynamicFieldItem (item) {
-        console.debug('drawDynamicFieldItem', item)
-        var $container = $('.__user-dfield-items')
-        var $item = $(dynamicFieldTemplate)
-
-        $item.find('.sort-list__text').text(item.label)
-        $item.find('[name=df_use]').prop('checked', item.use).attr('name', 'df_use[' + item.id + ']')
-        $item.find('[name=df_required]').prop('checked', item.required).attr('name', 'df_required[' + item.id + ']')
-
-        $container.append($item)
-    }
-
-    var dynamicFieldTemplate = '<li>\
-        <div class="sort-list__handler">\
-            <button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler">\
-                <span class="xu-button__icon">\
-                    <i class="xi-drag-vertical"></i>\
-                </span>\
-            </button>\
-        </div>\
-        <p class="sort-list__text"></p>\
-        <div class="sort-list__button">\
-            <button type="button" class="xu-button xu-button--subtle xu-button--icon">\
-                <span class="xu-button__icon">\
-                    <i class="xi-pen"></i>\
-                </span>\
-            </button>\
-        </div>\
-        <div class="sort-list__button">\
-            <button type="button" class="xu-button xu-button--subtle xu-button--icon">\
-                <span class="xu-button__icon">\
-                    <i class="xi-trash"></i>\
-                </span>\
-            </button>\
-        </div>\
-        <div class="sort-list__checkradio">\
-            <label class="xu-label-checkradio">\
-                <input type="checkbox" name="df_use">\
-                <span class="xu-label-checkradio__helper"></span>\
-            </label>\
-        </div>\
-        <div class="sort-list__checkradio">\
-            <label class="xu-label-checkradio">\
-                <input type="checkbox" name="df_required">\
-                <span class="xu-label-checkradio__helper"></span>\
-            </label>\
-        </div>\
-    </li>'
-</script>

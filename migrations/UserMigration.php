@@ -17,6 +17,7 @@ namespace Xpressengine\Migrations;
 use Illuminate\Database\Schema\Blueprint;
 use DB;
 use Schema;
+use XeLang;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\UserRegisterHandler;
@@ -44,8 +45,9 @@ class UserMigration extends Migration
             $table->engine = "InnoDB";
 
             $table->string('id', 36)->comment('user ID');
-            $table->string('display_name', 255)->unique()->comment('display name.');
+            $table->string('display_name', 255)->comment('display name.');
             $table->string('email', 255)->nullable()->comment('email');
+            $table->string('login_id', 255)->unique()->comment('id');
             $table->string('password', 255)->nullable()->comment('password');
             $table->string('rating', 15)->default('user')->comment('user rating. guest/user/manager/super');
             $table->string('status', 20)->comment('account status. activated/deactivated');
@@ -190,7 +192,7 @@ class UserMigration extends Migration
         DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true}'],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}'],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
@@ -202,6 +204,8 @@ class UserMigration extends Migration
      */
     public function init()
     {
+        $registerConfig = app('xe.config')->get('user.register');
+
         // add default user groups
         $joinGroup = app('xe.user')->groups()->create(
             [
@@ -215,10 +219,19 @@ class UserMigration extends Migration
                 'description' => 'sub user group'
             ]
         );
-        $joinConfig = app('xe.config')->get('user.register');
+        $registerConfig->set('joinGroup', $joinGroup->id);
 
-        $joinConfig->set('joinGroup', $joinGroup->id);
-        app('xe.config')->modify($joinConfig);
+        $displayNameCaption = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "닉네임";
+            if ($locale != 'ko') {
+                $value = "Nickname";
+            }
+            XeLang::save($displayNameCaption, $locale, $value);
+        }
+        $registerConfig->set('display_name_caption', $displayNameCaption);
+
+        app('xe.config')->modify($registerConfig);
 
         // set admin's group
         auth()->user()->joinGroups($joinGroup);
@@ -246,6 +259,10 @@ class UserMigration extends Migration
         }
 
         if ($this->checkExistUserTermAgreeTable() === false) {
+            return false;
+        }
+
+        if ($this->checkExistUserLoginIdColumn() === false) {
             return false;
         }
 
@@ -280,6 +297,12 @@ class UserMigration extends Migration
 
         //TODO 실행 조건 추가
         $this->deleteDisplayNameUnique();
+
+        if ($this->checkExistUserLoginIdColumn() === false) {
+            $this->createUserLoginIdColumn();
+            $this->migrationLoginIdColumn();
+            $this->setLoginIdColumnUnique();
+        }
     }
 
     /**
@@ -353,6 +376,23 @@ class UserMigration extends Migration
         $registerConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
         $registerConfigAttribute['display_name_unique'] = true;
         $registerConfigAttribute['use_display_name'] = true;
+        $registerConfigAttribute['dynamic_fields'] = array_keys(app('xe.dynamicField')->gets('user'));
+
+        $displayNameCaption = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "닉네임";
+            if ($locale != 'ko') {
+                $value = "Nickname";
+            }
+            XeLang::save($displayNameCaption, $locale, $value);
+        }
+        $registerConfigAttribute['display_name_caption'] = $displayNameCaption;
+
+        $passwordRuleLevel = app('config')->get('xe.user.password.default');
+        $registerConfigAttribute['password_rules'] = app('config')->get("xe.user.password.levels.{$passwordRuleLevel}");
+        if (isset($registerConfigAttribute['secureLevel']) === true) {
+            unset($registerConfigAttribute['secureLevel']);
+        }
 
         app('xe.config')->put('user.common', $newCommonConfigAttribute);
         app('xe.config')->set('user.register', $registerConfigAttribute);
@@ -436,5 +476,60 @@ class UserMigration extends Migration
             });
         } catch (\Exception $e) {
         }
+    }
+
+    /**
+     * User 테이블에 login_id 컬럼이 존재 여부 확인
+     *
+     * @return bool
+     */
+    private function checkExistUserLoginIdColumn()
+    {
+        return Schema::hasColumn('user', 'login_id');
+    }
+
+    /**
+     * User 테이블에 login_id 컬럼 생성
+     *
+     * @return void
+     */
+    private function createUserLoginIdColumn()
+    {
+        Schema::table('user', function (Blueprint $table) {
+            $table->string('login_id')->after('email');
+        });
+    }
+
+    /**
+     * user email에서 계정을 login_id로 update
+     * 중복된 login_id는 확인해서 login_id 뒤에 index를 붙임
+     *
+     * @return void
+     */
+    private function migrationLoginIdColumn()
+    {
+        \DB::table('user')->update(['login_id' =>  \DB::raw("REPLACE(SUBSTRING_INDEX(email, '@', 1), '.', '')")]);
+
+        $duplicateEmails = \DB::table('user')->select('login_id')
+            ->groupBy('login_id')->havingRaw('count(login_id) > 1')->get();
+        foreach ($duplicateEmails as $duplicateEmail) {
+            $duplicateUsers = User::where('login_id', $duplicateEmail->login_id)->orderBy('created_at')->get();
+            foreach ($duplicateUsers as $index => $duplicateUser) {
+                $duplicateUser->login_id .= ($index + 1);
+                $duplicateUser->save();
+            }
+        }
+    }
+
+    /**
+     * login_id 업데이트 후 unique 지정
+     *
+     * @return void
+     */
+    private function setLoginIdColumnUnique()
+    {
+        Schema::table('user', function (Blueprint $table) {
+            $table->unique('login_id');
+        });
     }
 }

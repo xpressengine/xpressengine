@@ -121,11 +121,14 @@
 
     this.$dialog.off('mousedown.dismiss.xe.modal')
 
-    $.support.transition && this.$element.hasClass('fade')
-      ? this.$element
-        .one('xeTransitionEnd', $.proxy(this.hideModal, this))
+    if ($.support.transition && this.$element.hasClass('fade')) {
+      this.$element
+        // .one('xeTransitionEnd', $.proxy(this.hideModal, this))
         .emulateTransitionEnd(Modal.TRANSITION_DURATION)
-      : this.hideModal()
+      this.hideModal()
+    } else {
+      this.hideModal()
+    }
   }
 
   Modal.prototype.enforceFocus = function () {
@@ -146,6 +149,8 @@
     } else if (!this.isShown) {
       this.$element.off('keydown.dismiss.xe.modal')
     }
+    this.removeBackdrop()
+    // this.hideModal()
   }
 
   Modal.prototype.resize = function () {

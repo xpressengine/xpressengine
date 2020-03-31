@@ -28,7 +28,7 @@ class CaptchaPart extends RegisterFormPart
 {
     const ID = 'captcha';
 
-    const NAME = 'xe::captcha';
+    const NAME = 'CAPTCHA';
 
     const DESCRIPTION = 'xe::descCaptcha';
 
@@ -43,12 +43,26 @@ class CaptchaPart extends RegisterFormPart
     }
 
     /**
+     * 동적으로 상태를 확인해서 사용 가능 한 part인지 반환
+     *
+     * @return bool
+     */
+    public static function isAvailable()
+    {
+        return app('xe.captcha')->available();
+    }
+
+    /**
      * Validate the request with the form part rules.
      *
      * @return array
      */
     public function validate()
     {
+        if (self::isAvailable() === false) {
+            return [];
+        }
+
         $this->getValidationFactory()->extendImplicit('captcha', function () {
             return $this->service('xe.captcha')->verify() === true;
         }, $this->service('xe.translator')->trans('xe::msgFailToPassCAPTCHA'));

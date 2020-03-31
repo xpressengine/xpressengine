@@ -14,18 +14,22 @@
 
 namespace Xpressengine\MediaLibrary;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFolderException;
 use Xpressengine\MediaLibrary\Exceptions\UnableRootFolderException;
+use Xpressengine\MediaLibrary\Models\MediaLibraryFile;
 use Xpressengine\MediaLibrary\Models\MediaLibraryFolder;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFileRepository;
 use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
 use XeDB;
 use XeStorage;
 use XeMedia;
+use Xpressengine\Storage\File;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
@@ -41,6 +45,9 @@ use Xpressengine\Support\Tree\NodePositionTrait;
 class MediaLibraryHandler
 {
     use NodePositionTrait;
+
+    const MODE_ADMIN = 1;
+    const MODE_USER = 2;
 
     /** @var MediaLibraryFileRepository $files */
     protected $files;
@@ -164,25 +171,25 @@ class MediaLibraryHandler
             if ($this->folders->query()->find($targetId) != null) {
                 $this->dropFolder($targetId);
             } else {
-                $this->dropFile($targetId);
+                $this->dropMediaLibraryFile($targetId);
             }
         }
     }
 
     /**
-     * @param string $fileId file id
+     * @param string $mediaLibraryFileId file id
      *
      * @return void
      * @throws \Exception
      */
-    protected function dropFile($fileId)
+    protected function dropMediaLibraryFile($mediaLibraryFileId)
     {
-        $fileItem = $this->files->query()->find($fileId);
-        if ($fileItem == null) {
+        $mediaLibraryFile = $this->files->query()->find($mediaLibraryFileId);
+        if ($mediaLibraryFile == null) {
             return;
         }
 
-        $this->files->delete($fileItem);
+        $this->files->delete($mediaLibraryFile);
     }
 
     /**
@@ -208,7 +215,7 @@ class MediaLibraryHandler
             }
 
             foreach ($folderItem->files as $file) {
-                $this->dropFile($file->id);
+                $this->dropMediaLibraryFile($file->id);
             }
 
             $parentFolderItem = $this->getFolderItem($folderItem->parent_id);
@@ -224,6 +231,51 @@ class MediaLibraryHandler
         }
 
         XeDB::commit();
+    }
+
+    public function getInstanceFolderItem($instanceId)
+    {
+        $rootFolderItem = $this->folders->getRootFolderItem();
+
+        $menuItem = app('xe.menu')->items()->find($instanceId);
+        if ($menuItem !== null) {
+            $folderTitle = $menuItem['type'];
+
+            $folderItem = $this->folders->query()->where([['parent_id', $rootFolderItem->id], ['name', $folderTitle]])->first();
+            if ($folderItem === null) {
+                $folderItem = $this->storeInstanceFolderItem($rootFolderItem, $folderTitle);
+            }
+
+            return $folderItem;
+        } elseif (app('xe.config')->get('comment' . '.' . $instanceId) !== null) {
+            $folderTitle = 'comment';
+
+            $folderItem = $this->folders->query()->where([['parent_id', $rootFolderItem->id], ['name', $folderTitle]])->first();
+            if ($folderItem === null) {
+                $folderItem = $this->storeInstanceFolderItem($rootFolderItem, $folderTitle);
+            }
+
+            return $folderItem;
+        }
+
+        return $rootFolderItem;
+    }
+
+    private function storeInstanceFolderItem($parentFolderItem, $folderTitle)
+    {
+        $folderAttribute = [
+            'parent_id' => $parentFolderItem->id,
+            'disk' => $parentFolderItem->disk,
+            'name' => $folderTitle,
+        ];
+
+        $folderItem = $this->folders->storeItem($folderAttribute);
+
+        $folderItem->ancestors()->attach($folderItem->getKey(), [$folderItem->getDepthName() => 0]);
+        $this->linkHierarchy($folderItem, $parentFolderItem);
+        $this->setOrder($folderItem);
+
+        return $folderItem;
     }
 
     /**
@@ -247,15 +299,19 @@ class MediaLibraryHandler
     }
 
     /**
-     * @param MediaLibraryFolder $folderItem folder item
-     * @param Request            $request    request
+     * @param MediaLibraryFolder $targetFolderItem folder item
+     * @param Request            $request          request
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|Collection
      */
-    public function getFolderList(MediaLibraryFolder $folderItem, Request $request)
+    public function getFolderList(MediaLibraryFolder $targetFolderItem, Request $request)
     {
-        if ($request->get('keyword', '') == '') {
-            $folderList = $folderItem->getChildren();
+        if ((int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
+            return [];
+        }
+
+        if ($request->get('keyword', '') === '') {
+            $folderList = $targetFolderItem->getChildren();
         } else {
             $folderList = $this->folders->getFolderItems($request);
         }
@@ -307,7 +363,7 @@ class MediaLibraryHandler
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getFileList(MediaLibraryFolder $folderItem, Request $request)
+    public function getMediaLibraryFileList(MediaLibraryFolder $folderItem, Request $request)
     {
         $attributes = $request->all();
 
@@ -319,10 +375,18 @@ class MediaLibraryHandler
                 break;
             }
         }
-        if ($isSearchState == false) {
-            $attributes = ['folder_id' => $folderItem->id];
 
-            if ($request->has('per_page') == true) {
+        if ($isSearchState === false) {
+            if (isset($attributes['index_mode']) && $attributes['index_mode'] == MediaLibraryHandler::MODE_ADMIN) {
+                $attributes['folder_id'] = $folderItem->id;
+            } else {
+                $rootFolderItem = $this->folders->getRootFolderItem();
+                if ($rootFolderItem->id !== $folderItem->id) {
+                    $attributes['folder_id'] = $folderItem->id;
+                }
+            }
+
+            if ($request->has('per_page') === true) {
                 $attributes['per_page'] = $request->get('per_page');
             }
         }
@@ -337,34 +401,74 @@ class MediaLibraryHandler
     }
 
     /**
-     * @param string $fileId file id
+     * @param string $mediaLibraryFileId file id
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function getFileItem($fileId)
+    public function getMediaLibraryFileItem($mediaLibraryFileId)
     {
-        $fileItem = $this->files->query()->find($fileId);
-        if ($fileItem == null) {
+        $mediaLibraryFileItem = $this->files->query()->find($mediaLibraryFileId);
+        if ($mediaLibraryFileItem == null) {
             throw new NotFoundFileException();
         }
 
-        $this->files->setCommonFileVisible($fileItem);
+        $this->files->setCommonFileVisible($mediaLibraryFileItem);
 
-        return $fileItem;
+        return $mediaLibraryFileItem;
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId file id
      *
      * @return void
      */
-    public function updateFile(Request $request, $fileId)
+    public function updateFile(Request $request, $mediaLibraryFileId)
     {
-        $fileItem = $this->getFileItem($fileId);
+        $mediaLibraryFileItem = $this->getMediaLibraryFileItem($mediaLibraryFileId);
         $attribute = $request->only(['title', 'alt_text', 'caption', 'description']);
 
-        $this->files->update($fileItem, $attribute);
+        $this->files->update($mediaLibraryFileItem, $attribute);
+    }
+
+    public function uploadModifyFile(Request $request, $mediaLibraryFile)
+    {
+        $uploadFile = $request->file('file');
+
+        $mediaLibraryConfig = config('xe.media.mediaLibrary');
+
+        //file size check
+        if ($mediaLibraryConfig['max_size'] != null && $mediaLibraryConfig['max_size'] != '' &&
+            $mediaLibraryConfig['max_size'] * 1024 * 1024 < $uploadFile->getSize()) {
+            throw new HttpException(
+                Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
+                xe_trans('xe::msgMaxFileSize', [
+                    'fileMaxSize' => $mediaLibraryConfig['max_size'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
+        }
+
+        //file extension check
+        $disallowExtensions = array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $mediaLibraryConfig['disallow_extensions']));
+
+        if (array_search('*', $disallowExtensions) === true
+            || in_array(strtolower($uploadFile->getClientOriginalExtension()), $disallowExtensions)) {
+            throw new HttpException(
+                Response::HTTP_NOT_ACCEPTABLE,
+                xe_trans('xe::msgImpossibleUploadingFiles', [
+                    'extensions' => $mediaLibraryConfig['disallow_extensions'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
+        }
+
+        $file = XeStorage::upload($uploadFile, 'public/media_library/modify', null, 'media');
+        XeStorage::bind($mediaLibraryFile->id, $file);
+
+        return $file;
     }
 
     /**
@@ -373,7 +477,7 @@ class MediaLibraryHandler
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \Exception
      */
-    public function uploadFile(Request $request)
+    public function uploadMediaLibraryFile(Request $request)
     {
         XeDB::beginTransaction();
 
@@ -423,9 +527,14 @@ class MediaLibraryHandler
                 }
             }
 
-            $folderItem = $this->getFolderItem($request->get('folder_id', ''));
-            if ($folderItem == null) {
-                throw new NotFoundFolderException();
+            $folderItem = null;
+            if ($instanceId = $request->get('instance_id')) {
+                $folderItem = $this->getInstanceFolderItem($instanceId);
+            } else {
+                $folderItem = $this->getFolderItem($request->get('folder_id', ''));
+                if ($folderItem === null) {
+                    throw new NotFoundFolderException();
+                }
             }
 
             $fileAttribute = [
@@ -436,7 +545,9 @@ class MediaLibraryHandler
                 'ext' => $uploadFile->getClientOriginalExtension()
             ];
 
-            $fileItem = $this->files->storeItem($fileAttribute);
+            $mediaLibraryFileItem = $this->files->storeItem($fileAttribute);
+
+            XeStorage::bind($mediaLibraryFileItem->id, $file);
         } catch (\Exception $e) {
             XeDB::rollback();
 
@@ -445,7 +556,9 @@ class MediaLibraryHandler
 
         XeDB::commit();
 
-        return $fileItem;
+        $this->files->setCommonFileVisible($mediaLibraryFileItem);
+
+        return $mediaLibraryFileItem;
     }
 
     /**
@@ -454,7 +567,7 @@ class MediaLibraryHandler
      * @return void
      * @throws \Exception
      */
-    public function moveFile(Request $request)
+    public function moveMediaLibraryFile(Request $request)
     {
         $targetFolder = $this->getFolderItem($request->get('folder_id', ''));
         $fileIds = $request->get('file_id', []);
@@ -465,7 +578,7 @@ class MediaLibraryHandler
         foreach ($fileIds as $fileId) {
             XeDB::beginTransaction();
             try {
-                $fileItem = $this->getFileItem($fileId);
+                $fileItem = $this->getMediaLibraryFileItem($fileId);
 
                 $this->files->update($fileItem, ['folder_id' => $targetFolder->id]);
             } catch (\Exception $e) {
@@ -475,5 +588,119 @@ class MediaLibraryHandler
             }
             XeDB::commit();
         }
+    }
+
+    public function swapImageFile(MediaLibraryFile $originalMediaLibraryFile, File $newFile)
+    {
+        $imageHandler = XeMedia::image();
+
+        $originFile = $originalMediaLibraryFile->file;
+        $originImage = XeMedia::make($originFile);
+        $newImage = XeMedia::make($newFile);
+
+        $dirtyAttributes = $originFile->getDirty();
+        foreach ($dirtyAttributes as $key => $dirtyAttribute) {
+            if (isset($originFile->{$key}) === true) {
+                unset($originFile[$key]);
+            }
+        }
+
+        $newImageThumbnails = $imageHandler->getThumbnails($newImage);
+        $originImageThumbnails = $imageHandler->getThumbnails($originImage);
+
+        try {
+            XeDB::beginTransaction();
+
+            //기존 썸네일 파일 정보 교체
+            foreach ($originImageThumbnails as $originImageThumbnail) {
+                $originImageThumbnailCode = $originImageThumbnail->meta->code;
+
+                $newImageThumbnail = $newImageThumbnails->filter(
+                    function ($newImageThumbnail) use ($originImageThumbnailCode) {
+                        return $newImageThumbnail->meta->code === $originImageThumbnailCode;
+                    }
+                )->first();
+
+                if ($newImageThumbnail == null) {
+                    continue;
+                }
+
+                //파일 교체
+                $this->swapFile($originImageThumbnail, $newImageThumbnail);
+
+                $originImageThumbnailAttributes = array_diff_key(
+                    $originImageThumbnail->meta->getAttributes(),
+                    array_flip(['id', 'file_id'])
+                );
+
+                $newImageThumbnailAttributes = array_diff_key(
+                    $newImageThumbnail->meta->getAttributes(),
+                    array_flip(['id', 'file_id'])
+                );
+
+                $tempThumbnailAttributes = $originImageThumbnailAttributes;
+                $originImageThumbnailAttributes = $newImageThumbnailAttributes;
+                $newImageThumbnailAttributes = $tempThumbnailAttributes;
+
+                $newImageThumbnail->meta->update($newImageThumbnailAttributes);
+                $originImageThumbnail->meta->update($originImageThumbnailAttributes);
+            }
+
+            //파일 교체
+            $this->swapFile($originFile, $newFile);
+
+            //파일 정보 변경
+            $originFileSize = $originFile->getAttribute('size');
+            $newFileSize = $newFile->getAttribute('size');
+
+            $tempSize = $originFileSize;
+            $originFileSize = $newFileSize;
+            $newFileSize = $tempSize;
+
+            $originFile->update(['size' => $originFileSize]);
+            $newFile->update(['size' => $newFileSize]);
+
+            $originImageMetaAttributes = array_diff_key(
+                $originImage->meta->getAttributes(),
+                array_flip(['id', 'file_id'])
+            );
+            $newImageMetaAttributes = array_diff_key(
+                $newImage->meta->getAttributes(),
+                array_flip(['id', 'file_id'])
+            );
+
+            $tempImageMetaAttributes = $originImageMetaAttributes;
+            $originImageMetaAttributes = $newImageMetaAttributes;
+            $newImageMetaAttributes = $tempImageMetaAttributes;
+
+            $originImage->meta->update($originImageMetaAttributes);
+            $newImage->meta->update($newImageMetaAttributes);
+
+            //이미지를 여러번 수정 하더라도 최초에 업로드한 파일만 저장
+            if ($originalMediaLibraryFile['origin_file_id'] === null) {
+                $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
+            } else {
+                //최초 수정한 파일이 아니면 변경 후 삭제 처리
+                XeStorage::unBind($originalMediaLibraryFile['id'], $newImage, true);
+            }
+
+            XeDB::commit();
+        } catch (\Exception $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+    }
+
+    private function swapFile($originFile, $newFile)
+    {
+        $originFilePath = config('filesystems.disks.' . $originFile->disk . '.root') . DIRECTORY_SEPARATOR . $originFile->path . DIRECTORY_SEPARATOR;
+        $newFilePath = config('filesystems.disks.' . $newFile->disk . '.root') . DIRECTORY_SEPARATOR . $newFile->path . DIRECTORY_SEPARATOR;
+
+        $tempFileName = app('xe.keygen')->generate();
+
+        rename($originFilePath . $originFile->filename, $newFilePath . $tempFileName);
+        rename($newFilePath . $newFile->filename, $originFilePath . $originFile->filename);
+        rename($newFilePath . $tempFileName, $newFilePath . $newFile->filename);
     }
 }

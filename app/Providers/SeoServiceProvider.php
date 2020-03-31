@@ -62,7 +62,8 @@ class SeoServiceProvider extends ServiceProvider
                 ],
                 $setting,
                 $app['xe.translator'],
-                $app['xe.frontend']
+                $app['xe.frontend'],
+                $app['xe.presenter']
             );
         });
         $this->app->alias(SeoHandler::class, 'xe.seo');

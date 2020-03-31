@@ -88,6 +88,15 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
+                            <div class="form-group __preview-input __preview-description">
+                                <label>{{ xe_trans('xe::keyword') }}</label> <small>{{ xe_trans('xe::siteSettingKeywordDescription') }}</small>
+                                {!! uio('langText', ['langKey'=> $seoSetting->get('keywords'), 'name'=>'keywords']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
                             <div class="form-group __preview-image">
                                 <label>{{ xe_trans('xe::siteImage') }}</label> <small>{{ xe_trans('xe::siteSettingImageDescription') }}</small>
                                 <div class="list-group-item">
@@ -180,7 +189,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::composerHomeDir') }}</label> <small>{{ xe_trans('xe::descComposerHomeDir') }}</small>
-                                <input type="text" class="form-control" name="composer_home" value="{{ $pluginConfig->get('composer_home') ?: (getenv('COMPOSER_HOME') ?: getenv('HOME')) }}">
+                                <input type="text" class="form-control" name="composer_home" value="{{ $pluginConfig->get('composer_home') ?: (getenv('COMPOSER_HOME') ?: (getenv('HOME') ? rtrim(getenv('HOME'), '/') . '/.composer' : '')) }}">
                             </div>
                         </div>
                     </div>

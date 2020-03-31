@@ -26,16 +26,14 @@ use Xpressengine\DynamicField\AbstractType;
  * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
- *
- * @deprecated since 3.0.8
  */
 class DynamicFieldPart extends RegisterFormPart
 {
     const ID = 'dynamic-fields';
 
-    const NAME = 'xe::additionalInfo';
+    const NAME = 'xe::customItems';
 
-    const DESCRIPTION = 'xe::descAdditionalInfo';
+    const DESCRIPTION = 'xe::descCustomItems';
 
     /**
      * Indicates if the form part is implicit
@@ -43,8 +41,6 @@ class DynamicFieldPart extends RegisterFormPart
      * @var bool
      */
     protected static $implicit = true;
-
-    protected static $detailSetting = true;
 
     /**
      * The view for the form part
@@ -60,8 +56,12 @@ class DynamicFieldPart extends RegisterFormPart
      */
     protected function data()
     {
+        $useDynamicFields = app('xe.config')->getVal('user.register.dynamic_fields');
+
         $fields = Collection::make($this->getFields())->filter(function ($field) {
             return $field->isEnabled();
+        })->sortBy(function ($field) use ($useDynamicFields) {
+            return array_search($field->getConfig()->get('id'), $useDynamicFields);
         });
 
         return compact('fields');

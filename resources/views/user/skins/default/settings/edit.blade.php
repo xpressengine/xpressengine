@@ -1,4 +1,7 @@
 @inject('passwordValidator', 'xe.password.validator')
+{{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
+{{ XeFrontend::js('assets/core/user/user_register.js')->load() }}
+
 <h1>{{ xe_trans('xe::privateInfoAndOptionSettings') }}</h1>
 <p>{{xe_trans('xe::privateInfoAndOptionSettingsDescription')}}</p>
 <div class="setting-card">
@@ -84,6 +87,15 @@
         </div>
     </div>
 
+    <div class="setting-group">
+        <div class="setting-detail">
+            <div class="setting-detail-content">
+                <p>{{ xe_trans('xe::id') }}</p>
+                <em class="text-gray2" style="margin-bottom: 0px;">{{ $user->login_id }}</em>
+            </div>
+        </div>
+    </div>
+
     <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
         <div class="setting-group">
             <a href="#" class="__xe_editBtn">
@@ -127,17 +139,19 @@
             <div class="setting-detail-content">
                 <p>{{ xe_trans('xe::changePassword') }}</p>
                 <em class="text-gray2">{{ $passwordValidator->getMessage() }}</em>
-                <div class="password-content __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
-                    <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
-                    <input type="password" class="xe-form-control" name="current_password">
-                    <em class="text-message">&nbsp;</em>
-                </div>
-                <div class="password-content __xe_newPassword">
+                @if($user->password)
+                    <div class="password-content __xe_currentPassword">
+                        <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
+                        <input type="password" class="xe-form-control" name="current_password">
+                        <em class="text-message">&nbsp;</em>
+                    </div>
+                @endif
+                <div class="password-content xu-form-group __xe_newPassword">
                     <p class="txt_pw">{{ xe_trans('xe::newPassword') }}</p>
                     <input type="password" class="xe-form-control" name="password">
                     <em class="text-message">&nbsp;</em>
                 </div>
-                <div class="password-content __xe_passwordConfirm">
+                <div class="password-content xu-form-group __xe_passwordConfirm">
                     <p class="txt_pw">{{ xe_trans('xe::newPasswordConfirm') }}</p>
                     <input type="password" class="xe-form-control" name="password_confirmation">
                     <p class="text-message">&nbsp;</p>
@@ -154,7 +168,7 @@
 
 @if($fieldTypes)
 <div class="setting-card">
-    <h2>{{ xe_trans('xe::additionalInfo') }}</h2>
+    <h2>{{ xe_trans('xe::customItems') }}</h2>
     @foreach($fieldTypes as $id => $fieldType)
 
         <div class="__xe_setting __xe_settingAddition __xe_settingAddition-{{ $id }}">
@@ -191,9 +205,6 @@
                     <em class="text-gray">{{xe_trans('xe::accountDeleteCautionDescription')}}</em>
                     <ul class="acount-list">
                         <li>{{xe_trans('xe::accountDeleteCaution1')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution2')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution3')}}</li>
-                        <li>{{xe_trans('xe::accountDeleteCaution4')}}</li>
                     </ul>
                     <label class="xe-label">
                         <input type="checkbox" id="__xe_chkLeave" name="confirm_leave" value="Y">

@@ -98,15 +98,15 @@ class UserController extends Controller
         }
 
         // resolve search keyword
-        // keyfield가 지정되지 않을 경우 email, display_name를 대상으로 검색함
-        $field = $request->get('keyfield') ?: 'email,display_name';
+        // keyfield가 지정되지 않을 경우 email, display_name, login_id를 대상으로 검색함
+        $field = $request->get('keyfield') ?: 'email,display_name,login_id';
 
         if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(
                 function (Builder $q) use ($field, $keyword) {
                     foreach (explode(',', $field) as $f) {
                         $q->orWhere($f, 'like', '%'.$keyword.'%');
-                    };
+                    }
                 }
             );
         }
@@ -135,7 +135,13 @@ class UserController extends Controller
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allUserCount', 'ratings'));
+
+        $config = app('xe.config')->get('user.register');
+
+        return XePresenter::make(
+            'user.settings.user.index',
+            compact('users', 'groups', 'selectedGroup', 'allUserCount', 'ratings', 'config')
+        );
     }
 
     /**
@@ -179,12 +185,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate($request, [
+        $rules = [
             'email' => 'email|required',
-            'display_name' => 'required',
+            'login_id' => 'required|login_id',
             'password' => 'required|password',
-        ]);
+        ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         $userData = $request->except('_token');
         $userData['emailConfirmed'] = 1;
@@ -270,7 +281,7 @@ class UserController extends Controller
      * Update user.
      *
      * @param Request $request request
-     * @param string  $id
+     * @param string  $id      user id
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -285,13 +296,18 @@ class UserController extends Controller
             throw $e;
         }
 
-        // default validation
-        $this->validate($request, [
+        $rules = [
             'email' => 'email',
-            'display_name' => 'required',
+            'login_id' => 'required|login_id',
             'rating' => 'required',
             'status' => 'required',
-        ]);
+        ];
+
+        if (app('xe.config')->getVal('user.register.use_display_name') === true) {
+            $rules['display_name'] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         if ($user->isAdmin() &&
             ($request->get('status') === User::STATUS_DENIED || $request->get('rating') !== Rating::SUPER)

@@ -76,19 +76,10 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($user, $provider->retrieveByCredentials($credentials));
     }
 
-    public function testRetrieveByCredentialsWithEmailPrefixReturnsUser()
+    public function testRetrieveByCredentialsWithLoginIdReturnsUser()
     {
         $user = $this->getUser();
         $query = $this->makeQuery();
-
-        $validator = function($callback) use($query) {
-            $query->shouldReceive('where')->once()->with('address', 'like', 'foo@%')->andReturnSelf();
-            $callback($query);
-            return true;
-        };
-
-        $query->shouldReceive('whereHas')->once()->with('emails', m::on($validator))->andReturnSelf();
-        $query->shouldReceive('get')->once()->andReturn(new Collection([$user]));
 
         $user->shouldReceive('newQuery')->once()->andReturn($query);
         $user->id = 1;
@@ -103,6 +94,8 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $provider->shouldReceive('createModel')->andReturn($user);
 
         $provider->dispatcher->shouldReceive('dispatch')->once();
+        $query->shouldReceive('where')->once()->with('login_id', $credentials['email'])->andReturnSelf();
+        $query->shouldReceive('first')->once()->andReturn($user);
         $this->assertEquals($user, $provider->retrieveByCredentials($credentials));
     }
 

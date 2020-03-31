@@ -144,9 +144,9 @@ class LangEditorBox {
     var name = (resource + '/locale/' + locale)
 
     if (!this.multiline) {
-      edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" />`).attr('value', value)
+      edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" />`).attr('value', value).attr('data-origin-value', value)
     } else {
-      edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).text(value)
+      edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).text(value).attr('data-origin-value', value)
     }
 
     return edit.prop('outerHTML')

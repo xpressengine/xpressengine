@@ -35,7 +35,7 @@ class MediaLibraryFile extends DynamicModel
     public $incrementing = false;
 
     protected $fillable = [
-        'file_id', 'folder_id', 'user_id', 'title', 'ext', 'caption',
+        'file_id', 'origin_file_id', 'folder_id', 'user_id', 'title', 'ext', 'caption',
         'alt_text', 'description'
     ];
 
@@ -45,6 +45,14 @@ class MediaLibraryFile extends DynamicModel
     public function file()
     {
         return $this->hasOne(File::class, 'id', 'file_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function originFile()
+    {
+        return $this->hasOne(File::class, 'id', 'origin_file_id');
     }
 
     /**

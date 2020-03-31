@@ -7,7 +7,7 @@
     <select class="form-control __xe_select_widgetskin" id="selectWidget" name="widget_skin">
         <option value="select-skin">{{ xe_trans('xe::choose') }}</option>
         @foreach($skins as $id => $entity)
-            <option @if(isset($skin) && $skin->getId()===$id) selected @endif value="{{ $id }}" data-url="{{ route('settings.widget.form', ['widget'=>$widget, 'skin'=>$id]) }}">{{ $entity->getTitle() }}</option>
+            <option @if(isset($skin) && $skin->getId()===$id) selected @endif value="{{ $id }}" data-url="{{ route('settings.widget.form', ['widget'=>$widget, 'skin'=>$id, 'code'=>$code ]) }}">{{ $entity->getTitle() }}</option>
         @endforeach
     </select>
     @endif

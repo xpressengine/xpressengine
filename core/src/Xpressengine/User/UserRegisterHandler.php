@@ -49,16 +49,22 @@ class UserRegisterHandler
      */
     public function updateConfig($attribute)
     {
-        if (isset($attribute['joinable']) && $attribute['joinable'] === 'true') {
-            $attribute['joinable'] = true;
-        } else {
-            $attribute['joinable'] = false;
-        }
-
+        $attribute['joinable'] = isset($attribute['joinable']);
         $attribute['display_name_unique'] = isset($attribute['display_name_unique']);
         $attribute['use_display_name'] = isset($attribute['use_display_name']);
 
         $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
+        $attribute['dynamic_fields'] = array_keys(array_get($attribute, 'dynamic_fields', []));
+
+        $passwordRules = '';
+        foreach ($attribute['password_rules'] as $rule => $value) {
+            if ($rule === 'min') {
+                $rule .= ':' . $value;
+            }
+
+            $passwordRules .= $rule . '|';
+        }
+        $attribute['password_rules'] = rtrim($passwordRules, '|');
 
         foreach ($attribute as $key => $value) {
             $this->config->set($key, $value);

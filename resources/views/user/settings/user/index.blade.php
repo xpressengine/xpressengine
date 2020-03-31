@@ -58,9 +58,11 @@ use Xpressengine\User\Models\User;
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <span class="__xe_selectedKeyfield">
-                                            @if(Request::get('keyfield')==='display_name')
-                                                {{xe_trans('xe::name')}}
-                                            @elseif(Request::get('keyfield')==='email')
+                                            @if (Request::get('keyfield') === 'display_name')
+                                                {{xe_trans($config->get('display_name_caption'))}}
+                                            @elseif (Request::get('keyfield') === 'login_id')
+                                                {{xe_trans('xe::id')}}
+                                            @elseif (Request::get('keyfield') === 'email')
                                                 {{xe_trans('xe::email')}}
                                             @else
                                                 {{xe_trans('xe::select')}}
@@ -69,7 +71,8 @@ use Xpressengine\User\Models\User;
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans($config->get('display_name_caption'))}}</a></li>
+                                            <li><a href="#" class="__xe_selectKeyfield" data-value="login_id">{{xe_trans('xe::id')}}</a></li>
                                             <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
                                         </ul>
                                     </div>
@@ -101,8 +104,14 @@ use Xpressengine\User\Models\User;
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
-                            <th scope="col">{{xe_trans('xe::name')}}</th>
-                            <th scope="col">{{xe_trans('xe::account')}}</th>
+                            <th scope="col">
+                                @if ($config->get('use_display_name') === true)
+                                    {{xe_trans($config->get('display_name_caption'))}}
+                                @else
+                                    {{xe_trans('xe::id')}}
+                                @endif
+                            </th>
+                            <th scope="col" class="text-center">{{xe_trans('xe::account')}}</th>
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
                             <th scope="col">{{xe_trans('xe::latestLogin')}}</th>
@@ -126,10 +135,10 @@ use Xpressengine\User\Models\User;
                                        data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a>
                                </span>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @if(count($user->accounts))
                                     @foreach($user->accounts as $account)
-                                        <span data-toggle="tooltip" class="badge grey {{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span>
+                                        <span data-toggle="tooltip" class="badge black" title="{{ $account->provider }}">{{ $account->provider }}</span>
                                     @endforeach
                                 @else
                                     <span data-toggle="tooltip" class="badge black" title="기본">xe</span>

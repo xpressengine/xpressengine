@@ -13,8 +13,11 @@
  */
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Collection;
+use App\Http\Sections\DynamicFieldSection;
 use Xpressengine\Http\Request;
 use Xpressengine\User\UserHandler;
+use XeFrontend;
 
 /**
  * Class SettingController
@@ -45,13 +48,57 @@ class RegisterSettingsController extends Controller
             return in_array($key, $activated) || $part::isImplicit();
         });
 
-        $parts = $activateParts->union($deactivateParts);
+        $parts = $activateParts->sortBy(function ($part, $key) use ($activated) {
+            return array_search($key, $activated);
+        })->union($deactivateParts);
 
-        $parts = $parts->filter(function ($part, $key) {
-            return $part::isDetailSetting() === false;
+        $passwordRules = explode('|', $config->get('password_rules'));
+        $passwordMinLength = array_filter($passwordRules, function ($rule) {
+            return strpos($rule, 'min:') !== false;
         });
 
-        return \XePresenter::make('settings.register', compact('config', 'parts', 'activated'));
+        if (count($passwordMinLength) > 0) {
+            list($rule, $passwordMinLength) = explode(':', $passwordMinLength[0], 2);
+        } else {
+            $passwordMinLength = 6;
+        }
+
+        $dynamicFieldSortKeys = $config->get('dynamic_fields', []);
+        list($activateDynamicFields, $deActivateDynamicFields) = Collection::make(app('xe.dynamicField')->gets('user'))
+            ->partition(function ($field, $key) use ($dynamicFieldSortKeys) {
+                return in_array($key, $dynamicFieldSortKeys);
+            });
+        $dynamicFields = $activateDynamicFields->sortBy(function ($field, $key) use ($dynamicFieldSortKeys) {
+            return array_search($field->getConfig()->get('id'), $dynamicFieldSortKeys);
+        })->union($deActivateDynamicFields);
+
+        /**
+         * @var \Xpressengine\DynamicField\RegisterHandler $registerHandler
+         */
+        $dynamicFieldHandler = app('xe.dynamicField');
+        $registerHandler = $dynamicFieldHandler->getRegisterHandler();
+        $types = $registerHandler->getTypes($dynamicFieldHandler);
+        $fieldTypes = [];
+        foreach ($types as $type) {
+            $fieldTypes[] = $type;
+        }
+
+        $connection = $userHandler->getConnection();
+        $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
+
+        return \XePresenter::make(
+            'settings.register',
+            compact(
+                'config',
+                'parts',
+                'activated',
+                'passwordRules',
+                'passwordMinLength',
+                'dynamicFields',
+                'fieldTypes',
+                'dynamicFieldSection'
+            )
+        );
     }
 
     /**
@@ -63,6 +110,8 @@ class RegisterSettingsController extends Controller
      */
     public function updateSetting(Request $request)
     {
+        $this->validate($request, ['password_rules.min' => 'required|numeric|min:4']);
+
         $inputs = $request->except('_token');
         app('xe.user_register')->updateConfig($inputs);
 

@@ -77,20 +77,9 @@ class UserProvider extends EloquentUserProvider
             $email = $where['email'];
             unset($where['email']);
 
-            // only prefix given
+            //login_id를 사용해서 로그인
             if (!str_contains($email, '@')) {
-                $emailPrefix = $email;
-
-                $query = $query->whereHas(
-                    'emails',
-                    function ($q) use ($emailPrefix) {
-                        $q->where('address', 'like', $emailPrefix.'@%');
-                    }
-                )->get();
-
-                if (count($query) === 1) {
-                    $user = $query->first();
-                }
+                $user = $query->where('login_id', $email)->first();
             } else {
                 $user = $query->whereHas(
                     'emails',

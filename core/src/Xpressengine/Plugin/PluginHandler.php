@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Plugin;
 
+use Composer\Json\JsonFile;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
@@ -572,20 +574,11 @@ class PluginHandler
 
         /** @var PluginEntity $plugin */
         foreach ($allPlugins as $plugin) {
-            if (empty($plugin->getComponentList('theme') == false)) {
-                //플러그인에 컴포넌트가 2개 이상일 경우 스토어에 등록된 정보 확인해서 구분
-                if (count($plugin->getComponentList()) > 1) {
-                    $storePlugin = $this->provider->find($plugin->getId());
-                    if ($storePlugin == null || isset($storePlugin->id) == false) {
-                        //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
-                        continue;
-                    } elseif ($storePlugin && $storePlugin->is_theme == false) {
-                        continue;
-                    }
-                }
-
-                $themes[] = $plugin;
+            if (empty($plugin->getComponentList('theme'))) {
+                continue;
             }
+
+            $themes[] = $plugin;
         }
 
         $themes = new PluginCollection($themes);
@@ -607,22 +600,11 @@ class PluginHandler
 
         /** @var PluginEntity $plugin */
         foreach ($allPlugins as $plugin) {
-            //플러그인에 테마 컴포넌트가 없으면 익스텐션
-            if (empty($plugin->getComponentList('theme') == true)) {
-                $extensions[] = $plugin;
-                continue;
-            }
-
-            //컴포넌트에 테마가 있는데 컴포넌트가 1개면 테마
-            if (count($plugin->getComponentList()) < 2) {
-                continue;
-            }
-
-            $storePlugin = $this->provider->find($plugin->getId());
-            if ($storePlugin == null || isset($storePlugin->id) == false) {
-                //TODO 업로드 플러그인 확인 소스 추가 필요(현재는 익스텐션에 출력)
-//                continue;
-            } elseif ($storePlugin && $storePlugin->is_extension == false) {
+            // 총 컴포넌트 수가 테마의 숫자와 같으면 테마로 분류
+            // 나머지 경우 모두 extenstion 으로 노출
+            if (!empty($plugin->getComponentList('theme')) &&
+                count($plugin->getComponentList()) === count($plugin->getComponentList('theme'))
+            ) {
                 continue;
             }
 
@@ -821,16 +803,12 @@ class PluginHandler
      */
     public function uploadPlugin(UploadedFile $uploadFile)
     {
-        $pluginName = str_replace(
+        $originalDirectoryName = str_replace(
             '.' . $uploadFile->getClientOriginalExtension(),
             "",
             $uploadFile->getClientOriginalName()
         );
-        $extractPath = app_storage_path('plugin/' . $pluginName);
-
-        if (!$this->checkExistAlreadyPlugin($pluginName)) {
-            throw new \InvalidArgumentException('Plugin already exists');
-        }
+        $extractPath = app_storage_path('plugin/' . $originalDirectoryName);
 
         try {
             $this->checkExistPrivateDirectory();
@@ -841,6 +819,11 @@ class PluginHandler
             $this->fixExtracted($extractPath);
             $this->removeVendorDir($extractPath);
 
+            $pluginName = $this->getPluginName($extractPath);
+            if (!$this->checkExistAlreadyPlugin($pluginName)) {
+                throw new \InvalidArgumentException('Plugin already exists');
+            }
+
             $this->movePlugin($extractPath, $pluginName);
         } catch (\Exception $e) {
             $this->removeGarageDirectory($extractPath);
@@ -849,6 +832,32 @@ class PluginHandler
         }
 
         return $pluginName;
+    }
+
+    /**
+     * Get plugin name
+     *
+     * @param string $targetDir target directory name
+     *
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    private function getPluginName($targetDir)
+    {
+        $composerString = $this->getFilesystem()->get($targetDir . '/composer.json');
+
+        $pluginInformation = JsonFile::parseJson($composerString);
+
+        if (isset($pluginInformation['name']) === false) {
+            throw new \InvalidArgumentException('Plugin name not exists');
+        }
+
+        $pluginNamePrefix = 'xpressengine-plugin/';
+        if (strpos($pluginInformation['name'], $pluginNamePrefix) === false) {
+            throw new \InvalidArgumentException('Plugin name is invalid');
+        }
+
+        return str_replace($pluginNamePrefix, '', $pluginInformation['name']);
     }
 
     /**

@@ -49,7 +49,6 @@
     letter-spacing: -0.03px;
     color: $n800;
     outline: none;
-    transition: all 0.5s ease-out;
 
     &:focus {
       border-radius: 4px;
@@ -208,13 +207,16 @@
 }
 
 // button subtle
-.media-library__button--icon {
-  padding: 0 8px;
+.media-library__button-icon {
+  font-size: 19px;
+  line-height: 18px;
+  padding: 0 9px;
+  vertical-align: middle;
 }
 
 // 버튼 그룹
 .media-library__button-group {
-  &:after {
+  &::after {
     content: '';
     display: block;
     clear: both;
@@ -223,6 +225,12 @@
   .media-library__button {
     float: left;
     margin: 0 1px;
+
+    i {
+      font-size: 19px;
+      line-height: 18px;
+      vertical-align: middle;
+    }
 
     &:first-child {
       margin-left: 0;
@@ -236,7 +244,7 @@
 
 // 버튼 그룹 라디오 (하나 선택 되는 형태)
 .media-library__button-group-radio {
-  &:after {
+  &::after {
     content: '';
     display: block;
     clear: both;
@@ -246,6 +254,12 @@
     float: left;
     margin: 0 1px;
     border-radius: 0;
+
+    i {
+      font-size: 19px;
+      line-height: 18px;
+      vertical-align: middle;
+    }
 
     &:first-child {
       margin-left: 0;

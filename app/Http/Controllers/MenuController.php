@@ -342,16 +342,22 @@ class MenuController extends Controller
             $mobileTheme = null;
         }
 
+        $menu = XeMenu::menus()->find($menuId);
+
+        list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
+        $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
+
+        if (XeMenu::items()->query()->where('url', $url)->exists()) {
+            return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
+        }
+
         XeDB::beginTransaction();
         try {
-            $menu = XeMenu::menus()->find($menuId);
-
-            list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
             $itemInput['parent'] = $itemInput['parent'] === $menu->getKey() ? null : $itemInput['parent'];
 
             $item = XeMenu::createItem($menu, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
+                'url' => $url,
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
@@ -362,6 +368,7 @@ class MenuController extends Controller
 
             // link image 등록
             XeMenu::updateItem($item, [
+                $this->getItemImageKeyName('menuImage') => $this->registerItemImage($request, $item, 'menuImage'),
                 $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
                 $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
                 $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
@@ -372,7 +379,6 @@ class MenuController extends Controller
 
             XeMenu::setMenuItemTheme($item, $desktopTheme, $mobileTheme);
             $this->permissionRegisterGrant(XeMenu::permKeyString($item), null, $menu->site_key);
-
         } catch (Exception $e) {
             XeDB::rollback();
             $request->flash();
@@ -461,17 +467,24 @@ class MenuController extends Controller
             $mobileTheme = null;
         }
 
+        list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
+        $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
+
+        if (XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
+            return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
+        }
+
         XeDB::beginTransaction();
         try {
-            list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
 
             XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/")),
+                'url' => $url,
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
                 'activated' => array_get($itemInput, 'itemActivated', '0'),
+                $this->getItemImageKeyName('menuImage') => $this->registerItemImage($request, $item, 'menuImage'),
                 $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
                 $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
                 $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
@@ -497,7 +510,7 @@ class MenuController extends Controller
 
     /**
      * Determine if the given keyword is available for url
-     * 
+     *
      * @param string $keyword url name
      * @return string
      */

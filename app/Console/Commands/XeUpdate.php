@@ -202,9 +202,9 @@ class XeUpdate extends ShouldOperation
             }
 
             // migration
+            \Artisan::call('cache:clear');
             $this->output->section('Running migration..');
             $this->migrateCore($installedVersion);
-
         });
 
         // mark installed

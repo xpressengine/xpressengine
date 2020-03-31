@@ -87,29 +87,22 @@ class PluginProvider
 
         $site_token = array_get($filters, 'site_token');
 
-        try {
-            $response = $this->request(
-                $url,
-                compact(
-                    'q',
-                    'authors',
-                    'tags',
-                    'page',
-                    'count',
-                    'collection',
-                    'order',
-                    'order_type',
-                    'site_token',
-                    'sale_type',
-                    'category'
-                )
-            );
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return null;
-            }
-            throw $e;
-        }
+        $response = $this->request(
+            $url,
+            compact(
+                'q',
+                'authors',
+                'tags',
+                'page',
+                'count',
+                'collection',
+                'order',
+                'order_type',
+                'site_token',
+                'sale_type',
+                'category'
+            )
+        );
 
         return $response;
     }
@@ -123,15 +116,7 @@ class PluginProvider
     public function getPluginCategories($collection)
     {
         $url = 'categories';
-
-        try {
-            $response = $this->request($url, compact('collection'));
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return null;
-            }
-            throw $e;
-        }
+        $response = $this->request($url, compact('collection'));
 
         return $response;
     }
@@ -146,15 +131,8 @@ class PluginProvider
     public function purchased($site_token)
     {
         $url = 'plugins/purchased';
+        $response = $this->request($url, compact('site_token'));
 
-        try {
-            $response = $this->request($url, compact('site_token'));
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return null;
-            }
-            throw $e;
-        }
         return $response;
     }
 
@@ -168,14 +146,8 @@ class PluginProvider
     public function find($id)
     {
         $url = 'plugins/show/'.$id;
-        try {
-            $response = $this->request($url);
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return null;
-            }
-            throw $e;
-        }
+        $response = $this->request($url);
+
         return $response;
     }
 
@@ -191,14 +163,7 @@ class PluginProvider
         $url = 'plugins/find';
         $queries = ['name' => implode(',', $ids)];
 
-        try {
-            $response = $this->request($url, $queries);
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return [];
-            }
-            throw $e;
-        }
+        $response = $this->request($url, $queries) ?: [];
 
         return $response;
     }
@@ -213,16 +178,8 @@ class PluginProvider
      */
     public function findRelease($id, $version)
     {
-
         $url = "plugins/show/$id/releases/$version";
-        try {
-            $response = $this->request($url);
-        } catch (ClientException $e) {
-            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
-                return null;
-            }
-            throw $e;
-        }
+        $response = $this->request($url);
 
         return $response;
     }
@@ -240,13 +197,7 @@ class PluginProvider
             $plugins = [$plugins->getId() => $plugins];
         }
         $ids = array_keys($plugins);
-        try {
-            $infos = $this->findAll($ids);
-        } catch (ConnectException $e) {
-            return false;
-        } catch (RequestException $e) {
-            return false;
-        }
+        $infos = $this->findAll($ids) ?: [];
 
         foreach ($infos as $data) {
             list($vendor, $id) = explode('/', $data->name);
@@ -278,22 +229,30 @@ class PluginProvider
                 'Accept' => 'application/json',
             ],
             'query' => $queries,
-            'http_errors' => false,
+//            'http_errors' => false,
         ];
         if ($this->auth !== null) {
             $options['auth'] = $this->auth;
         }
 
-        $res = $client->request(
-            'GET',
-            $url,
-            $options
-        );
+        try {
+            $res = $client->request(
+                'GET',
+                $url,
+                $options
+            );
+        } catch (ClientException $e) {
+            if ($e->getCode() == Response::HTTP_BAD_REQUEST) {
+                throw new HttpException(403, xe_trans('xe::needSiteTokenToViewListOfPurchasedStore', [
+                    'link' => sprintf('<a href="%s">%s</a>', route('settings.setting.edit'), xe_trans('xe::moveToSetting'))
+                ]));
+            }
 
-        if ($res->getStatusCode() == Response::HTTP_BAD_REQUEST) {
-            throw new HttpException(403, xe_trans('xe::needSiteTokenToViewListOfPurchasedStore', [
-                'link' => sprintf('<a href="%s">%s</a>', route('settings.setting.edit'), xe_trans('xe::moveToSetting'))
-            ]));
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+
+            throw $e;
         }
 
         return json_decode($res->getBody());

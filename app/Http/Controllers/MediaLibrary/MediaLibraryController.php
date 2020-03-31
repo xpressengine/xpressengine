@@ -17,6 +17,7 @@ namespace App\Http\Controllers\MediaLibrary;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use XePresenter;
+use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 
@@ -56,7 +57,7 @@ class MediaLibraryController extends Controller
 
         $returnValue['path'] = $this->handler->getFolderPath($targetFolderItem);
         $returnValue['folder'] = $this->handler->getFolderList($targetFolderItem, $request);
-        $returnValue['file'] = $this->handler->getFileList($targetFolderItem, $request);
+        $returnValue['file'] = $this->handler->getMediaLibraryFileList($targetFolderItem, $request);
 
         return XePresenter::makeApi($returnValue);
     }
@@ -131,27 +132,27 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  target file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function getFile(Request $request, $fileId)
+    public function getFile(Request $request, $mediaLibraryFileId)
     {
-        $fileItem = $this->handler->getFileItem($fileId);
+        $fileItem = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
 
         return XePresenter::makeApi([$fileItem]);
     }
 
     /**
-     * @param Request $request request
-     * @param string  $fileId  target file id
+     * @param Request $request            request
+     * @param string  $mediaLibraryFileId target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function updateFile(Request $request, $fileId)
+    public function updateFile(Request $request, $mediaLibraryFileId)
     {
-        $this->handler->updateFile($request, $fileId);
+        $this->handler->updateFile($request, $mediaLibraryFileId);
 
         return XePresenter::makeApi([
             'message' => xe_trans('xe::fileInformationUpdateMessage')
@@ -166,7 +167,7 @@ class MediaLibraryController extends Controller
      */
     public function moveFile(Request $request)
     {
-        $this->handler->moveFile($request);
+        $this->handler->moveMediaLibraryFile($request);
 
         return XePresenter::makeApi([]);
     }
@@ -183,8 +184,37 @@ class MediaLibraryController extends Controller
             throw new UploadFileNotExistException();
         }
 
-        $file = $this->handler->uploadFile($request);
+        $file = $this->handler->uploadMediaLibraryFile($request);
 
         return XePresenter::makeApi([$file]);
+    }
+
+    /**
+     * @param string $mediaLibraryFileId fileId
+     *
+     * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function download($mediaLibraryFileId)
+    {
+        $mediaLibraryFile = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
+        if ($mediaLibraryFile == null || $mediaLibraryFile->file == null) {
+            throw new NotFoundFileException;
+        }
+
+        return \XeStorage::download($mediaLibraryFile->file);
+    }
+
+    public function modifyFile(Request $request, $originFileId)
+    {
+        $originalMediaLibraryFileItem = $this->handler->getMediaLibraryFileItem($originFileId);
+        if ($request->file('file') == null) {
+            throw new UploadFileNotExistException();
+        }
+
+        $newImageFile = $this->handler->uploadModifyFile($request, $originalMediaLibraryFileItem);
+
+        $this->handler->swapImageFile($originalMediaLibraryFileItem, $newImageFile);
+
+        return redirect()->back();
     }
 }

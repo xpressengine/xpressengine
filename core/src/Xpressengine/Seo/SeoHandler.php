@@ -16,6 +16,7 @@ namespace Xpressengine\Seo;
 
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Presenter\Html\FrontendHandler;
+use Xpressengine\Presenter\Presenter;
 use Xpressengine\User\UserInterface;
 use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Translation\Translator;
@@ -61,6 +62,13 @@ class SeoHandler
     protected $frontend;
 
     /**
+     * Presenter instance
+     *
+     * @var Presenter $presenter
+     */
+    protected $presenter;
+
+    /**
      * Will be executed
      *
      * @var bool
@@ -81,13 +89,20 @@ class SeoHandler
      * @param Setting            $setting    Setting instances
      * @param Translator         $translator Translator instances
      * @param FrontendHandler    $frontend   Frontend instance
+     * @param Presenter          $presenter  Presenter instance
      */
-    public function __construct(array $importers, Setting $setting, Translator $translator, FrontendHandler $frontend)
-    {
+    public function __construct(
+        array $importers,
+        Setting $setting,
+        Translator $translator,
+        FrontendHandler $frontend,
+        Presenter $presenter
+    ) {
         $this->importers = $importers;
         $this->setting = $setting;
         $this->translator = $translator;
         $this->frontend = $frontend;
+        $this->presenter = $presenter;
     }
 
     /**
@@ -150,7 +165,7 @@ class SeoHandler
         $data['title'] = $this->makeTitle($item);
         $data['description'] = $item ? $item->getDescription()
             : $this->translator->trans($this->setting->get('description'));
-        $data['keywords'] = $item ? $item->getKeyword() : $this->setting->get('keywords');
+        $data['keywords'] = $item ? $item->getKeyword() : $this->translator->trans($this->setting->get('keywords'));
         $data['author'] = $item ? $item->getAuthor() : '';
         $data['images'] = $item ? $item->getImages() : [];
 
@@ -160,6 +175,11 @@ class SeoHandler
 
         if ($data['author'] instanceof UserInterface) {
             $data['author'] = $data['author']->getDisplayName();
+        }
+
+        $menuItem = $this->presenter->getInstanceConfig()->getMenuItem();
+        if ($menuItem && $image = $menuItem->menuImage) {
+            $data['images'][] = $image;
         }
 
         if ($image = $this->setting->getSiteImage()) {

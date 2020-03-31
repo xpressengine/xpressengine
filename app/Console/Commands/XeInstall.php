@@ -96,6 +96,7 @@ class XeInstall extends Command
         ],
         'admin' => [
             'email' => null,
+            'login_id' => 'admin',
             'password' => null,
             'display_name' => 'admin',
         ],
@@ -863,10 +864,14 @@ class XeInstall extends Command
             return $email;
         });
 
+        $adminInfo['login_id'] = $this->askValidation('ID', $adminInfo['login_id'], function ($loginId) {
+            return $loginId;
+        });
+
         // displayName
-        $adminInfo['display_name'] = $this->askValidation('Name', $adminInfo['display_name'], function ($displayName) {
+        $adminInfo['display_name'] = $this->askValidation('Nickname', $adminInfo['display_name'], function ($displayName) {
             if (strlen(trim($displayName)) === 0) {
-                throw new \Exception('Input Name');
+                throw new \Exception('Input Nickname');
             }
 
             return $displayName;
@@ -916,6 +921,10 @@ class XeInstall extends Command
         $config['rating'] = 'super';
         $config['status'] = 'activated';
         $config['emailConfirmed'] = true;
+
+        if (isset($config['login_id']) === false) {
+            $config['login_id'] = 'admin';
+        }
 
         // create admin account
         /** @var UserHandler $userHandler */

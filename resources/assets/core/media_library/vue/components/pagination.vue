@@ -1,6 +1,7 @@
 <template>
   <div v-if="paginate" class="media-library-paging">
     <VuePaginate
+      v-model="paginate.current"
       :page-count="paginate.last"
       :click-handler="pageMove"
       :container-class="'media-library-paging__box media-library-paging__box--normal'"
@@ -38,7 +39,7 @@ export default {
         page = this.paginate.last
       }
 
-      this.$store.dispatch('media/loadData', { file_page: page })
+      this.$store.dispatch('media/setFilter', { filter: {file_page: page} })
     }
   },
   mounted: function () {

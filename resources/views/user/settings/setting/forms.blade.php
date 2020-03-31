@@ -1,7 +1,3 @@
-{{ XeFrontend::css('https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css')->before('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')->load() }}
-{{ XeFrontend::js('https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js')->appendTo('head')->before('https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')->load() }}
-{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
-
 <!-- 드래그 리스트 -->
 <ul class="sort-list sort-list--custom-item __ui-sortable">
     @foreach($parts as $key => $part)
@@ -15,14 +11,23 @@
             </div>
             <p class="sort-list__text">{{ xe_trans($part::NAME) }} <small>{{ xe_trans($part::DESCRIPTION) }}</small></p>
             <div class="sort-list__checkradio">
-                <label class="xu-label-checkradio">
-                    @if($part::isImplicit())
-                        <input type="checkbox" name="forms[{{ $key }}]" checked="checked" disabled />
-                    @else
+                @if ($part::isImplicit())
+                    <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                        <input type="hidden" value="on" name="forms[{{ $key }}]">
+                        <input type="checkbox" checked="checked" disabled />
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @elseif ($part::isAvailable() === false)
+                    <label class="xu-label-checkradio xu-label-checkradio--disabled">
+                        <input type="checkbox" disabled />
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @else
+                    <label class="xu-label-checkradio">
                         <input type="checkbox" name="forms[{{ $key }}]" value="on" @if(in_array($key, $activated)) checked="checked" @endif />
-                    @endif
-                    <span class="xu-label-checkradio__helper"></span>
-                </label>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                @endif
             </div>
         </li>
     @endforeach

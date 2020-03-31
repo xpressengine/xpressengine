@@ -227,4 +227,22 @@ class EmailBroker
         $this->handler->deleteEmail($email);
         return true;
     }
+
+    /**
+     * 이메일 인증 후 가입 옵션을 사용할 때 메일 인증 처리
+     *
+     * @param EmailInterface $email 인증할 이메일
+     * @param string         $code  인증코드
+     *
+     * @return bool
+     */
+    public function approvalEmail(EmailInterface $email, $code)
+    {
+        if ($this->validateConfirmCode($email, $code) === false) {
+            throw new InvalidConfirmationCodeException();
+        }
+
+        $this->handler->deleteEmail($email);
+        return true;
+    }
 }

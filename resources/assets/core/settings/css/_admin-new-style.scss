@@ -47,6 +47,57 @@
       &:last-of-type {
         margin-bottom: 0;
       }
+
+      .setting-box__sub-title-more-info-button {
+        margin: 0;
+        padding: 0;
+        border: 0 none;
+        outline: none;
+        background-color: transparent;
+
+        i {
+          font-size: 18px;
+          vertical-align: top;
+          color: #6b778c;
+        }
+      }
+
+      .setting-box__popover-content {
+        width: 245px;
+        padding: 11px 10px;
+
+        .setting-box__popover-content-list {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+
+          > li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            .setting-box__popover-title {
+              display: block;
+              margin: 0;
+              padding: 0 0 4px;
+              font-size: 14px;
+              line-height: 20px;
+              font-weight: 600;
+              letter-spacing: -0.04px;
+              color: #172b4d;
+            }
+
+            .setting-box__popover-text {
+              margin: 0;
+              padding: 0 0 16px;
+              font-size: 14px;
+              line-height: 20px;
+              letter-spacing: -0.04px;
+              color: #6b778c;
+            }
+          }
+        }
+      }
     }
 
     .xu-label-checkradio__text {

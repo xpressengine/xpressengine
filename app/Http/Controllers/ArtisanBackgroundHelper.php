@@ -41,7 +41,7 @@ trait ArtisanBackgroundHelper
      */
     public function availableProcess()
     {
-        return Application::phpBinary() !== false;
+        return Application::phpBinary() !== false && app('config')->get('xe.console_allow_url_fopen');
     }
 
     /**

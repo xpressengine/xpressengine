@@ -37,6 +37,12 @@ return [
         ]
     ],
 
+    'ssl' => [
+        'always' => false,
+    ],
+
+    'console_allow_url_fopen' => true,
+
     'settings' => [
         /*
         |--------------------------------------------------------------------------
@@ -146,12 +152,6 @@ return [
                 'description' => '',
                 'display' => false,
                 'ordering' => 200
-            ],
-            'user.field' => [
-                'title' => 'xe::dynamicFieldSettings',
-                'description' => '',
-                'display' => true,
-                'ordering' => 300
             ],
             'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
@@ -302,6 +302,8 @@ return [
             'validate' => null
         ],
 
+        //deprecated since 3.0.8
+        //관리자 페이지->설정->가입 설정->비밀번호 정책 수정 기능으로 대체
         'password' => [
             'default' => 'normal',
             'levels' => [
@@ -419,8 +421,10 @@ return [
             'formTextarea' => 'uiobject/xpressengine@formTextArea',
             'formSelect' => 'uiobject/xpressengine@formSelect',
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
+            'formRadio' => 'uiobject/xpressengine@formRadio',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
+            'formMedialibraryImage' => 'uiobject/xpressengine@formMedialibraryImage',
             'formColorpicker' => 'uiobject/xpressengine@formColorpicker',
             'formMenu' => 'uiobject/xpressengine@menuSelect',
             'formLangText' => 'uiobject/xpressengine@formLangText',

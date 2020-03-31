@@ -190,6 +190,9 @@ class UserHandler
     {
         $data['rating'] = $data['rating'] ?? Rating::USER;
         $data['status'] = $data['status'] ?? $this->configManager->getVal('user.register.register_process', User::STATUS_ACTIVATED);
+        if ($this->configManager->getVal('user.register.use_display_name') === false && isset($data['display_name']) === false) {
+            $data['display_name'] = $data['login_id'];
+        }
 
         $this->validateForCreate($data);
 
@@ -363,6 +366,10 @@ class UserHandler
             $this->validateEmail($data['email']);
         }
 
+        if (isset($data['login_id'])) {
+            $this->validateLoginId($data['login_id']);
+        }
+
         // displayName 검사
         $this->validateDisplayName($data['display_name']);
 
@@ -386,6 +393,7 @@ class UserHandler
      *
      * @param string             $name 유효성 검사를 할 표시이름
      * @param UserInterface|null $user user object
+     *
      * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
     public function validateDisplayName($name, UserInterface $user = null)
@@ -406,6 +414,34 @@ class UserHandler
         $this->validator->make(
             ['display_name' => $name],
             ['display_name' => $displayNameRules]
+        )->validate();
+
+        return true;
+    }
+
+    /**
+     * LoginId에 대한 유효성 검사
+     *
+     * @param string             $loginId 유효성 검사를 할 LoginId
+     * @param UserInterface|null $user    user object
+     *
+     * @return bool
+     */
+    public function validateLoginId($loginId, UserInterface $user = null)
+    {
+        $rules = [
+            'required',
+            'login_id',
+            Rule::unique('user')->where(function ($query) use ($user) {
+                if ($user) {
+                    $query->where('id', '!=', $user->getId());
+                }
+            })
+        ];
+
+        $this->validator->make(
+            ['login_id' => $loginId],
+            ['login_id' => $rules]
         )->validate();
 
         return true;
@@ -450,6 +486,12 @@ class UserHandler
         if (array_get($data, 'display_name') !== null) {
             if (strcmp($user->display_name, $data['display_name']) !== 0) {
                 $this->validateDisplayName($data['display_name'], $user);
+            }
+        }
+
+        if (array_get($data, 'login_id') !== null) {
+            if (strcmp($user->login_id, $data['login_id']) !== 0) {
+                $this->validateLoginId($data['login_id'], $user);
             }
         }
 

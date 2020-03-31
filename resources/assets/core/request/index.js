@@ -5,7 +5,6 @@ import Axios from 'axios'
 import { stringify } from 'qs'
 import { eventify } from 'xe/utils'
 import $ from 'jquery'
-import qs from 'qs'
 
 import Config from './config'
 import RequestEntity from './request_entity'
@@ -98,6 +97,11 @@ class Request extends App {
    * @return {Axios}
    */
   async request (url, options, axiosConfig = {}) {
+    this.$$emit('start', new RequestEntity({
+      method: (options.method === 'delete') ? 'post' : options.method,
+      container: (options.container) ? options.container : $('body')
+    }))
+
     axiosConfig = Object.assign({}, axiosConfig)
     axiosConfig.url = await this.resolveRoute(url)
     axiosConfig.method = options.method || 'get'
@@ -105,21 +109,6 @@ class Request extends App {
     axiosConfig.params = options.params
     axiosConfig.headers = Object.assign({}, this.axiosInstance.defaults.headers[axiosConfig.method], options.headers)
     axiosConfig.container = (options.container) ? options.container : $('body')
-
-    if (axiosConfig.method == 'put' || axiosConfig.method == 'delete') {
-      if (typeof axiosConfig.data === 'string') {
-        axiosConfig.data = qs.parse(axiosConfig.data)
-      }
-
-      axiosConfig.data._method = axiosConfig.method
-      axiosConfig.data = qs.stringify(axiosConfig.data)
-      axiosConfig.method = 'post'
-    }
-
-    this.$$emit('start', new RequestEntity({
-      method: axiosConfig.method,
-      container: axiosConfig.container
-    }))
 
     return this.axiosInstance.request(axiosConfig)
   }

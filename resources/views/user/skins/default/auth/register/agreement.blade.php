@@ -37,12 +37,11 @@
 
                 <div class="button-box button-box--type2">
                     <a href="{{ url('/') }}" class="xu-button xu-button--default xu-button--large user__button-default">
-                        <span class="xu-button__text">취소</span>
+                        <span class="xu-button__text">{{ xe_trans('xe::cancel') }}</span>
                     </a>
 
-                    {{--TODO 모든 약관을 동의 했을 때 활성화 스크립트 적용 필요--}}
                     <button type="submit" class="xu-button xu-button--primary xu-button--block xu-button--large">
-                        <span class="xu-button__text">확인</span>
+                        <span class="xu-button__text">{{ xe_trans('xe::confirm') }}</span>
                     </button>
                 </div>
             </div>

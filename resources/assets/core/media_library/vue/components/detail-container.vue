@@ -3,7 +3,7 @@
     <div class="media-library-layer-popup-content">
       <div class="media-library-layer-popup-content-inner">
         <div class="media-library-layer-popup-header">
-          <h3 class="media-library-layer-popup-header__title">파일 상세정보 <span class="blind">레이어 팝업</span></h3>
+          <h3 class="media-library-layer-popup-header__title" v-bind:title="title">{{ title }} <span class="blind">레이어 팝업</span></h3>
           <!-- [D] 모바일에서 class="media-library-layer-popup__button-close" 버튼 클릭 시 팝업 닫기 기능 적용 (PC 에서는 해당 버튼 숨겨짐) -->
           <button @click="close" type="button" class="media-library-layer-popup__button-close">
             <span class="blind">파일 상세정보 레이어 팝업 닫기</span>
@@ -46,9 +46,17 @@
         <div class="media-library-layer-popup-detail">
           <div class="media-library-layer-popup-detail-view">
               <div class="media-library-layer-popup-detail-view__inner">
+                <slot name="content">
+                  <button type="button" class="media-library-layer-popup-detail-view__button-left"><i class="xi-angle-left-min"><span class="blind">이전 이미지 보기</span></i></button>
+
                   <div class="media-library-layer-popup-detail-view__image-box">
                       <img :src="thumbnailUrl" class="media-library-layer-popup-detail-view__image" alt="">
                   </div>
+
+                  <button type="button" class="media-library-layer-popup-detail-view__button-right"><i class="xi-angle-right-min"><span class="blind">다음 이미지 보기</span></i></button>
+
+                  <button type="button" class="media-library-layer-popup-detail-view__button-update">이미지 편집</button>
+                </slot>
               </div>
           </div>
           <div class="media-library-layer-popup-detail-info">
@@ -125,8 +133,8 @@ import filesize from 'filesize'
 export default {
   created: function () {
     this.$root.$on('show-detail-media', (id, media) => {
-      this.id = id
-      this.media = media
+      // this.id = id
+      // this.media = media
     })
     this.$root.$on('show-detail-media-closed', () => {
       this.id = null
@@ -136,7 +144,8 @@ export default {
   data: () => {
     return {
       id: null,
-      media: null
+      media: null,
+      title: '파일 상세보기'
     }
   },
   computed: {
@@ -173,8 +182,7 @@ export default {
     },
     save () {
       return new Promise((resolve, reject) => {
-        const url = ['/media_library/file', this.media.id, 'update'].join('/')
-        window.XE.put(url, {
+        window.XE.put(['media_library.update_file', { mediaLibraryFileId: this.media.id }], {
           file_id: this.media.id,
           title: this.media.title,
           caption: this.media.caption,

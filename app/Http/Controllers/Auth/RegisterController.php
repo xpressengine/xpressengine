@@ -113,6 +113,8 @@ class RegisterController extends Controller
             );
         }
 
+        $request->session()->forget('user_agree_terms');
+
         //약관을 회원정보 입력 전에 받는 경우 처리
         $agreeType = app('xe.config')->getVal(
             'user.register.term_agree_type',
@@ -129,9 +131,11 @@ class RegisterController extends Controller
             }
         }
 
-        if ($agreeType === UserRegisterHandler::TERM_AGREE_PRE &&
-            count($terms) > 0 &&
-            $isAllRequireTermAgree === false
+        if ($agreeType === UserRegisterHandler::TERM_AGREE_PRE && count($terms) > 0 &&  //가입 정보 이전에 약관 동의 출력 여부
+            (
+                $isAllRequireTermAgree === false || //필수 조건이 있는데 선택 안했을 경우
+                ($requireTerms->count() === 0 && $request->session()->has('pass_agree') === false))
+                //약관에 선택 약관만 존재하는데 session에 약관 동의에 대한 데이터가 없을 경우
         ) {
             return \XePresenter::make('register.agreement', compact('terms'));
         }
@@ -161,6 +165,8 @@ class RegisterController extends Controller
             ['*.accepted' => xe_trans('xe::pleaseAcceptRequireTerms')]
         );
 
+        $request->session()->flash('pass_agree');
+
         return redirect()->route('auth.register', $request->except('_token'));
     }
 
@@ -180,6 +186,8 @@ class RegisterController extends Controller
 
         $parts = collect($parts)->filter(function ($part, $key) use ($activated) {
             return in_array($key, $activated) || $part::isImplicit();
+        })->sortBy(function ($part, $key) use ($activated) {
+            return array_search($key, $activated);
         })->map(function ($part) use ($request) {
             return new $part($request);
         });
@@ -201,6 +209,10 @@ class RegisterController extends Controller
         if (count($userAgreeTerms) > 0) {
             $request->session()->put('user_agree_terms', $userAgreeTerms);
         }
+
+        expose_trans('xe::passwordIncludeNumber');
+        expose_trans('xe::passwordIncludeCharacter');
+        expose_trans('xe::passwordIncludeSpecialCharacter');
 
         return \XePresenter::make('register.create', compact('config', 'parts'));
     }
@@ -405,7 +417,7 @@ class RegisterController extends Controller
         XeDB::beginTransaction();
         try {
             //이메일 승인 처리
-            $this->emailBroker->confirmEmail($email, $code);
+            $this->emailBroker->approvalEmail($email, $code);
 
             //회원 상태 변경
             $user = $email->user;
