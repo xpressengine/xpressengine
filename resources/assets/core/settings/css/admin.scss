@@ -3,37 +3,54 @@
 // Custom variables
 
 // Core variables and mixins
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+// @import "bootstrap/variables";
+// @import "bootstrap/mixins";
 
 // Core CSS
-@import "bootstrap/scaffolding";
-@import "bootstrap/type";
-@import "bootstrap/tables";
-@import "bootstrap/forms";
-@import "bootstrap/buttons";
+// @import "bootstrap/scaffolding";
+// @import "bootstrap/type";
+// @import "bootstrap/tables";
+// @import "bootstrap/forms";
+// @import "bootstrap/buttons";
 
 // Components
-@import "bootstrap/dropdowns";
-@import "bootstrap/input-groups";
-@import "bootstrap/labels";
-@import "bootstrap/list-group";
-@import "bootstrap/pagination";
-@import "bootstrap/panels";
-@import "bootstrap/thumbnails";
-@import "bootstrap/navs";
-@import "bootstrap/modals";
+// @import "bootstrap/dropdowns";
+// @import "bootstrap/input-groups";
+// @import "bootstrap/labels";
+// @import "bootstrap/list-group";
+// @import "bootstrap/pagination";
+// @import "bootstrap/panels";
+// @import "bootstrap/thumbnails";
+// @import "bootstrap/navs";
+// @import "bootstrap/modals";
 
 // Utility classes
-@import "bootstrap/utilities";
+// @import "bootstrap/utilities";
 
 // xe-modal-plugin-detail
-@import "modal-plugin";
+// @import "modal-plugin";
 
 // 임시 컴포넌트 버튼 (cdn 링크 적용 전 임시 사용)
-@import "component/functions";
-@import "component/variables";
-@import "component/button";
+// @import "component/functions";
+// @import "component/variables";
+// @import "component/button";
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 // 관리자 세팅 페이지 개편
 @import "admin-new-style";
@@ -129,14 +146,14 @@ aside ul li em,
 }
 
 p.text {
-  color: $brand-grey;
-  margin-bottom: $form-group-margin-bottom;
+  color: #8e8e93;
+  margin-bottom: 15px;
 }
 
 .normal-list li {
   position: relative;
   padding-left: 15px;
-  color: $brand-grey;
+  color: #8e8e93;
 
   &::before {
     position: absolute;
@@ -936,7 +953,7 @@ aside {
     margin-bottom: 0;
     padding-top: 7px;
     background-color: #fff;
-    border: 1px solid $brand-primary;
+    border: 1px solid #2c8beb;
     clear: both;
 
     .panel-heading {
@@ -953,7 +970,7 @@ aside {
 
     .panel-footer {
       padding: 0 15px;
-      background-color: $panel-footer-bg;
+      background-color: #F8F8FA;
       border-top: 1px solid #ededed;
     }
   }
@@ -973,14 +990,14 @@ aside {
   > .panel-heading {
     margin-bottom: 20px;
     background-color: #fff;
-    border: 1px solid $panel-inner-border;
+    border: 1px solid #e0e0e0;
 
     .panel.panel-edit {
       margin: 0 -15px;
     }
 
     &.open {
-      background-color: $brand-primary;
+      background-color: #2c8beb;
 
       > .pull-left .panel-title {
         color: #fff;
@@ -994,7 +1011,7 @@ aside {
 
   > .panel-body {
     padding: 0 !important;
-    border: 1px solid $panel-inner-border;
+    border: 1px solid #e0e0e0;
 
     > .item-container {
       &:first-child {
@@ -1033,7 +1050,7 @@ aside {
             display: block;
             vertical-align: middle;
             padding-left: 30px;
-            font-size: $font-size-large;
+            font-size: 18px;
             color: #2c2e37;
             font-weight: normal;
             line-height: 70px;
@@ -1048,13 +1065,13 @@ aside {
           top: 18px;
 
           button {
-            background-color: $brand-primary;
+            background-color: #2c8beb;
             color: #fff;
             font-size: 13px;
 
             &.on {
               background-color: #fff;
-              color: $brand-primary;
+              color: #2c8beb;
             }
           }
         }
@@ -1067,10 +1084,10 @@ aside {
       }
 
       &.open > .item-content {
-        background-color: $brand-primary;
+        background-color: #2c8beb;
 
         .handler i {
-          background-color: $brand-primary;
+          background-color: #2c8beb;
           color: #fff;
         }
 
@@ -1089,7 +1106,7 @@ aside {
 
           &.on {
             background-color: #fff;
-            color: $brand-primary;
+            color: #2c8beb;
           }
         }
       }
@@ -1106,7 +1123,7 @@ aside {
     }
 
     > td {
-      border-top: 1px solid $list-group-border;
+      border-top: 1px solid #e0e0e0;
       background-color: #f8fafd;
       white-space: nowrap;
 
@@ -1124,7 +1141,7 @@ aside {
       .item-title {
         display: inline-block;
         min-width: 90px;
-        color: $brand-primary;
+        color: #2c8beb;
         font-style: normal;
         font-size: 14px;
       }
@@ -1147,7 +1164,7 @@ aside {
 .item-title {
   display: inline-block;
   min-width: 90px;
-  color: $brand-primary;
+  color: #2c8beb;
   font-style: normal;
   font-size: 14px;
 }
@@ -1169,7 +1186,7 @@ aside {
     @include clearfix;
 
     &.on {
-      border-left: 2px solid $brand-primary;
+      border-left: 2px solid #2c8beb;
     }
 
     .skin-select-btn {
@@ -1187,7 +1204,7 @@ aside {
         }
 
         &.on {
-          background-color: $brand-primary;
+          background-color: #2c8beb;
           color: #fff;
           border-color: transparent;
 
@@ -1234,7 +1251,7 @@ aside {
         top: 35px;
 
         .btn {
-          color: $gray-light;
+          color: #777;
           text-decoration: none;
 
           i {
@@ -1249,9 +1266,9 @@ aside {
 
     .panel-body {
       display: none;
-      margin: $panel-body-padding;
-      background-color: $panel-footer-bg;
-      border: 1px solid $panel-inner-border;
+      margin: 15px;
+      background-color: #F8F8FA;
+      border: 1px solid #e0e0e0;
     }
   }
 }
@@ -1299,7 +1316,6 @@ aside {
     }
   }
 }
-
 
 .admin-tab {
   $start-color: rgba(255, 255, 255, 0);
@@ -2584,7 +2600,7 @@ aside {
           width: 86px;
 
           &.hover {
-            border-color: $brand-primary;
+            border-color: #2c8beb;
           }
         }
 

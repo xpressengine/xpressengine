@@ -83,13 +83,14 @@ class SettingsTheme extends AbstractTheme
         )->load();
 
         $frontendHandler->css([
-            'assets/vendor/bootstrap/css/bootstrap.min.css',
+            'assets/vendor/bootstrap4/css/bootstrap.min.css',
             'assets/core/xe-ui-component/xe-ui-component.css',
-            'assets/core/settings/css/admin.css',
+            'assets/core/settings/css/setting-menu-renewal.css',
         ])->load();
 
         $frontendHandler->js([
-             'assets/core/settings/js/admin.bundle.js'
+             'assets/vendor/bootstrap4/js/bootstrap.bundle.min.js',
+             'assets/core/settings/js/admin.bundle.js',
          ])->appendTo('head')->load();
     }
 

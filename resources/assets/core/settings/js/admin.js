@@ -1,6 +1,3 @@
-import 'bootstrap'
-import $ from 'jquery'
-
 $(document).ready(function () {
   var $sidebar = $('.settings-nav-sidebar')
   var $dim = $('.dim')
