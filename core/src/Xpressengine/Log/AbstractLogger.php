@@ -112,7 +112,20 @@ abstract class AbstractLogger
             'parameters' => $request->except('_method', '_token'),
             'summary' => '',
             'data' => [],
+            'target_id' => $this->getTargetId($request),
             'ipaddress' => $request->ip()
         ];
+    }
+
+    /**
+     * Get targetId by log type
+     *
+     * @param Request $request request
+     *
+     * @return string
+     */
+    protected function getTargetId(Request $request)
+    {
+        return '';
     }
 }

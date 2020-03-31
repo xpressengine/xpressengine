@@ -51,10 +51,10 @@ class UserLogger extends AbstractLogger
                 return;
             }
 
-            self::writeLog($result->request, self::getSummary($result->request));
+            $this->writeLog($result->request, self::getSummary($result->request));
         });
 
-        self::registerIntercept();
+        $this->registerIntercept();
     }
 
     /**
@@ -67,19 +67,51 @@ class UserLogger extends AbstractLogger
     protected function getSummary(Request $request)
     {
         $list = [
-                'settings.user.index' => '회원목록 열람',
-                'settings.user.edit' => '회원상세정보 열람',
-                'settings.user.create' => '회원 추가',
-                'settings.user.mail.add' => '회원 이메일 추가',
-                'settings.user.mail.delete' => '회원 이메일 삭제',
-                'settings.user.mail.confirm' => '회원 이메일 승인',
-                'settings.user.update' => '회원정보 수정',
-                'settings.user.destroy' => '회원정보 삭제',
-            ];
+            'settings.user.index' => '회원목록 열람',
+            'settings.user.edit' => '회원상세정보 열람',
+            'settings.user.store' => '회원 추가',
+            'settings.user.mail.add' => '회원 이메일 추가',
+            'settings.user.mail.delete' => '회원 이메일 삭제',
+            'settings.user.mail.confirm' => '회원 이메일 승인',
+            'settings.user.update' => '회원정보 수정',
+            'settings.user.destroy' => '회원정보 삭제',
+        ];
 
         return $list[$request->route()->getName()] ?? null;
     }
 
+    /**
+     * Get target Id
+     *
+     * @param Request $request request
+     *
+     * @return string
+     */
+    protected function getTargetId(Request $request)
+    {
+        $targetId = '';
+        switch ($request->route()->getName()) {
+            case 'settings.user.edit':
+            case 'settings.user.update':
+                $targetId = $request->route()->parameter('id');
+                break;
+                
+            case 'settings.user.destroy':
+                $targetId = $request->get('userId', []);
+                if (is_array($targetId) === true) {
+                    $targetId = implode(',', $targetId);
+                }
+                break;
+                
+            case 'settings.user.mail.add':
+            case 'settings.user.mail.delete':
+                $targetId = $request->get('userId');
+                break;
+        }
+
+        return $targetId;
+    }
+    
     /**
      * 회원 권한 변경 로그 작성 인터셉트 등록
      *
@@ -111,7 +143,7 @@ class UserLogger extends AbstractLogger
                         . $ratingNames[$updateUser['beforeRating']] . '=>'
                         . $ratingNames[$updateUser['afterRating']] . ')';
 
-                    self::writeLog($request, $summary);
+                    $this->writeLog($request, $summary);
                 }
 
                 return $afterUpdateUser;
@@ -138,7 +170,7 @@ class UserLogger extends AbstractLogger
             return;
         }
 
-        self::storeLog($request, $summary);
+        $this->storeLog($request, $summary);
     }
 
     /**
@@ -152,9 +184,10 @@ class UserLogger extends AbstractLogger
     protected function storeLog(Request $request, $summary)
     {
         $data = $this->loadRequest($request);
+        
         array_set($data['data'], 'route', $request->route()->getName());
         array_forget($data['parameters'], 'password');
-        array_set($data['data'], 'user_id', $request->route()->parameter('id'));
+        
         $data['summary'] = $summary;
 
         $this->log($data);

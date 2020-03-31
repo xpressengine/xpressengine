@@ -506,7 +506,7 @@ class SettingsController extends Controller
 
             fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
-            fwrite($file, "일시\t타입\t관리자\t요약\tIP주소\t자세히\n");
+            fwrite($file, "일시\t타입\t관리자\t요약\t대상ID\tIP주소\t자세히\n");
 
             foreach ($logs as $log) {
                 fwrite($file, $log->created_at->format('y-m-d H:i:s') . "\t");
@@ -517,6 +517,7 @@ class SettingsController extends Controller
                 }
                 fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
                 fwrite($file, $log->summary . "\t");
+                fwrite($file, $log->target_id . "\t");
                 fwrite($file, $log->ipaddress . "\t");
 
                 $detail = $handler->find($log->id);

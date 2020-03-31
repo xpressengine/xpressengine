@@ -48,7 +48,7 @@ class Log extends DynamicModel
     protected $appends = [];
 
     protected $fillable = [
-        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'ipaddress', 'created_at'
+        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'target_id', 'ipaddress', 'created_at'
     ];
 
     /**

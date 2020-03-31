@@ -71,7 +71,7 @@ class AuthLogger extends AbstractLogger
             return;
         }
 
-        self::storeLog($request, $type);
+        $this->storeLog($request, $type);
     }
 
     /**

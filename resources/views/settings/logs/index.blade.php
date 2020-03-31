@@ -114,6 +114,7 @@
                             <th scope="col">{{ xe_trans('xe::types') }}</th>
                             <th scope="col">{{ xe_trans('xe::userRatingManager') }}</th>
                             <th scope="col">{{ xe_trans('xe::summary') }}</th>
+                            <th scope="col">{{ xe_trans('xe::target') }} ID</th>
                             <th scope="col">{{ xe_trans('xe::ipAddress') }}</th>
                             <th scope="col">{{ xe_trans('xe::showDetails') }}</th>
                         </tr>
@@ -135,6 +136,7 @@
                                    data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'
                                    {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}</a></td>
                             <td>{{ $log->summary }}</td>
+                            <td>{{ $log->target_id }}</td>
                             <td>{{ $log->ipaddress }}</td>
                             <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">{{ xe_trans('xe::view') }}</a></td>
                         </tr>

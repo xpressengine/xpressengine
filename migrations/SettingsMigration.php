@@ -68,11 +68,46 @@ class SettingsMigration extends Migration
             $table->text('parameters')->comment('parameters of request');
             $table->string('summary', 2000)->comment('summary for request');
             $table->text('data')->comment('extra data for request');
+            $table->string('target_id', 1000)->nullable()->comment('target ID');
             $table->string('ipaddress', 16)->comment('ip address');
             $table->timestamp('created_at')->nullable()->index()->comment('created date');
             $table->timestamp('updated_at')->nullable()->index()->comment('updated date');
 
             $table->primary('id');
         });
+    }
+
+    /**
+     * Checked updated
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        $updated = true;
+        
+        if (Schema::hasColumn('admin_log', 'target_id') === false) {
+            $updated = false;
+        }
+        
+        return $updated;
+    }
+
+    /**
+     * Update
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if (Schema::hasColumn('admin_log', 'target_id') === false) {
+            Schema::table('admin_log', function (Blueprint $table) {
+                $table->string('target_id', 1000)->nullable()->after('data');
+            });
+        }
     }
 }
