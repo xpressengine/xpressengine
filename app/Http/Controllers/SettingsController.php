@@ -32,6 +32,7 @@ use Xpressengine\Log\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
+use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
@@ -515,7 +516,13 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, $log->type . "\t");
                 }
-                fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
+
+                if ($log->getUser() instanceof UnknownUser) {
+                    fwrite($file, sprintf('%s', $log->getUser()->getDisplayName()) . "\t");
+                } else {
+                    fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
+                }
+                
                 fwrite($file, $log->summary . "\t");
                 fwrite($file, $log->target_id . "\t");
                 fwrite($file, $log->ipaddress . "\t");

@@ -130,11 +130,19 @@
                                 {{ $log->type }}
                                 @endif
                             </td>
-                            <td><a href="#"
-                                   data-toggle="xe-page-toggle-menu"
-                                   data-url="{{ route('toggleMenuPage') }}"
-                                   data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'
-                                   {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}</a></td>
+                            <td>
+                                @if ($log->getUser() instanceOf \Xpressengine\User\Models\UnknownUser)
+                                    {{ $log->getUser()->getDisplayName() }}
+                                @else
+                                    <a href="#"
+                                       data-toggle="xe-page-toggle-menu"
+                                       data-url="{{ route('toggleMenuPage') }}"
+                                       data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'>
+                                        {{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}
+                                    </a>
+                                @endif
+                                
+                            </td>
                             <td>{{ $log->summary }}</td>
                             <td>{{ $log->target_id }}</td>
                             <td>{{ $log->ipaddress }}</td>
