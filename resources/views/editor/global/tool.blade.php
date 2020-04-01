@@ -5,19 +5,19 @@
 @include('editor.global._tab', ['_active' => 'tool'])
 
 <div class="container-fluid container-fluid--part">
-    <div class="panel-group" role="tablist" aria-multiselectable="true">
-        <div class="panel">
-            <div class="panel-heading">
+    <div class="card-group" role="tablist" aria-multiselectable="true">
+        <div class="card">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::addTools') }}</h3>
+                    <h3 class="card-title">{{ xe_trans('xe::addTools') }}</h3>
                 </div>
             </div>
             <div class="panel-collapse collapse in">
                 <form method="post" action="{{ route('settings.editor.global.tool') }}">
                     {{ csrf_field() }}
-                    <div class="panel-body">
+                    <div class="card-body">
 
-                        <div class="panel">
+                        <div class="card">
                             <ul class="list-group item-setting">
                                 @foreach ($items as $id => $item)
                                     <li class="list-group-item">
@@ -39,7 +39,7 @@
                         </div>
 
                     </div>
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary">{{ xe_trans('xe::save') }}</button>
                         </div>

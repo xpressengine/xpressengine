@@ -1,7 +1,7 @@
 <h3>{{ xe_trans('xe::updatePlugin') }}</h3>
 @if(count($plugins) < 1)
-<div class="panel">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         <div>
             <p class="help-block">업데이트할 익스텐션이 없습니다.</p>
             <a href="{{ route('settings.extension.install') }}" >새 익스텐션 설치</a>
@@ -16,9 +16,9 @@
 @else
 <form id="__xe_form-update-plugins" action="{{ route('settings.plugins.manage.update') }}" method="post">
     {{ csrf_field() }}
-    <div class="panel">
+    <div class="card">
 
-        <div class="panel-body">
+        <div class="card-body">
             <p class="help-block">
                 {{ xe_trans('xe::selectPluginToUpdateAndClick') }}
             </p>

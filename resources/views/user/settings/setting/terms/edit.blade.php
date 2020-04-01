@@ -1,19 +1,19 @@
 {{ XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load() }}
 
 <div class="container-fluid container-fluid--part">
-    <div class="panel-group">
-        <div class="panel">
+    <div class="card-group">
+        <div class="card">
             <form method="post" action="{{ route('settings.user.setting.terms.update', $term->id) }}">
                 {{ csrf_field() }}
                 {{ method_field('PUT') }}
-                <div class="panel-heading">
+                <div class="card-header">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::termsSettings')}}</h3>
+                        <h3 class="card-title">{{xe_trans('xe::termsSettings')}}</h3>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="panel">
-                        <div class="panel-body">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="form-group">
                                 <label>{{ xe_trans('xe::title') }}</label>
                                 {!! uio('langText', ['langKey'=> $term->title, 'name'=>'title']) !!}
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer">
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                     </div>

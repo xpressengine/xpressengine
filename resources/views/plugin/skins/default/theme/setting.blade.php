@@ -17,9 +17,9 @@
 
                 {!! uio('themeSelect', ['selectedTheme' => $selectedTheme]) !!}
 
-                <div class="panel-group">
-                    <div class="panel">
-                        <div class="panel-footer">
+                <div class="card-group">
+                    <div class="card">
+                        <div class="card-footer">
                             <div class="pull-right">
                                 <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                             </div>

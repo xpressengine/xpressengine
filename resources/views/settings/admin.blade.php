@@ -2,10 +2,10 @@
     <h2>{{ xe_trans('xe::adminAuth') }}</h2>
 @endsection
 
-<div class="panel-group">
-    <div class="panel">
-        <div class="panel-collapse collapse in">
-            <div class="panel-body">
+<div class="card-group">
+    <div class="card">
+        <div> <!--  class="panel-collapse collapse in" 사용했었음 -->
+            <div class="card-body">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="section-user-auth">

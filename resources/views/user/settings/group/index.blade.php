@@ -1,20 +1,20 @@
 <div class="container-fluid container-fluid--part">
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel-group">
+            <div class="card-group">
             <form id="__xe_fList" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="panel">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <div class="pull-left">
-                            <h3 class="panel-title">{{xe_trans('xe::groupManagement')}}<small>{{xe_trans('xe::groupManagementSummary', ['count' => $groups->count()])}}</small></h3>
+                            <h3 class="card-title">{{xe_trans('xe::groupManagement')}}<small>{{xe_trans('xe::groupManagementSummary', ['count' => $groups->count()])}}</small></h3>
                         </div>
                         <div class="pull-right">
                             <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewGroup')}}</span></a>
                         </div>
                     </div>
 
-                    <div class="panel-heading">
+                    <div class="card-heading">
                         <div class="pull-left">
                             <div class="btn-group" role="group">
                                 <button type="button" class="__xe_remove btn btn-default">{{xe_trans('xe::deleteSelected')}}</button>
@@ -96,4 +96,3 @@
         });
     })
 </script>
-

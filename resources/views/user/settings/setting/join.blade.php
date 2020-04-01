@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel-group">
+        <div class="card-group">
         <form id="fSetting" class="form" method="post" action="{{ route('settings.user.setting.join') }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="panel">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::joinSettings')}}</h3>
+                        <h3 class="card-title">{{xe_trans('xe::joinSettings')}}</h3>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="form-group">
                         <label>{{xe_trans('xe::permitSignUp')}}</label>
                         <div class="list-group-item">
@@ -47,7 +47,7 @@
                     </div>
 
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer">
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                     </div>

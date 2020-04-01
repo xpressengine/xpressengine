@@ -5,7 +5,7 @@
 <div class="container-fluid container-fluid--part">
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel-group">
+            <div class="card-group">
                 @if(!$available)
                 <div class="alert alert-danger" role="alert">
                     {!! xe_trans('xe::iniOptionOff', ['option' => '<code>allow_url_fopen</code>']) !!}

@@ -1,28 +1,28 @@
 @section('page_title')
-    <h2>{{ xe_trans('xe::defaultSettings') }}</h2>
+    <h2>{{ xe_trans('xe::defaultSettings') }}</h2> <!-- header 부분으로 변경 -->
 @endsection
 
 @section('page_description')
-    <small>{!! xe_trans('xe::siteDefaultSettingsDescription') !!}</small>
+    <!-- <small>{!! xe_trans('xe::siteDefaultSettingsDescription') !!}</small> 삭제-->
 @endsection
 
-<div class="panel-group">
+<div class="card-group">
     <input type="hidden" id="defaultSettingMainTitle" value="{{ $langs['mainTitle'] }}">
     <input type="hidden" id="defaultSettingSubTitle" value="{{ $langs['subTitle'] }}">
     <input type="hidden" id="defaultSettingDescription" value="{{ $langs['description'] }}">
 
     <form role="form" action="{{ route('settings.setting.update') }}" method="post" id="__xe_settingForm" enctype="multipart/form-data">
-        <div class="panel">
+        <div class="card">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{xe_trans('xe::site')}} {{xe_trans('xe::defaultSettings')}}</h3>
+                    <h3 class="card-title">{{xe_trans('xe::site')}} {{xe_trans('xe::defaultSettings')}}</h3>
                     <p>{{ xe_trans('xe::siteSettingDefaultSettingDescription') }}</p>
                 </div>
             </div>
 
-            <div class="panel-collapse collapse in">
-                <div class="panel-body">
+            <div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -55,16 +55,16 @@
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::detail') }} {{ xe_trans('xe::settings') }}</h3>
+                    <h3 class="card-title">{{ xe_trans('xe::detail') }} {{ xe_trans('xe::settings') }}</h3>
                     <p>{!! xe_trans('xe::siteSettingDetailSettingDescription') !!}</p>
                 </div>
             </div>
 
-            <div class="panel-collapse collapse in">
-                <div class="panel-body">
+            <div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group __preview-input __preview-browser-title">
@@ -141,15 +141,15 @@
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::siteSettingMailingDefaultSetting') }}</h3>
+                    <h3 class="card-title">{{ xe_trans('xe::siteSettingMailingDefaultSetting') }}</h3>
                 </div>
             </div>
 
-            <div class="panel-collapse collapse in">
-                <div class="panel-body">
+            <div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -170,15 +170,15 @@
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::pluginInstallSetting') }}</h3>
+                    <h3 class="card-title">{{ xe_trans('xe::pluginInstallSetting') }}</h3>
                 </div>
             </div>
 
-            <div class="panel-collapse collapse in">
-                <div class="panel-body">
+            <div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -197,12 +197,12 @@
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <h3>{{xe_trans('xe::userDefaultSetting')}}</h3>
             </div>
 
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="form-group">
                     <label for="item-url">{{xe_trans('xe::useLoginCaptcha')}}</label>
                     <div class="list-group-item">
@@ -224,7 +224,7 @@
             </div>
         </div>
 
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="pull-right">
                 <div class="row">
                     <button type="submit" class="xe-btn xe-btn-positive">{{ xe_trans('xe::save') }}</button>

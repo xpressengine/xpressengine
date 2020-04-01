@@ -6,14 +6,14 @@ XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
 <div class="container-fluid container-fluid--part">
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel-group">
-                <div class="panel">
-                    <div class="panel-heading">
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-header">
                         <div class="pull-left">
-                            <h3 class="panel-title">{{xe_trans('xe::multilingualInput')}}</h3>
+                            <h3 class="card-title">{{xe_trans('xe::multilingualInput')}}</h3>
                         </div>
                     </div>
-                    <div class="panel-heading">
+                    <div class="card-header">
                         {{---todo: 좌측 분류, 우측 검색영역--}}
                         {{--<div class="pull-left">--}}
                             {{--<div class="btn-group btn-fillter" role="group">--}}
@@ -54,7 +54,7 @@ XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         @foreach( $searchList as $search )
                             <?php $keyString = ($search->namespace ? $search->namespace.'::' : '').$search->item; ?>
                         <form>
@@ -75,7 +75,7 @@ XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
                         </form>
                         @endforeach
                     </div>
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <div class="pull-left">
                             {!! $pagination->render() !!}
                         </div>
@@ -120,4 +120,3 @@ XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
       });
     });
 </script>
-

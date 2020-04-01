@@ -1,6 +1,6 @@
 <h3>{{ xe_trans('xe::latestVersionOfCoreInstalled') }}</h3>
-<div class="panel">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         <p>{{ xe_trans('xe::msgCoreInstalled', ['version' => __XE_VERSION__]) }}</p>
         @if($operation->isSucceed())
             <hr>

@@ -28,7 +28,7 @@
                 </ul>
             </div>
 
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="search-group-box">
                     <div class="input-group search-group">
                         <div class="input-group-btn">

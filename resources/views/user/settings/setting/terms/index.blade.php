@@ -2,18 +2,18 @@
 {{ XeFrontend::js('//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js')->load() }}
 
 <div class="container-fluid container-fluid--part">
-    <div class="panel-group">
-        <div class="panel">
+    <div class="card-group">
+        <div class="card">
 
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{xe_trans('xe::termsSettings')}}</h3>
+                    <h3 class="card-title">{{xe_trans('xe::termsSettings')}}</h3>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <form id="index_form" method="post">
                     {{ csrf_field() }}
-                    <div class="panel">
+                    <div class="card">
                         <a href="{{ route('settings.user.setting.terms.create') }}" class="btn btn-primary"><i class="xi-plus"></i> <span>{{ xe_trans('xe::add') }}</span></a>
 
                         <ul class="list-group item-setting">
@@ -38,7 +38,7 @@
                 </form>
 
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 <div class="pull-left">
                     <button type="button" class="btn btn-danger btn-lg btn-destroy">{{xe_trans('xe::deleteSelected')}}</button>
                 </div>

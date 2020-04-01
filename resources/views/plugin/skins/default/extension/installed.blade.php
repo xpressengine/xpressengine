@@ -26,9 +26,9 @@
                 </ul>
             </div>
 
-            <div class="panel-group">
-                <div class="panel">
-                    <div class="panel-heading">
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-header">
                         <div class="pull-left">
                             <div class="btn-group">
                                 <button class="btn btn-default __xe_check_all">{{ xe_trans('xe::selectAll') }}</button>

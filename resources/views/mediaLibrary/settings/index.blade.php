@@ -5,18 +5,18 @@
     {!! csrf_field() !!}
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel-group">
-            <div class="panel">
+        <div class="card-group">
+            <div class="card">
 
 
-                    <div class="panel-heading">
+                    <div class="card-header">
                         <div class="pull-left">
-                            <h3 class="panel-title">{{xe_trans('xe::imageSizeSetting')}}</h3>
+                            <h3 class="card-title">{{xe_trans('xe::imageSizeSetting')}}</h3>
                             <small>{{xe_trans('xe::imageSizeSettingDescription')}}</small>
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">
@@ -94,14 +94,14 @@
                         </div>
                     </div>
 
-                    <div class="panel-heading">
+                    <div class="card-header">
                         <div class="pull-left">
-                            <h3 class="panel-title">{{xe_trans('xe::uploadFileSetting')}}</h3>
+                            <h3 class="card-title">{{xe_trans('xe::uploadFileSetting')}}</h3>
                             <small>{{xe_trans('xe::uploadFileSettingDescription')}}</small>
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -114,7 +114,7 @@
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -128,7 +128,7 @@
                     </div>
             </div>
 
-            <div class="panel-footer">
+            <div class="card-footer">
                 <div class="pull-right">
                     <button type="submit" class="xe-btn xe-btn-positive">{{xe_trans('xe::save')}}</button>
                 </div>

@@ -1,8 +1,8 @@
-<div class="panel">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <h3>Storage {{ xe_trans('xe::usage') }}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         @if(sizeof($list) == 0)
             <h4>{{xe_trans('xe::msgNoUploadFiles')}}</h4>
         @endif

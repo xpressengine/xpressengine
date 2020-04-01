@@ -1,4 +1,4 @@
-.setting-area-group .setting-area {
+/* .setting-area-group .setting-area {
   padding: 24px 15px;
   background-color: #fff
 }
@@ -3232,3 +3232,19 @@ aside.open {
 }
 
 /*# sourceMappingURL=admin.css.map */
+
+
+
+
+
+
+
+
+/* bootstrap 4로 변경 css
+
+.card-header h3{ font-size: 16px; font-weight: 500; line-height: 1.5; letter-spacing: -0.08px; color: #344563;}
+.card-header p,
+.card-body small{ display: block; font-size: 13px; line-height: 1.38; letter-spacing: -0.3px; color: #8993a4;}
+.card-body label{ font-size: 14px; font-weight: 500; line-height: normal; letter-spacing: normal; color: #505f79;}
+
+*/ */

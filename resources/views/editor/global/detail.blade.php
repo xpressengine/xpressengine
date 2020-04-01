@@ -3,25 +3,25 @@
 @include('editor.global._tab', ['_active' => 'detail'])
 
 <div class="container-fluid container-fluid--part">
-    <div class="panel-group" role="tablist" aria-multiselectable="true">
-        <div class="panel">
-            <div class="panel-heading">
+    <div class="card-group" role="tablist" aria-multiselectable="true">
+        <div class="card">
+            <div class="card-header">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{ xe_trans('xe::detailSettings') }}</h3>
+                    <h3 class="card-title">{{ xe_trans('xe::detailSettings') }}</h3>
                 </div>
             </div>
             <div class="panel-collapse collapse in">
                 <form method="post" action="{{ route('settings.editor.global.detail') }}">
                     {{ csrf_field() }}
-                    <div class="panel-body">
+                    <div class="card-body">
 
-                        <div class="panel">
-                            <div class="panel-heading">
+                        <div class="card">
+                            <div class="card-header">
                                 <div class="pull-left">
-                                    <h4 class="panel-title">{{ xe_trans('xe::defaultSettings') }}</h4>
+                                    <h4 class="card-title">{{ xe_trans('xe::defaultSettings') }}</h4>
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -82,13 +82,13 @@
                         </div>
 
 
-                        <div class="panel">
-                            <div class="panel-heading">
+                        <div class="card">
+                            <div class="card-header">
                                 <div class="pull-left">
-                                    <h4 class="panel-title">{{ xe_trans('xe::file') }}</h4>
+                                    <h4 class="card-title">{{ xe_trans('xe::file') }}</h4>
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -172,7 +172,7 @@
                         </div>
 
                     </div>
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary">{{ xe_trans('xe::save') }}</button>
                         </div>
