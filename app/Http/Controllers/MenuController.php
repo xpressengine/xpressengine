@@ -31,6 +31,7 @@ use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\Exceptions\NotFoundModuleException;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\Presentable;
+use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
 /**
@@ -225,7 +226,6 @@ class MenuController extends Controller
         XeDB::commit();
         return redirect()->route('settings.menu.index')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
-
     }
 
     /**
@@ -347,7 +347,7 @@ class MenuController extends Controller
         list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
-        if (XeMenu::items()->query()->where('url', $url)->exists()) {
+        if ($itemInput['selectedType'] !== 'xpressengine@directLink'  && InstanceRoute::where('url', $url)->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 
@@ -470,13 +470,12 @@ class MenuController extends Controller
         list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
-        if (XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
+        if ($itemInput['selectedType'] !== 'xpressengine@directLink'  && InstanceRoute::where('url', $url)->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 
         XeDB::beginTransaction();
         try {
-
             XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
                 'url' => $url,
@@ -505,7 +504,6 @@ class MenuController extends Controller
 
         return redirect()->route('settings.menu.index')
             ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
-
     }
 
     /**
