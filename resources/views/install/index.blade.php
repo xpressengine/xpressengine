@@ -311,7 +311,15 @@
                     return false;
                 }
             }
-
+            
+            var password_check = /[^!-\/:-@[-`{-~a-zA-Z0-9]/.test($(f['admin_password']).val())
+            if (password_check) {
+                $(f['admin_password']).css('backgroundColor', '#F49EA0');
+                alert('비밀번호로 사용가능한 문자는 영문과 특수문자만 가능합니다.');
+                $(f['admin_password']).focus();
+                return false;
+            }
+            
             if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
                 alert('비밀번호가 일치하지 않습니다.');
                 $(f['admin_password_confirmation']).focus();
