@@ -66,7 +66,8 @@ class Kernel extends ConsoleKernel
         Commands\ThemeMake::class,
         Commands\SkinMake::class,
         Commands\DynamicFieldMake::class,
-        Commands\DynamicFieldSkinMake::class
+        Commands\DynamicFieldSkinMake::class,
+        Commands\CharsetConvert::class
     ];
 
     /**
