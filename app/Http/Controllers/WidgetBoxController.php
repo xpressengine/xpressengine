@@ -180,9 +180,31 @@ class WidgetBoxController extends Controller
             throw new NotFoundWidgetBoxException();
         }
 
+        $content = $widgetbox->content;
+
+        $widgetHandler = app('xe.widget');
+        $skinHandler = app('xe.skin');
+        $widgetNames = [];
+        $widgetList = $widgetHandler->getAll();
+        foreach ($widgetList as $id => $class) {
+            $widgetNames[$id] = $class::getTitle();
+        }
+
+        foreach ($content as $i1 => $row) {
+            foreach ($row as $i2 => $col) {
+                foreach ($col['widgets'] as $i3 => $info) {
+                    $skinId = $info['@attributes']['skin-id'];
+                    $class = $skinHandler->get($skinId);
+                    $skinNames[$skinId] = $class->getTitle();
+                    $content[$i1][$i2]['widgets'][$i3]['widgetName'] = $widgetNames[$info['@attributes']['id']];
+                    $content[$i1][$i2]['widgets'][$i3]['skinName'] = $class->getTitle();
+                }
+            }
+        }
+
         return XePresenter::makeApi([
             'presenter' => $widgetbox->getPresenter(),
-            'data' => $widgetbox->content,
+            'data' => $content,
             'options' => $widgetbox->options,
         ]);
 
