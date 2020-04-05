@@ -56,6 +56,7 @@ class MenuMigration extends Migration
             $table->string('site_key')->comment('site key. for multi web site support.');
             $table->text('description')->nullable()->comment('description');
             $table->integer('count')->default(0)->comment('number of menu item');
+            $table->integer('ordering')->default(0)->comment('ordering number for menu sort.');
 
             $table->primary('id');
         });
@@ -163,6 +164,10 @@ class MenuMigration extends Migration
         if ($this->checkExistMenuImageColumn() === false) {
             $this->createMenuImageColumn();
         }
+
+        if ($this->checkExistMenuOrderingColumn() === false) {
+            $this->createMenuOrderingColumn();
+        }
     }
 
     /**
@@ -184,6 +189,28 @@ class MenuMigration extends Migration
     {
         Schema::table('menu_item', function (Blueprint $table) {
             $table->string('menu_image_id', 36)->nullable()->after('type');
+        });
+    }
+
+    /**
+     * check exist menu table ordering column
+     *
+     * @return bool
+     */
+    private function checkExistMenuOrderingColumn()
+    {
+        return Schema::hasColumn('menu', 'ordering');
+    }
+
+    /**
+     * create menu table ordering column
+     *
+     * @return  void
+     */
+    private function createMenuOrderingColumn()
+    {
+        Schema::table('menu', function (Blueprint $table) {
+            $table->integer('ordering')->default(0)->comment('ordering number for menu sort.')->after('count');
         });
     }
 
