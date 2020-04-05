@@ -273,17 +273,11 @@ return [
                 'description' => '',
                 'ordering' => 700
             ],
-            'lang' => [
-                'title' => 'xe::multiLang',
-                'display' => true,
-                'description' => '',
-                'ordering' => 7000
-            ],
-            'lang.default' => [
+            'setting.lang' => [
                 'title' => 'xe::multiLangSettings',
                 'display' => true,
                 'description' => '다국어를 설정합니다',
-                'ordering' => 100
+                'ordering' => 800
             ],
         ]
     ],
