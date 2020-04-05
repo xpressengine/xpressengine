@@ -209,9 +209,18 @@ class MenuMigration extends Migration
      */
     private function createMenuOrderingColumn()
     {
-        Schema::table('menu', function (Blueprint $table) {
-            $table->integer('ordering')->default(0)->comment('ordering number for menu sort.')->after('count');
-        });
+        if ($this->checkExistMenuOrderingColumn() === false) {
+            Schema::table('menu', function (Blueprint $table) {
+                $table->integer('ordering')->default(0)->comment('ordering number for menu sort.')->after('count');
+            });
+        }
+
+        $items = \Menu::get();
+        foreach ($items as $index => $item) {
+            $item->ordering = $index + 1;
+            $item->save();
+        }
+
     }
 
     /**
