@@ -223,6 +223,7 @@ class ThemeSettingsController extends Controller
 
         $config = $theme->setting();
 
+        XePresenter::widgetParsing(false);
         return \XePresenter::make('theme.config', compact('theme', 'config'));
     }
 
