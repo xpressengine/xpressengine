@@ -49,16 +49,17 @@
           var data = response.data;
           if(data.in_progress === true) {
             $('#__xe-dialog').modal({backdrop:'static'});
-            if (data.log) {
-              $('#__xe-operation-log').show();
-              var $well = $('#__xe-operation-log>.well');
-              $well.html(data.log);
-              $well.animate({ scrollTop: $well.prop('scrollHeight')}, 100);
-            }
           } else {
             $('#__xe-dialog').modal('hide');
             clearInterval(loadOperation);
           }
+
+            if (data.log) {
+                $('#__xe-operation-log').show();
+                var $well = $('#__xe-operation-log>.well');
+                $well.html(data.log);
+                $well.animate({ scrollTop: $well.prop('scrollHeight')}, 100);
+            }
 
           if (data.succeed === true) {
             location.assign(data.redirect);

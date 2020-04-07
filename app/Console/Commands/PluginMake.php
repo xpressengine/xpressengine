@@ -60,6 +60,11 @@ class PluginMake extends MakeCommand
 
         $path = app('path.privates').DIRECTORY_SEPARATOR.$name;
 
+        if ($this->files->isDirectory($path)) {
+            $this->setFailed();
+            throw new \RuntimeException("Plugin [{$name}] already exists!");
+        }
+
         $this->startPrivate(function () use ($path, $name, $namespace, $title) {
             $this->info('Generating the plugin');
             $this->copyStubDirectory($path);
@@ -188,7 +193,7 @@ class PluginMake extends MakeCommand
     protected function makeComposerJson($path, $name, $namespace, $title)
     {
         $namespace = str_replace('\\', '\\\\', $namespace);
-        
+
         $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle', 'DummyCoreVer'];
         $replace = [$namespace, $name, $title, '~'.__XE_VERSION__];
 

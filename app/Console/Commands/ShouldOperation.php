@@ -44,13 +44,6 @@ abstract class ShouldOperation extends Command
     protected $operator;
 
     /**
-     * The log path.
-     *
-     * @var string
-     */
-    protected $log;
-
-    /**
      * ShouldOperation constructor.
      *
      * @param Operator $operator Operator instance
@@ -72,12 +65,15 @@ abstract class ShouldOperation extends Command
     public function run(InputInterface $input, OutputInterface $output)
     {
         $datetime = Carbon::now()->format('YmdHis');
-        $this->log = $file = "logs/operation-{$datetime}.log";
+        $file = "logs/operation-{$datetime}.log";
         $path = $this->laravel->storagePath().DIRECTORY_SEPARATOR.$file;
 
         $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
 
         \Log::useFiles($path);
+
+        $this->operator->log($file);
+        $this->operator->save();
 
         return parent::run($input, $output);
     }
@@ -98,7 +94,6 @@ abstract class ShouldOperation extends Command
         $method = 'set'.ucfirst($mode).'Mode';
         $this->operator->$method();
 
-        $this->operator->log($this->log);
         $this->operator->expiresAt(Carbon::now()->addSeconds($limit = $this->getTimeLimit())->toDateTimeString());
         $this->operator->save();
 
