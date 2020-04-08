@@ -100,7 +100,11 @@ class SkinController extends Controller
 
         $config = $request->except('instanceId', 'skinId', '_token');
 
-        $skin = $skinHandler->get($skinId);
+
+        $skin = $skinHandler->get(
+            $skinId,
+            $skinHandler->getConfig($skinInstanceId, $skinId)
+        );
 
         // 각 스킨에게 config값을 전처리 할 기회를 준다.
         $config = $skin->resolveSetting($config);

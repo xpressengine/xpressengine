@@ -173,7 +173,7 @@ class PluginRegister
      *
      * @param string $id component id
      *
-     * @return string
+     * @return array
      */
     protected function split($id)
     {

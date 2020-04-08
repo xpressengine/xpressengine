@@ -357,6 +357,14 @@ class SkinHandler
         $this->store->setConfigs($storeKey, $skin->getId(), $skin->setting());
     }
 
+    public function getConfig($target, $skin)
+    {
+        $storeKey = $this->mergeKey($target);
+        $skinId = $skin instanceof SkinEntity ? $skin->getId() : $skin;
+
+        return $this->store->getConfigs($storeKey, $skinId);
+    }
+
     /**
      * 기본스킨으로 사용할 스킨을 지정한다.
      * 해당 타겟에 사용할 스킨을 찾을 때, 저장소에 지정된 스킨 정보가 없을 경우, 이 메소드를 통해 지정된 기본스킨을 조회한다.
