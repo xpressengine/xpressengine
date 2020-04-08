@@ -155,8 +155,10 @@
     flex-direction: column;
     height: 100%;
     margin: 0;
+    margin-top: 60px;
     padding: 0;
     background-color: $n0;
+    height: calc(100% - 100px);
   }
 
   .media-library-layer-popup-content-inner {
@@ -695,19 +697,25 @@
             // 모바일만 적용
             // flex-direction: column;
             display: block;
+            .media-library-aside__content {
+              display: none;
+            }
+            .media-library-content-sort {
+              display: none;
+            }
           }
 
           .media-library-main {
-            // 모바일만 적용
             display: flex;
             flex-direction: column;
             // flex: 1;
             flex: 1 1 auto;
-            height: calc(100% - 48px);
+            height: 100%;
 
             .media-library-content {
-              // 모바일만
               flex: 1;
+              margin-top: 48px;
+              padding-top: 0;
               // flex: 1 1 auto;
 
               .media-library-content-list {
@@ -717,6 +725,28 @@
                   }
                 }
               }
+            }
+          }
+
+          .media-library-upload {
+            top: unset;
+            right: unset;
+            left: 20px;
+            bottom: -50px;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            width: auto !important;
+            height: auto;
+            margin: 0;
+            text-align: left;
+
+            .update-message {
+              display: none;
+            }
+
+            .media-library-header-mobile-upload-button {
+              display: none;
             }
           }
         }
