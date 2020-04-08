@@ -29,7 +29,6 @@ use Xpressengine\MediaLibrary\Repositories\MediaLibraryFolderRepository;
 use XeDB;
 use XeStorage;
 use XeMedia;
-use Xpressengine\Storage\Exceptions\InvalidFileException;
 use Xpressengine\Storage\File;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
