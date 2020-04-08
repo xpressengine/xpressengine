@@ -32,13 +32,17 @@ window.jQuery(function ($) {
   $(document).on('submit', 'form.__xe_skin_form', function () {
     var $form = $(this)
     var $modal = $('#skinModal')
+    var formdata = new FormData(this) || null
 
     XE.ajax({
       type: $form.attr('method'),
       url: $form.attr('action'),
+      enctype: 'multipart/form-data',
       cache: false,
-      data: $form.serialize(),
+      data: formdata,
       dataType: 'json',
+      contentType: false,
+      processData: false,
       success: function (data) {
         $modal.xeModal('hide')
         window.XE.toast(data.type, data.message)
