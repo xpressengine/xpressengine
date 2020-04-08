@@ -15,11 +15,14 @@
 namespace App\Http\Controllers\MediaLibrary;
 
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
+use XeDB;
 use XePresenter;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
 use Xpressengine\MediaLibrary\Exceptions\UploadFileNotExistException;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
+use Xpressengine\Storage\Exceptions\InvalidFileException;
 
 /**
  * Class MediaLibraryController
@@ -184,7 +187,19 @@ class MediaLibraryController extends Controller
             throw new UploadFileNotExistException();
         }
 
-        $file = $this->handler->uploadMediaLibraryFile($request);
+        XeDB::beginTransaction();
+        try {
+            $file = $this->handler->uploadMediaLibraryFile($request);
+        } catch (InvalidFileException $e) {
+            XeDB::rollback();
+
+            throw new HttpException(400, xe_trans('xe::msgInvalidUploadedFile'));
+        } catch (\Throwable $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+        XeDB::commit();
 
         return XePresenter::makeApi([$file]);
     }
@@ -211,9 +226,21 @@ class MediaLibraryController extends Controller
             throw new UploadFileNotExistException();
         }
 
-        $newImageFile = $this->handler->uploadModifyFile($request, $originalMediaLibraryFileItem);
+        XeDB::beginTransaction();
+        try {
+            $newImageFile = $this->handler->uploadModifyFile($request, $originalMediaLibraryFileItem);
 
-        $this->handler->swapImageFile($originalMediaLibraryFileItem, $newImageFile);
+            $this->handler->swapImageFile($originalMediaLibraryFileItem, $newImageFile);
+        } catch (InvalidFileException $e) {
+            XeDB::rollback();
+
+            throw new HttpException(400, xe_trans('xe::msgInvalidUploadedFile'));
+        } catch (\Throwable $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+        XeDB::commit();
 
         return redirect()->back();
     }
