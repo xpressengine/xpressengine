@@ -306,7 +306,7 @@ class MediaLibraryHandler
      */
     public function getFolderList(MediaLibraryFolder $targetFolderItem, Request $request)
     {
-        if ((int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
+        if (!$request->user()->isAdmin() || (int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
             return [];
         }
 
@@ -374,6 +374,10 @@ class MediaLibraryHandler
                 $isSearchState = true;
                 break;
             }
+        }
+
+        if (!$request->user()->isAdmin()) {
+            $attributes['index_mode'] = MediaLibraryHandler::MODE_USER;
         }
 
         if ($isSearchState === false) {
