@@ -105,7 +105,10 @@ export default {
       return false
     },
     userName({ $props }) {
-      return $props.media.user.display_name
+      if ($props.media.user) {
+        return $props.media.user.display_name || ''
+      }
+      return ''
     },
     filesize({ $props }) {
       return filesize($props.media.file.size)
