@@ -25,8 +25,10 @@ export default {
 
       this.$root.selectedMedia.forEach(item => {
         const media = this.$store.getters['media/media'](item)
-        media.thumbnailUrl = '/storage/app/' + media.file.path + '/' + media.file.filename
-        mediaList.push(media)
+        if (typeof media !== 'undefined') {
+          media.thumbnailUrl = '/storage/app/' + media.file.path + '/' + media.file.filename
+          mediaList.push(media)
+        }
       })
 
       window.XE.MediaLibrary.$$emit('media.import', mediaList, {

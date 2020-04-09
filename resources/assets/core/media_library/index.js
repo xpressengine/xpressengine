@@ -195,6 +195,7 @@ class MediaLibrary extends App {
             if (this.selectedMedia.length) {
               this.selectedMedia.splice(this.selectedMedia.findIndex(v => item.media.id === v), 1)
             }
+            this.clearSelectedMedia()
           },
           removeConfirm () {
             EventBus.$emit('dialog.open', DialogDeleteFile)
@@ -206,7 +207,7 @@ class MediaLibrary extends App {
                   this.selectedMedia.forEach(function (item) {
                     store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
                   })
-                  this.selectedMedia = []
+                  this.clearSelectedMedia()
                 })
             }
           },
@@ -237,11 +238,12 @@ class MediaLibrary extends App {
   * 페이지 내 대상 Element에 UI 출력
   * @returns {Promise}
   */
-  show () {
+  show (options) {
     return new Promise((resolve) => {
       this._componentBoot({
         renderMode: 'inline',
-        listMode: 1
+        listMode: 1,
+        ...options
       }).then((ddd) => {
         resolve(ddd)
       })
