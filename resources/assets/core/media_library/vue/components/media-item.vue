@@ -91,11 +91,13 @@ export default {
       return !!this.thumbnailUrl
     },
     thumbnailUrl({ $props }) {
-      if (typeof $props.media.file.url === 'undefined') {
-        return false
+      if (typeof $props.media.file.thumbnail_url !== 'undefined') {
+        return $props.media.file.thumbnail_url
+      } else if (typeof $props.media.file.url !== 'undefined') {
+        return $props.media.file.url
       }
 
-      return $props.media.file.url
+      return false;
     },
     thumbnailBackground({ $props }) {
       if (!!this.thumbnailUrl) {
@@ -105,7 +107,10 @@ export default {
       return false
     },
     userName({ $props }) {
-      return $props.media.user.display_name
+      if ($props.media.user) {
+        return $props.media.user.display_name || ''
+      }
+      return ''
     },
     filesize({ $props }) {
       return filesize($props.media.file.size)

@@ -317,7 +317,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         $replace = $this->sortReplacements($replace);
 
         foreach ($replace as $key => $value) {
-            if (is_string($value) !== true) {
+            if ($value instanceof self) {
                 continue;
             }
 
