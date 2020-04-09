@@ -106,7 +106,7 @@ export default {
       :class="{
         'media-library-layer-popup': true,
         'media-library-layer-popup--media-library': true,
-        'media-library-layer-popup--sidebar': true,
+        'media-library-layer-popup--sidebar': $root.user.rating == 'super',
         'media-library-layer-popup--upload': true
       }"
       tabindex="-1"
