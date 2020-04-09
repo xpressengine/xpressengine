@@ -183,8 +183,6 @@ abstract class GenericSkin extends AbstractSkin
             } elseif ($item === '__delete_file__') {
                 $this->removeFile($key);
                 $inputs[$key] = null;
-            } elseif ($item === null) {
-                unset($inputs[$key]);
             }
         }
         return $inputs;
