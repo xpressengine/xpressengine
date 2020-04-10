@@ -43,6 +43,8 @@ return [
 
     'console_allow_url_fopen' => true,
 
+    'composer_no_cache' => false,
+
     'settings' => [
         /*
         |--------------------------------------------------------------------------

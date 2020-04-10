@@ -168,6 +168,11 @@ trait ComposerRunTrait
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
 
+        if (config('xe.composer_no_cache') === true) {
+            $output->writeln('<warning>Disabling cache usage</warning>');
+            putenv('COMPOSER_CACHE_DIR='.(Platform::isWindows() ? 'nul' : '/dev/null'));
+        }
+
         $result = $application->run(new ArrayInput($inputs), $output);
 
         $cnt = gc_collect_cycles();
