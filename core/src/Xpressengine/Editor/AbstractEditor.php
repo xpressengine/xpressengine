@@ -628,7 +628,7 @@ abstract class AbstractEditor implements ComponentInterface
             $this->getContentDomHtmlOption($args['contentDomOptions']) .
             ' placeholder="' . xe_trans('xe::content') . '" '.
             'style="width:100%;">'.
-            htmlspecialchars($args['content']) .
+            e($args['content']) .
             '</textarea>';
 
         return $html;
