@@ -9,12 +9,12 @@ window.jQuery(function ($) {
 
   $('.swiper-button-prev').on('click', function (e) {
     e.preventDefault()
-    swiper1.swipePrev()
+    swiper.swipePrev()
   })
 
   $('.swiper-button-next').on('click', function (e) {
     e.preventDefault()
-    swiper1.swipeNext()
+    swiper.swipeNext()
   })
 
   $('.swiper').hover(function () {

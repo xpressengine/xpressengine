@@ -195,7 +195,7 @@ var SearchHead = (function (XE, $) {
           $.each(suggestion, function (idx, obj) {
             var title = obj.title.split(value).join('<em>' + value + '</em>')
 
-            list += '<li data-id="' + obj.id + '"><a href="#">' + title + '</a></li>'
+            list += '<li data-id="' + obj.id + '"><a href="#dummy">' + title + '</a></li>'
           })
 
           list += '</ul>'

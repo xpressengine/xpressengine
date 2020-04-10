@@ -139,7 +139,7 @@
     > a {
       position: relative;
 
-      &~ ul {
+      & ~ ul {
         padding-left: 15px;
       }
     }
@@ -149,7 +149,7 @@
     > a::before {
       content: '⌞';
       position: absolute;
-      top: 0px;
+      top: 0;
       font-size: 1.3em;
       transform: translateX(-15px);
     }

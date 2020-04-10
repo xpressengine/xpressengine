@@ -206,10 +206,10 @@
   Widget.prototype = {
     render: function () {
       if (this.data['widgetName'] == undefined) {
-          this.data['widgetName'] = '';
+        this.data['widgetName'] = ''
       }
       if (this.data['skinName'] == undefined) {
-          this.data['skinName'] = '';
+        this.data['skinName'] = ''
       }
       return [
         '<div class="xe-well widget" data-uid="' + this.uid + '">',

@@ -7,7 +7,7 @@
  * @category    Frontend
  * @package     Xpressengine\Presenter
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -30,7 +30,7 @@ namespace Xpressengine\Presenter\Html;
  * @method Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
  * @method Tags\Preload preload($keys) preload resources
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */

@@ -42,7 +42,7 @@ To install XE3, refer to the following guide. [Install guide](https://www.xpress
 * Slack : https://xpressengine-forum-invite.herokuapp.com/
 
 ## License
-Copyright 2019 XEHub Corp. <https://www.xehub.io>
+Copyright 2020 XEHub Corp. <https://www.xehub.io>
 
 "XpressEngine (XE)" is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

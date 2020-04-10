@@ -350,7 +350,8 @@
           text-align: left;
           outline: none;
 
-          &:hover, &:focus {
+          &:hover,
+          &:focus {
             background-color: #f4f5f7;
           }
         }
@@ -414,7 +415,6 @@
       width: 100%;
       background-color: #fff;
       z-index: 10;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -679,7 +679,7 @@
 
 .dropzone--active {
   .media-library-upload {
-    border-color: #007AFF;
+    border-color: #007aff;
   }
 }
 
@@ -695,9 +695,11 @@
             // 모바일만 적용
             // flex-direction: column;
             display: block;
+
             .media-library-aside__content {
               display: none;
             }
+
             .media-library-content-sort {
               display: none;
             }
@@ -754,6 +756,7 @@
   }
   // === //레이어팝업 (미디어 매니저, 편집 팝업) ===
 }
+
 /* tablet */
 @media (min-width: 768px) {
   // === 레이어팝업 (미디어 매니저, 편집 팝업) ===
@@ -888,21 +891,21 @@
 
         > li {
           .media-library-button-data__button {
-          //   width: 100%;
-          //   padding: 0 16px;
-          //   font-size: 14px;
-          //   line-height: 28px;
-          //   border: 0 none;
-          //   letter-spacing: -0.03px;
-          //   background-color: transparent;
-          //   color: #42526e;
-          //   white-space: nowrap;
-          //   text-align: left;
-          //   outline: none;
+            //   width: 100%;
+            //   padding: 0 16px;
+            //   font-size: 14px;
+            //   line-height: 28px;
+            //   border: 0 none;
+            //   letter-spacing: -0.03px;
+            //   background-color: transparent;
+            //   color: #42526e;
+            //   white-space: nowrap;
+            //   text-align: left;
+            //   outline: none;
 
-          //   &:hover, &:focus {
-          //     background-color: #f4f5f7;
-          //   }
+            //   &:hover, &:focus {
+            //     background-color: #f4f5f7;
+            //   }
           }
         }
       }
@@ -1019,12 +1022,12 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             width: auto;
             height: auto;
             max-width: 100%;
             max-height: 100%;
-            box-shadow: 0 0 30px rgba(0,0,0,.35);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
           }
 
           .media-library-layer-popup-detail-view__button-update {

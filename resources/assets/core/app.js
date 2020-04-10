@@ -40,7 +40,7 @@ class App {
    * @returns {String}
    */
   static appName () {
-    return 'MediaLibrary'
+    return 'Unknown'
   }
 
   /**

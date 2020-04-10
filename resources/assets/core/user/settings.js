@@ -354,7 +354,7 @@ window.jQuery(function ($) {
         if (this.checkedPassword != input) {
           this.checkedPassword = input
         } else {
-          return
+
         }
 
         // _this = this

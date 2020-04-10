@@ -310,7 +310,7 @@ class MediaLibrary extends App {
       if (typeof $.fn.fileupload !== 'undefined') {
         $el.fileupload(setup)
       } else {
-        console.error('파일 업로더가 없음')
+        console.error('파일 업로더가 초기화되지 않음')
       }
     })
   }

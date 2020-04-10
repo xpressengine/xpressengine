@@ -30,15 +30,15 @@ window.jQuery(function ($) {
   // })
 
   $(document).on('submit', 'form.__xe_skin_form', function (e) {
-    e.preventDefault();
+    e.preventDefault()
 
     var $form = $(this)
     var $modal = $(this).closest('.xe-modal')
 
-    var fileList = [];
+    var fileList = []
     $('input:file', this).each(function (i, dom) {
       if ($(dom).val()) {
-        fileList.push($(dom).val());
+        fileList.push($(dom).val())
       }
     })
 
@@ -54,7 +54,7 @@ window.jQuery(function ($) {
           $modal.xeModal('hide')
           window.XE.toast(data.type, data.message)
         })
-        .fileupload('send', {fileInput: $('input:file', this)});
+        .fileupload('send', { fileInput: $('input:file', this) })
     } else {
       XE.ajax({
         type: $form.attr('method'),
@@ -72,8 +72,7 @@ window.jQuery(function ($) {
         }
       })
     }
-
-  });
+  })
 
   function modalPage (url, callback) {
     var $modal = $('#skinModal')

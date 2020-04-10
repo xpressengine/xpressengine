@@ -452,7 +452,7 @@ hr {
   }
 
   .float-clear {
-    &:after {
+    &::after {
       content: '';
       display: block;
       clear: both;
@@ -611,7 +611,7 @@ hr {
         margin-top: 0;
       }
 
-      &:after {
+      &::after {
         content: '';
         display: block;
         clear: both;
@@ -690,7 +690,8 @@ hr {
       margin-left: -3px;
       margin-right: -3px;
 
-      a, button {
+      a,
+      button {
         float: left;
         width: calc(50% - 6px);
         margin: 0 3px;
@@ -701,14 +702,15 @@ hr {
       margin-left: -3px;
       margin-right: -3px;
 
-      a, button {
+      a,
+      button {
         float: left;
         width: calc(33.3333% - 6px);
         margin: 0 3px;
       }
     }
 
-    &:after {
+    &::after {
       content: '';
       display: block;
       clear: both;

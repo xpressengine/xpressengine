@@ -135,7 +135,8 @@
   width: 100%;
   max-width: 100%;
 
-  td, th {
+  td,
+  th {
     height: 48px;
     padding: 6px;
     font-size: 14px;
@@ -152,7 +153,8 @@
   }
 
   tbody {
-    td, th {
+    td,
+    th {
       border-bottom: 1px solid #ebecf0;
       font-size: 14px;
       line-height: 20px;
@@ -207,7 +209,8 @@
   }
 
   tbody {
-    th, td {
+    th,
+    td {
       &:first-of-type {
         padding-left: 24px;
       }
@@ -229,7 +232,6 @@
     margin: 0;
     padding: 0;
     list-style: none;
-
     display: flex;
     align-items: center;
   }
@@ -240,8 +242,8 @@
   // 사용자 정의 항목 추가 리스트 헤더 영역
   &.sort-list--custom-item-header {
     > li {
-      padding-top: 0px;
-      padding-bottom: 0px;
+      padding-top: 0;
+      padding-bottom: 0;
       border-bottom: 0 none;
 
       &:hover {
@@ -404,13 +406,14 @@
 
   .setting-area-group {
     .setting-button-box {
-       // margin: 16px 15px;
+      // margin: 16px 15px;
       display: flex;
       margin: 0 -4px;
       padding: 0 15px 32px;
       background-color: #fff;
 
-      a, button {
+      a,
+      button {
         flex: 1;
         width: 100%;
         margin: 0 4px;

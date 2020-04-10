@@ -42,7 +42,7 @@ XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인
 * 슬랙 : https://xpressengine-forum-invite.herokuapp.com/
 
 ## 라이센스
-Copyright 2019 XEHub Corp. <https://www.xehub.io>
+Copyright 2020 XEHub Corp. <https://www.xehub.io>
 
 "XpressEngine (XE)" is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

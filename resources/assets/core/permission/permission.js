@@ -90,9 +90,9 @@ class Permission {
                 var prefix = ''
 
                 // user
-                if ($ul.data('target') == 'user') {
+                if ($ul.data('target') === 'user') {
                   // include
-                  if (dataInput == 'include') {
+                  if (dataInput === 'include') {
                     name = _this.type + 'User'
                     pType = 'user'
                     prefix = '@'
@@ -140,7 +140,7 @@ class Permission {
                 $this.val('').data('index', -1).focus()
               }
 
-              e.preventDefault()	// prevent tab
+              e.preventDefault() // prevent tab
 
               break
             case Keys.ESCAPE :
@@ -162,7 +162,6 @@ class Permission {
 
     this.$wrapper.find('.ReactTags__suggestions').on('mouseenter', 'li', function () {
       var $this = $(this)
-      var $ul = $this.closest('ul')
 
       $this.addClass('active').siblings().removeClass('active')
     })
@@ -173,14 +172,13 @@ class Permission {
       var $ul = $this.closest('ul')
       var $input = $this.closest('.ReactTags__tagInput').find('input:text')
       var dataInput = $input.data('input')
-      var id = tag.id
       var name = ''
       var pType = ''
       var prefix = ''
 
-      if ($ul.data('target') == 'user') {
+      if ($ul.data('target') === 'user') {
         // include
-        if (dataInput == 'include') {
+        if (dataInput === 'include') {
           name = _this.type + 'User'
           pType = 'user'
           prefix = '@'
@@ -236,9 +234,9 @@ class Permission {
       if (query.length >= _this.MIN_QUERY_LENGTH) {
         if ([Keys.ENTER, Keys.TAB, Keys.UP_ARROW, Keys.DOWN_ARROW, Keys.ESCAPE, 37, 39].indexOf(keyCode) == -1) {
           var temp = ''
-          temp += 	`<ul>`
-          temp +=			`<li>Searching ... <span class="spinner" role="spinner"><span class="spinner-icon"></span></span></li>`
-          temp += 	`</ul>`
+          temp += `<ul>`
+          temp += `<li>Searching ... <span class="spinner" role="spinner"><span class="spinner-icon"></span></span></li>`
+          temp += `</ul>`
 
           $this.parent().find('.ReactTags__suggestions').html(temp)
 
@@ -324,15 +322,15 @@ class Permission {
       success: function (data) {
         if (data.length > 0) {
           var temp = ''
-          temp += 	`<ul data-target="user">`
+          temp += `<ul data-target="user">`
 
           data.forEach(function (item, i) {
-            temp += 		`<li class="" data-tag='${JSON.stringify(item)}'>`
-            temp += 			`<span>${_this.makeIt(item, keyword)}</span>`
-            temp += 		`</li>`
+            temp += `<li class="" data-tag='${JSON.stringify(item)}'>`
+            temp += `<span>${_this.makeIt(item, keyword)}</span>`
+            temp += `</li>`
           })
 
-          temp += 	`</ul>`
+          temp += `</ul>`
 
           $input.parent().find('.ReactTags__suggestions').html(temp)
         } else {
@@ -358,15 +356,15 @@ class Permission {
         // TODO:: view renderin
         if (data.length > 0) {
           var temp = ''
-          temp += 	`<ul data-target="group">`
+          temp += `<ul data-target="group">`
 
           data.forEach(function (item, i) {
-            temp += 		`<li data-tag='${JSON.stringify(item)}'>`
-            temp += 			`<span>${_this.makeIt(item, keyword)}</span>`
-            temp += 		`</li>`
+            temp += `<li data-tag='${JSON.stringify(item)}'>`
+            temp += `<span>${_this.makeIt(item, keyword)}</span>`
+            temp += `</li>`
           })
 
-          temp += 	`</ul>`
+          temp += `</ul>`
 
           $input.parent().find('.ReactTags__suggestions').html(temp)
         } else {
@@ -417,55 +415,55 @@ class Permission {
       var checked = (mode === 'inherit') ? 'checked="checked"' : ''
 
       temp += `<div class="form-group">`
-      temp += 	`<div class="checkbox">`
-      temp +=			`<label><input type="checkbox" name="${this.type + 'Mode'}" class="chkModeAble" value="inherit" ${checked} /> ${XE.Lang.trans('xe::inheritMode')}</label>`
-      temp += 	`</div>`
+      temp += `<div class="checkbox">`
+      temp += `<label><input type="checkbox" name="${this.type + 'Mode'}" class="chkModeAble" value="inherit" ${checked} /> ${XE.Lang.trans('xe::inheritMode')}</label>`
+      temp += `</div>`
       temp += `</div>`
     }
 
-    temp += 	`<div class="form-group">`
-    temp +=			`<label>회원 등급</label>`
-    temp += 		'<div class="radio">'
+    temp += `<div class="form-group">`
+    temp += `<label>회원 등급</label>`
+    temp += '<div class="radio">'
     permissionTypes.forEach(function (permissionType) {
       var checked = (permissionType.value == rating) ? 'checked' : ''
 
       temp += `<label><input type="radio" ${(disabled) ? 'disabled="disabled"' : ''} name="${_this.type + 'Rating'}" value="${permissionType.value}" ${(checked) ? 'checked="checked"' : ''} /> ${permissionType.name} &nbsp;</label>`
     })
-    temp +=			`</div>`
-    temp +=		`</div>`
-    temp += 	`<div class="form-group">`
-    temp +=			`<label>${XE.Lang.trans('xe::includeUserOrGroup')}</label>`
-    temp +=			`<div class="ReactTags__tags">`
+    temp += `</div>`
+    temp += `</div>`
+    temp += `<div class="form-group">`
+    temp += `<label>${XE.Lang.trans('xe::includeUserOrGroup')}</label>`
+    temp += `<div class="ReactTags__tags">`
 
-    temp += 			`<div class="ReactTags__selected groupWrap" data-ptype="group">`
+    temp += `<div class="ReactTags__selected groupWrap" data-ptype="group">`
     this.permission.group.forEach(function (g) {
       var tag = g
       var label = '%' + (tag.display_name || tag.name)
 
-      temp += 			`<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`
+      temp += `<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`
     })
-    temp +=				'</div>'
+    temp += '</div>'
 
-    temp +=				'<div class="ReactTags__selected userWrap" data-ptype="user">'
+    temp += '<div class="ReactTags__selected userWrap" data-ptype="user">'
     this.permission.user.forEach(function (tag) {
       var label = '@' + (tag.display_name || tag.name)
 
-      temp += 			`<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}|">x</a></span>`
+      temp += `<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}|">x</a></span>`
     })
-    temp +=				`</div>`
+    temp += `</div>`
 
-    temp +=				`<div class="ReactTags__tagInput">`
-    temp += 				`<input type="text" placeholder="${this.placeholder}" class="form-control inputUserGroup" data-input="include" ${(disabled) ? 'disabled="disabled"' : ''} value="${this.query}" data-index="-1" />`	// TODO:: PermissionInclude handleKeyDown
-    temp += 				`<div class="ReactTags__suggestions" data-input="include"></div>`
-    temp +=				`</div>` // ReactTags__tagInput
-    temp += 			`<input type="hidden" name="${this.type + 'Group'}" class="form-control includeGroups" value="${includeGroups.join().trim()}" />`
-    temp +=				`<input type="hidden" name="${this.type + 'User'}" class="form-control includeUsers" value="${includeUsers.join().trim()}" />`
-    temp +=			`</div>`	// ReactTags__tags
-    temp +=		`</div>`// form-group
+    temp += `<div class="ReactTags__tagInput">`
+    temp += `<input type="text" placeholder="${this.placeholder}" class="form-control inputUserGroup" data-input="include" ${(disabled) ? 'disabled="disabled"' : ''} value="${this.query}" data-index="-1" />` // TODO:: PermissionInclude handleKeyDown
+    temp += `<div class="ReactTags__suggestions" data-input="include"></div>`
+    temp += `</div>` // ReactTags__tagInput
+    temp += `<input type="hidden" name="${this.type + 'Group'}" class="form-control includeGroups" value="${includeGroups.join().trim()}" />`
+    temp += `<input type="hidden" name="${this.type + 'User'}" class="form-control includeUsers" value="${includeUsers.join().trim()}" />`
+    temp += `</div>` // ReactTags__tags
+    temp += `</div>`// form-group
 
     if (this.vgroupAll.length >= 1) {
       temp += `<div class="form-group">`
-      temp += 	`<label>${XE.Lang.trans('xe::includeVGroup')}</label>`
+      temp += `<label>${XE.Lang.trans('xe::includeVGroup')}</label>`
 
       temp += _this.vgroupAll.map(function (data) {
         var checked = false
@@ -491,9 +489,9 @@ class Permission {
     }
 
     temp += `<div class="form-group">`
-    temp += 	`<label>${XE.Lang.trans('xe::excludeUser')}</label>`
-    temp +=		`<div class="ReactTags__tags">`
-    temp +=			`<div class="ReactTags__selected exceptWrap" data-ptype="except">`
+    temp += `<label>${XE.Lang.trans('xe::excludeUser')}</label>`
+    temp += `<div class="ReactTags__tags">`
+    temp += `<div class="ReactTags__selected exceptWrap" data-ptype="except">`
 
     this.permission.except.forEach(function (tag) {
       var label = tag.display_name || tag.name
@@ -502,13 +500,13 @@ class Permission {
       temp += `<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`
     })
 
-    temp +=			`</div>`
-    temp += 		`<div class="ReactTags__tagInput">`
-    temp +=				`<input type="text" placeholder="${XE.Lang.trans('xe::explainExcludeUser')}" class="form-control inputUserGroup" data-input="exclude" ${(disabled) ? 'disabled="disabled"' : ''} data-index="-1" />` 	// TODO:: PermissionExclude handleKeyDown
-    temp += 			`<div class="ReactTags__suggestions" data-input="exclude"></div>`
-    temp += 		`</div>` // ReactTags__tagInput
-    temp +=		`<input type="hidden" name="${this.type + 'Except'}" class="form-control excludeUsers" value="${excludeUsers}" />`
-    temp +=		`</div>` // ReactTags__tags
+    temp += `</div>`
+    temp += `<div class="ReactTags__tagInput">`
+    temp += `<input type="text" placeholder="${XE.Lang.trans('xe::explainExcludeUser')}" class="form-control inputUserGroup" data-input="exclude" ${(disabled) ? 'disabled="disabled"' : ''} data-index="-1" />` // TODO:: PermissionExclude handleKeyDown
+    temp += `<div class="ReactTags__suggestions" data-input="exclude"></div>`
+    temp += `</div>` // ReactTags__tagInput
+    temp += `<input type="hidden" name="${this.type + 'Except'}" class="form-control excludeUsers" value="${excludeUsers}" />`
+    temp += `</div>` // ReactTags__tags
     temp += `</div>`// form-group
 
     temp += `</div>`

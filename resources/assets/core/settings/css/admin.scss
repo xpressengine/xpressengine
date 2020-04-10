@@ -39,18 +39,18 @@
 @import "admin-new-style";
 
 /* 단일 클래스 스타일 */
-.text-align--center {text-align: center !important}
-.text-align--left {text-align: left !important}
-.text-align--right {text-align: right !important}
+.text-align--center { text-align: center !important; }
+.text-align--left { text-align: left !important; }
+.text-align--right { text-align: right !important; }
 
-.vertical-align--top {vertical-align: top !important}
-.vertical-align--middle {vertical-align: middle !important}
-.vertical-align--bottom {vertical-align: bottom !important}
+.vertical-align--top { vertical-align: top !important; }
+.vertical-align--middle { vertical-align: middle !important; }
+.vertical-align--bottom { vertical-align: bottom !important; }
 
 /* reset, helper class */
 legend {
   position: absolute;
-  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
   width: 1px;
   height: 1px;
   margin: -1px;
@@ -61,10 +61,10 @@ legend {
 .blind {
   position: absolute;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
   margin: -1px;
   width: 1px;
-  height: 1px
+  height: 1px;
 }
 
 .logo-area h1,
@@ -169,19 +169,22 @@ p.text {
   color: #505f79;
   text-decoration: none;
 
-  &:hover, &:hover:not([disabled]) {
+  &:hover,
+  &:hover:not([disabled]) {
     background-color: #deebff;
     color: #505f79;
     text-decoration: none;
   }
 
-  &:focus, &:focus:not([disabled]) {
+  &:focus,
+  &:focus:not([disabled]) {
     background-color: #deebff;
     color: #505f79;
     text-decoration: none;
   }
 
-  &:active, &:active:not([disabled]) {
+  &:active,
+  &:active:not([disabled]) {
     background-color: #deebff;
     color: #505f79;
   }
@@ -193,19 +196,22 @@ p.text {
   color: #fff;
   text-decoration: none;
 
-  &:hover, &:hover:not([disabled]) {
+  &:hover,
+  &:hover:not([disabled]) {
     background-color: #505f79;
     color: #fff;
     text-decoration: none;
   }
 
-  &:focus, &:focus:not([disabled]) {
+  &:focus,
+  &:focus:not([disabled]) {
     background-color: #505f79;
     color: #fff;
     text-decoration: none;
   }
 
-  &:active, &:active:not([disabled]) {
+  &:active,
+  &:active:not([disabled]) {
     background-color: #505f79;
     color: #fff;
   }
@@ -1376,14 +1382,16 @@ aside {
     overflow-y: hidden;
     margin: 0 0 23px;
     padding: 0;
-    border-bottom: 1px solid #D6D9DF;
+    border-bottom: 1px solid #d6d9df;
     list-style: none;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+
     > li {
       display: inline-block;
       margin: 0;
       list-style: none;
+
       .admin-tab-info-list__link {
         position: relative;
         display: inline-block;
@@ -1395,18 +1403,22 @@ aside {
         text-decoration: none;
         cursor: pointer;
         background-color: transparent;
-        color: #42526E;
+        color: #42526e;
+
         &:hover,
         &:focus {
-          color: #345BD9;
+          color: #345bd9;
         }
+
         .admin-tab-info-list__count {
-          color: #345BD9;
+          color: #345bd9;
         }
       }
+
       &.on {
         .admin-tab-info-list__link {
-          color: #345BD9;
+          color: #345bd9;
+
           &::before {
             content: '';
             position: absolute;
@@ -1414,7 +1426,7 @@ aside {
             left: 0;
             right: 0;
             height: 3px;
-            background-color: #345BD9;
+            background-color: #345bd9;
           }
         }
       }
@@ -1515,8 +1527,6 @@ aside {
       margin: 7px 0 7px 15px;
     }
   }
-
-
 }
 
 .xe-lypop-plugin {
@@ -2039,7 +2049,7 @@ aside {
       .list-card__image-content {
         transform: scale(1.1);
 
-        &:after {
+        &::after {
           opacity: 1;
         }
       }
@@ -2068,7 +2078,7 @@ aside {
     transform: scale(1);
     transition: transform 0.3s ease-out;
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       top: 0;
@@ -2155,7 +2165,7 @@ aside {
       position: relative;
       margin-left: 8px;
 
-      &:before {
+      &::before {
         content: '';
         position: absolute;
         top: 50%;
@@ -2255,8 +2265,8 @@ aside {
     width: 70px;
     height: 70px;
 
-    &:after {
-      display :none;
+    &::after {
+      display: none;
     }
   }
 
@@ -2298,9 +2308,9 @@ aside {
       .admin-layer-plugin-popup-plugin__title-sub-text {
         overflow: hidden;
         height: 72px;
-        display:-webkit-box;
-        -webkit-line-clamp:3;
-        -webkit-box-orient:vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
       }
     }
 
@@ -2345,7 +2355,7 @@ aside {
       margin: 18px 0 12px;
       font-size: 15px;
       line-height: 24px;
-      color: rgba(0,0,0,0.7);
+      color: rgba(0, 0, 0, 0.7);
     }
   }
 
@@ -2384,7 +2394,8 @@ aside {
         button {
           flex: 1;
 
-          & + button, & + a {
+          & + button,
+          & + a {
             margin-left: 10px;
           }
         }
@@ -2392,7 +2403,8 @@ aside {
         a {
           flex: 1;
 
-          & + a, & + button {
+          & + a,
+          & + button {
             margin-left: 10px;
           }
         }
@@ -2826,8 +2838,8 @@ aside {
       width: 70px;
       height: 70px;
 
-      &:after {
-        display :none;
+      &::after {
+        display: none;
       }
     }
 
@@ -2858,7 +2870,7 @@ aside {
       .admin-layer-plugin-popup-header {
         .admin-layer-plugin-popup-plugin__title-sub-text {
           height: 48px;
-          -webkit-line-clamp:2;
+          -webkit-line-clamp: 2;
         }
       }
 
@@ -2888,7 +2900,6 @@ aside {
     }
   }
   // --- //테마, 익스텐션 레이어 팝업 ---
-
 }
 
 @media (min-width: 1068px) {
