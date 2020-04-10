@@ -658,7 +658,7 @@
 
   .media-library-paging {
     &__box {
-      display: none;
+      // display: none;
       width: 100%;
 
       &--simple {
@@ -783,11 +783,37 @@
     }
   }
 
+  .media-library-content__card-type {
+    .media-library-content-list {
+      > li {
+        flex: 0 0 30%;
+        max-width: 120px;
+      }
+
+      .media-library-content-list {
+        &__icon {
+          width: 100%;
+          height: unset;
+          padding-bottom: 100%;
+        }
+
+        &__icon-preview {
+          position: absolute;
+        }
+
+        &__title {
+          width: auto;
+        }
+      }
+
+    }
+  }
+
   // 페이징 스타일
   .media-library-paging {
     .media-library-paging {
       &__box--normal {
-        display: none;
+        // display: none;
       }
 
       &__box--simple {

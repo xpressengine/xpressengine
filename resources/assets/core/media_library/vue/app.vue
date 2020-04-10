@@ -25,8 +25,10 @@ export default {
 
       this.$root.selectedMedia.forEach(item => {
         const media = this.$store.getters['media/media'](item)
-        media.thumbnailUrl = '/storage/app/' + media.file.path + '/' + media.file.filename
-        mediaList.push(media)
+        if (typeof media !== 'undefined') {
+          media.thumbnailUrl = '/storage/app/' + media.file.path + '/' + media.file.filename
+          mediaList.push(media)
+        }
       })
 
       window.XE.MediaLibrary.$$emit('media.import', mediaList, {
@@ -106,7 +108,7 @@ export default {
       :class="{
         'media-library-layer-popup': true,
         'media-library-layer-popup--media-library': true,
-        'media-library-layer-popup--sidebar': true,
+        'media-library-layer-popup--sidebar': $root.user.rating == 'super',
         'media-library-layer-popup--upload': true
       }"
       tabindex="-1"

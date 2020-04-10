@@ -38,13 +38,14 @@
     background-color: $b500;
     z-index: 30;
     outline: none;
-    transition: all 0.3s ease-out;
+    // transition: all 0.3s ease-out;
     visibility: hidden;
     transform: scale(0);
     opacity: 0;
 
     &.open {
-      visibility: visible;
+      display: none;
+      // visibility: visible;
       transform: scale(1);
       opacity: 0.9;
     }

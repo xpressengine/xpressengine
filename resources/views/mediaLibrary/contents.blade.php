@@ -26,7 +26,12 @@
                 maxSize: '{{ app('config')['xe.media.mediaLibrary.max_size'] }}'
             }
         }).then(function (appMediaLibrary) {
-            appMediaLibrary.show();
+            appMediaLibrary.show({
+                user: {
+                    id: XE.config.getters['user/id'],
+                    rating: XE.config.getters['user/rating']
+                },
+            });
         })
     })
 </script>

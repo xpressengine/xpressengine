@@ -183,8 +183,6 @@ abstract class GenericSkin extends AbstractSkin
             } elseif ($item === '__delete_file__') {
                 $this->removeFile($key);
                 $inputs[$key] = null;
-            } elseif ($item === null) {
-                unset($inputs[$key]);
             }
         }
         return $inputs;
@@ -201,22 +199,14 @@ abstract class GenericSkin extends AbstractSkin
      */
     protected function saveFile($configId, $key, UploadedFile $file)
     {
-        $oldSetting = $this->setting();
-        $oldFileId = $oldSetting->get("$key.id");
-
-        // remove old file
-        if ($oldFileId !== null) {
-            $oldFile = app('xe.storage')->find($oldFileId);
-            if ($oldFile) {
-                app('xe.storage')->delete($oldFile);
-            }
-        }
+        $this->removeFile($key);
 
         // save new file
         $file = app('xe.storage')->upload(
             $file,
-            config('xe.theme.upload.path').$configId,
-            config('xe.theme.upload.disk')
+            config('xe.skin.storage.path').$configId,
+            null,
+            config('xe.skin.storage.disk')
         );
         $saved = [
             'id' => $file->id,
@@ -242,8 +232,10 @@ abstract class GenericSkin extends AbstractSkin
      */
     protected function removeFile($key)
     {
-        $oldSetting = $this->setting();
-        $oldFileId = $oldSetting->get("$key.id");
+        $oldFileId = null;
+        if ($oldSetting = $this->setting()) {
+            $oldFileId = $oldSetting[$key]['id'] ?? null;
+        }
 
         // remove old file
         if ($oldFileId !== null) {
