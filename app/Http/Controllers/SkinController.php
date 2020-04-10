@@ -113,8 +113,9 @@ class SkinController extends Controller
 
         $skinHandler->saveConfig($skinInstanceId, $skin);
 
-        return XePresenter::makeApi(
+
+        return response(XePresenter::makeApi(
             ['type' => 'success', 'message' => xe_trans('xe::saved'), 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
-        );
+        ))->header('Content-Type', $request->wantsJson() ? 'application/json' : 'text/plain');
     }
 }
