@@ -1199,6 +1199,7 @@
                     fileInput.prop('entries'),
                 files,
                 value;
+            entries = [];
             if (entries && entries.length) {
                 return this._handleFileTreeEntries(entries);
             }
