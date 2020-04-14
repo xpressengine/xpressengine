@@ -31,7 +31,7 @@
         </li>
     </ul>
     <div id="__xe-operation-log" style="display: none;padding:15px 10px;">
-        <div class="well" style="overflow-y:auto; max-height: 150px;"></div>
+        <div class="well"></div>
     </div>
 </div>
 
