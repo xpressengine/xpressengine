@@ -146,7 +146,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px;
+  padding: 60px 100px;
   background-color: rgba(52, 61, 82, 0.6);
   z-index: 1010;
 
@@ -155,10 +155,11 @@
     flex-direction: column;
     height: 100%;
     margin: 0;
-    margin-top: 60px;
+    margin: 0 auto;
     padding: 0;
+    max-width: 1280px;
     background-color: $n0;
-    height: calc(100% - 100px);
+    height: 100%;
   }
 
   .media-library-layer-popup-content-inner {
@@ -687,6 +688,12 @@
 @media (max-width: 768px) {
   // === 레이어팝업 (미디어 매니저, 편집 팝업) ===
   .media-library-layer-popup {
+    padding: 15px;
+
+    .media-library-layer-popup-content {
+      margin-top: 70px;
+      height: calc(100% - 70px);
+    }
     // === 미디어 라이브러리 레이어 팝업 스타일 ===
     &.media-library-layer-popup--media-library {
       .media-library-layer-popup-body {
