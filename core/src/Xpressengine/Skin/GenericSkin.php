@@ -294,11 +294,11 @@ abstract class GenericSkin extends AbstractSkin
     /**
      * 기본 스킨을 주입
      *
-     * @param GenericSkin $skin default skin
+     * @param AbstractSkin $skin default skin
      *
      * @return void
      */
-    public function setDefaultSkin(GenericSkin $skin)
+    public function setDefaultSkin(AbstractSkin $skin)
     {
         static::$defaultSkin = $skin;
     }
