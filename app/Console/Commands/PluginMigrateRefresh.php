@@ -23,7 +23,7 @@ class PluginMigrateRefresh extends Command
                         {--pretend : Dump the SQL queries that would be run.}
                         {--seed : Indicates if the seed task should be re-run.}
                         {--seeder : The class name of the root seeder.}
-                        {--step : Force the migrations to be run so they can be rolled back individually.}';
+                        {--step= : Force the migrations to be run so they can be rolled back individually.}';
 
     /**
      * The console command description.

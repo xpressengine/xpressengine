@@ -21,7 +21,7 @@ class PluginMigrateRollback extends Command
     protected $signature = 'plugin:migrate:rollback {name : The name of the plugin}
                         {--force : Force the operation to run when in production.}
                         {--pretend : Dump the SQL queries that would be run.}
-                        {--step : Force the migrations to be run so they can be rolled back individually.}';
+                        {--step= : Force the migrations to be run so they can be rolled back individually.}';
 
     /**
      * The console command description.
