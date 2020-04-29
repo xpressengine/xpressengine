@@ -461,6 +461,7 @@ return [
 
     'editor' => [
         'default' => 'editor/xpressengine@textarea',
+        'gif_origin' => true,
     ],
 
     'HtmlWrapper' => [
