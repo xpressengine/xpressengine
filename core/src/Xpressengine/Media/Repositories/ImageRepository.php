@@ -36,14 +36,24 @@ class ImageRepository extends MediaRepository
      * @param string $type        thumbnail make type
      * @param string $dimension   dimension code
      * @param bool   $defaultSelf if set true, returns self when thumbnail not exists
+     * @param bool   $strict      use strict
      * @return Image|Media|null
      */
-    public function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
+    public function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true, $strict = false)
     {
-        $image = $this->query()->derives($media)
-            ->whereHas('meta', function ($query) use ($type, $dimension) {
-                $query->where('type', $type)->where('code', $dimension);
-            })->first();
+        $images = $this->query()->derives($media)->get();
+        $image = $images->first(function ($image) use ($type, $dimension) {
+            return $image->meta->type === $type && $image->meta->code === $dimension;
+        });
+
+        if ($strict) {
+            return (!$image && $defaultSelf) ? $media : $image;
+        }
+
+        $image = $images->first(function ($image) use ($type, $dimension) {
+            return $image->meta->code === $dimension;
+        });
+        $image = $image ?: $images->first();
 
         return (!$image && $defaultSelf) ? $media : $image;
     }
