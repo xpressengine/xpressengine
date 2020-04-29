@@ -5,7 +5,7 @@
 /* reset */
 .theme-select-list,
 .theme-select-list ul {
-  margin: 0px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -60,7 +60,7 @@
 
           &.on {
             border-color: transparent;
-            background-color: #6F8DFF;
+            background-color: #6f8dff;
             color: #fff;
 
             i {
@@ -198,7 +198,7 @@
         .skin-select-btn {
           .btn {
             width: 86px;
-  
+
             &.on {
               i {
                 margin-right: 3px;

@@ -42,7 +42,7 @@ Route::settings('lang', function () {
     Route::get('/', [
         'as' => 'settings.lang.index',
         'uses' => 'LangController@index',
-        'settings_menu' => ['lang.default']
+        'settings_menu' => ['setting.lang']
     ]);
 
     Route::get('import', ['as' => 'settings.lang.import', 'uses' => 'LangController@getImport']);

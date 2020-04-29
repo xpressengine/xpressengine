@@ -392,7 +392,7 @@ class XE {
         options.data = qs.parse(options.data)
       }
 
-      if (typeof options.data === "undefined") {
+      if (typeof options.data === 'undefined') {
         options.data = {}
       }
 

@@ -3645,5 +3645,9 @@ return [
     'footerHtmlDescription' => [
         'ko' => 'BODY 태그 닫기 전에 코드를 추가할 수 있습니다.',
         'en' => 'You can add code before closing the BODY tag.'
-    ]
+    ],
+    'msgInvalidUploadedFile' => [
+        'ko' => '업로드 파일이 유효하지 않습니다. 파일확장자가 수정되었을 수 있습니다.',
+        'en' => 'The upload file is not valid. The file extension may have been modified.'
+    ],
 ];

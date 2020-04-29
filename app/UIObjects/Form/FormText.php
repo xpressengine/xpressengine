@@ -7,7 +7,7 @@
  * @category    UIObjects
  * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -23,7 +23,7 @@ use Xpressengine\UIObject\Element;
  * @category    UIObjects
  * @package     App\UIObjects\Form
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -72,6 +72,9 @@ class FormText extends AbstractUIObject
                 case 'id':
                     $label->attr('for', $arg);
                     // pass to default
+                case 'value':
+                    $input->attr($key, e($arg, false));
+                    break;
                 default:
                     $input->attr($key, $arg);
                     break;

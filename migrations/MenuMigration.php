@@ -7,7 +7,7 @@
  * @category    Migrations
  * @package     Xpressengine\Migrations
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -34,7 +34,7 @@ use Xpressengine\Config\ConfigManager;
  * @category    Migrations
  * @package     Xpressengine\Migrations
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -56,6 +56,7 @@ class MenuMigration extends Migration
             $table->string('site_key')->comment('site key. for multi web site support.');
             $table->text('description')->nullable()->comment('description');
             $table->integer('count')->default(0)->comment('number of menu item');
+            $table->integer('ordering')->default(0)->comment('ordering number for menu sort.');
 
             $table->primary('id');
         });
@@ -163,6 +164,10 @@ class MenuMigration extends Migration
         if ($this->checkExistMenuImageColumn() === false) {
             $this->createMenuImageColumn();
         }
+
+        if ($this->checkExistMenuOrderingColumn() === false) {
+            $this->createMenuOrderingColumn();
+        }
     }
 
     /**
@@ -185,6 +190,37 @@ class MenuMigration extends Migration
         Schema::table('menu_item', function (Blueprint $table) {
             $table->string('menu_image_id', 36)->nullable()->after('type');
         });
+    }
+
+    /**
+     * check exist menu table ordering column
+     *
+     * @return bool
+     */
+    private function checkExistMenuOrderingColumn()
+    {
+        return Schema::hasColumn('menu', 'ordering');
+    }
+
+    /**
+     * create menu table ordering column
+     *
+     * @return  void
+     */
+    private function createMenuOrderingColumn()
+    {
+        if ($this->checkExistMenuOrderingColumn() === false) {
+            Schema::table('menu', function (Blueprint $table) {
+                $table->integer('ordering')->default(0)->comment('ordering number for menu sort.')->after('count');
+            });
+        }
+
+        $items = \Menu::get();
+        foreach ($items as $index => $item) {
+            $item->ordering = $index + 1;
+            $item->save();
+        }
+
     }
 
     /**

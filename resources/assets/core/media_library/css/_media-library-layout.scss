@@ -321,7 +321,6 @@
   position: relative;
 
   .media-library-content {
-    padding-top: 48px;
   }
 }
 
@@ -349,7 +348,6 @@
       flex: 1;
 
       .media-library-content {
-        padding-top: 0;
       }
     }
 
@@ -362,6 +360,7 @@
 
 
 /* break point, bootstrap 3.4.1 기준 */
+
 /* wide desctop */
 @media (min-width: 1200px) {
 
@@ -379,5 +378,11 @@
 
 /* xe-col-xs- */
 @media (max-width: 768px) {
-
+  .media-library {
+    .media-library-main {
+      .media-library-content {
+        padding-top: 48px;
+      }
+    }
+  }
 }

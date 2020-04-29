@@ -47,6 +47,8 @@ export default class Toast extends Plugin {
 
     const that = this
 
+    XE.$$emit('toast.boot', this, App, defaultOptions)
+
     return new Promise((resolve) => {
       super.boot(XE, App)
 

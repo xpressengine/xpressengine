@@ -101,6 +101,60 @@
             @endforeach
         </ul>
     </aside>
+    <script>
+        $(function () {
+
+            var smartSelectSideMenu = function () {
+                var $snb = $('.settings-nav-sidebar .snb-list');
+                if ($snb.find('li.on').length == 0) {
+                    var url = '{{Request::url()}}',
+                        settingsPrefix = '{{app('config')->get('xe.routing.settingsPrefix')}}',
+                        parts = url.split('?'),
+                        settingsBaseUrl = '';
+                    parts = parts[0].split('/');
+                    for (var i=0; i<parts.length; i++) {
+                        settingsBaseUrl = settingsBaseUrl + parts[i] + '/';
+                        if (parts[i] == settingsPrefix) {
+                            break;
+                        }
+                    }
+
+                    var checkurl = '',
+                        pop = '',
+                        isMatched = false;
+
+                    for (var i=0; i<parts.length; i++) {
+                        checkurl = parts.join('/');
+                        if (pop == settingsPrefix) {
+                            break;
+                        }
+
+                        $snb.find('a').each(function () {
+                            var $anchor = $(this);
+                            if ($anchor.prop('href') == checkurl) {
+                                if ($anchor.closest('li').length) {
+                                    $anchor.closest('li').addClass('on');
+                                }
+                                $anchor.parents('.sub-depth').each(function () {
+                                    $(this).addClass('open');
+                                });
+                                isMatched = true;
+
+                                return false; // break each
+                            }
+                        });
+
+                        if (isMatched == true) {
+                            break;
+                        }
+
+                        pop = parts.pop();
+                    }
+                }
+            }
+            smartSelectSideMenu();
+        });
+    </script>
 
     <div id="content" class="transition">
         <div class="ct">

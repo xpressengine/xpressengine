@@ -7,7 +7,7 @@
  * @category    Skin
  * @package     Xpressengine\Skin
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -24,7 +24,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  * @category    Skin
  * @package     Xpressengine\Skin
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -355,6 +355,14 @@ class SkinHandler
 
         // set config
         $this->store->setConfigs($storeKey, $skin->getId(), $skin->setting());
+    }
+
+    public function getConfig($target, $skin)
+    {
+        $storeKey = $this->mergeKey($target);
+        $skinId = $skin instanceof SkinEntity ? $skin->getId() : $skin;
+
+        return $this->store->getConfigs($storeKey, $skinId);
     }
 
     /**

@@ -66,6 +66,7 @@ class EditorDefine {
         }
       }
 
+      this.$$emit('editor.created', this.editorList[sel])
       return this.editorList[sel]
     }
   }

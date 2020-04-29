@@ -7,7 +7,7 @@
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -23,7 +23,7 @@ use Xpressengine\Skin\SkinHandler;
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -100,17 +100,22 @@ class SkinController extends Controller
 
         $config = $request->except('instanceId', 'skinId', '_token');
 
-        $skin = $skinHandler->get($skinId);
+
+        $skin = $skinHandler->get(
+            $skinId,
+            $oldConfig = $skinHandler->getConfig($skinInstanceId, $skinId)
+        );
 
         // 각 스킨에게 config값을 전처리 할 기회를 준다.
         $config = $skin->resolveSetting($config);
 
-        $skin->setting($config);
+        $skin->setting(array_merge($oldConfig, $config));
 
         $skinHandler->saveConfig($skinInstanceId, $skin);
 
-        return XePresenter::makeApi(
+
+        return response(XePresenter::makeApi(
             ['type' => 'success', 'message' => xe_trans('xe::saved'), 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
-        );
+        ))->header('Content-Type', $request->wantsJson() ? 'application/json' : 'text/plain');
     }
 }

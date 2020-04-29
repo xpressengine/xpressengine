@@ -7,7 +7,7 @@
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -28,7 +28,7 @@ use Xpressengine\Foundation\Operator;
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -42,13 +42,6 @@ abstract class ShouldOperation extends Command
      * @var Operator
      */
     protected $operator;
-
-    /**
-     * The log path.
-     *
-     * @var string
-     */
-    protected $log;
 
     /**
      * ShouldOperation constructor.
@@ -72,12 +65,15 @@ abstract class ShouldOperation extends Command
     public function run(InputInterface $input, OutputInterface $output)
     {
         $datetime = Carbon::now()->format('YmdHis');
-        $this->log = $file = "logs/operation-{$datetime}.log";
+        $file = "logs/operation-{$datetime}.log";
         $path = $this->laravel->storagePath().DIRECTORY_SEPARATOR.$file;
 
         $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
 
         \Log::useFiles($path);
+
+        $this->operator->log($file);
+        $this->operator->save();
 
         return parent::run($input, $output);
     }
@@ -98,7 +94,6 @@ abstract class ShouldOperation extends Command
         $method = 'set'.ucfirst($mode).'Mode';
         $this->operator->$method();
 
-        $this->operator->log($this->log);
         $this->operator->expiresAt(Carbon::now()->addSeconds($limit = $this->getTimeLimit())->toDateTimeString());
         $this->operator->save();
 

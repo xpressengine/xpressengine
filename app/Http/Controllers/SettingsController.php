@@ -7,7 +7,7 @@
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -32,6 +32,7 @@ use Xpressengine\Log\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
+use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
@@ -41,7 +42,7 @@ use Xpressengine\User\UserHandler;
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -506,7 +507,7 @@ class SettingsController extends Controller
 
             fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
-            fwrite($file, "일시\t타입\t관리자\t요약\tIP주소\t자세히\n");
+            fwrite($file, "일시\t타입\t관리자\t요약\t대상ID\tIP주소\t자세히\n");
 
             foreach ($logs as $log) {
                 fwrite($file, $log->created_at->format('y-m-d H:i:s') . "\t");
@@ -515,8 +516,15 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, $log->type . "\t");
                 }
-                fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
+
+                if ($log->getUser() instanceof UnknownUser) {
+                    fwrite($file, sprintf('%s', $log->getUser()->getDisplayName()) . "\t");
+                } else {
+                    fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
+                }
+                
                 fwrite($file, $log->summary . "\t");
+                fwrite($file, $log->target_id . "\t");
                 fwrite($file, $log->ipaddress . "\t");
 
                 $detail = $handler->find($log->id);

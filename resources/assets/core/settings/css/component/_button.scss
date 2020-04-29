@@ -60,7 +60,8 @@
     }
   }
 
-  &--link, &--subtle-link {
+  &--link,
+  &--subtle-link {
     &:hover:not([disabled]),
     &.hover:not([disabled]),
     &:focus:not([disabled]),
@@ -74,7 +75,6 @@
 // button-Colors
 @each $type, $value in $button-colors {
   .#{$prefix}-button {
-
     &--#{$type} {
       outline: 0;
       background-color: button-color($type, 'defaultBackgroundColor');

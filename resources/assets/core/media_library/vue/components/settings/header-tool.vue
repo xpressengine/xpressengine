@@ -83,7 +83,7 @@
       [D] class="media-library-content__button-sort" 버튼 클릭 시 class="media-library-content-sort" 영역에 class="open" 추가
       그리고 딤드영역 적용을 위해 class="media-library-dimmed" 영역 display: block 적용
     -->
-    <div class="media-library-content-sort">
+    <div v-if="false" class="media-library-content-sort">
       <!-- [D] 첫번째 클릭 오름차순 class="active-sort--up" 적용, 두번째 클릭 내림차순 class="active-sort--down" 적용, 항목 변경 시 두 클래스 삭제 -->
       <button type="button" class="media-library-content__button-sort active-sort--up">
         제목 순

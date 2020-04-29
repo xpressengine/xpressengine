@@ -7,7 +7,7 @@
  * @category    Providers
  * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -19,6 +19,7 @@ use App\Skins\Widget\DownloadRankSkin;
 use App\Skins\Widget\HtmlWidgetSkin;
 use App\Skins\Widget\StorageSpaceSkin;
 use App\Skins\Widget\SystemInfoSkin;
+use App\Skins\Widget\MenuPrintSkin;
 use App\UIObjects\Widget\WidgetGenerator;
 use App\UIObjects\Widget\WidgetBox as WidgetBoxUIObject;
 use App\Widgets\ContentInfo;
@@ -26,6 +27,7 @@ use App\Widgets\DownloadRank;
 use App\Widgets\HtmlWidget;
 use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
+use App\Widgets\MenuPrint;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Widget\Models\WidgetBox;
 use Xpressengine\Widget\Presenters\AbstractPresenter;
@@ -42,7 +44,7 @@ use Xpressengine\Widget\WidgetParser;
  * @category    Providers
  * @package     App\Providers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -121,6 +123,7 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(SystemInfo::class);
         $register->add(HtmlWidget::class);
         $register->add(DownloadRank::class);
+        $register->add(MenuPrint::class);
     }
 
     /**
@@ -136,6 +139,7 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(StorageSpaceSkin::class);
         $register->add(HtmlWidgetSkin::class);
         $register->add(DownloadRankSkin::class);
+        $register->add(MenuPrintSkin::class);
     }
 
     /**

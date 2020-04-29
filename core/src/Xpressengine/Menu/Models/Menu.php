@@ -7,7 +7,7 @@
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright 2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      https://xpressengine.io
  */
@@ -28,7 +28,7 @@ use Xpressengine\Site\Site;
  * @property string $site_key
  * @property string $description
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */

@@ -7,7 +7,7 @@
  * @category    Log
  * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -22,7 +22,7 @@ use Xpressengine\Log\Models\Log;
  * @category    Log
  * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -71,7 +71,7 @@ class AuthLogger extends AbstractLogger
             return;
         }
 
-        self::storeLog($request, $type);
+        $this->storeLog($request, $type);
     }
 
     /**

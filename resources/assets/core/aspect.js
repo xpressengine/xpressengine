@@ -1,6 +1,6 @@
-const symbolAdvices = Symbol('Advices')
+const symbolAdvices = Symbol('Aspect-Advices')
 const mapTargets = new WeakMap()
-const symbolDummy = Symbol('dummy')
+const symbolDummy = Symbol('Aspect-dummy')
 
 /**
  * Aspect

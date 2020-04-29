@@ -29,26 +29,49 @@ window.jQuery(function ($) {
   //   modalPage(url)
   // })
 
-  $(document).on('submit', 'form.__xe_skin_form', function () {
+  $(document).on('submit', 'form.__xe_skin_form', function (e) {
+    e.preventDefault()
+
     var $form = $(this)
-    var $modal = $('#skinModal')
+    var $modal = $(this).closest('.xe-modal')
 
-    XE.ajax({
-      type: $form.attr('method'),
-      url: $form.attr('action'),
-      cache: false,
-      data: $form.serialize(),
-      dataType: 'json',
-      success: function (data) {
-        $modal.xeModal('hide')
-        window.XE.toast(data.type, data.message)
-      },
-
-      error: function (data) {
-        window.XE.toast(data.type, data.message)
+    var fileList = []
+    $('input:file', this).each(function (i, dom) {
+      if ($(dom).val()) {
+        fileList.push($(dom).val())
       }
     })
-    return false
+
+    if (fileList.length > 0) {
+      $form
+        .fileupload({
+          url: $form.attr('action'),
+          singleFileUploads: false
+        })
+        .on('fileuploaddone', function (e, data) {
+          data = data.result
+
+          $modal.xeModal('hide')
+          window.XE.toast(data.type, data.message)
+        })
+        .fileupload('send', { fileInput: $('input:file', this) })
+    } else {
+      XE.ajax({
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        cache: false,
+        data: $form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          $modal.xeModal('hide')
+          window.XE.toast(data.type, data.message)
+        },
+
+        error: function (data) {
+          window.XE.toast(data.type, data.message)
+        }
+      })
+    }
   })
 
   function modalPage (url, callback) {

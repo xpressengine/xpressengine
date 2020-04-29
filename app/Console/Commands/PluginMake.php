@@ -7,7 +7,7 @@
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -20,7 +20,7 @@ namespace App\Console\Commands;
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -59,6 +59,11 @@ class PluginMake extends MakeCommand
         $title = $this->getTitleInput($name);
 
         $path = app('path.privates').DIRECTORY_SEPARATOR.$name;
+
+        if ($this->files->isDirectory($path)) {
+            $this->setFailed();
+            throw new \RuntimeException("Plugin [{$name}] already exists!");
+        }
 
         $this->startPrivate(function () use ($path, $name, $namespace, $title) {
             $this->info('Generating the plugin');
@@ -188,7 +193,7 @@ class PluginMake extends MakeCommand
     protected function makeComposerJson($path, $name, $namespace, $title)
     {
         $namespace = str_replace('\\', '\\\\', $namespace);
-        
+
         $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle', 'DummyCoreVer'];
         $replace = [$namespace, $name, $title, '~'.__XE_VERSION__];
 

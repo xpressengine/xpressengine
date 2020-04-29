@@ -7,7 +7,7 @@
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -39,7 +39,7 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
  * @category    Controllers
  * @package     App\Http\Controllers
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -347,7 +347,8 @@ class MenuController extends Controller
         list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
-        if (XeMenu::items()->query()->where('url', $url)->exists()) {
+        $menuType = XeMenu::getModuleHandler()->getModuleObject($itemInput['selectedType']);
+        if ($menuType::isRouteAble() && XeMenu::items()->query()->where('url', $url)->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 
@@ -470,7 +471,8 @@ class MenuController extends Controller
         list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
-        if (XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
+        $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
+        if ($menuType::isRouteAble() && XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 

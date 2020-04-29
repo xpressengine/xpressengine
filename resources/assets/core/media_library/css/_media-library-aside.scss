@@ -112,7 +112,7 @@
   // aside 영역은 모바일과 PC 형태가 너무 달라서 모바일 스타일만 따로 적용, PC는 여기서부터 새로 적용
   .media-library-aside {
     overflow-y: auto;
-    
+
     // 저장소가 1개일 때 
     &.state-one {
       display: none;
@@ -150,7 +150,7 @@
         }
 
         &.on {
-          &:before {
+          &::before {
             content: '';
             position: absolute;
             top: 3px;
@@ -163,7 +163,7 @@
 
           .media-library-aside__button {
             color: $b500;
-          }    
+          }
         }
       }
 

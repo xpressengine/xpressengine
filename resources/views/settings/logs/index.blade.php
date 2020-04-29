@@ -114,6 +114,7 @@
                             <th scope="col">{{ xe_trans('xe::types') }}</th>
                             <th scope="col">{{ xe_trans('xe::userRatingManager') }}</th>
                             <th scope="col">{{ xe_trans('xe::summary') }}</th>
+                            <th scope="col">{{ xe_trans('xe::target') }} ID</th>
                             <th scope="col">{{ xe_trans('xe::ipAddress') }}</th>
                             <th scope="col">{{ xe_trans('xe::showDetails') }}</th>
                         </tr>
@@ -129,12 +130,21 @@
                                 {{ $log->type }}
                                 @endif
                             </td>
-                            <td><a href="#"
-                                   data-toggle="xe-page-toggle-menu"
-                                   data-url="{{ route('toggleMenuPage') }}"
-                                   data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'
-                                   {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}</a></td>
+                            <td>
+                                @if ($log->getUser() instanceOf \Xpressengine\User\Models\UnknownUser)
+                                    {{ $log->getUser()->getDisplayName() }}
+                                @else
+                                    <a href="#"
+                                       data-toggle="xe-page-toggle-menu"
+                                       data-url="{{ route('toggleMenuPage') }}"
+                                       data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'>
+                                        {{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}
+                                    </a>
+                                @endif
+                                
+                            </td>
                             <td>{{ $log->summary }}</td>
+                            <td>{{ $log->target_id }}</td>
                             <td>{{ $log->ipaddress }}</td>
                             <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">{{ xe_trans('xe::view') }}</a></td>
                         </tr>

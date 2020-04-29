@@ -1,5 +1,3 @@
-import Router from 'xe/router'
-
 export default class Config {
   constructor (options = {}) {
     Object.assign(this, options)

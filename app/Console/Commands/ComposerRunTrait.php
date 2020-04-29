@@ -7,7 +7,7 @@
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -28,7 +28,7 @@ use Xpressengine\Plugin\Composer\Composer;
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -167,6 +167,11 @@ trait ComposerRunTrait
 
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
+
+        if (config('xe.composer_no_cache') === true) {
+            $output->writeln('<warning>Disabling cache usage</warning>');
+            putenv('COMPOSER_CACHE_DIR='.(Platform::isWindows() ? 'nul' : '/dev/null'));
+        }
 
         $result = $application->run(new ArrayInput($inputs), $output);
 

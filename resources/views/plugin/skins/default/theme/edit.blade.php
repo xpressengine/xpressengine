@@ -159,15 +159,8 @@
         jQuery(function($) {
             $('.__xe_insert_widget').click(function(){
                 $('#widgetGen').widgetGenerator().generate(function(data){
-
                     $('#widgetModal').modal('hide');
-
-                    // add code to textarea
-                    var txt = $('textarea[name=content]');
-                    var caretPos = txt[0].selectionStart;
-                    var textAreaTxt = txt.val();
-                    txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
-
+                    editor.getDoc().replaceSelection(data.code);
                 });
             })
             var editor = CodeMirror.fromTextArea(document.getElementById('code'), {

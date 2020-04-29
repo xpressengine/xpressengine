@@ -20,7 +20,7 @@ export default {
   <div class="media-library">
     <div class="media-library-upload">
       <form method="post" enctype="multipart/form-data">
-        여기에 선택한 파일을 드래그해 업로드 하거나 파일을 선택하세요.
+        <span class="update-message">여기에 선택한 파일을 드래그해 업로드 하거나 파일을 선택하세요.</span>
         <br />
         <div class="media-library__button media-library__button--primary fileinput-button">
           파일선택
@@ -32,7 +32,7 @@ export default {
     <!-- 좌측, 우측 컨텐츠 묶은 영역 -->
     <div class="media-library-box">
       <!-- [D] 저장소가 1개만 있을 경우 class="state-one" 추가 (화살표 노출 및 PC 에서 영역 제거) -->
-      <disk-list :listMode="$root.listMode"></disk-list>
+      <disk-list v-if="$root.user.rating == 'super'" :listMode="$root.listMode"></disk-list>
 
       <MediaListContainer></MediaListContainer>
     </div>

@@ -136,10 +136,16 @@ export default {
       return this.$props.media.file.url
     },
     userName() {
-      return this.$props.media.user.display_name
+      if (this.$props.media.user) {
+        return this.$props.media.user.display_name || ''
+      }
+      return ''
     },
     userProfileImage() {
-      return this.$props.media.user.profile_image_url
+      if (this.$props.media.user) {
+        return this.$props.media.user.profile_image_url || ''
+      }
+      return ''
     },
     filesize() {
       return filesize(this.$props.media.file.size)

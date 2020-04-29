@@ -6,7 +6,7 @@
  *
  * @category    Config
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -42,6 +42,8 @@ return [
     ],
 
     'console_allow_url_fopen' => true,
+
+    'composer_no_cache' => false,
 
     'settings' => [
         /*
@@ -273,17 +275,11 @@ return [
                 'description' => '',
                 'ordering' => 700
             ],
-            'lang' => [
-                'title' => 'xe::multiLang',
-                'display' => true,
-                'description' => '',
-                'ordering' => 7000
-            ],
-            'lang.default' => [
+            'setting.lang' => [
                 'title' => 'xe::multiLangSettings',
                 'display' => true,
                 'description' => '다국어를 설정합니다',
-                'ordering' => 100
+                'ordering' => 800
             ],
         ]
     ],

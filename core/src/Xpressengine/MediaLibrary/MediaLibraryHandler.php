@@ -7,7 +7,7 @@
  * @category    MediaLibrary
  * @package     Xpressengine\MediaLibrary
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -38,7 +38,7 @@ use Xpressengine\Support\Tree\NodePositionTrait;
  * @category    MediaLibrary
  * @package     Xpressengine\MediaLibrary
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
@@ -306,7 +306,7 @@ class MediaLibraryHandler
      */
     public function getFolderList(MediaLibraryFolder $targetFolderItem, Request $request)
     {
-        if ((int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
+        if (!$request->user()->isAdmin() || (int)$request->get('index_mode', self::MODE_USER) !== self::MODE_ADMIN) {
             return [];
         }
 
@@ -374,6 +374,10 @@ class MediaLibraryHandler
                 $isSearchState = true;
                 break;
             }
+        }
+
+        if (!$request->user()->isAdmin()) {
+            $attributes['index_mode'] = MediaLibraryHandler::MODE_USER;
         }
 
         if ($isSearchState === false) {
@@ -479,82 +483,67 @@ class MediaLibraryHandler
      */
     public function uploadMediaLibraryFile(Request $request)
     {
-        XeDB::beginTransaction();
+        $uploadFile = $request->file('file');
 
-        try {
-            $uploadFile = $request->file('file');
+        $mediaLibraryConfig = config('xe.media.mediaLibrary');
 
-            $mediaLibraryConfig = config('xe.media.mediaLibrary');
-
-            //file size check
-            if ($mediaLibraryConfig['max_size'] != null && $mediaLibraryConfig['max_size'] != '' &&
-                $mediaLibraryConfig['max_size'] * 1024 * 1024 < $uploadFile->getSize()) {
-                throw new HttpException(
-                    Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
-                    xe_trans('xe::msgMaxFileSize', [
-                        'fileMaxSize' => $mediaLibraryConfig['max_size'],
-                        'uploadFileName' => $uploadFile->getClientOriginalName()
-                    ])
-                );
-            }
-
-            //file extension check
-            $disallowExtensions = array_map(function ($v) {
-                return trim($v);
-            }, explode(',', $mediaLibraryConfig['disallow_extensions']));
-
-            if (array_search('*', $disallowExtensions) === true
-                || in_array(strtolower($uploadFile->getClientOriginalExtension()), $disallowExtensions)) {
-                throw new HttpException(
-                    Response::HTTP_NOT_ACCEPTABLE,
-                    xe_trans('xe::msgImpossibleUploadingFiles', [
-                        'extensions' => $mediaLibraryConfig['disallow_extensions'],
-                        'uploadFileName' => $uploadFile->getClientOriginalName()
-                    ])
-                );
-            }
-
-            $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
-
-            if (XeMedia::is($file) == true) {
-                $media = XeMedia::make($file);
-
-                $metaData = $media['meta'];
-                $thumbnailConfig = config('xe.media.thumbnail.dimensions');
-                if ($metaData['width'] < $thumbnailConfig['MAX']['width'] ||
-                    $metaData['height'] < $thumbnailConfig['MAX']['height']) {
-                    XeMedia::createThumbnails($media);
-                }
-            }
-
-            $folderItem = null;
-            if ($instanceId = $request->get('instance_id')) {
-                $folderItem = $this->getInstanceFolderItem($instanceId);
-            } else {
-                $folderItem = $this->getFolderItem($request->get('folder_id', ''));
-                if ($folderItem === null) {
-                    throw new NotFoundFolderException();
-                }
-            }
-
-            $fileAttribute = [
-                'file_id' => $file->id,
-                'folder_id' => $folderItem->id,
-                'user_id' => \Auth::user()->getId(),
-                'title' => $uploadFile->getClientOriginalName(),
-                'ext' => $uploadFile->getClientOriginalExtension()
-            ];
-
-            $mediaLibraryFileItem = $this->files->storeItem($fileAttribute);
-
-            XeStorage::bind($mediaLibraryFileItem->id, $file);
-        } catch (\Exception $e) {
-            XeDB::rollback();
-
-            throw $e;
+        //file size check
+        if ($mediaLibraryConfig['max_size'] != null && $mediaLibraryConfig['max_size'] != '' &&
+            $mediaLibraryConfig['max_size'] * 1024 * 1024 < $uploadFile->getSize()) {
+            throw new HttpException(
+                Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
+                xe_trans('xe::msgMaxFileSize', [
+                    'fileMaxSize' => $mediaLibraryConfig['max_size'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
         }
 
-        XeDB::commit();
+        //file extension check
+        $disallowExtensions = array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $mediaLibraryConfig['disallow_extensions']));
+
+        if (array_search('*', $disallowExtensions) === true
+            || in_array(strtolower($uploadFile->getClientOriginalExtension()), $disallowExtensions)) {
+            throw new HttpException(
+                Response::HTTP_NOT_ACCEPTABLE,
+                xe_trans('xe::msgImpossibleUploadingFiles', [
+                    'extensions' => $mediaLibraryConfig['disallow_extensions'],
+                    'uploadFileName' => $uploadFile->getClientOriginalName()
+                ])
+            );
+        }
+
+        $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
+
+        if (XeMedia::is($file) == true) {
+            $media = XeMedia::make($file);
+            XeMedia::createThumbnails($media);
+        }
+
+        $folderItem = null;
+        if ($instanceId = $request->get('instance_id')) {
+            $folderItem = $this->getInstanceFolderItem($instanceId);
+        } else {
+            $folderItem = $this->getFolderItem($request->get('folder_id', ''));
+            if ($folderItem === null) {
+                throw new NotFoundFolderException();
+            }
+        }
+
+        $fileAttribute = [
+            'file_id' => $file->id,
+            'folder_id' => $folderItem->id,
+            'user_id' => \Auth::user()->getId(),
+            'title' => $uploadFile->getClientOriginalName(),
+            'ext' => $uploadFile->getClientOriginalExtension()
+        ];
+
+        $mediaLibraryFileItem = $this->files->storeItem($fileAttribute);
+
+        XeStorage::bind($mediaLibraryFileItem->id, $file);
+
 
         $this->files->setCommonFileVisible($mediaLibraryFileItem);
 
@@ -608,87 +597,77 @@ class MediaLibraryHandler
         $newImageThumbnails = $imageHandler->getThumbnails($newImage);
         $originImageThumbnails = $imageHandler->getThumbnails($originImage);
 
-        try {
-            XeDB::beginTransaction();
+        //기존 썸네일 파일 정보 교체
+        foreach ($originImageThumbnails as $originImageThumbnail) {
+            $originImageThumbnailCode = $originImageThumbnail->meta->code;
 
-            //기존 썸네일 파일 정보 교체
-            foreach ($originImageThumbnails as $originImageThumbnail) {
-                $originImageThumbnailCode = $originImageThumbnail->meta->code;
-
-                $newImageThumbnail = $newImageThumbnails->filter(
-                    function ($newImageThumbnail) use ($originImageThumbnailCode) {
-                        return $newImageThumbnail->meta->code === $originImageThumbnailCode;
-                    }
-                )->first();
-
-                if ($newImageThumbnail == null) {
-                    continue;
+            $newImageThumbnail = $newImageThumbnails->filter(
+                function ($newImageThumbnail) use ($originImageThumbnailCode) {
+                    return $newImageThumbnail->meta->code === $originImageThumbnailCode;
                 }
+            )->first();
 
-                //파일 교체
-                $this->swapFile($originImageThumbnail, $newImageThumbnail);
-
-                $originImageThumbnailAttributes = array_diff_key(
-                    $originImageThumbnail->meta->getAttributes(),
-                    array_flip(['id', 'file_id'])
-                );
-
-                $newImageThumbnailAttributes = array_diff_key(
-                    $newImageThumbnail->meta->getAttributes(),
-                    array_flip(['id', 'file_id'])
-                );
-
-                $tempThumbnailAttributes = $originImageThumbnailAttributes;
-                $originImageThumbnailAttributes = $newImageThumbnailAttributes;
-                $newImageThumbnailAttributes = $tempThumbnailAttributes;
-
-                $newImageThumbnail->meta->update($newImageThumbnailAttributes);
-                $originImageThumbnail->meta->update($originImageThumbnailAttributes);
+            if ($newImageThumbnail == null) {
+                continue;
             }
 
             //파일 교체
-            $this->swapFile($originFile, $newFile);
+            $this->swapFile($originImageThumbnail, $newImageThumbnail);
 
-            //파일 정보 변경
-            $originFileSize = $originFile->getAttribute('size');
-            $newFileSize = $newFile->getAttribute('size');
-
-            $tempSize = $originFileSize;
-            $originFileSize = $newFileSize;
-            $newFileSize = $tempSize;
-
-            $originFile->update(['size' => $originFileSize]);
-            $newFile->update(['size' => $newFileSize]);
-
-            $originImageMetaAttributes = array_diff_key(
-                $originImage->meta->getAttributes(),
-                array_flip(['id', 'file_id'])
-            );
-            $newImageMetaAttributes = array_diff_key(
-                $newImage->meta->getAttributes(),
+            $originImageThumbnailAttributes = array_diff_key(
+                $originImageThumbnail->meta->getAttributes(),
                 array_flip(['id', 'file_id'])
             );
 
-            $tempImageMetaAttributes = $originImageMetaAttributes;
-            $originImageMetaAttributes = $newImageMetaAttributes;
-            $newImageMetaAttributes = $tempImageMetaAttributes;
+            $newImageThumbnailAttributes = array_diff_key(
+                $newImageThumbnail->meta->getAttributes(),
+                array_flip(['id', 'file_id'])
+            );
 
-            $originImage->meta->update($originImageMetaAttributes);
-            $newImage->meta->update($newImageMetaAttributes);
+            $tempThumbnailAttributes = $originImageThumbnailAttributes;
+            $originImageThumbnailAttributes = $newImageThumbnailAttributes;
+            $newImageThumbnailAttributes = $tempThumbnailAttributes;
 
-            //이미지를 여러번 수정 하더라도 최초에 업로드한 파일만 저장
-            if ($originalMediaLibraryFile['origin_file_id'] === null) {
-                $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
-            } else {
-                //최초 수정한 파일이 아니면 변경 후 삭제 처리
-                XeStorage::unBind($originalMediaLibraryFile['id'], $newImage, true);
-            }
+            $newImageThumbnail->meta->update($newImageThumbnailAttributes);
+            $originImageThumbnail->meta->update($originImageThumbnailAttributes);
+        }
 
-            XeDB::commit();
-        } catch (\Exception $e) {
-            XeDB::rollback();
+        //파일 교체
+        $this->swapFile($originFile, $newFile);
 
-            throw $e;
+        //파일 정보 변경
+        $originFileSize = $originFile->getAttribute('size');
+        $newFileSize = $newFile->getAttribute('size');
+
+        $tempSize = $originFileSize;
+        $originFileSize = $newFileSize;
+        $newFileSize = $tempSize;
+
+        $originFile->update(['size' => $originFileSize]);
+        $newFile->update(['size' => $newFileSize]);
+
+        $originImageMetaAttributes = array_diff_key(
+            $originImage->meta->getAttributes(),
+            array_flip(['id', 'file_id'])
+        );
+        $newImageMetaAttributes = array_diff_key(
+            $newImage->meta->getAttributes(),
+            array_flip(['id', 'file_id'])
+        );
+
+        $tempImageMetaAttributes = $originImageMetaAttributes;
+        $originImageMetaAttributes = $newImageMetaAttributes;
+        $newImageMetaAttributes = $tempImageMetaAttributes;
+
+        $originImage->meta->update($originImageMetaAttributes);
+        $newImage->meta->update($newImageMetaAttributes);
+
+        //이미지를 여러번 수정 하더라도 최초에 업로드한 파일만 저장
+        if ($originalMediaLibraryFile['origin_file_id'] === null) {
+            $originalMediaLibraryFile->update(['origin_file_id' => $newImage->id]);
+        } else {
+            //최초 수정한 파일이 아니면 변경 후 삭제 처리
+            XeStorage::unBind($originalMediaLibraryFile['id'], $newImage, true);
         }
     }
 

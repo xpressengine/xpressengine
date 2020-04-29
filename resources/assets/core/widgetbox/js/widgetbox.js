@@ -205,9 +205,17 @@
   }
   Widget.prototype = {
     render: function () {
+      if (this.data['widgetName'] == undefined) {
+        this.data['widgetName'] = ''
+      }
+      if (this.data['skinName'] == undefined) {
+        this.data['skinName'] = ''
+      }
       return [
         '<div class="xe-well widget" data-uid="' + this.uid + '">',
         '<strong>' + this.data['@attributes'].title + '</strong>',
+        '<span class="widget-name">' + this.data['widgetName'] + '</span>',
+        '<span class="skin-name">(' + this.data['skinName'] + ')</span>',
         '<div class="xe-pull-right widget-config-btn">',
         '<a href="#" class="xe-btn xe-btn-link btn-widget-config"><i class="xi-cog"></i></a>',
         '<button type="button" class="xe-btn xe-btn-link btn-remove-widget"><i class="xi-trash"></i></button>',
