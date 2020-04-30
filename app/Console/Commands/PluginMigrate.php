@@ -19,7 +19,7 @@ class PluginMigrate extends Command
      *
      * @var string
      */
-    protected $signature = 'plugin:migrate {name : The name of the plugin}
+    protected $signature = 'plugin:migrate {plugin : The name of the plugin}
                         {--force : Force the operation to run when in production.}
                         {--pretend : Dump the SQL queries that would be run.}
                         {--seed : Indicates if the seed task should be re-run.}
@@ -53,14 +53,14 @@ class PluginMigrate extends Command
      */
     public function handle(Filesystem $filesystem)
     {
-        $name = $this->argument('name');
+        $pluginId = $this->argument('plugin');
         // 플러그인이 이미 설치돼 있는지 검사
-        if (!$plugin = $this->handler->getPlugin($name)) {
+        if (!$plugin = $this->handler->getPlugin($pluginId)) {
             // 설치되어 있지 않은 플러그인입니다.
             throw new \Exception('Plugin not found');
         }
 
-        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'migrations';
+        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
 
         if (!$filesystem->exists($migrationPath)) {
             throw new \Exception('Directory ['.$migrationPath.'] does not exist');
@@ -70,8 +70,14 @@ class PluginMigrate extends Command
             '--path' => $migrationPath,
             '--force' => $this->option('force'),
             '--pretend' => $this->option('pretend'),
-            '--seed' => $this->option('seed'),
             '--step' => $this->option('step'),
         ]);
+
+        if($this->option('seed')) {
+            $this->call('plugin:seed', [
+                'plugin' => $pluginId,
+                '--force' => $this->option('force'),
+            ]);
+        }
     }
 }

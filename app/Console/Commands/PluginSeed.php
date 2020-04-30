@@ -3,11 +3,14 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 use Xpressengine\Plugin\PluginHandler;
 
-class PluginMigrateRollback extends Command
+class PluginSeed extends Command
 {
+
     /**
      * @var PluginHandler
      */
@@ -18,17 +21,15 @@ class PluginMigrateRollback extends Command
      *
      * @var string
      */
-    protected $signature = 'plugin:migrate:rollback {plugin : The name of the plugin}
-                        {--force : Force the operation to run when in production.}
-                        {--pretend : Dump the SQL queries that would be run.}
-                        {--step= : Force the migrations to be run so they can be rolled back individually.}';
+    protected $signature = 'plugin:seed {plugin : The name of the plugin}
+                        {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback the plugin\'s last database migration';
+    protected $description = 'Seed the plugin\'s database with records';
 
     /**
      * Create a new command instance.
@@ -45,11 +46,10 @@ class PluginMigrateRollback extends Command
     /**
      * Execute the console command.
      *
-     * @param Filesystem $filesystem
      * @return mixed
      * @throws \Exception
      */
-    public function handle(Filesystem $filesystem)
+    public function handle()
     {
         $pluginId = $this->argument('plugin');
         // 플러그인이 이미 설치돼 있는지 검사
@@ -57,18 +57,12 @@ class PluginMigrateRollback extends Command
             // 설치되어 있지 않은 플러그인입니다.
             throw new \Exception('Plugin not found');
         }
+        $pluginClass = new \ReflectionClass($plugin->getClass());
+        $seedClass = $pluginClass->getNamespaceName().'\\Database\\Seeds\\DatabaseSeeder';
 
-        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
-
-        if (!$filesystem->exists($migrationPath)) {
-            throw new \Exception('Directory ['.$migrationPath.'] does not exist');
-        }
-
-        $this->call('migrate:rollback', [
-            '--path' => $migrationPath,
+        $this->call('db:seed', [
             '--force' => $this->option('force'),
-            '--pretend' => $this->option('pretend'),
-            '--step' => $this->option('step'),
+            '--class' => $seedClass,
         ]);
     }
 }

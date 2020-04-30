@@ -58,10 +58,15 @@ class PluginMigrateMake extends Command
             throw new \Exception('Plugin not found');
         }
 
-        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'migrations';
+        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
+
+        $filesystem = app('files');
+        if (!$filesystem->isDirectory($migrationPath)) {
+            $filesystem->makeDirectory($migrationPath, 0777, true);
+        }
 
         if (!$filesystem->exists($migrationPath)) {
-            throw new \Exception('Directory ['.$migrationPath.'] does not exist');
+            throw new \Exception('Cannot make directory ['.$migrationPath.']');
         }
 
         $this->call('make:migration', [

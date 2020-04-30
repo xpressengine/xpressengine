@@ -68,6 +68,8 @@ class Kernel extends ConsoleKernel
         Commands\PluginMigrateRefresh::class,
         Commands\PluginMigrateReset::class,
         Commands\PluginMigrateMake::class,
+        Commands\PluginSeederMake::class,
+        Commands\PluginSeed::class,
         Commands\ThemeMake::class,
         Commands\SkinMake::class,
         Commands\DynamicFieldMake::class,
