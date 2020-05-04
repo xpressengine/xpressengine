@@ -15,6 +15,7 @@
 namespace Xpressengine\Plugin;
 
 use ReflectionClass;
+use Xpressengine\Skin\SimpleSkin;
 
 /**
  * 이 클래스는 Plugin의 추상클래스다. XE3에 플러그인으로 등록되는 모든 클래스는 이 클래스를 상속받아야 한다.
@@ -201,5 +202,52 @@ abstract class AbstractPlugin
     public static function view($view)
     {
         return static::getId().'::'.$view;
+    }
+
+    /**
+     * 특정 디렉토리를 스킨 디렉토리로 지정함.
+     *
+     * 디렉토리내에 info.php 파일이 존재해야하고 파일내에 'target' 항목이 정의되어야 함.
+     *
+     * @param string $path path for skin
+     * @return bool
+     */
+    public function loadSkin($path)
+    {
+        $pluginId = $this->getId();
+        $path = $pluginId.'/'.ltrim($path, '/');
+
+        // todo 없는 경로로 지정됬을때 어떻게 되는지 확인
+        $files = app('files')->files(plugins_path($path));
+        $files = collect($files);
+        $infoFile = $files->first(function ($file) {
+            return strtolower($file->getFilename()) === 'info.php';
+        });
+        if (!$infoFile) {
+            return false;
+        }
+        $info = require $infoFile->getPathname();
+        if (!isset($info['target'])) {
+            return false;
+        }
+
+        $group = $info['target'].'/skin';
+        $id = $group.'/'.$pluginId.'@'.basename($path);
+        $register = app('xe.register');
+        $register->set($id, $callback = function ($config) use ($id, $path, $info) {
+
+            $skin = new SimpleSkin($config);
+            $skin->setId($id);
+            $skin->setPath($path);
+            $skin->setComponentInfo('name', $info['name'] ?? $id);
+            $skin->setComponentInfo('description', $info['description'] ?? '');
+
+            return $skin;
+
+        });
+
+        $register->set($group.'.'.$id, $callback);
+
+        return true;
     }
 }

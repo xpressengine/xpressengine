@@ -90,6 +90,10 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getClass()
     {
+        if ($this->class instanceof \Closure) {
+            return $this->getObject();
+        }
+
         return $this->class;
     }
 
@@ -100,7 +104,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getTitle()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::getTitle();
     }
 
@@ -111,7 +115,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getDescription()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::getDescription();
     }
 
@@ -122,7 +126,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getScreenshot()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::getScreenshot();
     }
 
@@ -169,7 +173,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function supportDesktop()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::supportDesktop();
     }
 
@@ -180,7 +184,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function supportDesktopOnly()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::supportDesktopOnly();
     }
 
@@ -191,7 +195,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function supportMobile()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::supportMobile();
     }
 
@@ -202,7 +206,7 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function supportMobileOnly()
     {
-        $class = $this->class;
+        $class = $this->getClass();
         return $class::supportMobileOnly();
     }
 
@@ -216,7 +220,9 @@ class SkinEntity implements Arrayable, Jsonable
         if (isset($this->object) && is_a($this->object, 'Xpressengine\Skin\AbstractSkin')) {
             return $this->object;
         } else {
-            $this->object = new $this->class($this->config);
+            $this->object = $this->class instanceof \Closure ?
+                call_user_func($this->class, $this->config) :
+                new $this->class($this->config);
 
             if ($this->defaultSkin) {
                 $this->object->setDefaultSkin($this->defaultSkin->getObject());

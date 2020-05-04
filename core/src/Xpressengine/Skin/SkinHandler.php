@@ -143,7 +143,7 @@ class SkinHandler
             return null;
         }
 
-        if (class_exists($className) === false) {
+        if (!$className instanceof \Closure && class_exists($className) === false) {
             throw new SkinNotFoundException();
         }
 
@@ -163,7 +163,7 @@ class SkinHandler
         if ($className === null) {
             return false;
         }
-        if (class_exists($className) === false) {
+        if (!$className instanceof \Closure && class_exists($className) === false) {
             return false;
         }
         return true;
