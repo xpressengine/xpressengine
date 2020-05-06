@@ -3,16 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Console\Migrations\MigrateCommand;
 use Illuminate\Filesystem\Filesystem;
-use Xpressengine\Plugin\PluginHandler;
 
-class PluginMigrate extends Command
+class PluginMigrate extends MigrateCommand
 {
-
-    /**
-     * @var PluginHandler
-     */
-    protected $handler;
+    use PluginMigrateTrait;
 
     /**
      * The name and signature of the console command.
@@ -20,10 +16,11 @@ class PluginMigrate extends Command
      * @var string
      */
     protected $signature = 'plugin:migrate {plugin : The name of the plugin}
+                        {--database= : The database connection to use.}
                         {--force : Force the operation to run when in production.}
                         {--pretend : Dump the SQL queries that would be run.}
                         {--seed : Indicates if the seed task should be re-run.}
-                        {--step= : Force the migrations to be run so they can be rolled back individually.}';
+                        {--step : Force the migrations to be run so they can be rolled back individually.}';
 
     /**
      * The console command description.
@@ -33,51 +30,41 @@ class PluginMigrate extends Command
     protected $description = 'Run plugin\'s database migrations';
 
     /**
-     * Create a new command instance.
-     *
-     * @param PluginHandler $handler
-     */
-    public function __construct(PluginHandler $handler)
-    {
-        parent::__construct();
-
-        $this->handler = $handler;
-    }
-
-    /**
      * Execute the console command.
      *
-     * @param Filesystem $filesystem
-     * @return mixed
-     * @throws \Exception
+     * @return void
      */
-    public function handle(Filesystem $filesystem)
+    public function handle()
     {
-        $pluginId = $this->argument('plugin');
-        // 플러그인이 이미 설치돼 있는지 검사
-        if (!$plugin = $this->handler->getPlugin($pluginId)) {
-            // 설치되어 있지 않은 플러그인입니다.
-            throw new \Exception('Plugin not found');
+        if (! $this->confirmToProceed()) {
+            return;
         }
 
-        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
+        $this->prepareDatabase();
 
-        if (!$filesystem->exists($migrationPath)) {
-            throw new \Exception('Directory ['.$migrationPath.'] does not exist');
-        }
-
-        $this->call('migrate', [
-            '--path' => $migrationPath,
-            '--force' => $this->option('force'),
-            '--pretend' => $this->option('pretend'),
-            '--step' => $this->option('step'),
+        // Next, we will check to see if a path option has been defined. If it has
+        // we will use the path relative to the root of this installation folder
+        // so that migrations may be run for any path within the applications.
+        $this->migrator->run($this->getMigrationPaths(), [
+            'pretend' => $this->option('pretend'),
+            'step' => $this->option('step'),
         ]);
 
-        if($this->option('seed')) {
+        // Once the migrator has run we will grab the note output and send it out to
+        // the console screen, since the migrator itself functions without having
+        // any instances of the OutputInterface contract passed into the class.
+        foreach ($this->migrator->getNotes() as $note) {
+            $this->output->writeln($note);
+        }
+
+        // Finally, if the "seed" option has been given, we will re-run the database
+        // seed task to re-populate the database, which is convenient when adding
+        // a migration and a seed at the same time, as it is only this command.
+        if ($this->option('seed')) {
             $this->call('plugin:seed', [
-                'plugin' => $pluginId,
-                '--force' => $this->option('force'),
-            ]);
+                'plugin' => $this->argument('plugin'),
+                '--force' => true]
+            );
         }
     }
 }

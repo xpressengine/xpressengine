@@ -3,24 +3,19 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Console\Migrations\ResetCommand;
 use Illuminate\Filesystem\Filesystem;
-use Xpressengine\Plugin\PluginHandler;
 
-class PluginMigrateReset extends Command
+class PluginMigrateReset extends ResetCommand
 {
-    /**
-     * @var PluginHandler
-     */
-    protected $handler;
+    use PluginMigrateTrait;
 
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'plugin:migrate:reset {plugin : The name of the plugin}
-                        {--force : Force the operation to run when in production.}
-                        {--pretend : Dump the SQL queries that would be run.}';
+    protected $name = 'plugin:migrate:reset';
 
     /**
      * The console command description.
@@ -30,43 +25,37 @@ class PluginMigrateReset extends Command
     protected $description = 'Rollback plugin\'s all database migrations';
 
     /**
-     * Create a new command instance.
+     * handle 오버라이딩
      *
-     * @param PluginHandler $handler
+     * @return void
      */
-    public function __construct(PluginHandler $handler)
+    public function handle()
     {
-        parent::__construct();
-
-        $this->handler = $handler;
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @param Filesystem $filesystem
-     * @return mixed
-     * @throws \Exception
-     */
-    public function handle(Filesystem $filesystem)
-    {
-        $pluginId = $this->argument('plugin');
-        // 플러그인이 이미 설치돼 있는지 검사
-        if (!$plugin = $this->handler->getPlugin($pluginId)) {
-            // 설치되어 있지 않은 플러그인입니다.
-            throw new \Exception('Plugin not found');
+        if (! $this->confirmToProceed()) {
+            return;
         }
 
-        $migrationPath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $plugin->getPath()).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
+        $this->migrator->setConnection($this->option('database'));
 
-        if (!$filesystem->exists($migrationPath)) {
-            throw new \Exception('Directory ['.$migrationPath.'] does not exist');
+        // First, we'll make sure that the migration table actually exists before we
+        // start trying to rollback and re-run all of the migrations. If it's not
+        // present we'll just bail out with an info message for the developers.
+        if (! $this->migrator->repositoryExists()) {
+            return $this->comment('Migration table not found.');
         }
 
-        $this->call('migrate:reset', [
-            '--path' => $migrationPath,
-            '--force' => $this->option('force'),
-            '--pretend' => $this->option('pretend'),
-        ]);
+        $this->migrator->resetForPlugin(
+            $this->getMigrationPaths(),
+            $this->option('pretend'),
+            $this->getFileList()
+        );
+
+        // Once the migrator has run we will grab the note output and send it out to
+        // the console screen, since the migrator itself functions without having
+        // any instances of the OutputInterface contract passed into the class.
+        foreach ($this->migrator->getNotes() as $note) {
+            $this->output->writeln($note);
+        }
     }
+
 }

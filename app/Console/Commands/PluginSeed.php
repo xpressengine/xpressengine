@@ -22,6 +22,8 @@ class PluginSeed extends Command
      * @var string
      */
     protected $signature = 'plugin:seed {plugin : The name of the plugin}
+                        {--class= : The class name of the root seeder}
+                        {--database= : The database connection to use.}
                         {--force : Force the operation to run when in production.}';
 
     /**
@@ -58,11 +60,13 @@ class PluginSeed extends Command
             throw new \Exception('Plugin not found');
         }
         $pluginClass = new \ReflectionClass($plugin->getClass());
-        $seedClass = $pluginClass->getNamespaceName().'\\Database\\Seeds\\DatabaseSeeder';
+        $className = $this->option('class') ? $this->option('class') : 'DatabaseSeeder';
+        $seedClass = $pluginClass->getNamespaceName().'\\Database\\Seeds\\'. $className;
 
         $this->call('db:seed', [
-            '--force' => $this->option('force'),
             '--class' => $seedClass,
+            '--database' => $this->option('database'),
+            '--force' => $this->option('force'),
         ]);
     }
 }
