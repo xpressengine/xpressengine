@@ -375,7 +375,7 @@ return [
         'thumbnail' => [
             'disk' => 'local',
             'path' => 'public/thumbnails',
-            'type' => 'spill',
+            'type' => 'fit',
             'dimensions' => [
                 'S' => ['width' => 200, 'height' => 200,],
                 'M' => ['width' => 400, 'height' => 400,],
