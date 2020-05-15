@@ -44,6 +44,13 @@
                 translation: {!! XeFrontend::output('translation') !!}
             });
         }
+        if (jQuery) {
+            jQuery.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+        }
     </script>
 
     <!-- JS at head.append -->
