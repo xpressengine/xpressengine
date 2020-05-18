@@ -149,10 +149,11 @@ class PluginEntity implements Arrayable, Jsonable
         if (isset($this->object) && is_a($this->object, 'Xpressengine\Plugin\AbstractPlugin')) {
             return $this->object;
         } else {
-            if (file_exists($this->pluginFile) === false) {
-                throw new PluginFileNotFoundException(['path' => str_replace(base_path(), '', $this->pluginFile)]);
+            $pluginFilePath = base_path($this->pluginFile);
+            if (file_exists($pluginFilePath) === false) {
+                throw new PluginFileNotFoundException(['path' => $this->pluginFile]);
             }
-            require_once($this->pluginFile);
+            require_once($pluginFilePath);
 
             // reigster each plugin's autoload if autoload.php exist
             $this->registerPluginAutoload();
