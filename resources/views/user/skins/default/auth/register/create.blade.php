@@ -19,7 +19,7 @@
             </div>
 
             <button type="submit" class="xu-button xu-button--primary xu-button--block xu-button--large user-signup__button-signup">
-                <span class="xu-button__text">회원가입</span>
+                <span class="xu-button__text">{{ xe_trans('xe::signUp') }}</span>
             </button>
         </fieldset>
     </form>
