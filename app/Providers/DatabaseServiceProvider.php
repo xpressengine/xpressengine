@@ -53,6 +53,7 @@ class DatabaseServiceProvider extends ServiceProvider
                 $monoLog->pushHandler(new StreamHandler($logFile, Logger::INFO));
                 $prep = $query;
                 foreach ($bindings as $binding) {
+                    if($binding instanceof \DateTime) $binding = $binding->format(DATE_ATOM);
                     $prep = preg_replace('#\?#', is_numeric($binding) ? $binding : "'" . $binding . "'", $prep, 1);
                 }
                 $monoLog->info($prep);
