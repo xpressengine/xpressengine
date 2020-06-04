@@ -84,7 +84,7 @@ class ReleaseProvider
                 throw new \Exception('fail to get released information');
             }
 
-            $lines = explode(PHP_EOL, $response->getBody()->getContents());
+            $lines = array_map("rtrim", explode("\n", $response->getBody()->getContents()));
             $this->coreVersions = Collection::make($lines)->filter()->map(function ($v) {
                 return basename(trim($v), '.zip');
             })->sort('version_compare')->values()->all();
