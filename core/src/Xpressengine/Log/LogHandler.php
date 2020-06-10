@@ -15,6 +15,7 @@
 namespace Xpressengine\Log;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Arr;
 use Xpressengine\Log\Models\Log;
 use Xpressengine\Log\Repositories\LogRepository;
 use Xpressengine\Register\Container;
@@ -150,11 +151,11 @@ class LogHandler
      */
     public function getLogger($id, $loggerKey = LogHandler::ADMIN_LOGGER_KEY)
     {
-        if (array_has($this->loggers, $id)) {
+        if (Arr::has($this->loggers, $id)) {
             return $this->loggers[$id];
         }
 
-        $class = array_get($this->register->get($loggerKey), $id);
+        $class = Arr::get($this->register->get($loggerKey), $id);
 
         if ($class) {
             $logger = $this->loggers[$id] = new $class($this);

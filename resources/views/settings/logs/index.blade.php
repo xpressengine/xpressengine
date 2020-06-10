@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
+
 {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
 
 <div class="row">
@@ -124,7 +128,7 @@
                         <tr>
                             <td>{{ $log->created_at->format('y-m-d H:i:s') }}</td>
                             <td>
-                                @if($logger = array_get($loggers, $log->type))
+                                @if($logger = Arr::get($loggers, $log->type))
                                 {{  $logger::TITLE }}
                                 @else
                                 {{ $log->type }}
@@ -141,7 +145,7 @@
                                         {{ sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) }}
                                     </a>
                                 @endif
-                                
+
                             </td>
                             <td>{{ $log->summary }}</td>
                             <td>{{ $log->target_id }}</td>

@@ -14,7 +14,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -48,8 +47,6 @@ use Xpressengine\User\UserRegisterHandler;
  */
 class RegisterController extends Controller
 {
-    use RedirectsUsers;
-
     /**
      * The Guard implementation.
      *
@@ -344,7 +341,7 @@ class RegisterController extends Controller
             }
         }
 
-        return redirect()->intended(($this->redirectPath()));
+        return redirect()->intended(($this->redirectTo));
     }
 
     /**
@@ -472,7 +469,7 @@ class RegisterController extends Controller
 
         $this->handler->update(auth()->user(), $inputs);
 
-        return redirect($this->redirectPath());
+        return redirect($this->redirectTo);
     }
 
     /**

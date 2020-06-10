@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\UserInterface;
 
@@ -41,7 +42,7 @@ class UserRepository implements UserRepositoryInterface
     public function create(array $data)
     {
         $model = $this->createModel();
-        if (array_has($data, 'password')) {
+        if (Arr::has($data, 'password')) {
             $data['password_updated_at'] = $model->freshTimestamp();
         }
         $user = $model->create($data);

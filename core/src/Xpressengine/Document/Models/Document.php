@@ -607,7 +607,7 @@ class Document extends DynamicModel
         $documentDispatcher = Document::getEventDispatcher();
         if (isset($documentDispatcher)) {
             $documentEvent = "eloquent.{$event}: " . Document::class;
-            $method = $halt ? 'until' : 'fire';
+            $method = $halt ? 'until' : 'dispatch';
             Document::getEventDispatcher()->$method($documentEvent, $this);
         }
 

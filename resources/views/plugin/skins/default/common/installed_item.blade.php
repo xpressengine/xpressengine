@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <li class="list-group-item @if (!$item->isActivated()) off @endif ">
     <div class="list-group-item-checkbox">
         <label class="xe-label">
@@ -15,7 +18,7 @@
             <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
             <dd>By
                 @if($authors = $item->getAuthors())
-                    <a href="{{ array_get(reset($authors),'homepage', array_get(reset($authors),'email')) }}" target="_blank">
+                    <a href="{{ Arr::get(reset($authors),'homepage', Arr::get(reset($authors),'email')) }}" target="_blank">
                         {{ reset($authors)['name'] }}
                     </a>
                 @endif
@@ -27,12 +30,12 @@
         </dl>
         <p class="ellipsis">{{ $item->getDescription() }}</p>
 
-        @if(array_has($unresolvedComponents, $item->getId()))
+        @if(Arr::has($unresolvedComponents, $item->getId()))
             <hr>
             <div class="alert alert-warning" role="alert" style="margin-top:10px;">
                 <p><i class="xi-info-o txt_red"></i> {{ xe_trans('xe::componentNotRegisteredProperly') }}</p>
                 <ul class="list-unstyled">
-                    @foreach(array_get($unresolvedComponents, $item->getId()) as $cId => $info)
+                    @foreach(Arr::get($unresolvedComponents, $item->getId()) as $cId => $info)
                         {{ $cId }}
                     @endforeach
                 </ul>

@@ -16,6 +16,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Arr;
 
 /**
  * Class ShareLocalizeSession
@@ -61,8 +62,8 @@ class ShareLocalizeSession
             $this->app['session']->start();
         }
 
-        if ($request->method() === 'GET' && array_has($queries = $request->query->all(), '_s')) {
-            $queries = array_except($queries, '_s');
+        if ($request->method() === 'GET' && Arr::has($queries = $request->query->all(), '_s')) {
+            $queries = Arr::except($queries, '_s');
             return redirect($request->url().(count($queries) > 0 ? '?'.http_build_query($queries) : ''));
         }
 

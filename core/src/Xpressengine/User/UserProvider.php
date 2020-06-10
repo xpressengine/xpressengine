@@ -17,6 +17,7 @@ namespace Xpressengine\User;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Illuminate\Support\Str;
 use Xpressengine\User\Contracts\CanResetPassword;
 use Xpressengine\User\Events\UserRetrievedEvent;
 
@@ -60,7 +61,7 @@ class UserProvider extends EloquentUserProvider
 
         $where = [];
         foreach ($credentials as $key => $value) {
-            if (!str_contains($key, 'password')) {
+            if (!Str::contains($key, 'password')) {
                 $where[$key] = $value;
             }
         }
@@ -78,7 +79,7 @@ class UserProvider extends EloquentUserProvider
             unset($where['email']);
 
             //login_id를 사용해서 로그인
-            if (!str_contains($email, '@')) {
+            if (!Str::contains($email, '@')) {
                 $user = $query->where('login_id', $email)->first();
             } else {
                 $user = $query->whereHas(

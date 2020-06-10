@@ -15,8 +15,10 @@
 namespace Xpressengine\Database\Eloquent;
 
 use Closure;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Arr;
 use Xpressengine\Database\DynamicQuery;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Xpressengine\Database\Exceptions\KeyGeneratorNotFoundException;
@@ -269,6 +271,17 @@ abstract class DynamicModel extends Model
     }
 
     /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param DateTimeInterface $date datetime object
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Register a custom macro.
      *
      * @param string   $name  macro name
@@ -277,7 +290,7 @@ abstract class DynamicModel extends Model
      */
     public static function macro($name, callable $macro)
     {
-        array_set(static::$macros, static::class . '.' . $name, $macro);
+        Arr::set(static::$macros, static::class . '.' . $name, $macro);
     }
 
     /**
@@ -288,7 +301,7 @@ abstract class DynamicModel extends Model
      */
     public static function hasMacro($name)
     {
-        return array_get(static::$macros, static::class . '.' . $name);
+        return Arr::get(static::$macros, static::class . '.' . $name);
     }
 
     /**
@@ -299,7 +312,7 @@ abstract class DynamicModel extends Model
      */
     public function callMacro($name, $parameters = [])
     {
-        $macro = array_get(static::$macros, static::class . '.' . $name);
+        $macro = Arr::get(static::$macros, static::class . '.' . $name);
         if ($macro instanceof Closure) {
             return call_user_func_array($macro->bindTo($this, get_class($this)), $parameters);
         } else {

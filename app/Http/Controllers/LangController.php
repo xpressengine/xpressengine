@@ -17,6 +17,7 @@ namespace App\Http\Controllers;
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use XePlugin;
 use XePresenter;
 use XeLang;
@@ -45,7 +46,7 @@ class LangController extends Controller
     {
         $namespace = $request->get('namespace');
         $keyword = $request->get('keyword');
-        
+
         XeFrontend::translation([
             'xe::saved', 'xe::failed'
         ]);
@@ -63,7 +64,7 @@ class LangController extends Controller
         $this->withLines($searchList);
 
         $namespaces = $this->search()->groupBy('namespace')->get()->toArray();
-        $namespaces = array_pluck($namespaces, 'namespace');
+        $namespaces = Arr::pluck($namespaces, 'namespace');
 
         return XePresenter::make('lang.index', [
             'selected_namespace' => $namespace,

@@ -15,7 +15,6 @@
 namespace Xpressengine\User\Repositories;
 
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\UserInterface;
 
 /**
  * 이 인터페이스는 회원의 이메일정보 저장소가 구현해야 하는 인터페이스이다.
@@ -26,10 +25,6 @@ use Xpressengine\User\UserInterface;
  * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
- * @method      create(UserInterface $user, array $data)
- * @method      update(EmailInterface $item, array $data = [])
- * @method      delete(EmailInterface $item)
- * @method      query()
  */
 interface UserEmailRepositoryInterface
 {

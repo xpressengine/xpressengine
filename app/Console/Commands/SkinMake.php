@@ -15,6 +15,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 /**
  * Class SkinMake
@@ -135,7 +136,7 @@ class SkinMake extends ComponentMakeCommand
      */
     protected function getDefaultPath()
     {
-        return 'Skins/' . studly_case($this->argument('name'));
+        return 'Skins/' . Str::studly($this->argument('name'));
     }
 
     /**
@@ -145,7 +146,7 @@ class SkinMake extends ComponentMakeCommand
      */
     protected function getClassName()
     {
-        return $this->option('class') ?: studly_case($this->argument('name')) . 'Skin';
+        return $this->option('class') ?: Str::studly($this->argument('name')) . 'Skin';
     }
 
     /**

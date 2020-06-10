@@ -11,7 +11,6 @@
  */
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
@@ -27,7 +26,7 @@ use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
+use Throwable;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 
@@ -67,10 +66,12 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
+     *
+     * @throws \Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -79,10 +80,10 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $e
+     * @param  \Throwable               $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         if (method_exists($e, 'render') && $response = $e->render($request)) {
             return Router::toResponse($request, $response);
@@ -90,9 +91,9 @@ class Handler extends ExceptionHandler
             return $e->toResponse($request);
         }
 
-        Event::fire('exception.handler:prepare.before', [$e]);
+        Event::dispatch('exception.handler:prepare.before', [$e]);
         $e = $this->prepareException($e);
-        Event::fire('exception.handler:prepare.after', [$e]);
+        Event::dispatch('exception.handler:prepare.after', [$e]);
 
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
@@ -110,10 +111,10 @@ class Handler extends ExceptionHandler
     /**
      * Prepare exception for rendering.
      *
-     * @param  \Exception  $e
-     * @return \Exception
+     * @param  \Throwable  $e
+     * @return \Throwable
      */
-    protected function prepareException(Exception $e)
+    protected function prepareException(Throwable $e)
     {
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException('xe::pageNotFound', $e);
@@ -132,10 +133,10 @@ class Handler extends ExceptionHandler
     /**
      * exception filter for send xpressengine message
      *
-     * @param Exception $e
-     * @return HttpXpressengineException|Exception
+     * @param Throwable $e
+     * @return HttpXpressengineException|Throwable
      */
-    protected function convert(Exception $e)
+    protected function convert(Throwable $e)
     {
         $converted = $e;
 
@@ -160,10 +161,10 @@ class Handler extends ExceptionHandler
     /**
      * Determine if the given exception is an HTTP exception.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return bool
      */
-    protected function isHttpException(Exception $e)
+    protected function isHttpException(Throwable $e)
     {
         return $e instanceof HttpException || $this->isHttpXpressengineException($e);
     }
@@ -171,33 +172,22 @@ class Handler extends ExceptionHandler
     /**
      * Determine if the given exception is an HTTP exception.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return bool
      */
-    protected function isHttpXpressengineException(Exception $e = null)
+    protected function isHttpXpressengineException(Throwable $e = null)
     {
         return $e !== null && $e instanceof HttpXpressengineException;
-    }
-
-    /**
-     * is fatal error
-     *
-     * @param Exception $e
-     * @return bool
-     */
-    protected function isFatalError(Exception $e)
-    {
-        return $e instanceof \Symfony\Component\Debug\Exception\FatalErrorException;
     }
 
     /**
      * Prepare a response for the given exception.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function prepareResponse($request, Exception $e)
+    protected function prepareResponse($request, Throwable $e)
     {
         if (!$this->isHttpException($e) && config('app.debug')) {
             return $this->toIlluminateResponse(
@@ -218,7 +208,7 @@ class Handler extends ExceptionHandler
             ] : [])
             ->then(function ($request) use ($e) {
                 return $this->toIlluminateResponse(
-                    $this->isFatalError($e) || !$this->withTheme() ?
+                    !$this->withTheme() ?
                         $this->renderWithoutXE($e) :
                         $this->renderWithTheme($e, $request),
                     $e
@@ -273,7 +263,7 @@ class Handler extends ExceptionHandler
             } else {
                 $view = $this->getTheme($path, $status, $e);
             }
-        } catch (Exception $renderError) {
+        } catch (Throwable $renderError) {
             $view = $this->getView($path, $status, $e);
         }
 
@@ -304,7 +294,7 @@ class Handler extends ExceptionHandler
      *
      * @param $path
      * @param $status
-     * @param Exception $e
+     * @param HttpXpressengineException $e
      * @return Response
      */
     protected function getView($path, $status, HttpXpressengineException $e)
@@ -320,10 +310,10 @@ class Handler extends ExceptionHandler
     /**
      * Convert the given exception to an array.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return array
      */
-    protected function convertExceptionToArray(Exception $e)
+    protected function convertExceptionToArray(Throwable $e)
     {
         $arr = parent::convertExceptionToArray($e);
 

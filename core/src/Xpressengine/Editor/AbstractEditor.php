@@ -14,6 +14,7 @@
 namespace Xpressengine\Editor;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
@@ -389,11 +390,11 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected function buildOptions()
     {
-        $this->events->fire('xe.editor.option.building', $this);
+        $this->events->dispatch('xe.editor.option.building', $this);
 
         $options = array_merge($this->getStaticOption(), $this->getDynamicOption());
 
-        $this->events->fire('xe.editor.option.builded', $this);
+        $this->events->dispatch('xe.editor.option.builded', $this);
 
         return $options;
     }
@@ -455,7 +456,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected function getDynamicOption()
     {
-        $data = array_except($this->config->all(), 'tools');
+        $data = Arr::except($this->config->all(), 'tools');
         $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
             return trim($v);
         }, explode(',', $data['fontFamily'])) : [];
@@ -562,7 +563,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function render()
     {
-        $this->events->fire('xe.editor.render', $this);
+        $this->events->dispatch('xe.editor.render', $this);
 
         $this->loadTools();
 
@@ -584,7 +585,7 @@ abstract class AbstractEditor implements ComponentInterface
     public function compile($content, $htmlable = false)
     {
         $content = (string)$content;
-        $this->events->fire('xe.editor.compile', $this);
+        $this->events->dispatch('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
             $content = nl2br(e($content));

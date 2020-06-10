@@ -14,6 +14,7 @@
 
 namespace App\Skins\Plugin;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Skin\GenericSkin;
 
 /**
@@ -159,7 +160,7 @@ class PluginSettingsSkin extends GenericSkin
             })
         </script>")->load();
 
-        array_set($this->data, 'color', [
+        Arr::set($this->data, 'color', [
             'theme' => 'success',
             'skin' => 'info',
             'settingsSkin' => 'warning',

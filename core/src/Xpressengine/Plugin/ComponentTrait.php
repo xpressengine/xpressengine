@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Plugin;
 
+use Illuminate\Support\Arr;
+
 /**
  * ComponentInterface를 구현한 Trait
  *
@@ -54,7 +56,7 @@ trait ComponentTrait
             return static::$id;
         }
 
-        return array_get(self::$id, static::class, null);
+        return Arr::get(self::$id, static::class, null);
     }
 
     /**
@@ -83,9 +85,9 @@ trait ComponentTrait
     public static function getComponentInfo($key = null)
     {
         if (property_exists(static::class, 'componentInfo')) {
-            return array_get(static::$componentInfo, $key);
+            return Arr::get(static::$componentInfo, $key);
         }
-        return array_get(self::$componentInfo, static::class.'.'.$key);
+        return Arr::get(self::$componentInfo, static::class.'.'.$key);
     }
 
     /**
@@ -105,9 +107,9 @@ trait ComponentTrait
         if (property_exists(static::class, 'componentInfo')) {
             static::$componentInfo = array_merge(static::$componentInfo, $key);
         } else {
-            $componentInfo = array_get(self::$componentInfo, static::class, []);
+            $componentInfo = Arr::get(self::$componentInfo, static::class, []);
             $componentInfo = array_merge($componentInfo, $key);
-            self::$componentInfo = array_add(self::$componentInfo, static::class, $componentInfo);
+            self::$componentInfo = Arr::add(self::$componentInfo, static::class, $componentInfo);
         }
     }
 

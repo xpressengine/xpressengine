@@ -1,6 +1,7 @@
-<?php
-use Xpressengine\User\Models\User;
-?>
+@php
+    use Illuminate\Support\Arr;
+    use Xpressengine\User\Models\User;
+@endphp
 {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
 {{ app('xe.frontend')->js('assets/vendor/jqueryui/jquery-ui.min.js')->load() }}
 {{ app('xe.frontend')->css('assets/vendor/jqueryui/jquery-ui.min.css')->load() }}
@@ -155,7 +156,7 @@ use Xpressengine\User\Models\User;
                             </td>
                             <td>
                                 @if($user->groups !== null)
-                                    {{ implode(', ', array_pluck($user->groups, 'name')) }}
+                                    {{ implode(', ', Arr::pluck($user->groups, 'name')) }}
                                 @endif
                             </td>
                             <td>

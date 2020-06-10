@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Permission;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 use Xpressengine\Permission\Exceptions\InvalidArgumentException;
 
@@ -136,7 +137,7 @@ class Grant extends Fluent
         }
 
 
-        $value = array_except($value, $unknown);
+        $value = Arr::except($value, $unknown);
 
         return $value;
     }

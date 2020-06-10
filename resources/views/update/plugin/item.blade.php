@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <li class="list-group-item off">
     <div class="list-group-item-checkbox">
         <label class="xe-label">
@@ -14,7 +17,7 @@
             <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
             <dd>By
                 @if($authors = $plugin->getAuthors())
-                    <a href="{{ array_get(reset($authors),'homepage', array_get(reset($authors),'email')) }}">
+                    <a href="{{ Arr::get(reset($authors),'homepage', Arr::get(reset($authors),'email')) }}">
                         {{ reset($authors)['name'] }}
                     </a>
                 @endif

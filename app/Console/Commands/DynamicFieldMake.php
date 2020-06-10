@@ -14,6 +14,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 /**
  * Class DynamicFieldMake
@@ -137,7 +138,7 @@ class DynamicFieldMake extends ComponentMakeCommand
      */
     protected function getDefaultPath()
     {
-        return 'DynamicFields/' . studly_case($this->argument('name'));
+        return 'DynamicFields/' . Str::studly($this->argument('name'));
     }
 
     /**
@@ -147,7 +148,7 @@ class DynamicFieldMake extends ComponentMakeCommand
      */
     protected function getClassName()
     {
-        return $this->option('class') ?: studly_case($this->argument('name')) . 'Field';
+        return $this->option('class') ?: Str::studly($this->argument('name')) . 'Field';
     }
 
     /**

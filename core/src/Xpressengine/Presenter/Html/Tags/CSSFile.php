@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
+use Illuminate\Support\Arr;
+
 /**
  * CSSFile
  *
@@ -77,7 +79,7 @@ class CSSFile
     {
         $output = '';
 
-        if (!$list = array_get(static::$fileList, static::LOCATION_OUTPUT)) {
+        if (!$list = Arr::get(static::$fileList, static::LOCATION_OUTPUT)) {
             return $output;
         }
 
@@ -105,7 +107,7 @@ class CSSFile
     {
         $output = [];
 
-        if (!$list = array_get(static::$fileList, static::LOCATION_ASYNC)) {
+        if (!$list = Arr::get(static::$fileList, static::LOCATION_ASYNC)) {
             return $output;
         }
 
@@ -232,7 +234,7 @@ class CSSFile
      */
     protected function loadFile($location)
     {
-        static::$fileList = array_add(static::$fileList, $location, []);
+        static::$fileList = Arr::add(static::$fileList, $location, []);
 
         foreach ($this->files as $file) {
             list($element, $position) = explode('.', $location);

@@ -14,7 +14,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Exception;
 use Xpressengine\User\Guard;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
@@ -40,8 +39,6 @@ use Xpressengine\User\UserHandler;
  */
 class AuthController extends Controller
 {
-    use AuthenticatesUsers;
-
     /**
      * The Guard implementation.
      *
@@ -208,7 +205,7 @@ class AuthController extends Controller
                     break;
 
                 default:
-                    return redirect()->intended($this->redirectPath());
+                    return redirect()->intended($this->redirectTo);
             }
         }
 

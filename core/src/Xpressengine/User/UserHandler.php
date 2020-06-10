@@ -16,6 +16,7 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Register\Container;
@@ -197,13 +198,13 @@ class UserHandler
         $this->validateForCreate($data);
 
         /* 회원가입 절차 */
-        $userData = array_except(
+        $userData = Arr::except(
             $data,
             ['group_id', 'password_confirmation', 'account', '_token']
         );
 
         // insert user
-        if (array_has($userData, 'password')) {
+        if (Arr::has($userData, 'password')) {
             $userData['password'] = $this->hasher->make($userData['password']);
         }
 
@@ -223,7 +224,7 @@ class UserHandler
         }
 
         // join group
-        $groupIds = array_get($data, 'group_id', []);
+        $groupIds = Arr::get($data, 'group_id', []);
         if (count($groupIds) > 0) {
             $user->joinGroups($groupIds);
         }
@@ -235,11 +236,11 @@ class UserHandler
                 $user,
                 [
                     'user_id' => $user->id,
-                    'account_id' => array_get($accountData, 'account_id'),
-                    'email' => array_get($accountData, 'email', array_get($data, 'email')),
-                    'provider' => array_get($accountData, 'provider'),
-                    'token' => array_get($accountData, 'token'),
-                    'token_secret' => array_get($accountData, 'token_secret'),
+                    'account_id' => Arr::get($accountData, 'account_id'),
+                    'email' => Arr::get($accountData, 'email', Arr::get($data, 'email')),
+                    'provider' => Arr::get($accountData, 'provider'),
+                    'token' => Arr::get($accountData, 'token'),
+                    'token_secret' => Arr::get($accountData, 'token_secret'),
                 ]
             );
             $user->accounts()->save($account);
@@ -280,7 +281,7 @@ class UserHandler
         }
 
         // resolve profileImage
-        if (array_get($userData, 'profile_img_file') !== null) {
+        if (Arr::get($userData, 'profile_img_file') !== null) {
             $profileFile = $userData['profile_img_file'];
 
             if ($profileFile === false) {
@@ -292,10 +293,10 @@ class UserHandler
         }
 
         // resolve group
-        $groups = array_get($userData, 'group_id');
+        $groups = Arr::get($userData, 'group_id');
 
         // email, display_name, introduction, password, status, rating
-        $userData = array_except($userData, ['group_id', 'profile_img_file']);
+        $userData = Arr::except($userData, ['group_id', 'profile_img_file']);
 
         $user = $this->users()->update($user, $userData);
 
@@ -320,7 +321,7 @@ class UserHandler
         /** @var UserInterface[] $users */
         $users = $this->users()->whereIn('id', (array) $userIds)->with(['groups', 'emails'])->get();
 
-        $ratings = array_pluck($users, 'rating');
+        $ratings = Arr::pluck($users, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
             throw new CannotDeleteUserHavingSuperRatingException();
         }
@@ -380,7 +381,7 @@ class UserHandler
                 throw new InvalidAccountInfoException();
             }
 
-            if ($this->accounts()->where(array_only($account, ['account_id', 'provider']))->first() !== null) {
+            if ($this->accounts()->where(Arr::only($account, ['account_id', 'provider']))->first() !== null) {
                 throw new AccountAlreadyExistsException();
             }
         }
@@ -483,13 +484,13 @@ class UserHandler
      */
     public function validateForUpdate(UserInterface $user, array $data)
     {
-        if (array_get($data, 'display_name') !== null) {
+        if (Arr::get($data, 'display_name') !== null) {
             if (strcmp($user->display_name, $data['display_name']) !== 0) {
                 $this->validateDisplayName($data['display_name'], $user);
             }
         }
 
-        if (array_get($data, 'login_id') !== null) {
+        if (Arr::get($data, 'login_id') !== null) {
             if (strcmp($user->login_id, $data['login_id']) !== 0) {
                 $this->validateLoginId($data['login_id'], $user);
             }

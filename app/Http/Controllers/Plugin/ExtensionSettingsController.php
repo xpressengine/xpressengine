@@ -16,6 +16,7 @@ namespace App\Http\Controllers\Plugin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use XePresenter;
 use Xpressengine\Http\Request;
@@ -105,7 +106,7 @@ class ExtensionSettingsController extends Controller
 
         if ($orderType = $request->get('order_key')) {
             $order = $orderTypes[$orderType];
-            array_forget($order, 'name');
+            Arr::forget($order, 'name');
             $filter = array_merge($filter, $order);
         }
 

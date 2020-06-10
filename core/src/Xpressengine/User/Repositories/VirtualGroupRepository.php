@@ -15,6 +15,7 @@
 namespace Xpressengine\User\Repositories;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Xpressengine\User\Exceptions\UserNotFoundException;
 use Xpressengine\User\Models\UserVirtualGroup;
@@ -76,7 +77,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      */
     public function find($id)
     {
-        return array_get($this->vgroups, $id);
+        return Arr::get($this->vgroups, $id);
     }
 
     /**
@@ -113,7 +114,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
 
         $groupIds = $getByUser($user);
 
-        return array_only($this->vgroups, $groupIds);
+        return Arr::only($this->vgroups, $groupIds);
     }
 
     /**

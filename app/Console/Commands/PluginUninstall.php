@@ -14,6 +14,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -87,7 +88,7 @@ class PluginUninstall extends PluginCommand
             if (count($stables) > 0) {
                 $this->writeRequire('uninstall', $stables);
 
-                $packages = array_pluck($stables, 'name');
+                $packages = Arr::pluck($stables, 'name');
                 // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
                 $this->warn('Composer update command is running.. It may take up to a few minutes.');
                 $this->line(" composer update --with-dependencies " . implode(' ', $packages));
@@ -106,7 +107,7 @@ class PluginUninstall extends PluginCommand
         if (isset($composed)) {
             $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-            $uninstalled = array_get($changed, 'uninstalled', []);
+            $uninstalled = Arr::get($changed, 'uninstalled', []);
             if (count($uninstalled) < 1) {
                 $this->output->error(
                 // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다.

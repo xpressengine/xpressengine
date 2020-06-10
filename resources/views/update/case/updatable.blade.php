@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 @section('updateDescription')
     <p class="help-block">
         {{ xe_trans('xe::availableUpdatedCoreVersion') }}<br>

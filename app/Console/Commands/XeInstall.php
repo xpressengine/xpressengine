@@ -1010,7 +1010,8 @@ class XeInstall extends Command
             $this->line("passed");
         }
 
-        $process = new Process("chmod -R $storagePerm $storagePath");
+//        $process = new Process("chmod -R $storagePerm $storagePath");
+        $process = new Process(['chmod', '-R', $storagePerm, $storagePath]);
         $process->run();
 
         // executes after the command finishes
@@ -1037,7 +1038,8 @@ class XeInstall extends Command
             $this->line("passed");
         }
 
-        $process = new Process("chmod -R $bootCachePerm $bootCachePath");
+//        $process = new Process("chmod -R $bootCachePerm $bootCachePath");
+        $process = new Process(['chmod', '-R', $bootCachePerm, $bootCachePath]);
         $process->run();
 
         // executes after the command finishes

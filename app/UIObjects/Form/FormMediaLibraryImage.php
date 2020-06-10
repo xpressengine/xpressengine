@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
@@ -56,8 +57,8 @@ class FormMediaLibraryImage extends AbstractUIObject
         $this->loadAssets();
 
         // set width, height
-        $args = array_add($args, 'width', 10000);
-        $args = array_add($args, 'height', 10000);
+        $args = Arr::add($args, 'width', 10000);
+        $args = Arr::add($args, 'height', 10000);
 
         // render template
         $this->template = view($this->view, ['args' => $args, 'seq' => $seq])->render();

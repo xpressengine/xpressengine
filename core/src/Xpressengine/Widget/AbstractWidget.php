@@ -15,6 +15,7 @@
 namespace Xpressengine\Widget;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Skin\AbstractSkin;
@@ -94,7 +95,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     public function renderSkin(array $data)
     {
-        $skinId = array_get($this->config, '@attributes.skin-id');
+        $skinId = Arr::get($this->config, '@attributes.skin-id');
 
         /** @var AbstractSkin $skin */
         $skin = app('xe.skin')->get($skinId, $this->config);

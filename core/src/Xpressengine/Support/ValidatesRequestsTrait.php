@@ -16,6 +16,7 @@ namespace Xpressengine\Support;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Str;
 
 /**
  * Trait ValidatesRequestsTrait
@@ -53,7 +54,7 @@ trait ValidatesRequestsTrait
     {
         $transAttributes = [];
         foreach ($rules as $key => $val) {
-            $transAttributes[$key] = xe_trans($this->validateTranslationNamespace. '::' . camel_case($key));
+            $transAttributes[$key] = xe_trans($this->validateTranslationNamespace. '::' . Str::camel($key));
         }
         return $this->originValidate($request, $rules, $messages, array_merge($transAttributes, $customAttributes));
     }

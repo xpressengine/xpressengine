@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -44,19 +45,19 @@ class FormLangTextArea extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        $value = array_get($args, 'value');
+        $value = Arr::get($args, 'value');
 
         if($value !== null) {
-            array_set($args, 'langKey', $value);
+            Arr::set($args, 'langKey', $value);
         }
 
-        $label = array_get($args, 'label', '');
+        $label = Arr::get($args, 'label', '');
         if($label) {
             $label = '<label>'.$label.'</label>';
         }
 
         $content = uio('langTextArea', $args);
-        $description = array_get($args, 'description');
+        $description = Arr::get($args, 'description');
 
         return sprintf('
             <div class="form-group">

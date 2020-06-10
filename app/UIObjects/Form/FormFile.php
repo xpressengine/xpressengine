@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use XeFrontend;
 use XeStorage;
 use Xpressengine\Storage\File;
@@ -85,19 +86,19 @@ class FormFile extends AbstractUIObject
         }
 
         // resolve arguments
-        $fileuploadOptions = array_merge($fileuploadOptions, array_get($args, 'fileuploadOptions', []));
+        $fileuploadOptions = array_merge($fileuploadOptions, Arr::get($args, 'fileuploadOptions', []));
 
-        $args = array_add($args, 'width', 420);
-        $args = array_add($args, 'height', 240);
-        array_set($fileuploadOptions, 'previewMaxWidth', $args['width']);
-        array_set($fileuploadOptions, 'previewMaxHeight', $args['height']);
+        $args = Arr::add($args, 'width', 420);
+        $args = Arr::add($args, 'height', 240);
+        Arr::set($fileuploadOptions, 'previewMaxWidth', $args['width']);
+        Arr::set($fileuploadOptions, 'previewMaxHeight', $args['height']);
 
-        $types = array_get($args, 'types');
+        $types = Arr::get($args, 'types');
         if ($types !== null) {
-            array_set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', (array)$types).')$');
+            Arr::set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', (array)$types).')$');
         }
 
-        array_set($args, 'fileuploadOptions', $fileuploadOptions);
+        Arr::set($args, 'fileuploadOptions', $fileuploadOptions);
 
         // render template
         $this->template = \View::make($this->view, ['args' => $args, 'seq' => $seq])->render();

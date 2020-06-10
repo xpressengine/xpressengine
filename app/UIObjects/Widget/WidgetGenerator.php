@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Widget;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -51,7 +52,7 @@ class WidgetGenerator extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        $show_code = array_get($args, 'show_code', true);
+        $show_code = Arr::get($args, 'show_code', true);
 
         $handler = app('xe.widget');
 
@@ -65,7 +66,7 @@ class WidgetGenerator extends AbstractUIObject
 
         $this->loadFiles();
 
-        $id = array_get($args, 'id', 'widget-generator-'.static::seq());
+        $id = Arr::get($args, 'id', 'widget-generator-'.static::seq());
 
         $this->template = view($this->view, compact('widgets', 'id', 'show_code'))->render();
 

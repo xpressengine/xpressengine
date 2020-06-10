@@ -14,6 +14,8 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
+
 /**
  * Class PluginMake
  *
@@ -107,11 +109,11 @@ class PluginMake extends MakeCommand
     protected function getNamespace($name, $vendor)
     {
         if (!$namespace = $this->option('namespace')) {
-            $namespace = studly_case($vendor) . '\\XePlugin\\' . studly_case($name);
+            $namespace = Str::studly($vendor) . '\\XePlugin\\' . Str::studly($name);
         }
 
         // check namespace
-        if(!str_contains($namespace, '\\')) {
+        if(!Str::contains($namespace, '\\')) {
             throw new \Exception('The namespace must have at least 1 delimiter(\\), use double backslash(\\\\) as delimiter');
         }
 
@@ -126,7 +128,7 @@ class PluginMake extends MakeCommand
      */
     protected function getTitleInput($name)
     {
-        return $this->option('title') ?: studly_case($name) . ' plugin';
+        return $this->option('title') ?: Str::studly($name) . ' plugin';
     }
 
     /**

@@ -17,6 +17,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -67,25 +68,25 @@ class PluginProvider
     {
         $url = 'plugins/items';
 
-        $query = array_get($filters, 'query');
+        $query = Arr::get($filters, 'query');
         $q = implode(',', (array) $query);
 
-        $authors_query = array_get($filters, 'authors');
-        $tags_query = array_get($filters, 'tags');
+        $authors_query = Arr::get($filters, 'authors');
+        $tags_query = Arr::get($filters, 'tags');
 
         $authors = implode(',', (array) $authors_query);
         $tags = implode(',', (array) $tags_query);
 
-        $collection = array_get($filters, 'collection');
+        $collection = Arr::get($filters, 'collection');
 
-        $order = array_get($filters, 'order');
-        $order_type = array_get($filters, 'order_type');
+        $order = Arr::get($filters, 'order');
+        $order_type = Arr::get($filters, 'order_type');
 
-        $sale_type = array_get($filters, 'sale_type');
+        $sale_type = Arr::get($filters, 'sale_type');
 
-        $category = array_get($filters, 'category');
+        $category = Arr::get($filters, 'category');
 
-        $site_token = array_get($filters, 'site_token');
+        $site_token = Arr::get($filters, 'site_token');
 
         $response = $this->request(
             $url,

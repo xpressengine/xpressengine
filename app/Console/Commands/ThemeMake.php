@@ -15,6 +15,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 /**
  * Class ThemeMake
@@ -133,7 +134,7 @@ class ThemeMake extends ComponentMakeCommand
      */
     protected function getDefaultPath()
     {
-        return 'Themes/' . studly_case($this->argument('name'));
+        return 'Themes/' . Str::studly($this->argument('name'));
     }
 
     /**
@@ -143,7 +144,7 @@ class ThemeMake extends ComponentMakeCommand
      */
     protected function getClassName()
     {
-        return $this->option('class') ?: studly_case($this->argument('name')) . 'Theme';
+        return $this->option('class') ?: Str::studly($this->argument('name')) . 'Theme';
     }
 
     /**

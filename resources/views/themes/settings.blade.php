@@ -43,7 +43,7 @@
 
     <aside class="transition settings-nav-sidebar">
         <div class="logo-area transition">
-            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/core/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle or 'XpressEngine3' }}</a></h1>
+            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/core/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle ?? 'XpressEngine3' }}</a></h1>
         </div>
         <p class="list-title">MAIN MENU</p>
         <ul class="snb-list">

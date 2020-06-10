@@ -1,7 +1,10 @@
+@php
+use Illuminate\Support\Arr;
+@endphp
 <div class="__xe_imagebox_{{ $seq }}">
     <div class="__xe_inputBtn fileinput-button btn_file __xe_imgUploadBox" style="display: none;">
         <strong>{{ xe_trans('xe::update') }}</strong>
-        <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'imagebox') }}"/>
+        <input class="__xe_file_{{ $seq }}" type="file" name="{{ Arr::get($args, 'name', 'imagebox') }}"/>
     </div>
 </div>
 

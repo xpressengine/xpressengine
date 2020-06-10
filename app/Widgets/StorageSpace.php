@@ -14,6 +14,7 @@
 
 namespace App\Widgets;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Widget\AbstractWidget;
 use Config;
 use XeStorage;
@@ -56,7 +57,7 @@ class StorageSpace extends AbstractWidget
     {
         $args = $this->config;
 
-        $limit = (int)array_get($args, 'limit');
+        $limit = (int)Arr::get($args, 'limit');
         if ($limit < 1) {
             $limit = 5;
         }

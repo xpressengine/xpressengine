@@ -14,6 +14,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -240,7 +241,7 @@ class PluginController extends Controller
         $plugins = $request->get('plugin');
 
         foreach ($plugins as $id => $info) {
-            if(array_get($info, 'update', false)) {
+            if(Arr::get($info, 'update', false)) {
                 if (!$handler->getPlugin($id)) {
                     return back()->with('alert', [
                         'type' => 'danger',
@@ -248,7 +249,7 @@ class PluginController extends Controller
                     ]);
                 }
 
-                $plugins[$id] = $id.':'.array_get($info, 'version');
+                $plugins[$id] = $id.':'.Arr::get($info, 'version');
             }
         }
 
@@ -299,7 +300,7 @@ class PluginController extends Controller
             throw new HttpException(422, xe_trans('xe::notFoundPluginFromMarket'));
         }
 
-        $pluginIds = array_pluck($pluginsData, 'plugin_id');
+        $pluginIds = Arr::pluck($pluginsData, 'plugin_id');
 
         $operator->setPluginMode(false)->save();
 

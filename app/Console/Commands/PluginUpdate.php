@@ -13,6 +13,8 @@
  */
 namespace App\Console\Commands;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class PluginUpdate
  *
@@ -73,7 +75,7 @@ class PluginUpdate extends PluginCommand
         $this->startPlugin(function () use ($data) {
             $this->writeRequire('update', $data);
 
-            $packages = array_pluck($data, 'name');
+            $packages = Arr::pluck($data, 'name');
             // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
             $this->warn('Composer update command is running.. It may take up to a few minutes.');
             $this->line(" composer update --with-dependencies " . implode(' ', $packages));
@@ -90,7 +92,7 @@ class PluginUpdate extends PluginCommand
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        $updated = array_get($changed, 'updated', []);
+        $updated = Arr::get($changed, 'updated', []);
         if (count($updated) < 1) {
             $this->output->error(
             // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다.

@@ -36,14 +36,14 @@ class HttpXpressengineException extends XpressengineException implements HttpExc
      *
      * @param array           $args       arguments array
      * @param int             $statusCode exception status code
-     * @param \Exception|null $previous   exception
+     * @param \Throwable|null $previous   exception
      * @param array           $headers    header
      * @param int             $code       code
      */
     public function __construct(
         $args = [],
         $statusCode = null,
-        \Exception $previous = null,
+        \Throwable $previous = null,
         array $headers = [],
         $code = 0
     ) {

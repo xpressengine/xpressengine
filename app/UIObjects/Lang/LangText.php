@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Lang;
 
+use Illuminate\Support\Arr;
 use XeFrontend;
 use Config;
 use Xpressengine\UIObject\AbstractUIObject;
@@ -64,7 +65,7 @@ class LangText extends AbstractUIObject
             </script>
         ")->appendTo('head')->load();
 
-        $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
+        $langKey = htmlspecialchars(Arr::get($args, 'langKey', Arr::get($args, 'value')), ENT_QUOTES, 'UTF-8');
         $url = route('lang.lines.key', ['key'=>$langKey]);
         $autocomplete = Config::get('xe.lang.autocomplete');
 

@@ -13,6 +13,8 @@
  */
 namespace App\Console\Commands;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class PluginInstall
  *
@@ -75,7 +77,7 @@ class PluginInstall extends PluginCommand
         $this->startPlugin(function () use ($data) {
             $this->writeRequire('install', $data);
 
-            $packages = array_pluck($data, 'name');
+            $packages = Arr::pluck($data, 'name');
             // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
             $this->warn('Composer update command is running.. It may take up to a few minutes.');
             $this->line(" composer update --with-dependencies " . implode(' ', $packages));
@@ -92,7 +94,7 @@ class PluginInstall extends PluginCommand
         // changed plugin list 정보 출력
         $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-        $installed = array_get($changed, 'installed', []);
+        $installed = Arr::get($changed, 'installed', []);
         if (count($installed) < 1) {
             $this->output->error(
             // $name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다.
@@ -101,7 +103,7 @@ class PluginInstall extends PluginCommand
                 "Installation may not be able to success. Please check the plugin's dependencies."
             );
         } else {
-            $this->activate(array_pluck($data, 'id'));
+            $this->activate(Arr::pluck($data, 'id'));
 
             foreach ($installed as $name => $version) {
                 $this->output->success("$name:$version plugin is installed");

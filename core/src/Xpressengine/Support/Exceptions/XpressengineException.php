@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Support\Exceptions;
 
-use Exception;
+use Throwable;
 use RuntimeException;
 
 /**
@@ -41,9 +41,9 @@ class XpressengineException extends RuntimeException
      *
      * @param array     $args     message 변환시 사용될 변수 목록
      * @param int       $code     The Exception code.
-     * @param Exception $previous The previous exception used for the exception chaining. Since 5.3.0
+     * @param Throwable $previous The previous exception used for the exception chaining. Since 5.3.0
      */
-    public function __construct(array $args = [], $code = 0, Exception $previous = null)
+    public function __construct(array $args = [], $code = 0, Throwable $previous = null)
     {
         $this->args = $args;
 

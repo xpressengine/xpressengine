@@ -15,6 +15,7 @@
 namespace App\UIObjects\Skin;
 
 use App\UIObjects\Form\FormSelect;
+use Illuminate\Support\Arr;
 use XeSkin;
 
 /**
@@ -43,7 +44,7 @@ class SkinSelect extends FormSelect
      */
     public function render()
     {
-        $target = array_get($this->arguments, 'target');
+        $target = Arr::get($this->arguments, 'target');
 
         $skins = XeSkin::getList($target);
         $options = [];

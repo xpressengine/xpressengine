@@ -68,7 +68,7 @@ class CategoryItemRepository
     {
         $item = $this->createModel()->create($attributes);
         $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
-        $this->dispatcher->fire('xe.category.categoryitem.created', $item);
+        $this->dispatcher->dispatch('xe.category.categoryitem.created', $item);
 
         return $item;
     }
@@ -85,7 +85,7 @@ class CategoryItemRepository
 //        $item->descendants(false)->detach();
 
         $result = $this->traitDelete($item);
-        $this->dispatcher->fire('xe.category.categoryitem.deleted', $item);
+        $this->dispatcher->dispatch('xe.category.categoryitem.deleted', $item);
 
         return $result;
     }

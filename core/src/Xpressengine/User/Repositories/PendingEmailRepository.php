@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Illuminate\Support\Str;
 use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
@@ -44,7 +45,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     public function create(UserInterface $user, array $data)
     {
         if (empty($data['confirmation_code'])) {
-            $data['confirmation_code'] = str_random();
+            $data['confirmation_code'] = Str::random();
         }
         return $user->pendingEmail()->create($data);
     }

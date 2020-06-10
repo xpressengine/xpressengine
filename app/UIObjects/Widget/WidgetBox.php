@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Widget;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\Widget\Presenters\HTMLPresenter;
 
@@ -53,10 +54,10 @@ class WidgetBox extends AbstractUIObject
         $args = $this->arguments;
 
         $widgetbox = null;
-        $id = array_get($args, 'id');
+        $id = Arr::get($args, 'id');
 
         if($id === null) {
-            $widgetbox = array_get($args, 'widgetbox');
+            $widgetbox = Arr::get($args, 'widgetbox');
         }
 
         $handler = app('xe.widgetbox');
@@ -72,7 +73,7 @@ class WidgetBox extends AbstractUIObject
             $presenter = new HTMLPresenter('');
         }
 
-        $link = array_get($args, 'link');
+        $link = Arr::get($args, 'link');
 
         $this->template = view($this->view, compact('widgetbox', 'id', 'presenter', 'link'))->render();
         return parent::render();

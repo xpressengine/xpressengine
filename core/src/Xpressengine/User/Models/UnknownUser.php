@@ -12,6 +12,7 @@
 
 namespace Xpressengine\User\Models;
 
+use Illuminate\Support\Arr;
 use Xpressengine\User\Exceptions\UnsupportedOperationForGuestOrUnknownException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -59,7 +60,7 @@ class UnknownUser implements UserInterface
      */
     public function getId()
     {
-        return array_get($this->attributes, 'id');
+        return Arr::get($this->attributes, 'id');
     }
 
     /**
@@ -69,7 +70,7 @@ class UnknownUser implements UserInterface
      */
     public function getDisplayName()
     {
-        return array_get($this->attributes, 'display_name', self::$name);
+        return Arr::get($this->attributes, 'display_name', self::$name);
     }
 
     /**
@@ -113,7 +114,7 @@ class UnknownUser implements UserInterface
      */
     public function getProfileImage()
     {
-        return asset(array_get($this->attributes, 'profileImage', static::$profileImage));
+        return asset(Arr::get($this->attributes, 'profileImage', static::$profileImage));
     }
 
     /**

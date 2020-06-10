@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Translation;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Translation\Exceptions\InvalidLocaleException;
 
 /**
@@ -40,7 +41,7 @@ class LaravelLangData extends LangData
             throw new InvalidLocaleException();
         }
 
-        foreach (array_dot($data) as $key => $value) {
+        foreach (Arr::dot($data) as $key => $value) {
             $this->setLine($key, $this->locale, $value);
         }
     }

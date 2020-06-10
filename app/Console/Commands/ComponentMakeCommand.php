@@ -15,6 +15,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Foundation\Operator;
@@ -95,7 +97,7 @@ abstract class ComponentMakeCommand extends MakeCommand
             $path = $this->getDefaultPath();
 
             $autoload = $this->getOriginComposerData('autoload');
-            $prefix = array_first((array)($autoload->{'psr-4'} ?? []));
+            $prefix = Arr::first((array)($autoload->{'psr-4'} ?? []));
             $path = $prefix ? rtrim($prefix,'/') . '/' . $path : $path;
         }
 
@@ -141,7 +143,7 @@ abstract class ComponentMakeCommand extends MakeCommand
         $namespace = null;
         $autoload = $this->getOriginComposerData('autoload');
         foreach ((array)($autoload->{'psr-4'} ?? []) as $ns => $head) {
-            if (starts_with($path, $head)) {
+            if (Str::startsWith($path, $head)) {
                 $namespace = $ns;
                 $path = substr($path, strlen($head));
                 break;
@@ -154,7 +156,7 @@ abstract class ComponentMakeCommand extends MakeCommand
         }
 
         $segments = array_map(function ($segment) {
-            return studly_case($segment);
+            return Str::studly($segment);
         }, explode('/', $path));
 
         return rtrim($namespace, '\\') . '\\' . implode('\\', $segments);
@@ -184,7 +186,7 @@ abstract class ComponentMakeCommand extends MakeCommand
      */
     protected function getTitleInput()
     {
-        return $this->option('title') ?: studly_case($this->getComponentName()) . ' ' . $this->componentType;
+        return $this->option('title') ?: Str::studly($this->getComponentName()) . ' ' . $this->componentType;
     }
 
     /**
@@ -263,7 +265,7 @@ abstract class ComponentMakeCommand extends MakeCommand
     {
         $autoload = $this->getOriginComposerData('autoload');
         foreach ((array)($autoload->{'psr-4'} ?? []) as $ns => $head) {
-            if (starts_with($file, $head) && starts_with($class, $ns)) {
+            if (Str::startsWith($file, $head) && Str::startsWith($class, $ns)) {
                 return true;
             }
         }

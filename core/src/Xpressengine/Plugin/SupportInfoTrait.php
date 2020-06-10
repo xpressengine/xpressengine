@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Plugin;
 
+use Illuminate\Support\Arr;
+
 /**
  * Trait SupportInfoTrait
  *
@@ -78,7 +80,7 @@ trait SupportInfoTrait
         }
 
         if ($key !== null) {
-            return array_get(static::$info, $key, $default);
+            return Arr::get(static::$info, $key, $default);
         }
         return static::$info;
     }

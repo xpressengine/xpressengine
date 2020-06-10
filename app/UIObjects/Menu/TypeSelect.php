@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Menu;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -60,7 +61,7 @@ class TypeSelect extends AbstractUIObject
 
         $types = app('xe.menu')->getModuleHandler()->getAllModuleInfo();
 
-        $selectedTypeId = array_get($args, 'selectedType', static::$defaultSelectedId);
+        $selectedTypeId = Arr::get($args, 'selectedType', static::$defaultSelectedId);
 
         $this->template = view($this->view, compact('types', 'selectedTypeId'))->render();
 

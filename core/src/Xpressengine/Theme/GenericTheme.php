@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Theme;
 
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\SupportInfoTrait;
@@ -119,13 +120,13 @@ abstract class GenericTheme extends AbstractTheme
 
         $assets = $this->info('setting.assets');
 
-        if (array_has($assets, 'js')) {
+        if (Arr::has($assets, 'js')) {
             foreach ($assets['js'] as $js) {
                 app('xe.frontend')->js(static::asset($js))->load();
             }
         }
 
-        if (array_has($assets, 'css')) {
+        if (Arr::has($assets, 'css')) {
             foreach ($assets['css'] as $css) {
                 app('xe.frontend')->css(static::asset($css))->load();
             }
@@ -149,12 +150,12 @@ abstract class GenericTheme extends AbstractTheme
      */
     public function resolveSetting(array $config)
     {
-        $configId = array_get($config, '_configId');
+        $configId = Arr::get($config, '_configId');
 
         // 파일만 별도 처리
         foreach ($config as $key => $item) {
             if ($item instanceof UploadedFile) {
-                array_set($config, $key, $this->saveFile($configId, $key, $item));
+                Arr::set($config, $key, $this->saveFile($configId, $key, $item));
             } elseif ($item === '__delete_file__') {
                 $this->removeFile($key);
                 $config[$key] = null;

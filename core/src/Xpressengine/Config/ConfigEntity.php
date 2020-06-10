@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Config;
 
+use Illuminate\Support\Arr;
 use IteratorAggregate;
 use ArrayIterator;
 use Xpressengine\Support\Entity;
@@ -153,7 +154,7 @@ class ConfigEntity extends Entity implements IteratorAggregate
                 return $value;
             }
 
-            return array_get($value, implode('.', $segments));
+            return Arr::get($value, implode('.', $segments));
         }
 
         return $default;

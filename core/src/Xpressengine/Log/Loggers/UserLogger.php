@@ -14,6 +14,7 @@
 namespace Xpressengine\Log\Loggers;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Arr;
 use Xpressengine\Http\Request;
 use Xpressengine\Log\AbstractLogger;
 use Xpressengine\Log\Models\Log;
@@ -95,14 +96,14 @@ class UserLogger extends AbstractLogger
             case 'settings.user.update':
                 $targetId = $request->route()->parameter('id');
                 break;
-                
+
             case 'settings.user.destroy':
                 $targetId = $request->get('userId', []);
                 if (is_array($targetId) === true) {
                     $targetId = implode(',', $targetId);
                 }
                 break;
-                
+
             case 'settings.user.mail.add':
             case 'settings.user.mail.delete':
                 $targetId = $request->get('userId');
@@ -111,7 +112,7 @@ class UserLogger extends AbstractLogger
 
         return $targetId;
     }
-    
+
     /**
      * 회원 권한 변경 로그 작성 인터셉트 등록
      *
@@ -184,10 +185,10 @@ class UserLogger extends AbstractLogger
     protected function storeLog(Request $request, $summary)
     {
         $data = $this->loadRequest($request);
-        
-        array_set($data['data'], 'route', $request->route()->getName());
-        array_forget($data['parameters'], 'password');
-        
+
+        Arr::set($data['data'], 'route', $request->route()->getName());
+        Arr::forget($data['parameters'], 'password');
+
         $data['summary'] = $summary;
 
         $this->log($data);

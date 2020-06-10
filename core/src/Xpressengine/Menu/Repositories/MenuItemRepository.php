@@ -103,7 +103,7 @@ class MenuItemRepository
 
                 $this->clearCache();
 
-                $this->dispatcher->fire('xe.menu.menuitem.created', $model);
+                $this->dispatcher->dispatch('xe.menu.menuitem.created', $model);
 
                 break;
             } catch (QueryException $e) {
@@ -127,7 +127,7 @@ class MenuItemRepository
         $item->ancestors(false)->detach();
 
         $result = $this->traitDelete($item);
-        $this->dispatcher->fire('xe.menu.menuitem.deleted', $item);
+        $this->dispatcher->dispatch('xe.menu.menuitem.deleted', $item);
 
         return $result;
     }

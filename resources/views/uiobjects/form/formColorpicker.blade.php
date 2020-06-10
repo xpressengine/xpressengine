@@ -1,10 +1,13 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <div class="form-group">
-    @if($label = array_get($args, 'label'))<label>{!! $label !!}</label>@endif
+    @if($label = Arr::get($args, 'label'))<label>{!! $label !!}</label>@endif
     <div data-selector="{{ $selector }}" data-format="alias" class="input-group colorpicker-component">
         <span class="input-group-addon"><i></i></span>
-        <input type="text" id="{{ array_get($args, 'id') }}" value='{{ array_get($args, 'value') }}' class="form-control" name="{{ array_get($args, 'name', 'colorpicker') }}" />
+        <input type="text" id="{{ Arr::get($args, 'id') }}" value='{{ Arr::get($args, 'value') }}' class="form-control" name="{{ Arr::get($args, 'name', 'colorpicker') }}" />
     </div>
-    <p class="help-block">{{ array_get($args, 'description') }}</p>
+    <p class="help-block">{{ Arr::get($args, 'description') }}</p>
 </div>
 
 <style>

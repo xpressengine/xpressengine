@@ -75,7 +75,7 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     {
         // set status of plugins
         foreach ($this->getStatusList() as $id => $info) {
-            if (array_has($this->plugins, $id)) {
+            if (Arr::has($this->plugins, $id)) {
                 $plugin = $this->get($id);
                 $plugin->setStatus($info['status']);
                 $plugin->setInstalledVersion($info['version']);
@@ -130,7 +130,7 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
      */
     public function get($id)
     {
-        return array_get($this->plugins, $id);
+        return Arr::get($this->plugins, $id);
     }
 
     /**
@@ -160,17 +160,17 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     {
         $plugins = $this->plugins;
 
-        $status = array_get($searchField, 'status');
+        $status = Arr::get($searchField, 'status');
         if ($status !== null) {
             $plugins = $this->fetchByStatus($status, $plugins);
         }
 
-        $searchword = array_get($searchField, 'keyword');
+        $searchword = Arr::get($searchField, 'keyword');
         if ($searchword !== null) {
             $plugins = $this->fetchByKeyword($searchword, $plugins);
         }
 
-        $component = array_get($searchField, 'component');
+        $component = Arr::get($searchField, 'component');
         if ($component !== null) {
             $plugins = $this->fetchByComponent($component, $plugins);
         }
@@ -223,7 +223,7 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
                 /** @var PluginEntity $entity */
                 $subject = implode(
                     ' ',
-                    array_flatten(
+                    Arr::flatten(
                         [
                             $entity->getId(),
                             $entity->getTitle(),

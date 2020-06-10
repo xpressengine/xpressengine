@@ -15,6 +15,7 @@
 namespace Xpressengine\Skin;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Plugin\SupportInfoTrait;
 use View;
@@ -174,12 +175,12 @@ abstract class GenericSkin extends AbstractSkin
      */
     public function resolveSetting(array $inputs = [])
     {
-        $configId = array_get($inputs, '_configId');
+        $configId = Arr::get($inputs, '_configId');
 
         // 파일만 별도 처리
         foreach ($inputs as $key => $item) {
             if ($item instanceof UploadedFile) {
-                array_set($inputs, $key, $this->saveFile($configId, $key, $item));
+                Arr::set($inputs, $key, $this->saveFile($configId, $key, $item));
             } elseif ($item === '__delete_file__') {
                 $this->removeFile($key);
                 $inputs[$key] = null;

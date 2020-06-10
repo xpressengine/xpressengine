@@ -12,6 +12,9 @@
  * @link        https://xpressengine.io
  */
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
 if (function_exists('json_enc') === false) {
     /**
      * Returns the JSON representation of a value
@@ -246,7 +249,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $locale);
+            return app('xe.translator')->get($id, $parameters, $locale);
         } catch (Exception $e) {
             return $id;
         }
@@ -268,7 +271,7 @@ if (function_exists('xe_trans_choice') === false) {
      */
     function xe_trans_choice($id, $number, array $parameters = array(), $locale = null)
     {
-        return app('xe.translator')->transChoice($id, $number, $parameters, $locale);
+        return app('xe.translator')->choice($id, $number, $parameters, $locale);
     }
 }
 
@@ -294,10 +297,10 @@ if (function_exists('locale_url') === false) {
                 throw new \Exception("Unknown locale [$locale]");
             }
             $url = $request->getScheme().'://'.$domains[$locale].'/'.ltrim($request->path(), '/');
-            array_set($queries, '_s', encrypt(session()->getId()));
+            Arr::set($queries, '_s', encrypt(session()->getId()));
         } else {
             $url = $request->url();
-            array_set($queries, '_l', $locale);
+            Arr::set($queries, '_l', $locale);
         }
 
         $queries = array_merge($queries, $params);
@@ -439,8 +442,8 @@ if (!function_exists('expose_instance_route')) {
 
         $uri = $route->uri();
 
-        if (starts_with($route->getPrefix(), '{instanceGroup')) {
-            $uri = str_replace_first($route->getPrefix(), '{url}', $uri);
+        if (Str::startsWith($route->getPrefix(), '{instanceGroup')) {
+            $uri = Str::replaceFirst($route->getPrefix(), '{url}', $uri);
         }
 
         $parameters['url'] = $url;

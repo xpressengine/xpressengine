@@ -17,6 +17,7 @@ namespace Xpressengine\Settings;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Instance;
@@ -139,7 +140,7 @@ class SettingsHandler
     protected function getPermission($permissionId)
     {
         $list = $this->getPermissionList(false);
-        return array_get($list, $permissionId);
+        return Arr::get($list, $permissionId);
     }
 
     /**
@@ -219,10 +220,10 @@ class SettingsHandler
         // 각 메뉴에 해당되는 route를 지정한다.
         foreach ($routes as $route) {
             /** @var Route $route */
-            $menuIds = array_get($route->getAction(), 'settings_menu', []);
+            $menuIds = Arr::get($route->getAction(), 'settings_menu', []);
 
             // 만약 route에 permission 정보가 있고, 그 permission을 현재 user가 통과하지 못하면 display=false로 지정한다.
-            $permissions = array_get($route->getAction(), 'permission', []);
+            $permissions = Arr::get($route->getAction(), 'permission', []);
             $visible = false;
             if (false && !$isSuper) {
                 foreach ((array) $permissions as $permissionId) {
@@ -270,7 +271,7 @@ class SettingsHandler
      */
     protected function setSelectedMenu(Route $route)
     {
-        $selectedMenuIds = array_get($route->getAction(), 'settings_menu', []);
+        $selectedMenuIds = Arr::get($route->getAction(), 'settings_menu', []);
         $selectedMenuIds = (array) $selectedMenuIds;
 
         if (count($selectedMenuIds) === 0) {

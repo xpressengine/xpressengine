@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\UIObject\Element;
 
@@ -50,9 +51,9 @@ class FormSelect extends AbstractUIObject
         $select = new Element('select', ['class'=>'form-control']);
         $description = new Element('p', ['class'=>'help-block']);
 
-        $selectedValue = array_get($args, 'selected', null);
+        $selectedValue = Arr::get($args, 'selected', null);
         if ($selectedValue === null) {
-            $selectedValue = array_get($args, 'value', null);
+            $selectedValue = Arr::get($args, 'value', null);
         }
 
         foreach ($args as $key => $arg) {
@@ -75,11 +76,11 @@ class FormSelect extends AbstractUIObject
                                 $value = $option;
                             }
                         } else {
-                            $value = array_get($option, 'value', $value);
-                            $text = array_get($option, 'text', $value);
+                            $value = Arr::get($option, 'value', $value);
+                            $text = Arr::get($option, 'text', $value);
                         }
                         if ($selectedValue === null) {
-                            $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
+                            $selected = Arr::get($option, 'selected', false) ? 'selected="selected"' : '';
                         } else {
                             $selected = $value === $selectedValue ? 'selected="selected"' : '';
                         }
@@ -88,7 +89,7 @@ class FormSelect extends AbstractUIObject
                     }
                     break;
                 case 'description':
-                    $description->html(array_get($args, $key));
+                    $description->html(Arr::get($args, $key));
                     break;
                 case 'name':
                     $nameSegs = explode('.', $arg);

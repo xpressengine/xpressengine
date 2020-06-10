@@ -17,6 +17,7 @@ namespace App\Http\Controllers\User\Settings;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
@@ -323,7 +324,7 @@ class UserController extends Controller
 
         $userData = $request->except('_token');
 
-        if (array_get($userData, 'profile_img_file') === '__delete_file__') {
+        if (Arr::get($userData, 'profile_img_file') === '__delete_file__') {
             $userData['profile_img_file'] = false;
         }
         $userData['group_id'] = $request->get('group_id') ?: [];

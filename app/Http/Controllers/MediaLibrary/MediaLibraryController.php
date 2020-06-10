@@ -135,27 +135,27 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * @param Request $request            request
-     * @param string  $mediaLibraryFileId target file id
+     * @param Request $request request
+     * @param string  $fileId  target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function getFile(Request $request, $mediaLibraryFileId)
+    public function getFile(Request $request, $fileId)
     {
-        $fileItem = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
+        $fileItem = $this->handler->getMediaLibraryFileItem($fileId);
 
         return XePresenter::makeApi([$fileItem]);
     }
 
     /**
-     * @param Request $request            request
-     * @param string  $mediaLibraryFileId target file id
+     * @param Request $request request
+     * @param string  $fileId  target file id
      *
      * @return mixed|\Xpressengine\Presenter\Presentable
      */
-    public function updateFile(Request $request, $mediaLibraryFileId)
+    public function updateFile(Request $request, $fileId)
     {
-        $this->handler->updateFile($request, $mediaLibraryFileId);
+        $this->handler->updateFile($request, $fileId);
 
         return XePresenter::makeApi([
             'message' => xe_trans('xe::fileInformationUpdateMessage')
@@ -205,13 +205,13 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * @param string $mediaLibraryFileId fileId
+     * @param string $fileId fileId
      *
      * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function download($mediaLibraryFileId)
+    public function download($fileId)
     {
-        $mediaLibraryFile = $this->handler->getMediaLibraryFileItem($mediaLibraryFileId);
+        $mediaLibraryFile = $this->handler->getMediaLibraryFileItem($fileId);
         if ($mediaLibraryFile == null || $mediaLibraryFile->file == null) {
             throw new NotFoundFileException;
         }
@@ -219,9 +219,9 @@ class MediaLibraryController extends Controller
         return \XeStorage::download($mediaLibraryFile->file);
     }
 
-    public function modifyFile(Request $request, $originFileId)
+    public function modifyFile(Request $request, $fileId)
     {
-        $originalMediaLibraryFileItem = $this->handler->getMediaLibraryFileItem($originFileId);
+        $originalMediaLibraryFileItem = $this->handler->getMediaLibraryFileItem($fileId);
         if ($request->file('file') == null) {
             throw new UploadFileNotExistException();
         }

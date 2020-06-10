@@ -17,6 +17,7 @@ namespace App\Http\Controllers;
 use Artisan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use XeMedia;
@@ -132,7 +133,7 @@ class SettingsController extends Controller
         $oldConfig['site_title'] = $inputs['site_title'];
 
         /* resolve favicon */
-        $uploaded = array_get($inputs, 'favicon');
+        $uploaded = Arr::get($inputs, 'favicon');
 
         if ($uploaded !== null) {
             $favicon = $this->saveFile($oldConfig, 'favicon', $uploaded, 'public/favicon/default');
@@ -386,7 +387,7 @@ class SettingsController extends Controller
     {
         $grant = new Grant;
 
-        $rating = array_get($inputs, 'accessRating', Rating::SUPER);
+        $rating = Arr::get($inputs, 'accessRating', Rating::SUPER);
         $group = $this->innerParamParsing($inputs['accessGroup']);
         $user = $this->innerParamParsing($inputs['accessUser']);
         $except = $this->innerParamParsing($inputs['accessExcept']);
@@ -511,7 +512,7 @@ class SettingsController extends Controller
 
             foreach ($logs as $log) {
                 fwrite($file, $log->created_at->format('y-m-d H:i:s') . "\t");
-                if ($logger = array_get($loggers, $log->type)) {
+                if ($logger = Arr::get($loggers, $log->type)) {
                     fwrite($file, $logger::TITLE . "\t");
                 } else {
                     fwrite($file, $log->type . "\t");
@@ -522,7 +523,7 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
                 }
-                
+
                 fwrite($file, $log->summary . "\t");
                 fwrite($file, $log->target_id . "\t");
                 fwrite($file, $log->ipaddress . "\t");

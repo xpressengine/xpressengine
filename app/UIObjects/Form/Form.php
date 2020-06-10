@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\UIObject\Element;
 
@@ -62,7 +63,7 @@ class Form extends AbstractUIObject
                     break;
                 case 'inputs':
                 case 'fields':
-                    $this->appendFields($form, $arg, array_get($args, 'value', []));
+                    $this->appendFields($form, $arg, Arr::get($args, 'value', []));
                     break;
                 case 'value':
                     break;
@@ -87,9 +88,9 @@ class Form extends AbstractUIObject
         $args = $this->arguments;
 
         // style(type) = panel, fieldset
-        $style = array_get($args, 'type', 'panel');
+        $style = Arr::get($args, 'type', 'panel');
 
-        if (array_get($args, 'action') === null) {
+        if (Arr::get($args, 'action') === null) {
             if ($style === 'fieldset') {
                 $form = new Element('div');
             } else {
@@ -116,8 +117,8 @@ class Form extends AbstractUIObject
         // check array type(sequencial or associated)
         if (array_keys($inputs) === range(0, count($inputs) - 1)) {
             foreach ($inputs as $sectionItem) {
-                $globals['_section'] = array_get($sectionItem, 'section');
-                $fields = array_get($sectionItem, 'fields');
+                $globals['_section'] = Arr::get($sectionItem, 'section');
+                $fields = Arr::get($sectionItem, 'fields');
                 $this->appendFields($form, $fields, $values, $globals);
             }
             return;
@@ -130,10 +131,10 @@ class Form extends AbstractUIObject
             preg_match("/^([^[]+)\\[(.+)\\]$/", $name, $m);
             if (!empty($m)) {
                 $seq = (int)$m[2];
-                $value = array_get($values, "$m[1].$seq");
+                $value = Arr::get($values, "$m[1].$seq");
                 $name = $m[1].'[]';
             } else {
-                $value = array_get($values, $name);
+                $value = Arr::get($values, $name);
             }
 
             // default value
@@ -143,21 +144,21 @@ class Form extends AbstractUIObject
 
             $arg['name'] = $name;
 
-            $type = array_get($arg, '_type');
+            $type = Arr::get($arg, '_type');
             unset($arg['_type']);
 
-            array_set($arg, 'value', $value);
+            Arr::set($arg, 'value', $value);
 
             $uio = 'form'.ucfirst($type);
             $input = uio($uio, $arg);
 
             $field = $this->wrapInput($name, $input);
 
-            $sectionInfo = array_get($arg, '_section', array_get($globals, '_section'));
+            $sectionInfo = Arr::get($arg, '_section', Arr::get($globals, '_section'));
 
             unset($arg['_section']);
 
-            $style = array_get($this->arguments, 'type', 'panel');
+            $style = Arr::get($this->arguments, 'type', 'panel');
             $section = $this->getSection($form, $sectionInfo, $style);
             $section->append($field);
         }
@@ -180,11 +181,11 @@ class Form extends AbstractUIObject
             $sectionName = $sectionInfo;
             $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
         } elseif (is_array($sectionInfo)) {
-            $sectionName = array_get($sectionInfo, 'title');
-            $classname = array_get($sectionInfo, 'class');
+            $sectionName = Arr::get($sectionInfo, 'title');
+            $classname = Arr::get($sectionInfo, 'class');
         }
 
-        if ($section = array_get($this->sections, $classname)) {
+        if ($section = Arr::get($this->sections, $classname)) {
             return $section;
         } else {
             if ($style === 'fieldset') {

@@ -17,6 +17,7 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use Composer\Console\Application;
 use Composer\Util\Platform;
+use Illuminate\Support\Arr;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -49,7 +50,7 @@ trait ComposerRunTrait
             if (file_exists($file) == true) {
                 $config = include($file);
             }
-            array_set($config, 'console_allow_url_fopen', false);
+            Arr::set($config, 'console_allow_url_fopen', false);
             config_file_generate($key, $config);
 
             throw new \Exception(

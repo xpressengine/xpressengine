@@ -17,8 +17,7 @@ namespace Xpressengine\Translation;
 use Xpressengine\Database\VirtualConnectionInterface;
 
 /**
- * 다국어의 데이터를 제어하기 위한 클래스로
- * DB persistence 그리고 TransCache(다국어 전용 캐시)를 지원한다
+ * 다국어의 데이터를 제어하기 위한 클래스
  *
  * @category    Translation
  * @package     Xpressengine\Translation

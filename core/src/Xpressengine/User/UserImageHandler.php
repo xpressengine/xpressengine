@@ -15,6 +15,7 @@
 namespace Xpressengine\User;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\File;
 use Xpressengine\Media\MediaManager;
@@ -81,9 +82,9 @@ class UserImageHandler
      */
     public function updateUserProfileImage(UserInterface $user, $profileFile)
     {
-        $disk = array_get($this->profileImgConfig, 'storage.disk');
-        $path = array_get($this->profileImgConfig, 'storage.path');
-        $size = array_get($this->profileImgConfig, 'size');
+        $disk = Arr::get($this->profileImgConfig, 'storage.disk');
+        $path = Arr::get($this->profileImgConfig, 'storage.path');
+        $size = Arr::get($this->profileImgConfig, 'size');
 
         // make fitted image
         /** @var ImageManager $imageManager */

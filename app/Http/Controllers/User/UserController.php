@@ -202,7 +202,7 @@ class UserController extends Controller
      */
     public function updatePassword(Request $request)
     {
-        $this->validate($request, ['password' => 'required|confirmed|password']);
+        $this->validate($request, ['password' => 'required|confirmed|xe_password']);
 
         $result = true;
         $message = 'success';

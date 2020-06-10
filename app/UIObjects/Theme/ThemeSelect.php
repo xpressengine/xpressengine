@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Theme;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\UIObject\AbstractUIObject;
 
@@ -53,7 +54,7 @@ class ThemeSelect extends AbstractUIObject
         $themes = [];
         $blankTheme = null;
         $args = $this->arguments;
-        $prefix = array_get($args, 'prefixName', 'theme_');
+        $prefix = Arr::get($args, 'prefixName', 'theme_');
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
 
@@ -72,10 +73,10 @@ class ThemeSelect extends AbstractUIObject
         if (!isset($args['selectedTheme'])) {
             $selectedThemeId = $themeHandler->getSiteThemeId();
         } else {
-            $selectedThemeId = array_get($args, 'selectedTheme');
+            $selectedThemeId = Arr::get($args, 'selectedTheme');
         }
 
-        $previewLink = array_get($args, 'preview', '/');
+        $previewLink = Arr::get($args, 'preview', '/');
 
         if (strpos($previewLink, '?') === false) {
             $previewLink .= '?';

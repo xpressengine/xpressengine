@@ -19,6 +19,7 @@ use App\ToggleMenus\User\ProfileItem;
 use Closure;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
@@ -444,7 +445,7 @@ class UserServiceProvider extends ServiceProvider
                     return false;
                 }
 
-                if (str_contains($value, "  ")) {
+                if (Str::contains($value, "  ")) {
                     return false;
                 }
 
@@ -464,7 +465,7 @@ class UserServiceProvider extends ServiceProvider
             });
 
             app('config')->set('xe.user.loginId.validate', function ($value) {
-                if (str_contains($value, " ")) {
+                if (Str::contains($value, " ")) {
                     return false;
                 }
 
@@ -530,10 +531,10 @@ class UserServiceProvider extends ServiceProvider
                 xe_trans('xe::validationLoginId')
             );
 
-            $validator->extend('password', function ($attribute, $value, $parameters) {
+            $validator->extend('xe_password', function ($attribute, $value, $parameters) {
                 return $this->app['xe.password.validator']->handle($value);
             });
-            $validator->replacer('password', function () {
+            $validator->replacer('xe_password', function () {
                 return $this->app['xe.password.validator']->getMessage();
             });
         });

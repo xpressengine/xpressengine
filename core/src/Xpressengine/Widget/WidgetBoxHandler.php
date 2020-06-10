@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Widget;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Register\Container;
@@ -77,13 +79,13 @@ class WidgetBoxHandler
      */
     public function create($data)
     {
-        $id = array_get($data, 'id');
+        $id = Arr::get($data, 'id');
 
         if ($id === null) {
             throw new IDNotFoundException();
         }
 
-        if (str_contains($id, '.')) {
+        if (Str::contains($id, '.')) {
             throw new InvalidIDException();
         }
 
@@ -91,9 +93,9 @@ class WidgetBoxHandler
             throw new IDAlreadyExistsException();
         }
 
-        $options = array_get($data, 'options', ['presenter' => XEUIPresenter::class]);
-        $title = array_get($data, 'title', $id);
-        $content = array_get($data, 'content');
+        $options = Arr::get($data, 'options', ['presenter' => XEUIPresenter::class]);
+        $title = Arr::get($data, 'title', $id);
+        $content = Arr::get($data, 'content');
         $content = empty($content) ? [] : $content;
 
         $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options'));

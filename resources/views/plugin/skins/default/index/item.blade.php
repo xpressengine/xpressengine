@@ -15,7 +15,7 @@
             <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
             <dd>By
                 @if($authors = $plugin->getAuthors())
-                    <a href="{{ array_get(reset($authors),'homepage', array_get(reset($authors),'email')) }}">
+                    <a href="{{ Arr::get(reset($authors),'homepage', Arr::get(reset($authors),'email')) }}">
                         {{ reset($authors)['name'] }}
                     </a>
                 @endif
@@ -27,12 +27,12 @@
         </dl>
         <p class="ellipsis">{{ $plugin->getDescription() }}</p>
 
-        @if(array_has($unresolvedComponents, $plugin->getId()))
+        @if(Arr::has($unresolvedComponents, $plugin->getId()))
             <hr>
             <div class="alert alert-warning" role="alert" style="margin-top:10px;">
                 <p><i class="xi-info-o txt_red"></i> {{ xe_trans('xe::componentNotRegisteredProperly') }}</p>
                 <ul class="list-unstyled">
-                    @foreach(array_get($unresolvedComponents, $plugin->getId()) as $cId => $info)
+                    @foreach(Arr::get($unresolvedComponents, $plugin->getId()) as $cId => $info)
                         {{ $cId }}
                     @endforeach
                 </ul>

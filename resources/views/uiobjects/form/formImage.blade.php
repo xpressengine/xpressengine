@@ -1,15 +1,18 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <div class="form-group">
-    @if($label = array_get($args, 'label'))<label>{!! $label !!}</label>@endif
+    @if($label = Arr::get($args, 'label'))<label>{!! $label !!}</label>@endif
     <div class="__xe_imagebox_{{ $seq }} clearfix list-group-item">
 
         <div class="btn-group" role="group" aria-label="...">
             <span type="button" class="btn btn-default __xe_inputBtn fileinput-button">
-                @if($path = array_get($args, 'value.path', array_get($args, 'image')))
+                @if($path = Arr::get($args, 'value.path', Arr::get($args, 'image')))
                     <span>변경</span>
                 @else
                     <span>{{xe_trans('xe::register')}}</span>
                 @endif
-                <input class="__xe_file_{{ $seq }}" type="file" name="{{ $name = array_get($args, 'name', 'image') }}"/>
+                <input class="__xe_file_{{ $seq }}" type="file" name="{{ $name = Arr::get($args, 'name', 'image') }}"/>
             </span>
             <label @if($path === null) disabled @endif class="btn btn-default">
                 <input type="checkbox" class="__xe_delete_file_{{ $seq }}" value="__delete_file__">
@@ -23,7 +26,7 @@
             @endif
         </div>
     </div>
-    <p class="help-block">{{ array_get($args, 'description') }}</p>
+    <p class="help-block">{{ Arr::get($args, 'description') }}</p>
 </div>
 
 <script>
@@ -39,7 +42,7 @@
             previewCanvas: false,
             autoUpload: false,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: {{array_get($args, 'maxSize', 5000000)}}, // 5 MB @FIXME
+            maxFileSize: {{Arr::get($args, 'maxSize', 5000000)}}, // 5 MB @FIXME
             replaceFileInput: false,
             disableImageResize: true,
             imageCrop: false,

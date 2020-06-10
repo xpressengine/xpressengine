@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <div class="xe-container">
     <!--[D]  setting 영역-->
     <div class="setting-wrap">
@@ -15,7 +18,7 @@
                     </div>
                     <ul class="snb-list">
                         @foreach($menus as $id => $menu)
-                            <li class="@if(array_get($menu, 'selected', false))on @endif">
+                            <li class="@if(Arr::get($menu, 'selected', false))on @endif">
                                 <a href="{{ route('user.settings', ['section'=>$id]) }}">{{ xe_trans($menu['title']) }}</a>
                             </li>
                         @endforeach

@@ -15,6 +15,7 @@
 namespace Xpressengine\DynamicField;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 use Xpressengine\Support\Entity;
 
 /**
@@ -126,7 +127,7 @@ class ColumnEntity extends Entity
     {
         // make all names to camel case
         if ($prefix) {
-            $this->{'name'} = snake_case($prefix . '_' .  $this->{'name'});
+            $this->{'name'} = Str::snake($prefix . '_' .  $this->{'name'});
         }
 
         if (method_exists($table, $this->{'dataType'}) === false) {
@@ -158,6 +159,6 @@ class ColumnEntity extends Entity
      */
     public function drop(Blueprint $table, $prefix = '')
     {
-        $table->dropColumn(snake_case($prefix . '_' .  $this->{'name'}));
+        $table->dropColumn(Str::snake($prefix . '_' .  $this->{'name'}));
     }
 }

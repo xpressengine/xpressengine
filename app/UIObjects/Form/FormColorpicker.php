@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
@@ -55,7 +56,7 @@ class FormColorpicker extends AbstractUIObject
         $args = $this->arguments;
         $seq  = $this->seq();
 
-        $selector = array_get($args, 'name').$seq;
+        $selector = Arr::get($args, 'name').$seq;
 
         // render template
         $this->template = \View::make($this->view, ['args' => $args, 'selector' => $selector])->render();

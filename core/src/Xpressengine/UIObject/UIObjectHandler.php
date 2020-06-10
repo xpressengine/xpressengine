@@ -14,6 +14,7 @@
 
 namespace Xpressengine\UIObject;
 
+use Illuminate\Support\Arr;
 use ReflectionClass;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\UIObject\Exceptions\UIObjectNotFoundException;
@@ -125,7 +126,7 @@ class UIObjectHandler
     public function create($id, $args = [])
     {
         // retrieve alias
-        if (array_has($this->aliases, $id)) {
+        if (Arr::has($this->aliases, $id)) {
             $id = $this->aliases[$id];
         }
 

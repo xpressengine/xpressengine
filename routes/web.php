@@ -53,7 +53,7 @@ Route::group(
     ['prefix' => 'lang'],
     function() {
         Route::get('lines/many', ['as' => 'lang.lines.many', 'uses' => 'LangController@getLinesMany']);
-        Route::get('lines/{key}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('lines/{key?}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'lang.search', 'uses' => 'LangController@searchKeyword']);
     }
 );
@@ -959,15 +959,15 @@ Route::group(['prefix' => 'media_library'], function () {
     });
 
     Route::group(['prefix' => 'file'], function () {
-        Route::get('/{mediaLibraryFileId}', [
+        Route::get('/{file_id}', [
             'as' => 'media_library.get_file',
             'uses' => 'MediaLibrary\MediaLibraryController@getFile'
         ]);
-        Route::put('/{mediaLibraryFileId}', [
+        Route::put('/{file_id}', [
             'as' => 'media_library.update_file',
             'uses' => 'MediaLibrary\MediaLibraryController@updateFile'
         ]);
-        Route::post('/{mediaLibraryFileId}/modify', [
+        Route::post('/{file_id}/modify', [
             'as' => 'media_library.modify_file',
             'uses' => 'MediaLibrary\MediaLibraryController@modifyFile'
         ]);
@@ -979,7 +979,7 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
         ]);
-        Route::get('/{mediaLibraryFileId}/download', [
+        Route::get('/{file_id}/download', [
             'as' => 'media_library.download_file',
             'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);

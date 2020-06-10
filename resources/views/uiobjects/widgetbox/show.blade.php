@@ -7,7 +7,7 @@
         <hr>
         <div class="widget-controll">
             <p>
-                <button type="button" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}', 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false"> {{ $link or $widgetbox->title.' '.xe_trans('xe::editWidgetBox') }}</button>
+                <button type="button" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}', 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false"> {{ $link ?? $widgetbox->title.' '.xe_trans('xe::editWidgetBox') }}</button>
             </p>
         </div>
         @endcan

@@ -14,6 +14,8 @@
 
 namespace Xpressengine\UIObject;
 
+use Illuminate\Support\Arr;
+
 /**
  * Element class
  *
@@ -100,7 +102,7 @@ class Element
      */
     public function removeAttr($key)
     {
-        array_forget($this->attributes, $key);
+        Arr::forget($this->attributes, $key);
         return $this;
     }
 
@@ -240,7 +242,7 @@ class Element
      */
     protected function resolveAttribute($key)
     {
-        $this->attributes = array_add($this->attributes, $key, []);
+        $this->attributes = Arr::add($this->attributes, $key, []);
 
         if (is_string($this->attributes[$key])) {
             $this->attributes[$key] = [$this->attributes[$key]];

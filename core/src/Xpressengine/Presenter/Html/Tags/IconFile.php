@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
+use Illuminate\Support\Arr;
+
 /**
  * IconFile
  *
@@ -167,7 +169,7 @@ class IconFile
             static::$fileList['icon'] = $this;
         } else {
             if (isset($this->attributes['size'])) {
-                array_set(static::$fileList, 'apple-touch-icon-sized.'.$this->attributes['size'], $this);
+                Arr::set(static::$fileList, 'apple-touch-icon-sized.'.$this->attributes['size'], $this);
             } else {
                 static::$fileList['apple-touch-icon'] = $this;
             }

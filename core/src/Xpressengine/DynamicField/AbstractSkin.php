@@ -14,6 +14,7 @@
 
 namespace Xpressengine\DynamicField;
 
+use Illuminate\Support\Str;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\ComponentInterface;
@@ -212,7 +213,7 @@ abstract class AbstractSkin implements ComponentInterface
     {
         $this->mergeData = $data;
     }
-    
+
     /**
      * 등록 form 에 추가될 html 코드 반환
      * return html tag string
@@ -309,7 +310,7 @@ abstract class AbstractSkin implements ComponentInterface
     {
         $data = [];
         foreach ($this->getType()->getColumns() as $columnName => $columns) {
-            $dataName = snake_case($id . '_' . $columnName);
+            $dataName = Str::snake($id . '_' . $columnName);
             if (isset($args[$dataName])) {
                 $data[$dataName] = $args[$dataName];
             } else {

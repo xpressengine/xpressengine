@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
+
 @section('page_title')
     <h2>{{ xe_trans('xe::pluginInstalled') }}</h2>
 @stop

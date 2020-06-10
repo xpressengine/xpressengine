@@ -214,7 +214,7 @@ class Guard extends SessionGuard implements GuardInterface
         }
 
         if (isset($this->events)) {
-            $this->events->dispatch(new Logout($user));
+            $this->events->dispatch(new Logout($this, $user));
         }
 
         // Once we have fired the logout event we will clear the users out of memory

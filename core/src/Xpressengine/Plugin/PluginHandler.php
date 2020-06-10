@@ -20,6 +20,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
@@ -219,7 +220,7 @@ class PluginHandler
         $unresolved = $this->register->getUnresolvedComponents();
 
         if ($plugin) {
-            return array_get($unresolved, $plugin, []);
+            return Arr::get($unresolved, $plugin, []);
         }
 
         return $unresolved;
@@ -409,7 +410,7 @@ class PluginHandler
 
         // status list에서 해당 플러그인 정보를 삭제한다.
         $configs = $this->getPluginsStatus();
-        array_forget($configs, $pluginId);
+        Arr::forget($configs, $pluginId);
         $this->setPluginsStatus($configs);
     }
 
@@ -714,7 +715,7 @@ class PluginHandler
             $configKey = $pluginId.'.'.$field;
         }
         $configs = $this->getPluginsStatus();
-        return array_get($configs, $configKey);
+        return Arr::get($configs, $configKey);
     }
 
     /**
@@ -749,7 +750,7 @@ class PluginHandler
             $configKey = $pluginId.'.'.$field;
         }
         $configs = $this->getPluginsStatus();
-        array_set($configs, $configKey, $status);
+        Arr::set($configs, $configKey, $status);
         $this->setPluginsStatus($configs);
     }
 

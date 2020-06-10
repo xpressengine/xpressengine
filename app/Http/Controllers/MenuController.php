@@ -14,6 +14,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -485,7 +487,7 @@ class MenuController extends Controller
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
-                'activated' => array_get($itemInput, 'itemActivated', '0'),
+                'activated' => Arr::get($itemInput, 'itemActivated', '0'),
                 $this->getItemImageKeyName('menuImage') => $this->registerItemImage($request, $item, 'menuImage'),
                 $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
                 $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
@@ -538,7 +540,7 @@ class MenuController extends Controller
      */
     protected function getItemImageKeyName($name)
     {
-        return snake_case($name . 'Id');
+        return Str::snake($name . 'Id');
     }
 
     /**
@@ -782,8 +784,8 @@ class MenuController extends Controller
         ];
 
         return [
-            array_only($inputs, $itemInputKeys),
-            array_except($inputs, $itemInputKeys),
+            Arr::only($inputs, $itemInputKeys),
+            Arr::except($inputs, $itemInputKeys),
         ];
     }
 

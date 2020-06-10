@@ -15,6 +15,7 @@
 namespace App\Widgets;
 
 use Config;
+use Illuminate\Support\Arr;
 use View;
 use Xpressengine\Widget\AbstractWidget;
 
@@ -54,7 +55,7 @@ class HtmlWidget extends AbstractWidget
      */
     public function render()
     {
-        $content = htmlspecialchars_decode(array_get($this->config, 'content'));
+        $content = htmlspecialchars_decode(Arr::get($this->config, 'content'));
         return $this->renderSkin(compact('content'));
     }
 
@@ -67,7 +68,7 @@ class HtmlWidget extends AbstractWidget
      */
     public function renderSetting(array $args = [])
     {
-        return uio('formTextarea', ['id'=>'', 'name'=>'content', 'label'=>'HTML', 'value'=>array_get($args, 'content')]);
+        return uio('formTextarea', ['id'=>'', 'name'=>'content', 'label'=>'HTML', 'value'=>Arr::get($args, 'content')]);
     }
 
     /**
@@ -78,10 +79,10 @@ class HtmlWidget extends AbstractWidget
      */
     public function resolveSetting(array $inputs = [])
     {
-        $content = array_get($inputs, 'content');
+        $content = Arr::get($inputs, 'content');
         //$content = '<![CDATA['.$content.']]>';
         $content = htmlspecialchars($content);
-        array_set($inputs, 'content', $content);
+        Arr::set($inputs, 'content', $content);
         return $inputs;
     }
 }

@@ -19,28 +19,30 @@
     "license": "LGPL-3.0-or-later",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
-        "composer/composer": "1.7.1",
+        "php": "^7.2.5",
+        "fideloper/proxy": "^4.2",
+        "fruitcake/laravel-cors": "^1.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
+        "composer/composer": "~1.10.0",
         "ezyang/htmlpurifier": "~4.7",
-        "fideloper/proxy": "~3.3",
         "google/recaptcha": "^1.2",
-        "guzzlehttp/guzzle": "~6.1",
         "intervention/image": "2.1.*",
         "james-heinrich/getid3": "1.9.*",
         "jenssegers/agent": "~2.6",
-        "laravel/framework": "5.5.*",
-        "laravel/tinker": "~1.0",
         "ramsey/uuid": "~3.0",
-        "symfony/dom-crawler": "~3.3",
-        "symfony/yaml": "~3.3",
-        "wikimedia/composer-merge-plugin": "1.3.1",
+        "symfony/dom-crawler": "^5.0",
+        "symfony/yaml": "^5.0",
+        "wikimedia/composer-merge-plugin": "1.4.1",
         "xpressengine/installer": "~1.1.1"
     },
     "require-dev": {
-        "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0",
+        "facade/ignition": "^2.0",
+        "fzaninotto/faker": "^1.9.1",
+        "mockery/mockery": "^1.3.1",
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^8.5",
         "barryvdh/laravel-debugbar": "~3.0"
     },
     "replace": {
@@ -124,7 +126,7 @@
         "post-create-project-cmd": [],
         "post-autoload-dump": [
             "Xpressengine\\Plugin\\Composer\\Composer::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
         ]
     },
     "config": {

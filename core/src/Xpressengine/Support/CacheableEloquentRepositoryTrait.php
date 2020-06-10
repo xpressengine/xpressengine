@@ -158,13 +158,13 @@ trait CacheableEloquentRepositoryTrait
     }
 
     /**
-     * Return cache life time (minute)
+     * Return cache life time (seconds)
      *
      * @return int
      */
     protected function getLifetime()
     {
-        return 60;
+        return 3600;
     }
 
     /**

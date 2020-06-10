@@ -14,6 +14,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 /**
  * Class DynamicFieldSkinMake
@@ -135,7 +136,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
      */
     protected function getDefaultPath()
     {
-        return 'DynamicFieldSkins/' . studly_case($this->argument('name'));
+        return 'DynamicFieldSkins/' . Str::studly($this->argument('name'));
     }
 
     /**
@@ -143,7 +144,7 @@ class DynamicFieldSkinMake extends ComponentMakeCommand
      */
     protected function getClassName()
     {
-        return $this->option('class') ?: studly_case($this->argument('name'));
+        return $this->option('class') ?: Str::studly($this->argument('name'));
     }
 
     /**

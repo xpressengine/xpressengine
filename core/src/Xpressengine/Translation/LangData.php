@@ -13,6 +13,7 @@
  */
 
 namespace Xpressengine\Translation;
+use Illuminate\Support\Arr;
 
 /**
  * 중첩 구조의 다국어 데이터 파일을 다루는 클래스
@@ -35,7 +36,7 @@ class LangData
      */
     public function setData($data)
     {
-        foreach (array_dot($data) as $key => $value) {
+        foreach (Arr::dot($data) as $key => $value) {
             $arrKey = explode('.', $key);
             $locale = array_pop($arrKey);
             $item = implode('.', $arrKey);

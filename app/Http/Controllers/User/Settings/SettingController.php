@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
+use Illuminate\Support\Arr;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
@@ -93,7 +94,7 @@ class SettingController extends Controller
             throw new ConfigurationNotExistsException();
         }
 
-        $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
+        $inputs['forms'] = array_keys(Arr::get($inputs, 'forms', []));
 
         if (isset($inputs['guard_forced'])) {
             $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
@@ -188,7 +189,7 @@ class SettingController extends Controller
     {
         $inputs = $request->except('_token');
 
-        $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
+        $inputs['forms'] = array_keys(Arr::get($inputs, 'forms', []));
 
         $config = app('xe.config')->get('user.register');
 

@@ -16,6 +16,7 @@ namespace Xpressengine\Theme;
 
 use Closure;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Arr;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\PluginRegister;
@@ -338,7 +339,7 @@ class ThemeHandler
     public function getAllThemeSupportingMobile()
     {
         $themes = $this->getAllTheme();
-        return array_where(
+        return Arr::where(
             $themes,
             function ($entity) {
                 /** @var ThemeEntity $entity */
@@ -355,7 +356,7 @@ class ThemeHandler
     public function getAllThemeSupportingDesktop()
     {
         $themes = $this->getAllTheme();
-        return array_where(
+        return Arr::where(
             $themes,
             function ($entity) {
                 /** @var ThemeEntity $entity */

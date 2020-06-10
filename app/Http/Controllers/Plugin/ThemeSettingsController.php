@@ -17,7 +17,9 @@ namespace App\Http\Controllers\Plugin;
 use App\Http\Controllers\Controller;
 use File;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
@@ -107,7 +109,7 @@ class ThemeSettingsController extends Controller
 
         if ($orderType = $request->get('order_key')) {
             $order = $orderTypes[$orderType];
-            array_forget($order, 'name');
+            Arr::forget($order, 'name');
             $filter = array_merge($filter, $order);
         }
 
@@ -341,7 +343,7 @@ class ThemeSettingsController extends Controller
 
         $themeId = $request->get('theme', null);
         if ($themeId == null) {
-            $themeId = array_first($themes)->getId();
+            $themeId = Arr::first($themes)->getId();
         }
 
         $fileName = $request->get('file', null);
@@ -363,7 +365,7 @@ class ThemeSettingsController extends Controller
             $filePath = realpath($item);
             $ext = last(explode('.', $file));
 
-            if (str_contains($file, '.blade.php')) {
+            if (Str::contains($file, '.blade.php')) {
                 $ext = 'blade.php';
             }
 

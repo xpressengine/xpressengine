@@ -16,7 +16,7 @@
                             </div>
                             <form action="{{ route('settings.auth.admin') }}" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="hidden" name="redirectUrl" value="{{ $redirectUrl or '' }}">
+                                <input type="hidden" name="redirectUrl" value="{{ $redirectUrl ?? '' }}">
                                 <fieldset>
                                     <legend>{{ xe_trans('xe::authenticate') }}</legend>
                                     <div class="section-user-auth-group">

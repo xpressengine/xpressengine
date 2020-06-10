@@ -15,6 +15,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\WidgetSection;
+use Illuminate\Support\Arr;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Skin\SkinHandler;
@@ -58,7 +59,7 @@ class WidgetController extends Controller
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
         $inputs = $request->except('_token');
-        $widget = array_get($inputs, '@id');
+        $widget = Arr::get($inputs, '@id');
 
         $code = $widgetHandler->generateCode($widget, $inputs);
 
@@ -128,7 +129,7 @@ class WidgetController extends Controller
             $skinForm = $skin->renderSetting();
         }
 
-        $title = array_get($inputs, '@attributes.title', '');
+        $title = Arr::get($inputs, '@attributes.title', '');
 
         return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title'));
     }
@@ -157,9 +158,9 @@ class WidgetController extends Controller
             $inputs = $widgetParser->parseCode($code);
         }
 
-        $widget = array_get($inputs, '@attributes.id');
+        $widget = Arr::get($inputs, '@attributes.id');
 
-        $title = array_get($inputs, '@attributes.title', '');
+        $title = Arr::get($inputs, '@attributes.title', '');
 
         // widget list
         $widgetList = $widgetHandler->getAll();
@@ -176,7 +177,7 @@ class WidgetController extends Controller
         $widgetForm = $widgetHandler->setup($widget, $inputs);
 
         // skin form
-        $skin = array_get($inputs, '@attributes.skin-id');
+        $skin = Arr::get($inputs, '@attributes.skin-id');
         $skin = $skinHandler->get($skin);
         $skinForm = $skin->renderSetting($inputs);
 

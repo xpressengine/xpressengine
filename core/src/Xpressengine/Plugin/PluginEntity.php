@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Plugin\PluginHandler as Plugin;
@@ -408,7 +409,7 @@ class PluginEntity implements Arrayable, Jsonable
         if ($field === null) {
             return $this->metaData;
         } else {
-            return array_get($this->metaData, $field);
+            return Arr::get($this->metaData, $field);
         }
     }
 
@@ -443,7 +444,7 @@ class PluginEntity implements Arrayable, Jsonable
     {
         $metaData = $this->getMetaData();
 
-        $support = array_get($metaData, 'support');
+        $support = Arr::get($metaData, 'support');
 
         if ($support === null) {
             if ($field === null) {
@@ -456,7 +457,7 @@ class PluginEntity implements Arrayable, Jsonable
         if ($field === null) {
             return $support;
         } else {
-            return array_get($support, $field, null);
+            return Arr::get($support, $field, null);
         }
     }
 

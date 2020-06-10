@@ -20,6 +20,7 @@ use Illuminate\Routing\Matching\MethodValidator;
 use Illuminate\Routing\Matching\SchemeValidator;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\ModuleValidator;
@@ -160,7 +161,7 @@ class RoutingServiceProvider extends ServiceProvider
             ];
 
             if ($routeOptions !== null and is_array($routeOptions)) {
-                $routeOptions = array_except($routeOptions, ['prefix']);
+                $routeOptions = Arr::except($routeOptions, ['prefix']);
                 $attributes = array_merge($attributes, $routeOptions);
             }
 
@@ -191,7 +192,7 @@ class RoutingServiceProvider extends ServiceProvider
             ];
 
             if ($routeOptions !== null and is_array($routeOptions)) {
-                $routeOptions = array_except($routeOptions, ['prefix']);
+                $routeOptions = Arr::except($routeOptions, ['prefix']);
                 $attributes = array_merge($attributes, $routeOptions);
             }
 
@@ -222,7 +223,7 @@ class RoutingServiceProvider extends ServiceProvider
             ];
 
             if ($routeOptions) {
-                $attributes = array_merge(array_except($routeOptions, ['prefix', 'middleware']), $attributes);
+                $attributes = array_merge(Arr::except($routeOptions, ['prefix', 'middleware']), $attributes);
 
                 if (isset($routeOptions['middleware'])) {
                     $attributes['middleware'] = array_merge(

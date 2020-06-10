@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Plugin;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Plugin\Exceptions\ComponentNotFoundException;
 use Xpressengine\Plugin\Exceptions\NotImplementedException;
 use Xpressengine\Register\Container;
@@ -96,7 +97,7 @@ class PluginRegister
                 $this->setComponentInfo($info);
                 $this->add($info['class']);
             } catch (ComponentNotFoundException $e) {
-                array_set($this->unresolvedComponents[$entity->getId()], $id, $info);
+                Arr::set($this->unresolvedComponents[$entity->getId()], $id, $info);
             } catch (NotImplementedException $e) {
                 $this->unresolvedComponents[$entity->getId()] = $info;
             }
@@ -229,6 +230,6 @@ class PluginRegister
 
         $class::setId($info['id']);
 
-        $class::setComponentInfo(array_except($info, ['class', 'id']));
+        $class::setComponentInfo(Arr::except($info, ['class', 'id']));
     }
 }

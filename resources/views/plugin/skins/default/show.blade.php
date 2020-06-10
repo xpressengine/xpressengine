@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 @section('page_title')
     <h2><a href="{{ route('settings.plugins') }}"><i class="xi-arrow-left"></i>{{xe_trans('xe::pluginDetails')}}</a></h2>
 @stop
@@ -38,17 +41,17 @@
                             <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-user"></i>
-                                @if($email = array_get($author, 'email'))
+                                @if($email = Arr::get($author, 'email'))
                                     <a href="mailto:{{ $email }}">
-                                        {{ array_get($author, 'name', '') }}
+                                        {{ Arr::get($author, 'name', '') }}
                                     </a>
                                 @else
-                                    {{ array_get($author, 'name', '') }}
+                                    {{ Arr::get($author, 'name', '') }}
                                 @endif
                             </dd>
 
                             {{-- author homepage --}}
-                            @if($homepage = array_get($author, 'homepage'))
+                            @if($homepage = Arr::get($author, 'homepage'))
                                 <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                                 <dd>
                                     <i class="xi-paperclip"></i>

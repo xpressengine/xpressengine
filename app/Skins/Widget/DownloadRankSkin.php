@@ -14,6 +14,7 @@
 
 namespace App\Skins\Widget;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Skin\GenericSkin;
 
 /**
@@ -72,7 +73,7 @@ class DownloadRankSkin extends GenericSkin
      */
     public function render()
     {
-        $this->data = array_merge($this->data, ['title' => array_get($this->setting(), "@attributes.title")]);
+        $this->data = array_merge($this->data, ['title' => Arr::get($this->setting(), "@attributes.title")]);
 
         return parent::render();
     }

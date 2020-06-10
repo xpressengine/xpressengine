@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Skin;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Config\ConfigManager as ConfigStore;
 
 /**
@@ -115,8 +116,8 @@ class SkinInstanceStore
             $skinId = [$mode => $skinId];
         }
 
-        $desktop = array_get($skinId, static::SKIN_MODE_DESKTOP);
-        $mobile = array_get($skinId, static::SKIN_MODE_MOBILE);
+        $desktop = Arr::get($skinId, static::SKIN_MODE_DESKTOP);
+        $mobile = Arr::get($skinId, static::SKIN_MODE_MOBILE);
 
         if (isset($desktop)) {
             $this->store->setVal("$key.".static::SKIN_MODE_DESKTOP, $desktop);

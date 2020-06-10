@@ -15,6 +15,7 @@
 namespace Xpressengine\Presenter\Html\Tags;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationRuleParser;
 
 /**
@@ -113,7 +114,7 @@ class Rule
         array_walk($rules, function (&$rule, $key) {
             foreach ($rule as &$item) {
                 list($method, $parameter) = ValidationRuleParser::parse($item);
-                $method = snake_case($method);
+                $method = Str::snake($method);
                 if (count($parameter)) {
                     $parameter = implode(',', $parameter);
                     $item = implode(':', compact('method', 'parameter'));

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Widget;
 
+use Illuminate\Support\Arr;
 use SimpleXMLElement;
 
 /**
@@ -76,7 +77,7 @@ class WidgetParser
 
             $inputs = $this->parseCode($widgetXmlString);
 
-            $widgetId = array_get($inputs, '@attributes.id');
+            $widgetId = Arr::get($inputs, '@attributes.id');
 
             $retString = $widgetHandler->render($widgetId, $inputs);
             if ($retString !== null && !empty($retString)) {

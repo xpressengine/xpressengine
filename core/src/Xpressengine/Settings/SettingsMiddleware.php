@@ -18,6 +18,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\IpMatch;
@@ -114,7 +115,7 @@ class SettingsMiddleware
             return;
         }
 
-        $permissionId = array_get($route->getAction(), 'permission');
+        $permissionId = Arr::get($route->getAction(), 'permission');
 
         if ($permissionId === null) {
             throw new AccessDeniedHttpException();

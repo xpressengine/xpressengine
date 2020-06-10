@@ -15,6 +15,7 @@ namespace Xpressengine\Captcha\Services;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 use Xpressengine\Captcha\CaptchaInterface;
 use Illuminate\View\Factory as View;
 use Xpressengine\Captcha\Exceptions\WrongResponseException;
@@ -138,10 +139,10 @@ class NaverCaptcha implements CaptchaInterface
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $response = $e->getResponse();
             $content = json_dec($response->getBody()->getContents(), true);
-            $this->errors[array_get($content, 'errorCode')] = array_get($content, 'errorMessage');
+            $this->errors[Arr::get($content, 'errorCode')] = Arr::get($content, 'errorMessage');
         }
 
-        $result = array_get($content, 'result');
+        $result = Arr::get($content, 'result');
 
         return $result === true;
     }
@@ -203,7 +204,7 @@ class NaverCaptcha implements CaptchaInterface
             ]
         ]);
 
-        if (!$key = array_get(json_dec($response->getBody()->getContents(), true), 'key')) {
+        if (!$key = Arr::get(json_dec($response->getBody()->getContents(), true), 'key')) {
             throw new WrongResponseException;
         }
 

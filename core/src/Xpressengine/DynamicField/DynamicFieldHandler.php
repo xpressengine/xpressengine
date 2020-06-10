@@ -21,6 +21,7 @@
 
 namespace Xpressengine\DynamicField;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
@@ -261,7 +262,7 @@ class DynamicFieldHandler
         $dynamicFieldsArrays = array_map(function (AbstractType $fieldType) {
             return array_keys($fieldType->getRules());
         }, $fieldTypes);
-        return array_flatten($dynamicFieldsArrays);
+        return Arr::flatten($dynamicFieldsArrays);
     }
 
     /**
@@ -358,11 +359,11 @@ class DynamicFieldHandler
 
         $rules = [];
         foreach ($type->getRules() as $columnName => $rule) {
-            $id = snake_case($config->get('id'));
+            $id = Str::snake($config->get('id'));
             if (Str::startsWith($columnName, $id . '_')) {
                 $key = $columnName;
             } else {
-                $key = snake_case($config->get('id')) . '_' . $columnName;
+                $key = Str::snake($config->get('id')) . '_' . $columnName;
             }
 
             $rules[$key] = $rule;

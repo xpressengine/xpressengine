@@ -35,7 +35,7 @@
 
                             <dt class="xe-sr-only"><label for="intro">{{xe_trans('xe::introduction')}}</label></dt>
                             <dd class="input-intro">
-                                <p class="__xe_introView">{!! $user->introduction or xe_trans('xe::enterIntroduction') !!}</p>
+                                <p class="__xe_introView">{!! $user->introduction ?? xe_trans('xe::enterIntroduction') !!}</p>
                                 @if($grant['modify'])
                                     <input class="__xe_introInput" style="display: none;" type="text" name="introduction" placeholder="{{xe_trans('xe::enterIntroduction')}}" value="{{ $user->introduction }}">
                                 @endif

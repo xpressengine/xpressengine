@@ -15,6 +15,7 @@
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
@@ -265,7 +266,7 @@ class MediaLibraryFileRepository
             $perPageCount = $attributes['per_page'];
         }
 
-        $items = $query->paginate($perPageCount, ['*'], 'file_page')->appends(array_forget($attributes, 'file_page'));
+        $items = $query->paginate($perPageCount, ['*'], 'file_page')->appends(Arr::forget($attributes, 'file_page'));
 
         return $items;
     }
@@ -279,7 +280,7 @@ class MediaLibraryFileRepository
     {
         if ($fileItem->user != null) {
             $fileItem->user->setAttribute('profile_image_url', $fileItem->user->getProfileImage());
-            $fileItem->user->addVisible(['profile_image_url']);
+            $fileItem->user->makeVisible(['profile_image_url']);
         }
 
         if (!empty($fileItem->file)) {
@@ -292,7 +293,7 @@ class MediaLibraryFileRepository
             }
 
             $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
-            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'width', 'height']);
+            $fileItem->file->makeVisible(['path', 'filename', 'url', 'download_url', 'width', 'height']);
         }
     }
 

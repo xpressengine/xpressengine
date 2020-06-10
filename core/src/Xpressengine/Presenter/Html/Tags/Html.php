@@ -15,6 +15,7 @@
 namespace Xpressengine\Presenter\Html\Tags;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Xpressengine\Support\Sorter;
 
 /**
@@ -78,7 +79,7 @@ class Html
     {
         $output = '';
 
-        if (!$list = array_get(static::$htmlList, $location)) {
+        if (!$list = Arr::get(static::$htmlList, $location)) {
             return $output;
         }
 
@@ -141,7 +142,7 @@ class Html
     public function load()
     {
         $location = $this->getLocations()[0];
-        static::$htmlList = array_add(static::$htmlList, $location, []);
+        static::$htmlList = Arr::add(static::$htmlList, $location, []);
 
         list($element, $position) = explode('.', $location);
         static::$htmlList[$element][$position][$this->alias] = $this;

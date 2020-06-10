@@ -14,6 +14,7 @@
 namespace Xpressengine\Log\Loggers;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Arr;
 use Xpressengine\Http\Request;
 use Xpressengine\Log\AbstractLogger;
 use Xpressengine\Log\Models\Log;
@@ -85,11 +86,11 @@ class AuthLogger extends AbstractLogger
     public function storeLog($request, int $type)
     {
         $data = $this->loadRequest($request);
-        array_set($data['data'], 'route', $request->route()->getName());
+        Arr::set($data['data'], 'route', $request->route()->getName());
 
         if ($type == static::LOGIN) {
             $data['summary'] = '로그인';
-            array_forget($data['parameters'], 'password');
+            Arr::forget($data['parameters'], 'password');
         } else {
             $data['summary'] = '로그아웃';
         }

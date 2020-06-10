@@ -51,11 +51,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->booted(function ($app) {
             $pluginHandler = $app['xe.plugin'];
 
-            $app['events']->fire('booting.plugins', [$pluginHandler]);
+            $app['events']->dispatch('booting.plugins', [$pluginHandler]);
 
             $pluginHandler->bootPlugins();
 
-            $app['events']->fire('booted.plugins', [$pluginHandler]);
+            $app['events']->dispatch('booted.plugins', [$pluginHandler]);
         });
 
         $this->registerSettingsPermissions();

@@ -1,5 +1,8 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
 <div class="form-group">
-    @if($label = array_get($args, 'label'))<label>{!! $label !!} @if($description = array_get($args, 'description'))<small>{!! $description !!}</small>@endif</label>@endif
+    @if($label = Arr::get($args, 'label'))<label>{!! $label !!} @if($description = Arr::get($args, 'description'))<small>{!! $description !!}</small>@endif</label>@endif
     <div class="__xe_filebox_{{ $seq }} clearfix panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -10,7 +13,7 @@
                     @else
                         <span>{{xe_trans('xe::register')}}</span>
                     @endif
-                    <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'filebox') }}"/>
+                    <input class="__xe_file_{{ $seq }}" type="file" name="{{ Arr::get($args, 'name', 'filebox') }}"/>
                 </span>
                 </div>
                 <div class="col-md-10 col-sm-9 text-right">
@@ -18,7 +21,7 @@
                     </div>
                     <div class="__xe_file_preview_{{ $seq }}">
                         @if(isset($args['value']))
-                            {{ array_get($args, 'value.filename') }}
+                            {{ Arr::get($args, 'value.filename') }}
                         @elseif(isset($args['file']))
                             {{ $args['file'] }}
                         @endif
@@ -27,7 +30,7 @@
             </div>
         </div>
     </div>
-    <p class="help-block">{{ array_get($args, 'description') }}</p>
+    <p class="help-block">{{ Arr::get($args, 'description') }}</p>
 </div>
 
 <script>

@@ -51,7 +51,7 @@ class CacheClearPlus extends ClearCommand
      */
     public function handle()
     {
-        $this->laravel['events']->fire(
+        $this->laravel['events']->dispatch(
             'cache:clearing', [$this->argument('store'), $this->tags()]
         );
 
@@ -61,7 +61,7 @@ class CacheClearPlus extends ClearCommand
 
         $this->flushXeCaches();
 
-        $this->laravel['events']->fire(
+        $this->laravel['events']->dispatch(
             'cache:cleared', [$this->argument('store'), $this->tags()]
         );
 
@@ -93,11 +93,11 @@ class CacheClearPlus extends ClearCommand
         }
 
         foreach ($stores as $storeName) {
-            $this->laravel['events']->fire('cache:clearing', [$storeName, $this->tags()]);
+            $this->laravel['events']->dispatch('cache:clearing', [$storeName, $this->tags()]);
 
             $this->cache->store($storeName)->flush();
 
-            $this->laravel['events']->fire('cache:cleared', [$storeName, $this->tags()]);
+            $this->laravel['events']->dispatch('cache:cleared', [$storeName, $this->tags()]);
         }
 
         if (!$this->option('except-proxy')) {

@@ -15,8 +15,10 @@
 namespace App\Providers;
 
 use Blade;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Xpressengine\Translation\Loaders\LangFileLoader;
 use Xpressengine\Translation\Loaders\LangURLLoader;
@@ -34,15 +36,8 @@ use Xpressengine\Translation\Translator;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
-class TranslationServiceProvider extends ServiceProvider
+class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
     /**
      * Bootstrap the application events.
      *
@@ -61,7 +56,7 @@ class TranslationServiceProvider extends ServiceProvider
             $protocol = 'xe_lang_preprocessor://';
             $prefix = null;
             foreach ($fields as $key => $val) {
-                if (starts_with($key, $protocol)) {
+                if (Str::startsWith($key, $protocol)) {
                     if ($val == $attribute) {
                         $prefix = substr($key, 0, strrpos($key, '/'));
                         break;

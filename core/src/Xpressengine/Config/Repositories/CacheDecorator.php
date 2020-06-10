@@ -52,7 +52,7 @@ class CacheDecorator implements ConfigRepository
      *
      * @var int
      */
-    protected $minutes;
+    protected $seconds;
 
     /**
      * Prefix for cache key
@@ -73,13 +73,13 @@ class CacheDecorator implements ConfigRepository
      *
      * @param ConfigRepository $repo    repository instance
      * @param CacheContract    $cache   cache instance
-     * @param int              $minutes expire time
+     * @param int              $seconds expire time
      */
-    public function __construct(ConfigRepository $repo, CacheContract $cache, $minutes = 60)
+    public function __construct(ConfigRepository $repo, CacheContract $cache, $seconds = 3600)
     {
         $this->repo = $repo;
         $this->cache = $cache;
-        $this->minutes = $minutes;
+        $this->seconds = $seconds;
     }
 
     /**
@@ -97,7 +97,7 @@ class CacheDecorator implements ConfigRepository
             return $item->name === $name;
         });
     }
-    
+
     /**
      * search ancestors getter
      *
@@ -129,7 +129,7 @@ class CacheDecorator implements ConfigRepository
             return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }
-    
+
     /**
      * save
      *
@@ -221,7 +221,7 @@ class CacheDecorator implements ConfigRepository
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$config], $descendant);
-                $this->cache->put($cacheKey, $data, $this->minutes);
+                $this->cache->put($cacheKey, $data, $this->seconds);
             }
 
             $this->bag[$key] = $data;

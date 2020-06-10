@@ -14,6 +14,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Foundation\Operator;
@@ -62,7 +63,7 @@ class UpdateController extends Controller
 
         $provider->sync($fetched);
 
-        $plugins = array_where($fetched, function ($plugin) {
+        $plugins = Arr::where($fetched, function ($plugin) {
             return $plugin->hasUpdate();
         });
         $available = ini_get('allow_url_fopen') ? true : false;

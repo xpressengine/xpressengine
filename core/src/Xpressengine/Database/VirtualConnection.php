@@ -16,7 +16,7 @@ namespace Xpressengine\Database;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\DetectsDeadlocks;
+//use Illuminate\Database\DetectsDeadlocks;
 use Illuminate\Database\DetectsLostConnections;
 use Closure;
 
@@ -32,8 +32,8 @@ use Closure;
  */
 class VirtualConnection implements VirtualConnectionInterface
 {
-    use DetectsDeadlocks,
-        DetectsLostConnections;
+//    use DetectsDeadlocks,
+    use DetectsLostConnections;
 
     /**
      * @var ConnectionInterface
@@ -53,11 +53,11 @@ class VirtualConnection implements VirtualConnectionInterface
     protected static $cache;
 
     /**
-     * The number of minutes to store cache items.
+     * The number of seconds to store cache items.
      *
      * @var int
      */
-    protected $minutes = 60;
+    protected $seconds = 1800;
 
     /**
      * The database table schemas
@@ -93,12 +93,13 @@ class VirtualConnection implements VirtualConnectionInterface
      * Begin a fluent query against a database table.
      * ProxyManager 를 통한 처리를 하지 않음.
      *
-     * @param string $table table name
+     * @param string      $table table name
+     * @param string|null $as    table as name
      * @return DynamicQuery
      */
-    public function table($table)
+    public function table($table, $as = null)
     {
-        return $this->query()->from($table);
+        return $this->query()->from($table, $as);
     }
 
     /**
@@ -149,23 +150,38 @@ class VirtualConnection implements VirtualConnectionInterface
      *
      * @param string $query    query
      * @param array  $bindings bindings
+     * @param bool   $useReadPdo use read PDO
      * @return mixed
      */
-    public function selectOne($query, $bindings = array())
+    public function selectOne($query, $bindings = array(), $useReadPdo = true)
     {
-        return $this->connection->selectOne($query, $bindings);
+        return $this->connection->selectOne($query, $bindings, $useReadPdo);
     }
 
     /**
      * Run a select statement against the database.
      *
-     * @param string $query    query
-     * @param array  $bindings bindings
+     * @param string $query      query
+     * @param array  $bindings   bindings
+     * @param bool   $useReadPdo use read PDO
      * @return array
      */
-    public function select($query, $bindings = array())
+    public function select($query, $bindings = array(), $useReadPdo = true)
     {
-        return $this->connection->select($query, $bindings);
+        return $this->connection->select($query, $bindings, $useReadPdo);
+    }
+
+    /**
+     * Run a select statement against the database and returns a generator.
+     *
+     * @param string $query      query
+     * @param array  $bindings   bindings
+     * @param bool   $useReadPdo use read PDO
+     * @return \Generator
+     */
+    public function cursor($query, $bindings = [], $useReadPdo = true)
+    {
+        return $this->connection->cursor($query, $bindings, $useReadPdo);
     }
 
     /**
@@ -358,7 +374,7 @@ class VirtualConnection implements VirtualConnectionInterface
             return false;
         }
 
-        $cache->put($table, $schema, $this->minutes);
+        $cache->put($table, $schema, $this->seconds);
         return true;
     }
 
@@ -384,14 +400,14 @@ class VirtualConnection implements VirtualConnectionInterface
     }
 
     /**
-     * Set the number of minutes to store cache items.
+     * Set the number of seconds to store cache items.
      *
-     * @param int $minutes number of minutes
+     * @param int $seconds number of seconds
      * @return void
      */
-    public function setCacheExpire($minutes)
+    public function setCacheExpire($seconds)
     {
-        $this->minutes = $minutes;
+        $this->seconds = $seconds;
     }
 
     /**

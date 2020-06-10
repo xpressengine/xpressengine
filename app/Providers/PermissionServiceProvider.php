@@ -46,13 +46,6 @@ class PermissionServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Service Provider Boot
      *
      * @return void

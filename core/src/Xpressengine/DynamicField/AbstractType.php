@@ -245,7 +245,7 @@ abstract class AbstractType implements ComponentInterface
     {
         $tableName = $this->getId();
         $tableName = str_replace(RegisterHandler::FIELD_TYPE . '/', '', $tableName);
-        $tableName = snake_case($tableName);
+        $tableName = Str::snake($tableName);
         $tableName = str_replace('@_', '@', $tableName);
         $tableName = str_replace('@', '_', $tableName);
 

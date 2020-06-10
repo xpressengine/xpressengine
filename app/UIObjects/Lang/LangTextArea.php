@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Lang;
 
+use Illuminate\Support\Arr;
 use XeFrontend;
 use Config;
 use Xpressengine\UIObject\AbstractUIObject;
@@ -51,7 +52,7 @@ class LangTextArea extends AbstractUIObject
         XeFrontend::js('/assets/core/lang/langEditorBox.bundle.js')->appendTo('head')->load();
         XeFrontend::css('/assets/core/lang/langEditorBox.css')->load();
 
-        $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
+        $langKey = htmlspecialchars(Arr::get($args, 'langKey', Arr::get($args, 'value')), ENT_QUOTES, 'UTF-8');
         $autocomplete = Config::get('xe.lang.autocomplete');
 
         return "<div class=\"lang-editor-box\""

@@ -14,9 +14,11 @@
 
 namespace Xpressengine\Translation;
 
+use Countable;
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Support\Collection;
-use Symfony\Component\Translation\MessageSelector;
+use Illuminate\Support\Str;
+use Illuminate\Translation\MessageSelector;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Translation\Exceptions\EmptyLocaleException;
 use Xpressengine\Translation\Loaders\LoaderInterface;
@@ -188,13 +190,21 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      */
     public function trans($id, array $parameters = array(), $locale = null)
     {
-        $sentence = $this->get($id, $parameters, $locale);
+        return $this->get($id, $parameters, $locale);
+    }
 
-        if ($sentence == $id) {
-            return $this->makeUnknownSentence($id);
-        }
-
-        return $sentence;
+    /**
+     * 선택이 가능한 다국어를 번역합니다
+     *
+     * @param string $id         다국어 key
+     * @param int    $number     숫자
+     * @param array  $parameters 인자
+     * @param null   $locale     locale
+     * @return mixed
+     */
+    public function transChoice($id, $number, array $parameters = array(), $locale = null)
+    {
+        return $this->choice($id, $number, $parameters, $locale);
     }
 
     /**
@@ -222,28 +232,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     }
 
     /**
-     * 선택이 가능한 다국어를 번역합니다
-     *
-     * @param string $id         다국어 key
-     * @param int    $number     숫자
-     * @param array  $parameters 인자
-     * @param null   $locale     locale
-     * @return mixed
-     */
-    public function transChoice($id, $number, array $parameters = array(), $locale = null)
-    {
-        $sentence = $this->choice($id, $number, $parameters, $locale);
-
-        if ($sentence == $id) {
-            return $number . ' ' . $this->makeUnknownSentence($id);
-        }
-
-        return $sentence;
-    }
-
-    /**
      * 다국어로 번역되기 전 원형 문장을 읽어옵니다
-     *
+     *parseKey
      * @param string $key     다국어 key
      * @param array  $replace 변경 데이터
      * @param null   $locale  로케일
@@ -258,9 +248,11 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
                 break;
             }
         }
+
         if (!isset($line) || !$line) {
-            return $key;
+            return $this->makeUnknownSentence($key);
         }
+
         return $line;
     }
 
@@ -274,6 +266,11 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     public function choice($key, $number, array $replace = [], $locale = null)
     {
         $line = $this->get($key, $replace, $locale = $locale ?: $this->getLocale());
+
+        // @see \Illuminate\Translation\Translator@choice
+        if (is_array($number) || $number instanceof Countable) {
+            $number = count($number);
+        }
 
         $replace['count'] = $number;
 
@@ -454,7 +451,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         $protocol = $this->preprocessorProtocol;
         $len = strlen($protocol);
 
-        if (starts_with($key, $protocol)) {
+        if (Str::startsWith($key, $protocol)) {
             $params = explode("/", substr($key, $len));
             array_shift($params);
             return !empty($params) ? $params : null;

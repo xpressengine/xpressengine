@@ -14,6 +14,7 @@
 
 namespace App\UIObjects\Form;
 
+use Illuminate\Support\Arr;
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\UIObject\Element;
 
@@ -50,10 +51,10 @@ class FormCheckbox extends AbstractUIObject
         $checkboxWrapper = new Element('div', ['class'=>'checkboxWrap']);
         $description = new Element('p', ['class'=>'help-block']);
 
-        $nameGlobal = array_get($args, 'name');
+        $nameGlobal = Arr::get($args, 'name');
         $checkboxes = null;
 
-        $values = array_get($args, 'value', null);
+        $values = Arr::get($args, 'value', null);
 
         foreach ($args as $key => $arg) {
             switch ($key) {
@@ -92,9 +93,9 @@ class FormCheckbox extends AbstractUIObject
                 $value = $itemKey;
                 $checked = false;
             } else {
-                $text = array_get($itemValue, 'text');
-                $value = array_get($itemValue, 'value');
-                $checked = array_get($itemValue, 'checked', false);
+                $text = Arr::get($itemValue, 'text');
+                $value = Arr::get($itemValue, 'value');
+                $checked = Arr::get($itemValue, 'checked', false);
             }
 
             if ($values != null && in_array($value, $values)) {

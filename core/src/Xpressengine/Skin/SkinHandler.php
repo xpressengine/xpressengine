@@ -15,6 +15,7 @@
 namespace Xpressengine\Skin;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Skin\Exceptions\SkinNotFoundException;
 
@@ -202,7 +203,7 @@ class SkinHandler
     public function getListSupportingMobile($target, $isSettings = false)
     {
         $skins = $this->getList($target, $isSettings);
-        return array_where(
+        return Arr::where(
             $skins,
             function ($entity) {
                 /** @var SkinEntity $entity */
@@ -222,7 +223,7 @@ class SkinHandler
     public function getListSupportingDesktop($target, $isSettings = false)
     {
         $skins = $this->getList($target, $isSettings);
-        return array_where(
+        return Arr::where(
             $skins,
             function ($entity) {
                 /** @var SkinEntity $entity */
@@ -261,7 +262,7 @@ class SkinHandler
 
         // 타켓에 지정된 스킨이 없을 경우, 해당 타겟에 지정된 기본 스킨을 선택한다.
         if ($skinId === null || !$this->has($skinId)) {
-            $skinId = $target ? array_get($this->defaultSkins, $target) : null;
+            $skinId = $target ? Arr::get($this->defaultSkins, $target) : null;
         }
 
         // 해당 타겟에 지정된 기본 스킨도 없을 경우, 해당 타겟으로 등록된 첫번째 스킨을 선택한다.
@@ -304,7 +305,7 @@ class SkinHandler
     public function getAssignedSettings($target)
     {
         // 해당 타겟에 지정된 기본 스킨을 선택한다.
-        $skinId = array_get($this->defaultSettingsSkins, $target, null);
+        $skinId = Arr::get($this->defaultSettingsSkins, $target, null);
         $skin = null;
 
         // 해당 타겟에 지정된 기본 스킨도 없을 경우, 해당 타겟으로 등록된 첫번째 스킨을 선택한다.

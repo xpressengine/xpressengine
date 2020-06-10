@@ -14,6 +14,8 @@
 
 namespace Xpressengine\User;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class UserRegisterHandler
  *
@@ -53,8 +55,8 @@ class UserRegisterHandler
         $attribute['display_name_unique'] = isset($attribute['display_name_unique']);
         $attribute['use_display_name'] = isset($attribute['use_display_name']);
 
-        $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
-        $attribute['dynamic_fields'] = array_keys(array_get($attribute, 'dynamic_fields', []));
+        $attribute['forms'] = array_keys(Arr::get($attribute, 'forms', []));
+        $attribute['dynamic_fields'] = array_keys(Arr::get($attribute, 'dynamic_fields', []));
 
         $passwordRules = '';
         foreach ($attribute['password_rules'] as $rule => $value) {
