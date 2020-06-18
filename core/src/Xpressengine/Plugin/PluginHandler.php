@@ -336,7 +336,7 @@ class PluginHandler
         $collection = $this->getPlugins();
         $dependencyPlugins = [];
         foreach ($dependencies as $dependency => $version) {
-            list($venacdor, $id) = explode('/', $dependency);
+            $id = array_last(explode('/', $dependency));
             $entity = $collection->get($id);
             if ($entity !== null && $entity->getName() === $dependency) {
                 $dependencyPlugins[$id] = $entity;
