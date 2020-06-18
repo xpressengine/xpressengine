@@ -793,7 +793,14 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function isPrivate()
     {
-        return is_link(dirname($this->pluginFile));
+        // is_link는 윈도우에 적용된 심볼릭링크 방식인 JUNCTION을 인식하지 못하기 때문에 별도로 구현
+        // 윈도우에선 윈도우용 디렉토리 문자열과 슬래시가 혼용되어 나오기 때문에, 슬래시를 OS에 맞는 Separator로 치환
+        $pluginPath = str_replace('/', DIRECTORY_SEPARATOR, dirname($this->pluginFile));
+        $realPath = realpath($pluginPath);
+        if ($realPath && $realPath !== $pluginPath) {
+            return true;
+        }
+        return false;
     }
 
     /**
