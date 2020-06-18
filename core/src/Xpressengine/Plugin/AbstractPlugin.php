@@ -217,8 +217,15 @@ abstract class AbstractPlugin
         $pluginId = $this->getId();
         $path = $pluginId.'/'.ltrim($path, '/');
 
-        // todo 없는 경로로 지정됬을때 어떻게 되는지 확인
-        $files = app('files')->files(plugins_path($path));
+        try {
+            $files = app('files')->files(plugins_path($path));
+        } catch (\Throwable $e) {
+            \Log::error($e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            return false;
+        }
+
         $files = collect($files);
         $infoFile = $files->first(function ($file) {
             return strtolower($file->getFilename()) === 'info.php';
@@ -235,15 +242,10 @@ abstract class AbstractPlugin
         $id = $group.'/'.$pluginId.'@'.basename($path);
         $register = app('xe.register');
         $register->set($id, $callback = function ($config) use ($id, $path, $info) {
-
-            $skin = new SimpleSkin($config);
-            $skin->setId($id);
-            $skin->setPath($path);
-            $skin->setComponentInfo('name', $info['name'] ?? $id);
-            $skin->setComponentInfo('description', $info['description'] ?? '');
+            $info = $info + ['name' => $id, 'description' => ''];
+            $skin = new SimpleSkin($id, $path, $info, $config);
 
             return $skin;
-
         });
 
         $register->set($group.'.'.$id, $callback);

@@ -31,16 +31,18 @@ class SimpleSkin extends GenericSkin
      */
     protected static $viewDir = null;
 
-    /**
-     * Set path for this skin.
-     *
-     * @param string $path path from plugin dir
-     * @return $this
-     */
-    public function setPath($path)
-    {
-        static::$path = $path;
+    protected static $id;
 
-        return $this;
+    protected static $path;
+
+    protected static $componentInfo;
+
+    public function __construct($id, $path, $info, array $config = null)
+    {
+        static::$id = $id;
+        static::$path = $path;
+        static::$componentInfo = $info;
+
+        parent::__construct($config);
     }
 }
