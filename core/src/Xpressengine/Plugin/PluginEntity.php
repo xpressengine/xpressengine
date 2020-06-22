@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Plugin;
 
+use Composer\Util\Filesystem;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
@@ -793,7 +794,8 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function isPrivate()
     {
-        return is_link(dirname($this->pluginFile));
+        $pluginDir = dirname($this->pluginFile);
+        return is_link($pluginDir) || app(Filesystem::class)->isJunction($pluginDir);
     }
 
     /**
