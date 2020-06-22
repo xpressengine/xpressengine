@@ -337,7 +337,7 @@ class PluginHandler
         $dependencyPlugins = [];
         foreach ($dependencies as $dependency => $version) {
             // Platform 의존성은 검사를 건너뜀
-            if (0 === stripos($dependency, 'ext-')) {
+            if (in_array($dependency, ['php', 'php-64bit', 'hhvm']) || 0 === stripos($dependency, 'ext-') || 0 === stripos($dependency, 'lib-')) {
                 continue;
             }
             list($vendor, $id) = explode('/', $dependency);
