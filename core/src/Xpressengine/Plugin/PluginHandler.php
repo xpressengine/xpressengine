@@ -336,7 +336,11 @@ class PluginHandler
         $collection = $this->getPlugins();
         $dependencyPlugins = [];
         foreach ($dependencies as $dependency => $version) {
-            $id = array_last(explode('/', $dependency));
+            // Platform 의존성은 검사를 건너뜀
+            if (0 === stripos($dependency, 'ext-')) {
+                continue;
+            }
+            list($vendor, $id) = explode('/', $dependency);
             $entity = $collection->get($id);
             if ($entity !== null && $entity->getName() === $dependency) {
                 $dependencyPlugins[$id] = $entity;
