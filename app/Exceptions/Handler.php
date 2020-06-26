@@ -277,6 +277,8 @@ class Handler extends ExceptionHandler
             $view = $this->getView($path, $status, $e);
         }
 
+        $view->setStatusCode($e->getStatusCode());
+        
         return $view;
     }
 
