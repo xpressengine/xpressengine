@@ -81,7 +81,7 @@ class FormSelect extends AbstractUIObject
                         if ($selectedValue === null) {
                             $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
                         } else {
-                            $selected = $value === $selectedValue ? 'selected="selected"' : '';
+                            $selected = in_array($value, (array) $selectedValue) ? 'selected="selected"' : '';
                         }
                         $optionEl = "<option value=\"$value\" $selected>$text</option>";
                         $select->append($optionEl);
