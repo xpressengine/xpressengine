@@ -70,7 +70,6 @@ class FormSelect extends AbstractUIObject
                         $optgroupEl = new Element('optgroup', $groupAttrs);
 
                         $options = array_get($group, 'options');
-                        debug($options);
                         foreach ($options as $value => $option) {
                             $optionEl = $this->processOption($value, $option, $selectedValue);
                             $optgroupEl->append($optionEl);
