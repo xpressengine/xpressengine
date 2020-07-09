@@ -137,7 +137,7 @@ export default {
   },
   data() {
     return {
-      listType: 'list', // list, card
+      listType: 'card', // list, card
       filter: {
         folder_id: null,
         page: 1

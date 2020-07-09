@@ -40,6 +40,8 @@
       if (this.options.field && $(this.options.field).length) {
         if (this.options.files[0]) {
           $(this.options.field).val(_.get(this.options.files[0], 'file_id', null))
+        } else {
+          $(this.options.field).val(null)
         }
       }
     },
@@ -69,7 +71,7 @@
     _removeFile: function (targetId) {
       var that = this
       this.options.files.splice(_.findIndex(this.options.files, function (item) { return item.file_id === targetId }), 1)
-      that._renderList()
+      that._refresh()
     },
 
     _renderList: function () {

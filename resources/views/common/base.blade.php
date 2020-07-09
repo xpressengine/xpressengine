@@ -50,6 +50,13 @@
                 passwordRules: '{!! app('xe.config')->getVal('user.register.password_rules') !!}'
             });
         }
+        if (jQuery) {
+            jQuery.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+        }
     </script>
 
     <!-- JS at head.append -->

@@ -108,7 +108,7 @@ trait ArtisanBackgroundHelper
         }
 
         try {
-            return (new Process($commandLine, base_path(), null, null, 3))->run();
+            return (new Process($commandLine, base_path(), getenv(), null, 3))->run();
         } catch (ProcessTimedOutException $e) {
             // not throw exception
             return 0;

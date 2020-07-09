@@ -238,7 +238,7 @@ class PluginHandler
 
         // 플러그인이 존재하는지 검사한다.
         if ($entity === null) {
-            throw new PluginNotFoundException(['pluginName' => $pluginId]);
+            throw new PluginNotFoundException(['plugin' => $pluginId]);
         }
 
         // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
@@ -336,7 +336,11 @@ class PluginHandler
         $collection = $this->getPlugins();
         $dependencyPlugins = [];
         foreach ($dependencies as $dependency => $version) {
-            list($venacdor, $id) = explode('/', $dependency);
+            // Platform 의존성은 검사를 건너뜀
+            if (in_array($dependency, ['php', 'php-64bit', 'hhvm']) || 0 === stripos($dependency, 'ext-') || 0 === stripos($dependency, 'lib-')) {
+                continue;
+            }
+            list($vendor, $id) = explode('/', $dependency);
             $entity = $collection->get($id);
             if ($entity !== null && $entity->getName() === $dependency) {
                 $dependencyPlugins[$id] = $entity;

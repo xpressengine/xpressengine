@@ -116,7 +116,11 @@ class SettingsMiddleware
 
         $permissionId = array_get($route->getAction(), 'permission');
 
-        if ($permissionId && $this->gate->denies('access', new Instance('settings.'.$permissionId))) {
+        if ($permissionId === null) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if ($this->gate->denies('access', new Instance('settings.'.$permissionId))) {
             throw new AccessDeniedHttpException();
         }
     }

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Plugin;
 
+use Composer\Util\Filesystem;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
@@ -149,10 +150,11 @@ class PluginEntity implements Arrayable, Jsonable
         if (isset($this->object) && is_a($this->object, 'Xpressengine\Plugin\AbstractPlugin')) {
             return $this->object;
         } else {
-            if (file_exists($this->pluginFile) === false) {
-                throw new PluginFileNotFoundException(['path' => str_replace(base_path(), '', $this->pluginFile)]);
+            $pluginFilePath = base_path($this->pluginFile);
+            if (file_exists($pluginFilePath) === false) {
+                throw new PluginFileNotFoundException(['path' => $this->pluginFile]);
             }
-            require_once($this->pluginFile);
+            require_once($pluginFilePath);
 
             // reigster each plugin's autoload if autoload.php exist
             $this->registerPluginAutoload();
@@ -792,7 +794,8 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function isPrivate()
     {
-        return is_link(dirname($this->pluginFile));
+        $pluginDir = dirname($this->pluginFile);
+        return is_link($pluginDir) || app(Filesystem::class)->isJunction($pluginDir);
     }
 
     /**

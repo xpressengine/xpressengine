@@ -14,6 +14,8 @@
 
 namespace App\Console\Commands;
 
+use Composer\Util\Filesystem;
+
 /**
  * Class PrivateUpdateCommand
  *
@@ -63,7 +65,8 @@ class PrivateUpdateCommand extends PluginCommand
 
             $this->info('Unlink plugin');
             $this->output->write('  - Unlinking ... ');
-            if (!app('files')->delete($plugin->getPath())) {
+            // 윈도우와의 호환성을 위해 Composer FileSystem 유틸로 삭제 (Junction 삭제 지원)
+            if (!app(Filesystem::class)->remove($plugin->getPath())) {
                 throw new \RuntimeException('Unable to unlink.');
             }
             $this->info('done');

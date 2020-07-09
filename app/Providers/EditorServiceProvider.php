@@ -50,11 +50,16 @@ class EditorServiceProvider extends ServiceProvider
             $handler = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE);
             $images = [];
             foreach ($files as $file) {
-                $images[] = $handler->getThumbnail(
-                    $this->app['xe.media']->make($file),
-                    EditorHandler::THUMBNAIL_TYPE,
-                    $dimension
-                );
+                $media = $this->app['xe.media']->make($file);
+                if (config('xe.editor.gif_origin') && $media->mime === 'image/gif') {
+                    $images[] = $media;
+                } else {
+                    $images[] = $handler->getThumbnail(
+                        $media,
+                        EditorHandler::THUMBNAIL_TYPE,
+                        $dimension
+                    );
+                }
             }
 
             return $images;

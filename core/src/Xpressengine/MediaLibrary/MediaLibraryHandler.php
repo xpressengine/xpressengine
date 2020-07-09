@@ -519,13 +519,7 @@ class MediaLibraryHandler
 
         if (XeMedia::is($file) == true) {
             $media = XeMedia::make($file);
-
-            $metaData = $media['meta'];
-            $thumbnailConfig = config('xe.media.thumbnail.dimensions');
-            if ($metaData['width'] < $thumbnailConfig['MAX']['width'] ||
-                $metaData['height'] < $thumbnailConfig['MAX']['height']) {
-                XeMedia::createThumbnails($media);
-            }
+            XeMedia::createThumbnails($media);
         }
 
         $folderItem = null;

@@ -55,23 +55,18 @@ class PresenterServiceProvider extends ServiceProvider
     public function boot()
     {
         if (app()->runningInConsole() === false && !request()->ajax()) {
-            $this->app->booted(
-                function () {
+            intercept('Presenter@make' , 'frontend.load.default', function ($method, $id, array $data = [], array $mergeData = [], $html = true, $api = false) {
+                $frontendHandler = app('xe.frontend');
+                // set site title
+                $this->loadTitle($frontendHandler);
+                // load default files
+                $this->loadDefaultFiles($frontendHandler);
+                // icon
+                $this->loadIcon($frontendHandler);
 
-                    $frontendHandler = app('xe.frontend');
-
-                    // set site title
-                    $this->loadTitle($frontendHandler);
-
-                    // load default files
-                    $this->loadDefaultFiles($frontendHandler);
-
-                    // icon
-                    $this->loadIcon($frontendHandler);
-                }
-            );
+                return $method($id, $data, $mergeData, $html, $api);
+            });
         }
-
     }
 
     /**
