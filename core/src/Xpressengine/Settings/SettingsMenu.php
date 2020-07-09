@@ -92,7 +92,7 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
         // menu에 링크 정보가 있을 경우
         if ($this->link !== null) {
             if ($this->link instanceof Closure) {
-                return $this->link();
+                return call_user_func($this->link);
             } else {
                 return $this->link;
             }
