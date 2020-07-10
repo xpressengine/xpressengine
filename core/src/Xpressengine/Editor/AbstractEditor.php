@@ -470,6 +470,9 @@ abstract class AbstractEditor implements ComponentInterface
             'upload' => $this->gate->allows('upload', $instance),
             'medialibrary' => auth()->user()->isAdmin()
         ];
+        if (!$data['perms']['upload']) {
+            $data['uploadActive'] = false;
+        }
         $data['stylesheet'] = $this->config->get('stylesheet') ? asset($this->config->get('stylesheet')) : null;
 
         $data['files'] = $this->files;
