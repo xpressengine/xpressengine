@@ -50,15 +50,17 @@ class ThemeSelect extends AbstractUIObject
      */
     public function render()
     {
-        $themes = [];
         $blankTheme = null;
         $args = $this->arguments;
         $prefix = array_get($args, 'prefixName', 'theme_');
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
 
+        $themes = [];
         if (!isset($args['themes'])) {
             $themes = $themeHandler->getAllTheme();
+        } else {
+            $themes = $args['themes'];
         }
 
         $blankThemeClass = app('config')->get('xe.theme.blank');
