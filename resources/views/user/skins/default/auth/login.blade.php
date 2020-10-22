@@ -17,7 +17,7 @@
                 </div>
                 <div class="float-clear">
                     <label class="xu-label-checkradio xu-label-checkradio--small">
-                        <input type="checkbox" class="__xe_keep_login">
+                        <input type="checkbox" class="__xe_keep_login" name="remember">
                         <span class="xu-label-checkradio__helper"></span>
                         <span class="xu-label-checkradio__text">{{ xe_trans('xe::keepLogin') }}</span>
                     </label>
