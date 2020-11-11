@@ -112,7 +112,6 @@ class PluginScanner
             $pluginInfos[$id] = $pluginInfo;
         }
 
-        //return null;
         return $pluginInfos;
     }
 
