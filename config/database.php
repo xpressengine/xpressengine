@@ -71,7 +71,7 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
+            'prefix' => env('DB_PREFIX', ''),
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
@@ -84,7 +84,7 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
+            'prefix' => env('DB_PREFIX', ''),
         ],
 
         'cubrid' => [
@@ -95,7 +95,7 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
+            'prefix' => env('DB_PREFIX', ''),
         ],
     ],
 
