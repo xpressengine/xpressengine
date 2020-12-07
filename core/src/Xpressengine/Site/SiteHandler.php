@@ -131,7 +131,7 @@ class SiteHandler
         if (is_null($siteKey)) {
             $siteKey = $this->currentSite->site_key;
         }
-        return $this->config->getVal(sprintf("site.%s.defaultMenu", $siteKey));
+        return $this->config->getVal(sprintf("site.%s.defaultMenu", $siteKey),null,false,'default');
     }
 
     /**
@@ -163,7 +163,8 @@ class SiteHandler
         if (is_null($siteKey)) {
             $siteKey = $this->currentSite->site_key;
         }
-        return $this->config->getVal(sprintf("site.%s.homeInstance", $siteKey));
+        //site.{site_key}는 default다..
+        return $this->config->getVal(sprintf("site.%s.homeInstance", $siteKey),null,false,'default');
     }
 
     /**
@@ -196,7 +197,7 @@ class SiteHandler
         if (is_null($siteKey)) {
             $siteKey = $this->currentSite->site_key;
         }
-        return $this->config->getVal(sprintf("site.%s.%s", $siteKey, $key));
+        return $this->config->getVal(sprintf("site.%s.%s", $siteKey, $key),null,false,'default');
     }
 
     /**
