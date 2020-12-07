@@ -32,6 +32,7 @@ use Xpressengine\Routing\InstanceRoute;
  * @property string $id          자동 생성된 고유한 식별자
  * @property string $menu_id     소속된 MenuEntity 의 ID
  * @property string $parent_id    부모의 ID
+ * @property string $site_key     해당 메뉴의 사이트 Key
  * @property string $url         해당 메뉴의 URL
  * @property string $pre_title    UI 에서 출력을 위해서 사용되는 property title 출력전에 추가
  * @property string $title       사용자에게 보여지는 이름
@@ -84,7 +85,7 @@ class MenuItem extends CategoryItem
      * @var array
      */
     protected $fillable = [
-        'menu_id', 'parent_id', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
+        'menu_id', 'parent_id', 'title', 'site_key', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
         'menu_image_id', 'basic_image_id', 'hover_image_id', 'selected_image_id',
         'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
     ];

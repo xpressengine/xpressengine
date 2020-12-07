@@ -101,7 +101,8 @@ class SiteHandler
         if (is_null($siteKey)) {
             $siteKey = $this->currentSite->site_key;
         }
-        return $this->config->get(sprintf("site.%s", $siteKey));
+        //site.{site_key}는 무조건 default 라서... 수정..
+        return $this->config->get(sprintf("site.%s", $siteKey),false,'default');
     }
 
     /**

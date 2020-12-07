@@ -486,7 +486,7 @@ class ConfigManager
         }
 
         if ($config->getDepth() > 1 && $config->getParent() === null) {
-            throw new ValidationException(['message' => 'The config must be has parent']);
+            throw new ValidationException(['message' => $config->name . 'The config must be has parent']);
         }
     }
 

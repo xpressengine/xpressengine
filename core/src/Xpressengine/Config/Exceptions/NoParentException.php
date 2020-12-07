@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class NoParentException extends ConfigException
 {
-    protected $message = 'Parent is not exists';
+    protected $message = '[:name] Parent [:ancestor_name] is not exists';
 }

@@ -133,7 +133,9 @@ class PermissionHandler
         if (strrpos($name, '.') !== false) {
             $pname = substr($name, 0, strrpos($name, '.'));
             if (!$this->repo->findByName($siteKey, $pname)) {
-                throw new NoParentException(['name' => $name]);
+                //재귀함수로 상위 권한 자동생성
+                $this->register($pname, new Grant, $siteKey);
+//                throw new NoParentException(['name' => $name]);
             }
         }
 

@@ -198,7 +198,7 @@ class ConfigEntity extends Entity implements IteratorAggregate
             $this->parent = $ancestor;
         } else {
             if (is_null($this->parent)) {
-                throw new NoParentException();
+                throw new NoParentException(['ancestor_name' => $ancestor->name, 'name' => $this->name]);
             }
             $this->parent->setParent($ancestor);
         }

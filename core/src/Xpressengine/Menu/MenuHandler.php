@@ -26,6 +26,7 @@ use Xpressengine\Permission\Grant;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
 use Xpressengine\User\Rating;
+use XeSite;
 
 /**
  * Class MenuHandler
@@ -61,7 +62,7 @@ class MenuHandler
      * @var ConfigManager
      */
     protected $configs;
-    
+
     /**
      * ModuleHandler instance
      *
@@ -351,14 +352,16 @@ class MenuHandler
      * @param string $mobileTheme  theme id
      * @return void
      */
-    public function setMenuTheme(Menu $menu, $desktopTheme, $mobileTheme)
+    public function setMenuTheme(Menu $menu, $desktopTheme, $mobileTheme, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         $this->configs->add(
             $this->menuKeyString($menu->getKey()),
             [
                 'desktopTheme' => $desktopTheme,
                 'mobileTheme' => $mobileTheme
-            ]
+            ],
+            $siteKey
         );
     }
 
@@ -411,14 +414,17 @@ class MenuHandler
      * @param string   $mobileTheme  theme id
      * @return void
      */
-    public function setMenuItemTheme(MenuItem $item, $desktopTheme, $mobileTheme)
+    public function setMenuItemTheme(MenuItem $item, $desktopTheme, $mobileTheme, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
+
         $this->configs->add(
             $this->menuKeyString($item),
             [
                 'desktopTheme' => $desktopTheme,
                 'mobileTheme' => $mobileTheme
-            ]
+            ],
+            $siteKey
         );
     }
 
@@ -516,7 +522,7 @@ class MenuHandler
         $grant->add(static::VISIBLE, 'group', []);
         $grant->add(static::VISIBLE, 'user', []);
         $grant->add(static::VISIBLE, 'except', []);
-        
+
         return $grant;
     }
 

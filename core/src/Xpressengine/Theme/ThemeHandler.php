@@ -15,6 +15,7 @@
 namespace Xpressengine\Theme;
 
 use Closure;
+use XeSite;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
@@ -278,8 +279,9 @@ class ThemeHandler
      *
      * @return void
      */
-    public function setSiteTheme($id, $mode = null)
+    public function setSiteTheme($id, $mode = null, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         if (is_array($id)) {
             $configId = 'theme.setting.siteTheme';
         } else {
@@ -289,7 +291,7 @@ class ThemeHandler
                 $configId = 'theme.setting.siteTheme.mobile';
             }
         }
-        $this->config->setVal($configId, $id);
+        $this->config->setVal($configId, $id, $siteKey);
     }
 
     /**
