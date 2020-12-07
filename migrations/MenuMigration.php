@@ -69,6 +69,7 @@ class MenuMigration extends Migration
             $table->string('menu_id')->comment('menu ID');
             $table->string('parent_id')->nullable()->comment('parent ID. parent menu item ID.');
             $table->string('title')->comment('menu title. It can be code of translation information.');
+            $table->string('site_key')->default('default')->comment('site key. for multi web site support.');
             $table->string('url')->comment('URL');
             $table->text('description')->nullable()->comment('menu description. It can be code of translation information.');
             $table->string('target')->comment('HTML <a> tag target attribute value');
@@ -273,6 +274,7 @@ class MenuMigration extends Migration
             'menu_id' => $mainMenu->id,
             'parent_id' => null,
             'title' => $menuTitle,
+            'site_key' => 'default',
             'url' => 'home',
             'description' => 'home',
             'target' => '',
@@ -347,6 +349,7 @@ class MenuMigration extends Migration
             'menu_id' => $mainMenu->id,
             'parent_id' => null,
             'title' => $noticeBoardTitle,
+            'site_key' => 'default',
             'url' => 'notice',
             'description' => 'notice',
             'target' => '',
@@ -367,6 +370,7 @@ class MenuMigration extends Migration
             'menu_id' => $mainMenu->id,
             'parent_id' => null,
             'title' => $blogBoardTitle,
+            'site_key' => 'default',
             'url' => 'blog',
             'description' => 'blog',
             'target' => '',
@@ -387,6 +391,7 @@ class MenuMigration extends Migration
             'menu_id' => $mainMenu->id,
             'parent_id' => null,
             'title' => $boardBoardTitle,
+            'site_key' => 'default',
             'url' => 'board',
             'description' => 'board',
             'target' => '',
@@ -407,6 +412,7 @@ class MenuMigration extends Migration
             'menu_id' => $mainMenu->id,
             'parent_id' => null,
             'title' => $galleryBoardTitle,
+            'site_key' => 'default',
             'url' => 'gallery',
             'description' => 'gallery',
             'target' => '',
@@ -449,7 +455,7 @@ class MenuMigration extends Migration
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('theme/together@together.0', 'mainMenu', $mainMenu);
-        $themeHandler->setThemeConfig('theme/together@together.1', 'mainMenu', $mainMenu);
+        $themeHandler->setThemeConfig('theme/together@together.0', 'mainMenu', $mainMenu, 'default');
+        $themeHandler->setThemeConfig('theme/together@together.1', 'mainMenu', $mainMenu, 'default');
     }
 }

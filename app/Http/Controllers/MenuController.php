@@ -348,7 +348,12 @@ class MenuController extends Controller
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
         $menuType = XeMenu::getModuleHandler()->getModuleObject($itemInput['selectedType']);
-        if ($menuType::isRouteAble() && XeMenu::items()->query()->where('url', $url)->exists()) {
+        $siteKey = XeSite::getCurrentSiteKey();
+
+        if ($menuType::isRouteAble() && XeMenu::items()->query()->where([
+            ['url', '=', $url],
+            ['site_key', '=', $siteKey]
+            ])->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 
@@ -472,7 +477,12 @@ class MenuController extends Controller
         $url = $this->urlAvailable(trim($itemInput['itemUrl'], " \t\n\r\0\x0B/"));
 
         $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
-        if ($menuType::isRouteAble() && XeMenu::items()->query()->where('url', $url)->whereKeyNot($item->getKey())->exists()) {
+        $siteKey = XeSite::getCurrentSiteKey();
+
+        if ($menuType::isRouteAble() && XeMenu::items()->query()->where([
+                ['url', '=', $url],
+                ['site_key', '=', $siteKey]
+            ])->whereKeyNot($item->getKey())->exists()) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 

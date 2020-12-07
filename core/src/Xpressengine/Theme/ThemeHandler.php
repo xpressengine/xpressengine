@@ -424,8 +424,9 @@ class ThemeHandler
      *
      * @return void
      */
-    public function setThemeConfig($id, $key, $configData = null)
+    public function setThemeConfig($id, $key, $configData = null, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         if ($configData === null) {
             $configData = $key;
             $key = null;
@@ -436,9 +437,9 @@ class ThemeHandler
         $configId = $this->getConfigId($id);
 
         if ($key === null) {
-            $this->config->set($configId, $configData);
+            $this->config->set($configId, $configData, $siteKey);
         } else {
-            $this->config->setVal($configId, $configData);
+            $this->config->setVal($configId, $configData, $siteKey);
         }
     }
 
