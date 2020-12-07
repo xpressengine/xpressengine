@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Permission;
 
+use XeSite;
 use Xpressengine\Permission\Exceptions\InvalidArgumentException;
 use Xpressengine\Permission\Exceptions\NoParentException;
 
@@ -53,8 +54,9 @@ class PermissionHandler
      * @param string $siteKey site key name
      * @return Permission|null
      */
-    public function get($name, $siteKey = 'default')
+    public function get($name, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         if ($permission = $this->repo->findByName($siteKey, $name)) {
             $this->setAncestor($permission);
         }
@@ -69,8 +71,9 @@ class PermissionHandler
      * @param string $siteKey site key name
      * @return Permission|null
      */
-    public function getOrNew($name, $siteKey = 'default')
+    public function getOrNew($name, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         if (!$permission = $this->get($name, $siteKey)) {
             $permission = $this->newItem();
             $permission->site_key = $siteKey;
@@ -122,8 +125,9 @@ class PermissionHandler
      * @param string $siteKey site key name
      * @return Permission
      */
-    public function register($name, Grant $grant, $siteKey = 'default')
+    public function register($name, Grant $grant, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         $permission = $this->getOrNew($name, $siteKey);
 
         if (strrpos($name, '.') !== false) {
@@ -149,8 +153,9 @@ class PermissionHandler
      * @param string $siteKey site key name
      * @return void
      */
-    public function destroy($name, $siteKey = 'default')
+    public function destroy($name, $siteKey = null)
     {
+        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
         if ($permission = $this->get($name, $siteKey)) {
             $this->repo->delete($permission);
         }
