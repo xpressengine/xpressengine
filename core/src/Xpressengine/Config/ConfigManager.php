@@ -153,7 +153,12 @@ class ConfigManager
      */
     public function get($group, $create = false, $siteKey = null)
     {
-        if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
+        $defaultGroups = array(
+            'plugin',
+            'site'
+        );
+        if(in_array(explode(".",$group)[0],$defaultGroups)) $siteKey = 'default';
+        else if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
 
         $config = $this->repo->find($siteKey, $group);
 
