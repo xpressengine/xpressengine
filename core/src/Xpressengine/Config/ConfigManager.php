@@ -154,7 +154,7 @@ class ConfigManager
     public function get($group, $create = false, $siteKey = null)
     {
         $defaultGroups = array(
-            'plugin',
+//            'plugin',
             'site'
         );
         if(in_array(explode(".",$group)[0],$defaultGroups)) $siteKey = 'default';

@@ -37,13 +37,15 @@ class ConfigMigration extends Migration
      */
     public function install()
     {
-        Schema::create('config', function ($table) {
-            $table->engine = "InnoDB";
+        if(Schema::hasTable('config') === false) {
+            Schema::create('config', function ($table) {
+                $table->engine = "InnoDB";
 
-            $table->string('site_key', 50)->default('default')->comment('site key. for multi web site support.');
-            $table->string('name', 255)->comment('site name');
-            $table->text('vars')->default('')->comment('setting values. JSON data type.');
-            $table->primary(['site_key', 'name']);
-        });
+                $table->string('site_key', 50)->default('default')->comment('site key. for multi web site support.');
+                $table->string('name', 255)->comment('site name');
+                $table->text('vars')->default('')->comment('setting values. JSON data type.');
+                $table->primary(['site_key', 'name']);
+            });
+        }
     }
 }

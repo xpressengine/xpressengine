@@ -38,18 +38,20 @@ class TranslationMigration extends Migration
      */
     public function install()
     {
-        Schema::create('translation', function (Blueprint $table) {
-            // multiple languages information
-            $table->engine = "InnoDB";
+        if(Schema::hasTable('translation') === false) {
+            Schema::create('translation', function (Blueprint $table) {
+                // multiple languages information
+                $table->engine = "InnoDB";
 
-            $table->increments('id')->comment('ID');
-            $table->string('namespace', 50)->index()->comment('item namespace. XE Core use [xe] and plugin use plugin name as like [board], [page].');
-            $table->string('item', 100)->index()->comment('item key. A string that can understand meaning when read by a person.');
-            $table->string('locale', 6)->index()->comment('language locale code. ko:korean/en:english');
-            $table->text('value')->comment('display string');
-            $table->boolean('multiline')->default(false)->comment('multiple lines support. Set to 1 if use multiple lines to display string value.');
-            $table->unique(array('namespace', 'item', 'locale'));
-        });
+                $table->increments('id')->comment('ID');
+                $table->string('namespace', 50)->index()->comment('item namespace. XE Core use [xe] and plugin use plugin name as like [board], [page].');
+                $table->string('item', 100)->index()->comment('item key. A string that can understand meaning when read by a person.');
+                $table->string('locale', 6)->index()->comment('language locale code. ko:korean/en:english');
+                $table->text('value')->comment('display string');
+                $table->boolean('multiline')->default(false)->comment('multiple lines support. Set to 1 if use multiple lines to display string value.');
+                $table->unique(array('namespace', 'item', 'locale'));
+            });
+        }
     }
 
     /**

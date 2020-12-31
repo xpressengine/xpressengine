@@ -37,18 +37,20 @@ class DraftMigration extends Migration
      */
     public function install()
     {
-        Schema::create('draft', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+        if(!Schema::hasTable('draft')) {
+            Schema::create('draft', function (Blueprint $table) {
+                $table->engine = "InnoDB";
 
-            $table->string('id', '36')->comment('ID');
-            $table->string('user_id', '36')->comment('user ID');
-            $table->string('key')->comment('key');
-            $table->text('val')->comment('val');
-            $table->mediumText('etc')->comment('etc');
-            $table->boolean('is_auto')->default(false)->comment('is auto saved');
-            $table->timestamp('created_at')->nullable()->comment('created date');
+                $table->string('id', '36')->comment('ID');
+                $table->string('user_id', '36')->comment('user ID');
+                $table->string('key')->comment('key');
+                $table->text('val')->comment('val');
+                $table->mediumText('etc')->comment('etc');
+                $table->boolean('is_auto')->default(false)->comment('is auto saved');
+                $table->timestamp('created_at')->nullable()->comment('created date');
 
-            $table->primary('id');
-        });
+                $table->primary('id');
+            });
+        }
     }
 }

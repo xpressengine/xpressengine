@@ -53,34 +53,38 @@ class DocumentMigration extends Migration
     public function create($table, $revision = '')
     {
         // create documents table
-        Schema::create($table, function (Blueprint $table) {
-            // global documents table
-            $table->engine = "InnoDB";
-
-            $table->string('id', 36)->comment('document ID');
-            $table = $this->setColumns($table);
-
-            $table->index('created_at');
-            $table->unique(['head', 'reply']);
-            $table->primary(array('id'));
-        });
-
-        if ($revision != '') {
-            // create revision table
-            Schema::create($revision, function (Blueprint $table) {
-                // documents update log
+        if(Schema::hasTable($table) === false) {
+            Schema::create($table, function (Blueprint $table) {
+                // global documents table
                 $table->engine = "InnoDB";
-
-                $table->string('revision_id', 36)->comment('revision ID');
-                $table->integer('revision_no')->default(0)->comment('revision version number. It starts with 0 and increases when added.');
 
                 $table->string('id', 36)->comment('document ID');
                 $table = $this->setColumns($table);
 
                 $table->index('created_at');
-                $table->primary(array('revision_id'));
-                $table->index(array('id', 'revision_no'));
+                $table->unique(['head', 'reply']);
+                $table->primary(array('id'));
             });
+        }
+
+        if ($revision != '') {
+            // create revision table
+            if(Schema::hasTable($revision) === false) {
+                Schema::create($revision, function (Blueprint $table) {
+                    // documents update log
+                    $table->engine = "InnoDB";
+
+                    $table->string('revision_id', 36)->comment('revision ID');
+                    $table->integer('revision_no')->default(0)->comment('revision version number. It starts with 0 and increases when added.');
+
+                    $table->string('id', 36)->comment('document ID');
+                    $table = $this->setColumns($table);
+
+                    $table->index('created_at');
+                    $table->primary(array('revision_id'));
+                    $table->index(array('id', 'revision_no'));
+                });
+            }
         }
     }
 
@@ -93,17 +97,19 @@ class DocumentMigration extends Migration
      */
     public function createDivision(Builder $schema, $table)
     {
-        $schema->create($table, function (Blueprint $table) {
-            // division table of documents. Same documents exist in global documents table.
-            $table->engine = "InnoDB";
+        if(Schema::hasTable($table) === false) {
+            $schema->create($table, function (Blueprint $table) {
+                // division table of documents. Same documents exist in global documents table.
+                $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table = $this->setColumns($table);
+                $table->string('id', 36);
+                $table = $this->setColumns($table);
 
-            $table->index('created_at');
-            $table->unique(['head', 'reply']);
-            $table->primary(array('id'));
-        });
+                $table->index('created_at');
+                $table->unique(['head', 'reply']);
+                $table->primary(array('id'));
+            });
+        }
     }
 
     /**
