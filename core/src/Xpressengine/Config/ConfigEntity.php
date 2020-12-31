@@ -211,7 +211,7 @@ class ConfigEntity extends Entity implements IteratorAggregate
      */
     public function getParent()
     {
-        return $this->parent;
+        return is_null($this->parent) ? [] : $this->parent;
     }
 
     /**
