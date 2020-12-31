@@ -36,16 +36,16 @@ class SettingsMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         $now = Carbon::now()->format('Y-m-d H:i:s');
-        \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]']);
+        \DB::table('config')->insert(['site_key' => $site_key, 'name' => 'settings', 'vars' => '[]']);
         \DB::table('permissions')->insert([
-            'site_key'=> 'default', 'name' => 'settings', 'grants' => '[]',
+            'site_key' => $site_key, 'name' => 'settings', 'grants' => '[]',
             'created_at' => $now, 'updated_at' => $now,
         ]);
         \DB::table('permissions')->insert([
-            'site_key'=> 'default', 'name' => 'settings.user', 'grants' => '[]',
+            'site_key' => $site_key, 'name' => 'settings.user', 'grants' => '[]',
             'created_at' => $now, 'updated_at' => $now,
         ]);
     }
@@ -87,11 +87,11 @@ class SettingsMigration extends Migration
     public function checkUpdated($installedVersion = null)
     {
         $updated = true;
-        
+
         if (Schema::hasColumn('admin_log', 'target_id') === false) {
             $updated = false;
         }
-        
+
         return $updated;
     }
 

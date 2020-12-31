@@ -49,13 +49,13 @@ class ThemeMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         \DB::table('config')->insert(
             [
-                ['name' => 'theme', 'vars' => '[]'],
-                ['name' => 'theme.settings', 'vars' => '[]'],
-                ['name' => 'theme.settings.theme/together@together', 'vars' => '[]']
+                ['site_key' => $site_key, 'name' => 'theme', 'vars' => '[]'],
+                ['site_key' => $site_key, 'name' => 'theme.settings', 'vars' => '[]'],
+                ['site_key' => $site_key, 'name' => 'theme.settings.theme/together@together', 'vars' => '[]']
             ]
         );
     }

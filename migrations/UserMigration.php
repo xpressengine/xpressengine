@@ -187,13 +187,13 @@ class UserMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         DB::table('config')->insert([
-            ['name' => 'user', 'vars' => '[]'],
-            ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}'],
-            ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
+            ['site_key' => $site_key, 'name' => 'user', 'vars' => '[]'],
+            ['site_key' => $site_key, 'name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
+            ['site_key' => $site_key, 'name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}'],
+            ['site_key' => $site_key, 'name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
         ]);
     }
 

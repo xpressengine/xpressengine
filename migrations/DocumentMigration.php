@@ -169,9 +169,10 @@ class DocumentMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         DB::table('config')->insert([
+            'site_key' => $site_key,
             'name' => 'document',
             'vars' => '{"instanceId":0,"instanceName":0,"division":false,"revision":false,"comment":true,"assent":true,"nonmember":false,"reply":false}'
         ]);

@@ -56,9 +56,9 @@ class MediaLibraryMigration extends Migration
      * db seeding과 같은 코드를 작성한다.
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        $this->storeConfig();
+        $this->storeConfig($site_key);
     }
 
     /**
@@ -265,9 +265,10 @@ class MediaLibraryMigration extends Migration
         return \DB::table('config')->where('name', 'media_library')->exists();
     }
 
-    private function storeConfig()
+    private function storeConfig($site_key)
     {
         \DB::table('config')->insert([
+            'site_key' => $site_key,
             'name' => 'media_library',
             'vars' => '{"container":{}, "file":{"dimensions":{"MAX":{"width":4000, "height":4000}}}}'
         ]);
