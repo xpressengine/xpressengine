@@ -44,7 +44,8 @@ class RequiredDF
     {
         if (Auth::check() &&
             !Auth::user()->isAdmin() &&
-            !$request->routeIs('auth.pending_admin', 'auth.pending_email', 'auth.register.add', 'logout')
+            //!$request->routeIs('auth.pending_admin', 'auth.pending_email', 'auth.register.add', 'logout')
+            !$request->routeIs(app('config')->get('xe.dynamicField.required.exceptRouteNames'))
         ) {
             $fields = XeDynamicField::gets('user');
 
