@@ -153,8 +153,9 @@ class ConfigManager
      */
     public function get($group, $create = false, $siteKey = null)
     {
+        //기본사이트의 설정을 따르는 config 정의
         $defaultGroups = array(
-//            'plugin',
+            'plugin',
             'site'
         );
         if(in_array(explode(".",$group)[0],$defaultGroups)) $siteKey = 'default';
