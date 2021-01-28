@@ -103,12 +103,12 @@ class MenuMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         // 홈 메뉴 설정.
-        \DB::table('config')->insert(['name' => 'menu', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'site', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]']);
+        \DB::table('config')->insert(['name' => 'menu', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'site', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]', 'site_key' => $site_key]);
     }
 
     /**

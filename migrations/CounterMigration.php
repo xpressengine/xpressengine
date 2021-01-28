@@ -59,8 +59,8 @@ class CounterMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
+        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}','site_key'=>$site_key]);
     }
 }
