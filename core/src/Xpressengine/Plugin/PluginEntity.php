@@ -79,7 +79,7 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * @var string
      */
-    protected $status;
+    protected  $status;
 
     /**
      * @var null

@@ -83,6 +83,7 @@ class MenuMigration extends Migration
             $table->integer('ordering')->default(0)->comment('ordering number for menu item sort.');
             $table->boolean('activated')->default(true)->comment('value of menu item activating');
             $table->string('options')->default('')->comment('options');
+            $table->string('site_key')->nullable()->default('default')->comment('site key. for multi web site support.');
 
             $table->primary('id');
         });
@@ -95,6 +96,7 @@ class MenuMigration extends Migration
             $table->string('ancestor')->comment('parent menu item ID');
             $table->string('descendant')->comment('child menu item ID');
             $table->integer('depth')->comment('depth');
+            $table->string('site_key')->nullable()->default('default')->comment('site key. for multi web site support.');
         });
     }
 
