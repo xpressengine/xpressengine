@@ -80,8 +80,10 @@ class ConfigManager
      * @return ConfigEntity
      * @throws DuplicateException
      */
-    public function add($group, array $collection, $siteKey = 'default')
+    public function add($group, array $collection, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
+
         if ($this->repo->find($siteKey, $group) !== null) {
             throw new DuplicateException(['name' => $group]);
         }
@@ -109,8 +111,10 @@ class ConfigManager
      * @param string $siteKey site key
      * @return mixed
      */
-    public function getVal($key, $default = null, $pure = false, $siteKey = 'default')
+    public function getVal($key, $default = null, $pure = false, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
+
         list($group, $item) = $this->parseKey($key);
 
         $config = $this->get($group, false, $siteKey);
@@ -134,8 +138,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return mixed
      */
-    public function getPureVal($key, $default = null, $siteKey = 'default')
+    public function getPureVal($key, $default = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
         return $this->getVal($key, $default, true, $siteKey);
     }
 
@@ -147,8 +152,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return ConfigEntity
      */
-    public function get($group, $create = false, $siteKey = 'default')
+    public function get($group, $create = false, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
         $config = $this->repo->find($siteKey, $group);
 
         $config = $config ?: ($create === true ? new ConfigEntity() : null);
@@ -170,8 +176,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return ConfigEntity
      */
-    public function getOrNew($group, $siteKey = 'default')
+    public function getOrNew($group, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
         return $this->get($group, true, $siteKey);
     }
 
@@ -185,8 +192,10 @@ class ConfigManager
      * @param string   $siteKey site key
      * @return void
      */
-    public function setVal($key, $value, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function setVal($key, $value, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
+
         list($group, $item) = $this->parseKey($key);
 
         if ($config = $this->get($group, false, $siteKey)) {
@@ -211,8 +220,9 @@ class ConfigManager
      * @param string   $siteKey    site key
      * @return ConfigEntity
      */
-    public function set($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function set($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
         if ($config = $this->get($group, false, $siteKey)) {
             foreach ($collection as $item => $value) {
                 $config = $this->share($config, $item, $value);
@@ -241,8 +251,10 @@ class ConfigManager
      * @return ConfigEntity
      * @throws NotExistsException
      */
-    public function put($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function put($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
+
         if (!$config = $this->get($group, false, $siteKey)) {
             throw new NotExistsException(['name' => $group]);
         }
@@ -384,8 +396,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return void
      */
-    public function removeByName($name, $siteKey = 'default')
+    public function removeByName($name, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? 'default' : $siteKey;
         if ($config = $this->get($name, false, $siteKey)) {
             $this->remove($config);
         }
