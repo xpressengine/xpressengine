@@ -66,7 +66,7 @@ abstract class Policy
      */
     protected function get($name, $siteKey = null)
     {
-        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : 'default';
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         return $this->perm->get($name, $siteKey);
     }
 

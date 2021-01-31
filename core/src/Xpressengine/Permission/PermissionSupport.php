@@ -14,6 +14,7 @@ namespace Xpressengine\Permission;
 
 use Illuminate\Http\Request;
 use Xpressengine\User\Models\UserGroup;
+use XeSite;
 
 /**
  * @category    Permission
@@ -33,8 +34,9 @@ trait PermissionSupport
      * @param string       $siteKey   site key
      * @return array
      */
-    public function getPermArguments($key, $abilities, $siteKey = 'default')
+    public function getPermArguments($key, $abilities, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         $abilities = !is_array($abilities) ? [$abilities] : $abilities;
 
         $permission = app('xe.permission')->getOrNew($key, $siteKey);
@@ -70,8 +72,9 @@ trait PermissionSupport
      * @param string       $siteKey   site key
      * @return void
      */
-    public function permissionRegister(Request $request, $key, $abilities, $siteKey = 'default')
+    public function permissionRegister(Request $request, $key, $abilities, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         $abilities = !is_array($abilities) ? [$abilities] : $abilities;
 
         $grant = new Grant();
@@ -92,8 +95,9 @@ trait PermissionSupport
      * @param string     $siteKey site key
      * @return void
      */
-    public function permissionRegisterGrant($key, Grant $grant = null, $siteKey = 'default')
+    public function permissionRegisterGrant($key, Grant $grant = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         $grant = $grant ?: new Grant;
 
         app('xe.permission')->register($key, $grant, $siteKey);
@@ -106,8 +110,9 @@ trait PermissionSupport
      * @param string $siteKey site key
      * @return void
      */
-    public function permissionUnregister($key, $siteKey = 'default')
+    public function permissionUnregister($key, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         app('xe.permission')->destroy($key, $siteKey);
     }
 
@@ -119,8 +124,9 @@ trait PermissionSupport
      * @param string $siteKey site key
      * @return void
      */
-    public function permissionMove($from, $to, $siteKey = 'default')
+    public function permissionMove($from, $to, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         $permission = app('xe.permission')->get($from, $siteKey);
         app('xe.permission')->move($permission, $to);
     }
