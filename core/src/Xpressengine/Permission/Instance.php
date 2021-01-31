@@ -13,6 +13,7 @@
  */
 
 namespace Xpressengine\Permission;
+use XeSite;
 
 /**
  * Class Instance
