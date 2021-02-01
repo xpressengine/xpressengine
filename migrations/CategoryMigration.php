@@ -44,6 +44,9 @@ class CategoryMigration extends Migration
             $table->increments('id')->comment('ID');
             $table->string('name', 100)->comment('category name');
             $table->integer('count')->default(0)->comment('The count of category item');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
         });
 
         Schema::create('category_item', function (Blueprint $table) {
@@ -56,7 +59,9 @@ class CategoryMigration extends Migration
             $table->string('word', 250)->comment('string of category item. It can be code of translation information.');
             $table->text('description')->comment('description of category item. It can be code of translation information.');
             $table->integer('ordering')->default(0)->comment('ordering number of category item sort.');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->index('category_id');
             $table->index('parent_id');
         });
@@ -69,6 +74,9 @@ class CategoryMigration extends Migration
             $table->bigInteger('ancestor')->comment('parent category item ID');
             $table->bigInteger('descendant')->comment('child category item ID');
             $table->tinyInteger('depth')->comment('depth');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
 
             $table->unique(['ancestor', 'descendant']);
             $table->index('ancestor');

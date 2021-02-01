@@ -100,6 +100,7 @@ class DocumentMigration extends Migration
             $table->string('id', 36);
             $table = $this->setColumns($table);
 
+            $table->index('site_key');
             $table->index('created_at');
             $table->unique(['head', 'reply']);
             $table->primary(array('id'));
@@ -154,6 +155,8 @@ class DocumentMigration extends Migration
         $table->string('head', 50)->comment('document order. It using for document list sorting. Enables sorting of parent-child relationship documents.');
         $table->string('reply', 150)->comment('string for sorting parent-child documents');
         $table->string('ipaddress', 16)->comment('IP address of document writer');
+
+        $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
         return $table;
     }

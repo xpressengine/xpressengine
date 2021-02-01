@@ -21,6 +21,7 @@ use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
+use Xpressengine\Site\Site;
 
 /**
  * Document
@@ -76,7 +77,7 @@ class Document extends DynamicModel
         'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
         'published', 'status', 'display', 'format', 'locale', 'title',
         'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
-        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email',
+        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email', 'site_key'
     ];
 
     protected $casts = [
@@ -217,6 +218,17 @@ class Document extends DynamicModel
     public function user()
     {
         return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
+    }
+
+
+    /**
+     * Relation of site
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site_key', 'site_key');
     }
 
     /**

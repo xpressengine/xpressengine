@@ -18,6 +18,7 @@ use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\Rating;
+use XeSite;
 
 /**
  * Class EditorMigration
@@ -39,6 +40,12 @@ class EditorMigration extends Migration
      */
     public function init()
     {
+        $this->installed();
+    }
+
+    public function installed($siteKey = 'default'){
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         app('xe.config')->set(EditorHandler::CONFIG_NAME, [
             'height' => 400,
             'fontSize' => '14px',

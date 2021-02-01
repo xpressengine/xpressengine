@@ -65,6 +65,12 @@ class WidgetboxMigration extends Migration
      */
     public function init()
     {
+        $this->installed();
+    }
+
+    public function installed($siteKey = 'default'){
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         // create widgetbox permission
         /** @var PermissionHandler $permission */
         $permission = app('xe.permission');
@@ -76,7 +82,6 @@ class WidgetboxMigration extends Migration
         $handler = app('xe.widgetbox');
         $dashboard = $handler->find('dashboard');
         if($dashboard === null) {
-
             $handler->create([
                 'id'=>'dashboard',
                 'title'=>'dashboard',

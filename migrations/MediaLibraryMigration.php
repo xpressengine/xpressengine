@@ -211,6 +211,9 @@ class MediaLibraryMigration extends Migration
                 $table->string('caption')->nullable();
                 $table->string('alt_text')->nullable();
                 $table->text('description')->nullable();
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+                $table->index('site_key');
 
                 $table->timestamps();
 
@@ -227,6 +230,9 @@ class MediaLibraryMigration extends Migration
                 $table->string('disk');
                 $table->string('name');
                 $table->integer('ordering');
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+                $table->index('site_key');
 
                 $table->timestamps();
 
@@ -241,6 +247,9 @@ class MediaLibraryMigration extends Migration
                 $table->string('ancestor', 36);
                 $table->string('descendant', 36);
                 $table->integer('depth');
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+                $table->index('site_key');
 
                 $table->index('ancestor');
                 $table->index('descendant');

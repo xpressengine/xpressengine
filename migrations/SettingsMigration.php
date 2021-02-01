@@ -73,6 +73,9 @@ class SettingsMigration extends Migration
             $table->timestamp('created_at')->nullable()->index()->comment('created date');
             $table->timestamp('updated_at')->nullable()->index()->comment('updated date');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
             $table->primary('id');
         });
     }
