@@ -40,12 +40,6 @@ class EditorMigration extends Migration
      */
     public function init()
     {
-        $this->installed();
-    }
-
-    public function installed($siteKey = 'default'){
-        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
-
         app('xe.config')->set(EditorHandler::CONFIG_NAME, [
             'height' => 400,
             'fontSize' => '14px',
@@ -71,5 +65,10 @@ class EditorMigration extends Migration
         $grant->set('upload', $data);
         $grant->set('download', $data);
         app('xe.permission')->register(EditorHandler::CONFIG_NAME, $grant);
+    }
+    public function installed($siteKey = 'default')
+    {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        if($siteKey != 'default') $this->init();
     }
 }

@@ -48,7 +48,7 @@ class Log extends DynamicModel
     protected $appends = [];
 
     protected $fillable = [
-        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'target_id', 'ipaddress', 'created_at'
+        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'target_id', 'ipaddress', 'created_at', 'site_key'
     ];
 
     /**
@@ -98,5 +98,30 @@ class Log extends DynamicModel
     {
         $resolver = static::$detailResolver;
         return $resolver($this);
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

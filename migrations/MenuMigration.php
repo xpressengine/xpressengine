@@ -99,10 +99,6 @@ class MenuMigration extends Migration
             $table->string('ancestor')->comment('parent menu item ID');
             $table->string('descendant')->comment('child menu item ID');
             $table->integer('depth')->comment('depth');
-
-            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
-
-            $table->index('site_key');
         });
     }
 

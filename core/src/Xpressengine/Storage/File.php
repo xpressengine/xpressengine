@@ -61,7 +61,7 @@ class File extends DynamicModel
      *
      * @var array
      */
-    protected $fillable = ['origin_id', 'user_id', 'disk', 'path', 'filename', 'clientname', 'mime', 'size'];
+    protected $fillable = ['origin_id', 'user_id', 'disk', 'path', 'filename', 'clientname', 'mime', 'size', 'site_key'];
 
     /**
      * The attributes that should be visible for serialization.
@@ -197,5 +197,30 @@ class File extends DynamicModel
     public function getFileableTable()
     {
         return $this->fileableTable;
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }
