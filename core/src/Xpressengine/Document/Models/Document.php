@@ -178,11 +178,12 @@ class Document extends DynamicModel
      * @param string $instanceId instance id
      * @return Document
      */
-    public static function division($instanceId)
+    public static function division($instanceId, $site_key = null)
     {
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
         /** @var Document $instance */
         $instance = new static;
-        $instance->setDivision($instanceId);
+        $instance->setDivision($instanceId,$site_key);
 
         return $instance;
     }
@@ -193,12 +194,13 @@ class Document extends DynamicModel
      * @param string $instanceId instance id
      * @return $this
      */
-    public function setDivision($instanceId)
+    public function setDivision($instanceId,$site_key = null)
     {
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
         /** @var DocumentHandler $handler */
         $handler = app('xe.document');
 
-        $config = $handler->getConfig($instanceId);
+        $config = $handler->getConfig($instanceId, $site_key);
         if ($config !== null && $config->get('division') === true) {
             $tableName = $handler->getInstanceManager()->getDivisionTableName($config);
             $this->setTable($tableName);
