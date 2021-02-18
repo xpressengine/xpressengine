@@ -184,16 +184,23 @@ class HtmlPresenter implements Presentable
                 $skinView;
             $baseTheme->content = $viewContent;
 
-            return $baseTheme->render();
+            $output = $baseTheme->render();
+        }else{
+            $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
+            $viewContent = $this->presenter->isWidgetParsing() ?
+                $this->parser->parseXml($this->renderTheme($skinView)->render()) :
+                $this->renderTheme($skinView)->render();
+            $baseTheme->content = $viewContent;
+
+            $output = $baseTheme->render();
+
         }
 
-        $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
-        $viewContent = $this->presenter->isWidgetParsing() ?
-            $this->parser->parseXml($this->renderTheme($skinView)->render()) :
-            $this->renderTheme($skinView)->render();
-        $baseTheme->content = $viewContent;
+        // asset scheme 보정
+        $output = str_replace('https://', '//', $output);
+        $output = str_replace('http://', '//', $output);
+        return $output;
 
-        return $baseTheme->render();
     }
 
     /**
