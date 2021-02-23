@@ -173,11 +173,11 @@ class HtmlPresenter implements Presentable
             $viewContent = $this->presenter->isWidgetParsing() ?
                 $this->parser->parseXml($skinView) :
                 $skinView;
-            return $viewContent;
+            $output = $viewContent;
         }
 
         // return popup type, without theme
-        if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
+        else if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
             $baseTheme = $viewFactory->make(self::$popupHtmlWrapper);
             $viewContent = $this->presenter->isWidgetParsing() ?
                 $this->parser->parseXml($skinView) :
@@ -196,9 +196,14 @@ class HtmlPresenter implements Presentable
 
         }
 
-        // asset scheme 보정
-        $output = str_replace('https://', '//', $output);
-        $output = str_replace('http://', '//', $output);
+        // 화면 출력 처리 후
+        $host = app('request')->getHost();
+        $scheme = app('request')->getScheme();
+        if($scheme == 'https') {
+            // 도메인 보정
+            $output = str_replace('http://' . $host, 'https://' . $host, $output);
+        }
+
         return $output;
 
     }
