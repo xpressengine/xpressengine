@@ -91,13 +91,35 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param \Illuminate\Console\Scheduling\Schedule $schedule Schedule instance
+     * @param Schedule $schedule Schedule instance
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        /**
+        ** working with cron
+        ** register crontab -e : * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+        **/
+        // plugin list in site
+        $configs = \DB::table('config')->where('name', 'plugin')->get();
+        foreach($configs as $config){
+            $vars = json_dec($config->vars, true);
+            foreach ($vars['list'] as $id => $val) {
+                if ($val['status'] == 'activated') {
+                    $entity = \XePlugin::getPlugin($id);
+                    $pluginObj = $entity->getObject();
+
+                    if (method_exists($pluginObj, 'schedule')) {
+                        try {
+                            $pluginObj->schedule($schedule,$config->site_key);
+                        } catch (\Exception $e) {
+                            //Log::info(sprintf('Failed Schedule Working in %s site.\n%s:%s\n%s\n%s',$config->site_key,$e->getFile(),$e->getLine(),$e->getMessage(),$e->getCode()));
+                            //see storage/logs/laravel-yyyy-mm-dd.log
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
