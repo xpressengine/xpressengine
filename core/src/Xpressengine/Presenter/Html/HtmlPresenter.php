@@ -173,39 +173,27 @@ class HtmlPresenter implements Presentable
             $viewContent = $this->presenter->isWidgetParsing() ?
                 $this->parser->parseXml($skinView) :
                 $skinView;
-            $output = $viewContent;
+            return $viewContent;
         }
 
         // return popup type, without theme
-        else if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
+        if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
             $baseTheme = $viewFactory->make(self::$popupHtmlWrapper);
             $viewContent = $this->presenter->isWidgetParsing() ?
                 $this->parser->parseXml($skinView) :
                 $skinView;
             $baseTheme->content = $viewContent;
 
-            $output = $baseTheme->render();
-        }else{
-            $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
-            $viewContent = $this->presenter->isWidgetParsing() ?
-                $this->parser->parseXml($this->renderTheme($skinView)->render()) :
-                $this->renderTheme($skinView)->render();
-            $baseTheme->content = $viewContent;
-
-            $output = $baseTheme->render();
-
+            return $baseTheme->render();
         }
 
-        // 화면 출력 처리 후
-        $host = app('request')->getHost();
-        $scheme = app('request')->getScheme();
-        if($scheme == 'https') {
-            // 도메인 보정
-            $output = str_replace('http://' . $host, 'https://' . $host, $output);
-        }
+        $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
+        $viewContent = $this->presenter->isWidgetParsing() ?
+            $this->parser->parseXml($this->renderTheme($skinView)->render()) :
+            $this->renderTheme($skinView)->render();
+        $baseTheme->content = $viewContent;
 
-        return $output;
-
+        return $baseTheme->render();
     }
 
     /**
