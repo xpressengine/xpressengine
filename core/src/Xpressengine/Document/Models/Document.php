@@ -639,6 +639,11 @@ class Document extends DynamicModel
             if(!isset($model->site_key)){
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
+
+            //로드밸런서를 쓰는경우 리얼 클라이언트 아이피가 기록되도록 수정
+            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+                $model->ipaddress = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            }
         });
 
         self::updating(function($model){
