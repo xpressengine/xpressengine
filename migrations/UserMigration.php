@@ -70,7 +70,9 @@ class UserMigration extends Migration
             $table->integer('order')->default(0)->index()->comment('order number');
             $table->timestamp('created_at')->nullable()->index()->comment('created date');
             $table->timestamp('updated_at')->nullable()->comment('updated date');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->primary('id');
         });
 
