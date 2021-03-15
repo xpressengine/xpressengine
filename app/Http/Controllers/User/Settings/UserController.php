@@ -114,7 +114,7 @@ class UserController extends Controller
         $users = $query->orderBy('created_at', 'desc')->paginate()->appends(request()->query());
 
         // get all groups
-        $groups = $this->handler->groups()->all();
+        $groups = $this->handler->groups()->query()->where('site_key',\XeSite::getCurrentSiteKey())->get();
 
         // get all ratings
         $ratings = Rating::getUsableAll();

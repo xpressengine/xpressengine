@@ -43,7 +43,7 @@ trait PermissionSupport
         $mode = function ($action) use ($permission) {
             return $permission->pure($action) ? 'manual' : 'inherit';
         };
-        $groups = UserGroup::get();
+        $groups = UserGroup::where('site_key',$siteKey)->get();
 
         $arguments = [];
         foreach ($abilities as $ability) {

@@ -266,6 +266,11 @@ class UserMigration extends Migration
             return false;
         }
 
+        $need_sitekey_table = ['user_group'];
+        foreach($need_sitekey_table as $table){
+            if ($this->checkSiteKeyColumn($table) == false) return false;
+        }
+
         return true;
     }
 
@@ -303,6 +308,27 @@ class UserMigration extends Migration
             $this->migrationLoginIdColumn();
             $this->setLoginIdColumnUnique();
         }
+
+        $need_sitekey_table = ['user_group'];
+        foreach($need_sitekey_table as $table_name){
+            if(Schema::hasColumn($table_name, 'site_key') == false) {
+                Schema::table($table_name, function (Blueprint $table) {
+                    $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                    $table->index('site_key');
+                });
+            }
+        }
+    }
+
+
+    /**
+     * User 테이블에 login_id 컬럼이 존재 여부 확인
+     *
+     * @return bool
+     */
+    private function checkSiteKeyColumn($table)
+    {
+        return Schema::hasColumn($table, 'site_key');
     }
 
     /**

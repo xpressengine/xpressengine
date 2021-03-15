@@ -53,7 +53,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = $this->groups->with('userCountRelation')->orderBy('created_at')->get();
+        $groups = $this->groups->with('userCountRelation')->where('site_key',\XeSite::getCurrentSiteKey())->orderBy('created_at')->get();
 
         $config = app('xe.config')->get('user.register');
         $joinGroup = $config->get('joinGroup');
