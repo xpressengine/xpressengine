@@ -42,7 +42,11 @@ class SiteMigration extends Migration
 
             $table->string('site_key')->comment('site key');
             $table->string('host')->commet('host');
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->nullable()->comment('site created date');
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'))->nullable()->comment('site updated date');
 
+            $table->index('created_at');
+            $table->index('updated_at');
             $table->primary('site_key');
         });
     }
