@@ -227,9 +227,12 @@ class UserHandler
         $joinGroup = $config->get('joinGroup');
 
         $groupIds = array_get($data, 'group_id', []);
-        if (count($groupIds) < 1) $groupIds[] = $joinGroup;
+        //설치단계에선 그룹생성보다 이게 먼저여서 패스해야됨.
+        if (count($groupIds) < 1 && $joinGroup != null) $groupIds[] = $joinGroup;
 
-        $user->joinGroups($groupIds);
+        if(count($groupIds) > 0){
+            $user->joinGroups($groupIds);
+        }
 
         // insert accounts
         if (isset($data['account'])) {
