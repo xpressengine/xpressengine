@@ -223,10 +223,13 @@ class UserHandler
         }
 
         // join group
+        $config = app('xe.config')->get('user.register');
+        $joinGroup = $config->get('joinGroup');
+
         $groupIds = array_get($data, 'group_id', []);
-        if (count($groupIds) > 0) {
-            $user->joinGroups($groupIds);
-        }
+        if (count($groupIds) < 1) $groupIds[] = $joinGroup;
+
+        $user->joinGroups($groupIds);
 
         // insert accounts
         if (isset($data['account'])) {
@@ -293,6 +296,12 @@ class UserHandler
 
         // resolve group
         $groups = array_get($userData, 'group_id');
+
+        // set default group added
+        $config = app('xe.config')->get('user.register');
+        $joinGroup = $config->get('joinGroup');
+
+        if (count($groups) < 1) $groups[] = $joinGroup;
 
         // email, display_name, introduction, password, status, rating
         $userData = array_except($userData, ['group_id', 'profile_img_file']);
