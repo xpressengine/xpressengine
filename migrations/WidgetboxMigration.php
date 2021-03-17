@@ -50,9 +50,12 @@ class WidgetboxMigration extends Migration
                     $table->string('title', 200)->comment('widget box title');
                     $table->text('content')->comment('widget information. HTML string');
                     $table->text('options')->comment('options');
+                    $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
                     $table->timestamp('created_at')->nullable()->comment('created date');
                     $table->timestamp('updated_at')->nullable()->comment('updated date');
-                    $table->primary('id');
+
+                    $table->index('site_key');
+                    $table->primary(['site_key','id']);
                 }
             );
         }
@@ -63,7 +66,7 @@ class WidgetboxMigration extends Migration
      *
      * @return void
      */
-    public function init()
+    public function init($site_key = 'default')
     {
         // create widgetbox permission
         /** @var PermissionHandler $permission */
@@ -74,7 +77,8 @@ class WidgetboxMigration extends Migration
 
         // dashboard setting
         $handler = app('xe.widgetbox');
-        $dashboard = $handler->find('dashboard');
+        $dashboard = $handler->query()->where('site_key','a')->find('dashboard');
+
         if($dashboard === null) {
             $handler->create([
                 'id'=>'dashboard',
@@ -84,7 +88,7 @@ class WidgetboxMigration extends Migration
             ]);
         }
 
-        $userProfile = $handler->find('user-profile');
+        $userProfile = $handler->query()->where('site_key',$site_key)->find('user-profile');
         if($userProfile === null) {
             $handler->create(['id'=>'user-profile', 'title'=>'User Profile']);
         }
@@ -93,7 +97,41 @@ class WidgetboxMigration extends Migration
     public function installed($siteKey = 'default')
     {
         $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
-        if($siteKey != 'default') $this->init();
+        if($siteKey != 'default') $this->init($siteKey);
+    }
+
+    /**
+     * check updated
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if (Schema::hasColumn('widgetbox', 'site_key') == false) return false;
+        return true;
+    }
+
+
+    /**
+     * run update
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if(Schema::hasColumn('widgetbox', 'site_key') == false) {
+            Schema::table('widgetbox', function (Blueprint $table) {
+                $table->dropPrimary('id');
+                $table->primary(['site_key','id']);
+
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
     }
 
     /**

@@ -317,6 +317,8 @@ class UserMigration extends Migration
         foreach($need_sitekey_table as $table_name){
             if(Schema::hasColumn($table_name, 'site_key') == false) {
                 Schema::table($table_name, function (Blueprint $table) {
+                    $table->dropPrimary('id');
+
                     $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
                     $table->index('site_key');
                 });
