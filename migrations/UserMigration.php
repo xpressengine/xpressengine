@@ -164,7 +164,9 @@ class UserMigration extends Migration
             $table->integer('order')->default(0);
             $table->boolean('is_enabled')->default(false);
             $table->boolean('is_require')->default(true);
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->primary('id');
             $table->engine = "InnoDB";
         });
@@ -268,7 +270,7 @@ class UserMigration extends Migration
             return false;
         }
 
-        $need_sitekey_table = ['user_group'];
+        $need_sitekey_table = ['user_group','user_term_agrees','user_terms'];
         foreach($need_sitekey_table as $table){
             if ($this->checkSiteKeyColumn($table) == false) return false;
         }
@@ -311,7 +313,7 @@ class UserMigration extends Migration
             $this->setLoginIdColumnUnique();
         }
 
-        $need_sitekey_table = ['user_group'];
+        $need_sitekey_table = ['user_group','user_term_agrees','user_terms'];
         foreach($need_sitekey_table as $table_name){
             if(Schema::hasColumn($table_name, 'site_key') == false) {
                 Schema::table($table_name, function (Blueprint $table) {
@@ -481,11 +483,13 @@ class UserMigration extends Migration
 
             $table->string('user_id', 36);
             $table->string('term_id', 36);
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
             $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['user_id', 'term_id']);
+            $table->index('site_key');
             $table->index('user_id');
             $table->index('term_id');
         });

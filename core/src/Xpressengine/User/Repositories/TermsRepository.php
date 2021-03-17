@@ -37,7 +37,7 @@ class TermsRepository
      */
     public function all()
     {
-        return $this->query()->orderBy('order')->get();
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->orderBy('order')->get();
     }
 
     /**
@@ -47,7 +47,7 @@ class TermsRepository
      */
     public function lastOrder()
     {
-        return $this->query()->where('is_enabled', true)->max('order');
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->where('is_enabled', true)->max('order');
     }
 
     /**
@@ -57,7 +57,7 @@ class TermsRepository
      */
     public function fetchEnabled()
     {
-        return $this->query()->where('is_enabled', true)->orderBy('order')->get();
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->where('is_enabled', true)->orderBy('order')->get();
     }
 
     /**
@@ -67,7 +67,7 @@ class TermsRepository
      */
     public function fetchRequireEnabled()
     {
-        return $this->query()->where([['is_enabled', true], ['is_require', true]])->orderBy('order')->get();
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->where([['is_enabled', true], ['is_require', true]])->orderBy('order')->get();
     }
 
     /**
