@@ -304,7 +304,7 @@ class UserHandler
         $config = app('xe.config')->get('user.register');
         $joinGroup = $config->get('joinGroup');
 
-        if (count($groups) < 1) $groups[] = $joinGroup;
+        if ($groups === null || count($groups) < 1) $groups[] = $joinGroup;
 
         // email, display_name, introduction, password, status, rating
         $userData = array_except($userData, ['group_id', 'profile_img_file']);
