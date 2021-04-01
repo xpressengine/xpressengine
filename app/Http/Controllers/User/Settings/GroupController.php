@@ -207,7 +207,8 @@ class GroupController extends Controller
             return XePresenter::makeApi([]);
         }
 
-        $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->paginate()->items();
+        $site_key = request()->get('site_key') == null ? \XeSite::getCurrentSiteKey() : request()->get('site_key');
+        $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->where('site_key',$site_key)->paginate()->items();
         return XePresenter::makeApi($matched);
     }
 }
