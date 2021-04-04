@@ -134,8 +134,10 @@ class PermissionHandler
 
         if (strrpos($name, '.') !== false) {
             $pname = substr($name, 0, strrpos($name, '.'));
+            //부모권한이 없으면 자동생성하도록 수정 (재귀)
             if (!$this->repo->findByName($siteKey, $pname)) {
-                throw new NoParentException(['name' => $name]);
+                $this->register($pname,$grant,$siteKey);
+//                throw new NoParentException(['name' => $name]);
             }
         }
 
