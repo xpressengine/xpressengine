@@ -56,7 +56,6 @@ if ((isset($_ENV["HTTPS"]) && ("on" == $_ENV["HTTPS"]))
     || (isset($_SERVER["HTTP_X_PROTO"]) && (strpos($_SERVER["HTTP_X_PROTO"], "SSL") !== false))
 ) {
     $_SERVER["HTTPS"] = "on";
-    Illuminate\Support\Facades\URL::forceScheme('https');
 }
 
 /*
