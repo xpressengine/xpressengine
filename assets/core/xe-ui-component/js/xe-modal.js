@@ -8,6 +8,7 @@
   var Modal = function (element, options) {
     this.options = options
     this.$body = $(document.body)
+    this.$contentWrap = $('#content')
     this.$element = $(element)
     this.$dialog = this.$element.find('.xe-modal-dialog')
     this.$backdrop = null
@@ -64,6 +65,8 @@
         if ($(e.target).is(_this.$element)) _this.ignoreBackdropClick = true
       })
     })
+
+    this.$contentWrap.css('position','static')
 
     this.backdrop(function () {
       var transition = $.support.transition && _this.$element.hasClass('fade')
@@ -164,6 +167,7 @@
   Modal.prototype.hideModal = function () {
     var _this = this
     this.$element.hide()
+    this.$contentWrap.css('position','fixed')
     this.backdrop(function () {
       _this.$body.removeClass('xe-modal-open')
       _this.resetAdjustments()
