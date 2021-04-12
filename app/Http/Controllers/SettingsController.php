@@ -447,7 +447,7 @@ class SettingsController extends Controller
         // resolve search keyword
         // keyfield가 지정되지 않을 경우 url, summary를 대상으로 검색함
         $field = $request->get('keyfield', 'url,summary');
-        $field = ($field === '') ? 'url,summary' : $field;
+        $field = ($field === '' || $field == null) ? 'url,summary' : $field;
 
         if ($keyword = trim($request->get('keyword'))) {
             $query->where(
