@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="margin:20px 0;">
 <h2>{{ xe_trans($term->title) }}</h2>
 <hr />
 <div style="padding:20px; background:#eee; border:1px solid #ccc;">
