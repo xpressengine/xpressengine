@@ -160,13 +160,13 @@ return [
             ],
             'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
-                'icon' => 'xi-library-books-o',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
             ],
             'contents' => [
                 'title' => 'xe::contents',
+                'icon' => 'xi-library-books-o',
                 'display' => true,
                 'description' => '',
                 'ordering' => 4000
@@ -216,8 +216,8 @@ return [
             ],
             'extension' => [
                 'title' => 'xe::extension',
-                'icon' => 'xi-plug',
                 'display' => true,
+                'icon' => 'xi-plug',
                 'description' => '',
                 'ordering' => 5000
             ],
