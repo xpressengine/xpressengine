@@ -80,6 +80,7 @@ return [
         'menus' => [
             'dashboard' => [
                 'title' => 'xe::dashBoard',
+                'icon' => 'xi-dashboard',
                 'display' => true,
                 'description' => '',
                 'ordering' => 1000
@@ -105,6 +106,7 @@ return [
             'sitemap' => [
                 'title' => 'xe::siteMap',
                 'display' => true,
+                'icon' => 'xi-sitemap-o',
                 'description' => 'xe::siteMapDescription',
                 'ordering' => 2000
             ],
@@ -116,6 +118,7 @@ return [
             ],
             'user' => [
                 'title' => 'xe::user',
+                'icon' => 'xi-users',
                 'description' => '',
                 'display' => true,
                 'ordering' => 3000
@@ -157,6 +160,7 @@ return [
             ],
             'user.menu' => [
                 'title' => 'xe::toggleMenuSettings',
+                'icon' => 'xi-library-books-o',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
@@ -175,6 +179,7 @@ return [
             ],
             'theme' => [
                 'title' => 'xe::themeDesign',
+                'icon' => 'xi-layout-aside-o',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
@@ -211,6 +216,7 @@ return [
             ],
             'extension' => [
                 'title' => 'xe::extension',
+                'icon' => 'xi-plug',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
@@ -229,6 +235,7 @@ return [
             ],
             'setting' => [
                 'title' => 'xe::settings',
+                'icon' => 'xi-cog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 6000
