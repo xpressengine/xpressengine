@@ -224,7 +224,7 @@ function renderLangEditorBox () {
 
     if (langKeys.length > 0) {
       window.XE.ajax({
-        type: 'get',
+        type: 'post',
         dataType: 'json',
         url: config.getters['router/origin'] + '/lang/lines/many',
         data: {
