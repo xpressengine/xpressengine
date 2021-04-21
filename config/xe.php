@@ -80,10 +80,10 @@ return [
         'menus' => [
             'dashboard' => [
                 'title' => 'xe::dashBoard',
-                'icon' => 'xi-dashboard',
                 'display' => true,
                 'description' => '',
-                'ordering' => 1000
+                'ordering' => 1000,
+                'icon' => 'xi-dashboard'
             ],
             'dashboard.home' => [
                 'title' => 'xe::home',
@@ -106,9 +106,9 @@ return [
             'sitemap' => [
                 'title' => 'xe::siteMap',
                 'display' => true,
-                'icon' => 'xi-sitemap-o',
                 'description' => 'xe::siteMapDescription',
-                'ordering' => 2000
+                'ordering' => 2000,
+                'icon' => 'xi-sitemap-o',
             ],
             'sitemap.default' => [
                 'title' => 'xe::editSiteMenu',
@@ -118,10 +118,10 @@ return [
             ],
             'user' => [
                 'title' => 'xe::user',
-                'icon' => 'xi-users',
                 'description' => '',
                 'display' => true,
-                'ordering' => 3000
+                'ordering' => 3000,
+                'icon' => 'xi-users',
             ],
             'user.list' => [
                 'title' => 'xe::userList',
@@ -166,10 +166,10 @@ return [
             ],
             'contents' => [
                 'title' => 'xe::contents',
-                'icon' => 'xi-library-books-o',
                 'display' => true,
                 'description' => '',
-                'ordering' => 4000
+                'ordering' => 4000,
+                'icon' => 'xi-library-books-o',
             ],
             'contents.media_library' => [
                 'title' => 'xe::media',
@@ -179,10 +179,10 @@ return [
             ],
             'theme' => [
                 'title' => 'xe::themeDesign',
-                'icon' => 'xi-layout-aside-o',
                 'display' => true,
                 'description' => '',
-                'ordering' => 5000
+                'ordering' => 5000,
+                'icon' => 'xi-layout-aside-o',
             ],
             'theme.installed' => [
                 'title' => 'xe::installedTheme',
@@ -217,9 +217,9 @@ return [
             'extension' => [
                 'title' => 'xe::extension',
                 'display' => true,
-                'icon' => 'xi-plug',
                 'description' => '',
-                'ordering' => 5000
+                'ordering' => 5000,
+                'icon' => 'xi-plug',
             ],
             'extension.installed' => [
                 'title' => 'xe::installedExtension',
@@ -235,10 +235,10 @@ return [
             ],
             'setting' => [
                 'title' => 'xe::settings',
-                'icon' => 'xi-cog',
                 'display' => true,
                 'description' => '',
-                'ordering' => 6000
+                'ordering' => 6000,
+                'icon' => 'xi-cog',
             ],
             'setting.default' => [
                 'title' => 'xe::defaultSettings',
