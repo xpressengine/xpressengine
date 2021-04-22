@@ -80,7 +80,11 @@ class Caster
      */
     protected static function castInt($v)
     {
-        return !preg_match('/[^0-9]/', $v) ? (int)$v : null;
+        $c = !preg_match('/[^0-9]/', $v) ? (int)$v : null;
+
+        if ($c != null && (string)$v !== (string)$c) {
+            return $v;
+        }
     }
 
     /**
@@ -91,6 +95,11 @@ class Caster
      */
     protected static function castFloat($v)
     {
-        return !preg_match('/[^0-9\.]/', $v) ? (float)$v : null;
+        $c = !preg_match('/[^0-9\.]/', $v) ? (float)$v : null;
+
+        if ($c != null && (string)$v !== (string)$c) {
+            return $v;
+        }
+        return $c;
     }
 }
