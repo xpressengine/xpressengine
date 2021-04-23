@@ -29,6 +29,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-      '/plugin/clientApi/login',
+      '/plugin/pos/api/login',
     ];
 }
