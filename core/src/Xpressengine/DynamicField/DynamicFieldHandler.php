@@ -69,6 +69,13 @@ class DynamicFieldHandler
     protected $viewFactory;
 
     /**
+     * 생성된 확장 필드 테이블 이름을 저장해줍니다.
+     *
+     * @var array
+     */
+    protected $existsTableNames;
+
+    /**
      * create instance
      *
      * @param VirtualConnectionInterface $connection      database connection
@@ -89,6 +96,28 @@ class DynamicFieldHandler
         $this->registerHandler = $registerHandler;
         $this->viewFactory = $viewFactory;
         $this->register = $pluginRegister;
+        $this->existsTableNames = [];
+    }
+
+    /**
+     * add exists dynamic field's table name
+     *
+     * @param $name
+     */
+    public function addExistsTableName($name)
+    {
+        array_push($this->existsTableNames, $name);
+    }
+
+    /**
+     * add Exists Dynamic Field's Table Name
+     *
+     * @param $name
+     * @return bool
+     */
+    public function hasExistsTableName($name)
+    {
+        return in_array($name, $this->existsTableNames);
     }
 
     /**

@@ -271,7 +271,17 @@ abstract class AbstractType implements ComponentInterface
      */
     private function checkExistTable($tableName)
     {
-        return $this->handler->connection()->getSchemaBuilder()->hasTable($tableName);
+        if ($this->handler->hasExistsTableName($tableName)) {
+            return true;
+        }
+
+        $isExists = $this->handler->connection()->getSchemaBuilder()->hasTable($tableName);
+
+        if ($isExists) {
+            $this->handler->addExistsTableName($tableName);
+        }
+
+        return $isExists;
     }
 
     /**
