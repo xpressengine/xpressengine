@@ -106,10 +106,11 @@ $(function () {
       } else {
         XE._.forEach(passwordRules, function (rule) {
           XE.Griper.form.fn.message($this, rule.message, result[rule.type], false)
-          $('body').stop();
-        })
+	  $('body').stop();
+	})
       }
     })
+
   }
 
   function validatePassword (val) {

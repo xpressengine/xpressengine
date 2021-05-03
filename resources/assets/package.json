@@ -7,7 +7,9 @@
     "eslint": "gulp lint:script",
     "eslint-fix": "gulp lint:fix-script",
     "build": "NODE_ENV=production gulp build -p",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "align": "webpack --config dll.webpack.config.babel.js",
+    "align2": "webpack --config webpack.config.babel.js"
   },
   "eslintConfig": {
     "extends": "standard",
