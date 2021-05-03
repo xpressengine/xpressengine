@@ -296,6 +296,12 @@ class MediaLibrary extends App {
           data.submit()
         },
         done: function (e, data) {
+          $($el.prevObject[0]).trigger('done.upload.editor', {
+            file: data.result[0],
+            form: data.form,
+            target: $el.prevObject[0]
+          })
+          // @deprecated
           that.$$emit('done.upload.editor', {
             file: data.result[0],
             form: data.form
