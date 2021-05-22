@@ -27,7 +27,7 @@ namespace Xpressengine\DynamicField;
 class ColumnDataType
 {
     const INTEGER = 'integer';
-    const BIGINTEGER = 'bigInterge';
+    const BIGINTEGER = 'bigInteger';
     const MEDIUMINTEGER = 'mediumInteger';
     const SMALLINTEGER = 'smallInteger';
     const TINYINTEGER = 'tinyInteger';
