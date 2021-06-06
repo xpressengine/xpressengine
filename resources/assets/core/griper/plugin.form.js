@@ -16,7 +16,7 @@ const defaultOptions = {
 
 function scrollToElement ($element) {
   if ($element instanceof $) {
-    $('body').animate({
+    $('body').stop().animate({
       scrollTop: $element.offset().top - (window.innerHeight / 3)
     }, 800)
   }
