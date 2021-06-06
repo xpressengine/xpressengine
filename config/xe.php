@@ -311,7 +311,7 @@ return [
 
 
         'profileImage' => [
-            'default' => 'assets/core/user/img/default_avatar.jpg',
+            'default' => 'assets/core/user/img/default_avatar.png',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
                 'disk' => 'local',
