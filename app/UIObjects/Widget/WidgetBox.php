@@ -75,6 +75,8 @@ class WidgetBox extends AbstractUIObject
         $link = array_get($args, 'link');
 
         $this->template = view($this->view, compact('widgetbox', 'id', 'presenter', 'link'))->render();
+
+        $this->template = app('xe.widget.parser')->parseXml($this->template);
         return parent::render();
     }
 }
