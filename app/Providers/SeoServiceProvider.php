@@ -53,8 +53,10 @@ class SeoServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(SeoHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(SeoHandler::class, 'SeoHandler');
+
             $setting = new Setting($app['xe.config'], $app['xe.storage'], $app['xe.media'], $app['xe.keygen']);
-            return new SeoHandler(
+            return new $proxyClass(
                 [
                     new BasicImporter($app['xe.frontend'], $app['request']),
                     new OpenGraphImporter($app['xe.frontend'], $app['request']),
