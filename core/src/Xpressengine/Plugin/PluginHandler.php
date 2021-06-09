@@ -514,7 +514,7 @@ class PluginHandler
             'exception' => $e
         ];
 
-        if ($entity->isActivated()) {
+        if ($entity->isActivated() && $this->app['config']['xe.plugin.sensitive'] == true) {
             $this->deactivatePlugin($entity->getId());
         }
     }

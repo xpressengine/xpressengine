@@ -311,7 +311,7 @@ return [
 
 
         'profileImage' => [
-            'default' => 'assets/core/user/img/default_avatar.png',
+            'default' => 'assets/core/user/img/default_avatar.jpg',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
                 'disk' => 'local',
@@ -406,7 +406,8 @@ return [
         ],
         'operation' => [
             'time_limit' => 1200
-        ]
+        ],
+        'sensitive' => false
     ],
 
     'uiobject' => [
@@ -468,10 +469,5 @@ return [
         'common' => 'common.base',
         'popup' => 'common.popup',
         'alert' => 'common.alert',
-    ],
-    'dynamicField' => [
-        'required' => [
-            'exceptRouteNames' => ['auth.pending_admin', 'auth.pending_email', 'auth.register.add', 'logout']
-        ]
     ]
 ];
