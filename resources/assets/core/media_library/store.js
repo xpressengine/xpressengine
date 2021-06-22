@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import _ from 'lodash'
 
 const types = {
@@ -208,10 +209,9 @@ const actions = {
   deleteFolder ({ commit }, folderId) {
     window.XE.delete('media_library.drop', {
       target_ids: [folderId]
-    })
-      .then(() => {
+    }).then(() => {
         commit(types.DELETE_FOLDER, folderId)
-      })
+    })
   },
   viewDisk ({ dispatch, getters }, payload) {
     dispatch('setFilter', { filter: { folder_id: getters['currentRoot'].id } }).then((a) => {
@@ -263,7 +263,15 @@ const mutations = {
     })
   },
   [types.DELETE_FOLDER] (state, payload) {
-    state.folder.splice(state.folder.findIndex(item => item.id === payload), 1)
+    let target = payload
+
+    if (!Array.isArray(target)) {
+      target = [target]
+    }
+
+    _.forEach(target, (id) => {
+      Vue.delete(state.folder, id)
+    })
   },
   [types.ADD_FOLDER] (state, payload) {
     state.folder.push(payload)
