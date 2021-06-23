@@ -910,7 +910,7 @@ return [
         'en' => 'Please enter between :min and :max size :attribute.',
     ],
     'validationDisplayName' => [
-        'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
+        'ko' => ':attribute은(는) 문자, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
         'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
     ],
     'validationLoginId' => [
