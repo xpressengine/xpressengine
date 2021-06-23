@@ -105,6 +105,7 @@ class XeInstall extends Command
             'host' => 'localhost',
             'dbname' => null,
             'port' => '3306',
+            'charset' => 'utf8',
             'username' => 'root',
             'password' => null,
             'prefix' => 'xe'
@@ -426,6 +427,9 @@ class XeInstall extends Command
         // dbname
         $dbInfo['dbname'] = $this->ask("Database name", $dbInfo['dbname']);
 
+        // charset
+        $dbInfo['charset'] = $this->choice("Character set", ['utf8', 'utf8mb4'], $dbInfo['charset']);
+
         // username
         $dbInfo['username'] = $this->ask("UserID", $dbInfo['username']);
 
@@ -500,8 +504,8 @@ class XeInstall extends Command
                     'username'  => $dbInfo['username'],
                     'password'  => $dbInfo['password'],
                     'port'      => $dbInfo['port'],
-                    'charset'   => 'utf8',
-                    'collation' => 'utf8_unicode_ci',
+                    'charset'   => $dbInfo['charset'],
+                    'collation' => $dbInfo['charset'].'_unicode_ci',
                     'prefix' => $prefix . '_',
                     'strict'    => false,
                 ],
