@@ -837,6 +837,10 @@ return [
         'ko' => '약관 설정',
         'en' => 'Terms settings',
     ],
+    'htmlSupportDescription' => [
+        'ko' => 'Html을 사용할 수 있습니다. 줄바꿈은 지원하지 않습니다. 줄바꿈은 &#60;br&#62; 태그를 사용하세요.',
+        'en' => 'You can use html. Line breaks are not supported. Use the &#60;br&#62; tag for line breaks.',
+    ],
     'skinSettings' => [
         'ko' => '스킨 설정',
         'en' => 'Skin settings',

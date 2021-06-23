@@ -37,6 +37,7 @@
                             <div class="form-group">
                                 <label>{{ xe_trans('xe::content') }}</label>
                                 {!! uio('langTextArea', ['langKey'=> $term->content, 'name'=>'content']) !!}
+                                <p class="help-block">{!! xe_trans('xe::htmlSupportDescription') !!}</p>
                             </div>
                         </div>
                     </div>
