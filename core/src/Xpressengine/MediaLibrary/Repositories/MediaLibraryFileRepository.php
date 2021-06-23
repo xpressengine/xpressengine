@@ -15,6 +15,7 @@
 namespace Xpressengine\MediaLibrary\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\MediaLibrary\MediaLibraryHandler;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
@@ -289,10 +290,13 @@ class MediaLibraryFileRepository
                 $fileItem->file->setAttribute('url', $fileItem->file->url());
                 $fileItem->file->setAttribute('width', $media['meta']['width']);
                 $fileItem->file->setAttribute('height', $media['meta']['height']);
+
+                $imageMediaHandler = \XeMedia::getHandler(Media::TYPE_IMAGE);
+                $fileItem->file->setAttribute('thumbnail_url', $imageMediaHandler->getThumbnail($media, 'spill', 'M')->url());
             }
 
             $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
-            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'width', 'height']);
+            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'thumbnail_url', 'width', 'height']);
         }
     }
 
