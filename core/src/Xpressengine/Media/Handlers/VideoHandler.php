@@ -149,6 +149,10 @@ class VideoHandler extends AbstractHandler
 
         $tmpFile->destroy();
 
+        if (! array_key_exists('audio', $info)) {
+            $info['audio'] = [];
+        }
+
         if (isset($info['audio']['streams'])) {
             unset($info['audio']['streams']);
         }
