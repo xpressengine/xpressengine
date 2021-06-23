@@ -53,7 +53,10 @@ class PluginScanner
     {
         $this->metaFileReader = $metaFileReader;
         $this->pluginDirectory = $pluginDirectory;
-        $this->basePath = $basePath.'/';
+
+        $path_char = "/";
+        if (strtoupper(substr(PHP_OS,0,3)) == "WIN") $path_char = "\\";
+        $this->basePath = $basePath.$path_char;
     }
 
     /**
