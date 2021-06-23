@@ -167,7 +167,12 @@ class MediaLibrary extends App {
             this.$emit('show-detail-media-closed')
           },
           putSelectedMedia (item) {
-            this.selectedMedia.push(item.media.id)
+            if('folder' in item) {
+              this.selectedMedia.push(item.folder.id)
+            }
+            if('media' in item) {
+              this.selectedMedia.push(item.media.id)
+            }
           },
           clearSelectedMedia () {
             this.selectedMedia = []
@@ -193,7 +198,10 @@ class MediaLibrary extends App {
           },
           removeSelectedMedia (item) {
             if (this.selectedMedia.length) {
-              this.selectedMedia.splice(this.selectedMedia.findIndex(v => item.media.id === v), 1)
+              this.selectedMedia.splice(this.selectedMedia.findIndex(v => {
+                if('media' in item && item.media.id === v) { return v }
+                if('folder' in item && item.folder.id === v) { return v }
+              }), 1)
             }
             this.clearSelectedMedia()
           },
@@ -205,7 +213,12 @@ class MediaLibrary extends App {
               that.$$xe.delete('media_library.drop', { target_ids: this.selectedMedia })
                 .then(() => {
                   this.selectedMedia.forEach(function (item) {
-                    store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
+                    if('media' in item) {
+                      store.state.media.media.splice(store.state.media.media.findIndex(v => v.id === item), 1)
+                    }
+                    if('folder' in item) {
+                      store.state.media.folder.splice(store.state.media.folder.findIndex(v => v.id === item), 1)
+                    }
                   })
                   this.clearSelectedMedia()
                 })

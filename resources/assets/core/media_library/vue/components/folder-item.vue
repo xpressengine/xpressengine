@@ -13,7 +13,7 @@
         <span class="media-library__input-helper"></span>
       </label>
     </div>
-    <div @click="view" class="media-library-content-list__icon">
+    <div @dblclick="view" @click="selectFolder" class="media-library-content-list__icon">
       <div class="media-library-content-list__icon-thumb media-library-content-list__icon-folder"></div>
     </div>
     <div class="media-library-content-list__content-box">
@@ -54,6 +54,18 @@ export default {
   methods: {
     view (event) {
       this.$parent.viewFolder(this.folder.id)
+    },
+    selectFolder (event) {
+      if (event) {
+        $(event.target).closest('li').toggleClass('active')
+        if ( $(event.target).closest('li').hasClass('active') ) {
+          this.$root.putSelectedMedia(this)
+          $(event.target).closest('li').find('.media-library__input-checkbox').prop('checked', true)
+        } else {
+          this.$root.removeSelectedMedia(this)
+          $(event.target).closest('li').find('.media-library__input-checkbox').prop('checked', false)
+        }
+      }
     },
     deleteFolder (event) {
       this.$store.dispatch('media/deleteFolder', this.folder.id)

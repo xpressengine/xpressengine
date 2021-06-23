@@ -430,7 +430,7 @@
       position: relative;
       flex: 0 0 110px;
       margin: 0 4px 15px;
-      cursor: pointer;
+      cursor: default;
       list-style: none;
 
       &.active {
@@ -1077,7 +1077,7 @@
         position: relative;
         flex: 0 0 120px;
         margin: 0 16px 20px;
-        cursor: pointer;
+        cursor: default;
         list-style: none;
 
         &.active {

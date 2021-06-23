@@ -57,6 +57,24 @@ export default {
           EventBus.$emit('modal.close')
           this.$store.dispatch('media/deleteMedia', target_ids)
         })
+
+      this.deleteFolder();
+    },
+    deleteFolder() {
+      let target_ids = []
+
+      if (this.folder && this.folder.id) {
+        target_ids.push(this.folder.id)
+      } else {
+        target_ids = [...this.$root.selectedMedia]
+      }
+
+      window.XE.delete('media_library.drop', { target_ids: target_ids })
+        .then(() => {
+          EventBus.$emit('dialog.close')
+          EventBus.$emit('modal.close')
+          this.$store.dispatch('media/deleteFolder', target_ids)
+        })
     }
   }
 }
