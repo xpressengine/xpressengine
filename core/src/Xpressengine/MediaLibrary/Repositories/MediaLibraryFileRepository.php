@@ -295,6 +295,14 @@ class MediaLibraryFileRepository
                 $fileItem->file->setAttribute('thumbnail_url', $imageMediaHandler->getThumbnail($media, 'spill', 'M')->url());
             }
 
+            else if ($fileItem->file->mime == "image/svg") {
+                $svg = file_get_contents($fileItem->file->url());
+                $base64Image = 'data:image/svg+xml;base64,' .base64_encode(unescape(rawurlencode($svg)));
+
+                $fileItem->file->setAttribute('url', $base64Image);
+                $fileItem->file->setAttribute('thumbnail_url', $base64Image);
+            }
+
             $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
             $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'thumbnail_url', 'width', 'height']);
         }
