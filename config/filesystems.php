@@ -130,7 +130,6 @@ return [
             'bmp'   => 'image/bmp',
             'tiff'  => 'image/tiff',
             'tif'   => 'image/tiff',
-            'svg'   => 'image/svg+xml',
             'mpeg'  => 'video/mpeg',
             'mpg'   => 'video/mpeg',
             'mpe'   => 'video/mpeg',
@@ -164,6 +163,7 @@ return [
             'js'    => 'application/javascript',
         ],
         'white' => [
+            'svg'   => 'image/svg+xml',
             'hqx'   => 'application/mac-binhex40',
             'cpt'   => 'application/mac-compactpro',
             'csv'   => 'text/x-comma-separated-values',
