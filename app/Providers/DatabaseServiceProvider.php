@@ -17,6 +17,7 @@ namespace App\Providers;
 use Carbon\Carbon;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Xpressengine\Database\DatabaseHandler;
@@ -48,19 +49,21 @@ class DatabaseServiceProvider extends ServiceProvider
             \DB::listen(function (QueryExecuted $executed) {
                 $query = $executed->sql;
                 $bindings = $executed->bindings;
-                $time = $executed->time;
                 $logFile = storage_path('logs/query.log');
                 $monoLog = new Logger('log');
-                $monoLog->pushHandler(new StreamHandler($logFile, Logger::INFO));
+                $monoLog->pushHandler(new RotatingFileHandler($logFile, 7, Logger::INFO));
                 $prep = $query;
+
                 foreach ($bindings as $binding) {
                     if ($binding instanceof \DateTimeInterface) {
                         $binding = new Carbon(
                             $binding->format('Y-m-d H:i:s.u'), $binding->getTimezone()
                         );
                     }
+
                     $prep = preg_replace('#\?#', is_numeric($binding) ? $binding : "'" . $binding . "'", $prep, 1);
                 }
+
                 $monoLog->info($prep);
             });
         }
