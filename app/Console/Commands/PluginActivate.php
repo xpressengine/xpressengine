@@ -52,13 +52,15 @@ class PluginActivate extends PluginCommand
 
         foreach ($plugins as $id => $plugin) {
             if ($plugin === null) {
-                // 설치되어 있지 않은 플러그인입니다.
                 throw new \Exception('Plugin not found : '.$id);
             }
+
             if (!$plugin->isActivated()) {
                 $this->line("Activating $id");
                 $this->handler->activatePlugin($plugin->getId());
                 $this->output->success("$id is activated");
+            } else {
+                $this->output->success("$id is already activated");
             }
         }
     }
