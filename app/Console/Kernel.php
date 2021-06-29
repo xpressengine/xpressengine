@@ -60,6 +60,7 @@ class Kernel extends ConsoleKernel
         Commands\PluginInstall::class,
         Commands\PluginUpdate::class,
         Commands\PluginUninstall::class,
+        Commands\PluginDeactivate::class,
         Commands\PluginActivate::class,
         Commands\PluginComposerSync::class,
         Commands\PrivateUpdateCommand::class,
