@@ -256,6 +256,7 @@ class SkinMake extends ComponentMakeCommand
 
         rename($path.'/info.stub', $path.'/info.php');
         rename($path.'/views/index.blade.stub', $path.'/views/index.blade.php');
+        rename($path.'/views/widget.blade.stub', $path.'/views/widget.blade.php');
     }
 
     /**
