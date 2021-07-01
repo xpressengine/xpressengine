@@ -1,6 +1,7 @@
 <?php
+
 /**
- * PluginActivate.php
+ * PluginDeactivate.php.php
  *
  * PHP version 7
  *
@@ -14,7 +15,7 @@
 namespace App\Console\Commands;
 
 /**
- * Class PluginActivate
+ * Class PluginDeactivate.php
  *
  * @category    Commands
  * @package     App\Console\Commands
@@ -23,22 +24,22 @@ namespace App\Console\Commands;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PluginActivate extends PluginCommand
+class PluginDeactivate extends PluginCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'plugin:activate
-                        {plugin* : The plugin to activate.}';
+    protected $signature = 'plugin:deactivate
+                        {plugin* : The plugin to deactivate.}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Activate a plugin of XpressEngine';
+    protected $description = 'Deactivate a plugin of XpressEngine';
 
     /**
      * Execute the console command.
@@ -55,12 +56,12 @@ class PluginActivate extends PluginCommand
                 throw new \Exception('Plugin not found : '.$id);
             }
 
-            if (!$plugin->isActivated()) {
-                $this->line("Activating $id");
-                $this->handler->activatePlugin($plugin->getId());
-                $this->output->success("$id is activated");
+            if ($plugin->isActivated()) {
+                $this->line("Deactivating $id");
+                $this->handler->deactivatePlugin($plugin->getId());
+                $this->output->success("$id is deactivated");
             } else {
-                $this->output->success("$id is already activated");
+                $this->output->success("$id is already deactivated");
             }
         }
     }
