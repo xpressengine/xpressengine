@@ -469,5 +469,10 @@ return [
         'common' => 'common.base',
         'popup' => 'common.popup',
         'alert' => 'common.alert',
+    ],
+    'dynamicField' => [
+        'required' => [
+            'exceptRouteNames' => ['auth.pending_admin', 'auth.pending_email', 'auth.register.add', 'logout']
+        ]
     ]
 ];

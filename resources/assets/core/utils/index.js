@@ -45,7 +45,7 @@ export function eventify (target) {
  * @return {boolean}
  */
 export function isImage (mime) {
-  return ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'].includes(mime)
+  return ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'].includes(mime)
 }
 
 /**
