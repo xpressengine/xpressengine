@@ -63,27 +63,28 @@ class FormSelect extends AbstractUIObject
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
                     break;
+                case 'optgroups':
+                    $groups = $arg;
+                    foreach ($groups as $group) {
+                        $groupAttrs = array_except($group, 'options');
+                        $optgroupEl = new Element('optgroup', $groupAttrs);
+
+                        $options = array_get($group, 'options');
+                        foreach ($options as $value => $option) {
+                            $optionEl = $this->processOption($value, $option, $selectedValue);
+                            $optgroupEl->append($optionEl);
+                        }
+
+                        $select->append($optgroupEl);
+                    }
+                    break;
                 case 'options':
                     $options = $arg;
                     if (is_callable($options)) {
                         $options = $options();
                     }
                     foreach ($options as $value => $option) {
-                        if (is_array($option) === false) {
-                            $text = $option;
-                            if (is_string($value) === false) {
-                                $value = $option;
-                            }
-                        } else {
-                            $value = array_get($option, 'value', $value);
-                            $text = array_get($option, 'text', $value);
-                        }
-                        if ($selectedValue === null) {
-                            $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
-                        } else {
-                            $selected = in_array($value, (array) $selectedValue) ? 'selected="selected"' : '';
-                        }
-                        $optionEl = "<option value=\"$value\" $selected>$text</option>";
+                        $optionEl = $this->processOption($value, $option, $selectedValue);
                         $select->append($optionEl);
                     }
                     break;
@@ -112,5 +113,24 @@ class FormSelect extends AbstractUIObject
         $this->template = $box->append([$label, $select, $description])->render();
 
         return parent::render();
+    }
+
+    protected function processOption($value, $option, $selectedValue)
+    {
+        if (is_array($option) === false) {
+            $text = $option;
+            if (is_string($value) === false) {
+                $value = $option;
+            }
+        } else {
+            $value = array_get($option, 'value', $value);
+            $text = array_get($option, 'text', $value);
+        }
+        if ($selectedValue === null) {
+            $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
+        } else {
+            $selected = in_array($value, (array) $selectedValue) ? 'selected="selected"' : '';
+        }
+        return "<option value=\"$value\" $selected>$text</option>";
     }
 }
