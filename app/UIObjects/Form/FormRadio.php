@@ -91,10 +91,12 @@ class FormRadio extends AbstractUIObject
                 $text = $itemValue;
                 $value = $itemKey;
                 $checked = false;
+                $disabled = false;
             } else {
                 $text = array_get($itemValue, 'text');
                 $value = array_get($itemValue, 'value');
                 $checked = array_get($itemValue, 'checked', false);
+                $disabled = array_get($itemValue, 'disabled', false);
             }
 
             if ($values != null && $value == $values) {
@@ -108,6 +110,12 @@ class FormRadio extends AbstractUIObject
                 $radiobox->attr('checked', 'checked');
             } else {
                 $radiobox->removeAttr('checked');
+            }
+
+            if ($disabled) {
+                $radiobox->attr('disabled', 'disabled');
+            } else {
+                $radiobox->removeAttr('disabled');
             }
 
             $label->append([$radiobox, $text]);
