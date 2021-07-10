@@ -37,6 +37,6 @@ class PluginMigration extends Migration
      */
     public function installed()
     {
-        \DB::table('config')->insert(['name' => 'plugin', 'vars' => '[]']);
+        \DB::table('config')->insert(['name' => 'plugin', 'vars' => '{"composer_home":"storage\/framework\/.composer"}']);
     }
 }
