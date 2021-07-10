@@ -19,6 +19,7 @@ use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\MetaFileReader;
+use Xpressengine\Plugin\Migrations\PluginMigrator;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -73,6 +74,7 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerPluginProvider();
         $this->registerComposerWriter();
         $this->registerPluginHandler();
+        $this->registerMigrator();
     }
 
     /**
@@ -195,6 +197,20 @@ class PluginServiceProvider extends ServiceProvider
             foreach ($permissions as $id => $permission) {
                 $register->push('settings/permission', $id, $permission);
             }
+        });
+    }
+
+    /**
+     * Register the migrator service.
+     *
+     * @return void
+     */
+    protected function registerMigrator()
+    {
+        $this->app->singleton(PluginMigrator::class, function ($app) {
+            $repository = $app['migration.repository'];
+
+            return new PluginMigrator($repository, $app['db'], $app['files']);
         });
     }
 }
