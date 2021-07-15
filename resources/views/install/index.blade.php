@@ -120,6 +120,10 @@
                     <td><input type="password" class="xe-form-control" name="database_password" placeholder="{{ trans('xe::install.inputDBPassword') }}"></td>
                 </tr>
                 <tr>
+                    <th scope="row">Database Charset</th>
+                    <td><input type="text" class="xe-form-control" name="database_charset" placeholder="{{ trans('xe::install.inputDBCharset') }}(default: utf8)"></td>
+                </tr>
+                <tr>
                     <th scope="row">Table Prefix</th>
                     <td><input type="text" class="xe-form-control" name="database_prefix" placeholder="{{ trans('xe::install.inputDBPrefix') }}(default: xe)"></td>
                 </tr>
@@ -311,7 +315,7 @@
                     return false;
                 }
             }
-            
+
             var password_check = /[^!-\/:-@[-`{-~a-zA-Z0-9]/.test($(f['admin_password']).val())
             if (password_check) {
                 $(f['admin_password']).css('backgroundColor', '#F49EA0');
@@ -319,7 +323,7 @@
                 $(f['admin_password']).focus();
                 return false;
             }
-            
+
             if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
                 alert('비밀번호가 일치하지 않습니다.');
                 $(f['admin_password_confirmation']).focus();

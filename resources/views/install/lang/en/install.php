@@ -34,6 +34,7 @@ return [
     'inputDBName' => 'Input database name.',
     'inputDBUser' => 'Input database user name.',
     'inputDBPassword' => 'Input database password.',
+    'inputDBCharset' => 'Input database charset.',
     'inputDBPrefix' => 'Input database table prefix.',
     'inputAdminEmail' => 'Input email address.',
     'inputAdminID' => 'Input ID.',

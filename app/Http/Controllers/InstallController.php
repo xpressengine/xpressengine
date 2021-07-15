@@ -172,6 +172,7 @@ class InstallController extends Controller
                 'dbname' => $request->get('database_name'),
                 'username' => $request->get('database_user_name') ?: 'root',
                 'password' => $request->get('database_password'),
+                'charset' => $request->get('database_charset') ?: 'utf8',
                 'prefix' => $request->get('database_prefix') ?: 'xe',
             ],
         ]);
