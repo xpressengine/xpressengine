@@ -409,7 +409,12 @@ class Storage
         $files = $this->repo->fetchIn($fileIds);
         $olds = $this->repo->fetchByFileable($fileableId)->getDictionary();
 
-        foreach ($files as $file) {
+        foreach ($fileIds as $fileId) {
+            /** @var File $file */
+            if (is_null($file = $files->find($fileId))) {
+                continue;
+            }
+
             if (!isset($olds[$file->getKey()])) {
                 $this->bind($fileableId, $file);
             } else {
