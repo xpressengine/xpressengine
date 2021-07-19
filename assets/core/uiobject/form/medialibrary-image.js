@@ -63,6 +63,7 @@
 
             that._addFiles(list)
             that._refresh()
+            $(that.element).trigger('media/uploadedPreviewMounted')
           }
         })
       })
