@@ -44,6 +44,8 @@
           $(this.options.field).val(null)
         }
       }
+
+      $(this.element).trigger('media/uploadedPreviewMounted')
     },
 
     _importFile: function () {
@@ -63,7 +65,6 @@
 
             that._addFiles(list)
             that._refresh()
-            $(that.element).trigger('media/uploadedPreviewMounted')
           }
         })
       })
