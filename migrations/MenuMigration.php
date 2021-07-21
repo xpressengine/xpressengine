@@ -155,6 +155,10 @@ class MenuMigration extends Migration
             return false;
         }
 
+        if(Schema::hasColumn('menu_item', 'site_key') == false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -171,6 +175,13 @@ class MenuMigration extends Migration
 
         if ($this->checkExistMenuOrderingColumn() === false) {
             $this->createMenuOrderingColumn();
+        }
+
+        if(Schema::hasColumn('menu_item', 'site_key') == false) {
+            Schema::table('menu_item', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
         }
     }
 
