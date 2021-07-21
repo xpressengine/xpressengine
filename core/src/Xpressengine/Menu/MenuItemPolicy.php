@@ -42,7 +42,6 @@ class MenuItemPolicy extends Policy
     public function access(UserInterface $user, MenuItem $item, Menu $menu = null)
     {
         $breadcrumbs = $this->getItemBreadcrumbs($item, $menu);
-
         return $this->check($user, $this->get(implode('.', $breadcrumbs)), 'access');
     }
 

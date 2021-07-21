@@ -86,7 +86,7 @@ class MenuItem extends CategoryItem
     protected $fillable = [
         'menu_id', 'parent_id', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
         'menu_image_id', 'basic_image_id', 'hover_image_id', 'selected_image_id',
-        'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
+        'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id', 'site_key'
     ];
 
     /**
@@ -382,5 +382,29 @@ class MenuItem extends CategoryItem
     public function getSelectedAttribute()
     {
         return $this->isSelected();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

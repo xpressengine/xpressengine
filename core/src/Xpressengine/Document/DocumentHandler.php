@@ -402,9 +402,10 @@ class DocumentHandler
      * @param string $instanceId instance id
      * @return ConfigEntity
      */
-    public function getConfig($instanceId)
+    public function getConfig($instanceId,$site_key = null)
     {
-        return $this->configHandler->getOrDefault($instanceId);
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
+        return $this->configHandler->getOrDefault($instanceId, $site_key);
     }
 
     /**

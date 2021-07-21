@@ -100,6 +100,7 @@ class DocumentMigration extends Migration
             $table->string('id', 36);
             $table = $this->setColumns($table);
 
+            $table->index('site_key');
             $table->index('created_at');
             $table->unique(['head', 'reply']);
             $table->primary(array('id'));
@@ -155,6 +156,8 @@ class DocumentMigration extends Migration
         $table->string('reply', 150)->comment('string for sorting parent-child documents');
         $table->string('ipaddress', 16)->comment('IP address of document writer');
 
+        $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
         return $table;
     }
 
@@ -163,11 +166,12 @@ class DocumentMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         DB::table('config')->insert([
             'name' => 'document',
-            'vars' => '{"instanceId":0,"instanceName":0,"division":false,"revision":false,"comment":true,"assent":true,"nonmember":false,"reply":false}'
+            'vars' => '{"instanceId":0,"instanceName":0,"division":false,"revision":false,"comment":true,"assent":true,"nonmember":false,"reply":false}',
+            'site_key' => $site_key
         ]);
     }
 }

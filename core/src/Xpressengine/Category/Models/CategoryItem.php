@@ -57,7 +57,7 @@ class CategoryItem extends Node
      *
      * @var array
      */
-    protected $fillable = ['category_id', 'parent_id', 'word', 'description', 'ordering'];
+    protected $fillable = ['category_id', 'parent_id', 'word', 'description', 'ordering', 'site_key'];
 
     /**
      * The class name of aggregator
@@ -190,5 +190,30 @@ class CategoryItem extends Node
     public static function setAggregatorModel($model)
     {
         static::$aggregator = '\\' . ltrim($model, '\\');
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

@@ -67,5 +67,5 @@ class Site extends DynamicModel
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 }

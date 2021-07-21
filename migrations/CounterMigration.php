@@ -49,6 +49,10 @@ class CounterMigration extends Migration
             $table->string('ipaddress', 16)->comment('IP address');
             $table->timestamp('created_at')->nullable()->comment('created date');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
+
             $table->index(['target_id', 'user_id']);
             $table->index(['target_id', 'counter_name']);
         });
@@ -59,8 +63,8 @@ class CounterMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
+        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}','site_key'=>$site_key]);
     }
 }

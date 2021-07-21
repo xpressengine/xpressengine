@@ -18,6 +18,7 @@ use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\Rating;
+use XeSite;
 
 /**
  * Class EditorMigration
@@ -64,5 +65,10 @@ class EditorMigration extends Migration
         $grant->set('upload', $data);
         $grant->set('download', $data);
         app('xe.permission')->register(EditorHandler::CONFIG_NAME, $grant);
+    }
+    public function installed($siteKey = 'default')
+    {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        if($siteKey != 'default') $this->init();
     }
 }

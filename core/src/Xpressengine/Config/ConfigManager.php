@@ -15,6 +15,7 @@
 namespace Xpressengine\Config;
 
 use Closure;
+use XeSite;
 use Xpressengine\Config\Exceptions\DuplicateException;
 use Xpressengine\Config\Exceptions\InvalidArgumentException;
 use Xpressengine\Config\Exceptions\NoParentException;
@@ -80,8 +81,10 @@ class ConfigManager
      * @return ConfigEntity
      * @throws DuplicateException
      */
-    public function add($group, array $collection, $siteKey = 'default')
+    public function add($group, array $collection, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         if ($this->repo->find($siteKey, $group) !== null) {
             throw new DuplicateException(['name' => $group]);
         }
@@ -109,8 +112,10 @@ class ConfigManager
      * @param string $siteKey site key
      * @return mixed
      */
-    public function getVal($key, $default = null, $pure = false, $siteKey = 'default')
+    public function getVal($key, $default = null, $pure = false, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         list($group, $item) = $this->parseKey($key);
 
         $config = $this->get($group, false, $siteKey);
@@ -134,8 +139,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return mixed
      */
-    public function getPureVal($key, $default = null, $siteKey = 'default')
+    public function getPureVal($key, $default = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         return $this->getVal($key, $default, true, $siteKey);
     }
 
@@ -147,8 +153,16 @@ class ConfigManager
      * @param string $siteKey site key
      * @return ConfigEntity
      */
-    public function get($group, $create = false, $siteKey = 'default')
+    public function get($group, $create = false, $siteKey = null)
     {
+        //기본사이트의 설정을 따르는 config 정의
+        $defaultGroups = array(
+//            'plugin',
+            'site'
+        );
+        if(in_array(explode(".",$group)[0],$defaultGroups)) $siteKey = 'default';
+        else if($siteKey == null) $siteKey = XeSite::getCurrentSiteKey();
+
         $config = $this->repo->find($siteKey, $group);
 
         $config = $config ?: ($create === true ? new ConfigEntity() : null);
@@ -170,8 +184,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return ConfigEntity
      */
-    public function getOrNew($group, $siteKey = 'default')
+    public function getOrNew($group, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         return $this->get($group, true, $siteKey);
     }
 
@@ -185,8 +200,10 @@ class ConfigManager
      * @param string   $siteKey site key
      * @return void
      */
-    public function setVal($key, $value, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function setVal($key, $value, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         list($group, $item) = $this->parseKey($key);
 
         if ($config = $this->get($group, false, $siteKey)) {
@@ -211,13 +228,14 @@ class ConfigManager
      * @param string   $siteKey    site key
      * @return ConfigEntity
      */
-    public function set($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function set($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        $this->site_key = $siteKey;
         if ($config = $this->get($group, false, $siteKey)) {
             foreach ($collection as $item => $value) {
                 $config = $this->share($config, $item, $value);
             }
-
             $config = $this->build($this->repo->save($config));
         } else {
             $config = $this->add($group, $collection, $siteKey);
@@ -241,8 +259,10 @@ class ConfigManager
      * @return ConfigEntity
      * @throws NotExistsException
      */
-    public function put($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = 'default')
+    public function put($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
         if (!$config = $this->get($group, false, $siteKey)) {
             throw new NotExistsException(['name' => $group]);
         }
@@ -384,8 +404,9 @@ class ConfigManager
      * @param string $siteKey site key
      * @return void
      */
-    public function removeByName($name, $siteKey = 'default')
+    public function removeByName($name, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         if ($config = $this->get($name, false, $siteKey)) {
             $this->remove($config);
         }
@@ -475,7 +496,7 @@ class ConfigManager
         }
 
         if ($config->getDepth() > 1 && $config->getParent() === null) {
-            throw new ValidationException(['message' => 'The config must be has parent']);
+            throw new ValidationException(['message' => 'The config [' . $config->name . '] must be has parent']);
         }
     }
 

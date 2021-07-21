@@ -86,7 +86,7 @@ class SiteHandler
      */
     public function getCurrentSiteKey()
     {
-        return $this->currentSite->site_key;
+        return $this->currentSite != null ? $this->currentSite->site_key : 'default';
     }
 
     /**
