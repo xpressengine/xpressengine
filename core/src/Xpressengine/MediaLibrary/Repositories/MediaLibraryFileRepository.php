@@ -291,8 +291,15 @@ class MediaLibraryFileRepository
                 $fileItem->file->setAttribute('width', $media['meta']['width']);
                 $fileItem->file->setAttribute('height', $media['meta']['height']);
 
-                $imageMediaHandler = \XeMedia::getHandler(Media::TYPE_IMAGE);
-                $fileItem->file->setAttribute('thumbnail_url', $imageMediaHandler->getThumbnail($media, 'spill', 'M')->url());
+                $thumbnailUrl = $fileItem->file->url();
+                $exceptThumbnailMineTypes = ['image/gif'];
+
+                if (!in_array($fileItem->file->mime, $exceptThumbnailMineTypes)) {
+                    $imageMediaHandler = \XeMedia::getHandler(Media::TYPE_IMAGE);
+                    $thumbnailUrl = $imageMediaHandler->getThumbnail($media, 'spill', 'M')->url();
+                }
+
+                $fileItem->file->setAttribute('thumbnail_url', $thumbnailUrl);
             }
 
             else if (in_array($fileItem->file->mime, ['image/svg', 'image/svg+xml'])) {
