@@ -233,6 +233,7 @@ class AuthController extends Controller
 
         $this->auth->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return XePresenter::make('pending_admin');
     }
@@ -253,6 +254,7 @@ class AuthController extends Controller
 
         $this->auth->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return XePresenter::make('pending_email', compact('user'));
     }
@@ -268,6 +270,7 @@ class AuthController extends Controller
         $this->auth->logout();
 
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }
