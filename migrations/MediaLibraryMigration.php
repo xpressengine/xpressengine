@@ -56,9 +56,9 @@ class MediaLibraryMigration extends Migration
      * db seeding과 같은 코드를 작성한다.
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        $this->storeConfig();
+        $this->storeConfig($site_key);
     }
 
     /**
@@ -211,6 +211,9 @@ class MediaLibraryMigration extends Migration
                 $table->string('caption')->nullable();
                 $table->string('alt_text')->nullable();
                 $table->text('description')->nullable();
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+                $table->index('site_key');
 
                 $table->timestamps();
 
@@ -227,6 +230,9 @@ class MediaLibraryMigration extends Migration
                 $table->string('disk');
                 $table->string('name');
                 $table->integer('ordering');
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+                $table->index('site_key');
 
                 $table->timestamps();
 
@@ -265,11 +271,12 @@ class MediaLibraryMigration extends Migration
         return \DB::table('config')->where('name', 'media_library')->exists();
     }
 
-    private function storeConfig()
+    private function storeConfig($site_key)
     {
         \DB::table('config')->insert([
             'name' => 'media_library',
-            'vars' => '{"container":{}, "file":{"dimensions":{"MAX":{"width":4000, "height":4000}}}}'
+            'vars' => '{"container":{}, "file":{"dimensions":{"MAX":{"width":4000, "height":4000}}}}',
+            'site_key' => $site_key
         ]);
     }
 

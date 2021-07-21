@@ -21,6 +21,7 @@ use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
+use Xpressengine\Site\Site;
 
 /**
  * Document
@@ -76,7 +77,7 @@ class Document extends DynamicModel
         'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
         'published', 'status', 'display', 'format', 'locale', 'title',
         'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
-        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email',
+        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email', 'site_key'
     ];
 
     protected $casts = [
@@ -177,11 +178,12 @@ class Document extends DynamicModel
      * @param string $instanceId instance id
      * @return Document
      */
-    public static function division($instanceId)
+    public static function division($instanceId, $site_key = null)
     {
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
         /** @var Document $instance */
         $instance = new static;
-        $instance->setDivision($instanceId);
+        $instance->setDivision($instanceId,$site_key);
 
         return $instance;
     }
@@ -192,12 +194,13 @@ class Document extends DynamicModel
      * @param string $instanceId instance id
      * @return $this
      */
-    public function setDivision($instanceId)
+    public function setDivision($instanceId,$site_key = null)
     {
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
         /** @var DocumentHandler $handler */
         $handler = app('xe.document');
 
-        $config = $handler->getConfig($instanceId);
+        $config = $handler->getConfig($instanceId, $site_key);
         if ($config !== null && $config->get('division') === true) {
             $tableName = $handler->getInstanceManager()->getDivisionTableName($config);
             $this->setTable($tableName);
@@ -217,6 +220,17 @@ class Document extends DynamicModel
     public function user()
     {
         return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
+    }
+
+
+    /**
+     * Relation of site
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site_key', 'site_key');
     }
 
     /**
@@ -615,5 +629,34 @@ class Document extends DynamicModel
         if ($class != Document::class) {
             return parent::fireModelEvent($event, $halt);
         }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+
+            //로드밸런서를 쓰는경우 리얼 클라이언트 아이피가 기록되도록 수정
+            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+                $model->ipaddress = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

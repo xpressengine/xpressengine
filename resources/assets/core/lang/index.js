@@ -132,7 +132,7 @@ class Lang extends App {
     const that = this
 
     return new Promise((resolve, reject) => {
-      this.$$xe.get(this.$$config.getters['router/origin'] + '/lang/lines/many', { keys: langKeys }).then(response => {
+      this.$$xe.post(this.$$config.getters['router/origin'] + '/lang/lines/many', { keys: langKeys }).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
             result[key] = $$.find(val, { 'locale': config.getters['lang/current'].code }).value

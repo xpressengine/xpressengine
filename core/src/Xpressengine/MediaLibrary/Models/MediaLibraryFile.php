@@ -36,7 +36,7 @@ class MediaLibraryFile extends DynamicModel
 
     protected $fillable = [
         'file_id', 'origin_file_id', 'folder_id', 'user_id', 'title', 'ext', 'caption',
-        'alt_text', 'description'
+        'alt_text', 'description', 'site_key'
     ];
 
     /**
@@ -73,5 +73,29 @@ class MediaLibraryFile extends DynamicModel
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

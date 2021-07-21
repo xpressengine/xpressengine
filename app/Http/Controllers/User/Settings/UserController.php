@@ -66,7 +66,21 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $site_key = \XeSite::getCurrentSiteKey();
+        // get site groups
+        $groups = $this->handler->groups()->query()->where('site_key',$site_key)->get();
+
         $query = $this->handler->users()->query();
+
+        //set current site groups
+        $group_ids = $groups->pluck('id');
+        $query = $query->whereHas(
+            'groups',
+            function (Builder $q) use ($group_ids) {
+                $q->whereIn('group_id', $group_ids);
+            }
+        );
+
         $allUserCount = $query->count();
 
         if ($startDate = $request->get('startDate')) {
@@ -81,7 +95,7 @@ class UserController extends Controller
         if ($group = $request->get('group')) {
             $query = $query->whereHas(
                 'groups',
-                function (Builder $q) use ($group) {
+                function (Builder $q) use ($group,$site_key) {
                     $q->where('group_id', $group);
                 }
             );
@@ -113,8 +127,6 @@ class UserController extends Controller
 
         $users = $query->orderBy('created_at', 'desc')->paginate()->appends(request()->query());
 
-        // get all groups
-        $groups = $this->handler->groups()->all();
 
         // get all ratings
         $ratings = Rating::getUsableAll();
@@ -165,7 +177,7 @@ class UserController extends Controller
             ];
         }
 
-        $groupList = $this->handler->groups()->all();
+        $groupList = $this->handler->groups()->query()->where('site_key',\XeSite::getCurrentSiteKey())->get();
         $groups = $this->getGroupInfo($groupList);
         $status = $this->getUserStatus();
 
@@ -247,7 +259,7 @@ class UserController extends Controller
             }
         }
 
-        $groupList = $this->handler->groups()->all();
+        $groupList = $this->handler->groups()->query()->where('site_key',\XeSite::getCurrentSiteKey())->get();
         $groups = $this->getGroupInfo($groupList);
 
         foreach ($user->groups as $group) {

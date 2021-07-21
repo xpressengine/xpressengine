@@ -82,7 +82,8 @@ return [
                 'title' => 'xe::dashBoard',
                 'display' => true,
                 'description' => '',
-                'ordering' => 1000
+                'ordering' => 1000,
+                'icon' => 'xi-dashboard'
             ],
             'dashboard.home' => [
                 'title' => 'xe::home',
@@ -106,7 +107,8 @@ return [
                 'title' => 'xe::siteMap',
                 'display' => true,
                 'description' => 'xe::siteMapDescription',
-                'ordering' => 2000
+                'ordering' => 2000,
+                'icon' => 'xi-sitemap-o',
             ],
             'sitemap.default' => [
                 'title' => 'xe::editSiteMenu',
@@ -118,7 +120,8 @@ return [
                 'title' => 'xe::user',
                 'description' => '',
                 'display' => true,
-                'ordering' => 3000
+                'ordering' => 3000,
+                'icon' => 'xi-users',
             ],
             'user.list' => [
                 'title' => 'xe::userList',
@@ -165,7 +168,8 @@ return [
                 'title' => 'xe::contents',
                 'display' => true,
                 'description' => '',
-                'ordering' => 4000
+                'ordering' => 4000,
+                'icon' => 'xi-library-books-o',
             ],
             'contents.media_library' => [
                 'title' => 'xe::media',
@@ -177,7 +181,8 @@ return [
                 'title' => 'xe::themeDesign',
                 'display' => true,
                 'description' => '',
-                'ordering' => 5000
+                'ordering' => 5000,
+                'icon' => 'xi-layout-aside-o',
             ],
             'theme.installed' => [
                 'title' => 'xe::installedTheme',
@@ -213,7 +218,8 @@ return [
                 'title' => 'xe::extension',
                 'display' => true,
                 'description' => '',
-                'ordering' => 5000
+                'ordering' => 5000,
+                'icon' => 'xi-plug',
             ],
             'extension.installed' => [
                 'title' => 'xe::installedExtension',
@@ -231,7 +237,8 @@ return [
                 'title' => 'xe::settings',
                 'display' => true,
                 'description' => '',
-                'ordering' => 6000
+                'ordering' => 6000,
+                'icon' => 'xi-cog',
             ],
             'setting.default' => [
                 'title' => 'xe::defaultSettings',

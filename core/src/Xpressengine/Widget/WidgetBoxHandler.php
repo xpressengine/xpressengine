@@ -75,8 +75,9 @@ class WidgetBoxHandler
      *
      * @return WidgetBox
      */
-    public function create($data)
+    public function create($data, $site_key = null)
     {
+        if($site_key == null) $site_key = \XeSite::getCurrentSiteKey();
         $id = array_get($data, 'id');
 
         if ($id === null) {
@@ -87,7 +88,7 @@ class WidgetBoxHandler
             throw new InvalidIDException();
         }
 
-        if ($this->repository->find($id) !== null) {
+        if ($this->repository->query()->where('site_key',$site_key)->find($id) !== null) {
             throw new IDAlreadyExistsException();
         }
 
@@ -96,7 +97,7 @@ class WidgetBoxHandler
         $content = array_get($data, 'content');
         $content = empty($content) ? [] : $content;
 
-        $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options'));
+        $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options', 'site_key'));
 
         $grant = new Grant();
         $grant->set(

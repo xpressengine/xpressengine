@@ -369,9 +369,10 @@ class SettingsController extends Controller
      */
     public function updatePermission(PermissionHandler $permissionHandler, Request $request, $permissionId)
     {
+        $site_key = $request->get('site_key') == null ? XeSite::getCurrentSiteKey() : $request->get('site_key');
         $permissionHandler->register($permissionId, $this->createAccessGrant(
             $request->only(['accessRating', 'accessGroup', 'accessUser', 'accessExcept'])
-        ));
+        ),$request->get('site_key'));
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
@@ -446,7 +447,7 @@ class SettingsController extends Controller
         // resolve search keyword
         // keyfield가 지정되지 않을 경우 url, summary를 대상으로 검색함
         $field = $request->get('keyfield', 'url,summary');
-        $field = ($field === '') ? 'url,summary' : $field;
+        $field = ($field === '' || $field == null) ? 'url,summary' : $field;
 
         if ($keyword = trim($request->get('keyword'))) {
             $query->where(
@@ -522,7 +523,7 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, sprintf('%s(%s)', $log->getUser()->getDisplayName(), $log->getUser()->email) . "\t");
                 }
-                
+
                 fwrite($file, $log->summary . "\t");
                 fwrite($file, $log->target_id . "\t");
                 fwrite($file, $log->ipaddress . "\t");

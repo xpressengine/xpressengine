@@ -52,7 +52,7 @@ Route::settings('lang', function () {
 Route::group(
     ['prefix' => 'lang'],
     function() {
-        Route::get('lines/many', ['as' => 'lang.lines.many', 'uses' => 'LangController@getLinesMany']);
+        Route::match(array('GET', 'POST'),'lines/many', ['as' => 'lang.lines.many', 'uses' => 'LangController@getLinesMany']);
         Route::get('lines/{key}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'lang.search', 'uses' => 'LangController@searchKeyword']);
     }

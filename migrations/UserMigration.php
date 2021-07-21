@@ -70,7 +70,9 @@ class UserMigration extends Migration
             $table->integer('order')->default(0)->index()->comment('order number');
             $table->timestamp('created_at')->nullable()->index()->comment('created date');
             $table->timestamp('updated_at')->nullable()->comment('updated date');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->primary('id');
         });
 
@@ -162,7 +164,9 @@ class UserMigration extends Migration
             $table->integer('order')->default(0);
             $table->boolean('is_enabled')->default(false);
             $table->boolean('is_require')->default(true);
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->primary('id');
             $table->engine = "InnoDB";
         });
@@ -187,13 +191,13 @@ class UserMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         DB::table('config')->insert([
-            ['name' => 'user', 'vars' => '[]'],
-            ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}'],
-            ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
+            ['name' => 'user', 'vars' => '[]', 'site_key' => $site_key],
+            ['name' => 'user.common', 'vars' => '{"useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}', 'site_key' => $site_key],
+            ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}', 'site_key' => $site_key],
+            ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}', 'site_key' => $site_key]
         ]);
     }
 
@@ -266,6 +270,11 @@ class UserMigration extends Migration
             return false;
         }
 
+        $need_sitekey_table = ['user_group','user_term_agrees','user_terms'];
+        foreach($need_sitekey_table as $table){
+            if ($this->checkSiteKeyColumn($table) == false) return false;
+        }
+
         return true;
     }
 
@@ -303,6 +312,29 @@ class UserMigration extends Migration
             $this->migrationLoginIdColumn();
             $this->setLoginIdColumnUnique();
         }
+
+        $need_sitekey_table = ['user_group','user_term_agrees','user_terms'];
+        foreach($need_sitekey_table as $table_name){
+            if(Schema::hasColumn($table_name, 'site_key') == false) {
+                Schema::table($table_name, function (Blueprint $table) {
+                    $table->dropPrimary('id');
+
+                    $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                    $table->index('site_key');
+                });
+            }
+        }
+    }
+
+
+    /**
+     * User 테이블에 login_id 컬럼이 존재 여부 확인
+     *
+     * @return bool
+     */
+    private function checkSiteKeyColumn($table)
+    {
+        return Schema::hasColumn($table, 'site_key');
     }
 
     /**
@@ -453,11 +485,13 @@ class UserMigration extends Migration
 
             $table->string('user_id', 36);
             $table->string('term_id', 36);
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
             $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['user_id', 'term_id']);
+            $table->index('site_key');
             $table->index('user_id');
             $table->index('term_id');
         });

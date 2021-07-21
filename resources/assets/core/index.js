@@ -375,6 +375,7 @@ class XE {
    * Ajax를 요청한다.
    * @param {string|object} url request url
    * @param {object} options jQuery ajax options
+   * site_key가 global로 선언되어있으면 ajax 전송시 site_key를 붙여줌. // by xiso
    */
   ajax (url, options) {
     if (typeof url === 'object') {
@@ -401,6 +402,10 @@ class XE {
       options.type = options.method = 'post'
     }
 
+    if (typeof window.site_key !== 'undefined') {
+      var addParamChar = /\?/.test(options.url) ? '&' : '?'
+      options.url += addParamChar + 'site_key=' + window.site_key
+    }
     return $.ajax(url, options)
   }
 

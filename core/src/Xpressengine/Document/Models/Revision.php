@@ -79,7 +79,7 @@ class Revision extends DynamicModel
         'revision_no', 'id', 'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
         'published', 'status', 'display', 'locale', 'title',
         'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
-        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email',
+        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email', 'site_key'
     ];
 
     /**
@@ -100,5 +100,30 @@ class Revision extends DynamicModel
     public function user()
     {
         return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }

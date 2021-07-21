@@ -54,7 +54,8 @@ class SettingsPermission extends AbstractUIObject
         /** @var Permission $permission */
         $permission = $permissionInfo['permission'];
 
-        $groups = app('xe.user.groups')->all();
+        $site_key = array_get($args,'site_key') == null ? \XeSite::getCurrentSiteKey() : $args['site_key'];
+        $groups = app('xe.user.groups')->query()->where('site_key',$site_key)->get();
 
         $settings = [];
         $content = uio('permission', [

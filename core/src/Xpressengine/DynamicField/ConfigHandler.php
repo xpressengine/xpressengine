@@ -17,6 +17,7 @@ namespace Xpressengine\DynamicField;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\VirtualConnectionInterface;
+use XeSite;
 
 /**
  * ConfigHandler
@@ -105,9 +106,10 @@ class ConfigHandler
      * @param ConfigEntity $config config entity
      * @return void
      */
-    public function add(ConfigEntity $config)
+    public function add(ConfigEntity $config, $siteKey = null)
     {
-        $this->configManager->add($this->getConfigName($config), $config->getPureAll());
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        $this->configManager->add($this->getConfigName($config), $config->getPureAll(),$siteKey);
     }
 
     /**
@@ -116,9 +118,10 @@ class ConfigHandler
      * @param ConfigEntity $config config entity
      * @return void
      */
-    public function put(ConfigEntity $config)
+    public function put(ConfigEntity $config, $siteKey = null)
     {
-        $this->configManager->put($this->getConfigName($config), $config->getPureAll());
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        $this->configManager->put($this->getConfigName($config), $config->getPureAll(),false,null,$siteKey);
     }
 
     /**
@@ -139,9 +142,10 @@ class ConfigHandler
      * @param string $id    dynamic field id
      * @return ConfigEntity|null
      */
-    public function get($group, $id)
+    public function get($group, $id, $siteKey = null)
     {
-        return $this->configManager->get(sprintf('%s.%s.%s', self::CONFIG_NAME, $group, $id));
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        return $this->configManager->get(sprintf('%s.%s.%s', self::CONFIG_NAME, $group, $id),false,$siteKey);
     }
 
     /**
@@ -150,9 +154,10 @@ class ConfigHandler
      * @param string $group group name
      * @return array
      */
-    public function gets($group)
+    public function gets($group, $siteKey = null)
     {
-        $config = $this->parent($group);
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        $config = $this->parent($group,$siteKey);
         if ($config === null) {
             return [];
         }
@@ -166,10 +171,11 @@ class ConfigHandler
      * @param string $group group name
      * @return ConfigEntity|null
      */
-    public function parent($group)
+    public function parent($group, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         return $this->configManager->get(
-            sprintf('%s.%s', self::CONFIG_NAME, $group)
+            sprintf('%s.%s', self::CONFIG_NAME, $group),$siteKey
         );
     }
 
@@ -180,9 +186,10 @@ class ConfigHandler
      * @return void
      * @throws \Xpressengine\Config\Exceptions\InvalidArgumentException
      */
-    public function setParent($group)
+    public function setParent($group, $siteKey = null)
     {
-        $this->configManager->add(sprintf('%s.%s', self::CONFIG_NAME, $group), []);
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+        $this->configManager->add(sprintf('%s.%s', self::CONFIG_NAME, $group), [],$siteKey);
     }
 
     /**

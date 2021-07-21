@@ -84,6 +84,10 @@ class MenuMigration extends Migration
             $table->boolean('activated')->default(true)->comment('value of menu item activating');
             $table->string('options')->default('')->comment('options');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
+
             $table->primary('id');
         });
 
@@ -103,12 +107,12 @@ class MenuMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         // 홈 메뉴 설정.
-        \DB::table('config')->insert(['name' => 'menu', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'site', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]']);
+        \DB::table('config')->insert(['name' => 'menu', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'site', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]', 'site_key' => $site_key]);
     }
 
     /**

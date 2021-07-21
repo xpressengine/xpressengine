@@ -13,6 +13,7 @@
  */
 
 namespace Xpressengine\Permission;
+use XeSite;
 
 /**
  * Class Instance
@@ -46,8 +47,9 @@ class Instance
      * @param string $name    permission name
      * @param string $siteKey site key
      */
-    public function __construct($name, $siteKey = 'default')
+    public function __construct($name, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         $this->siteKey = $siteKey;
         $this->name = $name;
     }

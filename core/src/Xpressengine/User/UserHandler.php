@@ -223,8 +223,14 @@ class UserHandler
         }
 
         // join group
+        $config = app('xe.config')->get('user.register');
+        $joinGroup = $config->get('joinGroup');
+
         $groupIds = array_get($data, 'group_id', []);
-        if (count($groupIds) > 0) {
+        //설치단계에선 그룹생성보다 이게 먼저여서 패스해야됨.
+        if (count($groupIds) < 1 && $joinGroup != null) $groupIds[] = $joinGroup;
+
+        if(count($groupIds) > 0){
             $user->joinGroups($groupIds);
         }
 
@@ -293,6 +299,12 @@ class UserHandler
 
         // resolve group
         $groups = array_get($userData, 'group_id');
+
+        // set default group added
+        $config = app('xe.config')->get('user.register');
+        $joinGroup = $config->get('joinGroup');
+
+        if ($groups === null || count($groups) < 1) $groups[] = $joinGroup;
 
         // email, display_name, introduction, password, status, rating
         $userData = array_except($userData, ['group_id', 'profile_img_file']);

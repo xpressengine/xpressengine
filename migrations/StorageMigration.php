@@ -54,7 +54,9 @@ class StorageMigration extends Migration
             $table->integer('download_count')->default(0)->comment('download count');
             $table->timestamp('created_at')->nullable()->comment('created date');
             $table->timestamp('updated_at')->nullable()->comment('updated date');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->primary('id');
             $table->unique(['disk', 'path', 'filename'], 'findKey');
             $table->index('origin_id');
@@ -68,7 +70,9 @@ class StorageMigration extends Migration
             $table->string('file_id', 36)->comment('file ID');
             $table->string('fileable_id', 36)->comment('target ID. If Document uploaded a file, [fileable_id] is document ID.');
             $table->timestamp('created_at')->nullable()->comment('created date');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+            $table->index('site_key');
             $table->unique(['file_id', 'fileable_id']);
         });
     }
