@@ -12,6 +12,13 @@
                     @endif
                     <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'filebox') }}"/>
                 </span>
+                @if(isset($args['file']))
+                    <label>
+                    <span class="btn btn-default btn-sm">
+                        <input type="checkbox" class="__xe_delete_file_{{ $seq }}" value="__delete_file__" /> 삭제
+                    </span>
+                    </label>
+                @endif
                 </div>
                 <div class="col-md-10 col-sm-9 text-right">
                     <div class="__xe_file_info_{{ $seq }}">
@@ -52,5 +59,19 @@
                 $('.__xe_file_info_{{ $seq }}').empty().append(file.name)
             }
         );
+
+        $('input.__xe_delete_file_{{ $seq }}').change(function () {
+            var btn = $('.__xe_imagebox_{{ $seq }} .__xe_inputBtn');
+            var file = $('.__xe_file_{{ $seq }}');
+            if (this.checked) {
+                btn.attr('disabled', 'disabled');
+                file.attr('disabled', 'disabled')
+                $(this).attr('name', '{{ array_get($args, 'name', 'filebox') }}')
+            } else {
+                btn.removeAttr('disabled');
+                file.removeAttr('disabled');
+                $(this).removeAttr('name');
+            }
+        });
     });
 </script>
