@@ -4,6 +4,13 @@
     @if(!count($skins))
         <p class="text-danger">{{ xe_trans('xe::alertNoWidgetSkins') }}</p>
     @else
+
+    @foreach($skins as $id => $entity)
+        @if ($screenshot = $entity->getScreenshot())
+            <img src="{{ $screenshot }}" />
+        @endif
+    @endforeach
+
     <select class="form-control __xe_select_widgetskin" id="selectWidget" name="widget_skin">
         <option value="select-skin">{{ xe_trans('xe::choose') }}</option>
         @foreach($skins as $id => $entity)
