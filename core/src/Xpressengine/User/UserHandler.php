@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
@@ -30,6 +31,7 @@ use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\Repositories\UserRepositoryInterface;
+use Illuminate\Events\Dispatcher;
 
 /**
  * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다.
@@ -106,6 +108,7 @@ class UserHandler
      * @param Hasher                          $hasher        해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator     유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
      * @param ConfigManager                   $configManager ConfigManager
+     * @param Dispatcher                      $events        event dispatcher
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -116,7 +119,8 @@ class UserHandler
         UserImageHandler $imageHandler,
         Hasher $hasher,
         Validator $validator,
-        ConfigManager $configManager
+        ConfigManager $configManager,
+        Dispatcher $events
     ) {
         $this->users = $users;
         $this->accounts = $accounts;
@@ -127,6 +131,7 @@ class UserHandler
         $this->pendingEmails = $pendingEmails;
         $this->imageHandler = $imageHandler;
         $this->configManager = $configManager;
+        $this->events = $events;
     }
 
     /**
@@ -208,6 +213,7 @@ class UserHandler
         }
 
         $user = $this->users()->create($userData);
+        $this->events->dispatch(new Registered($userData));
 
         // insert mail, delete pending mail
         if (isset($userData['email'])) {
@@ -248,6 +254,7 @@ class UserHandler
                     'token_secret' => array_get($accountData, 'token_secret'),
                 ]
             );
+
             $user->accounts()->save($account);
         }
 

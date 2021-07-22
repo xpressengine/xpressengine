@@ -246,7 +246,8 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.image'],
                 $app['hash'],
                 $app['validator'],
-                $app['xe.config']
+                $app['xe.config'],
+                $app['events']
             );
             return $userHandler;
         });
