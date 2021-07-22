@@ -34,11 +34,12 @@ class DynamicFieldMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
         \DB::table('config')->insert([
             'name' => 'dynamicField',
-            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false}'
+            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false}',
+            'site_key' => $site_key
         ]);
     }
 

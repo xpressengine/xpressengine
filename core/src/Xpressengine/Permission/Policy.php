@@ -18,6 +18,7 @@ use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\User\UserInterface;
+use XeSite;
 
 /**
  * Abstract class Policy
@@ -63,8 +64,9 @@ abstract class Policy
      * @param string $siteKey site key name
      * @return Permission|null
      */
-    protected function get($name, $siteKey = 'default')
+    protected function get($name, $siteKey = null)
     {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
         return $this->perm->get($name, $siteKey);
     }
 

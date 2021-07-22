@@ -173,6 +173,10 @@ class LogHandler
      */
     public function log($data)
     {
+        //로드밸런서를 쓰는경우 리얼 클라이언트 아이피가 기록되도록 수정
+        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $data['ipaddress'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        }
         return $this->repository->create($data);
     }
 

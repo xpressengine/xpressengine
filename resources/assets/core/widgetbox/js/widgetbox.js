@@ -366,9 +366,12 @@
         // remove widget
         _this.$editor.on('click', '.btn-remove-widget', function (e) {
           e.stopPropagation()
-
+          var _confirm = window.confirm('위젯을 삭제하시겠습니까?')
           var $widget = $(this).closest('.widget')
-          _this.removeWidget($widget.data('uid'))
+
+          if(_confirm) {
+            _this.removeWidget($widget.data('uid'))
+          }
         })
         // open widget config
         _this.$editor.on('click', '.btn-widget-config', function (e) {

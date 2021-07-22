@@ -46,6 +46,9 @@ class TagMigration extends Migration
             $table->string('decomposed')->comment('decomposed. for auto complete.');
             $table->integer('count')->default(0)->comment('same tag registrations count');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
             $table->index('instance_id');
             $table->index('decomposed');
         });
@@ -60,6 +63,9 @@ class TagMigration extends Migration
             $table->integer('position')->default(0)->comment('position number within same [taggable_id]');
             $table->timestamp('created_at')->nullable()->comment('created date');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
             $table->unique(['tag_id', 'taggable_id']);
         });
     }

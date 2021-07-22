@@ -33,10 +33,10 @@ class SkinMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        \DB::table('config')->insert(['name' => 'skins', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'skins.selected', 'vars' => '[]']);
-        \DB::table('config')->insert(['name' => 'skins.configs', 'vars' => '[]']);
+        \DB::table('config')->insert(['name' => 'skins', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'skins.selected', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('config')->insert(['name' => 'skins.configs', 'vars' => '[]', 'site_key' => $site_key]);
     }
 }

@@ -112,4 +112,29 @@ class UserGroup extends DynamicModel implements GroupInterface
     {
         return $this->count;
     }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+    }
 }

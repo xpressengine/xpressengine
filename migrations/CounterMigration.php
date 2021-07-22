@@ -49,6 +49,10 @@ class CounterMigration extends Migration
             $table->string('ipaddress', 16)->comment('IP address');
             $table->timestamp('created_at')->nullable()->comment('created date');
 
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+
+            $table->index('site_key');
+
             $table->index(['target_id', 'user_id']);
             $table->index(['target_id', 'counter_name']);
         });
@@ -59,8 +63,41 @@ class CounterMigration extends Migration
      *
      * @return void
      */
-    public function installed()
+    public function installed($site_key = 'default')
     {
-        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
+        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}','site_key'=>$site_key]);
+    }
+
+    /**
+     * check updated
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if(Schema::hasColumn('counter_log', 'site_key') == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * run update
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if(Schema::hasColumn('counter_log', 'site_key') == false) {
+            Schema::table('counter_log', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
     }
 }

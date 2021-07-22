@@ -143,9 +143,20 @@ class User extends DynamicModel implements
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function groups()
+    public function allSiteGroups()
     {
         return $this->belongsToMany(UserGroup::class, 'user_group_user', 'user_id', 'group_id');
+    }
+
+    /**
+     * set relationship with user groups
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function groups()
+    {
+        $site_key = $this->site_key == null ? \XeSite::getCurrentSiteKey() : $this->site_key;
+        return $this->belongsToMany(UserGroup::class, 'user_group_user', 'user_id', 'group_id')->where('site_key',$site_key);
     }
 
     /**

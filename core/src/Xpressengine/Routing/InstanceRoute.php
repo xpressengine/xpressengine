@@ -15,6 +15,7 @@
 namespace Xpressengine\Routing;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Site\Site;
 
 /**
@@ -55,6 +56,17 @@ class InstanceRoute extends DynamicModel
      * @var array
      */
     protected $guarded = ['id'];
+
+
+    /**
+     * Aggregator relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function MenuItem()
+    {
+        return $this->belongsTo(MenuItem::class,'instance_id','id');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

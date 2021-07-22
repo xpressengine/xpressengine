@@ -206,13 +206,13 @@
                 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
                 {!! $content !!}
             </div>
-        </div>
-    </div>
 
-    <div class="footer">
-        <span>Copyright ©2015 <a href="http://xpressengine.io">XpressEngine.</a> All rights reserved.</span>
-        <em class="pull-r">Version {{ __XE_VERSION__ }} @if($installedVersion !== __XE_VERSION__)
-                (installed Version: {{ $installedVersion }} - <a href="{{ route('settings.coreupdate.show') }}">update XE</a>) @endif </em>
+            <div class="footer">
+                <span>Copyright ©2015 <a href="http://xpressengine.io">XpressEngine.</a> All rights reserved.</span>
+                <em class="pull-r">Version {{ __XE_VERSION__ }} @if($installedVersion !== __XE_VERSION__)
+                        (installed Version: {{ $installedVersion }} - <a href="{{ route('settings.coreupdate.show') }}">update XE</a>) @endif </em>
+            </div>
+        </div>
     </div>
 </div>
 <div class="dim"></div>

@@ -90,13 +90,14 @@ class ConfigHandler
      * @param string $instanceId instance id
      * @return ConfigEntity
      */
-    public function get($instanceId = null)
+    public function get($instanceId = null,$site_key = null)
     {
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
         if ($instanceId === null) {
-            return $this->configManager->get(self::CONFIG_NAME);
+            return $this->configManager->get(self::CONFIG_NAME, false, $site_key);
         } else {
             return $this->configManager->get(
-                sprintf('%s.%s', self::CONFIG_NAME, $instanceId)
+                sprintf('%s.%s', self::CONFIG_NAME, $instanceId), false, $site_key
             );
         }
     }
@@ -107,9 +108,10 @@ class ConfigHandler
      * @param string $instanceId instance id
      * @return ConfigEntity
      */
-    public function getOrDefault($instanceId)
+    public function getOrDefault($instanceId,$site_key = null)
     {
-        $config = $this->get($instanceId);
+        $site_key = $site_key == null ? \XeSite::getCurrentSiteKey() : $site_key;
+        $config = $this->get($instanceId, $site_key);
         if ($config === null) {
             $config = $this->getDefault();
         }

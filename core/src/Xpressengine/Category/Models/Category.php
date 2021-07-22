@@ -41,7 +41,7 @@ class Category extends Aggregator
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'site_key'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -108,5 +108,30 @@ class Category extends Aggregator
     public function getCountName()
     {
         return 'count' ;
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::updating(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
+        self::saving(function($model){
+            if(!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
+            }
+        });
+
     }
 }
