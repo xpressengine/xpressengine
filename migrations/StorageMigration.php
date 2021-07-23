@@ -37,7 +37,6 @@ class StorageMigration extends Migration
      */
     public function install()
     {
-
         Schema::create('files', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
@@ -75,5 +74,45 @@ class StorageMigration extends Migration
             $table->index('site_key');
             $table->unique(['file_id', 'fileable_id']);
         });
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if (Schema::hasColumn('files', 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn('fileables', 'site_key') == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if (Schema::hasColumn('files', 'site_key') == false) {
+            Schema::table('files', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn('fileables', 'site_key') == false) {
+            Schema::table('fileables', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
     }
 }
