@@ -85,4 +85,55 @@ class MediaMigration extends Migration
             $table->index('file_id');
         });
     }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if (Schema::hasColumn('files_image', 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn('files_video', 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn('files_audio', 'site_key') == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if (Schema::hasColumn('files_image', 'site_key') == false) {
+            Schema::table('files_image', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn('files_video', 'site_key') == false) {
+            Schema::table('files_video', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn('files_audio', 'site_key') == false) {
+            Schema::table('files_audio', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+    }
 }
