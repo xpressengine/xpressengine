@@ -140,7 +140,11 @@ abstract class AbstractPresenter implements PresenterInterface
             }
         } else {
             foreach (Arr::get($data, 'widgets', []) as $widget) {
-                $content .= $this->getWidget($widget);
+                $activate = Arr::get($widget['@attributes'], 'activate');
+
+                if ($activate === 'activate') {
+                    $content .= $this->getWidget($widget);
+                }
             }
         }
 

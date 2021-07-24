@@ -129,8 +129,9 @@ class WidgetController extends Controller
         }
 
         $title = array_get($inputs, '@attributes.title', '');
+        $activate = array_get($inputs, '@attributes.activate', 'activate');
 
-        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title'));
+        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title', 'activate'));
     }
 
     /**
@@ -158,8 +159,8 @@ class WidgetController extends Controller
         }
 
         $widget = array_get($inputs, '@attributes.id');
-
         $title = array_get($inputs, '@attributes.title', '');
+        $activate = array_get($inputs, '@attributes.activate', 'activate');
 
         // widget list
         $widgetList = $widgetHandler->getAll();
@@ -180,7 +181,7 @@ class WidgetController extends Controller
         $skin = $skinHandler->get($skin);
         $skinForm = $skin->renderSetting($inputs);
 
-        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm', 'code'));
+        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'activate', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm', 'code'));
     }
 
     /**

@@ -198,9 +198,14 @@ class WidgetBoxController extends Controller
                     $skinNames[$skinId] = $class->getTitle();
                     $content[$i1][$i2]['widgets'][$i3]['widgetName'] = $widgetNames[$info['@attributes']['id']];
                     $content[$i1][$i2]['widgets'][$i3]['skinName'] = $class->getTitle();
+
+                    if (empty($content[$i1][$i2]['widgets'][$i3]['@attributes']['activate'])) {
+                        $content[$i1][$i2]['widgets'][$i3]['@attributes']['activate'] = 'activate';
+                    }
                 }
             }
         }
+
 
         return XePresenter::makeApi([
             'presenter' => $widgetbox->getPresenter(),
