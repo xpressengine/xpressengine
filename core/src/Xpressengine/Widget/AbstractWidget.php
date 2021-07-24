@@ -14,10 +14,14 @@
 
 namespace Xpressengine\Widget;
 
+use Exception;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
+use Xpressengine\Plugin\SupportInfoTrait;
 use Xpressengine\Skin\AbstractSkin;
+use Xpressengine\Storage\File;
 use Xpressengine\User\Rating;
 
 /**
@@ -34,7 +38,7 @@ use Xpressengine\User\Rating;
  */
 abstract class AbstractWidget implements ComponentInterface, Renderable
 {
-    use ComponentTrait;
+    use ComponentTrait, SupportInfoTrait;
 
     /**
      * @var array
@@ -107,11 +111,87 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      *
      * @param array $args 설정값
      *
+     * @throws Exception
+     *
      * @return string
      */
     public function renderSetting(array $args = [])
     {
-        return '';
+        if ($args === null) {
+            $args = $this->setting();
+        }
+
+        try{
+            $view = $this->info('setting');
+        }
+        catch (\ErrorException  $exception) {
+            $view = null;
+        }
+
+        if (is_null($view)) {
+            return '';
+        } elseif (is_string($view)) {
+            return view($this->view($view), compact('config', '_skin'));
+        } elseif (is_array($view)) {
+            return $this->makeConfigView($view, $args);
+        }
+    }
+
+    /**
+     * view 반환한다.
+     *
+     * @param string $view view name
+     *
+     * @return string
+     */
+    protected function view($view)
+    {
+        return str_replace('/', '.', static::$path) . '.views.' . $view;
+    }
+
+    /**
+     * `info.php`에 적혀있는 settings 값을 바탕으로 폼을 생성하고 반환.
+     *
+     * @param array $info setting form info
+     * @param array $data old config data
+     * @return string
+     * @throws Exception
+     */
+    protected function makeConfigView(array $info, array $data)
+    {
+        foreach ($info as $name => &$field) {
+            $this->coverMediaLibraryImageData($field, $data, $name);
+        }
+
+        return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $data]);
+    }
+
+    /**
+     * `medialibraryImage` Input Type 에서 사용할 수 있는 데이터로 값을 변경
+     *
+     * @param array $field
+     * @param array $data
+     * @param string $name
+     */
+    private function coverMediaLibraryImageData(array &$field, array $data, $name)
+    {
+        $type = Arr::get($field, '_type');
+        $limit = Arr::get($field, 'limit');
+        $fileId = Arr::get($data, $name);
+
+        if ($type !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
+            return;
+        }
+
+        if ($file = File::find($fileId)) {
+            $value = [
+                'file_id' => $file->getAttribute("id"),
+                'mime' => $file->getAttribute("mime"),
+                'preview' => $file->url(),
+            ];
+
+            $field['files'] = [$value];
+        }
     }
 
     /**
@@ -138,6 +218,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
         if ($config !== null) {
             $this->config = $config;
         }
+
         return $this->config;
     }
 }
