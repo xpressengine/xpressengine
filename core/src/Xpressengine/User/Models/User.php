@@ -73,7 +73,7 @@ class User extends DynamicModel implements
      *
      * @var array
      */
-    protected $visible = ['id', 'display_name', 'introduction',];
+    protected $visible = ['id', 'display_name', 'introduction', 'profileImage'];
 
     /**
      * The accessors to append to the model's array form.
