@@ -19,7 +19,9 @@
             @if($permission !== null)
                 <button type="button" class="xe-btn __xe_btnPermission" data-target="#permission-modal" data-toggle="modal">{{ xe_trans('xe::permissionSettings') }}</button>
             @endif
+
             <button type="button" class="xe-btn" id="btn-preview" data-url="{{ route('widgetbox.preview', ['id' => $widgetbox->id]) }}">{{ xe_trans('xe::preview') }}</button>
+            <button type="button" class="xe-btn" id="btn-reset" onClick="window.location.reload()">{{ xe_trans('xe::reset') }}</button>
             <button type="button" class="xe-btn xe-btn-primary" id="btn-save" data-url="{{ route('widgetbox.update', ['id' => $widgetbox->id]) }}"><i class="xi-check"></i>{{ xe_trans('xe::save') }}</button>
         </div>
     </header>
