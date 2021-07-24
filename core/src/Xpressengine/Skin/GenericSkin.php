@@ -252,7 +252,9 @@ abstract class GenericSkin extends AbstractSkin
      * info.php에 등록돼 있는 setting 폼 리스트를 가져와 form을 생성하여 반환한다.
      *
      * @param array $info setting form info
-     * @param array $old  old config data
+     * @param array $old old config data
+     *
+     * @throws \Exception
      *
      * @return string
      */
