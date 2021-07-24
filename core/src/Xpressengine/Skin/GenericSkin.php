@@ -15,9 +15,11 @@
 namespace Xpressengine\Skin;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Plugin\SupportInfoTrait;
 use View;
+use Xpressengine\Storage\File;
 
 /**
  * 편의를 위해 AbstractSkin을 확장한 클래스. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -256,7 +258,39 @@ abstract class GenericSkin extends AbstractSkin
      */
     protected function makeConfigView(array $info, $old)
     {
+        foreach ($info as $name => &$field) {
+            $this->coverMediaLibraryImageData($field, $old, $name);
+        }
+
         return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
+    }
+
+    /**
+     * `medialibraryImage` Input Type 에서 사용할 수 있는 데이터로 값을 변경
+     *
+     * @param array $field
+     * @param array $data
+     * @param string $name
+     */
+    private function coverMediaLibraryImageData(array &$field, array $data, $name)
+    {
+        $type = Arr::get($field, '_type');
+        $limit = Arr::get($field, 'limit');
+        $fileId = Arr::get($data, $name);
+
+        if ($type !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
+            return;
+        }
+
+        if ($file = File::find($fileId)) {
+            $value = [
+                'file_id' => $file->getAttribute("id"),
+                'mime' => $file->getAttribute("mime"),
+                'preview' => $file->url(),
+            ];
+
+            $field['files'] = [$value];
+        }
     }
 
     /**
