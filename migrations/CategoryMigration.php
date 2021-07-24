@@ -83,4 +83,56 @@ class CategoryMigration extends Migration
             $table->index('descendant');
         });
     }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        if (Schema::hasColumn('category', 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn('category_item', 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn('category_closure', 'site_key') == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        if (Schema::hasColumn('category', 'site_key') == false) {
+            Schema::table('category', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn('category_item', 'site_key') == false) {
+            Schema::table('category_item', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn('category_closure', 'site_key') == false) {
+            Schema::table('category_closure', function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+    }
+
 }
