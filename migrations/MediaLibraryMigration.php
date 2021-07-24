@@ -113,6 +113,14 @@ class MediaLibraryMigration extends Migration
             return false;
         }
 
+        if (Schema::hasColumn($this->fileTableName, 'site_key') == false) {
+            return false;
+        }
+
+        if (Schema::hasColumn($this->folderTableName, 'site_key') == false) {
+            return false;
+        }
+
         return true;
     }
 
@@ -187,6 +195,21 @@ class MediaLibraryMigration extends Migration
 
         if ($this->checkAllFileHasUseCount() === false) {
             $this->updateFileUseCount();
+        }
+
+
+        if (Schema::hasColumn($this->fileTableName, 'site_key') == false) {
+            Schema::table($this->fileTableName, function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
+        }
+
+        if (Schema::hasColumn($this->folderTableName, 'site_key') == false) {
+            Schema::table($this->folderTableName, function (Blueprint $table) {
+                $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+                $table->index('site_key');
+            });
         }
     }
 
