@@ -15,6 +15,7 @@
 namespace Xpressengine\Plugin;
 
 use Illuminate\Support;
+use Illuminate\Support\Arr;
 
 /**
  * Trait SupportInfoTrait
@@ -96,7 +97,7 @@ trait SupportInfoTrait
      * @param array $info
      * @param array $data
      */
-    public static function covertInfoMediaLibraryImage(array &$info, array $data)
+    public static function convertInfoMediaLibraryImage(array &$info, array $data)
     {
         foreach ($info as $name => &$field) {
             $type = Support\Arr::get($field, '_type');
@@ -107,6 +108,8 @@ trait SupportInfoTrait
             }
 
             $fileIds = is_array($fileIds) ? $fileIds : array($fileIds);
+            $fileIds = Arr::has($fileIds, 'item') ? $fileIds['item'] : $fileIds;
+
             $files = \Xpressengine\Storage\File::whereIn('id', $fileIds)->get();
 
             if ($files->count() == 0) {
@@ -129,5 +132,27 @@ trait SupportInfoTrait
                 ];
             }
         }
+    }
+
+    public static function convertDataMediaLibraryImage($key, &$data)
+    {
+        $info = static::info($key);
+
+        if (! is_array($info) || !is_array($data)) {
+            return null;
+        }
+
+        static::convertInfoMediaLibraryImage($info, $data);
+
+        foreach ($info as $name => $field) {
+            if (array_has($data, $name) && array_key_exists('files', $field) && count($field['files']) > 0) {
+                $files = $field['files'];
+
+                $data[$name] = count($files) == 1
+                    ? $files[0]['preview']
+                    : array_map(function($file) { return $file['preview']; }, $files);
+            }
+        }
+
     }
 }

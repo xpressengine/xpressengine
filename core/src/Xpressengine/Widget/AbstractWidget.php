@@ -16,13 +16,10 @@ namespace Xpressengine\Widget;
 
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\SupportInfoTrait;
 use Xpressengine\Skin\AbstractSkin;
-use Xpressengine\Storage\File;
 use Xpressengine\User\Rating;
 
 /**
@@ -68,6 +65,15 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     protected function init()
     {
+        if ($this->config !== null) {
+            $this->convertDataMediaLibraryImage('setting', $this->config);
+
+            if ($skinId = array_get($this->config, '@attributes.skin-id')) {
+                if ($skin = app('xe.skin')->get($skinId, $this->config)) {
+                    $skin->getClass()::convertDataMediaLibraryImage('setting', $this->config);
+                }
+            }
+        }
     }
 
     /**
@@ -160,7 +166,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     protected function makeConfigView(array $info, array $data)
     {
-        $this->covertInfoMediaLibraryImage($info, $data);
+        $this->convertInfoMediaLibraryImage($info, $data);
         return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $data]);
     }
 

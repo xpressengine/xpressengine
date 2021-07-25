@@ -14,13 +14,10 @@
 
 namespace Xpressengine\Skin;
 
+use View;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Plugin\SupportInfoTrait;
-use View;
-use Xpressengine\Storage\File;
 
 /**
  * 편의를 위해 AbstractSkin을 확장한 클래스. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -253,15 +250,13 @@ abstract class GenericSkin extends AbstractSkin
      * info.php에 등록돼 있는 setting 폼 리스트를 가져와 form을 생성하여 반환한다.
      *
      * @param array $info setting form info
-     * @param array $old old config data
-     *
-     * @throws \Exception
+     * @param array $old  old config data
      *
      * @return string
      */
-    protected function makeConfigView(array $info, array $old)
+    protected function makeConfigView(array $info, $old)
     {
-        $this->covertInfoMediaLibraryImage($info, $old);
+        $this->convertInfoMediaLibraryImage($info, $old);
         return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
     }
 
