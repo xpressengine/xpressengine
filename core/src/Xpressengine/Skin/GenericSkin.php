@@ -16,6 +16,7 @@ namespace Xpressengine\Skin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Plugin\SupportInfoTrait;
 use View;
@@ -280,7 +281,7 @@ abstract class GenericSkin extends AbstractSkin
         $limit = Arr::get($field, 'limit');
         $fileId = Arr::get($data, $name);
 
-        if ($type !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
+        if (Str::camel($type) !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
             return;
         }
 
