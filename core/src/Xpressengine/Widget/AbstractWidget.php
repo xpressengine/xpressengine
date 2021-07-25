@@ -17,6 +17,7 @@ namespace Xpressengine\Widget;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\SupportInfoTrait;
@@ -179,7 +180,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
         $limit = Arr::get($field, 'limit');
         $fileId = Arr::get($data, $name);
 
-        if ($type !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
+        if (Str::camel($type) !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
             return;
         }
 
