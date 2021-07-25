@@ -38,7 +38,7 @@ class DynamicFieldMigration extends Migration
     {
         \DB::table('config')->insert([
             'name' => 'dynamicField',
-            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false}',
+            'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false, "protect": false}',
             'site_key' => $site_key
         ]);
     }
@@ -53,6 +53,10 @@ class DynamicFieldMigration extends Migration
     public function checkUpdated($installedVersion = null)
     {
         $isLatest = true;
+
+        if ($this->checkNeedProtectInDefault() == true) {
+            return false;
+        }
 
         if ($this->checkNeedTableMerge() == true) {
             return false;
@@ -70,6 +74,10 @@ class DynamicFieldMigration extends Migration
      */
     public function update($installedVersion = null)
     {
+        if ($this->checkNeedProtectInDefault() == true) {
+            $this->addProtectInDefault();
+        }
+
         if ($this->checkNeedTableMerge() == true) {
             $this->tableMerge();
         }
@@ -100,6 +108,19 @@ class DynamicFieldMigration extends Migration
         }
 
         return false;
+    }
+
+    /**
+     * Dynamic Field 기본 값에 protect 키가 생성되어 있는지 확인합니다.
+     *
+     * @return bool
+     */
+    private function checkNeedProtectInDefault()
+    {
+        $dynamicFieldConfigHandler = app('xe.dynamicField')->getConfigHandler();
+        $defaultConfigEntity = $dynamicFieldConfigHandler->getDefault();
+
+        return $defaultConfigEntity->offsetExists('protect') === false;
     }
 
     /**
@@ -227,5 +248,17 @@ class DynamicFieldMigration extends Migration
             $config->get('group'),
             $config->get('id')
         );
+    }
+
+    /**
+     * Dynamic Field 기본 값에 protect 키를 생성합니다.
+     */
+    private function addProtectInDefault()
+    {
+        $dynamicFieldConfigHandler = app('xe.dynamicField')->getConfigHandler();
+        $defaultConfigEntity = $dynamicFieldConfigHandler->getDefault();
+
+        $defaultConfigEntity->set('protect', false);
+        \XeConfig::modify($defaultConfigEntity);
     }
 }
