@@ -289,6 +289,8 @@ var DynamicField = function DynamicField() {
 
     _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(row).call(row, 'td.__xe_column_skinName').html(data.skinName);
 
+    _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(row).call(row, 'td.__xe_column_protect').html(data.protect == true ? 'True' : 'False');
+
     _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(row).call(row, 'td.__xe_column_use').html(data.use == true ? 'True' : 'False');
 
     if (_babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(_context7 = _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(_context8 = this.$container).call(_context8, '.__xe_tbody')).call(_context7, '.__xe_row_' + data.id).length != 0) {
@@ -368,11 +370,15 @@ var DynamicField = function DynamicField() {
 
         _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[name="searchable"]').val(that.checkBox(response.config.searchable) ? 'true' : 'false');
 
+        _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[name="protect"]').val(that.checkBox(response.config.protect) ? 'true' : 'false');
+
         _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[data-name="use"]').prop('checked', that.checkBox(response.config.use));
 
         _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[data-name="required"]').prop('checked', that.checkBox(response.config.required));
 
         _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[data-name="searchable"]').prop('checked', that.checkBox(response.config.searchable));
+
+        _babel_runtime_corejs3_core_js_stable_instance_find__WEBPACK_IMPORTED_MODULE_2___default()(form).call(form, '[data-name="protect"]').prop('checked', that.checkBox(response.config.protect));
 
         that.getSkinOption(form);
       }

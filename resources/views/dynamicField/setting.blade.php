@@ -14,6 +14,7 @@
             <th>{{xe_trans('xe::label')}}</th>
             <th>{{xe_trans('xe::type')}}</th>
             <th>{{xe_trans('xe::skin')}}</th>
+            <th>삭제방지</th>
             <th>{{xe_trans('xe::use')}}</th>
             <th>{{xe_trans('xe::config')}}</th>
             <th>{{xe_trans('xe::delete')}}</th>
@@ -26,6 +27,7 @@
             <td class="__xe_column_label"></td>
             <td class="__xe_column_typeName"></td>
             <td class="__xe_column_skinName"></td>
+            <td class="__xe_column_protect"></td>
             <td class="__xe_column_use"></td>
             <td>
                 <a class="text-light-blue __xe_btn_edit" href="#">{{xe_trans('xe::edit')}}</a>
@@ -94,6 +96,8 @@
                 <input type="hidden" name="required" value="true" />
                 <input type="hidden" name="sortable" value="true" />
                 <input type="hidden" name="searchable" value="true" />
+                <input type="hidden" name="protect" value="false" />
+
                 <div class="checkbox mg-reset mg-bottom">
                     <label>
                         <input type="checkbox" class="__xe_checkbox-config" data-name="use" checked="checked"/>
@@ -114,6 +118,13 @@
                         {{xe_trans('xe::searchable')}}
                     </label>
                     <small>{{xe_trans('xe::dynamicFieldSearchableDescription')}}</small>
+                </div>
+                <div class="checkbox mg-reset mg-bottom">
+                    <label>
+                        <input type="checkbox" class="__xe_checkbox-config" data-name="protect" />
+                        삭제방지
+                    </label>
+                    <small>삭제방지가 활성화 되어 있으면 삭제가 제한됩니다.</small>
                 </div>
             </div>
             <div class="form-group">
