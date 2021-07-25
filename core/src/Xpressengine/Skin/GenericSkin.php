@@ -259,41 +259,10 @@ abstract class GenericSkin extends AbstractSkin
      *
      * @return string
      */
-    protected function makeConfigView(array $info, $old)
+    protected function makeConfigView(array $info, array $old)
     {
-        foreach ($info as $name => &$field) {
-            $this->coverMediaLibraryImageData($field, $old, $name);
-        }
-
+        $this->covertInfoMediaLibraryImage($info, $old);
         return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
-    }
-
-    /**
-     * `medialibraryImage` Input Type 에서 사용할 수 있는 데이터로 값을 변경
-     *
-     * @param array $field
-     * @param array $data
-     * @param string $name
-     */
-    private function coverMediaLibraryImageData(array &$field, array $data, $name)
-    {
-        $type = Arr::get($field, '_type');
-        $limit = Arr::get($field, 'limit');
-        $fileId = Arr::get($data, $name);
-
-        if (Str::camel($type) !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
-            return;
-        }
-
-        if ($file = File::find($fileId)) {
-            $value = [
-                'file_id' => $file->getAttribute("id"),
-                'mime' => $file->getAttribute("mime"),
-                'preview' => $file->url(),
-            ];
-
-            $field['files'] = [$value];
-        }
     }
 
     /**
