@@ -57,7 +57,7 @@
                 </div>
                 <div class="sort-list__checkradio">
                     <label class="xu-label-checkradio">
-                        <input type="checkbox" class="__udfield-protect" name="dynamic_fields[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('protect') === true) checked @endif>
+                        <input type="checkbox" class="__udfield-protect" name="df_protect[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('protect') === true) checked @endif>
                         <span class="xu-label-checkradio__helper"></span>
                     </label>
                 </div>
