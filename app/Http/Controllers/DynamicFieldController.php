@@ -15,6 +15,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
@@ -288,6 +289,9 @@ class DynamicFieldController extends Controller
      * Destroy a field.
      *
      * @param Request $request request
+     *
+     * @throws HttpException
+     *
      * @return \Xpressengine\Presenter\Presentable
      */
     public function destroy(Request $request)
@@ -303,6 +307,10 @@ class DynamicFieldController extends Controller
         $configHandler = $dynamicField->getConfigHandler();
 
         $config = $configHandler->get($request->get('group'), $request->get('id'));
+
+        if ($config->get('protect', false)) {
+            throw new HttpException(400, sprintf("%s Dynamic Field protected.", $request->get('id')));
+        }
 
         $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->drop($config);

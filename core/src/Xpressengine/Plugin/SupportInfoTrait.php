@@ -14,6 +14,9 @@
 
 namespace Xpressengine\Plugin;
 
+use Illuminate\Support;
+use Illuminate\Support\Arr;
+
 /**
  * Trait SupportInfoTrait
  *
@@ -74,12 +77,82 @@ trait SupportInfoTrait
     public static function info($key = null, $default = null)
     {
         if (static::$info === null) {
-            static::$info = include(base_path(static::getPath().'/'.'info.php'));
+            try {
+                static::$info = include(base_path(static::getPath().'/'.'info.php'));
+            } catch (\ErrorException $exception) {
+                return $default;
+            }
         }
 
         if ($key !== null) {
             return array_get(static::$info, $key, $default);
         }
+
         return static::$info;
+    }
+
+    /**
+     * `medialibraryImage` Input 값이 화면에 출력될 수 있도록 값을 변경합니다.
+     *
+     * @param array $info
+     * @param array $data
+     */
+    public static function convertInfoMediaLibraryImage(array &$info, array $data)
+    {
+        foreach ($info as $name => &$field) {
+            $type = Support\Arr::get($field, '_type');
+            $fileIds = Support\Arr::get($data, $name);
+
+            if (Support\Str::camel($type) !== 'medialibraryImage' || empty($fileIds)) {
+                continue;
+            }
+
+            $fileIds = is_array($fileIds) ? $fileIds : array($fileIds);
+            $fileIds = Arr::has($fileIds, 'item') ? $fileIds['item'] : $fileIds;
+
+            $files = \Xpressengine\Storage\File::whereIn('id', $fileIds)->get();
+
+            if ($files->count() == 0) {
+                continue;
+            }
+
+            $field['files'] = [];
+
+            foreach ($fileIds as $fileId) {
+                $file = $files->find($fileId);
+
+                if (is_null($file)) {
+                    continue;
+                }
+
+                $field['files'][] = [
+                    'file_id' => $file->getAttribute("id"),
+                    'mime' => $file->getAttribute("mime"),
+                    'preview' => $file->url(),
+                ];
+            }
+        }
+    }
+
+    public static function convertDataMediaLibraryImage($key, &$data)
+    {
+        $info = static::info($key);
+
+        if (! is_array($info) || !is_array($data)) {
+            return null;
+        }
+
+        static::convertInfoMediaLibraryImage($info, $data);
+
+        foreach ($info as $name => $field) {
+            if (array_has($data, $name) && array_key_exists('files', $field) && count($field['files']) > 0) {
+                $files = $field['files'];
+
+                $data[$name] = count($files) == 1
+                    ? $files[0]['preview']
+                    : array_map(function($file) { return $file['preview']; }, $files);
+            }
+        }
+
     }
 }
