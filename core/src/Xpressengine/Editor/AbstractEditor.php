@@ -758,7 +758,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected function image($content)
     {
-        $list = $this->getData($content, 'img.' . $this->getImageClassName(), ['data-id', 'data-media-id', 'style', 'alt', 'title']);
+        $list = $this->getData($content, 'img.' . $this->getImageClassName(), ['data-id', 'data-media-id', 'style', 'alt', 'title', 'width', 'height']);
 
         $ids = array_column($list, 'data-id');
         $images = static::resolveImage($ids);
@@ -785,14 +785,16 @@ abstract class AbstractEditor implements ComponentInterface
                     '<' . $attrStr . ' />',
                 ],
                 sprintf(
-                    '<img src="%s" class="%s" data-id="%s" data-media-id="%s" style="%s" alt="%s" title="%s" />',
+                    '<img src="%s" class="%s" data-id="%s" data-media-id="%s" style="%s" alt="%s" title="%s" width="%s" height="%s"/>',
                     $image->url(),
                     $this->getImageClassName(),
                     $data['data-id'],
                     $data['data-media-id'],
                     $data['style'],
                     $data['alt'],
-                    $data['title']
+                    $data['title'],
+                    $data['width'],
+                    $data['height']
                 ),
                 $content
             );
