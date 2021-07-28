@@ -16,13 +16,10 @@ namespace Xpressengine\Widget;
 
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\SupportInfoTrait;
 use Xpressengine\Skin\AbstractSkin;
-use Xpressengine\Storage\File;
 use Xpressengine\User\Rating;
 
 /**
@@ -68,6 +65,15 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     protected function init()
     {
+        if ($this->config !== null) {
+            $this->convertDataMediaLibraryImage('setting', $this->config);
+
+            if ($skinId = array_get($this->config, '@attributes.skin-id')) {
+                if ($skin = app('xe.skin')->get($skinId, $this->config)) {
+                    $skin->getClass()::convertDataMediaLibraryImage('setting', $this->config);
+                }
+            }
+        }
     }
 
     /**
@@ -160,39 +166,8 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     protected function makeConfigView(array $info, array $data)
     {
-        foreach ($info as $name => &$field) {
-            $this->coverMediaLibraryImageData($field, $data, $name);
-        }
-
+        $this->convertInfoMediaLibraryImage($info, $data);
         return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $data]);
-    }
-
-    /**
-     * `medialibraryImage` Input Type 에서 사용할 수 있는 데이터로 값을 변경
-     *
-     * @param array $field
-     * @param array $data
-     * @param string $name
-     */
-    private function coverMediaLibraryImageData(array &$field, array $data, $name)
-    {
-        $type = Arr::get($field, '_type');
-        $limit = Arr::get($field, 'limit');
-        $fileId = Arr::get($data, $name);
-
-        if (Str::camel($type) !== 'medialibraryImage' || $limit !== 1 || empty($fileId)) {
-            return;
-        }
-
-        if ($file = File::find($fileId)) {
-            $value = [
-                'file_id' => $file->getAttribute("id"),
-                'mime' => $file->getAttribute("mime"),
-                'preview' => $file->url(),
-            ];
-
-            $field['files'] = [$value];
-        }
     }
 
     /**

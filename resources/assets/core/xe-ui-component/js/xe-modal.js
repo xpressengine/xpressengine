@@ -66,7 +66,7 @@
       })
     })
 
-    this.$contentWrap.css('position','static')
+    // this.$contentWrap.css('position','static') // (#1277)
 
     this.backdrop(function () {
       var transition = $.support.transition && _this.$element.hasClass('fade')
@@ -167,7 +167,7 @@
   Modal.prototype.hideModal = function () {
     var _this = this
     this.$element.hide()
-    this.$contentWrap.css('position','fixed')
+    // this.$contentWrap.css('position','fixed') // (#1277)
     this.backdrop(function () {
       _this.$body.removeClass('xe-modal-open')
       _this.resetAdjustments()

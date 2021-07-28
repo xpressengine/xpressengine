@@ -13,6 +13,7 @@
             <div class="sort-list__header-title">{{ xe_trans('xe::customItems') }}</div>
             <div class="sort-list__header-text">{{ xe_trans('xe::use') }}</div>
             <div class="sort-list__header-text">{{ xe_trans('xe::require') }}</div>
+            <div class="sort-list__header-text">삭제방지</div>
         </li>
     </ul>
 
@@ -51,6 +52,12 @@
                 <div class="sort-list__checkradio">
                     <label class="xu-label-checkradio">
                         <input type="checkbox" class="__udfield-require" name="df_required[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('required') === true) checked @endif>
+                        <span class="xu-label-checkradio__helper"></span>
+                    </label>
+                </div>
+                <div class="sort-list__checkradio">
+                    <label class="xu-label-checkradio">
+                        <input type="checkbox" class="__udfield-protect" name="df_protect[{{ $dynamicField->getConfig()->get('id') }}]" @if ($dynamicField->getConfig()->get('protect') === true) checked @endif>
                         <span class="xu-label-checkradio__helper"></span>
                     </label>
                 </div>
