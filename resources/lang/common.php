@@ -533,6 +533,10 @@ return [
         'ko' => '회원 아이디',
         'en' => 'User ID',
     ],
+    'loginId' => [
+        'ko' => '아이디',
+        'en' => 'Login ID',
+    ],
     'email' => [
         'ko' => '이메일',
         'en' => 'Email',
