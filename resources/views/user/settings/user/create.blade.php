@@ -28,7 +28,7 @@
                                         {!! XeUI::formSelect(['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
                                         {{-- rating --}}
                                         {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>xe_trans('xe::userRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
-                                        {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'group_id', 'checkboxes'=> $groups]) !!}
+                                        {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'group_id', 'checkboxes'=> $groups, 'value' => old('group_id')]) !!}
                                 </div>
                                 <div class="col-sm-12">
                                     @foreach($fieldTypes as $fieldType)
