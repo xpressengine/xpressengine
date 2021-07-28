@@ -172,10 +172,17 @@ abstract class AbstractPresenter implements PresenterInterface
         array_walk($keys, function (&$item) {
             $item = '@'. $item;
         });
+
+        $attributes = array_combine($keys, $values);
+
+        if (array_key_exists('@title', $attributes)) {
+            $attributes['@title'] = htmlentities($attributes['@title']);
+        }
+
         return call_user_func(
             static::$generator,
             Arr::get($raw, '@attributes.id'),
-            array_merge(Arr::except($raw, '@attributes'), array_combine($keys, $values))
+            array_merge(Arr::except($raw, '@attributes'), $attributes)
         );
     }
 
