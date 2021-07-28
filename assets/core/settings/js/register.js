@@ -89,6 +89,7 @@ $.widget('xe.userRegisterDynamicFiled', {
       btnDelete: '__udfield-btn-delete',
       useToggle: '__udfield-use',
       requireToggle: '__udfield-require',
+      protectToggle: '__udfield-protect',
       modal: '__xe-udfield-modal',
       form: '__xe-udfield-form',
       modalClose: '__xe-udfield-modal-close',
@@ -136,6 +137,11 @@ $.widget('xe.userRegisterDynamicFiled', {
     // require use
     this.element.on('change', '.' + this.options.classess.requireToggle, function () {
       that.requireToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
+    })
+
+    // protect use
+    this.element.on('change', '.' + this.options.classess.protectToggle, function () {
+      that.protectToggleField(that.getFieldId(this), that.getFieldTypeId(this), that.getFieldSkinId(this), $(this).prop('checked'))
     })
 
     this.$modal.on('change', '.__xe_type_id', function (e) {
@@ -308,7 +314,8 @@ $.widget('xe.userRegisterDynamicFiled', {
         } else {
           var useAttr = (res.use) ? 'checked' : ''
           var requireAttr = (res.required) ? 'checked' : ''
-          var compile = XE._.template('<li class="__udfield-item" data-field-id="<%= id %>" data-field-typeid="<%= typeId %>" data-field-skinid="<%= skinId %>"><div class="sort-list__handler"><button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler"><span class="xu-button__icon"><i class="xi-drag-vertical"></i></span></button></div><p class="sort-list__text"><%= label %></p><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-edit"><span class="xu-button__icon"><i class="xi-pen"></i></span></button></div><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-delete"><span class="xu-button__icon"><i class="xi-trash"></i></span></button></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-use" name="dynamic_fields[<%= id %>]" <%= useAttr %>><span class="xu-label-checkradio__helper"></span></label></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-require" name="df_required[<%= id %>]" <%= requireAttr %>><span class="xu-label-checkradio__helper"></span></label></div></li>')
+
+          var compile = XE._.template('<li class="__udfield-item" data-field-id="<%= id %>" data-field-typeid="<%= typeId %>" data-field-skinid="<%= skinId %>"><div class="sort-list__handler"><button type="button" class="xu-button xu-button--subtle-link xu-button--icon __handler"><span class="xu-button__icon"><i class="xi-drag-vertical"></i></span></button></div><p class="sort-list__text"><%= label %></p><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-edit"><span class="xu-button__icon"><i class="xi-pen"></i></span></button></div><div class="sort-list__button"><button type="button" class="xu-button xu-button--subtle xu-button--icon __udfield-btn-delete"><span class="xu-button__icon"><i class="xi-trash"></i></span></button></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-use" name="dynamic_fields[<%= id %>]" <%= useAttr %>><span class="xu-label-checkradio__helper"></span></label></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-require" name="df_required[<%= id %>]" <%= requireAttr %>><span class="xu-label-checkradio__helper"></span></label></div><div class="sort-list__checkradio"><label class="xu-label-checkradio"><input type="checkbox" class="__udfield-protect" name="df_protect[<%= id %>]"><span class="xu-label-checkradio__helper"></span></label></div></li>')
           var html = compile(XE._.assign(res, { useAttr: useAttr, requireAttr: requireAttr }))
           $('.__udfield-items').append(html)
         }
@@ -351,6 +358,12 @@ $.widget('xe.userRegisterDynamicFiled', {
     value = (value === true) ? 'true' : 'false'
     this.updateAttribute(id, typeId, skinId, {
       required: value
+    })
+  },
+  protectToggleField: function (id, typeId, skinId, value) {
+    value = (value === true) ? 'true' : 'false'
+    this.updateAttribute(id, typeId, skinId, {
+      protect: value
     })
   },
   checkBox: function (data) {
