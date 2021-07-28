@@ -211,12 +211,8 @@
       if (this.data['skinName'] == undefined) {
         this.data['skinName'] = ''
       }
-
-      var isActivate = this.data['@attributes']['activate'] === 'activate';
-      var deactivateStyle = isActivate ? '' : 'background-color: #c8c9cc';
-
       return [
-        '<div class="xe-well widget" style="'+ deactivateStyle +'"  data-uid="' + this.uid + '">',
+        '<div class="xe-well widget" data-uid="' + this.uid + '">',
         '<strong>' + this.data['@attributes'].title + '</strong>',
         '<span class="widget-name">' + this.data['widgetName'] + '</span>',
         '<span class="skin-name">(' + this.data['skinName'] + ')</span>',
