@@ -1093,6 +1093,10 @@ Route::group(['prefix'=>'widgetbox'], function() {
     Route::post('{id}/preview', ['as' => 'widgetbox.preview', 'uses' => 'WidgetBoxController@preview']);
     Route::get('{id}/code', ['as' => 'widgetbox.code', 'uses' => 'WidgetBoxController@code']);
 
+    Route::get('{id}/histories', ['as' => 'widgetbox.histories', 'uses' => 'WidgetBoxHistoryController@index']);
+
+    Route::get('/histories/{historyId}/code', ['as' => 'widgetbox.histories.code', 'uses' => 'WidgetBoxHistoryController@code']);
+
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
 
 });
