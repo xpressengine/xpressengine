@@ -27,6 +27,8 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class WidgetBox extends DynamicModel
 {
+    use WidgetBoxDataTrait;
+
     /**
      * @var string table name
      */
@@ -63,6 +65,16 @@ class WidgetBox extends DynamicModel
         return Arr::get($this->getAttributeValue('options'), 'presenter');
     }
 
+    public function getOptions()
+    {
+        return $this->getAttributeValue('options');
+    }
+
+    public function getContent()
+    {
+        return $this->getAttributeValue('content');
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -84,6 +96,5 @@ class WidgetBox extends DynamicModel
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
         });
-
     }
 }
