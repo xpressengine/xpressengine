@@ -39,7 +39,7 @@ class WidgetboxMigration extends Migration
      */
     public function install()
     {
-        // create table
+        // create widget box table
         if(!Schema::hasTable('widgetbox')) {
             Schema::create(
                 'widgetbox',
@@ -58,6 +58,20 @@ class WidgetboxMigration extends Migration
                     $table->primary(['site_key','id']);
                 }
             );
+        }
+
+        // create widget box history table
+        if(!Schema::hasTable('widgetbox_history')) {
+            $this->createHistoryTable();
+        }
+    }
+
+    public function installed($siteKey = 'default')
+    {
+        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
+
+        if($siteKey != 'default') {
+            $this->init($siteKey);
         }
     }
 
@@ -94,12 +108,6 @@ class WidgetboxMigration extends Migration
         }
     }
 
-    public function installed($siteKey = 'default')
-    {
-        $siteKey = $siteKey == null ? XeSite::getCurrentSiteKey() : $siteKey;
-        if($siteKey != 'default') $this->init($siteKey);
-    }
-
     /**
      * check updated
      *
@@ -109,10 +117,16 @@ class WidgetboxMigration extends Migration
      */
     public function checkUpdated($installedVersion = null)
     {
-        if (Schema::hasColumn('widgetbox', 'site_key') == false) return false;
+        if (Schema::hasColumn('widgetbox', 'site_key') == false) {
+            return false;
+        }
+
+        if (!Schema::hasTable('widgetbox_history')) {
+            return false;
+        }
+
         return true;
     }
-
 
     /**
      * run update
@@ -132,6 +146,10 @@ class WidgetboxMigration extends Migration
                 $table->index('site_key');
             });
         }
+
+        if (!Schema::hasTable('widgetbox_history')) {
+            $this->createHistoryTable();
+        }
     }
 
     /**
@@ -142,5 +160,26 @@ class WidgetboxMigration extends Migration
     private function getDefaultDashboard()
     {
         return json_decode('[[{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@systemInfo","title":"System Info","skin-id":"widget\/xpressengine@systemInfo\/skin\/xpressengine@default"},"skin":""}]},{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@storageSpace","title":"Storage \uc0ac\uc6a9\ub7c9","skin-id":"widget\/xpressengine@storageSpace\/skin\/xpressengine@default"},"limit":"5","skin":""}]}],[{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@contentInfo","title":"Content Info","skin-id":"widget\/xpressengine@contentInfo\/skin\/xpressengine@default"}}]},{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/news_client@news","title":"News","skin-id":"widget\/news_client@news\/skin\/news_client@default"}}]}]]', true);
+    }
+
+    /**
+     * create widget history table
+     *
+     * @return void
+     */
+    public function createHistoryTable()
+    {
+        Schema::create('widgetbox_history', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
+            $table->unsignedBigInteger('id', true)->comment('ID');
+            $table->string('widgetbox_id', 100)->comment('widget Box ID');
+            $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
+            $table->text('content')->comment('written content');
+            $table->text('options')->comment('written options');
+            $table->timestamp('created_at')->nullable()->comment('created_at');
+
+            $table->index(['site_key', 'widgetbox_id'], 'WIDGETBOX_INDEX');
+        });
     }
 }
