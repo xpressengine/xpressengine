@@ -36,7 +36,7 @@ class WidgetBoxHistoryController extends Controller
             ]);
         });
 
-        return XePresenter::makeApi(['histories' => $histories]);
+        return XePresenter::makeApi($histories->toArray());
     }
 
     public function code($historyId)
