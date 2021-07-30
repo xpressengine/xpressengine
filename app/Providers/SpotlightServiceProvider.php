@@ -30,11 +30,11 @@ class SpotlightServiceProvider extends ServiceProvider
 
             foreach ($siteMapMenus as $siteMapMenu)
             {
-                $container->add($siteMapMenu);
+                $container->add($siteMapMenu, 'menu');
 
                 foreach ($siteMapMenu->items as $siteMapMenuItem)
                 {
-                    $container->add($siteMapMenuItem);
+                    $container->add($siteMapMenuItem, 'menuItem');
 
                     if ($siteMapMenuItem->type === 'board@board')
                     {
