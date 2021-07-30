@@ -258,7 +258,9 @@ class SettingsHandler
             }
         }
 
-        $this->setSelectedMenu($router->current());
+        if ($router->current() instanceof Route) {
+            $this->setSelectedMenu($router->current());
+        }
     }
 
     /**
