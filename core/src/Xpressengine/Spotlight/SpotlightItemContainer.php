@@ -49,12 +49,19 @@ final class SpotlightItemContainer
 
     public function get($key, $default = null)
     {
-        $this->items->get($key, $default);
+        return $this->items->get($key, $default);
     }
 
-    public function all()
+    public function all($keyword = null)
     {
-        return $this->items->all();
+        return $this->items->when($keyword, function($items, $keyword) {
+            $pattern  = sprintf("*%s*", strtolower($keyword));
+
+            return $items->filter(function(SpotlightItem $item) use($pattern) {
+                return str_is($pattern, strtolower($item->getTitle()))
+                    || str_is($pattern, strtolower($item->getDescription()));
+            });
+        })->all();
     }
 
     public function add($value, $importerKey = null)

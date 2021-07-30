@@ -15,8 +15,8 @@ class SettingsMenuImporter extends AbstractImporter
 
         return new SpotlightItem(
             $value->id,
-            $value->get('title'),
-            $value->get('description'),
+            xe_trans($value->get('title')),
+            xe_trans($value->get('description')),
             $value->link()
         );
     }

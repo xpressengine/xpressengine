@@ -1098,7 +1098,11 @@ Route::group(['prefix'=>'widgetbox'], function() {
     Route::get('/histories/{historyId}/code', ['as' => 'widgetbox.histories.code', 'uses' => 'WidgetBoxHistoryController@code']);
 
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
+});
 
+Route::group(['prefix'=>'spotlight'], function() {
+    Route::get('/', ['as' => 'spotlight.index', 'uses' => 'SpotlightController@index']);
+    Route::get('/{id}', ['as' => 'spotlight.show', 'uses' => 'SpotlightController@show']);
 });
 
 Route::group(['prefix' => 'captcha'], function () {
