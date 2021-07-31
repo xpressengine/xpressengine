@@ -275,7 +275,7 @@
   exports.WidgetBox = (function () {
     var _this
     var _options = {}
-    var _containers = [];
+    var _containers = []
     var _rows = []
     var _flat = {}
 
@@ -577,12 +577,12 @@
           dataType: 'json',
           success: function (json) {
             json.data = json.data || []
-            var rows = []
-            $.each(json.data, function (i, row) {
-              rows.push(_this.createRow(row))
+            var containers = []
+            $.each(json.data, function (i, container) {
+              containers.push(_this.createContainer(container))
             })
 
-            _rows = rows
+            _containers = containers
 
             _this.$presenter.val(json.presenter).triggerHandler('change')
             // _this.render();
