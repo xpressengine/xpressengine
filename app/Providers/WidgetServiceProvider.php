@@ -32,6 +32,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Widget\Models\WidgetBox;
 use Xpressengine\Widget\Presenters\AbstractPresenter;
 use Xpressengine\Widget\Presenters\BootstrapPresenter;
+use Xpressengine\Widget\Presenters\ContainerPresenter;
 use Xpressengine\Widget\Presenters\XEUIPresenter;
 use Xpressengine\Widget\WidgetBoxHandler;
 use Xpressengine\Widget\WidgetBoxRepository;
@@ -108,6 +109,7 @@ class WidgetServiceProvider extends ServiceProvider
         WidgetBoxHandler::setContainer($this->app['xe.register']);
         WidgetBoxHandler::addPresenter(BootstrapPresenter::class);
         WidgetBoxHandler::addPresenter(XEUIPresenter::class);
+        WidgetBoxHandler::addPresenter(ContainerPresenter::class);
     }
 
     /**
