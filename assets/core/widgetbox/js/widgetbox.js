@@ -17,6 +17,47 @@
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
   }
 
+  var Container = function () {
+    this.uid = guid()
+    this.rows = []
+  }
+  Container.prototype = {
+    addRow: function (row) {
+      this.rows.push(row)
+    },
+    removeRow: function (rowUid) {
+      this.rows = this.rows.filter(function (row) {
+        return row.uid !== rowUid
+      })
+    },
+    render: function () {
+      var html = ''
+      $.each(this.rows, function (i, row) {
+        html += row.render()
+      })
+
+      return [
+        '<div class="wb-container" data-uid="' + this.uid + '">',
+        this.getHeader(),
+        html,
+        '</div>'
+      ].join('')
+    },
+    getHeader: function () {
+      return [
+        '<div class="wb-container-header">',
+        '<span class="label label-danger">container</span>',
+        '<div class="pull-right">',
+        '<button type="button" class="btn btn-row-remove"><i class="glyphicon glyphicon-remove"></i></button>',
+        '</div>',
+        '</div>'
+      ].join('')
+    },
+    toJSON: function () {
+      return this.rows
+    }
+  }
+
   var Row = function () {
     this.uid = guid()
     this.cols = []
@@ -234,6 +275,7 @@
   exports.WidgetBox = (function () {
     var _this
     var _options = {}
+    var _containers = [];
     var _rows = []
     var _flat = {}
 
@@ -282,14 +324,37 @@
           _this.render()
         })
 
-        // add new row
-        $('#btn-add-row').click(function () {
-          _rows.push(_this.createRow())
+        // add new container
+        $('#btn-add-container').click(function () {
+          _containers.push(_this.createContainer())
           _this.render()
         })
 
+        // remove container event
+        _this.$editor.on('click', '.btn-row-remove', function (e) {
+          e.stopPropagation()
+
+          var $container = $(this).closest('.wb-container')
+          _this.removeContainer($container.data('uid'))
+        })
+
+        $('#btn-add-row').click(function () {
+          var uid = _this.$editor.find('.selected').data('uid')
+          var _container = _containers.find(function (container) {
+            return container.uid == uid
+          })
+          _container.addRow(_this.createRow())
+          _this.render()
+        })
+
+        // add new row @deprecated
+        // $('#btn-add-row').click(function () {
+        //   _rows.push(_this.createRow())
+        //   _this.render()
+        // })
+
         // select row or col
-        _this.$editor.on('click', '.wb-row, .wb-col', function (e) {
+        _this.$editor.on('click', '.wb-container, .wb-row, .wb-col', function (e) {
           e.stopPropagation()
 
           _this.$editor.find('.selected').removeClass('selected')
@@ -298,6 +363,9 @@
           var except
 
           if ($(this).is('.wb-row')) {
+            except = 'opt'
+            _this.disableWidgetControls()
+          } else if ($(this).is('.wb-container')) {
             except = 'opt'
             _this.disableWidgetControls()
           } else {
@@ -521,6 +589,22 @@
           }
         })
       },
+      createContainer: function (data) {
+        var container = new Container()
+        data = data || []
+
+        $.each(data, function (i, row) {
+          container.addRow(_this.createRow(row))
+        })
+
+        _flat[container.uid] = container
+
+        return container
+      },
+
+
+
+
       createRow: function (data) {
         var row = new Row()
         data = data || []
@@ -533,6 +617,7 @@
 
         return row
       },
+
       createCol: function (data) {
         var col = new Col(data.grid)
 
@@ -563,8 +648,8 @@
       render: function () {
         var html = ''
 
-        $.each(_rows, function (i, row) {
-          html += row.render()
+        $.each(_containers, function (i, container) {
+          html += container.render()
         })
 
         var selectedUid = _this.$editor.find('.selected').data('uid')
@@ -634,6 +719,19 @@
 
         _this.render()
       },
+      removeContainer: function (uid) {
+        if (_flat[uid].parent) {
+          _flat[uid].parent.removeRow(uid)
+        } else {
+          _containers = _containers.filter(function (container) {
+            return container.uid !== uid
+          })
+        }
+
+        delete _flat[uid]
+
+        _this.render()
+      },
       removeRow: function (uid) {
         if (_flat[uid].parent) {
           _flat[uid].parent.removeRow(uid)
@@ -686,7 +784,7 @@
         $('.__xe_select_widget').find('option:eq(0)').prop('selected', 'selected').trigger('change')
       },
       toJSON: function () {
-        return JSON.stringify(_rows)
+        return JSON.stringify(_containers)
       }
     }
   })()

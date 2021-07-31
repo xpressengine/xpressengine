@@ -460,12 +460,27 @@ header {
     margin-bottom: 5px;
   }
 
+  .wb-container {
+    width: 100%;
+    border: 1px solid #c9c9c9;
+    min-height: 140px;
+    margin-bottom: 5px;
+  }
+
   .wb-col {
     display: inline-block;
     padding: 2px 2px;
     min-height: 140px;
     vertical-align: top;
     .wb-row-header { display: none; }
+  }
+
+  .wb-container.selected {
+    background-color: #ffb0b6;
+
+    > .wb-container-header {
+      background-color: #ffb0b6;
+    }
   }
 
   .wb-row.selected {
@@ -484,6 +499,7 @@ header {
     }
   }
 
+  .wb-container-header,
   .wb-row-header,
   .wb-col-header {
     height: 25px;

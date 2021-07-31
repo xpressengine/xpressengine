@@ -14,7 +14,7 @@
 <div class="widget-wrap">
     <header>
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span
-                            class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
+                        class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
         <div class="xe-pull-right">
             @if($permission !== null)
                 <button type="button" class="xe-btn __xe_btnPermission" data-target="#permission-modal" data-toggle="modal">{{ xe_trans('xe::permissionSettings') }}</button>
@@ -72,8 +72,11 @@
         </div>
         <div class="snb-section">
             <h3>{{ xe_trans('xe::cellManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                       title="{{ xe_trans('xe::descCellManagement') }}"></i></h3>
+                                                        title="{{ xe_trans('xe::descCellManagement') }}"></i></h3>
             <div class="cell-config-btn">
+                <div>
+                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-container">{{ xe_trans('xe::addContainer') }}</button>
+                </div>
                 <div>
                     <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-row">{{ xe_trans('xe::addRow') }}</button>
                 </div>
@@ -97,7 +100,7 @@
         </div>
         <div class="snb-section">
             <h3>{{ xe_trans('xe::widgetManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                         title="{{ xe_trans('xe::descWidgetManagement') }}"></i></h3>
+                                                          title="{{ xe_trans('xe::descWidgetManagement') }}"></i></h3>
             <button class="xe-btn xe-btn-primary xe-btn-sm xe-btn-block btn-widget-add" id="btn-add-widget">
                 <i class="xi-layout-o"></i>{{ xe_trans('xe::addWidget') }}
             </button>
@@ -106,7 +109,7 @@
     <div class="widget-container">
         <div class="widget-content">
             <h3>{{ xe_trans('xe::editArea') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                         title="{{ xe_trans('xe::descEditArea') }}"></i>
+                                                  title="{{ xe_trans('xe::descEditArea') }}"></i>
             </h3>
             <!-- editor area -->
             <div class="editor xe-container-fluid"></div>
