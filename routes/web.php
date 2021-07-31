@@ -1100,9 +1100,9 @@ Route::group(['prefix'=>'widgetbox'], function() {
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
 });
 
-Route::group(['prefix'=>'spotlight'], function() {
-    Route::get('/', ['as' => 'spotlight.index', 'uses' => 'SpotlightController@index']);
-    Route::get('/{id}', ['as' => 'spotlight.show', 'uses' => 'SpotlightController@show']);
+Route::group(['prefix'=>'spotlights'], function() {
+    Route::get('/', ['as' => 'spotlights.index', 'uses' => 'SpotlightController@index']);
+    Route::get('/{id}', ['as' => 'spotlights.show', 'uses' => 'SpotlightController@show']);
 });
 
 Route::group(['prefix' => 'captcha'], function () {
