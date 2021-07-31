@@ -57,6 +57,11 @@ abstract class AbstractPresenter implements PresenterInterface
     protected $options = [];
 
     /**
+     * @var bool
+     */
+    protected $supportContainer = false;
+
+    /**
      * The widget code generator
      *
      * @var callable
@@ -72,6 +77,14 @@ abstract class AbstractPresenter implements PresenterInterface
     public function __construct($data, $options = [])
     {
         $this->data = $data;
+
+        if (!$this->supportContainer && $this->hasContainer()) {
+            $this->data = array_merge(...array_values($this->data));
+        }
+
+        else if($this->supportContainer && !$this->hasContainer()) {
+            $this->data = array($this->data);
+        }
     }
 
     /**

@@ -40,15 +40,6 @@ class BootstrapPresenter extends AbstractPresenter
      */
     const COLS = 12;
 
-    public function render()
-    {
-        if ($this->hasContainer()) {
-            $this->data = array_merge(...array_values($this->data));
-        }
-
-        return parent::render();
-    }
-
     /**
      * Get HTML wrapper for row contents
      *
