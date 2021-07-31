@@ -19,6 +19,10 @@ class ContainerPresenter extends XEUIPresenter
      */
     public function render()
     {
+        if (! $this->hasContainer()) {
+            $this->data = array($this->data);
+        }
+
         $content = '';
 
         foreach ($this->data as $container) {
