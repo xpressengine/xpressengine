@@ -26,7 +26,16 @@ class SpotlightController extends Controller
 
     public function index(Request $request, SpotlightItemContainer $container)
     {
-        return XePresenter::makeApi($container->all($request->get('keyword')));
+        $keyword = $request->get('keyword');
+        $link = $request->get('link');
+
+        $items = $container->search($keyword)->when($link, function($items, $link) {
+            return $items->filter(function(SpotlightItem $item) use($link) {
+                return $item->getLink() === $link;
+            });
+        });
+
+        return XePresenter::makeApi($items->all());
     }
 
     public function show(SpotlightItemContainer $container, $id)
