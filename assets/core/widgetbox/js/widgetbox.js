@@ -246,14 +246,18 @@
   }
   Widget.prototype = {
     render: function () {
+      var _activateColor = '';
       if (this.data['widgetName'] == undefined) {
         this.data['widgetName'] = ''
       }
       if (this.data['skinName'] == undefined) {
         this.data['skinName'] = ''
       }
+      if (this.data['@attributes'].hasOwnProperty('activate') && this.data['@attributes'].activate == 'deactivate') {
+        _activateColor = '#d0d0d0'
+      }
       return [
-        '<div class="xe-well widget" data-uid="' + this.uid + '">',
+        '<div class="xe-well widget" data-uid="' + this.uid + '" style=" background-color:' + _activateColor + '">',
         '<strong>' + this.data['@attributes'].title + '</strong>',
         '<span class="widget-name">' + this.data['widgetName'] + '</span>',
         '<span class="skin-name">(' + this.data['skinName'] + ')</span>',
