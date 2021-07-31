@@ -219,4 +219,12 @@ abstract class AbstractPresenter implements PresenterInterface
     {
         return static::$generator;
     }
+
+    /**
+     * @return bool
+     */
+    protected function hasContainer()
+    {
+        return array_depth($this->data) === 7;
+    }
 }
