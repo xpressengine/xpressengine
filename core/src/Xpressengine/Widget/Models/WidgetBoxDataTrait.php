@@ -11,8 +11,6 @@ trait WidgetBoxDataTrait
      */
     public function getData()
     {
-        $content = $this->getAttribute("content");
-
         $widgetNames = [];
         $widgetList = app('xe.widget')->getAll();
 
@@ -20,6 +18,21 @@ trait WidgetBoxDataTrait
             $widgetNames[$id] = $class::getTitle();
         }
 
+        $content = $this->getAttribute("content");
+        $this->getContainerData($content, $widgetNames);
+
+        return $content;
+    }
+
+    private function getContainerData(&$content, array $widgetNames)
+    {
+        foreach ($content as &$container) {
+            $this->getGridData($container, $widgetNames);
+        }
+    }
+
+    private function getGridData(&$content, array $widgetNames)
+    {
         foreach ($content as &$row) {
             foreach ($row as &$col) {
                 foreach ($col['widgets'] as &$widgetInfo) {
@@ -35,7 +48,5 @@ trait WidgetBoxDataTrait
                 }
             }
         }
-
-        return $content;
     }
 }
