@@ -13,6 +13,7 @@ namespace App\Console;
 
 use App\ResetProvidersTrait;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 /**
@@ -70,6 +71,8 @@ class Kernel extends ConsoleKernel
         Commands\CharsetConvert::class
     ];
 
+    protected $scheduled_plugins = [];
+
     /**
      * If true, except xe services.
      *
@@ -88,18 +91,8 @@ class Kernel extends ConsoleKernel
         'up',
     ];
 
-    /**
-     * Define the application's command schedule.
-     *
-     * @param Schedule $schedule Schedule instance
-     * @return void
-     */
-    protected function schedule(Schedule $schedule)
-    {
-        /**
-        ** working with cron
-        ** register crontab -e : * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
-        **/
+
+    protected function registerPluginMethods(){
         // plugin list in site
         if(app()->getInstalledVersion() != null) {
             $configs = \DB::table('config')->where('name', 'plugin')->get();
@@ -110,15 +103,49 @@ class Kernel extends ConsoleKernel
                         $entity = \XePlugin::getPlugin($id);
                         $pluginObj = $entity->getObject();
 
+                        //register schedule method of plugin
+                        //커맨드라인에서 URL없이 접속하기때문에, 사이트키 구분을 위해 해당 플러그인이 활성화된 사이트의 config에 붙어있는 site_key를 활용
                         if (method_exists($pluginObj, 'schedule')) {
-                            try {
-                                $pluginObj->schedule($schedule, $config->site_key);
-                            } catch (\Exception $e) {
-                                //Log::info(sprintf('Failed Schedule Working in %s site.\n%s:%s\n%s\n%s',$config->site_key,$e->getFile(),$e->getLine(),$e->getMessage(),$e->getCode()));
-                                //see storage/logs/laravel-yyyy-mm-dd.log
+                            if(array_get($this->scheduled_plugins,$config->site_key) == null) $this->scheduled_plugins[$config->site_key] = [];
+                            $this->scheduled_plugins[$config->site_key][] = $pluginObj;
+                        }
+
+                        //register command class of plugin
+                        //플러그인단에서 아티산커맨드를 활용할 수 있도록 등록은 해 주지만, 실제 사이트키 구분로직은 필요에 따라 내부에서 다시 구현해야함
+                        if (method_exists($pluginObj, 'commandClass')) {
+                            $command_class = $pluginObj->commandClass($config->site_key);
+                            if(is_array($command_class)) {
+                                foreach($command_class as $command) $this->commands[] = $command;
+                            }else{
+                                $this->commands[] = $pluginObj->commandClass($config->site_key);
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Define the application's command schedule.
+     *
+     * @param Schedule $schedule Schedule instance
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        $this->registerPluginMethods();
+        /**
+        ** working with cron
+        ** register crontab -e : * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+        **/
+        foreach($this->scheduled_plugins as $site_key => $plugins){
+            foreach($plugins as $pluginObj){
+                try {
+                    $pluginObj->schedule($schedule, $site_key);
+                } catch (\Exception $e) {
+                    Log::info(sprintf('Failed Schedule Working in %s site.\n%s:%s\n%s\n%s',$site_key,$e->getFile(),$e->getLine(),$e->getMessage(),$e->getCode()));
+                    //see storage/logs/laravel-yyyy-mm-dd.log
                 }
             }
         }
@@ -131,6 +158,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
+        $this->registerPluginMethods();
         require base_path('routes/console.php');
     }
 
