@@ -184,6 +184,7 @@ class WidgetBoxController extends Controller
             'presenter' => $widgetbox->getPresenter(),
             'data' => $widgetbox->getData(),
             'options' => $widgetbox->getOptions(),
+            'supportContainer' => $widgetbox->getPresenter()::SUPPORT_CONTAINER
         ]);
     }
 
