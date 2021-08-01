@@ -122,7 +122,7 @@ table,
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   color: #656973;
-
+  .snb-section:first-child { border-top: none }
   .snb-section {
     padding: 20px 20px 37px 20px;
     border-top: 1px solid #e5e5e5;
