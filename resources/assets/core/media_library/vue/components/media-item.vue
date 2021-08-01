@@ -101,9 +101,12 @@ export default {
     },
     thumbnailBackground({ $props }) {
       if (!!this.thumbnailUrl) {
-        return `url('${$props.media.file.url}')`
+        if(!!$props.media.file.thumbnail_url) {
+          return `url('${$props.media.file.thumbnail_url}')`
+        }else {
+          return `url('${$props.media.file.url}')`
+        }
       }
-
       return false
     },
     userName({ $props }) {
