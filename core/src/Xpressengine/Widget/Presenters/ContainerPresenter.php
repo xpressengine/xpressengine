@@ -11,7 +11,10 @@ class ContainerPresenter extends XEUIPresenter
      */
     const NAME = 'Container UI';
 
-    protected $supportContainer = true;
+    /**
+     * @var boolean
+     */
+    const SUPPORT_CONTAINER = true;
 
     /**
      * Get the string contents of the presenter.
@@ -41,6 +44,10 @@ class ContainerPresenter extends XEUIPresenter
         $content = '';
 
         foreach ($data as $row) {
+            if ($this->isColumn($row)) {
+                $row = array($row);
+            }
+
             $content .= $this->getRow($row);
         }
 

@@ -56,6 +56,16 @@ class WidgetBox extends DynamicModel
     ];
 
     /**
+     * get Support Container
+     *
+     * @return boolean
+     */
+    public function isSupportContainer()
+    {
+        return Arr::get($this->getOptions(), 'supportContainer', false);
+    }
+
+    /**
      * Get presenter class
      *
      * @return string
@@ -87,7 +97,17 @@ class WidgetBox extends DynamicModel
             }
         });
 
-        self::updating(function($model){
+        self::updating(function(WidgetBox $model){
+            $original = $model->getOriginal();
+            $originalPresenter = json_decode($original['options'], JSON_OBJECT_AS_ARRAY)['presenter'];
+
+            if (! empty($model->getContent())) {
+                if ($originalPresenter::SUPPORT_CONTAINER !== $model->getPresenter()::SUPPORT_CONTAINER) {
+                    $supportContainer = $model->getPresenter()::SUPPORT_CONTAINER;
+                    $model->setAttribute('content', $supportContainer ? array($model->getContent()) : array_merge(...array_values($model->getContent())));
+                }
+            }
+
             if(!isset($model->site_key)){
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }

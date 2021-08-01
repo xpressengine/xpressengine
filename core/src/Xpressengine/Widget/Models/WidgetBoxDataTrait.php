@@ -4,11 +4,6 @@ namespace Xpressengine\Widget\Models;
 
 trait WidgetBoxDataTrait
 {
-    /**
-     * get widget box's data
-     *
-     * @return array
-     */
     public function getData()
     {
         $widgetNames = [];
@@ -18,20 +13,26 @@ trait WidgetBoxDataTrait
             $widgetNames[$id] = $class::getTitle();
         }
 
-        $content = $this->getAttribute("content");
-        $this->getContainerData($content, $widgetNames);
+        $content =  $this->getContent();
+
+        if ($this->getPresenter()::SUPPORT_CONTAINER) {
+            foreach ($content as &$container) {
+                $this->combineWidgets($container, $widgetNames);
+            }
+        } else {
+            $this->combineWidgets($content, $widgetNames);
+        }
 
         return $content;
     }
 
-    private function getContainerData(&$content, array $widgetNames)
-    {
-        foreach ($content as &$container) {
-            $this->getGridData($container, $widgetNames);
-        }
-    }
-
-    private function getGridData(&$content, array $widgetNames)
+    /**
+     * combine widgets
+     *
+     * @param $content
+     * @param array $widgetNames
+     */
+    private function combineWidgets(&$content, array $widgetNames)
     {
         foreach ($content as &$row) {
             foreach ($row as &$col) {
