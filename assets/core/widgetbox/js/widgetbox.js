@@ -727,6 +727,9 @@
         _this.render()
       },
       removeContainer: function (uid) {
+        var _confirm = window.confirm('정말로 container를 삭제하시겠습니까?')
+        if (!_confirm) return false
+
         if (_flat[uid].parent) {
           _flat[uid].parent.removeRow(uid)
         } else {
@@ -740,6 +743,9 @@
         _this.render()
       },
       removeRow: function (uid) {
+        var _confirm = window.confirm('정말로 row를 삭제하시겠습니까?')
+        if (!_confirm) return false
+
         if (_flat[uid].parent) {
           _flat[uid].parent.removeRow(uid)
         } else {
@@ -764,6 +770,9 @@
         _this.render()
       },
       removeWidget: function (uid) {
+        var _confirm = window.confirm('정말로 widget을 삭제하시겠습니까?')
+        if (!_confirm) return false
+
         _flat[uid].parent.removeWidget(uid)
         delete _flat[uid]
 
