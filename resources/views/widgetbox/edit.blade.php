@@ -12,9 +12,13 @@
 ])->load() }}
 
 <div class="widget-wrap">
-    <header>
-        <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span
-                        class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
+    <header class="widget-wrap__header">
+        <h1 class="widget-wrap__header-title">
+            <a href="#">
+                <i class="xi-xpressengine"></i>
+                <span class="brand-title"><span class="xe-sr-only">xe3 widgetbox</span></span>
+            </a>
+        </h1>
         <div class="xe-pull-right">
             @if($permission !== null)
                 <button type="button" class="xe-btn __xe_btnPermission" data-target="#permission-modal" data-toggle="modal">{{ xe_trans('xe::permissionSettings') }}</button>
@@ -25,6 +29,7 @@
             <button type="button" class="xe-btn xe-btn-primary" id="btn-save" data-url="{{ route('widgetbox.update', ['id' => $widgetbox->id]) }}"><i class="xi-check"></i>{{ xe_trans('xe::save') }}</button>
         </div>
     </header>
+    <div class="widget-wrap__content">
     <div class="widget-snb">
         <div class="snb-section">
             <h2>{{ $widgetbox->title }}</h2>
@@ -115,6 +120,7 @@
             <div class="editor xe-container-fluid"></div>
             <!-- editor area -->
         </div>
+    </div>
     </div>
     <!--widget layer  -->
     <!--[D] .open 추가 시 layer 펼침 -->
