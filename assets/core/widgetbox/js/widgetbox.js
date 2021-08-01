@@ -23,6 +23,7 @@
   }
   Container.prototype = {
     addRow: function (row) {
+      row.parent = this
       this.rows.push(row)
     },
     removeRow: function (rowUid) {
@@ -48,7 +49,7 @@
         '<div class="wb-container-header">',
         '<span class="label label-danger">container</span>',
         '<div class="pull-right">',
-        '<button type="button" class="btn btn-row-remove"><i class="glyphicon glyphicon-remove"></i></button>',
+        '<button type="button" class="btn btn-container-remove"><i class="glyphicon glyphicon-remove"></i></button>',
         '</div>',
         '</div>'
       ].join('')
@@ -61,6 +62,7 @@
   var Row = function () {
     this.uid = guid()
     this.cols = []
+    this.parent = null
   }
   Row.prototype = {
     addCol: function (col) {
@@ -335,7 +337,7 @@
         })
 
         // remove container event
-        _this.$editor.on('click', '.btn-row-remove', function (e) {
+        _this.$editor.on('click', '.btn-container-remove', function (e) {
           e.stopPropagation()
 
           var $container = $(this).closest('.wb-container')
@@ -432,6 +434,7 @@
           e.stopPropagation()
 
           var $row = $(this).closest('.wb-row')
+          console.log($row);
           _this.removeRow($row.data('uid'))
         })
 
