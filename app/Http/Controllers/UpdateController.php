@@ -55,7 +55,7 @@ class UpdateController extends Controller
         $installedVersion = app()->getInstalledVersion();
         $latest = $releaseProvider->getLatestCoreVersion();
         $updatables = $releaseProvider->getUpdatableVersions();
-
+        $useCoreWebUpdate = config('xe.settings.use_core_web_update');
 
         $collection = $handler->getAllPlugins(true);
         $fetched = $collection->fetchByInstallType('fetched');
@@ -71,7 +71,7 @@ class UpdateController extends Controller
 
         return XePresenter::make(
             'update.show',
-            compact('installedVersion', 'latest', 'updatables', 'plugins', 'available', 'operation')
+            compact('installedVersion', 'latest', 'updatables', 'plugins', 'available', 'operation', 'useCoreWebUpdate')
         );
     }
 
@@ -88,6 +88,14 @@ class UpdateController extends Controller
     {
         if($operator->isLocked()) {
             throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
+        }
+
+        $useCoreWebUpdate = config('xe.settings.use_core_web_update');
+        if ($useCoreWebUpdate == false && $request->get('use_core_web_update') != 'Y') {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => xe_trans('xe::adminSiteDisableCoreWebUpdate')
+            ]);
         }
 
         $version = $request->get('version') ?: __XE_VERSION__;
