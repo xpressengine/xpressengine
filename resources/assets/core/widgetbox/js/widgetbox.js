@@ -311,13 +311,28 @@
         _this.$btnCloseLayer = $('#btn-close-layer')
         _this.$btnPreview = $('#btn-preview')
         _this.$btnSave = $('#btn-save')
+        _this.$btnAddContainer = $('#btn-add-container')
       },
       bindEvents: function () {
         // change presenter
-        _this.$presenter.change(function () {
+        _this.$presenter.change(function (event, data) {
           _cols = $(this).children(':selected').data('cols') || 12
-
-          _this.render()
+          if (!data) {
+            XE.ajax({
+              url: _this.$btnSave.data('url'),
+              type: 'put',
+              dataType: 'json',
+              data: {
+                data: _this.toJSON(),
+                presenter: _this.$presenter.val()
+              }
+            }).then(function () {
+              _this.loadContents()
+              _this.setAvailableContainerBtn()
+            })
+          } else {
+            _this.render()
+          }
         })
 
         // change view mode
@@ -345,21 +360,19 @@
           _this.removeContainer($container.data('uid'))
         })
 
-        if (_this._supportContainer) {
-          $('#btn-add-row').click(function () {
+        $('#btn-add-row').click(function () {
+          if (_this._supportContainer) {
             var uid = _this.$editor.find('.selected').data('uid')
             var _container = _containers.find(function (container) {
               return container.uid == uid
             })
             _container.addRow(_this.createRow())
             _this.render()
-          })
-        } else {
-          $('#btn-add-row').click(function () {
+          } else {
             _rows.push(_this.createRow())
             _this.render()
-          })
-        }
+          }
+        })
 
         // select row or col
         _this.$editor.on('click', '.wb-container, .wb-row, .wb-col', function (e) {
@@ -436,7 +449,6 @@
           e.stopPropagation()
 
           var $row = $(this).closest('.wb-row')
-          console.log($row);
           _this.removeRow($row.data('uid'))
         })
 
@@ -446,7 +458,7 @@
           var _confirm = window.confirm('위젯을 삭제하시겠습니까?')
           var $widget = $(this).closest('.widget')
 
-          if(_confirm) {
+          if (_confirm) {
             _this.removeWidget($widget.data('uid'))
           }
         })
@@ -557,6 +569,13 @@
           })
         })
       },
+      setAvailableContainerBtn: function () {
+        if (_this._supportContainer) {
+          _this.$btnAddContainer.show()
+        } else {
+          _this.$btnAddContainer.hide()
+        }
+      },
       setColSpanOpt: function () {
         var $select = $('select[data-type=span]', _this.$colControls)
         $select.empty()
@@ -579,6 +598,7 @@
       disableWidgetControls: function () {
         _this.$btnAddWidget.prop('disabled', true)
       },
+
       loadContents: function () {
         XE.ajax({
           url: _options.loadUrl,
@@ -586,7 +606,12 @@
           dataType: 'json',
           success: function (json) {
             json.data = json.data || []
+
+            if (_this._supportContainer == null) {
+              _this.$presenter.val(json.presenter).triggerHandler('change', json)
+            }
             _this._supportContainer = json.supportContainer
+            _this.setAvailableContainerBtn()
 
             if (_this._supportContainer) {
               var containers = []
@@ -594,16 +619,14 @@
                 containers.push(_this.createContainer(container))
               })
               _containers = containers
-              _this.$presenter.val(json.presenter).triggerHandler('change')
-              _this.render()
+              _this.$presenter.val(json.presenter).triggerHandler('change', json)
             } else {
               var rows = []
               $.each(json.data, function (i, row) {
                 rows.push(_this.createRow(row))
               })
               _rows = rows
-              _this.$presenter.val(json.presenter).triggerHandler('change')
-              _this.render()
+              _this.$presenter.val(json.presenter).triggerHandler('change', json)
             }
           }
         })
