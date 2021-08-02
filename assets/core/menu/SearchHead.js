@@ -162,6 +162,7 @@ var SearchHead = (function (XE, $) {
 
           _searchData.push({
             id: item.id,
+            menu_id: item.menu_id,
             title: XE.Lang.trans(item.title)
           })
 
@@ -194,8 +195,9 @@ var SearchHead = (function (XE, $) {
 
           $.each(suggestion, function (idx, obj) {
             var title = obj.title.split(value).join('<em>' + value + '</em>')
+            var url = _createMenuUrl + '/' + obj.menu_id + '/items/' + obj.id
 
-            list += '<li data-id="' + obj.id + '"><a href="#dummy">' + title + '</a></li>'
+            list += '<li data-id="' + obj.id + '"><a href="'+ url +'">' + title + '</a></li>'
           })
 
           list += '</ul>'

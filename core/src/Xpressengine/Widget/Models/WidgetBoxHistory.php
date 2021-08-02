@@ -55,14 +55,14 @@ class WidgetBoxHistory extends DynamicModel
         self::OPTIONS => 'array'
     ];
 
-    /**
-     * Get presenter class
-     *
-     * @return string
-     */
     public function getPresenter()
     {
         return Arr::get($this->getAttributeValue('options'), 'presenter');
+    }
+
+    public function isSupportContainer()
+    {
+        return Arr::get($this->getOptions(), 'supportContainer', false);
     }
 
     public function getWidgetBoxId()
@@ -75,13 +75,6 @@ class WidgetBoxHistory extends DynamicModel
         return $this->getAttributeValue(self::OPTIONS);
     }
 
-    /**
-     * add 'whereWidgetbox' scope
-     *
-     * @param $query
-     * @param WidgetBox $widgetBox
-     * @return mixed
-     */
     public function scopeWhereWidgetbox($query, WidgetBox $widgetBox)
     {
         return $query->where([

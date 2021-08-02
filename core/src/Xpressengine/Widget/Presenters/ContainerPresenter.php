@@ -12,6 +12,11 @@ class ContainerPresenter extends XEUIPresenter
     const NAME = 'Container UI';
 
     /**
+     * @var boolean
+     */
+    const SUPPORT_CONTAINER = true;
+
+    /**
      * Get the string contents of the presenter.
      *
      * @author Sparkweb
@@ -47,16 +52,5 @@ class ContainerPresenter extends XEUIPresenter
         }
 
         return '<div class="xe-container">'.$content.'</div>';
-    }
-
-    /**
-     * Is it a column.
-     *
-     * @param $data
-     * @return bool
-     */
-    private function isColumn($data)
-    {
-        return array_key_exists('grid', $data);
     }
 }

@@ -43,6 +43,11 @@ abstract class AbstractPresenter implements PresenterInterface
     const COLS = 0;
 
     /**
+     * @var boolean
+     */
+    const SUPPORT_CONTAINER = false;
+
+    /**
      * The data for contents
      *
      * @var @array
@@ -55,6 +60,11 @@ abstract class AbstractPresenter implements PresenterInterface
      * @var array
      */
     protected $options = [];
+
+    /**
+     * @var bool
+     */
+    protected $supportContainer = false;
 
     /**
      * The widget code generator
@@ -109,7 +119,13 @@ abstract class AbstractPresenter implements PresenterInterface
     protected function getRow($data)
     {
         $content = '';
+
         foreach ($data as $col) {
+            if (empty($col)) {
+                continue;
+            }
+
+            $col = $this->isColumn($col) ? $col : array_merge(...array_values($col));
             $content .= $this->getColumn($col);
         }
 
@@ -218,5 +234,16 @@ abstract class AbstractPresenter implements PresenterInterface
     public static function getWidgetCodeGenerator()
     {
         return static::$generator;
+    }
+
+    /**
+     * Is it a column.
+     *
+     * @param $data
+     * @return bool
+     */
+    protected function isColumn($data)
+    {
+        return array_key_exists('grid', $data);
     }
 }

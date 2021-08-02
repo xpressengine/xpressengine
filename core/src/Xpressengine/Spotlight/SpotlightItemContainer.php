@@ -2,6 +2,7 @@
 
 namespace Xpressengine\Spotlight;
 
+use Request;
 use Xpressengine\Plugins\Board\Components\Modules\BoardModule;
 use Xpressengine\Spotlight\Importers\AbstractImporter;
 
@@ -52,7 +53,23 @@ final class SpotlightItemContainer
         return $this->items->get($key, $default);
     }
 
+    /**
+     * @param $url
+     * @return SpotlightItem
+     */
+    public function getSelected($url)
+    {
+        return $this->items->first(function(SpotlightItem $item) use($url) {
+            return $item->getLink() === $url;
+        });
+    }
+
     public function all($keyword = null)
+    {
+        return $this->search($keyword)->all();
+    }
+
+    public function search($keyword = null)
     {
         return $this->items->when($keyword, function($items, $keyword) {
             $pattern  = sprintf("*%s*", strtolower($keyword));
@@ -61,7 +78,7 @@ final class SpotlightItemContainer
                 return str_is($pattern, strtolower($item->getTitle()))
                     || str_is($pattern, strtolower($item->getDescription()));
             });
-        })->all();
+        });
     }
 
     public function add($value, $importerKey = null)
