@@ -42,7 +42,7 @@ class AudioHandler extends AbstractHandler
 
     /**
      * TempFileCreator instance
-     *
+     *playtime_seconds
      * @var TempFileCreator
      */
     protected $temp;
@@ -118,6 +118,14 @@ class AudioHandler extends AbstractHandler
 
         if (isset($info['audio']['streams'])) {
             unset($info['audio']['streams']);
+        }
+
+        if (isset($info['playtime_seconds']) == false) {
+            $info['playtime_seconds'] = 60;
+        }
+
+        if (isset($info['bitrate']) == false) {
+            $info['bitrate'] = 128000;
         }
 
         return [$info['audio'], $info['playtime_seconds'], $info['bitrate']];
