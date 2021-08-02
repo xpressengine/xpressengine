@@ -139,6 +139,7 @@ class Storage
      * @param string|null   $disk     disk name (ex. local, ftp, s3 ...)
      * @param UserInterface $user     user instance
      * @param mixed         $option   disk option (ex. aws s3 'visibility: public')
+     * @param boolean       $force    force mode
      * @return File
      */
     public function upload(
@@ -147,7 +148,8 @@ class Storage
         $name = null,
         $disk = null,
         UserInterface $user = null,
-        $option = []
+        $option = [],
+        $force = false
     ) {
 
         $this->validateUploadedFile($uploaded);
@@ -170,13 +172,18 @@ class Storage
             throw new WritingFailException;
         }
 
+        $mime = $uploaded->getClientMimeType();
+        if ($force == false) {
+            $mime = $uploaded->getMimeType();
+        }
+
         return $this->repo->create([
             'user_id' => $user->getId(),
             'disk' => $disk,
             'path' => $path,
             'filename' => $name,
             'clientname' => $this->getNormalizedOriginalName($uploaded),
-            'mime' => $uploaded->getMimeType(),
+            'mime' => $mime,
             'size' => $uploaded->getSize(),
         ], $id);
     }
