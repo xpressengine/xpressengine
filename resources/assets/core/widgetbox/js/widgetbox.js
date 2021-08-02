@@ -284,6 +284,7 @@
     var _containers = []
     var _rows = []
     var _flat = {}
+    var _supportContainer = null;
 
     return {
       init: function (options) {
@@ -344,20 +345,21 @@
           _this.removeContainer($container.data('uid'))
         })
 
-        $('#btn-add-row').click(function () {
-          var uid = _this.$editor.find('.selected').data('uid')
-          var _container = _containers.find(function (container) {
-            return container.uid == uid
+        if (_this._supportContainer) {
+          $('#btn-add-row').click(function () {
+            var uid = _this.$editor.find('.selected').data('uid')
+            var _container = _containers.find(function (container) {
+              return container.uid == uid
+            })
+            _container.addRow(_this.createRow())
+            _this.render()
           })
-          _container.addRow(_this.createRow())
-          _this.render()
-        })
-
-        // add new row @deprecated
-        // $('#btn-add-row').click(function () {
-        //   _rows.push(_this.createRow())
-        //   _this.render()
-        // })
+        } else {
+          $('#btn-add-row').click(function () {
+            _rows.push(_this.createRow())
+            _this.render()
+          })
+        }
 
         // select row or col
         _this.$editor.on('click', '.wb-container, .wb-row, .wb-col', function (e) {
@@ -584,15 +586,25 @@
           dataType: 'json',
           success: function (json) {
             json.data = json.data || []
-            var containers = []
-            $.each(json.data, function (i, container) {
-              containers.push(_this.createContainer(container))
-            })
+            _this._supportContainer = json.supportContainer
 
-            _containers = containers
-
-            _this.$presenter.val(json.presenter).triggerHandler('change')
-            // _this.render();
+            if (_this._supportContainer) {
+              var containers = []
+              $.each(json.data, function (i, container) {
+                containers.push(_this.createContainer(container))
+              })
+              _containers = containers
+              _this.$presenter.val(json.presenter).triggerHandler('change')
+              _this.render()
+            } else {
+              var rows = []
+              $.each(json.data, function (i, row) {
+                rows.push(_this.createRow(row))
+              })
+              _rows = rows
+              _this.$presenter.val(json.presenter).triggerHandler('change')
+              _this.render()
+            }
           }
         })
       },
@@ -608,9 +620,6 @@
 
         return container
       },
-
-
-
 
       createRow: function (data) {
         var row = new Row()
@@ -655,9 +664,15 @@
       render: function () {
         var html = ''
 
-        $.each(_containers, function (i, container) {
-          html += container.render()
-        })
+        if (_this._supportContainer) {
+          $.each(_containers, function (i, container) {
+            html += container.render()
+          })
+        } else {
+          $.each(_rows, function (i, row) {
+            html += row.render()
+          })
+        }
 
         var selectedUid = _this.$editor.find('.selected').data('uid')
 
@@ -800,7 +815,11 @@
         $('.__xe_select_widget').find('option:eq(0)').prop('selected', 'selected').trigger('change')
       },
       toJSON: function () {
-        return JSON.stringify(_containers)
+        if (_this._supportContainer) {
+          return JSON.stringify(_containers)
+        } else {
+          return JSON.stringify(_rows)
+        }
       }
     }
   })()
