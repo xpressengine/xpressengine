@@ -296,7 +296,8 @@ class MediaLibraryFileRepository
 
                 if (!in_array($fileItem->file->mime, $exceptThumbnailMineTypes)) {
                     $imageMediaHandler = \XeMedia::getHandler(Media::TYPE_IMAGE);
-                    $thumbnailUrl = $imageMediaHandler->getThumbnail($media, 'spill', 'M')->url();
+                    $thumbnail = $imageMediaHandler->getThumbnail($media, 'spill', 'M');
+                    $thumbnailUrl = $thumbnail !== null && $thumbnail instanceof \Xpressengine\Media\Models\Image ? $thumbnail->url() : null;
                 }
 
                 $fileItem->file->setAttribute('thumbnail_url', $thumbnailUrl);
