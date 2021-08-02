@@ -89,8 +89,6 @@ class WidgetBox extends DynamicModel
     {
         parent::boot();
 
-        static::observe(WidgetBoxHistoryObserver::class);
-
         self::creating(function($model){
             if(!isset($model->site_key)){
                 $model->site_key = \XeSite::getCurrentSiteKey();
@@ -118,5 +116,7 @@ class WidgetBox extends DynamicModel
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
         });
+
+        static::observe(WidgetBoxHistoryObserver::class);
     }
 }
