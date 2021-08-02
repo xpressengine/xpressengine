@@ -15,8 +15,8 @@ class WidgetBoxHistoryObserver
     public function updating(WidgetBox $widgetBox)
     {
         if (Schema::hasTable(WidgetBoxHistory::TABLE)) {
-            if ($this->isUpdated($widgetBox)) {;
-                WidgetBoxHistory::create($this->getWrittenHistoryData($widgetBox));
+            if ($this->isUpdated($widgetBox)) {
+                WidgetBoxHistory::create($this->getStoredData($widgetBox));
             }
         }
     }
@@ -44,7 +44,7 @@ class WidgetBoxHistoryObserver
         return $isUpdated;
     }
 
-    private function getWrittenHistoryData(WidgetBox $widgetBox)
+    private function getStoredData(WidgetBox $widgetBox)
     {
         $writtenHistoryData = $widgetBox->getOriginal();
 
