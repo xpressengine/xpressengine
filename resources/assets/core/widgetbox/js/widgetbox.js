@@ -797,6 +797,9 @@
         _this.render()
       },
       removeCol: function (uid) {
+        var _confirm = window.confirm('정말로 col을 삭제하시겠습니까?')
+        if (!_confirm) return false
+
         _flat[uid].parent.removeCol(uid)
         delete _flat[uid]
 
