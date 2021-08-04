@@ -78,7 +78,37 @@
                 @endif
             @endif
 
-            <button type="submit" class="xe-btn xe-btn-primary xe-btn-lg">{{ xe_trans('xe::updateNow') }}</button>
+            @if($useCoreWebUpdate == true)
+                <button type="submit" class="xe-btn xe-btn-primary xe-btn-lg">{{ xe_trans('xe::updateNow') }}</button>
+            @else
+                <hr/>
+                <p class="help-block">
+                    {!! xe_trans('xe::adminSiteDisableCoreWebUpdate') !!} <br/>
+                    {!! xe_trans('xe::developerSetupDisableCoreWebUpdate') !!} <br/>
+                    {!! xe_trans('xe::findOutDisableCoreWebUpdate', ['option' => '<code>use_core_web_update</code>']) !!}
+                </p>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="use_core_web_update" value="Y">
+                        <code>force run</code>
+                        <small>- {!! xe_trans('xe::checkHereForceCoreWebUpdate') !!}</small>
+                    </label>
+                </div>
+                <button class="xe-btn xe-btn-disable xe-btn-lg" id="btn-core-update" disabled="disabled">{{ xe_trans('xe::updateNow') }}</button>
+                <script>
+                    jQuery(function($) {
+                        $('input[name="use_core_web_update"]').change(function () {
+                            if ($(this).is(':checked')) {
+                                $('#btn-core-update').prop('disabled', false);
+                                $('#btn-core-update').addClass('xe-btn-primary');
+                            } else {
+                                $('#btn-core-update').prop('disabled', true);
+                                $('#btn-core-update').removeClass('xe-btn-primary');
+                            }
+                        });
+                    });
+                </script>
+            @endif
         </form>
         @if($operation->isFailed() || $operation->isExpired())
             <hr>
