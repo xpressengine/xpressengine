@@ -636,7 +636,9 @@ class UserServiceProvider extends ServiceProvider
             'title' => 'xe::defaultSettings',
             'content' => function ($user) {
                 // dynamic field
-                $fieldTypes = $this->app['xe.dynamicField']->gets('user');
+                $fieldTypes = array_filter($this->app['xe.dynamicField']->gets('user'), function($field) {
+                    return $field->getConfig()->get('use');
+                });
 
                 $this->app['xe.frontend']->js(
                     ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
