@@ -149,12 +149,24 @@ class VideoHandler extends AbstractHandler
 
         $tmpFile->destroy();
 
+        if (! array_key_exists('video', $info)) {
+            $info['video'] = [];
+        }
+
         if (! array_key_exists('audio', $info)) {
             $info['audio'] = [];
         }
 
         if (isset($info['audio']['streams'])) {
             unset($info['audio']['streams']);
+        }
+
+        if (isset($info['playtime_seconds']) == false) {
+            $info['playtime_seconds'] = 60;
+        }
+
+        if (isset($info['bitrate']) == false) {
+            $info['bitrate'] = 128000;
         }
 
         return [$info['audio'], $info['video'], $info['playtime_seconds'], $info['bitrate']];
