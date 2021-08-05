@@ -119,6 +119,14 @@ class Kernel extends ConsoleKernel
                 foreach ($vars['list'] as $id => $val) {
                     if ($val['status'] == 'activated') {
                         $entity = \XePlugin::getPlugin($id);
+
+                        if ($entity == null) {
+                            $exceptionMessage = sprintf('%s::registerPluginMethods() [%s] not found skip excute.', self::class, $id);
+                            dump($exceptionMessage);
+                            \Log::info($exceptionMessage);
+                            continue;
+                        }
+
                         $pluginObj = $entity->getObject();
 
                         //register schedule method of plugin
