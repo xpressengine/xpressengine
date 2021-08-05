@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
+use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
@@ -235,7 +236,20 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->handler->users()->with('groups', 'emails', 'accounts')->find($id);
+        $userBuilder = $this->handler->users()->with('groups', 'emails', 'accounts');
+
+        $dynamicField = app('xe.dynamicField');
+        $fieldTypes = $dynamicField->gets('user');
+
+        foreach ($fieldTypes as $field) {
+            $originUseValue = $field->getConfig()->get('use');
+            $field->getConfig()->set('use', true);
+            $field->join($userBuilder->getQuery());
+
+            $field->getConfig()->set('use', $originUseValue);
+        }
+
+        $user = $userBuilder->find($id);
 
         if ($user === null) {
             $e = new InvalidArgumentHttpException();
@@ -271,10 +285,6 @@ class UserController extends Controller
 
         // profileImage config
         $profileImgSize = config('xe.user.profileImage.size');
-
-        // dynamic field
-        $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('user');
 
         return XePresenter::make(
             'user.settings.user.edit',

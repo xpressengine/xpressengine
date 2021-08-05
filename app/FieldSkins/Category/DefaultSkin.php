@@ -39,7 +39,7 @@ class DefaultSkin extends AbstractSkin
      */
     public function name()
     {
-        return 'Category1 default';
+        return 'Category default';
     }
 
     /**
@@ -72,12 +72,9 @@ class DefaultSkin extends AbstractSkin
      */
     public function create(array $args)
     {
-        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
-            $this->config->set('category_id', $this->config->get('categoryId'));
-        }
+        $this->setCategoryId();
 
-        $category = Category::find($this->config->get('category_id'));
-        $this->addMergeData(['categoryItems' => $category->items]);
+        $this->addMergeData(['items' => $this->getCategoryItems()]);
 
         return parent::create($args);
     }
@@ -91,21 +88,9 @@ class DefaultSkin extends AbstractSkin
      */
     public function edit(array $args)
     {
-        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
-            $this->config->set('category_id', $this->config->get('categoryId'));
-        }
+        $this->setCategoryId();
 
-        $category = Category::find($this->config->get('category_id'));
-
-        $item = null;
-        if (isset($args[$this->config->get('id') . '_item_id'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
-        }
-
-        $this->addMergeData([
-            'categoryItems' => $category->items,
-            'categoryItem' => $item,
-        ]);
+        $this->addMergeData(['items' => $this->getCategoryItems()]);
 
         return parent::edit($args);
     }
@@ -119,14 +104,18 @@ class DefaultSkin extends AbstractSkin
      */
     public function show(array $args)
     {
-        $item = null;
-        if (isset($args[$this->config->get('id') . '_item_id'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
+        $this->setCategoryId();
+
+        $items = $this->getCategoryItems();
+        $selectedCategoryItemId = $args[$this->config->get('id') . '_item_id'];
+        $selectedItemText = '';
+        foreach ($items as $item) {
+            if ($item['value'] == $selectedCategoryItemId) {
+                $selectedItemText = $item['text'];
+            }
         }
 
-        $this->addMergeData([
-            'categoryItem' => $item,
-        ]);
+        $this->addMergeData(['selectedItemText' => $selectedItemText]);
 
         return parent::show($args);
     }
@@ -140,22 +129,9 @@ class DefaultSkin extends AbstractSkin
      */
     public function search(array $args)
     {
-        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
-            $this->config->set('category_id', $this->config->get('categoryId'));
-        }
+        $this->setCategoryId();
 
-        $category = Category::find($this->config->get('category_id'));
-
-        $item = null;
-
-        if (isset($args[$this->config->get('id') . '_item_id'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . '_item_id']);
-        }
-
-        $this->addMergeData([
-            'categoryItems' => $category->items,
-            'categoryItem' => $item,
-        ]);
+        $this->addMergeData(['items' => $this->getCategoryItems()]);
 
         return parent::search($args);
     }
@@ -175,5 +151,37 @@ class DefaultSkin extends AbstractSkin
         }
 
         return xe_trans(CategoryItem::find($args[$key])->word);
+    }
+
+
+    /**
+     * 카테고리 ID를 config에 공통된 이름으로 설정
+     *
+     * @return void
+     */
+    private function setCategoryId()
+    {
+        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
+            $this->config->set('category_id', $this->config->get('categoryId'));
+        }
+    }
+
+    /**
+     * 확장필드에 지정된 Category를 가져옴
+     *
+     * @return array
+     */
+    private function getCategoryItems()
+    {
+        $items = [];
+        $categoryItems = Category::find($this->config->get('category_id'))->items;
+        foreach ($categoryItems as $categoryItem) {
+            $items[] = [
+                'value' => $categoryItem->id,
+                'text' => $categoryItem->word,
+            ];
+        }
+
+        return $items;
     }
 }
