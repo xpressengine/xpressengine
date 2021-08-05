@@ -122,8 +122,7 @@ class Kernel extends ConsoleKernel
 
                         if ($entity == null) {
                             $exceptionMessage = sprintf('%s::registerPluginMethods() [%s] not found skip excute.', self::class, $id);
-                            dump($exceptionMessage);
-                            \Log::info($exceptionMessage);
+                            \Log::warning($exceptionMessage);
                             continue;
                         }
 
