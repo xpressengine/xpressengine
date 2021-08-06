@@ -16,6 +16,7 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
+use DB;
 use Xpressengine\Support\Migration;
 
 /**
@@ -42,8 +43,8 @@ class SiteMigration extends Migration
 
             $table->string('site_key')->comment('site key');
             $table->string('host')->commet('host');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->nullable()->comment('site created date');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'))->nullable()->comment('site updated date');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable()->comment('site created date');
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'))->nullable()->comment('site updated date');
 
             $table->index('created_at');
             $table->index('updated_at');
@@ -62,5 +63,43 @@ class SiteMigration extends Migration
         $url = \Config::get('app.url');
         $url = preg_replace('#^https?://#', '', $url);
         \DB::table('site')->insert(['host' => $url, 'site_key' => 'default']);
+    }
+
+    /**
+     * check updated
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        // for 3.0.15
+        if (Schema::hasColumn('site', 'created_at') == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * run update
+     *
+     * @param null $installedVersion installed version
+     *
+     * @return void
+     */
+    public function update($installedVersion = null)
+    {
+        // for 3.0.15
+        if (Schema::hasColumn('site', 'created_at') == false) {
+            Schema::table('site', function (Blueprint $table) {
+                $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable()->comment('site created date');
+                $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'))->nullable()->comment('site updated date');
+
+                $table->index('created_at');
+                $table->index('updated_at');
+            });
+        }
     }
 }
