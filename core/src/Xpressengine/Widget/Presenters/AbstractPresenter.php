@@ -118,13 +118,15 @@ abstract class AbstractPresenter implements PresenterInterface
      */
     protected function getRow($data)
     {
+        $cols = Arr::get($data, 'cols', $data);
         $content = '';
 
-        foreach ($data as $col) {
+        foreach ($cols as $col) {
             if (empty($col)) {
                 continue;
             }
 
+            $col = $this->isColumn($col) ? $col : array_merge(...array_values($col));
             $content .= $this->getColumn($col);
         }
 

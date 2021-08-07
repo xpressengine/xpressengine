@@ -17,7 +17,7 @@ trait WidgetBoxDataTrait
 
         if ($this->getPresenter()::SUPPORT_CONTAINER) {
             foreach ($content as &$container) {
-                $this->combineWidgets($container, $widgetNames);
+                $this->combineWidgets($container['rows'], $widgetNames);
             }
         } else {
             $this->combineWidgets($content, $widgetNames);
@@ -35,7 +35,7 @@ trait WidgetBoxDataTrait
     private function combineWidgets(&$content, array $widgetNames)
     {
         foreach ($content as &$row) {
-            foreach ($row as &$col) {
+            foreach ($row['cols'] as &$col) {
                 foreach ($col['widgets'] as &$widgetInfo) {
                     $skinId = $widgetInfo['@attributes']['skin-id'];
                     $class = app('xe.skin')->get($skinId);

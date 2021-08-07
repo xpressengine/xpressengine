@@ -2,6 +2,8 @@
 
 namespace Xpressengine\Widget\Presenters;
 
+use Illuminate\Support\Arr;
+
 class ContainerPresenter extends XEUIPresenter
 {
     /**
@@ -43,12 +45,19 @@ class ContainerPresenter extends XEUIPresenter
     {
         $content = '';
 
-        foreach ($data as $row) {
+        $rows = Arr::get($data, 'rows', $data);
+        $options = Arr::get($data, 'options', []);
+
+        foreach ($rows as $row) {
             if ($this->isColumn($row)) {
                 $row = array($row);
             }
 
             $content .= $this->getRow($row);
+        }
+
+        if ($isFluid = Arr::get($options, 'fluid')) {
+            return '<div class="xe-container-fluid">'.$content.'</div>';
         }
 
         return '<div class="xe-container">'.$content.'</div>';
