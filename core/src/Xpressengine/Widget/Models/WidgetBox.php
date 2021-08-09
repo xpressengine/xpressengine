@@ -82,7 +82,28 @@ class WidgetBox extends DynamicModel
 
     public function getContent()
     {
-        return $this->getAttributeValue('content');
+        $content = $this->getAttributeValue('content');
+
+        foreach ($content as &$container) {
+            if (!array_key_exists('rows', $container)) {
+                $container = [
+                    'rows' => $container,
+                    'options' => [],
+                ];
+            }
+
+            $rows = &$container['rows'];
+            foreach ($rows as &$row) {
+                if (!array_key_exists('cols', $row)) {
+                    $row = [
+                        'cols' => $row,
+                        'options' => [],
+                    ];
+                }
+            }
+        }
+
+        return $content;
     }
 
     public static function boot()
@@ -100,10 +121,14 @@ class WidgetBox extends DynamicModel
             $originalPresenter = json_decode($original['options'], JSON_OBJECT_AS_ARRAY)['presenter'];
 
             if (! empty($model->getContent())) {
+                $content = $model->getContent();
+
                 if ($originalPresenter::SUPPORT_CONTAINER !== $model->getPresenter()::SUPPORT_CONTAINER) {
                     $supportContainer = $model->getPresenter()::SUPPORT_CONTAINER;
-                    $model->setAttribute('content', $supportContainer ? array($model->getContent()) : array_merge(...array_values($model->getContent())));
+                    $content = $supportContainer ? array($content) : array_merge(...array_values($content));
                 }
+
+                $model->setAttribute('content', $content);
             }
 
             if(!isset($model->site_key)){
