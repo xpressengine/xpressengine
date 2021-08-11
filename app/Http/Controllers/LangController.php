@@ -17,6 +17,7 @@ namespace App\Http\Controllers;
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use XePlugin;
 use XePresenter;
 use XeLang;
@@ -55,7 +56,7 @@ class LangController extends Controller
             $conditions['namespace'] = $namespace;
         }
         if ($keyword) {
-            $conditions['value'] = $keyword;
+            $conditions['keyword'] = $keyword;
         }
 
         $pagination = $this->search($conditions)->groupBy('item')->groupBy('namespace')->paginate(10);
@@ -150,18 +151,28 @@ class LangController extends Controller
         $query->orderBy('item', 'asc');
         $query->orderBy('id', 'desc');
 
-        if (isset($conditions['namespace'])) {
-            $query->where('namespace', $conditions['namespace']);
-        }
-        if (isset($conditions['item'])) {
-            $query->where('item', $conditions['item']);
-        }
-        if (isset($conditions['locale'])) {
-            $query->where('locale', $conditions['locale']);
-        }
-        if (isset($conditions['value'])) {
-            $query->where('value', 'LIKE', '%'.$conditions['value'].'%');
-        }
+        $query->when(Arr::get($conditions, 'namespace'), function($query, $namespace) {
+            $query->where('namespace', $namespace);
+        });
+
+        $query->when(Arr::get($conditions, 'keyword'), function($query, $keyword) {
+            $query->where(function($query) use($keyword) {
+                return $query->where('item', $keyword)
+                    ->orWhere('value', 'LIKE', '%'.$keyword.'%');
+            });
+        });
+
+        $query->when(Arr::get($conditions, 'item'), function($query, $item) {
+            $query->where('item', $item);
+        });
+
+        $query->when(Arr::get($conditions, 'locale'), function($query, $locale) {
+            $query->where('locale', $locale);
+        });
+
+        $query->when(Arr::get($conditions, 'value'), function($query, $value) {
+            $query->where('value', 'LIKE', '%'.$value.'%');
+        });
 
         return $query;
     }
