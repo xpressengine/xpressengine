@@ -158,7 +158,7 @@ class PluginRepository
      * @param array  $meta  the meta data for plugin
      * @return PluginEntity
      */
-    protected function createEntity($id, $path, $class, array $meta)
+    protected function createEntity($id, $path, $class, array $meta = [])
     {
         return new $this->entityClass($id, $path, $class, $meta);
     }
