@@ -56,14 +56,9 @@ class EditorController extends Controller
     public function setting(Request $request, $instanceId)
     {
         $editorId = $request->get('editorId');
-
         XeEditor::setInstance($instanceId, $editorId);
 
-        if (!$url = XeMenu::getInstanceSettingURIByItemId($instanceId)) {
-            return redirect()->back();
-        } else {
-            return redirect($url);
-        }
+        return redirect()->back();
     }
 
     /**
