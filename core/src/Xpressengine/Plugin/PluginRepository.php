@@ -108,7 +108,7 @@ class PluginRepository
         }
 
         foreach ($this->files->getRequire($this->manifestPath) as $id => $item) {
-            $this->manifest[$id] = $this->createEntity($id, $item['path'], $item['class'], $item['metaData']);
+            $this->manifest[$id] = $this->createEntity($id, $item['path'], $item['class'], $item['metaData'] ?? []);
         }
     }
 
@@ -158,7 +158,7 @@ class PluginRepository
      * @param array  $meta  the meta data for plugin
      * @return PluginEntity
      */
-    protected function createEntity($id, $path, $class, array $meta = [])
+    protected function createEntity($id, $path, $class, array $meta)
     {
         return new $this->entityClass($id, $path, $class, $meta);
     }
