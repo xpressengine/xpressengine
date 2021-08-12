@@ -186,6 +186,10 @@ class WidgetBox extends DynamicModel
                 $model->setAttribute('content', $content);
             }
 
+            $model->setAttribute('options', array_merge($model->getOptions(), [
+                'supportContainer' => $supportContainer
+            ]));
+
             if(!isset($model->site_key)){
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
@@ -205,7 +209,7 @@ class WidgetBox extends DynamicModel
         $rows = [];
 
         foreach ($content as $container) {
-            if (array_key_exists('rows', $container)) {
+            if (array_key_exists('rows', $container) && count($container) > 0) {
                 array_push($rows, ...$container['rows']);
             }
         }
