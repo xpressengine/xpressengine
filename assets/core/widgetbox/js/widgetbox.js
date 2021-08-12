@@ -20,6 +20,7 @@
   var Container = function () {
     this.uid = guid()
     this.rows = []
+    this.options = {}
   }
   Container.prototype = {
     addRow: function (row) {
@@ -30,6 +31,17 @@
       this.rows = this.rows.filter(function (row) {
         return row.uid !== rowUid
       })
+    },
+    addOption: function (option) {
+      this.options['fluid'] = true
+    },
+    removeOption: function (containerUid) {
+      this.containers = this.containers.filter(function (container) {
+        return container.uid !== containerUid
+      })
+    },
+    setOptions: function (options) {
+      this.options = options
     },
     render: function () {
       var html = ''
@@ -45,9 +57,12 @@
       ].join('')
     },
     getHeader: function () {
+      var _containerFluidLabel = this.options.fluid && ('<span class="label label-danger">' + 'container-fluid' + '</span>')
+
       return [
         '<div class="wb-container-header">',
         '<span class="label label-danger">container</span>',
+        _containerFluidLabel,
         '<div class="pull-right">',
         '<button type="button" class="btn btn-container-remove"><i class="glyphicon glyphicon-remove"></i></button>',
         '</div>',
@@ -55,7 +70,16 @@
       ].join('')
     },
     toJSON: function () {
-      return this.rows
+      var _self = this;
+      console.log(_self);
+      console.log({
+        rows: _self.rows,
+        options: _self.options,
+      })
+      return {
+        rows: _self.rows,
+        options: _self.options,
+      }
     }
   }
 
@@ -63,6 +87,7 @@
     this.uid = guid()
     this.cols = []
     this.parent = null
+    this.options = {}
   }
   Row.prototype = {
     addCol: function (col) {
@@ -73,6 +98,9 @@
       this.cols = this.cols.filter(function (col) {
         return col.uid !== colUid
       })
+    },
+    setOptions: function (options) {
+      this.options = options
     },
     render: function () {
       var html = ''
@@ -178,6 +206,7 @@
     },
     getSpan: function () {
       var m = ['xs', 'sm', 'md', 'lg']
+
       if (this.grid.hasOwnProperty(_mode)) {
         return this.grid[_mode]
       }
@@ -387,7 +416,7 @@
             except = 'opt'
             _this.disableWidgetControls()
           } else if ($(this).is('.wb-container')) {
-            except = 'opt'
+            except = 'container'
             _this.disableWidgetControls()
           } else {
             if ($(this).is(':empty')) {
@@ -409,6 +438,8 @@
           var control = $(this).data('control')
           var mode = $('select[data-type=mode]', _this.$colControls).val()
           var span = $('select[data-type=span]', _this.$colControls).val()
+          var containerOpt = $('select[data-type=container]', _this.$colControls).val()
+
           var $selected = _this.$editor.find('.selected')
 
           if (!$selected.length || !_flat.hasOwnProperty($selected.data('uid'))) {
@@ -419,6 +450,8 @@
             _this.addCol(_flat[$selected.data('uid')], mode, span)
           } else if (control === 'opt') {
             _this.addSpanOpt(_flat[$selected.data('uid')], mode, span)
+          } else if (control === 'container') {
+            _this.addOption(_flat[$selected.data('uid')], containerOpt)
           }
         })
 
@@ -551,6 +584,7 @@
 
         // save
         _this.$btnSave.click(function () {
+          document.getElementById('preview').contentDocument.location.reload(true);
           XE.ajax({
             url: $(this).data('url'),
             type: 'put',
@@ -585,8 +619,11 @@
       },
       enableColControls: function (except) {
         $('select, button', _this.$colControls).prop('disabled', false)
-        if (except) {
+        if (except !== 'container') {
           $('[data-control="' + except + '"]', _this.$colControls).prop('disabled', true)
+          $('[data-control="container"]', _this.$colControls).prop('disabled', true) // @FIXME
+        } else {
+          $('[data-control="' + except + '"]', _this.$colControls).prop('disabled', false)
         }
       },
       disableColControls: function () {
@@ -600,6 +637,10 @@
       },
 
       loadContents: function () {
+
+        $('#preview').attr('src', document.referrer);
+        console.log(document.referrer);
+
         XE.ajax({
           url: _options.loadUrl,
           type: 'get',
@@ -635,6 +676,13 @@
         var container = new Container()
         data = data || []
 
+        if (data.hasOwnProperty('options')) {
+          container.setOptions(data.options)
+        }
+        if (data.hasOwnProperty('rows')) {
+          data = data.rows
+        }
+
         $.each(data, function (i, row) {
           container.addRow(_this.createRow(row))
         })
@@ -647,6 +695,13 @@
       createRow: function (data) {
         var row = new Row()
         data = data || []
+
+        if (data.hasOwnProperty('options')) {
+          row.setOptions(data.rows)
+        }
+        if (data.hasOwnProperty('cols')) {
+          data = data.cols
+        }
 
         $.each(data, function (i, col) {
           row.addCol(_this.createCol(col))
@@ -745,6 +800,16 @@
         }
 
         target.addCol(_this.createCol(data))
+
+        _this.render()
+      },
+      addOption: function (container, option) {
+        if (!(container instanceof Container)) {
+          return
+        }
+
+        debugger;
+        container.addOption(option)
 
         _this.render()
       },
