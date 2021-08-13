@@ -59,7 +59,7 @@
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
-                <div class="panel-body">c
+                <div class="panel-body">
                     <div id="collapseTwo" class="panel-collapse collapse in">
                         {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
                     </div>
