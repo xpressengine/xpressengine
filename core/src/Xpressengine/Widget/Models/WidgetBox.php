@@ -62,7 +62,7 @@ class WidgetBox extends DynamicModel
      */
     public function isSupportContainer(): bool
     {
-        return Arr::get($this->getOptions(), 'supportContainer', false);
+        return Arr::get($this->getOptions(), 'supportContainer', $this->getPresenter()::SUPPORT_CONTAINER);
     }
 
     /**
