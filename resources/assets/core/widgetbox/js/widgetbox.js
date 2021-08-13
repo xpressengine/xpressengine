@@ -313,7 +313,7 @@
     var _containers = []
     var _rows = []
     var _flat = {}
-    var _supportContainer = null;
+    var _supportContainer = null
 
     return {
       init: function (options) {
@@ -343,6 +343,13 @@
         _this.$btnAddContainer = $('#btn-add-container')
       },
       bindEvents: function () {
+
+        // tracking iframe dom
+        _this.$editor.on('mouseover', '', function () {
+
+        })
+
+
         // change presenter
         _this.$presenter.change(function (event, data) {
           _cols = $(this).children(':selected').data('cols') || 12
@@ -638,8 +645,7 @@
 
       loadContents: function () {
 
-        $('#preview').attr('src', document.referrer);
-        console.log(document.referrer);
+        $('#preview').attr('src', document.referrer)
 
         XE.ajax({
           url: _options.loadUrl,
