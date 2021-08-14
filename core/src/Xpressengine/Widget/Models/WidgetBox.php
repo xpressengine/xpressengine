@@ -181,18 +181,18 @@ class WidgetBox extends DynamicModel
                 if ($supportContainer) {
                     $model->setAttribute('content', array($model->getAttributeValue('content')));
                 }
+            }
 
-                $content = $model->getContent();
-                $model->setAttribute('content', $content);
+            if (!isset($model->site_key)){
+                $model->site_key = \XeSite::getCurrentSiteKey();
             }
 
             $model->setAttribute('options', array_merge($model->getOptions(), [
                 'supportContainer' => $supportContainer
             ]));
 
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
+            $content = $model->getContent();
+            $model->setAttribute('content', $content);
         });
 
         self::saving(function($model){
