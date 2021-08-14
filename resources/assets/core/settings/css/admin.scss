@@ -2949,3 +2949,59 @@ aside {
     display: none;
   }
 }
+
+// xe-menu-type-list
+.xe-menu-type-list {
+  margin-bottom: 24px;
+
+  .card:hover,
+  .card.card--active {
+    border: 2px solid #3A5ED1;
+    transition: border .25s ease-in-out;
+  }
+
+  .card-header, .card-body {
+    display: flex;
+  }
+
+  .card-body {
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: row;
+    margin-top: 24px;
+    padding: 6px;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: border .15s ease-in-out;
+  }
+
+  .card-body {
+    justify-content: center;
+    padding-left: 24px;
+  }
+
+  .card-title {
+    margin-bottom: 6px;
+    font-size: 18px;
+  }
+
+  .card-text {
+    color: #9a9a9a;
+  }
+
+  .card-img-top {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    background-color: #C8C7CC;
+  }
+}
