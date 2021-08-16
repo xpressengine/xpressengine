@@ -184,7 +184,7 @@ class Element
      *
      * @return $this
      */
-    public function html(string $html)
+    public function html(string $html = null)
     {
         $this->children = [$html];
         return $this;
