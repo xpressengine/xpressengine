@@ -474,6 +474,7 @@ class PluginManageController extends Controller
             'uiobject' => xe_trans('xe::uiobject'),
             'FieldType' => xe_trans('xe::dynamicField'),
             'FieldSkin' => xe_trans('xe::dynamicFieldSkin'),
+            'toggleMenu' => xe_trans('xe::toggleMenu'),
         ];
 
         return $componentTypes;

@@ -14,6 +14,9 @@
 
 namespace Xpressengine\Widget\Presenters;
 
+use Illuminate\Support\Arr;
+use Xpressengine\UIObject\Element;
+
 /**
  * Class BootstrapPresenter
  *
@@ -44,11 +47,28 @@ class BootstrapPresenter extends AbstractPresenter
      * Get HTML wrapper for row contents
      *
      * @param string $content row contents
+     * @param array $options
      * @return string
      */
-    protected function getRowWrapper($content)
+    protected function getRowWrapper(string $content, array $options): string
     {
-        return '<div class="row">'.$content.'</div>';
+        $row = new Element('div');
+
+        if ($attributes = Arr::get($options, 'attributes')) {
+            $this->setElementAttributes($row, $attributes);
+        }
+
+        return $row->addClass($this->getRowClass())->append($content)->render();
+    }
+
+    /**
+     * get row's class
+     *
+     * @return string
+     */
+    protected function getRowClass(): string
+    {
+        return 'row';
     }
 
     /**
@@ -56,16 +76,24 @@ class BootstrapPresenter extends AbstractPresenter
      *
      * @param string $content column content
      * @param array  $grid    column grid data
+     * @param array  $options column options
      * @return string
      */
-    protected function getColumnWrapper($content, $grid = [])
+    protected function getColumnWrapper(string $content, array $grid = [], array $options = []): string
     {
         $classes = [];
+
         foreach ($grid as $type => $count) {
             $classes[] = $this->getColumnClass($type, $count);
         }
 
-        return '<div class="'.implode(' ', $classes).'">'.$content.'</div>';
+        $col = new Element('div');
+
+        if ($attributes = Arr::get($options, 'attributes')) {
+            $this->setElementAttributes($col, $attributes);
+        }
+
+        return $col->addClass(implode(' ', $classes))->append($content)->render();
     }
 
     /**
@@ -75,7 +103,7 @@ class BootstrapPresenter extends AbstractPresenter
      * @param int    $count span count
      * @return string
      */
-    protected function getColumnClass($type, $count)
+    protected function getColumnClass(string $type, int $count): string
     {
         return sprintf('col-%s-%s', $type, $count);
     }

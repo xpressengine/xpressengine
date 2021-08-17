@@ -16,7 +16,7 @@
                         <h3 class="panel-title">{{xe_trans('xe::editItemDescription')}}</h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
 
@@ -151,30 +151,31 @@
         </div>
 
         @if ($menuType !== null && $menuType::isRouteAble())
-        <div class="panel">
-            <div class="panel-heading">
-                <div class="pull-left">
-                    <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
-                </div>
-                <div class="pull-right">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
-                </div>
-            </div>
-
-            <div id="collapseTwo" class="panel-collapse collapse in">
+        <div class="panel-group">
+            <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="parentTheme" id="parentTheme" value="1"
-                                @if($parentThemeMode) checked @endif>
-                                <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
-                            </label>
-                        </div>
+                        <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
+                    </div>
+                    <div class="pull-right">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
-                <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
-                    {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
+
+                <div id="collapseTwo" class="panel-collapse collapse in">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="parentTheme" id="parentTheme" value="1" @if($parentThemeMode) checked @endif>
+                                    <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
+                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
+                    </div>
                 </div>
             </div>
         </div>

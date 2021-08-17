@@ -17,7 +17,11 @@ trait WidgetBoxDataTrait
 
         if ($this->getPresenter()::SUPPORT_CONTAINER) {
             foreach ($content as &$container) {
-                $this->combineWidgets($container, $widgetNames);
+                if (array_key_exists('options', $container)) {
+                    $container['options']['_time'] = time();
+                }
+
+                $this->combineWidgets($container['rows'], $widgetNames);
             }
         } else {
             $this->combineWidgets($content, $widgetNames);
@@ -35,7 +39,11 @@ trait WidgetBoxDataTrait
     private function combineWidgets(&$content, array $widgetNames)
     {
         foreach ($content as &$row) {
-            foreach ($row as &$col) {
+            if (array_key_exists('options', $row)) {
+                $row['options']['_time'] = time();
+            }
+
+            foreach ($row['cols'] as &$col) {
                 foreach ($col['widgets'] as &$widgetInfo) {
                     $skinId = $widgetInfo['@attributes']['skin-id'];
                     $class = app('xe.skin')->get($skinId);

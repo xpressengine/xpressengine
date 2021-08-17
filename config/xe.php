@@ -428,6 +428,7 @@ return [
             'formText' => 'uiobject/xpressengine@formText',
             'formPassword' => 'uiobject/xpressengine@formPassword',
             'formTextarea' => 'uiobject/xpressengine@formTextArea',
+            'formScriptEditor' => 'uiobject/xpressengine@formScriptEditor',
             'formSelect' => 'uiobject/xpressengine@formSelect',
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formRadio' => 'uiobject/xpressengine@formRadio',
