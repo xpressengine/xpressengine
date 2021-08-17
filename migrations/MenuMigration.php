@@ -155,6 +155,10 @@ class MenuMigration extends Migration
             return false;
         }
 
+        if ($this->checkExistMenuOrderingColumn() === false) {
+            return false;
+        }
+
         if(Schema::hasColumn('menu_item', 'site_key') == false) {
             return false;
         }
@@ -230,7 +234,7 @@ class MenuMigration extends Migration
             });
         }
 
-        $items = \Menu::get();
+        $items = Menu::get();
         foreach ($items as $index => $item) {
             $item->ordering = $index + 1;
             $item->save();
