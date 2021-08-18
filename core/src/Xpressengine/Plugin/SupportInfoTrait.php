@@ -92,10 +92,11 @@ trait SupportInfoTrait
     }
 
     /**
-     * `medialibraryImage` Input 값이 화면에 출력될 수 있도록 값을 변경합니다.
+     * `mediaLibraryImage` Input 값이 화면에 출력될 수 있도록 값을 변경합니다.
      *
      * @param array $info
      * @param array $data
+     * @return void
      */
     public static function convertInfoMediaLibraryImage(array &$info, array $data)
     {
@@ -134,12 +135,19 @@ trait SupportInfoTrait
         }
     }
 
+    /**
+     * mediaLibraryImage 데이터 변환
+     *
+     * @param $key
+     * @param $data
+     * @return bool
+     */
     public static function convertDataMediaLibraryImage($key, &$data)
     {
         $info = static::info($key);
 
         if (! is_array($info) || !is_array($data)) {
-            return null;
+            return false;
         }
 
         static::convertInfoMediaLibraryImage($info, $data);
@@ -153,5 +161,7 @@ trait SupportInfoTrait
                     : array_map(function($file) { return $file['preview']; }, $files);
             }
         }
+
+        return true;
     }
 }
