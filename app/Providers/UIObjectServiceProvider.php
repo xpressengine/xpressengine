@@ -29,6 +29,7 @@ use App\UIObjects\Form\FormPassword;
 use App\UIObjects\Form\FormSelect;
 use App\UIObjects\Form\FormText;
 use App\UIObjects\Form\FormTextArea;
+use App\UIObjects\Form\FormScriptEditor;
 use App\UIObjects\Form\FormColorpicker;
 use App\UIObjects\Lang\LangText;
 use App\UIObjects\Lang\LangTextArea;
@@ -109,5 +110,6 @@ class UIObjectServiceProvider extends ServiceProvider
 
         $register->add(FormLangText::class);
         $register->add(FormLangTextArea::class);
+        $register->add(FormScriptEditor::class);
     }
 }

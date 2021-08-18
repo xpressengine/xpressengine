@@ -61,8 +61,8 @@ var SearchHead = (function (XE, $) {
         '</div>',
         '</div>',
         '<div class="pull-right">',
-        '<a href="' + _createMenuUrl + '" class="btn btn-primary pull-right">',
-        '<i class="xi-plus"></i>',
+        '<a href="' + _createMenuUrl + '" class="btn btn-primary">',
+        '<i class="xi-folder"></i>',
         XE.Lang.trans('xe::addMenu'),
         '</a>',
         '</div>'

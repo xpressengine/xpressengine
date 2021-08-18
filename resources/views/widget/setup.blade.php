@@ -19,3 +19,24 @@
     @include('widget.form')
     @endif
 </div>
+
+<script>
+$(function () {
+    var _$selectWidget = $('.__xe_select_widget');
+
+    _$selectWidget.ready(function () {
+        _hideDirectStore();
+    });
+    _$selectWidget.on('change', function(e) {
+        _hideDirectStore();
+    });
+
+    function _hideDirectStore() {
+        if(_$selectWidget.val()) {
+            $('.xe-panel--direct-store').hide();
+        } else {
+            $('.xe-panel--direct-store').show();
+        }
+    }
+})
+</script>

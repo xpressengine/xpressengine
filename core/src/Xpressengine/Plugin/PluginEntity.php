@@ -468,18 +468,14 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getReadMe()
     {
-
         if ($this->hasRemoteData()) {
-            return data_get($this->remoteData, 'details', '');
+            if ($details = data_get($this->remoteData, 'details')) {
+                return $details;
+            }
         }
 
         $file = $this->getPath('README.md');
-
-        if (!file_exists($file)) {
-            return '';
-        } else {
-            return nl2br(file_get_contents($file));
-        }
+        return file_exists($file) ? nl2br(file_get_contents($file)) : '';
     }
 
     /**

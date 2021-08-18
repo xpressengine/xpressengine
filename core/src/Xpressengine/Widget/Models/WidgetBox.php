@@ -60,9 +60,9 @@ class WidgetBox extends DynamicModel
      *
      * @return boolean
      */
-    public function isSupportContainer()
+    public function isSupportContainer(): bool
     {
-        return Arr::get($this->getOptions(), 'supportContainer', false);
+        return Arr::get($this->getOptions(), 'supportContainer', $this->getPresenter()::SUPPORT_CONTAINER);
     }
 
     /**
@@ -70,40 +70,96 @@ class WidgetBox extends DynamicModel
      *
      * @return string
      */
-    public function getPresenter()
+    public function getPresenter(): string
     {
         return Arr::get($this->getAttributeValue('options'), 'presenter');
     }
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->getAttributeValue('options');
     }
 
-    public function getContent()
+    public function getContent(): array
     {
         $content = $this->getAttributeValue('content');
 
-        foreach ($content as &$container) {
-            if (!array_key_exists('rows', $container)) {
-                $container = [
-                    'rows' => $container,
-                    'options' => [],
-                ];
+        return $this->getPresenter()::SUPPORT_CONTAINER
+            ? $this->getContainersContent($content)
+            : $this->getRowsContent($content);
+    }
+
+    /**
+     * get containers content
+     *
+     * @param array $containers
+     * @return array
+     */
+    private function getContainersContent(array $containers): array
+    {
+        foreach ($containers as &$container) {
+            $hasNotStringKeys = count(array_filter(array_keys($container), 'is_string')) === 0;
+
+            if ($hasNotStringKeys && !array_key_exists('rows', $container)) {
+                $container = $this->getContainerData($container);
             }
 
-            $rows = &$container['rows'];
-            foreach ($rows as &$row) {
-                if (!array_key_exists('cols', $row)) {
-                    $row = [
-                        'cols' => $row,
-                        'options' => [],
-                    ];
-                }
+
+            if (array_key_exists('rows', $container)) {
+                $container['rows'] = $this->getRowsContent($container['rows']);
             }
         }
 
-        return $content;
+        return $containers;
+    }
+
+    /**
+     * make rows content
+     *
+     * @param array $rows
+     * @return array
+     */
+    private function getRowsContent(array $rows): array
+    {
+        $rows = $this->getContainersToRaws($rows);
+
+        foreach ($rows as &$row) {
+            $hasNotStringKeys = count(array_filter(array_keys($row), 'is_string')) === 0;
+
+            if ($hasNotStringKeys && !array_key_exists('cols', $row)) {
+                $row = $this->getRowData($row);
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * get container data
+     *
+     * @param $data
+     * @return array
+     */
+    private function getContainerData($data): array
+    {
+        return [
+            'rows' => $data,
+            'options' => [],
+        ];
+    }
+
+    /**
+     * get row data
+     *
+     * @param $data
+     * @return array
+     */
+    private function getRowData($data): array
+    {
+        return [
+            'cols' => $data,
+            'options' => [],
+        ];
     }
 
     public static function boot()
@@ -118,22 +174,25 @@ class WidgetBox extends DynamicModel
 
         self::updating(function(WidgetBox $model){
             $original = $model->getOriginal();
-            $originalPresenter = json_decode($original['options'], JSON_OBJECT_AS_ARRAY)['presenter'];
+            $originSupportContainer = json_decode($original['options'], JSON_OBJECT_AS_ARRAY)['presenter']::SUPPORT_CONTAINER;
+            $supportContainer = $model->getPresenter()::SUPPORT_CONTAINER;
 
-            if (! empty($model->getContent())) {
-                $content = $model->getContent();
-
-                if ($originalPresenter::SUPPORT_CONTAINER !== $model->getPresenter()::SUPPORT_CONTAINER) {
-                    $supportContainer = $model->getPresenter()::SUPPORT_CONTAINER;
-                    $content = $supportContainer ? array($content) : array_merge(...array_values($content));
+            if ($supportContainer !== $originSupportContainer && $model->getAttributeValue('content')) {
+                if ($supportContainer) {
+                    $model->setAttribute('content', array($model->getAttributeValue('content')));
                 }
-
-                $model->setAttribute('content', $content);
             }
 
-            if(!isset($model->site_key)){
+            if (!isset($model->site_key)){
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
+
+            $model->setAttribute('options', array_merge($model->getOptions(), [
+                'supportContainer' => $supportContainer
+            ]));
+
+            $content = $model->getContent();
+            $model->setAttribute('content', $content);
         });
 
         self::saving(function($model){
@@ -143,5 +202,18 @@ class WidgetBox extends DynamicModel
         });
 
         static::observe(WidgetBoxHistoryObserver::class);
+    }
+
+    private function getContainersToRaws(array $content): array
+    {
+        $rows = [];
+
+        foreach ($content as $container) {
+            if (array_key_exists('rows', $container) && count($container) > 0) {
+                array_push($rows, ...$container['rows']);
+            }
+        }
+
+        return count($rows) > 0 ? $rows : $content;
     }
 }
