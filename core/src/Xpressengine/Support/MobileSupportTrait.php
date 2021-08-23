@@ -24,10 +24,10 @@ namespace Xpressengine\Support;
  * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
+ * @deprecated  SupportInfoTrait 사용하도록 대체
  */
 trait MobileSupportTrait
 {
-
     /**
      * @var bool desktop 버전 지원 여부
      */
