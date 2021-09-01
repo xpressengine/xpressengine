@@ -26,8 +26,8 @@
                 </ul>
             </div>
 
-            <div class="panel-group">
-                <div class="panel">
+            <div class="panel-group" style="margin-bottom: 0; border-bottom: 0">
+                <div class="panel" style="border-bottom: 0">
                     <div class="panel-heading">
                         <div class="pull-left">
                             <div class="btn-group">
@@ -74,16 +74,23 @@
                             </div>
                         </div>
                     </div>
-
-                    <ul class="list-group list-plugin">
-                        @foreach ($extensions as $item)
-                            @include($_skin::view('common.installed_item'))
-                        @endforeach
-                    </ul>
                 </div>
             </div>
         </div>
     </form>
+
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <div class="panel" style="border-top: 0">
+                <ul class="list-group list-plugin">
+                    @foreach ($extensions as $item)
+                        @include($_skin::view('common.installed_item'))
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <form action="{{ route('settings.plugins.install') }}" method="POST" id="xe-install-plugin">

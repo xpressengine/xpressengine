@@ -23,7 +23,11 @@
             <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
             <dd>plugins/{{ $item->getId() }}</dd>
             <dt class="sr-only">{{ xe_trans('xe::pluginDetails') }}</dt>
-            <dd><a href="{{ route('settings.plugins.show', [$item->getId()]) }}">{{ xe_trans('xe::viewDetails') }}</a></dd>
+            <dd>
+                <a href="{{ route('settings.plugins.show', array_merge([$item->getId()], request()->all())) }}">
+                    {{ xe_trans('xe::viewDetails') }}
+                </a>
+            </dd>
         </dl>
         <p class="ellipsis">{{ $item->getDescription() }}</p>
 
