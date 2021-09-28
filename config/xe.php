@@ -405,7 +405,22 @@ return [
                 'ffmpeg.threads' => 4,   // The number of threads that FFMpeg should use
             ]
         ],
-        'videoSnapshotFromSec' => 10
+        'videoSnapshotFromSec' => 10,
+
+
+        'waveform' => [
+            'disk' => 'local',
+            'path' => 'public/waveforms',
+        ],
+
+        // use 'dummy', 'waveform'
+        'audioExtensionDefault' => 'dummy',
+        'audioExtensions' => [
+            'waveform' => [
+                'commandFilePath' => env('COMMAND_FILE_PATH','scale-json.py'),
+                'timeout' => 3600, // The timeout for the underlying process
+            ]
+        ],
     ],
 
     'security' => [

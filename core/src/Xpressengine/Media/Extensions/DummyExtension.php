@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Media\Extensions;
 
+use Xpressengine\Media\Models\Media;
+
 /**
  * extension 을 사용하지 않을 경우 사용되는 클래스
  *
@@ -34,6 +36,17 @@ class DummyExtension implements ExtensionInterface
      * @return null
      */
     public function getSnapshot($content, $fromSecond = 10)
+    {
+        return null;
+    }
+
+    /**
+     * 오디오에서 waveform 생성
+     *
+     * @param Media $media media instance
+     * @return null
+     */
+    public function getWaveform($media)
     {
         return null;
     }

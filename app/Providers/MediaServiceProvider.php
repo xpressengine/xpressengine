@@ -32,6 +32,7 @@ use Xpressengine\Media\Repositories\AudioRepository;
 use Xpressengine\Media\Repositories\ImageRepository;
 use Xpressengine\Media\Repositories\VideoRepository;
 use Xpressengine\Media\Thumbnailer;
+use Xpressengine\Media\Extensions\WaveFormExtension;
 
 /**
  * Class MediaServiceProvider
@@ -71,7 +72,8 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->singleton(MediaManager::class, function ($app) {
             $config = $app['config']['xe.media'];
             $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'XeMedia');
-            $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
+            $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config);
+            //$mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
 
             $mediaManager->extend(Media::TYPE_IMAGE, new ImageHandler(new ImageRepository(), $app['xe.storage']));
 
@@ -91,10 +93,21 @@ class MediaServiceProvider extends ServiceProvider
                 isset($config['videoSnapshotFromSec']) ?: null
             ));
 
+            $audioExtensionName = isset($config['audioExtensionDefault']) ? $config['audioExtensionDefault'] : 'dummy';
+            $method = 'create' . ucfirst($audioExtensionName) . 'Extension';
+            if (method_exists($this, $method) !== true) {
+                throw new \InvalidArgumentException(
+                    sprintf('Unknown extension [%s]', $config['audioExtensionDefault'])
+                );
+            }
+            $audioExtension = $this->{$method}($config);
+
             $mediaManager->extend(Media::TYPE_AUDIO, new AudioHandler(
                 new AudioRepository(),
                 new \getID3(),
-                $app['xe.storage.temp']
+                $app['xe.storage.temp'],
+                $audioExtension,
+                $app['xe.storage']
             ));
 
             return $mediaManager;
@@ -122,6 +135,17 @@ class MediaServiceProvider extends ServiceProvider
     private function createFfmpegExtension($config)
     {
         return new FFMpegExtension(FFMpeg::create($config['videoExtensions']['ffmpeg']), $this->app['xe.storage.temp']);
+    }
+
+    /**
+     * Returns WaveformExtension
+     *
+     * @param array $config config data
+     * @return WaveFormExtension
+     */
+    private function createWaveformExtension($config)
+    {
+        return new WaveFormExtension($config['audioExtensions']['waveform'], $this->app['xe.storage.temp']);
     }
 
     /**

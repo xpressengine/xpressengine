@@ -16,6 +16,7 @@ namespace Xpressengine\Media\Extensions;
 
 use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Storage\TempFileCreator;
 
 /**
@@ -77,5 +78,16 @@ class FFMpegExtension implements ExtensionInterface
         @unlink($imgPathname);
 
         return $imageContent;
+    }
+
+    /**
+     * 오디오에서 waveform 생성
+     *
+     * @param Media $media media instance
+     * @return null
+     */
+    public function getWaveform($media)
+    {
+        return null;
     }
 }

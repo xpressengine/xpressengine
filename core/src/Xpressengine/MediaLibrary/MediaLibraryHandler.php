@@ -516,6 +516,7 @@ class MediaLibraryHandler
         if (XeMedia::is($file) == true) {
             $media = XeMedia::make($file);
             XeMedia::createThumbnails($media);
+            XeMedia::createWaveform($media);
         }
 
         $folderItem = null;

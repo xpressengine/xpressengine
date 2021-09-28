@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Media\Extensions;
 
+use Xpressengine\Media\Models\Media;
+
 /**
  * extension 의 기능을 정의 함
  *
@@ -34,4 +36,12 @@ interface ExtensionInterface
      * @return null|string
      */
     public function getSnapshot($content, $fromSecond = 10);
+
+    /**
+     * 오디오에서 waveform 생성
+     *
+     * @param Media $media media instance
+     * @return null|string
+     */
+    public function getWaveform($media);
 }

@@ -224,10 +224,10 @@ class MediaManager
         $disk = null,
         $option = []
     ) {
-        $type = strtolower($type ?: $this->config['type']);
-        $path = $path ?: $this->config['path'];
-        $disk = $disk ?: $this->config['disk'];
-        $dimensions = $dimensions ?: $this->config['dimensions'];
+        $type = strtolower($type ?: $this->config['thumbnail']['type']);
+        $path = $path ?: $this->config['thumbnail']['path'];
+        $disk = $disk ?: $this->config['thumbnail']['disk'];
+        $dimensions = $dimensions ?: $this->config['thumbnail']['dimensions'];
         $handler = $this->getHandlerByMedia($media);
 
         if (!$content = $handler->getPicture($media)) {
@@ -252,6 +252,44 @@ class MediaManager
         }
 
         return new Collection($thumbnails);
+    }
+
+    /**
+     * jsonfile waveform 생성
+     *
+     * @param Media       $media      media instance
+     * @param null        $path       directory for saved
+     * @param string|null $disk       disk for saved
+     * @param mixed       $option     disk option (ex. aws s3 'visibility: public')
+     * @return File
+     */
+    public function createWaveform(
+        Media $media,
+        $path = null,
+        $disk = null,
+        $option = []
+    ) {
+
+        $path = $path ?: $this->config['waveform']['path'];
+        $disk = $disk ?: $this->config['waveform']['disk'];
+
+        $handler = $this->getHandlerByMedia($media);
+
+        if (!$content = $handler->getJsonFile($media)) {
+            return null;
+        }
+
+        $waveform = $this->getHandler(Media::TYPE_AUDIO)
+            ->createWaveform(
+                $content,
+                $disk,
+                $path,
+                $media->getOriginKey(),
+                $option
+            );
+
+
+        return $waveform;
     }
 
     /**

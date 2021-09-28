@@ -61,6 +61,14 @@ interface MediaHandler
     public function getPicture(Media $media);
 
     /**
+     * 미디어에서 jsonfile 생성
+     *
+     * @param Media $media media instance
+     * @return null|string jsonfile content
+     */
+    public function getJsonFile(Media $media);
+
+    /**
      * Make model
      *
      * @param File $file file instance

@@ -106,6 +106,17 @@ class VideoHandler extends AbstractHandler
     }
 
     /**
+     * 미디어에서 jsonfile 생성
+     *
+     * @param Media $media audio instance
+     * @return null
+     */
+    public function getJsonFile(Media $media)
+    {
+        return null;
+    }
+
+    /**
      * media 객체로 반환
      *
      * @param File $file file instance
