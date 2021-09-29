@@ -2514,6 +2514,10 @@ return [
         'ko' => '사용 가능한 이름입니다.',
         'en' => 'This is a usable name.',
     ],
+    'usableLoginId' => [
+        'ko' => '사용 가능한 아이디입니다.',
+        'en' => 'This is a usable login id.',
+    ],
     'cannotDeleteSuperUser' => [
         'ko' => '최고 권한을 가진 회원은 삭제할 수 없습니다.',
         'en' => 'Can not delete the user having \'super\' rating'

@@ -577,4 +577,37 @@ class RegisterController extends Controller
             ['type' => 'success', 'message' => xe_trans($message), 'displayName' => $displayName, 'valid' => $valid]
         );
     }
+
+    /**
+     * validate login id
+     *
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
+    public function validateLoginId(Request $request)
+    {
+        $valid = true;
+        $message = 'xe::usableLoginId';
+        $loginId = trim($request->input('login_id'));
+
+        try {
+            $this->validate($request, [
+                'login_id' => ['login_id', Rule::unique('user', 'login_id')]
+            ]);
+        }
+
+        catch (ValidationException $exception) {
+            $valid = false;
+            $message = Arr::first($exception->errors()['login_id']);
+        }
+
+        catch (\Exception $e) {
+            throw $e;
+        }
+
+        return XePresenter::makeApi(
+            ['type' => 'success', 'message' => xe_trans($message), 'login_id' => $loginId, 'valid' => $valid]
+        );
+    }
 }

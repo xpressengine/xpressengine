@@ -89,6 +89,7 @@ Route::group(
 
         Route::post('register/check/email', ['as' => 'auth.register.check.email', 'uses' => 'Auth\RegisterController@validateEmail']);
         Route::post('register/check/name', ['as' => 'auth.register.check.name', 'uses' => 'Auth\RegisterController@validateDisplayName']);
+        Route::post('register/check/login_id', ['as' => 'auth.register.check.login_id', 'uses' => 'Auth\RegisterController@validateLoginId']);
 
         // email confirm
         Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']); // confirm email
