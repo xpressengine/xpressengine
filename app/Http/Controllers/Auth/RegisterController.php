@@ -17,7 +17,9 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeConfig;
 use XeDB;
@@ -558,22 +560,17 @@ class RegisterController extends Controller
      */
     public function validateDisplayName(Request $request)
     {
-        $displayName = $request->get('display_name');
-        $displayName = trim($displayName);
-        $message = 'xe::usableDisplayName';
-
         $valid = true;
+        $message = 'xe::usableDisplayName';
+        $displayName = trim($request->get('display_name'));
+
         try {
             $this->handler->validateDisplayName($displayName);
-        } catch (DisplayNameAlreadyExistsException $e) {
+        } catch (ValidationException $exception) {
             $valid = false;
-            $message = $e->getMessage();
-        } catch (InvalidDisplayNameException $e) {
-            $valid = false;
-            $message = $e->getMessage();
-        } catch (\Exception $e) {
-            $valid = false;
-            throw $e;
+            $message = Arr::first($exception->errors()['display_name']);
+        } catch (\Exception $exception) {
+            throw $exception;
         }
 
         return XePresenter::makeApi(

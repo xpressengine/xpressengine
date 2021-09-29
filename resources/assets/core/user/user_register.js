@@ -91,6 +91,27 @@ $(function () {
         }, function () { })
     })
 
+    $('[name=display_name]').on('focusout change', function () {
+      var that = this
+      var $this = $(this)
+      var $form = $this.closest('form')
+
+      console.log('enter login_id')
+
+      XE.Validator.validate($form, 'display_name', XE.Validator.rules[$form.data('rule')].display_name)
+        .then(function (r) {
+          // 메시지 제거
+          $this.closest('.xu-form-group').find('.xu-form-group__validation').remove()
+
+          if ($this.val().length) {
+            checkDuplicate('name', 'display_name', that.value)
+              .then(function (result) {
+                XE.Griper.form.fn.message($this, result.data.message, (result.data.valid) ? 'success' : 'error')
+              }, function (e) { })
+          }
+        }, function () { })
+    })
+
     $('[name=password],[name=password_confirmation]').on('focusin focusout keyup change', function (e) {
       var $this = $(this)
 
@@ -110,7 +131,6 @@ $(function () {
 	})
       }
     })
-
   }
 
   function validatePassword (val) {
