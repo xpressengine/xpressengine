@@ -145,7 +145,7 @@
                                     <td>
                                     @foreach($componentTypes as $type => $typeText)
                                         @foreach($plugin->getComponentList($type) as $key => $component)
-                                            <span class="label label-{{ $color[$type] }}" title="{{ $component['name'] }}" data-toggle="tooltip">{{ $type }}</span>
+                                            <span class="label label-{{ $color[$type] }}" title="{{ $component['name'] }}" data-toggle="tooltip">{{ $typeText }}</span>
                                         @endforeach
                                     @endforeach
                                     </td>
