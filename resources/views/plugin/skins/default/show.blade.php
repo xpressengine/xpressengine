@@ -206,7 +206,7 @@
                                                                     <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
                                                                 @endif
                                                             </td>
-                                                            <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                            <td><span class="label label-{{ $color[$type] }}">{{ $typeText }}</span></td>
                                                             <td>{{ $class::getComponentInfo('description') }}</td>
                                                         </tr>
                                                     @endif
