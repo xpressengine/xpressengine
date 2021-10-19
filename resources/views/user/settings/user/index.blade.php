@@ -145,14 +145,8 @@ use Xpressengine\User\Models\User;
                                 @endif
                             </td>
                             <td>{{ data_get($user, 'email', xe_trans('xe::empty')) }}</td>
-                            <td>{!! $user->created_at->format('y-m-d') !!}</td>
-                            <td>
-                                @if($user->login_at !== null)
-                                {!! $user->login_at->format('y-m-d') !!}
-                                @else
-                                -
-                                @endif
-                            </td>
+                            <td>{{ optional($user->created_at)->format('y-m-d') ?? '-' }}</td>
+                            <td>{{ optional($user->login_at)->format('y-m-d') ?? '-' }}</td>
                             <td>
                                 @if($user->groups !== null)
                                     {{ implode(', ', array_pluck($user->groups, 'name')) }}
