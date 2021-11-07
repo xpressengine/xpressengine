@@ -221,13 +221,13 @@ class WidgetHandler
         foreach ($inputs as $k => $v) {
             // attribute
             if (strpos($k, '@') === 0) {
-                $attr[substr($k, 1)] = (string) $v;
+                $attr[substr($k, 1)] = htmlentities((string) $v);
             } elseif (is_array($v)) {
                 $children[] = $this->generateXml($k, $v, $depth + 1);
             } elseif (is_numeric($k)) {
-                $children[] = sprintf("%s<item>%s</item>", $space, $v);
+                $children[] = sprintf("%s<item>%s</item>", $space, htmlentities($v));
             } else {
-                $children[] = sprintf("%s<%s>%s</%s>", $space, $k, $v, $k);
+                $children[] = sprintf("%s<%s>%s</%s>", $space, $k, htmlentities($v), $k);
             }
         }
 
