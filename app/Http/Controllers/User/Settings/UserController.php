@@ -72,16 +72,6 @@ class UserController extends Controller
         $groups = $this->handler->groups()->query()->where('site_key',$site_key)->get();
 
         $query = $this->handler->users()->query();
-
-        //set current site groups
-        $group_ids = $groups->pluck('id');
-        $query = $query->whereHas(
-            'groups',
-            function (Builder $q) use ($group_ids) {
-                $q->whereIn('group_id', $group_ids);
-            }
-        );
-
         $allUserCount = $query->count();
 
         if ($startDate = $request->get('startDate')) {
