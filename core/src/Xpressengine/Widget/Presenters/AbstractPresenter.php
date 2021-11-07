@@ -245,10 +245,18 @@ abstract class AbstractPresenter implements PresenterInterface
             $attributes['@title'] = htmlentities($attributes['@title']);
         }
 
+        $info = Arr::except($raw, '@attributes');
+
+        foreach ($info as $key => $value) {
+            if (is_string($value) === true) {
+                $info[$key] = htmlentities($value);
+            }
+        }
+
         return call_user_func(
             static::$generator,
             Arr::get($raw, '@attributes.id'),
-            array_merge(Arr::except($raw, '@attributes'), $attributes)
+            array_merge($info, $attributes)
         );
     }
 
