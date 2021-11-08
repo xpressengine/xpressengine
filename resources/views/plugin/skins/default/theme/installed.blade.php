@@ -31,7 +31,7 @@
                         <div class="panel-heading">
                             <div class="pull-left">
                                 <div class="btn-group">
-                                    <button class="btn btn-default __xe_check_all">{{ xe_trans('xe::selectAll') }}</button>
+                                    <button class="btn btn-default __xe_check_all" type="button">{{ xe_trans('xe::selectAll') }}</button>
                                 </div>
                                 <div class="btn-group __xe_controll_btn">
                                     <a href="{{ route('settings.plugins.manage.activate') }}" class="btn btn-default on __xe_activate_plugin"><span>{{ xe_trans('xe::activate') }}</span></a>
