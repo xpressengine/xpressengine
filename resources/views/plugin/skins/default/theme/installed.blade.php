@@ -44,9 +44,9 @@
                                 <div class="input-group search-group">
                                     <div class="search-input-group">
                                         <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="query" value="{{ \Request::get('query') }}">
-                                        <button class="btn-link">
-                                            <span class="sr-only">{{xe_trans('xe::search')}}</span>
-                                        </button>
+                                        <a class="btn-link" href="{{ request()->fullUrlWithQuery(['query' => null]) }}" style="right: 11px; height: 26px">
+                                            <i class="xi-close"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
