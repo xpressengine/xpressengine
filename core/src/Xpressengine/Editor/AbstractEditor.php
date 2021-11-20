@@ -482,7 +482,7 @@ abstract class AbstractEditor implements ComponentInterface
                 $this->getMegaSize(ini_get('upload_max_filesize')),
                 $this->getMegaSize(ini_get('post_max_size'))
             );
-            $data['attachMaxSize'] = 0;
+            $data['attachMaxSize'] = $this->config->get('attachMaxSize');
         }
 
         return $data;
