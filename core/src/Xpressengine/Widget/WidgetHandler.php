@@ -16,6 +16,7 @@ namespace Xpressengine\Widget;
 
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Plugin\PluginRegister;
@@ -197,6 +198,8 @@ class WidgetHandler
      */
     protected function handleError(Exception $e)
     {
+        app(ExceptionHandler::class)->report($e);
+
         if (in_array($this->guard->user()->getRating(), static::$displayErrorRatings)) {
             return $this->view->make('widget.error', ['message' => $e->getMessage()])->render();
         }
