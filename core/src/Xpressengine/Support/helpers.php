@@ -565,7 +565,13 @@ if (!function_exists('menu_list')) {
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }
+
             $tree = $menu->getTree()->getTreeNodes();
+            $loaded = \Illuminate\Database\Eloquent\Collection::make($tree)->load('ancestors');
+
+            $tree->transform(function ($menuItem, $key) use($loaded) {
+                return $loaded->find($loaded[$key]);
+            });
 
             // resolve menu visible
             $menuTree = [];
