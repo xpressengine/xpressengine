@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class DuplicateException extends ConfigException
 {
-    protected $message = '":name" is duplicate.';
+    protected $message = 'config ":name" group is duplicate.';
 }

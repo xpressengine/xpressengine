@@ -2514,6 +2514,10 @@ return [
         'ko' => '사용 가능한 이름입니다.',
         'en' => 'This is a usable name.',
     ],
+    'usableLoginId' => [
+        'ko' => '사용 가능한 아이디입니다.',
+        'en' => 'This is a usable login id.',
+    ],
     'cannotDeleteSuperUser' => [
         'ko' => '최고 권한을 가진 회원은 삭제할 수 없습니다.',
         'en' => 'Can not delete the user having \'super\' rating'
@@ -3195,6 +3199,22 @@ return [
     'recentUpdate' => [
         'ko' => '최근 업데이트',
         'en' => 'Recent update',
+    ],
+    'adminSiteDisableCoreWebUpdate' => [
+        'ko' => '관리자사이트에서 업데이트 기능을 지원하지 않습니다.',
+        'en' => 'Admin-site does not support the update function.',
+    ],
+    'developerSetupDisableCoreWebUpdate' => [
+        'ko' => '웹사이트 개발자가 업데이트 설정을 사용할 수 없도록 했습니다.',
+        'en' => 'The website developer has disabled the update settings.',
+    ],
+    'findOutDisableCoreWebUpdate' => [
+        'ko' => '관리자사이트에서 업데이트 기능을 사용해야할 경우 :option 설정에 대해서 알아보십시오.',
+        'en' => 'If you need to use the update function on the admin-site, please find out about the :option setting.',
+    ],
+    'checkHereForceCoreWebUpdate' => [
+        'ko' => '업데이트를 강제 실행하려면 여기를 체크하십시오.',
+        'en' => 'Check here if you want to force an update.',
     ],
     'selectPluginToUpdateAndClick' => [
         'ko' => '아래 플러그인의 새버전이 있습니다. 업데이트를 할 플러그인을 확인하시고 "플러그인 업데이트"를 누르세요.',

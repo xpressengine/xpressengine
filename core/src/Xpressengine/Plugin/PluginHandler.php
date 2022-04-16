@@ -1014,7 +1014,8 @@ class PluginHandler
      */
     private function movePlugin($targetDir, $pluginName)
     {
-        $this->getFilesystem()->move($targetDir, $this->getPrivatesDir().DIRECTORY_SEPARATOR.$pluginName);
+        $this->getFilesystem()->copyDirectory($targetDir, $this->getPrivatesDir().DIRECTORY_SEPARATOR.$pluginName);
+        $this->getFilesystem()->deleteDirectory($targetDir);
     }
 
     /**

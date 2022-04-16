@@ -159,6 +159,7 @@ return [
             'php4'  => 'application/x-httpd-php',
             'php3'  => 'application/x-httpd-php',
             'phtml' => 'application/x-httpd-php',
+            'phar' => 'application/x-httpd-php',
             'phps'  => 'application/x-httpd-php-source',
             'js'    => 'application/javascript',
         ],

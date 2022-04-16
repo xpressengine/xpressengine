@@ -15,6 +15,7 @@
 namespace Xpressengine\Widget\Presenters;
 
 use Illuminate\Support\Arr;
+use Xpressengine\UIObject\Element;
 
 /**
  * Abstract class AbstractPresenter
@@ -79,9 +80,10 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param array $data    contents data
      * @param array $options options
      */
-    public function __construct($data, $options = [])
+    public function __construct(array $data, array $options = [])
     {
         $this->data = $data;
+        $this->options = $options;
     }
 
     /**
@@ -89,7 +91,7 @@ abstract class AbstractPresenter implements PresenterInterface
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $content = '';
         foreach ($this->data as $row) {
@@ -105,7 +107,7 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param string $content content string
      * @return string
      */
-    protected function getContainerWrapper($content)
+    protected function getContainerWrapper(string $content): string
     {
         return $content;
     }
@@ -116,11 +118,14 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param array $data row data
      * @return string
      */
-    protected function getRow($data)
+    protected function getRow(array $data): string
     {
+        $cols = Arr::get($data, 'cols', $data);
+        $options = Arr::get($data, 'options', []);
+
         $content = '';
 
-        foreach ($data as $col) {
+        foreach ($cols as $col) {
             if (empty($col)) {
                 continue;
             }
@@ -128,16 +133,17 @@ abstract class AbstractPresenter implements PresenterInterface
             $content .= $this->getColumn($col);
         }
 
-        return $this->getRowWrapper($content);
+        return $this->getRowWrapper($content, $options);
     }
 
     /**
      * Get HTML wrapper for row contents
      *
      * @param string $content row contents
+     * @param array $options
      * @return string
      */
-    abstract protected function getRowWrapper($content);
+    abstract protected function getRowWrapper(string $content, array $options): string;
 
     /**
      * Get a column contents
@@ -145,8 +151,9 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param array $data column data
      * @return string
      */
-    protected function getColumn($data)
+    protected function getColumn(array $data): string
     {
+        $options = Arr::get($data, 'options', []);
         $content = '';
 
         if (count($rows = Arr::get($data, 'rows', [])) > 0) {
@@ -163,17 +170,60 @@ abstract class AbstractPresenter implements PresenterInterface
             }
         }
 
-        return $this->getColumnWrapper($content, $data['grid']);
+        return $this->getColumnWrapper($content, $data['grid'], $options);
     }
 
     /**
      * Get HTML wrapper for column contents
      *
      * @param string $content column content
-     * @param array  $grid    column grid data
+     * @param array $grid column grid data
+     * @param array $options
      * @return string
      */
-    abstract protected function getColumnWrapper($content, $grid = []);
+    abstract protected function getColumnWrapper(string $content, array $grid = [], array $options = []): string;
+
+    /**
+     * set element's attributes
+     *
+     * @param Element $element
+     * @param array $attrs
+     */
+    protected function setElementAttributes(Element $element, array $attrs)
+    {
+        foreach ($attrs as $key => $value) {
+            switch ($key) {
+                case 'class':
+                    $element->addClass($value);
+                    break;
+
+                case 'style':
+                    $style = null;
+
+                    if (is_string($value)) {
+                        $style = $value;
+                    }
+                    else if (is_array($value)) {
+                        foreach ($value as $styleKey => $styleValue) {
+                            $style = $style . "$styleKey: $styleValue; ";
+                        }
+                    }
+
+                    if ($style !== null) {
+                        $element->attr('style', $style);
+                    }
+
+                    break;
+
+                default:
+                    foreach ((array) $value as $val) {
+                        $element->attr($key, $val);
+                    }
+
+                    break;
+            }
+        }
+    }
 
     /**
      * Get a widget contents
@@ -181,7 +231,7 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param array $raw widget data
      * @return string
      */
-    protected function getWidget($raw)
+    protected function getWidget(array $raw): string
     {
         list($keys, $values) = Arr::divide(Arr::get($raw, '@attributes', []));
         array_walk($keys, function (&$item) {
@@ -194,10 +244,18 @@ abstract class AbstractPresenter implements PresenterInterface
             $attributes['@title'] = htmlentities($attributes['@title']);
         }
 
+        $info = Arr::except($raw, '@attributes');
+
+        foreach ($info as $key => $value) {
+            if (is_string($value) === true) {
+                $info[$key] = htmlentities($value);
+            }
+        }
+
         return call_user_func(
             static::$generator,
             Arr::get($raw, '@attributes.id'),
-            array_merge(Arr::except($raw, '@attributes'), $attributes)
+            array_merge($info, $attributes)
         );
     }
 
@@ -207,7 +265,7 @@ abstract class AbstractPresenter implements PresenterInterface
      * @param array $options options
      * @return $this
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): AbstractPresenter
     {
         $this->options = $options;
 
@@ -226,22 +284,12 @@ abstract class AbstractPresenter implements PresenterInterface
     }
 
     /**
-     * Get the widget code generator
-     *
-     * @return callable
-     */
-    public static function getWidgetCodeGenerator()
-    {
-        return static::$generator;
-    }
-
-    /**
      * Is it a column.
      *
-     * @param $data
+     * @param array $data
      * @return bool
      */
-    protected function isColumn($data)
+    protected function isColumn(array $data): bool
     {
         return array_key_exists('grid', $data);
     }

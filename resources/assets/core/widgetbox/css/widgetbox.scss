@@ -112,6 +112,58 @@ table,
     }
   }
 }
+.widget-snb:last-child {
+  border-left: 1px solid #e5e5e5;
+}
+
+.widget-snb.widget-snb--edit {
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: none;
+  flex-grow: 1;
+  .widget-snb__content {
+    position: relative;
+    padding: 15px 0;
+    box-sizing: border-box;
+    flex-grow: 1;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: auto;
+  }
+}
+.widget-snb--device-preview {
+  position: relative;
+  min-width: 480px;
+  max-width: 480px;
+  flex-direction: column;
+  overflow: hidden;
+  flex-grow: 1;
+  .widget-snb__content {
+    position: relative;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+  }
+  #preview {
+    z-index: 1;
+  }
+  //align-items: center;
+  //justify-content: center;
+}
+
+.widget-snb.widget-snb--inspector {
+  position: relative;
+  overflow: hidden;
+  .widget-snb__content {
+    position: relative;
+    flex-direction: column;
+    align-items: unset;
+    justify-content: unset;
+    overflow: auto;
+  }
+}
 
 .widget-snb {
   display: flex;
@@ -122,7 +174,65 @@ table,
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   color: #656973;
-  .snb-section:first-child { border-top: none }
+  /* widget snb header */
+  .widget-snb__header:hover {
+    background-color: #f4f7ff;
+    transition: background-color .25s ease-in-out;
+  }
+  .widget-snb__header {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+
+    min-height: 35px;
+    box-sizing: border-box;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    transition: background-color .25s ease-in-out;
+
+    .widget-snb__header-label {
+      display: flex;
+      font-weight: bold;
+      font-size: 13px;
+      line-height: 13px;
+    }
+    .widget-snb__header-icon {
+      display: flex;
+      margin-left: 6px;
+      font-size: 21px;
+      align-items: center;
+      vertical-align: middle;
+      line-height: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    .widget-snb__header-title {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+  /* widget snb content */
+  .widget-snb__content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 100%;
+
+    .preview {
+      display: flex;
+    }
+  }
+
+
+
+>>>>>>> release/3.0.15
   .snb-section {
     padding: 20px 20px 37px 20px;
     border-top: 1px solid #e5e5e5;
@@ -233,6 +343,7 @@ table,
       }
     }
   }
+  .snb-section:first-child { border-top: none }
 
   .xe-btn-group.vertical-list {
     text-align: center;
@@ -336,8 +447,8 @@ table,
   .widget-content {
     box-sizing: border-box;
     width: 100%;
-    height: 100%;
-    padding: 20px 15px 100px;
+    //height: 100%;
+    //padding: 20px 15px 100px;
     h3 {
       margin: 0 0 10px 5px;
       font-size: 15px;
@@ -577,3 +688,67 @@ table,
 .xe-container-fluid .widgetarea .xe-well strong { font-weight: bold; padding-right: 4px; }
 .xe-container-fluid .widgetarea .xe-well .widget-name { border-left: 1px solid #ccc; padding-left: 4px; color: #6f8dff; }
 .xe-container-fluid .widgetarea .xe-well .skin-name { color: #656973; }
+
+
+/**/
+.xe-panel--direct-store {
+  margin-top: 24px;
+}
+.xe-panel {
+  &:hover {
+    border-color: #4167D9
+  }
+  display: flex;
+  border-radius: 6px;
+  border: 2px solid #E5E5E5;
+  overflow: hidden;
+  &.xe-panel--row {
+    flex-direction: row;
+  }
+  a {
+    display: flex;
+    width: 100%;
+    flex-direction: inherit;
+    padding: 12px;
+    text-decoration: none;
+    text-underline: none;
+    box-sizing: border-box;
+  }
+  a:active,
+  a:hover {
+    text-decoration: none;
+    text-underline: none;;
+  }
+}
+.xe-panel__thumbnail {
+  display: flex;
+  width: 62px;
+  height: 62px;
+  font-size: 30px;
+  color: #345BD9;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background-color: #F1F3F5;
+}
+.xe-panel__info {
+  display: flex;
+  margin-left: 12px;
+  justify-content: center;
+  flex-direction: column;
+  .xe-panel__info-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+  }
+  .xe-panel__info-description {
+    margin: 0;
+    margin-top: 3px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 21px;
+    color: #5B5B5B;
+  }
+}

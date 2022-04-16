@@ -59,12 +59,14 @@ class Element
      * @param array  $attributes attributes of element
      * @param array  $children   children of element
      */
-    public function __construct($name, array $attributes = [], array $children = [])
+    public function __construct(string $name, array $attributes = [], array $children = [])
     {
         $this->name = $name;
+
         if (in_array($name, static::$emptyElements)) {
             $this->empty = true;
         }
+
         $this->attributes = $attributes;
         $this->children = $children;
     }
@@ -78,16 +80,18 @@ class Element
      *
      * @return $this
      */
-    public function attr($key, $value, $append = false)
+    public function attr(string $key, string $value, bool $append = false)
     {
         if ($append) {
             $this->resolveAttribute($key);
+
             if (!in_array($value, $this->attributes[$key])) {
                 $this->attributes[$key][] = $value;
             }
         } else {
             $this->attributes[$key] = [$value];
         }
+
         return $this;
     }
 
@@ -98,7 +102,7 @@ class Element
      *
      * @return $this
      */
-    public function removeAttr($key)
+    public function removeAttr(string $key)
     {
         array_forget($this->attributes, $key);
         return $this;
@@ -107,7 +111,7 @@ class Element
     /**
      * add class
      *
-     * @param string $class class name
+     * @param string|array $class class name
      *
      * @return $this
      */
@@ -116,6 +120,7 @@ class Element
         foreach ((array) $class as $c) {
             $this->attr('class', $c, true);
         }
+
         return $this;
     }
 
@@ -126,13 +131,14 @@ class Element
      *
      * @return $this
      */
-    public function removeClass($class)
+    public function removeClass(string $class)
     {
         $this->resolveAttribute('class');
 
         if (in_array($class, $this->attributes['class'])) {
             unset($this->attributes['class'][array_search($class, $this->attributes['class'])]);
         }
+
         return $this;
     }
 
@@ -148,9 +154,11 @@ class Element
         if (!is_array($el)) {
             $el = [$el];
         }
+
         foreach ($el as $e) {
             array_push($this->children, $e);
         }
+
         return $this;
     }
 
@@ -176,7 +184,7 @@ class Element
      *
      * @return $this
      */
-    public function html($html)
+    public function html(string $html = null)
     {
         $this->children = [$html];
         return $this;
@@ -238,7 +246,7 @@ class Element
      *
      * @return void
      */
-    protected function resolveAttribute($key)
+    protected function resolveAttribute(string $key)
     {
         $this->attributes = array_add($this->attributes, $key, []);
 

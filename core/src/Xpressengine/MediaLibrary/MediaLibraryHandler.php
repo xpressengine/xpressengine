@@ -17,6 +17,7 @@ namespace Xpressengine\MediaLibrary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
 use Xpressengine\MediaLibrary\Exceptions\NotFoundFileException;
@@ -31,6 +32,8 @@ use XeStorage;
 use XeMedia;
 use Xpressengine\Storage\File;
 use Xpressengine\Support\Tree\NodePositionTrait;
+use Xpressengine\User\Models\User;
+
 
 /**
  * Class MediaLibraryHandler
@@ -475,15 +478,8 @@ class MediaLibraryHandler
         return $file;
     }
 
-    /**
-     * @param Request $request request
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     * @throws \Exception
-     */
-    public function uploadMediaLibraryFile(Request $request)
+    public function storeMediaLibraryFile($uploadFile, $args = [], User $user, $force = false)
     {
-        $uploadFile = $request->file('file');
 
         $mediaLibraryConfig = config('xe.media.mediaLibrary');
 
@@ -515,7 +511,7 @@ class MediaLibraryHandler
             );
         }
 
-        $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media');
+        $file = XeStorage::upload($uploadFile, 'public/media_library', null, 'media', null , [], $force);
 
         if (XeMedia::is($file) == true) {
             $media = XeMedia::make($file);
@@ -523,10 +519,10 @@ class MediaLibraryHandler
         }
 
         $folderItem = null;
-        if ($instanceId = $request->get('instance_id')) {
+        if ($instanceId = Arr::get($args, 'instance_id', null)) {
             $folderItem = $this->getInstanceFolderItem($instanceId);
         } else {
-            $folderItem = $this->getFolderItem($request->get('folder_id', ''));
+            $folderItem = $this->getFolderItem( Arr::get($args, 'folder_id', ''));
             if ($folderItem === null) {
                 throw new NotFoundFolderException();
             }
@@ -535,7 +531,7 @@ class MediaLibraryHandler
         $fileAttribute = [
             'file_id' => $file->id,
             'folder_id' => $folderItem->id,
-            'user_id' => \Auth::user()->getId(),
+            'user_id' => $user->getId(),
             'title' => $uploadFile->getClientOriginalName(),
             'ext' => $uploadFile->getClientOriginalExtension()
         ];
@@ -546,6 +542,21 @@ class MediaLibraryHandler
 
 
         $this->files->setCommonFileVisible($mediaLibraryFileItem);
+
+        return $mediaLibraryFileItem;
+    }
+
+    /**
+     * @param Request $request request
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \Exception
+     */
+    public function uploadMediaLibraryFile(Request $request)
+    {
+        $uploadFile = $request->file('file');
+        $user = \Auth::user();
+        $mediaLibraryFileItem = $this->storeMediaLibraryFile($uploadFile, $request->only('instance_id','folder_id'), $user);
 
         return $mediaLibraryFileItem;
     }

@@ -32,7 +32,7 @@ trait SupportInfoTrait
     /**
      * @var array
      */
-    protected static $info = null;
+    protected static $info = [];
 
     /**
      * desktop 버전 지원 여부를 조사한다.
@@ -41,7 +41,7 @@ trait SupportInfoTrait
      */
     public static function supportDesktop()
     {
-        return static::info('support.desktop');
+        return static::info('support.desktop') !== null;
     }
 
     /**
@@ -51,7 +51,7 @@ trait SupportInfoTrait
      */
     public static function supportMobile()
     {
-        return static::info('support.mobile');
+        return static::info('support.mobile') !== null;
     }
 
     /**
@@ -76,26 +76,27 @@ trait SupportInfoTrait
      */
     public static function info($key = null, $default = null)
     {
-        if (static::$info === null) {
+        if (! array_key_exists(static::class, static::$info)) {
             try {
-                static::$info = include(base_path(static::getPath().'/'.'info.php'));
+                static::$info[static::class] = include(base_path(static::getPath().'/'.'info.php'));
             } catch (\ErrorException $exception) {
                 return $default;
             }
         }
 
-        if ($key !== null) {
-            return array_get(static::$info, $key, $default);
+        if ($info = Arr::get(static::$info, static::class)) {
+            return $key !== null ? array_get($info, $key, $default) : $info;
         }
 
-        return static::$info;
+        return null;
     }
 
     /**
-     * `medialibraryImage` Input 값이 화면에 출력될 수 있도록 값을 변경합니다.
+     * `mediaLibraryImage` Input 값이 화면에 출력될 수 있도록 값을 변경합니다.
      *
      * @param array $info
      * @param array $data
+     * @return void
      */
     public static function convertInfoMediaLibraryImage(array &$info, array $data)
     {
@@ -134,12 +135,19 @@ trait SupportInfoTrait
         }
     }
 
+    /**
+     * mediaLibraryImage 데이터 변환
+     *
+     * @param $key
+     * @param $data
+     * @return bool
+     */
     public static function convertDataMediaLibraryImage($key, &$data)
     {
         $info = static::info($key);
 
         if (! is_array($info) || !is_array($data)) {
-            return null;
+            return false;
         }
 
         static::convertInfoMediaLibraryImage($info, $data);
@@ -154,5 +162,6 @@ trait SupportInfoTrait
             }
         }
 
+        return true;
     }
 }

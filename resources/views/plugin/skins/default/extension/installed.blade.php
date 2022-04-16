@@ -26,12 +26,12 @@
                 </ul>
             </div>
 
-            <div class="panel-group">
-                <div class="panel">
+            <div class="panel-group" style="margin-bottom: 0; border-bottom: 0">
+                <div class="panel" style="border-bottom: 0">
                     <div class="panel-heading">
                         <div class="pull-left">
                             <div class="btn-group">
-                                <button class="btn btn-default __xe_check_all">{{ xe_trans('xe::selectAll') }}</button>
+                                <button class="btn btn-default __xe_check_all" type="button">{{ xe_trans('xe::selectAll') }}</button>
                             </div>
                             <div class="btn-group __xe_controll_btn">
                                 <a href="{{ route('settings.plugins.manage.activate') }}" class="btn btn-default on __xe_activate_plugin"><span>{{ xe_trans('xe::activate') }}</span></a>
@@ -67,23 +67,31 @@
                                 </div>
                                 <div class="search-input-group">
                                     <input type="text" class="form-control" placeholder="{{xe_trans('xe::enterKeyword')}}" name="query" value="{{Request::get('query')}}">
-                                    <button class="btn-link">
+
+                                    <a class="btn-link" href="{{ request()->fullUrlWithQuery(['query' => null]) }}" style="right: 11px; height: 26px">
                                         <i class="xi-close"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <ul class="list-group list-plugin">
-                        @foreach ($extensions as $item)
-                            @include($_skin::view('common.installed_item'))
-                        @endforeach
-                    </ul>
                 </div>
             </div>
         </div>
     </form>
+
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <div class="panel" style="border-top: 0">
+                <ul class="list-group list-plugin">
+                    @foreach ($extensions as $item)
+                        @include($_skin::view('common.installed_item'))
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <form action="{{ route('settings.plugins.install') }}" method="POST" id="xe-install-plugin">

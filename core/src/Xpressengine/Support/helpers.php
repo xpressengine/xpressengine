@@ -565,7 +565,13 @@ if (!function_exists('menu_list')) {
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }
+
             $tree = $menu->getTree()->getTreeNodes();
+            $loaded = \Illuminate\Database\Eloquent\Collection::make($tree)->load('ancestors');
+
+            $tree->transform(function ($menuItem, $key) use($loaded) {
+                return $loaded->find($loaded[$key]);
+            });
 
             // resolve menu visible
             $menuTree = [];
@@ -925,5 +931,93 @@ if (!function_exists('array_depth')) {
         }
 
         return $max_depth;
+    }
+}
+
+
+if (function_exists('email_masking') === false) {
+    /**
+     * 이메일 마스킹 처리
+     *
+     * @param $email
+     * @param int $offset
+     * @return bool|string
+     */
+    function email_masking($email, $offset = 2)
+    {
+        $parts = explode('@', $email);
+        if (count($parts) < 2) {
+            return str_masking($email, $offset);
+        }
+
+        list($id, $host) = $parts;
+        $email = sprintf('%s@%s', str_masking($id, $offset), $host);
+        return $email;
+    }
+}
+
+if (function_exists('str_masking') === false) {
+    /**
+     * 문자열 마스킹 처리
+     *
+     * @param $str
+     * @param int $offset
+     * @return bool|string
+     */
+    function str_masking($str, $offset = 2)
+    {
+        $len = strlen($str);
+        $start = $offset;
+
+        /*
+         * 대상 문자가 너무 짧을 경우 마스킹을 하나 더 길게
+         * ex ) abcd => ab**
+         * ex ) abc => a**
+         */
+        if ($len <= $offset + 1) {
+            $start = $offset - 1;
+        }
+
+        $str = substr($str, 0, $start);
+        for ($i = $start; $i < $len; $i++) {
+            $str .= '*';
+        }
+
+        return $str;
+    }
+}
+
+if (function_exists('phone_masking') === false) {
+    /**
+     * 전화번호 마스킹 처리
+     *
+     * @param $phone
+     * @param int $offset
+     * @return bool|string
+     */
+    function phone_masking($phone, $offset = 4)
+    {
+        $phone = str_replace('-', '', $phone);
+
+        // 끝에 4개 마스킹
+        $len = strlen($phone);
+        $start = $offset;
+
+        /*
+         * 대상 문자가 너무 짧을 경우 마스킹을 하나 더 길게
+         * ex ) abcd => ab**
+         * ex ) abc => a**
+         */
+        if ($len <= $offset + 1) {
+            $start = $offset - 1;
+        }
+
+        $str = substr($phone, 0, -$start);
+        for ($i = 0; $i < $start; $i++) {
+            $str .= '*';
+        }
+
+        return $str;
+
     }
 }

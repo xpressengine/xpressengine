@@ -169,8 +169,8 @@ class PluginSettingsSkin extends GenericSkin
             'uiobject' => 'primary',
             'editor' => 'primary',
             'editortool' => 'primary',
-            'FieldType' => 'default',
-            'FieldSkin' => 'default',
+            'fieldType' => 'default',
+            'fieldSkin' => 'default',
             'toggleMenu' => 'default',
         ]);
     }

@@ -43,23 +43,30 @@ class EditorServiceProvider extends ServiceProvider
         $this->app['xe.pluginRegister']->add(Textarea::class);
 
         AbstractEditor::setImageResolver(function (array $ids) {
+            if (empty($ids) === true) {
+                return collect([]);
+            }
+
             $dimension = $this->app['request']->isMobile() ? 'M' : 'L';
             $fileClass = $this->app['xe.storage']->getModel();
             $files = $fileClass::whereIn('id', $ids)->get();
 
             $handler = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE);
             $images = [];
+
             foreach ($files as $file) {
                 $media = $this->app['xe.media']->make($file);
+
                 if (config('xe.editor.gif_origin') && $media->mime === 'image/gif') {
                     $images[] = $media;
-                } else {
-                    $images[] = $handler->getThumbnail(
-                        $media,
-                        EditorHandler::THUMBNAIL_TYPE,
-                        $dimension
-                    );
+                    continue;
                 }
+
+                $images[] = $handler->getThumbnail(
+                    $media,
+                    EditorHandler::THUMBNAIL_TYPE,
+                    $dimension
+                );
             }
 
             return $images;

@@ -30,96 +30,136 @@
         </div>
     </header>
     <div class="widget-wrap__content">
-    <div class="widget-snb">
-        <div class="snb-section">
-            <h2>{{ $widgetbox->title }}</h2>
-            <p>{{ $widgetbox->title }} {{ xe_trans('xe::doEditWidgetBox') }}</p>
+    <div class="widget-snb widget-snb--inspector">
+
+        <div class="widget-snb__header">
+            <h1 class="widget-snb__header-title">
+                <span class="widget-snb__header-icon">
+                    <i class="xi-info" data-toggle="xe-tooltip" data-placement="bottom" title=""></i>
+                </span>
+                <span class="widget-snb__header-label">Inspector</span>
+            </h1>
         </div>
-        <div class="snb-section">
-            <h3>Presenter <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                             title="{{ xe_trans('xe::descPresenter') }}"></i></h3>
-            <div>
-                <select class="xe-form-control" id="presenter">
-                    @foreach ($presenters as $presenter)
-                        <option value="{{ $presenter }}" data-cols="{{ $presenter::COLS }}">{{ $presenter::NAME }}</option>
-                    @endforeach
-                </select>
+        <div class="widget-snb__content">
+            <div class="snb-section">
+                <h2>{{ $widgetbox->title }}</h2>
+                <p>{{ $widgetbox->title }} {{ xe_trans('xe::doEditWidgetBox') }}</p>
             </div>
-        </div>
-        <div class="snb-section">
-            <h3>Device mode <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                               title="{{ xe_trans('xe::descDeviceMode') }}"></i></h3>
-            <div class="xe-btn-group xe-btn-group-justified mode-btns">
-                <div class="xe-btn-group">
-                    <button class="xe-btn xe-btn-sm" data-mode="xs">
-                        <i class="xi-mobile"></i>Mobile
-                    </button>
-                </div>
-                <div class="xe-btn-group">
-                    <button class="xe-btn xe-btn-sm" data-mode="sm">
-                        <i class="xi-tablet"></i>Tablet
-                    </button>
-                </div>
-            </div>
-            <div class="xe-btn-group xe-btn-group-justified mode-btns">
-                <div class="xe-btn-group">
-                    <!--[D] 활성화 시 .xe-btn-primary 추가-->
-                    <button class="xe-btn xe-btn-sm xe-btn-primary" data-mode="md">
-                        <i class="xi-desktop"></i>Desktop
-                    </button>
-                </div>
-                <div class="xe-btn-group">
-                    <button class="xe-btn xe-btn-sm" data-mode="lg">
-                        <i class="xi-tv"></i>Large Screen
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="snb-section">
-            <h3>{{ xe_trans('xe::cellManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                                                        title="{{ xe_trans('xe::descCellManagement') }}"></i></h3>
-            <div class="cell-config-btn">
+            <div class="snb-section">
+                <h3>Presenter <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
+                                 title="{{ xe_trans('xe::descPresenter') }}"></i></h3>
                 <div>
-                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-container">{{ xe_trans('xe::addContainer') }}</button>
+                    <select class="xe-form-control" id="presenter">
+                        @foreach ($presenters as $presenter)
+                            <option value="{{ $presenter }}" data-cols="{{ $presenter::COLS }}">{{ $presenter::NAME }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div>
-                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-row">{{ xe_trans('xe::addRow') }}</button>
+            </div>
+            <div class="snb-section">
+                <h3>Device mode <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
+                                   title="{{ xe_trans('xe::descDeviceMode') }}"></i></h3>
+                <div class="xe-btn-group xe-btn-group-justified mode-btns">
+                    <div class="xe-btn-group">
+                        <button class="xe-btn xe-btn-sm" data-mode="xs">
+                            <i class="xi-mobile"></i>Mobile
+                        </button>
+                    </div>
+                    <div class="xe-btn-group">
+                        <button class="xe-btn xe-btn-sm" data-mode="sm">
+                            <i class="xi-tablet"></i>Tablet
+                        </button>
+                    </div>
                 </div>
-                <div class="form-inline">
-                    <div class="form-group" id="col-controls">
-                        <select data-type="mode" class="form-control">
-                            <option value="xs">mobile</option>
-                            <option value="sm">tablet</option>
-                            <option value="md" selected>desktop</option>
-                            <option value="lg">large screen</option>
-                        </select>
-                        <select data-type="span" class="form-control">
-                        </select>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-default" data-control="col">{{ xe_trans('xe::addCell') }}</button>
-                            <button type="button" class="btn btn-sm btn-default" data-control="opt">{{ xe_trans('xe::addOption') }}</button>
+                <div class="xe-btn-group xe-btn-group-justified mode-btns">
+                    <div class="xe-btn-group">
+                        <!--[D] 활성화 시 .xe-btn-primary 추가-->
+                        <button class="xe-btn xe-btn-sm xe-btn-primary" data-mode="md">
+                            <i class="xi-desktop"></i>Desktop
+                        </button>
+                    </div>
+                    <div class="xe-btn-group">
+                        <button class="xe-btn xe-btn-sm" data-mode="lg">
+                            <i class="xi-tv"></i>Large Screen
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="snb-section">
+                <h3>{{ xe_trans('xe::cellManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
+                                                            title="{{ xe_trans('xe::descCellManagement') }}"></i></h3>
+                <div class="cell-config-btn">
+                    <div>
+                        <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-container">{{ xe_trans('xe::addContainer') }}</button>
+                    </div>
+                    <div>
+                        <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline xe-btn-block" id="btn-add-row">{{ xe_trans('xe::addRow') }}</button>
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group" id="col-controls">
+                            <select data-type="mode" class="form-control">
+                                <option value="xs">mobile</option>
+                                <option value="sm">tablet</option>
+                                <option value="md" selected>desktop</option>
+                                <option value="lg">large screen</option>
+                            </select>
+                            <select data-type="span" class="form-control"></select>
+                            <select data-type="container" class="form-control">
+                                <option value="true" selected>container fluid</option>
+                                <option value="false">container</option>
+                            </select>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-default" data-control="col">{{ xe_trans('xe::addCell') }}</button>
+                                <button type="button" class="btn btn-sm btn-default" data-control="opt">{{ xe_trans('xe::addOption') }}</button>
+                                <button type="button" class="btn btn-sm btn-default" data-control="container">컨테이너 옵션 추가</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="snb-section">
-            <h3>{{ xe_trans('xe::widgetManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                                                          title="{{ xe_trans('xe::descWidgetManagement') }}"></i></h3>
-            <button class="xe-btn xe-btn-primary xe-btn-sm xe-btn-block btn-widget-add" id="btn-add-widget">
-                <i class="xi-layout-o"></i>{{ xe_trans('xe::addWidget') }}
-            </button>
+            <div class="snb-section">
+                <h3>{{ xe_trans('xe::widgetManagement') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
+                                                              title="{{ xe_trans('xe::descWidgetManagement') }}"></i></h3>
+                <button class="xe-btn xe-btn-primary xe-btn-sm xe-btn-block btn-widget-add" id="btn-add-widget">
+                    <i class="xi-layout-o"></i>{{ xe_trans('xe::addWidget') }}
+                </button>
+            </div>
         </div>
     </div>
-    <div class="widget-container">
-        <div class="widget-content">
-            <h3>{{ xe_trans('xe::editArea') }} <i class="xi-help-o" data-toggle="xe-tooltip" data-placement="bottom"
-                                                  title="{{ xe_trans('xe::descEditArea') }}"></i>
-            </h3>
-            <!-- editor area -->
-            <div class="editor xe-container-fluid"></div>
-            <!-- editor area -->
+    <div class="widget-snb widget-snb--edit">
+        <div class="widget-snb__header">
+            <h1 class="widget-snb__header-title">
+                <span class="widget-snb__header-icon">
+                    {{-- {{ xe_trans('xe::descEditArea') }}--}}
+                    <i class="xi-apps" data-toggle="xe-tooltip" data-placement="bottom" title=""></i>
+                </span>
+                <span class="widget-snb__header-label">{{ xe_trans('xe::editArea') }}</span>
+            </h1>
         </div>
+        <div class="widget-snb__content">
+            <div class="widget-container">
+                <div class="widget-content">
+                    <!-- editor area -->
+                    <div class="editor xe-container-fluid"></div>
+                    <!-- editor area -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="widget-snb widget-snb--device-preview">
+        <div class="widget-snb__header">
+            <h1 class="widget-snb__header-title">
+                <span class="widget-snb__header-icon">
+                    <i class="xi-mobile"></i>
+                </span>
+                <span class="widget-snb__header-label">Device Preview</span>
+            </h1>
+        </div>
+        <div class="widget-snb__content">
+            <div style="position: absolute; z-index:10; width: 375px; height: 812px; top:50%; margin-top: -406px; left:50%; margin-left: -191px; right:0; bottom:0; pointer-events: none; z-index:10; background: url('/assets/core/widgetbox/img/iphone-frame.png'); background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
+            <iframe id="preview" style="width: 375px; height: 812px; padding: 100px 24px 77px 24px; box-sizing: border-box; border:none; outline: none;"></iframe>
+        </div>
+    </div>
     </div>
     </div>
     <!--widget layer  -->

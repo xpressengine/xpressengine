@@ -47,6 +47,11 @@ return [
 
     'settings' => [
         /*
+         * 관리자사이트에서 코어 업데이트 사용 여부
+         * false 인 경우 관리자사이트에서 "지금 업데이트" 버튼 클릭 불가
+         */
+        'use_core_web_update' => true,
+        /*
         |--------------------------------------------------------------------------
         | Settings page accessable client CIDR
         |--------------------------------------------------------------------------
@@ -423,6 +428,7 @@ return [
             'formText' => 'uiobject/xpressengine@formText',
             'formPassword' => 'uiobject/xpressengine@formPassword',
             'formTextarea' => 'uiobject/xpressengine@formTextArea',
+            'formScriptEditor' => 'uiobject/xpressengine@formScriptEditor',
             'formSelect' => 'uiobject/xpressengine@formSelect',
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formRadio' => 'uiobject/xpressengine@formRadio',

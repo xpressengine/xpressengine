@@ -34,14 +34,13 @@ class XEUIPresenter extends BootstrapPresenter
     const NAME = 'XE UI';
 
     /**
-     * Get HTML wrapper for row contents
+     * get row's class
      *
-     * @param string $content row contents
      * @return string
      */
-    protected function getRowWrapper($content)
+    protected function getRowClass(): string
     {
-        return '<div class="xe-row">'.$content.'</div>';
+        return 'xe-row';
     }
 
     /**
@@ -51,7 +50,7 @@ class XEUIPresenter extends BootstrapPresenter
      * @param int    $count span count
      * @return string
      */
-    protected function getColumnClass($type, $count)
+    protected function getColumnClass(string $type, int $count): string
     {
         return 'xe-' . parent::getColumnClass($type, $count);
     }

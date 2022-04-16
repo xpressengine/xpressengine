@@ -26,6 +26,7 @@ use XeSite;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Menu\MenuHandler;
+use Xpressengine\Menu\MenuType\DirectLink;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\Exceptions\NotFoundModuleException;
@@ -350,10 +351,13 @@ class MenuController extends Controller
         $menuType = XeMenu::getModuleHandler()->getModuleObject($itemInput['selectedType']);
         $siteKey = XeSite::getCurrentSiteKey();
 
-        if ($menuType::isRouteAble() && XeMenu::items()->query()->where([
-                ['url', '=', $url],
-                ['site_key', '=', $siteKey]
-            ])->exists()) {
+        $existsMenuQuery = XeMenu::items()->query()->where([
+            ['url', '=', $url],
+            ['site_key', '=', $siteKey],
+            ['type', '!=', short_module_id(DirectLink::getId())]
+        ]);
+
+        if ($menuType::isRouteAble() === true && $existsMenuQuery->exists() === true) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 
@@ -479,10 +483,13 @@ class MenuController extends Controller
         $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
         $siteKey = XeSite::getCurrentSiteKey();
 
-        if ($menuType::isRouteAble() && XeMenu::items()->query()->where([
-                ['url', '=', $url],
-                ['site_key', '=', $siteKey]
-            ])->whereKeyNot($item->getKey())->exists()) {
+        $existsMenuQuery = XeMenu::items()->query()->where([
+            ['url', '=', $url],
+            ['site_key', '=', $siteKey],
+            ['type', '!=', short_module_id(DirectLink::getId())]
+        ]);
+
+        if ($menuType::isRouteAble() === true && $existsMenuQuery->whereKeyNot($item->getKey())->exists() === true) {
             return back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::menuItemUrlAlreadyExists')]);
         }
 

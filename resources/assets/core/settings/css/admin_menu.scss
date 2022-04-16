@@ -36,16 +36,21 @@
   border-bottom: 1px solid #dadbde;
   background-color: #dadbde;
 
+  i.xi-folder {
+    position: relative;
+    top: 5px;
+    font-size: 23px;
+    line-height: 23px;
+    margin-right: 12px;
+    color: #fbbd08;
+  }
+
   h3 {
     display: inline;
     font-size: 16px;
     color: #2c2e37;
+    vertical-align: middle;
     line-height: 40px;
-
-    i {
-      margin-right: 25px;
-      color: #fbbd08;
-    }
   }
 
   > .item-container:empty {
