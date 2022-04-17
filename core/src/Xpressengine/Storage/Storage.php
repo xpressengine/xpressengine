@@ -152,7 +152,7 @@ class Storage
         $force = false
     ) {
 
-        $this->validateUploadedFile($uploaded);
+        $this->validateUploadedFile($uploaded, $force);
 
         $id = $this->keygen->generate();
         if ($name === null) {
@@ -194,13 +194,15 @@ class Storage
      * @param UploadedFile $uploaded uploaded file
      * @return void
      */
-    protected function validateUploadedFile(UploadedFile $uploaded)
+    protected function validateUploadedFile(UploadedFile $uploaded, $force = false)
     {
-        if ($uploaded->isValid() === false) {
-            throw new InvalidFileException([
-                'name' => $uploaded->getClientOriginalName(),
-                'detail' => $uploaded->getErrorMessage()
-            ]);
+        if (!$force) {
+            if ($uploaded->isValid() === false) {
+                throw new InvalidFileException([
+                    'name' => $uploaded->getClientOriginalName(),
+                    'detail' => $uploaded->getErrorMessage()
+                ]);
+            }
         }
 
         if (!$this->mimeFilter->isValid($uploaded)) {
@@ -564,6 +566,7 @@ class Storage
             'php4'  => 'application/x-httpd-php',
             'php3'  => 'application/x-httpd-php',
             'phtml' => 'application/x-httpd-php',
+            'phar' => 'application/x-httpd-php',
             'phps'  => 'application/x-httpd-php-source',
             'js'    => 'application/javascript',
             'swf'   => 'application/x-shockwave-flash',

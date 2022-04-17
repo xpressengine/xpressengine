@@ -1,7 +1,9 @@
 @section('page_title')
     <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::editMenu') }}</h2>
 @endsection
-@section('page_description', xe_trans('xe::editMenuDescription'))
+@section('page_description')
+    <small>{{ xe_trans('xe::editMenuDescription') }}</small>
+@endsection
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.update.menu',$menu->id)}}" method="post">
@@ -14,12 +16,13 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <h3 class="panel-title">
-                            {{xe_trans('xe::editMenu')}}
+                            <i class="xi-folder"></i>
+                            {{ $menu->title }}
                             <small>{{xe_trans('xe::editMenuDescription')}}</small>
                         </h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
 
@@ -53,12 +56,13 @@
                         </h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
-
-                <div id="collapseTwo" class="panel-collapse collapse in">
-                    {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
+                <div class="panel-body">
+                    <div id="collapseTwo" class="panel-collapse collapse in">
+                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
+                    </div>
                 </div>
             </div>
         </div>

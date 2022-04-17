@@ -66,11 +66,15 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     protected function init()
     {
         if ($this->config !== null) {
-            $this->convertDataMediaLibraryImage('setting', $this->config);
+            if (method_exists($this, 'convertDataMediaLibraryImage') == true) {
+                $this->convertDataMediaLibraryImage('setting', $this->config);
+            }
 
             if ($skinId = array_get($this->config, '@attributes.skin-id')) {
                 if ($skin = app('xe.skin')->get($skinId, $this->config)) {
-                    $skin->getClass()::convertDataMediaLibraryImage('setting', $this->config);
+                    if (method_exists($skin->getClass(), 'convertDataMediaLibraryImage') == true) {
+                        $skin->getClass()::convertDataMediaLibraryImage('setting', $this->config);
+                    }
                 }
             }
         }

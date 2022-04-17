@@ -42,7 +42,7 @@ class ConfigMigration extends Migration
 
             $table->string('site_key', 50)->default('default')->comment('site key. for multi web site support.');
             $table->string('name', 255)->comment('site name');
-            $table->text('vars')->default('')->comment('setting values. JSON data type.');
+            $table->longText('vars')->default('')->comment('setting values. JSON data type.');
             $table->primary(['site_key', 'name']);
         });
     }

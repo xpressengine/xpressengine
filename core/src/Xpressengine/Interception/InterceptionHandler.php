@@ -216,7 +216,18 @@ class InterceptionHandler
             $this->advisorCollection->setAlias($alias, $targetClass);
         }
 
-        $proxyClass = $this->proxyGenerator->generate($targetClass);
+        // remove intercept files and retry once
+        try {
+            $proxyClass = $this->proxyGenerator->generate($targetClass);
+        } catch (\Exception $e) {
+            try {
+                \Log::info('--->> intercept proxy exception auto fixed.');
+                $this->clearProxies();
+                $proxyClass = $this->proxyGenerator->generate($targetClass);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
 
         $this->proxyList[$targetClass] = $proxyClass;
 

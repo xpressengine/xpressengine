@@ -2,6 +2,9 @@
 
 namespace Xpressengine\Widget\Presenters;
 
+use Illuminate\Support\Arr;
+use Xpressengine\UIObject\Element;
+
 class ContainerPresenter extends XEUIPresenter
 {
     /**
@@ -22,7 +25,7 @@ class ContainerPresenter extends XEUIPresenter
      * @author Sparkweb
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $content = '';
 
@@ -39,11 +42,14 @@ class ContainerPresenter extends XEUIPresenter
      * @param array $data row data
      * @return string
      */
-    protected function getContainer(array $data)
+    protected function getContainer(array $data): string
     {
         $content = '';
 
-        foreach ($data as $row) {
+        $rows = Arr::get($data, 'rows', $data);
+        $options = Arr::get($data, 'options', []);
+
+        foreach ($rows as $row) {
             if ($this->isColumn($row)) {
                 $row = array($row);
             }
@@ -51,6 +57,14 @@ class ContainerPresenter extends XEUIPresenter
             $content .= $this->getRow($row);
         }
 
-        return '<div class="xe-container">'.$content.'</div>';
+        $container = new Element('div');
+
+        if ($attributes = Arr::get($options, 'attributes')) {
+            $this->setElementAttributes($container, $attributes);
+        } else {
+            $container->addClass(Arr::get($options, 'fluid') ? 'xe-container-fluid' : 'xe-container');
+        }
+
+        return $container->append($content)->render();
     }
 }

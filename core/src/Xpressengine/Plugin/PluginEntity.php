@@ -18,6 +18,7 @@ use Composer\Util\Filesystem;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
+use Parsedown;
 use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Plugin\PluginHandler as Plugin;
 
@@ -468,18 +469,20 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getReadMe()
     {
-
         if ($this->hasRemoteData()) {
             return data_get($this->remoteData, 'details', '');
         }
 
         $file = $this->getPath('README.md');
 
-        if (!file_exists($file)) {
+        if (file_exists($file) === false) {
             return '';
-        } else {
-            return nl2br(file_get_contents($file));
         }
+
+        return Parsedown::instance()
+            ->setSafeMode(true)
+            ->setMarkupEscaped(true)
+            ->text(file_get_contents($file));
     }
 
     /**

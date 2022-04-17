@@ -316,8 +316,9 @@ abstract class DynamicModel extends Model
     public function getMacroValue($name)
     {
         $result = $this->callMacro($name);
+
         if ($result instanceof Relation) {
-            $result = $result->getResults();
+            $result = $this->relationLoaded($name) ? $this->relations[$name] : $result->getResults();
         }
 
         return $result;

@@ -16,6 +16,7 @@ namespace Xpressengine\Widget;
 
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Plugin\PluginRegister;
@@ -197,6 +198,8 @@ class WidgetHandler
      */
     protected function handleError(Exception $e)
     {
+        app(ExceptionHandler::class)->report($e);
+
         if (in_array($this->guard->user()->getRating(), static::$displayErrorRatings)) {
             return $this->view->make('widget.error', ['message' => $e->getMessage()])->render();
         }
@@ -218,17 +221,24 @@ class WidgetHandler
         $attr = [];
         $children = [];
         $space = '';//str_repeat('  ', $depth);
+
         foreach ($inputs as $k => $v) {
             // attribute
             if (strpos($k, '@') === 0) {
-                $attr[substr($k, 1)] = (string) $v;
-            } elseif (is_array($v)) {
-                $children[] = $this->generateXml($k, $v, $depth + 1);
-            } elseif (is_numeric($k)) {
-                $children[] = sprintf("%s<item>%s</item>", $space, $v);
-            } else {
-                $children[] = sprintf("%s<%s>%s</%s>", $space, $k, $v, $k);
+                $attr[substr($k, 1)] = htmlentities((string) $v);
+                continue;
             }
+
+            if (is_array($v) === true) {
+                $children[] = $this->generateXml($k, $v, $depth + 1);
+                continue;
+            }
+
+            if (is_numeric($k) === true) {
+                $k = 'item';
+            }
+
+            $children[] = sprintf('%s<%s>%s</%s>', $space, $k, htmlentities($v), $k);
         }
 
         $attrStr = '';
@@ -239,9 +249,7 @@ class WidgetHandler
             }
         );
 
-        $xml = $space.'<'.$element.$attrStr.'>'.implode('', $children).$space.'</'.$element.'>';
-
-        return $xml;
+        return $space.'<'.$element.$attrStr.'>'.implode('', $children).$space.'</'.$element.'>';
     }
 
     /**
