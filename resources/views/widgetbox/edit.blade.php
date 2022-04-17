@@ -161,6 +161,7 @@
         </div>
     </div>
     </div>
+    </div>
     <!--widget layer  -->
     <!--[D] .open 추가 시 layer 펼침 -->
     <div class="widget-layer">
