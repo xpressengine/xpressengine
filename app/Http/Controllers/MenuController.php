@@ -816,9 +816,13 @@ class MenuController extends Controller
         $this->validate($request, ['itemId' => 'required']);
 
         $itemId = $request->get('itemId');
+        $item = XeMenu::items()->query()->where('activated', true)->find($itemId);
+
+        if ($item === null) {
+            throw (new ModelNotFoundException())->setModel(MenuItem::class);
+        }
 
         XeSite::setHomeInstanceId($itemId);
-
         return XePresenter::makeApi([$itemId]);
     }
 }
