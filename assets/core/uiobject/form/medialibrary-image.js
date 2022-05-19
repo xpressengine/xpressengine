@@ -13,20 +13,52 @@
       templates: {
         // previewContainer: '<ul class="xeuio-ml__preview"></ul>',
         previewItem: '<li class="xeuio-ml__preview-item"><input type="hidden" class="xeuio-ml__field" name="image[]"><img class="xeuio-ml__preview-image" /><button type="button" class="xeuio-ml__button xeuio-ml__remove">삭제</button></li>',
-        addItem: '<li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>'
+        addItem: '<li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>',
       }
     },
+
 
     // The constructor
     _create: function () {
       var that = this
 
-      $(this.element).on('click', '.xeuio-ml__add', function () {
-        that._importFile()
-      })
-      $(this.element).on('click', '.xeuio-ml__remove', function () {
-        that._removeFile($(this).closest('li').find('input').val())
-      })
+      if(!that.options.browser) {
+        $(this.element).on('click', '.xeuio-ml__add', function () {
+          that._importFile()
+        })
+        $(this.element).on('click', '.xeuio-ml__remove', function () {
+          that._removeFile($(this).closest('li').find('input').val())
+        })
+      }else {
+        XE.app('MediaLibrary').then(function (appMediaLibrary) {
+          appMediaLibrary.createUploader(that.element.find('input[type="file"]'), { instance_id: that.options.instanceId }, {
+            dropZone: that.element,
+            dragover: function () {
+              that.element.addClass('drag')
+            },
+            dragleave: function () {
+              that.element.removeClass('drag')
+            },
+            drop: function () {
+              that.element.removeClass('drag')
+            }
+          })
+
+          $(that.element).on('done.upload.editor', function (eventName, media, options) {
+            that.options.files.push({
+              file_id: media.file.file_id,
+              media_id: media.file.id,
+              preview: media.file.file.thumbnail_url,
+            });
+            that._refresh();
+          })
+        })
+
+        $(this.element).on('click', '.xeuio-ml__remove', function () {
+          that._removeFile($(this).closest('li').find('input').val())
+        })
+      }
+
 
       this.options.limit = Number(this.options.limit)
 
@@ -82,6 +114,7 @@
       var $tempEl = $('<ul>')
 
       _.forEach(fileList, function (file) {
+
         var $item = $(that.options.templates.previewItem)
         var fieldValue = (that.options.valueTarget === 'file_id') ? file.fileId() : file.mediaId()
 
@@ -94,7 +127,7 @@
       })
 
       if (!that.options.limit || fileList.length < that.options.limit) {
-        $tempEl.append($(that.options.templates.addItem))
+        if(!that.options.browser) $tempEl.append($(that.options.templates.addItem));
       }
 
       $(this.element).find('.xeuio-ml__preview').empty().append($tempEl.find('li'))
@@ -150,6 +183,107 @@
       //   .enableSelection()
       //   .css('background-color', 'transparent')
     },
+
+    _renderMedia: function (payload, $form) {
+      var that = this
+      var $container
+      var isCover = false
+      var media = this._normalizeFileData(payload)
+
+      this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
+
+      if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
+        isCover = media.fileId === that.options.coverId
+      }
+
+      if (window.XE.Utils.isImage(media.mime)) {
+        if (!this.options.coverId) {
+          this.options.coverId = media.fileId
+          this._setCover(media.fileId)
+        }
+        $container = $form.find(this.options.$el.fileThumbsContainer).find('.thumbnail-list')
+      } else {
+        $container = $form.find(this.options.$el.fileListContainer)
+      }
+
+      if ($container.find('[data-id=' + media.fileId + ']').length) {
+        return
+      }
+
+      var html = []
+      var itemClass = ['file-item']
+      if (isCover) {
+        itemClass.push('is-cover')
+      }
+      if (!window.XE.Utils.isImage(media.mime)) {
+        itemClass.push('xe-col-md-6')
+      }
+
+      html.push('<li class="' + itemClass.join(' ') + '" data-media-id="' + media.mediaId + '" data-id="' + media.fileId + '" title="' + media.title + '">')
+
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '">')
+      } else {
+        html.push('<div class="file-item-group">')
+        html.push('<p class="filename xe-pull-left">' + media.title + '</p>')
+      }
+
+      // 커버로 지정
+      if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
+        html.push('<button type="button" class="btn-cover">' + XE.Lang.trans('ckeditor::cover') + '</button>')
+      }
+
+      // 첨부 삭제
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<button type="button" class="btn-delete btnDelFile"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+      } else {
+        html.push('<div class="xe-pull-right"><button type="button" class="btn-insert"><i class="xi-arrow-up"></i></button><button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button></div>')
+      }
+
+      // 본문 삽입
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<button type="button" class="btn-insert"><i class="xi-arrow-up"></i></button>')
+      }
+
+      html.push('<input type="hidden" name="' + this.options.names.file.input + '[]" value="' + media.fileId + '" />')
+
+      if (!window.XE.Utils.isImage(media.mime)) {
+        html.push('</div>')
+      }
+
+      html.push('</li>')
+
+      var $item = $(html.join(''))
+
+      // 커버로 지정
+      $item.on('click', '.btn-cover', function () {
+        that._setCover(media.fileId)
+      })
+
+      // 삭제, 제거
+      $item.find('.btn-delete').on('click', function () {
+        that._removeFromDocument({
+          fileId: media.fileId,
+          mediaId: media.mediaId || null
+        })
+        $item.remove()
+
+        if (!that.options.names.cover) {
+          if (this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val() == media.fileId) {
+            this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val('')
+          }
+        }
+      })
+
+      // 본문 삽입
+      $item.find('.btn-insert').on('click', function () {
+        that._insertToDocument(media)
+      })
+
+
+      $container.append($item)
+    },
+
 
     // _setOptions is called with a hash of all options that are changing
     // always refresh when changing options
