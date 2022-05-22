@@ -6,7 +6,15 @@
             @endif
         </ul>
         @if($args['browser'])
-            <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><input type="file" class="xe-hidden" name="file" multiple /><i class="xi-plus"></i> 추가</label></div>
+            @if ($args['limit'] <= 1)
+                <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <input type="file" class="xe-hidden" name="file" /><i class="xi-plus"></i> 추가</label>
+                </div>
+            @else
+                <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <input type="file" class="xe-hidden" name="file" multiple /><i class="xi-plus"></i> 추가</label>
+                </div>
+            @endif
         @endif
     </section>
 </div>
