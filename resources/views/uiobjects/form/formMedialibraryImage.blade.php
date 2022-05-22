@@ -1,11 +1,11 @@
 <div class="xe-form-group">
     <section class="xeuio-medialibrary xeuio-medialibrary--image __xeuio-medialibrary-image" id="__xeuio-{{ $seq }}" data-uio-seq="{{ $seq }}">
         <ul class="xeuio-ml__preview">
-            @if(!$args['browser'])
+            @if(! array_get($args, 'browser'))
                 <li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>
             @endif
         </ul>
-        @if($args['browser'])
+        @if(array_get($args, 'browser'))
             @if ($args['limit'] <= 1)
                 <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <input type="file" class="xe-hidden" name="file" /><i class="xi-plus"></i> 추가</label>
