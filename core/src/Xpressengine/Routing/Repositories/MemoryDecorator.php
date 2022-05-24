@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Routing\Repositories;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\RouteRepository;
 
@@ -157,7 +158,7 @@ class MemoryDecorator implements RouteRepository
             }
         }
 
-        return $this->mapByModule[$module];
+        return Arr::get($this->mapByModule, $module, []);
     }
 
     /**
