@@ -77,6 +77,14 @@
         }
       }
 
+      if(this.options.limit === 1) {
+        if($(this.element).find('.xeuio-ml__preview-item').length >= 1) {
+          $(this.element).find('.xeuio-ml__add-item').hide();
+        }else {
+          $(this.element).find('.xeuio-ml__add-item').show();
+        }
+      }
+
       $(this.element).trigger('media/uploadedPreviewMounted')
     },
 
@@ -326,4 +334,6 @@
       raw: this.item
     }
   }
+
+
 })(window.jQuery, window.XE, window.XE._)
