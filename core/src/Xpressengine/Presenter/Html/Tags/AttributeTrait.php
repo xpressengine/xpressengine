@@ -41,4 +41,16 @@ trait AttributeTrait
         $this->attributes[$name] = $value;
         return $this;
     }
+
+    public function defer()
+    {
+        $this->attributes['defer'] = '';
+        return $this;
+    }
+
+    public function async()
+    {
+        $this->attributes['async'] = '';
+        return $this;
+    }
 }

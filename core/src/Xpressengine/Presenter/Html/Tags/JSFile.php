@@ -219,7 +219,10 @@ class JSFile
         $attr = '';
         if (count($this->attributes) > 0) {
             foreach ($this->attributes as $name => $value) {
-                $attr .= ' '.$name.'="'.$value.'"';
+                $attr .= ' '.$name;
+                if (empty($value) === false) {
+                    $attr .= '="'.$value.'"';
+                }
             }
         }
 
