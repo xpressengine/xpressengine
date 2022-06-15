@@ -54,7 +54,7 @@ trait AttributeTrait
     }
 
     /**
-     * 태그에 async을 지정한다.
+     * 태그에 async 속성을 지정한다.
      *
      * @return $this
      */
