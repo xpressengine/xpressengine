@@ -41,26 +41,4 @@ trait AttributeTrait
         $this->attributes[$name] = $value;
         return $this;
     }
-
-    /**
-     * 태그에 defer 속성을 지정한다.
-     *
-     * @return $this
-     */
-    public function defer()
-    {
-        $this->attributes['defer'] = '';
-        return $this;
-    }
-
-    /**
-     * 태그에 async 속성을 지정한다.
-     *
-     * @return $this
-     */
-    public function async()
-    {
-        $this->attributes['async'] = '';
-        return $this;
-    }
 }
