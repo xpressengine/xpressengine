@@ -30,101 +30,186 @@ use Xpressengine\UIObject\Element;
 class FormRadio extends AbstractUIObject
 {
     /**
-    * The component id
-    *
-    * @var string
-    */
+     * The component id
+     *
+     * @var string
+     */
     protected static $id = 'uiobject/xpressengine@formRadio';
 
     /**
-    * Get the evaluated contents of the object.
-    *
-    * @return string
-    */
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
-        $args = $this->arguments;
+        $radioOptionElements = $this->radioOptionElements();
 
-        $container = new Element('div', ['class' => 'form-group']);
-        $containerLavel = new Element('label', ['class' => 'hidden']);
-        $radioWrapper = new Element('div', ['class' => 'radioWrap']);
-        $description = new Element('p', ['class' => 'help-block']);
+        $formGroupElement = new Element('div', ['class' => 'form-group']);
+        $formGroupLabelElement = $this->labelElement();
+        $radioWrapperElement = $this->radioWrapperElement();
+        $descriptionElement = $this->descriptionElement();
+        $smallElement = $this->smallElement();
 
-        $nameGlobal = array_get($args, 'name');
-        $radioboxes = null;
-
-        $values = array_get($args, 'value', null);
-
-        foreach ($args as $key => $arg) {
-            switch ($key) {
-                case 'radioboxes':
-                    case 'options':
-                        $radioboxes = $arg;
-                    break;
-
-                    case 'label':
-                        $containerLavel->removeClass('hidden')->html($arg);
-                    break;
-
-                    case 'description':
-                        $description->html($arg);
-                    break;
-
-                    case 'id':
-                        $radioWrapper->attr('id', $arg);
-                    break;
-                    default:
-                break;
-            }
+        foreach ($radioOptionElements as $radioOptionElement) {
+            $radioWrapperElement->append($radioOptionElement);
         }
 
-        // make radioboxes
-        foreach ($radioboxes as $itemKey => $itemValue) {
-            $box = new Element('div', ['class' => 'radio']);
-            $label = new Element('label');
-            $radiobox = new Element('input', ['type' => 'radio']);
+        $formGroupElement->append([
+            $formGroupLabelElement,
+            $smallElement,
+            $radioWrapperElement,
+            $descriptionElement,
+        ]);
 
-            $itemValue = value($itemValue);
-
-            // $itemValue == title
-            if (!is_array($itemValue)) {
-                $text = $itemValue;
-                $value = $itemKey;
-                $checked = false;
-                $disabled = false;
-            } else {
-                $text = array_get($itemValue, 'text');
-                $value = array_get($itemValue, 'value');
-                $checked = array_get($itemValue, 'checked', false);
-                $disabled = array_get($itemValue, 'disabled', false);
-            }
-
-            if ($values != null && $value == $values) {
-                $checked = true;
-            }
-
-            $radiobox->attr('value', $value);
-            $radiobox->attr('name', $nameGlobal);
-
-            if ($checked) {
-                $radiobox->attr('checked', 'checked');
-            } else {
-                $radiobox->removeAttr('checked');
-            }
-
-            if ($disabled) {
-                $radiobox->attr('disabled', 'disabled');
-            } else {
-                $radiobox->removeAttr('disabled');
-            }
-
-            $label->append([$radiobox, $text]);
-            $box->append($label);
-            $radioWrapper->append($box);
-        }
-
-        $this->template = $container->append([$containerLavel, $radioWrapper, $description])->render();
-
+        $this->template = $formGroupElement->render();
         return parent::render();
+    }
+
+    /**
+     * label element
+     *
+     * @return Element
+     */
+    private function labelElement()
+    {
+        $labelValue = array_get($this->arguments, 'label');
+        $requiredValue = in_array(array_get($this->arguments, 'required', false), ['required', true], true);
+
+        $labelElement = new Element('label', ['class' => 'hidden']);
+
+        if ($labelValue !== null) {
+            $labelElement->html($labelValue);
+            $labelElement->removeClass('hidden');
+        }
+
+        if ($requiredValue === true) {
+            $labelElement->addClass('xe-form__label--requried');
+        }
+
+        return $labelElement;
+    }
+
+    /**
+     * @return Element
+     */
+    private function radioWrapperElement()
+    {
+        $id = array_get($this->arguments, 'id');
+
+        $radioWrapperElement = new Element('div', ['class' => 'radioWrap']);
+
+        if ($id !== null) {
+            $radioWrapperElement->attr('id', $id);
+        }
+
+        return $radioWrapperElement;
+    }
+
+    /**
+     * description element
+     *
+     * @return Element
+     */
+    private function descriptionElement()
+    {
+        $descriptionValue = array_get($this->arguments, 'description');
+        $descriptionElement = new Element('p', ['class' => ['help-block', 'hidden']]);
+
+        if ($descriptionValue !== null) {
+            $descriptionElement->html($descriptionValue);
+            $descriptionElement->removeClass('hidden');
+        }
+
+        return $descriptionElement;
+    }
+
+    /**
+     * small element
+     *
+     * @return Element
+     */
+    private function smallElement()
+    {
+        $smallValue = array_get($this->arguments, 'small');
+        $smallElement = new Element('small', ['class' => 'hidden']);
+
+        if ($smallValue !== null) {
+            $smallElement->html($smallValue);
+            $smallElement->removeClass('hidden');
+        }
+
+        return $smallElement;
+    }
+
+    /**
+     * Radio Option Elements
+     *
+     * @return array
+     */
+    private function radioOptionElements()
+    {
+        $optionElements = [];
+
+        $radioboxes = array_get($this->arguments, 'radioboxes');
+        $options = array_get($this->arguments, 'options');
+
+        if ($options === null) {
+            $options = $radioboxes;
+        }
+
+        foreach ($options as $itemKey => $itemValue) {
+            $optionElements[] = $this->radioOptionElement($itemKey, $itemValue);
+        }
+
+        return $optionElements;
+    }
+
+    /**
+     * @param $itemKey
+     * @param $value
+     * @return Element
+     */
+    private function radioOptionElement($itemKey, $value)
+    {
+        $inputName = array_get($this->arguments, 'name');
+        $inputValue = array_get($this->arguments, 'value');
+        $inputRequired = in_array(array_get($this->arguments, 'required', false), [true, 'required'], true);
+
+        $radioBox = new Element('div', ['class' => 'radio']);
+        $radioLabel = new Element('label');
+        $radioInput = new Element('input', ['type' => 'radio']);
+
+        $value = value($value);
+
+        $text = is_array($value) === true ? array_get($value, 'text') : $value;
+        $value = is_array($value) === true ? array_get($value, 'value') : $itemKey;
+        $checked = is_array($value) === true && in_array(array_get($value, 'checked', false), ['checked', true], true);
+        $disabled = is_array($value) === true && in_array(array_get($value, 'disabled', false), ['disabled', true], true);
+
+        if ($inputValue !== null && $inputValue === $value) {
+            $checked = true;
+        }
+
+        $radioInput->attr('value', $value);
+        $radioInput->attr('name', $inputName);
+
+
+        if ($checked === true) {
+            $radioInput->attr('checked', 'checked');
+        }
+
+        if ($disabled === true) {
+            $radioInput->attr('disabled', 'disabled');
+        }
+
+        if ($inputRequired === true) {
+            $radioInput->attr('required', 'required');
+        }
+
+        $radioLabel->append([$radioInput, $text]);
+        $radioBox->append($radioLabel);
+
+        return $radioBox;
     }
 }
