@@ -194,7 +194,9 @@ class Purifier
      */
     public function purify($content)
     {
-        if (!$this->app['request']->user()->isAdmin()) {
+        $isAdmin = optional($this->app['request']->user())->isAdmin() ?? false;
+
+        if ($isAdmin === true) {
             $this->config->set('HTML.Nofollow', true);
         }
 

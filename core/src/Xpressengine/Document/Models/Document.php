@@ -21,7 +21,10 @@ use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
+use Xpressengine\Editor\PurifierModules\EditorContent;
 use Xpressengine\Site\Site;
+use Xpressengine\Support\Purifier;
+use Xpressengine\Support\PurifierModules\Html5;
 
 /**
  * Document
@@ -302,6 +305,11 @@ class Document extends DynamicModel
      */
     public function getPureContent($content)
     {
+        $purifier = new Purifier();
+        $purifier->allowModule(EditorContent::class);
+        $purifier->allowModule(Html5::class);
+
+        $content = $purifier->purify($content);
         $content = strip_tags($content);
         $content = str_replace(['&nbsp;', PHP_EOL], ' ', $content);
         // remove Extended ASCII character number of 160
