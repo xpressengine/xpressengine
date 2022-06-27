@@ -87,16 +87,19 @@
         </div>
     </div>
 
-    <div class="setting-group">
-        <div class="setting-detail">
-            <div class="setting-detail-content">
-                <p>{{ xe_trans('xe::id') }}</p>
-                <em class="text-gray2" style="margin-bottom: 0px;">{{ $user->login_id }}</em>
+    @if (app('xe.user')->isUseLoginId() === true)
+        <div class="setting-group">
+            <div class="setting-detail">
+                <div class="setting-detail-content">
+                    <p>{{ xe_trans('xe::id') }}</p>
+                    <em class="text-gray2" style="margin-bottom: 0;">{{ $user->login_id }}</em>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
-    <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
+    @if (app('xe.user')->isUseDisplayName() === true)
+        <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
         <div class="setting-group">
             <a href="#" class="__xe_editBtn">
                 <div class="setting-left">
@@ -119,6 +122,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="__xe_setting __xe_settingPassword">
         <div class="setting-group">
