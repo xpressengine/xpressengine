@@ -15,12 +15,15 @@
 namespace App\Providers;
 
 use Closure;
+use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Matching\HostValidator;
 use Illuminate\Routing\Matching\MethodValidator;
 use Illuminate\Routing\Matching\SchemeValidator;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\ModuleValidator;
 use Xpressengine\Routing\Repositories\CacheDecorator;
@@ -52,8 +55,11 @@ class RoutingServiceProvider extends ServiceProvider
         $routeValidator = Route::getValidators();
         $routeValidator['module']->boot($this->app['xe.router'], $this->app['xe.site']);
 
-        $this->app['events']->listen('Illuminate\Routing\Events\RouteMatched', function ($event) {
-            if ($module = $event->route->getAction('module')) {
+        $this->app['events']->listen(RouteMatched::class, function (RouteMatched $event) {
+            $module = $event->route->getAction('module');
+            $instanceConfig = \Xpressengine\Routing\InstanceConfig::instance();
+
+            if ($module !== null) {
                 $routes = $this->app['xe.router']->fetchByModule($module);
                 $instanceRoute = collect($routes)->filter(function ($route) use ($event) {
                     $segment = $event->request->segment(1);
@@ -65,7 +71,6 @@ class RoutingServiceProvider extends ServiceProvider
                 $menuConfig = $this->app['xe.menu']->getMenuItemTheme($item);
                 $theme = $menuConfig->get($event->request->isMobile() ? 'mobileTheme' : 'desktopTheme');
 
-                $instanceConfig = \Xpressengine\Routing\InstanceConfig::instance();
                 $instanceConfig->setTheme($theme);
                 $instanceConfig->setInstanceId($instanceRoute->instance_id);
                 $instanceConfig->setModule($module);
@@ -73,6 +78,15 @@ class RoutingServiceProvider extends ServiceProvider
                 $instanceConfig->setMenuItem($item);
 
                 $this->app['xe.theme']->selectTheme($theme);
+            } else {
+                $requestUri = $event->request->getRequestUri();
+                $filteredMenuItem = $this->app['xe.menu']->items()->fetchByUrl($requestUri);
+
+                if ($menuItem = $filteredMenuItem->first()) {
+                    $instanceConfig->setInstanceId($menuItem->id);
+                    $instanceConfig->setUrl($menuItem->url);
+                    $instanceConfig->setMenuItem($menuItem);
+                }
             }
         });
     }

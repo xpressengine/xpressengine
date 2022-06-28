@@ -16,6 +16,7 @@ namespace Xpressengine\Menu\Repositories;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\CacheableEloquentRepositoryTrait;
 
@@ -143,6 +144,47 @@ class MenuItemRepository
     {
         return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($ids, $with) {
             return $this->query()->with($with)->whereIn('id', $ids)->get();
+        });
+    }
+
+
+    /**
+     * @param  string  $url
+     * @param  array  $with
+     * @return mixed
+     */
+    public function fetchByUrl(string $url, array $with = [])
+    {
+        return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($url, $with) {
+            $parsedUrl = parse_url($url);
+            $urlPath = str_replace_first('/', '', Arr::get($parsedUrl, 'path', ''));
+
+            parse_str(Arr::get($parsedUrl, 'query', ''), $urlQueries);
+
+            return $this->fetchByUrlPath($urlPath, $with)
+                ->filter(
+                    function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
+                        $parseredMenuItemUrl = parse_url($menuItem->url);
+                        $menuItemUrlPath = str_replace_first('/', '', Arr::get($parseredMenuItemUrl, 'path', ''));
+
+                        parse_str(Arr::get($parseredMenuItemUrl, 'query', ''), $menuItemUrlQueries);
+
+                        $arrayDiff = array_diff_assoc($menuItemUrlQueries, $urlQueries);
+                        return $urlPath === $menuItemUrlPath && empty($arrayDiff) === true;
+                    }
+                );
+        });
+    }
+
+    /**
+     * @param  string  $urlPath
+     * @param  array  $with
+     * @return mixed
+     */
+    protected function fetchByUrlPath(string $urlPath, array $with = [])
+    {
+        return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($urlPath, $with) {
+            return $this->query()->with($with)->where('url', 'like', $urlPath.'%')->get();
         });
     }
 
