@@ -482,6 +482,21 @@ if (!function_exists('current_instance_id')) {
     }
 }
 
+if (!function_exists('current_selected_instance_id')) {
+    /**
+     * Return current selected Instance Id
+     *
+     * @package Xpressengine\Menu
+     *
+     * @return string
+     */
+    function current_selected_instance_id()
+    {
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getSelectedInstanceId();
+    }
+}
+
 if (!function_exists('current_menu')) {
 
     /**
@@ -561,7 +576,7 @@ if (!function_exists('menu_list')) {
                 }
             }
 
-            $current = $selected ?: current_instance_id();
+            $current = $selected ?: current_selected_instance_id();
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }

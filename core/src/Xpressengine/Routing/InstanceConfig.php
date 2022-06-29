@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Menu
  *
@@ -29,7 +30,6 @@ use Xpressengine\Support\Singleton;
  */
 class InstanceConfig extends Singleton
 {
-
     /**
      * @var string $theme
      */
@@ -39,6 +39,11 @@ class InstanceConfig extends Singleton
      * @var string $instanceId
      */
     private $instanceId;
+
+    /**
+     * @var string $selectedInstanceId
+     */
+    private $selectedInstanceId;
 
     /**
      * @var string $url
@@ -71,7 +76,7 @@ class InstanceConfig extends Singleton
      * @param string $theme theme of instanceRoute
      * @return void
      */
-    public function setTheme($theme)
+    public function setTheme(string $theme)
     {
         $this->theme = $theme;
     }
@@ -92,7 +97,7 @@ class InstanceConfig extends Singleton
      * @param string $instanceId instance id
      * @return void
      */
-    public function setInstanceId($instanceId)
+    public function setInstanceId(string $instanceId)
     {
         $this->instanceId = $instanceId;
     }
@@ -113,7 +118,7 @@ class InstanceConfig extends Singleton
      * @param string $url url of instanceRoute
      * @return void
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
     }
@@ -134,7 +139,7 @@ class InstanceConfig extends Singleton
      * @param string $module module id
      * @return void
      */
-    public function setModule($module)
+    public function setModule(string $module)
     {
         $this->module = $module;
     }
@@ -158,5 +163,22 @@ class InstanceConfig extends Singleton
     public function setMenuItem(MenuItem $item)
     {
         $this->menuItem = $item;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelectedInstanceId()
+    {
+        return $this->selectedInstanceId;
+    }
+
+    /**
+     * @param  string  $selectedInstanceId
+     * @return void
+     */
+    public function setSelectedInstanceId(string $selectedInstanceId)
+    {
+        $this->selectedInstanceId = $selectedInstanceId;
     }
 }

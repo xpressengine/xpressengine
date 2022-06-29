@@ -147,7 +147,6 @@ class MenuItemRepository
         });
     }
 
-
     /**
      * @param  string  $url
      * @param  array  $with
@@ -164,10 +163,10 @@ class MenuItemRepository
             return $this->fetchByUrlPath($urlPath, $with)
                 ->filter(
                     function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
-                        $parseredMenuItemUrl = parse_url($menuItem->url);
-                        $menuItemUrlPath = str_replace_first('/', '', Arr::get($parseredMenuItemUrl, 'path', ''));
+                        $parsedMenuItemUrl = parse_url($menuItem->url);
+                        $menuItemUrlPath = str_replace_first('/', '', Arr::get($parsedMenuItemUrl, 'path', ''));
 
-                        parse_str(Arr::get($parseredMenuItemUrl, 'query', ''), $menuItemUrlQueries);
+                        parse_str(Arr::get($parsedMenuItemUrl, 'query', ''), $menuItemUrlQueries);
 
                         $arrayDiff = array_diff_assoc($menuItemUrlQueries, $urlQueries);
                         return $urlPath === $menuItemUrlPath && empty($arrayDiff) === true;
@@ -184,7 +183,7 @@ class MenuItemRepository
     protected function fetchByUrlPath(string $urlPath, array $with = [])
     {
         return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($urlPath, $with) {
-            return $this->query()->with($with)->where('url', 'like', $urlPath.'%')->get();
+            return $this->query()->with($with)->where('url', 'like', $urlPath . '%')->get();
         });
     }
 

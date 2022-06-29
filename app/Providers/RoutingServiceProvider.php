@@ -76,17 +76,16 @@ class RoutingServiceProvider extends ServiceProvider
                 $instanceConfig->setModule($module);
                 $instanceConfig->setUrl($instanceRoute->url);
                 $instanceConfig->setMenuItem($item);
+                $instanceConfig->setSelectedInstanceId($instanceRoute->instance_id);
 
                 $this->app['xe.theme']->selectTheme($theme);
-            } else {
-                $requestUri = $event->request->getRequestUri();
-                $filteredMenuItem = $this->app['xe.menu']->items()->fetchByUrl($requestUri);
+            }
 
-                if ($menuItem = $filteredMenuItem->first()) {
-                    $instanceConfig->setInstanceId($menuItem->id);
-                    $instanceConfig->setUrl($menuItem->url);
-                    $instanceConfig->setMenuItem($menuItem);
-                }
+            $requestUri = $event->request->getRequestUri();
+            $filteredMenuItem = $this->app['xe.menu']->items()->fetchByUrl($requestUri);
+
+            if ($menuItem = $filteredMenuItem->first()) {
+                $instanceConfig->setSelectedInstanceId($menuItem->id);
             }
         });
     }
