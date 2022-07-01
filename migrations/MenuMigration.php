@@ -103,8 +103,8 @@ class MenuMigration extends Migration
     }
 
     /**
-     * Run after installation.
-     *
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
      * @return void
      */
     public function installed($site_key = 'default')
@@ -113,6 +113,26 @@ class MenuMigration extends Migration
         \DB::table('config')->insert(['name' => 'menu', 'vars' => '[]', 'site_key' => $site_key]);
         \DB::table('config')->insert(['name' => 'site', 'vars' => '[]', 'site_key' => $site_key]);
         \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]', 'site_key' => $site_key]);
+
+        Schema::table('menu_item', function (Blueprint $table) {
+            // foreign
+            $table->foreign('menu_id')->references('id')->on('menu');
+//            $table->foreign('parent_id')->references('id')->on('menu_item');
+            $table->foreign('menu_image_id')->references('id')->on('files');
+            $table->foreign('basic_image_id')->references('id')->on('files');
+            $table->foreign('hover_image_id')->references('id')->on('files');
+            $table->foreign('selected_image_id')->references('id')->on('files');
+            $table->foreign('m_basic_image_id')->references('id')->on('files');
+            $table->foreign('m_hover_image_id')->references('id')->on('files');
+            $table->foreign('m_selected_image_id')->references('id')->on('files');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('menu_closure', function (Blueprint $table) {
+            // foreign
+            $table->foreign('ancestor')->references('id')->on('menu_item');
+            $table->foreign('descendant')->references('id')->on('menu_item');
+        });
     }
 
     /**

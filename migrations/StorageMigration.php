@@ -59,6 +59,7 @@ class StorageMigration extends Migration
             $table->primary('id');
             $table->unique(['disk', 'path', 'filename'], 'findKey');
             $table->index('origin_id');
+            $table->index('user_id');
         });
 
         Schema::create('fileables', function (Blueprint $table) {
@@ -73,6 +74,28 @@ class StorageMigration extends Migration
 
             $table->index('site_key');
             $table->unique(['file_id', 'fileable_id']);
+            $table->index(['fileable_id'], 'FILEABLE_INDEX');
+        });
+    }
+
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('files', static function (Blueprint $table) {
+            // foreign
+            $table->foreign('origin_id')->references('id')->on('files');
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('fileables', static function (Blueprint $table) {
+            // foreign
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 

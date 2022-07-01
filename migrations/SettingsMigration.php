@@ -32,25 +32,6 @@ use Xpressengine\Support\Migration;
 class SettingsMigration extends Migration
 {
     /**
-     * Run after installation.
-     *
-     * @return void
-     */
-    public function installed($site_key = 'default')
-    {
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-        \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]', 'site_key' => $site_key]);
-        \DB::table('permissions')->insert([
-            'site_key'=> $site_key, 'name' => 'settings', 'grants' => '[]',
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-        \DB::table('permissions')->insert([
-            'site_key'=> $site_key, 'name' => 'settings.user', 'grants' => '[]',
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-    }
-
-    /**
      * Run when install the application.
      *
      * @return void
@@ -76,7 +57,32 @@ class SettingsMigration extends Migration
             $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
             $table->index('site_key');
+            $table->index('user_id');
             $table->primary('id');
+        });
+    }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed($site_key = 'default')
+    {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]', 'site_key' => $site_key]);
+        \DB::table('permissions')->insert([
+            'site_key'=> $site_key, 'name' => 'settings', 'grants' => '[]',
+            'created_at' => $now, 'updated_at' => $now,
+        ]);
+        \DB::table('permissions')->insert([
+            'site_key'=> $site_key, 'name' => 'settings.user', 'grants' => '[]',
+            'created_at' => $now, 'updated_at' => $now,
+        ]);
+
+        Schema::table('admin_log', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 

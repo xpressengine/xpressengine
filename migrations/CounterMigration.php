@@ -59,13 +59,18 @@ class CounterMigration extends Migration
     }
 
     /**
-     * Run after installation.
-     *
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
      * @return void
      */
     public function installed($site_key = 'default')
     {
         \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}','site_key'=>$site_key]);
+
+        Schema::table('counter_log', function ($table) {
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
     }
 
     /**

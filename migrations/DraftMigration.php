@@ -51,4 +51,17 @@ class DraftMigration extends Migration
             $table->primary('id');
         });
     }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('draft', function (Blueprint $table) {
+            // foreign
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+    }
 }

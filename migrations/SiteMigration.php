@@ -15,8 +15,9 @@
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
-use Schema;
 use DB;
+use Schema;
+use Xpressengine\Site\Site;
 use Xpressengine\Support\Migration;
 
 /**
@@ -50,6 +51,8 @@ class SiteMigration extends Migration
             $table->index('updated_at');
             $table->primary('site_key');
         });
+
+        $this->installed();
     }
 
     /**
@@ -59,10 +62,19 @@ class SiteMigration extends Migration
      */
     public function installed($site_key = false)
     {
-        if($site_key !== false) return;
+        if($site_key !== false) {
+            return;
+        }
+
         $url = \Config::get('app.url');
         $url = preg_replace('#^https?://#', '', $url);
-        \DB::table('site')->insert(['host' => $url, 'site_key' => 'default']);
+
+        if (DB::table('site')->where('site_key', 'default')->exists() === false) {
+            DB::table('site')->insert([
+                'host' => $url,
+                'site_key' => 'default'
+            ]);
+        }
     }
 
     /**

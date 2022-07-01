@@ -51,7 +51,6 @@ class MediaMigration extends Migration
 
             $table->index('site_key');
             $table->index('file_id');
-
         });
 
         Schema::create('files_video', function (Blueprint $table) {
@@ -83,6 +82,29 @@ class MediaMigration extends Migration
 
             $table->index('site_key');
             $table->index('file_id');
+        });
+    }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('files_image', function (Blueprint $table) {
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('files_video', function (Blueprint $table) {
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('files_audio', function (Blueprint $table) {
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 

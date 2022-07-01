@@ -54,6 +54,7 @@ class WidgetboxMigration extends Migration
                     $table->timestamp('created_at')->nullable()->comment('created date');
                     $table->timestamp('updated_at')->nullable()->comment('updated date');
 
+                    $table->index('id');
                     $table->index('site_key');
                     $table->primary(['site_key','id']);
                 }
@@ -73,6 +74,14 @@ class WidgetboxMigration extends Migration
         if($siteKey != 'default') {
             $this->init($siteKey);
         }
+
+        Schema::table(
+            'widgetbox_history',
+            function (Blueprint $table) {
+                $table->foreign('widgetbox_id')->references('id')->on('widgetbox');
+                $table->foreign('site_key')->references('site_key')->on('site');
+            }
+        );
     }
 
     /**
@@ -180,6 +189,8 @@ class WidgetboxMigration extends Migration
             $table->timestamp('created_at')->nullable()->comment('created_at');
 
             $table->index(['site_key', 'widgetbox_id'], 'WIDGETBOX_INDEX');
+            $table->index('widgetbox_id');
+            $table->index('site_key');
         });
     }
 }

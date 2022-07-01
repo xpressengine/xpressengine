@@ -48,7 +48,24 @@ class RoutingMigration extends Migration
             $table->string('menu_id')->comment('menu ID. menu ID');
             $table->string('site_key')->comment('site key. for multi web site support.');
 
+            // index
             $table->unique('instance_id');
+            $table->index(['url'], 'URL_INDEX');
+            $table->index('menu_id');
+        });
+    }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('instance_route', static function (Blueprint $table) {
+            // foreign
+            $table->foreign('menu_id')->references('id')->on('menu');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 }

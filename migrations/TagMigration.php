@@ -58,7 +58,7 @@ class TagMigration extends Migration
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->integer('tag_id')->comment('tag ID');
+            $table->unsignedInteger('tag_id')->comment('tag ID');
             $table->string('taggable_id', 36)->comment('target ID. If Document saved a tag, [taggable_id] is document ID.');
             $table->integer('position')->default(0)->comment('position number within same [taggable_id]');
             $table->timestamp('created_at')->nullable()->comment('created date');
@@ -67,6 +67,32 @@ class TagMigration extends Migration
 
             $table->index('site_key');
             $table->unique(['tag_id', 'taggable_id']);
+            $table->index(['taggable_id'], 'TAGGABLE_INDEX');
+        });
+    }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('tags', static function (Blueprint $table) {
+            // tags table
+            $table->engine = 'InnoDB';
+
+            // foreign
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('taggables', static function (Blueprint $table) {
+            // tags table
+            $table->engine = 'InnoDB';
+
+            // foreign
+            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 

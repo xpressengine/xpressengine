@@ -59,6 +59,23 @@ class MediaLibraryMigration extends Migration
     public function installed($site_key = 'default')
     {
         $this->storeConfig($site_key);
+
+        Schema::table($this->fileTableName, function (Blueprint $table) {
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('origin_file_id')->references('id')->on('files');
+            $table->foreign('folder_id')->references('id')->on($this->folderTableName);
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table($this->folderTableName, function (Blueprint $table) {
+            $table->foreign('parent_id')->references('id')->on($this->folderTableName);
+        });
+
+        Schema::table($this->closureTableName, function (Blueprint $table) {
+            $table->foreign('ancestor')->references('id')->on($this->folderTableName);
+            $table->foreign('descendant')->references('id')->on($this->folderTableName);
+        });
     }
 
     /**
@@ -227,6 +244,7 @@ class MediaLibraryMigration extends Migration
                 $table->string('id', 36);
 
                 $table->string('file_id', 36);
+                $table->string('origin_file_id', 36)->nullable();
                 $table->string('folder_id', 36);
                 $table->string('user_id', 36)->nullable();
                 $table->string('title')->nullable();

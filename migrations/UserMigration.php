@@ -187,8 +187,8 @@ class UserMigration extends Migration
     }
 
     /**
-     * Run after installation.
-     *
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
      * @return void
      */
     public function installed($site_key = 'default')
@@ -199,6 +199,40 @@ class UserMigration extends Migration
             ['name' => 'user.register', 'vars' => '{"secureLevel":"low","joinable":true,"register_process":"activated","term_agree_type":"pre","display_name_unique":false,"use_display_name":true,"password_rules":"min:6|alpha|numeric|special_char"}', 'site_key' => $site_key],
             ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}', 'site_key' => $site_key]
         ]);
+
+        Schema::table('user_group', function (Blueprint $table) {
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('user_group_user', function (Blueprint $table) {
+            $table->foreign('group_id')->references('id')->on('user_group');
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('user_account', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('user_email', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('user_pending_email', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('user_login_log', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+        });
+
+        Schema::table('user_terms', function (Blueprint $table) {
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('user_term_agrees', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('term_id')->references('id')->on('user_terms');
+        });
     }
 
     /**

@@ -54,8 +54,8 @@ class CategoryMigration extends Migration
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->integer('category_id')->comment('category ID.');
-            $table->integer('parent_id')->nullable()->comment('parent ID. parent category item ID.');
+            $table->unsignedInteger('category_id')->comment('category ID.');
+            $table->unsignedInteger('parent_id')->nullable()->comment('parent ID. parent category item ID.');
             $table->string('word', 250)->comment('string of category item. It can be code of translation information.');
             $table->text('description')->comment('description of category item. It can be code of translation information.');
             $table->integer('ordering')->default(0)->comment('ordering number of category item sort.');
@@ -71,8 +71,8 @@ class CategoryMigration extends Migration
             $table->engine = "InnoDB";
 
             $table->bigIncrements('id')->comment('ID');
-            $table->bigInteger('ancestor')->comment('parent category item ID');
-            $table->bigInteger('descendant')->comment('child category item ID');
+            $table->unsignedInteger('ancestor')->comment('parent category item ID');
+            $table->unsignedInteger('descendant')->comment('child category item ID');
             $table->tinyInteger('depth')->comment('depth');
             $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
@@ -81,6 +81,28 @@ class CategoryMigration extends Migration
             $table->unique(['ancestor', 'descendant']);
             $table->index('ancestor');
             $table->index('descendant');
+        });
+    }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('category_item', function (Blueprint $table) {
+            // foreign
+            $table->foreign('parent_id')->references('id')->on('category_item');
+            $table->foreign('category_id')->references('id')->on('category');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('category_closure', function (Blueprint $table) {
+            // foreign
+            $table->foreign('ancestor')->references('id')->on('category_item');
+            $table->foreign('descendant')->references('id')->on('category_item');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 

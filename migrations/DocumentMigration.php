@@ -104,6 +104,10 @@ class DocumentMigration extends Migration
             $table->index('created_at');
             $table->unique(['head', 'reply']);
             $table->primary(array('id'));
+
+            $table->foreign('parent_id')->references('id')->on('documents');
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
         });
     }
 
@@ -162,8 +166,8 @@ class DocumentMigration extends Migration
     }
 
     /**
-     * Determine if executed the migration when application install.
-     *
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
      * @return void
      */
     public function installed($site_key = 'default')
@@ -173,6 +177,21 @@ class DocumentMigration extends Migration
             'vars' => '{"instanceId":0,"instanceName":0,"division":false,"revision":false,"comment":true,"assent":true,"nonmember":false,"reply":false}',
             'site_key' => $site_key
         ]);
+
+        Schema::table('documents', function (Blueprint $table) {
+            // foreign
+            $table->foreign('parent_id')->references('id')->on('documents');
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+
+        Schema::table('documents_revision', function (Blueprint $table) {
+            // foreign
+            $table->foreign('id')->references('id')->on('documents');
+            $table->foreign('parent_id')->references('id')->on('documents');
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
     }
 
     /**

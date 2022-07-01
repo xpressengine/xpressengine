@@ -50,4 +50,17 @@ class PermissionMigration extends Migration
             $table->unique(['site_key', 'name']);
         });
     }
+
+    /**
+     * 서비스에 필요한 환경(타 서비스와 연관된 환경)을 구축한다.
+     * db seeding과 같은 코드를 작성한다.
+     * @return void
+     */
+    public function installed()
+    {
+        Schema::table('permissions', function (Blueprint $table) {
+            // foreign
+            $table->foreign('site_key')->references('site_key')->on('site');
+        });
+    }
 }
