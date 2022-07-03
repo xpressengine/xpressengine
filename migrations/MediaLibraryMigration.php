@@ -267,12 +267,13 @@ class MediaLibraryMigration extends Migration
             Schema::create($this->folderTableName, function (Blueprint $table) {
                 $table->string('id', 36);
 
-                $table->string('parent_id', 36);
+                $table->string('parent_id', 36)->nullable();
                 $table->string('disk');
                 $table->string('name');
                 $table->integer('ordering');
                 $table->string('site_key', 50)->nullable()->default('default')->comment('site key. for multi web site support.');
 
+                $table->index('parent_id');
                 $table->index('site_key');
 
                 $table->timestamps();
@@ -330,7 +331,7 @@ class MediaLibraryMigration extends Migration
     {
         //TODO root 폴더 정보 config에 등록
         $rootFolderAttributes = [
-            'parent_id' => '',
+            'parent_id' => null,
             'disk' => 'media',
             'name' => '/',
             'ordering' => 0

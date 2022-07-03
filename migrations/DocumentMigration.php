@@ -119,7 +119,7 @@ class DocumentMigration extends Migration
      */
     private function setColumns(Blueprint $table)
     {
-        $table->string('parent_id', 36)->default('')->comment('parent document ID');
+        $table->string('parent_id', 36)->nullable()->comment('parent document ID');
 
         $table->string('instance_id', 36)->default('')->comment('instance ID. This is associated with area classification as like Menu, Board.');
         $table->string('type', 36)->default('')->comment('Module Type. Module ID of registered this document.');
