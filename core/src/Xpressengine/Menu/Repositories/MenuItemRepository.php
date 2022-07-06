@@ -163,7 +163,11 @@ class MenuItemRepository
             $menuItems = $this->fetchByUrlPath($urlPath, $with)
                 ->transform(static function (MenuItem $menuItem) {
                     $parsedMenuItemUrl = parse_url($menuItem->url);
-                    $menuItemUrlPath = str_replace_first('/', '', Arr::get($parsedMenuItemUrl, 'path', ''));
+                    $menuItemUrlPath = Arr::get($parsedMenuItemUrl, 'path', '');
+
+                    if ($menuItemUrlPath !== '' && $menuItemUrlPath[0]  === '/') {
+                        $menuItemUrlPath = str_replace_first('/', '', $menuItemUrlPath);
+                    }
 
                     parse_str(Arr::get($parsedMenuItemUrl, 'query', ''), $menuItemUrlQueries);
 
