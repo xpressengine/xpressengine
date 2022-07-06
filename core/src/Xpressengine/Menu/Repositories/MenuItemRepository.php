@@ -148,8 +148,8 @@ class MenuItemRepository
     }
 
     /**
-     * @param  string  $url
-     * @param  array  $with
+     * @param string $url
+     * @param array $with
      * @return mixed
      */
     public function fetchByUrl(string $url, array $with = [])
@@ -160,24 +160,37 @@ class MenuItemRepository
 
             parse_str(Arr::get($parsedUrl, 'query', ''), $urlQueries);
 
-            return $this->fetchByUrlPath($urlPath, $with)
-                ->filter(
-                    function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
-                        $parsedMenuItemUrl = parse_url($menuItem->url);
-                        $menuItemUrlPath = str_replace_first('/', '', Arr::get($parsedMenuItemUrl, 'path', ''));
+            $menuItems = $this->fetchByUrlPath($urlPath, $with)
+                ->transform(static function (MenuItem $menuItem) {
+                    $parsedMenuItemUrl = parse_url($menuItem->url);
+                    $menuItemUrlPath = str_replace_first('/', '', Arr::get($parsedMenuItemUrl, 'path', ''));
 
-                        parse_str(Arr::get($parsedMenuItemUrl, 'query', ''), $menuItemUrlQueries);
+                    parse_str(Arr::get($parsedMenuItemUrl, 'query', ''), $menuItemUrlQueries);
 
-                        $arrayDiff = array_diff_assoc($menuItemUrlQueries, $urlQueries);
-                        return $urlPath === $menuItemUrlPath && empty($arrayDiff) === true;
-                    }
-                );
+                    $menuItem->setAttribute('url_path', $menuItemUrlPath);
+                    $menuItem->setAttribute('url_queries', $menuItemUrlQueries);
+
+                    return $menuItem;
+                })
+                ->filter(static function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
+                    $arrayDiff = array_diff_assoc($menuItem->url_queries, $urlQueries);
+                    return $urlPath === $menuItem->url_path && empty($arrayDiff) === true;
+                });
+
+            $containedUrlMenuItems = $menuItems->filter(
+                static function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
+                    $arrayDiff = array_diff_assoc($urlQueries, $menuItem->url_queries);
+                    return $urlPath === $menuItem->url_path && empty($arrayDiff) === true;
+                }
+            );
+
+            return $containedUrlMenuItems->isNotEmpty() === true ? $containedUrlMenuItems : $menuItems;
         });
     }
 
     /**
-     * @param  string  $urlPath
-     * @param  array  $with
+     * @param string $urlPath
+     * @param array $with
      * @return mixed
      */
     protected function fetchByUrlPath(string $urlPath, array $with = [])

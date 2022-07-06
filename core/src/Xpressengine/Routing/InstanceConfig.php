@@ -15,6 +15,7 @@
 
 namespace Xpressengine\Routing;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\Singleton;
 
@@ -41,9 +42,9 @@ class InstanceConfig extends Singleton
     private $instanceId;
 
     /**
-     * @var string $selectedInstanceId
+     * @var array $selectedInstanceIds
      */
-    private $selectedInstanceId;
+    private $selectedInstanceIds = [];
 
     /**
      * @var string $url
@@ -73,7 +74,7 @@ class InstanceConfig extends Singleton
     /**
      * Set theme component id
      *
-     * @param string $theme theme of instanceRoute
+     * @param  string  $theme  theme of instanceRoute
      * @return void
      */
     public function setTheme(string $theme)
@@ -94,7 +95,7 @@ class InstanceConfig extends Singleton
     /**
      * Set instance id
      *
-     * @param string $instanceId instance id
+     * @param  string  $instanceId  instance id
      * @return void
      */
     public function setInstanceId(string $instanceId)
@@ -115,7 +116,7 @@ class InstanceConfig extends Singleton
     /**
      * Set first url segment
      *
-     * @param string $url url of instanceRoute
+     * @param  string  $url  url of instanceRoute
      * @return void
      */
     public function setUrl(string $url)
@@ -136,7 +137,7 @@ class InstanceConfig extends Singleton
     /**
      * Set module id
      *
-     * @param string $module module id
+     * @param  string  $module  module id
      * @return void
      */
     public function setModule(string $module)
@@ -157,7 +158,7 @@ class InstanceConfig extends Singleton
     /**
      * Set menu item instance
      *
-     * @param MenuItem $item menu item instance
+     * @param  MenuItem  $item  menu item instance
      * @return void
      */
     public function setMenuItem(MenuItem $item)
@@ -166,19 +167,36 @@ class InstanceConfig extends Singleton
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getSelectedInstanceId()
+    public function getSelectedInstanceIds()
     {
-        return $this->selectedInstanceId;
+        return $this->selectedInstanceIds ?? [];
     }
 
     /**
-     * @param  string  $selectedInstanceId
+     * @param array|string $selectedInstanceId
      * @return void
      */
-    public function setSelectedInstanceId(string $selectedInstanceId)
+    public function addSelectedInstanceId($selectedInstanceId)
     {
-        $this->selectedInstanceId = $selectedInstanceId;
+        $selectedInstanceId = is_array($selectedInstanceId) ? $selectedInstanceId : [$selectedInstanceId];
+        $this->selectedInstanceIds = array_unique(array_merge($this->selectedInstanceIds, $selectedInstanceId));
+    }
+
+    /**
+     * @param array|string $selectedInstanceId
+     * @return void
+     */
+    public function removeSelectedInstanceId($selectedInstanceId)
+    {
+        $selectedInstanceIds = is_array($selectedInstanceId) ? $selectedInstanceId : [$selectedInstanceId];
+
+        $this->selectedInstanceIds = Arr::where(
+            $this->selectedInstanceIds,
+            static function ($selectedInstanceId) use ($selectedInstanceIds) {
+                return in_array($selectedInstanceId, $selectedInstanceIds, true) === false;
+            }
+        );
     }
 }
