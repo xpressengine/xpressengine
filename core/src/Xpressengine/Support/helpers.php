@@ -1021,3 +1021,14 @@ if (function_exists('phone_masking') === false) {
 
     }
 }
+
+if (function_exists('is_home') === false) {
+    /**
+     * 현재 라우트가 홈인지 확인합니다.
+     *
+     * @return bool
+     */
+    function is_home() {
+        return app('xe.site')->getHomeInstanceId() === current_instance_id();
+    }
+}
