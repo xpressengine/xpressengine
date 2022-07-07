@@ -406,8 +406,11 @@ class UserMigration extends Migration
         unset($registerConfigAttribute['guard_forced']);
 
         $registerConfigAttribute['term_agree_type'] = UserRegisterHandler::TERM_AGREE_PRE;
+
         $registerConfigAttribute['display_name_unique'] = true;
         $registerConfigAttribute['use_display_name'] = true;
+        $registerConfigAttribute['use_login_id'] = true;
+
         $registerConfigAttribute['dynamic_fields'] = array_keys(app('xe.dynamicField')->gets('user'));
 
         $displayNameCaption = XeLang::genUserKey();

@@ -11,12 +11,14 @@
 </div>
 
 {{--loginId--}}
+@if (app('xe.user')->isUseLoginId() === true)
 <div class="xu-form-group xu-form-group--large">
     <label class="xu-form-group__label" for="f-login_id">{{ xe_trans('xe::id') }}</label>
     <div class="xu-form-group__box">
         <input type="text" id="f-login_id" class="xe-form-control xu-form-group__control" placeholder="{{ xe_trans('xe::enterId') }}" name="login_id" value="{{ old('login_id') }}" required data-valid-name="{{ xe_trans('xe::id') }}">
     </div>
 </div>
+@endif
 
 {{--display_name--}}
 @if (app('xe.config')->getVal('user.register.use_display_name') === true)

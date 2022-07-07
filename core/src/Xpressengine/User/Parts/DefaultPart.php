@@ -55,12 +55,15 @@ class DefaultPart extends RegisterFormPart
     {
         $rules = [
             'email' => 'required|email',
-            'login_id' => 'required|login_id',
             'password' => 'required|password',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
             $rules['display_name'] = 'required';
+        }
+
+        if (app('xe.user')->isUseLoginId() === true) {
+            $rules['login_id'] = 'required|login_id';
         }
 
         return $rules;

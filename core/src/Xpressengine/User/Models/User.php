@@ -251,8 +251,9 @@ class User extends DynamicModel implements
     public function getDisplayName()
     {
         $field = static::$displayField;
+
         if (app('xe.config')->getVal('user.register.use_display_name') === false) {
-            $field = 'login_id';
+            $field = app('xe.user')->isUseLoginId() === true ? 'login_id' : 'email';
         }
 
         return $this->getAttribute($field);
@@ -409,5 +410,18 @@ class User extends DynamicModel implements
         }
 
         return $at;
+    }
+
+    /**
+     * @param $displayName
+     * @return mixed
+     */
+    public function getDisplayNameAttribute($displayName)
+    {
+        if (app('xe.user')->isUseDisplayName() === false) {
+            return app('xe.user')->isUseLoginId() === true ? $this->login_id : $this->email;
+        }
+
+        return $displayName;
     }
 }

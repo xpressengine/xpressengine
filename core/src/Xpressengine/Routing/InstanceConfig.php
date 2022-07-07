@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Menu
  *
@@ -14,6 +15,7 @@
 
 namespace Xpressengine\Routing;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\Singleton;
 
@@ -29,7 +31,6 @@ use Xpressengine\Support\Singleton;
  */
 class InstanceConfig extends Singleton
 {
-
     /**
      * @var string $theme
      */
@@ -39,6 +40,11 @@ class InstanceConfig extends Singleton
      * @var string $instanceId
      */
     private $instanceId;
+
+    /**
+     * @var array $selectedInstanceIds
+     */
+    private $selectedInstanceIds = [];
 
     /**
      * @var string $url
@@ -68,10 +74,10 @@ class InstanceConfig extends Singleton
     /**
      * Set theme component id
      *
-     * @param string $theme theme of instanceRoute
+     * @param  string  $theme  theme of instanceRoute
      * @return void
      */
-    public function setTheme($theme)
+    public function setTheme(string $theme)
     {
         $this->theme = $theme;
     }
@@ -89,10 +95,10 @@ class InstanceConfig extends Singleton
     /**
      * Set instance id
      *
-     * @param string $instanceId instance id
+     * @param  string  $instanceId  instance id
      * @return void
      */
-    public function setInstanceId($instanceId)
+    public function setInstanceId(string $instanceId)
     {
         $this->instanceId = $instanceId;
     }
@@ -110,10 +116,10 @@ class InstanceConfig extends Singleton
     /**
      * Set first url segment
      *
-     * @param string $url url of instanceRoute
+     * @param  string  $url  url of instanceRoute
      * @return void
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
     }
@@ -131,10 +137,10 @@ class InstanceConfig extends Singleton
     /**
      * Set module id
      *
-     * @param string $module module id
+     * @param  string  $module  module id
      * @return void
      */
-    public function setModule($module)
+    public function setModule(string $module)
     {
         $this->module = $module;
     }
@@ -152,11 +158,45 @@ class InstanceConfig extends Singleton
     /**
      * Set menu item instance
      *
-     * @param MenuItem $item menu item instance
+     * @param  MenuItem  $item  menu item instance
      * @return void
      */
     public function setMenuItem(MenuItem $item)
     {
         $this->menuItem = $item;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSelectedInstanceIds()
+    {
+        return $this->selectedInstanceIds ?? [];
+    }
+
+    /**
+     * @param array|string $selectedInstanceId
+     * @return void
+     */
+    public function addSelectedInstanceId($selectedInstanceId)
+    {
+        $selectedInstanceId = is_array($selectedInstanceId) ? $selectedInstanceId : [$selectedInstanceId];
+        $this->selectedInstanceIds = array_unique(array_merge($this->selectedInstanceIds, $selectedInstanceId));
+    }
+
+    /**
+     * @param array|string $selectedInstanceId
+     * @return void
+     */
+    public function removeSelectedInstanceId($selectedInstanceId)
+    {
+        $selectedInstanceIds = is_array($selectedInstanceId) ? $selectedInstanceId : [$selectedInstanceId];
+
+        $this->selectedInstanceIds = Arr::where(
+            $this->selectedInstanceIds,
+            static function ($selectedInstanceId) use ($selectedInstanceIds) {
+                return in_array($selectedInstanceId, $selectedInstanceIds, true) === false;
+            }
+        );
     }
 }

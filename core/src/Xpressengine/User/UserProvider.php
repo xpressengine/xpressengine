@@ -79,7 +79,7 @@ class UserProvider extends EloquentUserProvider
 
             //login_id를 사용해서 로그인
             if (!str_contains($email, '@')) {
-                $user = $query->where('login_id', $email)->first();
+                $user = app('xe.user')->isUseLoginId() === true ? $query->where('login_id', $email)->first() : null;
             } else {
                 $user = $query->whereHas(
                     'emails',

@@ -207,18 +207,18 @@ use Xpressengine\User\UserRegisterHandler;
                                             </td>
                                         </tr>
 
-                                        {{-- 아이디 --}}
-                                        <tr>
+                                        {{-- 아이디 (login_id) --}}
+                                        <tr class="__regsetting-loginid-wrap">
                                             <td>{{ xe_trans('xe::id') }}</td>
                                             <td class="text-align--center">
-                                                <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" checked>
+                                                <label class="xu-label-checkradio">
+                                                    <input name="use_login_id" type="checkbox" @if (app('xe.user')->isUseLoginId() === true) checked @endif>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
                                             <td class="text-align--center">
                                                 <label class="xu-label-checkradio xu-label-checkradio--disabled">
-                                                    <input type="checkbox" checked>
+                                                    <input name="require_login_id" type="checkbox" @if (app('xe.user')->isUseLoginId() === true) checked @endif>
                                                     <span class="xu-label-checkradio__helper"></span>
                                                 </label>
                                             </td>
