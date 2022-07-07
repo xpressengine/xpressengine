@@ -67,7 +67,7 @@
 
 </head>
 
-<body class="{{ XeFrontend::output('bodyClass') }}">
+<body class="{!! XeFrontend::output('bodyClass') !!}">
 
 <!-- JS at body.prepend -->
 {!! XeFrontend::output('js', 'body.prepend') !!}
