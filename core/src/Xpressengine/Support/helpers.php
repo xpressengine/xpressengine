@@ -482,6 +482,21 @@ if (!function_exists('current_instance_id')) {
     }
 }
 
+if (!function_exists('current_selected_instance_ids')) {
+    /**
+     * Return current selected Instance Ids
+     *
+     * @package Xpressengine\Menu
+     *
+     * @return string
+     */
+    function current_selected_instance_ids()
+    {
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getSelectedInstanceIds();
+    }
+}
+
 if (!function_exists('current_menu')) {
 
     /**
@@ -561,9 +576,14 @@ if (!function_exists('menu_list')) {
                 }
             }
 
-            $current = $selected ?: current_instance_id();
+            $current = $selected ?: current_selected_instance_ids();
+
             if ($current !== null) {
-                $menu->setItemSelected($current);
+                $current = is_array($current) === true ? $current : [$current];
+
+                foreach ($current as $value) {
+                    $menu->setItemSelected($value);
+                }
             }
 
             $tree = $menu->getTree()->getTreeNodes();
