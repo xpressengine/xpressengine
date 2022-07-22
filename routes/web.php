@@ -20,6 +20,27 @@
 |
 */
 
+/**
+ * Path: /api/category-items
+ * Alias: category_items.*
+ */
+Route::group(['prefix' => '/api/category-items'], static function () {
+    /**
+     * Path: /api/category-items/{id}
+     */
+    Route::group(['prefix' => '/{id}', 'where' => ['id' => '[0-9]+']], static function () {
+        /**
+         * Path: /api/category-items/{id}/children
+         * Alias: category_items.children
+         * Method: GET
+         */
+        Route::get('/children', [
+            'as' => 'category_items.children',
+            'uses' => 'CategoryItemController@getChildren'
+        ]);
+    });
+});
+
 Route::settings(
     '/',
     function () {
