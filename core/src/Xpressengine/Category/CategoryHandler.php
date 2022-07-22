@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Category;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
@@ -116,6 +117,44 @@ class CategoryHandler
         $this->setOrder($item);
 
         return $item;
+    }
+
+    /**
+     * Create a category item by hierarchies
+     *
+     * @param Category $category
+     * @param array $hierarchies
+     * @return \Illuminate\Support\Collection<CategoryItem>
+     */
+    public function createItemsByHierarchies(Category $category, array $hierarchies)
+    {
+        $items = \collect([]);
+
+        \collect($hierarchies)->each(function (array $hierarchy) use ($category, $items) {
+            $hierarchy = \collect($hierarchy)->filter(static function ($word) {
+                return \is_string($word) === true;
+            });
+
+            $hierarchy->each(function ($word, $key) use ($category, $hierarchy, $items) {
+                $parentDepthName = $key > 0 ? $hierarchy->take($key)->implode('.') : null;
+                $currentDepthName = $key > 0 ? $parentDepthName . '.' . $word : $word;
+
+                $item = Arr::get($items, $currentDepthName);
+                if ($item !== null) {
+                    return;
+                }
+
+                $parentItem = $parentDepthName ? Arr::get($items, $parentDepthName) : null;
+
+                $items[$currentDepthName] = $this->createItem($category, [
+                    'parent_id' => $parentItem->id ?? null,
+                    'word' => $word,
+                    'description' => '',
+                ]);
+            });
+        });
+
+        return $items;
     }
 
     /**
