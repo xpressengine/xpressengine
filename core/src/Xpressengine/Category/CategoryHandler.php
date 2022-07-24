@@ -122,33 +122,41 @@ class CategoryHandler
     /**
      * Create a category item by hierarchies
      *
-     * @param Category $category
-     * @param array $hierarchies
+     * @param  Category  $category
+     * @param  array  $hierarchies
+     * @param  bool  $isUseTranslator
      * @return \Illuminate\Support\Collection<CategoryItem>
      */
-    public function createItemsByHierarchies(Category $category, array $hierarchies)
+    public function createItemsByHierarchies(Category $category, array $hierarchies,  bool $isUseTranslator = false)
     {
         $items = \collect([]);
 
-        \collect($hierarchies)->each(function (array $hierarchy) use ($category, $items) {
+        \collect($hierarchies)->each(function (array $hierarchy) use ($category, $items, $isUseTranslator) {
             $hierarchy = \collect($hierarchy)->filter(static function ($word) {
                 return \is_string($word) === true;
             });
 
-            $hierarchy->each(function ($word, $key) use ($category, $hierarchy, $items) {
-                $parentDepthName = $key > 0 ? $hierarchy->take($key)->implode('.') : null;
-                $currentDepthName = $key > 0 ? $parentDepthName . '.' . $word : $word;
+            $hierarchy->each(function (string $word, int $key) use ($category, $hierarchy, $items, $isUseTranslator) {
+                $parentName = $key > 0 ? $hierarchy->take($key)->implode('.') : null;
+                $currentName = $key > 0 ? $parentName . '.' . $word : $word;
 
-                $item = Arr::get($items, $currentDepthName);
-                if ($item !== null) {
+                if ($items->has($currentName) === true) {
                     return;
                 }
 
-                $parentItem = $parentDepthName ? Arr::get($items, $parentDepthName) : null;
+                $parentItem = $parentName ? $items->get($parentName) : null;
+                $itemWord = $word;
 
-                $items[$currentDepthName] = $this->createItem($category, [
-                    'parent_id' => $parentItem->id ?? null,
-                    'word' => $word,
+                if ($isUseTranslator === true) {
+                    $wordUserKey = \XeLang::genUserKey();
+                    \XeLang::save($wordUserKey, \XeLang::getLocale(), $word);
+
+                    $itemWord = $wordUserKey;
+                }
+
+                $items[$currentName] = $this->createItem($category, [
+                    'parent_id' => optional($parentItem)->id ?? null,
+                    'word' => $itemWord,
                     'description' => '',
                 ]);
             });
