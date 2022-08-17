@@ -196,22 +196,27 @@ class UserController extends Controller
     /**
      * Update password of user.
      *
-     * @param Request $request request
-     * @throws Exception
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function updatePassword(Request $request)
     {
-        $this->validate($request, ['password' => 'required|confirmed|password']);
+        $this->validate($request, [
+            'password' => 'required|confirmed|password'
+        ]);
+
+        $password = $request->get('password');
+        $currentPassword = $request->get('current_password');
 
         $result = true;
         $message = 'success';
         $target = null;
 
-        if ($request->user()->getAuthPassword() !== "") {
+        if (empty($request->user()->getAuthPassword()) === false) {
             $credentials = [
                 'id' => $request->user()->getId(),
-                'password' => $request->get('current_password')
+                'password' => $currentPassword
             ];
 
             if (Auth::validate($credentials) === false) {
@@ -221,25 +226,29 @@ class UserController extends Controller
             }
         }
 
-        $password = $request->get('password');
-
-        XeDB::beginTransaction();
-        try {
-            // save password
-            $this->handler->update($request->user(), compact('password'));
-        } catch (InvalidPasswordException $e) {
-            XeDB::rollback();
-            throw new HttpException(422, $e->getMessage(), $e);
-        } catch (\Exception $e) {
-            XeDB::rollback();
-            throw $e;
+        if ($result === true) {
+            XeDB::beginTransaction();
+            try {
+                // save password
+                $this->handler->update($request->user(), compact('password'));
+            } catch (InvalidPasswordException $e) {
+                XeDB::rollback();
+                throw new HttpException(422, $e->getMessage(), $e);
+            } catch (\Exception $e) {
+                XeDB::rollback();
+                throw $e;
+            }
+            XeDB::commit();
         }
-        XeDB::commit();
 
-        return XePresenter::makeApi(
-            ['type' => 'success', 'result' => $result, 'message' => $message, 'target' => $target]
-        );
+        return XePresenter::makeApi([
+            'type' => 'success',
+            'result' => $result,
+            'message' => $message,
+            'target' => $target
+        ]);
     }
+
 
     /**
      * Validate password of user.
