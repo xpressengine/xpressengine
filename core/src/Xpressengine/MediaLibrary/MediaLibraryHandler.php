@@ -404,6 +404,13 @@ class MediaLibraryHandler
             $this->files->setCommonFileVisible($item);
         });
 
+        $files->setCollection(
+            $files->getCollection()->filter(function (MediaLibraryFile $mediaLibraryFile) {
+                return $mediaLibraryFile->file !== null
+                    && \Storage::disk($mediaLibraryFile->file->disk)->exists($mediaLibraryFile->file->getPathname());
+            })
+        );
+
         return $files;
     }
 
