@@ -9,7 +9,7 @@
             <p>
                 <button class="xe-btn widget-controll__btn" type="button" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}', 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false">
                     <i class="xi-xpressengine" style="user-select: auto;"></i>
-                    <span class="widget-controll__btn-label">{{ $link or $widgetbox->title.' '.xe_trans('xe::editWidgetBox') }}</span>
+                    <span class="widget-controll__btn-label">{{ $link ?? $widgetbox->title.' '.xe_trans('xe::editWidgetBox') }}</span>
                 </button>
             </p>
         </div>
