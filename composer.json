@@ -19,17 +19,17 @@
     "license": "LGPL-3.0-or-later",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": "^7.1.3",
         "composer/composer": "1.7.1",
         "ezyang/htmlpurifier": "~4.7",
-        "fideloper/proxy": "~3.3",
+        "fideloper/proxy": "^4.0",
         "google/recaptcha": "^1.2",
         "guzzlehttp/guzzle": "~6.1",
         "intervention/image": "2.1.*",
         "james-heinrich/getid3": "1.9.*",
         "jenssegers/agent": "~2.6",
-        "laravel/framework": "5.5.*",
-        "laravel/tinker": "~1.0",
+        "laravel/framework": "5.6.*",
+        "laravel/tinker": "^1.0",
         "ramsey/uuid": "~3.0",
         "symfony/dom-crawler": "~3.3",
         "symfony/yaml": "~3.3",
@@ -37,11 +37,13 @@
         "xpressengine/installer": "~1.1.1"
     },
     "require-dev": {
-        "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0",
-        "barryvdh/laravel-debugbar": "~3.0"
+        "filp/whoops": "^2.0",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^7.0",
+        "nunomaduro/collision": "^2.0",
+        "barryvdh/laravel-debugbar": "~3.0",
+        "roave/security-advisories": "dev-latest"
     },
     "replace": {
         "xpressengine/xpressengine": "self.version"
