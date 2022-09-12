@@ -32,8 +32,8 @@ use Closure;
  */
 class VirtualConnection implements VirtualConnectionInterface
 {
-    use DetectsDeadlocks,
-        DetectsLostConnections;
+    use DetectsDeadlocks;
+    use DetectsLostConnections;
 
     /**
      * @var ConnectionInterface
@@ -53,11 +53,11 @@ class VirtualConnection implements VirtualConnectionInterface
     protected static $cache;
 
     /**
-     * The number of minutes to store cache items.
+     * The number of seconds to store cache items.
      *
      * @var int
      */
-    protected $minutes = 60;
+    protected $seconds = 3600;
 
     /**
      * The database table schemas
@@ -373,7 +373,7 @@ class VirtualConnection implements VirtualConnectionInterface
             return false;
         }
 
-        $cache->put($table, $schema, $this->minutes);
+        $cache->put($table, $schema, $this->seconds);
         return true;
     }
 
@@ -399,14 +399,14 @@ class VirtualConnection implements VirtualConnectionInterface
     }
 
     /**
-     * Set the number of minutes to store cache items.
+     * Set the number of seconds to store cache items.
      *
-     * @param int $minutes number of minutes
+     * @param int $seconds number of seconds
      * @return void
      */
-    public function setCacheExpire($minutes)
+    public function setCacheExpire($seconds)
     {
-        $this->minutes = $minutes;
+        $this->seconds = $seconds;
     }
 
     /**

@@ -17,6 +17,7 @@ namespace Xpressengine\Config\Repositories;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Psr\SimpleCache\InvalidArgumentException;
 use Xpressengine\Config\ConfigRepository;
 use Xpressengine\Config\ConfigEntity;
 
@@ -52,7 +53,7 @@ class CacheDecorator implements ConfigRepository
      *
      * @var int
      */
-    protected $minutes;
+    protected $seconds;
 
     /**
      * Prefix for cache key
@@ -73,13 +74,13 @@ class CacheDecorator implements ConfigRepository
      *
      * @param ConfigRepository $repo    repository instance
      * @param CacheContract    $cache   cache instance
-     * @param int              $minutes expire time
+     * @param  int  $seconds expire time
      */
-    public function __construct(ConfigRepository $repo, CacheContract $cache, $minutes = 60)
+    public function __construct(ConfigRepository $repo, CacheContract $cache, int $seconds = 3600)
     {
         $this->repo = $repo;
         $this->cache = $cache;
-        $this->minutes = $minutes;
+        $this->seconds = $seconds;
     }
 
     /**
@@ -97,7 +98,7 @@ class CacheDecorator implements ConfigRepository
             return $item->name === $name;
         });
     }
-    
+
     /**
      * search ancestors getter
      *
@@ -129,7 +130,7 @@ class CacheDecorator implements ConfigRepository
             return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }
-    
+
     /**
      * save
      *
@@ -204,9 +205,10 @@ class CacheDecorator implements ConfigRepository
     /**
      * get cached data
      *
-     * @param string $siteKey site key
-     * @param string $head    root name
+     * @param  string  $siteKey  site key
+     * @param  string  $head  root name
      * @return array
+     * @throws InvalidArgumentException
      */
     protected function getData($siteKey, $head)
     {
@@ -214,14 +216,18 @@ class CacheDecorator implements ConfigRepository
 
         if (!isset($this->bag[$key])) {
             $cacheKey = $this->getCacheKey($key);
-            if (!$data = $this->cache->get($cacheKey)) {
-                if (!$config = $this->repo->find($siteKey, $head)) {
+            $data = $this->cache->get($cacheKey);
+
+            if ($data !== null) {
+                $config = $this->repo->find($siteKey, $head);
+
+                if ($config !== null) {
                     return [];
                 }
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$config], $descendant);
-                $this->cache->put($cacheKey, $data, $this->minutes);
+                $this->cache->put($cacheKey, $data, $this->seconds);
             }
 
             $this->bag[$key] = $data;

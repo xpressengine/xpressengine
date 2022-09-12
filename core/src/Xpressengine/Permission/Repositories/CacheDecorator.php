@@ -50,7 +50,7 @@ class CacheDecorator implements PermissionRepository
      *
      * @var int
      */
-    protected $minutes;
+    protected $seconds;
 
     /**
      * Prefix for cache key
@@ -71,13 +71,13 @@ class CacheDecorator implements PermissionRepository
      *
      * @param PermissionRepository $repo    PermissionRepository instance
      * @param CacheContract        $cache   Cache instance
-     * @param int                  $minutes expire time
+     * @param  int  $seconds expire time
      */
-    public function __construct(PermissionRepository $repo, CacheContract $cache, $minutes = 60)
+    public function __construct(PermissionRepository $repo, CacheContract $cache, int $seconds = 3600)
     {
         $this->repo = $repo;
         $this->cache = $cache;
-        $this->minutes = $minutes;
+        $this->seconds = $seconds;
     }
 
     /**
@@ -210,14 +210,19 @@ class CacheDecorator implements PermissionRepository
 
         if (!isset($this->bag[$key])) {
             $cacheKey = $this->getCacheKey($key);
-            if (!$data = $this->cache->get($cacheKey)) {
-                if (!$item = $this->repo->findByName($siteKey, $head)) {
+            $data = $this->cache->get($cacheKey);
+
+
+            if ($data !== null) {
+                $item = $this->repo->findByName($siteKey, $head);
+
+                if ($item !== null) {
                     return [];
                 }
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$item], $descendant);
-                $this->cache->put($cacheKey, $data, $this->minutes);
+                $this->cache->put($cacheKey, $data, $this->seconds);
             }
 
             $this->bag[$key] = $data;
