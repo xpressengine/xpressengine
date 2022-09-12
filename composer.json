@@ -20,7 +20,9 @@
     "type": "project",
     "require": {
         "php": "^7.2.5|^8.0",
-        "composer/composer": "1.7.1",
+        "composer/composer": "^1.11",
+        "doctrine/dbal": "^2.6",
+        "erusev/parsedown": "^1.7",
         "ezyang/htmlpurifier": "~4.7",
         "fideloper/proxy": "^4.4",
         "google/recaptcha": "^1.2",
