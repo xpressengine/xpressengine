@@ -203,7 +203,7 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $this->validate($request, [
-            'password' => 'required|confirmed|password'
+            'password' => 'required|confirmed|xe_password'
         ]);
 
         $password = $request->get('password');
@@ -260,7 +260,7 @@ class UserController extends Controller
     public function validatePassword(Request $request)
     {
         try {
-            $this->validate($request, ['password' => 'password']);
+            $this->validate($request, ['password' => 'xe_password']);
 
             return XePresenter::makeApi(
                 ['type' => 'success', 'message' => 'success', 'valid' => true]
@@ -269,8 +269,6 @@ class UserController extends Controller
             return XePresenter::makeApi(
                 ['type' => 'success', 'message' => app('xe.password.validator')->getMessage(), 'valid' => false]
             );
-        } catch (\Exception $e) {
-            throw $e;
         }
     }
 

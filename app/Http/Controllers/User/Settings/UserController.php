@@ -190,7 +190,7 @@ class UserController extends Controller
     {
         $rules = [
             'email' => 'email|required',
-            'password' => 'required|password',
+            'password' => 'required|xe_password',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
