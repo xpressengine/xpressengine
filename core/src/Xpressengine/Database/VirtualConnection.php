@@ -92,11 +92,12 @@ class VirtualConnection implements VirtualConnectionInterface
      * ProxyManager 를 통한 처리를 하지 않음.
      *
      * @param string $table table name
+     * @param string|null $as
      * @return DynamicQuery
      */
-    public function table($table)
+    public function table($table, $as = null)
     {
-        return $this->query()->from($table);
+        return $this->query()->from($table, $as);
     }
 
     /**
