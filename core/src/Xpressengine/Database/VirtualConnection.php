@@ -16,7 +16,6 @@ namespace Xpressengine\Database;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\DetectsDeadlocks;
 use Illuminate\Database\DetectsLostConnections;
 use Closure;
 
@@ -32,7 +31,6 @@ use Closure;
  */
 class VirtualConnection implements VirtualConnectionInterface
 {
-    use DetectsDeadlocks;
     use DetectsLostConnections;
 
     /**
