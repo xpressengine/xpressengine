@@ -149,23 +149,38 @@ class VirtualConnection implements VirtualConnectionInterface
      *
      * @param string $query    query
      * @param array  $bindings bindings
+     * @param bool   $useReadPdo use read PDO
      * @return mixed
      */
-    public function selectOne($query, $bindings = array())
+    public function selectOne($query, $bindings = array(), $useReadPdo = true)
     {
-        return $this->connection->selectOne($query, $bindings);
+        return $this->connection->selectOne($query, $bindings, $useReadPdo);
     }
 
     /**
      * Run a select statement against the database.
      *
-     * @param string $query    query
-     * @param array  $bindings bindings
+     * @param string $query      query
+     * @param array  $bindings   bindings
+     * @param bool   $useReadPdo use read PDO
      * @return array
      */
-    public function select($query, $bindings = array())
+    public function select($query, $bindings = array(), $useReadPdo = true)
     {
-        return $this->connection->select($query, $bindings);
+        return $this->connection->select($query, $bindings, $useReadPdo);
+    }
+
+    /**
+     * Run a select statement against the database and returns a generator.
+     *
+     * @param string $query      query
+     * @param array  $bindings   bindings
+     * @param bool   $useReadPdo use read PDO
+     * @return \Generator
+     */
+    public function cursor($query, $bindings = [], $useReadPdo = true)
+    {
+        return $this->connection->cursor($query, $bindings, $useReadPdo);
     }
 
     /**
