@@ -892,7 +892,7 @@ Route::settings(
 Route::settings('category', function () {
 
     // 이하 신규
-    Route::group(['prefix' => '{id}', 'where' => ['id' => '[0-9]+']], function () {
+    Route::group(['prefix' => '{id?}', 'where' => ['id' => '[0-9]+']], function () {
         Route::get('/', ['as' => 'manage.category.show', 'uses' => 'CategoryController@show']);
         Route::post('item/store', [
             'as' => 'manage.category.edit.item.store',
