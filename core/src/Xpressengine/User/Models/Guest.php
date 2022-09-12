@@ -156,7 +156,7 @@ class Guest implements UserInterface, AuthorizableContract
      *
      * @return AccountEntity
      */
-    public function getAccountByProvider($provider)
+    public function getAccountByProvider(string $provider)
     {
         return null;
     }
