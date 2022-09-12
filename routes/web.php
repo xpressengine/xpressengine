@@ -832,7 +832,7 @@ Route::settings(
 
             });
 
-            Route::group(['prefix' => '{pluginId}'], function () {
+            Route::group(['prefix' => '{pluginId?}'], function () {
                 Route::get('/', [
                     'as' => 'settings.plugins.show',
                     'uses' => 'Plugin\PluginManageController@show',
