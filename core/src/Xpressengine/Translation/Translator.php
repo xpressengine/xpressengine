@@ -181,20 +181,14 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * 다국어를 번역합니다
      *
-     * @param string $id         다국어 key
-     * @param array  $parameters 인자
-     * @param null   $locale     locale
+     * @param  string  $key
+     * @param  array  $replace
+     * @param  string|null  $locale  locale
      * @return mixed
      */
-    public function trans($id, array $parameters = array(), $locale = null)
+    public function trans($key, array $replace = [], $locale = null)
     {
-        $sentence = $this->get($id, $parameters, $locale);
-
-        if ($sentence == $id) {
-            return $this->makeUnknownSentence($id);
-        }
-
-        return $sentence;
+        return $this->get($key, $replace, $locale);
     }
 
     /**
@@ -210,7 +204,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         }
 
         $userKeyHead = $this->userKeyPrefix . '::';
-        if (substr($id, 0, strlen($userKeyHead)) == $userKeyHead) {
+
+        if (strpos($id, $userKeyHead) === 0) {
             return '';
         }
 
@@ -224,21 +219,15 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * 선택이 가능한 다국어를 번역합니다
      *
-     * @param string $id         다국어 key
-     * @param int    $number     숫자
-     * @param array  $parameters 인자
+     * @param  string  $key
+     * @param  Countable|int|array    $number     숫자
+     * @param  array   $replace
      * @param null   $locale     locale
-     * @return mixed
+     * @return string
      */
-    public function transChoice($id, $number, array $parameters = array(), $locale = null)
+    public function transChoice($key, $number, array $replace = [], $locale = null)
     {
-        $sentence = $this->choice($id, $number, $parameters, $locale);
-
-        if ($sentence == $id) {
-            return $number . ' ' . $this->makeUnknownSentence($id);
-        }
-
-        return $sentence;
+        return $this->choice($key, $number, $replace, $locale);
     }
 
     /**
@@ -251,22 +240,25 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      */
     public function get($key, array $replace = [], $locale = null)
     {
-        list($namespace, $item) = $this->parseKey($key);
+        [$namespace, $item] = $this->parseKey($key);
+
         foreach ($this->parseLocale($locale) as $locale) {
             $line = $this->getLine($namespace, $item, $locale, $replace);
             if ($line) {
                 break;
             }
         }
+
         if (!isset($line) || !$line) {
-            return $key;
+            return $this->makeUnknownSentence($key);
         }
+
         return $line;
     }
 
     /**
      * @param string $key     다국어 key
-     * @param int    $number  숫자
+     * @param Countable|int|array    $number  숫자
      * @param array  $replace 변경 데이터
      * @param null   $locale  로케일
      * @return mixed
@@ -274,6 +266,11 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     public function choice($key, $number, array $replace = [], $locale = null)
     {
         $line = $this->get($key, $replace, $locale = $locale ?: $this->getLocale());
+
+        // @see \Illuminate\Translation\Translator@choice
+        if (is_array($number) || $number instanceof Countable) {
+            $number = count($number);
+        }
 
         $replace['count'] = $number;
 
