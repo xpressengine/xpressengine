@@ -187,6 +187,6 @@ class RegisterHandler
     public function fireEvent($event, $payload = [], $halt = false)
     {
         // \Log::info($event);
-        $this->dispatcher->fire($event, $payload, $halt);
+        $this->dispatcher->dispatch($event, $payload, $halt);
     }
 }
