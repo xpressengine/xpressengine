@@ -1001,7 +1001,7 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
         ]);
-        Route::get('/{mediaLibraryFileId}/download', [
+        Route::get('/{mediaLibraryFileId?}/download', [
             'as' => 'media_library.download_file',
             'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);
