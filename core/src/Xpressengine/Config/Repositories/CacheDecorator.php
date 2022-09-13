@@ -72,9 +72,9 @@ class CacheDecorator implements ConfigRepository
     /**
      * create instance
      *
-     * @param ConfigRepository $repo    repository instance
-     * @param CacheContract    $cache   cache instance
-     * @param  int  $seconds expire time
+     * @param  ConfigRepository  $repo  repository instance
+     * @param  CacheContract  $cache  cache instance
+     * @param  int  $seconds  expire time
      */
     public function __construct(ConfigRepository $repo, CacheContract $cache, int $seconds = 3600)
     {
@@ -86,15 +86,16 @@ class CacheDecorator implements ConfigRepository
     /**
      * search getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      * @return ConfigEntity
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function find($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::first($data, function ($item, $idx) use ($name) {
+        return Arr::first($data, static function ($item, $idx) use ($name) {
             return $item->name === $name;
         });
     }
@@ -102,15 +103,16 @@ class CacheDecorator implements ConfigRepository
     /**
      * search ancestors getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function fetchAncestor($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($item, $idx) use ($name) {
+        return Arr::where($data, static function ($item, $idx) use ($name) {
             return Str::startsWith($name, $item->name.'.') && $name !== $item->name;
         });
     }
@@ -118,15 +120,16 @@ class CacheDecorator implements ConfigRepository
     /**
      * search descendants getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function fetchDescendant($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($item, $idx) use ($name) {
+        return Arr::where($data, static function ($item, $idx) use ($name) {
             return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }
@@ -134,7 +137,7 @@ class CacheDecorator implements ConfigRepository
     /**
      * save
      *
-     * @param ConfigEntity $config config object
+     * @param  ConfigEntity  $config  config object
      * @return ConfigEntity
      */
     public function save(ConfigEntity $config)
@@ -147,8 +150,8 @@ class CacheDecorator implements ConfigRepository
     /**
      * clear all just descendants vars
      *
-     * @param ConfigEntity $config  config object
-     * @param array        $excepts target to the except
+     * @param  ConfigEntity  $config  config object
+     * @param  array  $excepts  target to the except
      * @return void
      */
     public function clearLike(ConfigEntity $config, $excepts = [])
@@ -161,8 +164,8 @@ class CacheDecorator implements ConfigRepository
     /**
      * remove
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      * @return void
      */
     public function remove($siteKey, $name)
@@ -175,8 +178,8 @@ class CacheDecorator implements ConfigRepository
     /**
      * Parent Changing with descendant
      *
-     * @param ConfigEntity $config config object
-     * @param string       $to     to config prefix
+     * @param  ConfigEntity  $config  config object
+     * @param  string  $to  to config prefix
      * @return void
      */
     public function foster(ConfigEntity $config, $to)
@@ -190,8 +193,8 @@ class CacheDecorator implements ConfigRepository
     /**
      * affiliated to another config
      *
-     * @param ConfigEntity $config config object
-     * @param string       $to     parent name
+     * @param  ConfigEntity  $config  config object
+     * @param  string  $to  parent name
      * @return void
      */
     public function affiliate(ConfigEntity $config, $to)
@@ -214,19 +217,20 @@ class CacheDecorator implements ConfigRepository
     {
         $key = $this->makeKey($siteKey, $head);
 
-        if (!isset($this->bag[$key])) {
+        if (isset($this->bag[$key]) === false) {
             $cacheKey = $this->getCacheKey($key);
             $data = $this->cache->get($cacheKey);
 
-            if ($data !== null) {
+            if ($data === null) {
                 $config = $this->repo->find($siteKey, $head);
 
-                if ($config !== null) {
+                if ($config === null) {
                     return [];
                 }
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$config], $descendant);
+
                 $this->cache->put($cacheKey, $data, $this->seconds);
             }
 
@@ -239,8 +243,8 @@ class CacheDecorator implements ConfigRepository
     /**
      * Remove cache data
      *
-     * @param string $siteKey site key
-     * @param string $name    config name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  config name
      * @return void
      */
     protected function erase($siteKey, $name)
@@ -254,7 +258,7 @@ class CacheDecorator implements ConfigRepository
     /**
      * parse name to head and segments
      *
-     * @param string $name the name
+     * @param  string  $name  the name
      * @return string
      */
     private function getHead($name)
@@ -267,23 +271,23 @@ class CacheDecorator implements ConfigRepository
     /**
      * Make key by combination of site key and config name
      *
-     * @param string $siteKey site key
-     * @param string $name    config name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  config name
      * @return string
      */
     protected function makeKey($siteKey, $name)
     {
-        return $siteKey . ':' . $name;
+        return $siteKey.':'.$name;
     }
 
     /**
      * String for cache key
      *
-     * @param string $keyword keyword
+     * @param  string  $keyword  keyword
      * @return string
      */
     protected function getCacheKey($keyword)
     {
-        return $this->prefix . '@' . $keyword;
+        return $this->prefix.'@'.$keyword;
     }
 }
