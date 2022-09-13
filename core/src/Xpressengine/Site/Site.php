@@ -31,9 +31,22 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @property string $host           지정된 도메인
  * @property string $site_key       고유한 식별자
  */
-
 class Site extends DynamicModel
 {
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
     /**
      * The table associated with the model.
      *
@@ -53,19 +66,15 @@ class Site extends DynamicModel
      *
      * @var array
      */
-    protected $fillable = ['site_key', 'host'];
+    protected $fillable = [
+        'site_key',
+        'host'
+    ];
 
     /**
-     * Indicates if the IDs are auto-incrementing.
+     * The "type" of the auto-incrementing ID.
      *
-     * @var bool
+     * @var string
      */
-    public $incrementing = false;
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
+    protected $keyType = 'string';
 }
