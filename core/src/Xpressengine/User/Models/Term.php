@@ -29,27 +29,6 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 class Term extends DynamicModel
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'user_terms';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['key', 'locale', 'title', 'content', 'description', 'order', 'is_enabled', 'is_require', 'site_key'];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = ['is_enabled' => 'bool', 'is_require' => 'bool'];
-
-    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
@@ -64,6 +43,47 @@ class Term extends DynamicModel
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user_terms';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'key',
+        'locale',
+        'title',
+        'content',
+        'description',
+        'order',
+        'is_enabled',
+        'is_require',
+        'site_key'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_enabled' => 'bool',
+        'is_require' => 'bool'
+    ];
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * get is term require
      *
      * @return bool
@@ -73,27 +93,21 @@ class Term extends DynamicModel
         return $this->getAttribute('is_require') === true;
     }
 
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }
