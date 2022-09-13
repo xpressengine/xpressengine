@@ -15,6 +15,7 @@
 namespace Xpressengine\Counter\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\User\Models\User;
 
 /**
  * CounterLog
@@ -24,7 +25,7 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @property string counter_option
  * @property string target_id
  * @property string user_id
- * @property integer point
+ * @property int point
  * @property string ipaddress
  * @property string created_at
  *
@@ -54,31 +55,24 @@ class CounterLog extends DynamicModel
      */
     public function user()
     {
-        return $this->hasOne('Xpressengine\User\Models\User', 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }
