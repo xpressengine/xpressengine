@@ -30,13 +30,37 @@ use Xpressengine\User\Models\User;
  */
 class MediaLibraryFile extends DynamicModel
 {
-    protected $table = 'media_library_files';
-
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var string
+     */
+    protected $table = 'media_library_files';
+
+    /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
-        'file_id', 'origin_file_id', 'folder_id', 'user_id', 'title', 'ext', 'caption',
-        'alt_text', 'description', 'site_key'
+        'file_id',
+        'origin_file_id',
+        'folder_id',
+        'user_id',
+        'title',
+        'ext',
+        'caption',
+        'alt_text',
+        'description',
+        'site_key'
     ];
 
     /**
@@ -60,11 +84,7 @@ class MediaLibraryFile extends DynamicModel
      */
     public function getTitleAttribute()
     {
-        if ($this->attributes['title'] == '') {
-            return $this->file->clientname;
-        } else {
-            return $this->attributes['title'];
-        }
+        return $this->attributes['title'] ?: $this->file->clientname;
     }
 
     /**
@@ -75,27 +95,21 @@ class MediaLibraryFile extends DynamicModel
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }
