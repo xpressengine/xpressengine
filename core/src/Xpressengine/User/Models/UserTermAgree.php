@@ -29,33 +29,47 @@ class UserTermAgree extends DynamicModel
 {
     use SoftDeletes;
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var string
+     */
     protected $table = 'user_term_agrees';
 
-    protected $fillable = ['user_id', 'term_id', 'site_key'];
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
-    public static function boot()
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'user_id',
+        'term_id',
+        'site_key'
+    ];
+
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }
