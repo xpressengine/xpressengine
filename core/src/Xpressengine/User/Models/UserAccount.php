@@ -27,11 +27,19 @@ use Xpressengine\User\AccountInterface;
  */
 class UserAccount extends DynamicModel implements AccountInterface
 {
-
-    protected $table = 'user_account';
-
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var string
+     */
+    protected $table = 'user_account';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id',
         'email',
@@ -46,6 +54,13 @@ class UserAccount extends DynamicModel implements AccountInterface
      * @var bool use dynamic query
      */
     protected $dynamic = false;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * set relationship with user

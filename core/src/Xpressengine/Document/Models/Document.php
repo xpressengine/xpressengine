@@ -176,6 +176,11 @@ class Document extends DynamicModel
     ];
 
     /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * division 테이블로 변경
      *
      * @param string $instanceId instance id
