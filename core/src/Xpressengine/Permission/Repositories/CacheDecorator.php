@@ -11,6 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Permission\Repositories;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
@@ -69,9 +70,9 @@ class CacheDecorator implements PermissionRepository
     /**
      * CacheDecorator constructor.
      *
-     * @param PermissionRepository $repo    PermissionRepository instance
-     * @param CacheContract        $cache   Cache instance
-     * @param  int  $seconds expire time
+     * @param  PermissionRepository  $repo  PermissionRepository instance
+     * @param  CacheContract  $cache  Cache instance
+     * @param  int  $seconds  expire time
      */
     public function __construct(PermissionRepository $repo, CacheContract $cache, int $seconds = 3600)
     {
@@ -83,15 +84,15 @@ class CacheDecorator implements PermissionRepository
     /**
      * Find a registered by type and name
      *
-     * @param string $siteKey site key
-     * @param string $name    target name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  target name
      * @return Permission
      */
     public function findByName($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::first($data, function ($item, $idx) use ($name) {
+        return Arr::first($data, static function ($item, $idx) use ($name) {
             return $item->name === $name;
         });
     }
@@ -99,7 +100,7 @@ class CacheDecorator implements PermissionRepository
     /**
      * Insert register information
      *
-     * @param Permission $item permission instance
+     * @param  Permission  $item  permission instance
      * @return Permission
      */
     public function insert(Permission $item)
@@ -112,7 +113,7 @@ class CacheDecorator implements PermissionRepository
     /**
      * Update register information
      *
-     * @param Permission $item permission instance
+     * @param  Permission  $item  permission instance
      * @return Permission
      */
     public function update(Permission $item)
@@ -125,7 +126,7 @@ class CacheDecorator implements PermissionRepository
     /**
      * Delete register information
      *
-     * @param Permission $item permission instance
+     * @param  Permission  $item  permission instance
      * @return int affecting statement
      */
     public function delete(Permission $item)
@@ -138,15 +139,15 @@ class CacheDecorator implements PermissionRepository
     /**
      * Returns ancestor of item
      *
-     * @param string $siteKey site key
-     * @param string $name    target name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  target name
      * @return array
      */
     public function fetchAncestor($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($item, $idx) use ($name) {
+        return Arr::where($data, static function ($item, $idx) use ($name) {
             return Str::startsWith($name, $item->name.'.') && $name !== $item->name;
         });
     }
@@ -154,15 +155,15 @@ class CacheDecorator implements PermissionRepository
     /**
      * Returns descendant of item
      *
-     * @param string $siteKey site key
-     * @param string $name    target name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  target name
      * @return array
      */
     public function fetchDescendant($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($item, $idx) use ($name) {
+        return Arr::where($data, static function ($item, $idx) use ($name) {
             return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }
@@ -170,8 +171,8 @@ class CacheDecorator implements PermissionRepository
     /**
      * Parent Changing with descendant
      *
-     * @param Permission $item permission instance
-     * @param string     $to   parent name
+     * @param  Permission  $item  permission instance
+     * @param  string  $to  parent name
      * @return void
      */
     public function foster(Permission $item, $to)
@@ -185,8 +186,8 @@ class CacheDecorator implements PermissionRepository
     /**
      * affiliated to another registered
      *
-     * @param Permission $item permission instance
-     * @param string     $to   parent name
+     * @param  Permission  $item  permission instance
+     * @param  string  $to  parent name
      * @return void
      */
     public function affiliate(Permission $item, $to)
@@ -200,23 +201,22 @@ class CacheDecorator implements PermissionRepository
     /**
      * get cached data
      *
-     * @param string $siteKey site key
-     * @param string $head    root name
+     * @param  string  $siteKey  site key
+     * @param  string  $head  root name
      * @return array
      */
     protected function getData($siteKey, $head)
     {
         $key = $this->makeKey($siteKey, $head);
 
-        if (!isset($this->bag[$key])) {
+        if (isset($this->bag[$key]) === false) {
             $cacheKey = $this->getCacheKey($key);
             $data = $this->cache->get($cacheKey);
 
-
-            if ($data !== null) {
+            if ($data === null) {
                 $item = $this->repo->findByName($siteKey, $head);
 
-                if ($item !== null) {
+                if ($item === null) {
                     return [];
                 }
 
@@ -234,8 +234,8 @@ class CacheDecorator implements PermissionRepository
     /**
      * Remove cache data
      *
-     * @param string $siteKey site key
-     * @param string $name    target name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  target name
      * @return void
      */
     protected function erase($siteKey, $name)
@@ -249,7 +249,7 @@ class CacheDecorator implements PermissionRepository
     /**
      * parse name to head and segments
      *
-     * @param string $name the name
+     * @param  string  $name  the name
      * @return string
      */
     private function getHead($name)
@@ -262,23 +262,23 @@ class CacheDecorator implements PermissionRepository
     /**
      * Make key by combination of site key and target name
      *
-     * @param string $siteKey site key
-     * @param string $name    target name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  target name
      * @return string
      */
     protected function makeKey($siteKey, $name)
     {
-        return $siteKey . ':' . $name;
+        return $siteKey.':'.$name;
     }
 
     /**
      * String for cache key
      *
-     * @param string $keyword keyword
+     * @param  string  $keyword  keyword
      * @return string
      */
     protected function getCacheKey($keyword)
     {
-        return $this->prefix . '@' . $keyword;
+        return $this->prefix.'@'.$keyword;
     }
 }
