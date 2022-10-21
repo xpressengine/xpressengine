@@ -907,7 +907,7 @@ return [
     ],
     'validatorMin' => [
         'ko' => ':charCount 이상의 글자를 입력하세요.',
-        'en' => 'Please enter at least :charCount character.|Please enter at least :charCount characters.',
+        'en' => 'Please enter at least :charCount character.',
     ],
     'validatorBetween' => [
         'ko' => ':attribute 는 :min ~ :max 사이로 입력해주세요.',
@@ -3612,15 +3612,15 @@ return [
     ],
     'passwordIncludeNumber' => [
         'ko' => '비밀번호에 숫자 포함',
-        'en' => 'Password contains numbers'
+        'en' => 'Please must contain at least a number.'
     ],
     'passwordIncludeCharacter' => [
         'ko' => '비밀번호에 문자 포함',
-        'en' => 'Password contains character'
+        'en' => 'Please must contain at least an Alphabet letter.'
     ],
     'passwordIncludeSpecialCharacter' => [
         'ko' => '비밀번호에 특수문자 포함',
-        'en' => 'Password contains special character'
+        'en' => 'Please must contain at least one special character.'
     ],
     'image' => [
         'ko' => '이미지',
@@ -3680,10 +3680,50 @@ return [
     ],
     'categoryManagementSummary' => [
         'ko' => ':count 개의 카테고리가 존재합니다.',
-        'en' => 'There is :count groups.',
+        'en' => 'There is :count categories.'
     ],
     'categoryName' => [
         'ko' => '카테고리명',
         'en' => 'Category name'
+    ],
+    'change' => [
+        'ko' => '변경',
+        'en' => 'Change'
+    ],
+    'noExtensionToUpdate' => [
+        'ko' => '업데이트할 익스텐션이 없습니다.',
+        'en' => 'No extension to update.'
+    ],
+    'noThemeToUpdate' => [
+        'ko' => '업데이트할 테마가 없습니다.',
+        'en' => 'No theme to update.'
+    ],
+    'phpIniSettings' => [
+        'ko' => 'php.ini 설정 값',
+        'en' => 'php.ini settings'
+    ],
+    'pleaseInputUserName' => [
+        'ko' => '회원 이름을 입력하세요.',
+        'en' => 'Please input user name.'
+    ],
+    'enteredCurrentName' => [
+        'ko' => '현재 회원 이름과 동일한 이름을 입력하셨습니다.',
+        'en' => 'You have entered your current name.'
+    ],
+    'visibleOption' => [
+        'ko' => '노출 여부',
+        'en' => 'Display'
+    ],
+    'visible' => [
+        'ko' => '노출',
+        'en' => 'Show'
+    ],
+    'hidden' => [
+        'ko' => '노출안함',
+        'en' => 'Hidden'
+    ],
+    'addContainerOption' => [
+        'ko' => '컨테이너 옵션 추가',
+        'en' => 'Add container option'
     ]
 ];

@@ -172,12 +172,12 @@ window.jQuery(function ($) {
       beforeCheck: function () {
         var input = this.ui.nameInput.val()
         if (input.length == 0) {
-          this.setStatus(false, '회원 이름을 입력하세요.')
+          this.setStatus(false, window.XE.Lang.trans('xe::pleaseInputUserName'))
           return false
         }
 
         if (input == this.options.originName) {
-          this.setStatus(true, '현재 회원 이름입니다')
+          this.setStatus(true, window.XE.Lang.trans('xe::enteredCurrentName'))
           return false
         }
 

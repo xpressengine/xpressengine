@@ -422,7 +422,7 @@ class Permission {
     }
 
     temp += `<div class="form-group">`
-    temp += `<label>회원 등급</label>`
+    temp += `<label>${XE.Lang.trans('xe::userRating')}</label>`
     temp += '<div class="radio">'
     permissionTypes.forEach(function (permissionType) {
       var checked = (permissionType.value == rating) ? 'checked' : ''
