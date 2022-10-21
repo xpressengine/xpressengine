@@ -41,7 +41,7 @@
                 <div class="panel">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <h3 class="panel-title">카테고리 관리<small>{{ count($categories) }} 개의 카테고리가 존재합니다.</small></h3>
+                            <h3 class="panel-title">{{ xe_trans('xe::categoryManagement') }}<small>{{ xe_trans('xe::categoryManagementSummary', ['count' => count($categories)]) }}</small></h3>
                         </div>
                     </div>
 
@@ -49,8 +49,8 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col">카테고리명</th>
-                                <th width="10%" scope="col">개수</th>
+                                <th scope="col">{{ xe_trans('xe::categoryName') }}</th>
+                                <th width="10%" scope="col">{{ xe_trans('xe::count') }}</th>
                                 <th width="10%" scope="col">{{ xe_trans('xe::management') }}</th>
                             </tr>
                             </thead>
