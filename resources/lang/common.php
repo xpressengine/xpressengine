@@ -502,7 +502,7 @@ return [
         'en' => 'Secret',
     ],
     'category' => [
-        'ko' => '분류',
+        'ko' => '카테고리',
         'en' => 'Category',
     ],
     'categoryModifyDescription' => [
@@ -518,7 +518,7 @@ return [
         'en' => 'Category management',
     ],
     'noneCategory' => [
-        'ko' => '분류 없음',
+        'ko' => '카테고리 없음',
         'en' => 'None category',
     ],
     'imageNotFound' => [
