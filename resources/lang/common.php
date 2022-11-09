@@ -1476,6 +1476,22 @@ return [
         'ko' => '현재 회원 이름입니다.',
         'en' => "It's current your name."
     ],
+    'changeUserDisplayName' => [
+        'ko' => '회원 :displayName 변경',
+        'en' => 'Change user :displayName'
+    ],
+    'canChangeUserDisplayName' => [
+        'ko' => '회원 :displayName을 변경할 수 있습니다. (2자이상의 한글 또는 3자이상의 영문, 숫자만 가능합니다.)',
+        'en' => 'You can change user :displayName.'
+    ],
+    'isYourCurrentDisplayName' => [
+        'ko' => '현재 회원 :displayName입니다.',
+        'en' => "It's current your :displayName."
+    ],
+    'inputUserDisplayName' => [
+        'ko' => '회원 :displayName을 입력하세요.',
+        'en' => 'Please input your user :displayName.'
+    ],
     'changedAt' => [
         'ko' => ':time에 변경됨',
         'en' => 'changed at :time'
@@ -2507,12 +2523,12 @@ return [
         'en' => 'This is a usable Email.',
     ],
     'invalidDisplayName' => [
-        'ko' => '회원이름 형식이 잘못되었습니다.',
-        'en' => 'The name format is invalid.',
+        'ko' => '회원 :displayName 형식이 잘못되었습니다.',
+        'en' => 'The :displayName format is invalid.',
     ],
     'usableDisplayName' => [
-        'ko' => '사용 가능한 이름입니다.',
-        'en' => 'This is a usable name.',
+        'ko' => '사용 가능한 :displayName입니다.',
+        'en' => 'This is a usable :displayName.',
     ],
     'usableLoginId' => [
         'ko' => '사용 가능한 아이디입니다.',

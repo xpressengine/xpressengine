@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,6 +40,7 @@ use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserRegisterHandler;
 
 /**
  * Class UserController
@@ -102,8 +104,8 @@ class UserController extends Controller
     /**
      * Show section for user setting.
      *
-     * @param Request $request request
-     * @param string  $section section
+     * @param  Request  $request  request
+     * @param  string  $section  section
      * @return \Xpressengine\Presenter\Presentable
      */
     public function show(Request $request, $section = 'settings')
@@ -139,7 +141,7 @@ class UserController extends Controller
     /**
      * Update display name of user.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -165,32 +167,39 @@ class UserController extends Controller
     /**
      * Validate display name of user.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function validateDisplayName(Request $request)
+    public function validateDisplayName(Request $request, UserRegisterHandler $userRegisterHandler)
     {
-        $name = $request->get('name');
-        $name = trim($name);
-
         $valid = true;
+        $message = 'xe::usableDisplayName';
+        $displayNameCaption = xe_trans(app('xe.config')->getVal('user.register.display_name_caption'));
+
+        $displayName = $request->get('display_name') ?? $request->get('name');
+        $displayName = trim($displayName);
+
         try {
-            $this->handler->validateDisplayName($name);
-            $message = xe_trans('xe::usableDisplayName');
+            $this->handler->validateDisplayName($displayName, $request->user());
         } catch (DisplayNameAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();
         } catch (InvalidDisplayNameException $e) {
             $valid = false;
             $message = xe_trans('xe::invalidDisplayName');
-        } catch (\Exception $e) {
-            throw $e;
+        } catch (ValidationException $exception) {
+            $valid = false;
+            $message = Arr::first($exception->errors()['display_name']);
         }
 
-        return XePresenter::makeApi(
-            ['type' => 'success', 'message' => $message, 'displayName' => $name, 'valid' => $valid]
-        );
+        return \XePresenter::makeApi([
+            'type' => 'success',
+            'message' => xe_trans($message, ['displayName' => $displayNameCaption]),
+            'displayName' => $displayName,
+            'valid' => $valid
+        ]);
     }
 
     /**
@@ -253,9 +262,9 @@ class UserController extends Controller
     /**
      * Validate password of user.
      *
-     * @param Request $request request
-     * @throws Exception
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
+     * @throws Exception
      */
     public function validatePassword(Request $request)
     {
@@ -277,7 +286,7 @@ class UserController extends Controller
     /**
      * Update user's main email address.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function updateMainMail(Request $request)
@@ -338,7 +347,7 @@ class UserController extends Controller
     /**
      * Add email to user.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -378,7 +387,7 @@ class UserController extends Controller
     /**
      * Confirm email by given code.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -410,7 +419,7 @@ class UserController extends Controller
     /**
      * Resend pending email.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      */
     public function resendPendingMail(Request $request)
@@ -429,7 +438,7 @@ class UserController extends Controller
     /**
      * Delete a email.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -479,7 +488,7 @@ class UserController extends Controller
     /**
      * Delete user's pending email
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Xpressengine\Presenter\Presentable
      * @throws Exception
      */
@@ -491,7 +500,7 @@ class UserController extends Controller
     /**
      * Leave the application.
      *
-     * @param Request $request request
+     * @param  Request  $request  request
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
@@ -529,7 +538,7 @@ class UserController extends Controller
     /**
      * Show additional field for user.
      *
-     * @param string $field field id
+     * @param  string  $field  field id
      * @return \Xpressengine\Presenter\Presentable
      */
     public function showAdditionField($field)
@@ -546,7 +555,7 @@ class UserController extends Controller
     /**
      * Show edit form for additional field for user.
      *
-     * @param string $field field id
+     * @param  string  $field  field id
      * @return \Xpressengine\Presenter\Presentable
      */
     public function editAdditionField($field)
@@ -563,8 +572,8 @@ class UserController extends Controller
     /**
      * Update additional field for user.
      *
-     * @param Request $request request
-     * @param string  $field   field id
+     * @param  Request  $request  request
+     * @param  string  $field  field id
      * @return \Xpressengine\Presenter\Presentable
      */
     public function updateAdditionField(Request $request, $field)
