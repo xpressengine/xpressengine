@@ -15,6 +15,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
 
 /**
@@ -39,6 +41,10 @@ class AsyncExpose
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
+
+        if (($response instanceof Response) === false || $response->isClientError() === true) {
+            return $response;
+        }
 
         if ($request->wantsJson() && $request->hasHeader('X-XE-Async-Expose')) {
             $content = json_decode($response->getContent(), true);

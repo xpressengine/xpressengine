@@ -59,6 +59,9 @@ class FormMediaLibraryImage extends AbstractUIObject
         $args = array_add($args, 'width', 10000);
         $args = array_add($args, 'height', 10000);
 
+        if (isset($args['browser']) == false) {
+            $args['browser'] = 0;
+        }
         // render template
         $this->template = view($this->view, ['args' => $args, 'seq' => $seq])->render();
 

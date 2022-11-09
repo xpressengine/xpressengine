@@ -16,10 +16,12 @@ namespace Xpressengine\Routing;
 
 use Auth;
 use Closure;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Contracts\Foundation\Application;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Xpressengine\Http\Request;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
  * Class AccessMiddleware
@@ -46,7 +48,7 @@ class AccessMiddleware
     /**
      * 생성자이며, Application 을 주입받는다.
      *
-     * @param Application  $app  Application
+     * @param Application $app Application
      * @param GateContract $gate GateContract
      */
     public function __construct(Application $app, GateContract $gate)
@@ -56,16 +58,14 @@ class AccessMiddleware
     }
 
     /**
-     *
-     * @param  \Illuminate\Http\Request $request 현재 처리중인 Request
-     * @param  \Closure                 $next    next middleware
+     * @param Request $request 현재 처리중인 Request
+     * @param Closure $next next middleware
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->checkPermission();
-
         return $next($request);
     }
 
@@ -77,13 +77,16 @@ class AccessMiddleware
      */
     protected function checkPermission()
     {
-        $item = $this->getMenuItem();
+        $menuItem = $this->getMenuItem();
         $user = Auth::user();
         $rating = $user->getRating();
 
-        if (!$item->activated
-            || ($rating !== 'super' && $this->gate->denies('access', $item))) {
-            throw new AccessDeniedHttpException;
+        if (!$menuItem->activated) {
+            throw new NotFoundHttpException();
+        }
+
+        if (($rating !== 'super' && $this->gate->denies('access', $menuItem)) === true) {
+            throw new AccessDeniedHttpException();
         }
     }
 
@@ -94,8 +97,6 @@ class AccessMiddleware
      */
     protected function getMenuItem()
     {
-        $instanceConfig = InstanceConfig::instance();
-
-        return $instanceConfig->getMenuItem();
+        return InstanceConfig::instance()->getMenuItem();
     }
 }

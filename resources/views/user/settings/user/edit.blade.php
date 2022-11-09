@@ -14,17 +14,23 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    {{-- displayName --}}
-                                    {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans(app('xe.config')->getVal('user.register.display_name_caption')), 'placeholder'=>xe_trans('xe::enterDisplayName', ['displayNameCaption' => xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))]), 'value'=> $user->display_name, 'name'=>'display_name']) !!}
-                                </div>
+                                {{-- displayName --}}
+                                @if (app('xe.user')->isUseDisplayName() === true)
+                                    <div class="form-group">
+                                        {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans(app('xe.config')->getVal('user.register.display_name_caption')), 'placeholder'=>xe_trans('xe::enterDisplayName', ['displayNameCaption' => xe_trans(app('xe.config')->getVal('user.register.display_name_caption'))]), 'value'=> $user->display_name, 'name'=>'display_name']) !!}
+                                    </div>
+                                @endif
+
                                 <div class="form-group">
                                     <label>{{xe_trans('xe::email')}}</label>
                                     {{-- email --}}
                                     <div id="__xe_emailSetting" data-user-id="{{ $user->id }}" data-email="{{ $user->email }}"></div>
                                 </div>
 
-                                {!! uio('formText', ['id'=>'__xe_loginId', 'label'=>xe_trans('xe::id'), 'placeholder'=>xe_trans('xe::enterId'), 'value'=> $user->login_id, 'name'=>'login_id']) !!}
+                                {{-- login_id --}}
+                                @if (app('xe.user')->isUseLoginId() === true)
+                                    {!! uio('formText', ['id'=>'__xe_loginId', 'label'=>xe_trans('xe::id'), 'placeholder'=>xe_trans('xe::enterId'), 'value'=> $user->login_id, 'name'=>'login_id']) !!}
+                                @endif
 
                                 {{-- introduction --}}
                                 {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>xe_trans('xe::introduction'), 'placeholder'=>xe_trans('xe::enterIntroduction'), 'value'=> $user->introduction, 'name'=>'introduction']) !!}

@@ -67,8 +67,12 @@ class TagHandler
     public function set($taggableId, array $words = [], $instanceId = null)
     {
         $words = array_unique($words);
-        
-        $tags = $this->repo->query()->where('instance_id', $instanceId)->whereIn('word', $words)->get();
+        $whereInWords = array_map(static function(string $word) { return 'binary '. $word; }, $words);
+
+        $tags = $this->repo->query()
+             ->where('instance_id', $instanceId)
+             ->whereIn('word', $whereInWords)
+             ->get();
 
         // 등록되지 않은 단어가 있다면 등록 함
         foreach (array_diff($words, $tags->pluck('word')->all()) as $word) {

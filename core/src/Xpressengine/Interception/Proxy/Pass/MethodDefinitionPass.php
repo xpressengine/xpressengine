@@ -181,7 +181,17 @@ BODY;
             $typehintMatch
         )) {
             if (!empty($typehintMatch['typehint'])) {
-                return $typehintMatch['typehint'];
+                $typehint = $typehintMatch['typehint'];
+
+                if (strpos($typehint, 'boolean') !== false) {
+                    $typehint = str_replace('boolean', 'bool', $typehint);
+                }
+
+                if (strpos($typehint, 'integer') !== false) {
+                    $typehint = str_replace('integer', 'int', $typehint);
+                }
+
+                return $typehint;
             }
         }
 

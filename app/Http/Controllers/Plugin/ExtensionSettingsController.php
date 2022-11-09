@@ -160,8 +160,8 @@ class ExtensionSettingsController extends Controller
             'editor' => xe_trans('xe::editor'),
             'editortool' => xe_trans('xe::editorTool'),
             'uiobject' => xe_trans('xe::uiobject'),
-            'FieldType' => xe_trans('xe::dynamicField'),
-            'FieldSkin' => xe_trans('xe::dynamicFieldSkin'),
+            'fieldType' => xe_trans('xe::dynamicField'),
+            'fieldSkin' => xe_trans('xe::dynamicFieldSkin'),
             'toggleMenu' => xe_trans('xe::toggleMenu'),
         ];
 

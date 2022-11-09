@@ -72,16 +72,6 @@ class UserController extends Controller
         $groups = $this->handler->groups()->query()->where('site_key',$site_key)->get();
 
         $query = $this->handler->users()->query();
-
-        //set current site groups
-        $group_ids = $groups->pluck('id');
-        $query = $query->whereHas(
-            'groups',
-            function (Builder $q) use ($group_ids) {
-                $q->whereIn('group_id', $group_ids);
-            }
-        );
-
         $allUserCount = $query->count();
 
         if ($startDate = $request->get('startDate')) {
@@ -200,12 +190,15 @@ class UserController extends Controller
     {
         $rules = [
             'email' => 'email|required',
-            'login_id' => 'required|login_id',
             'password' => 'required|password',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
             $rules['display_name'] = 'required';
+        }
+
+        if ($this->handler->isUseLoginId() === true) {
+            $rules['login_id'] = 'required|login_id';
         }
 
         $this->validate($request, $rules);
@@ -320,13 +313,16 @@ class UserController extends Controller
 
         $rules = [
             'email' => 'email',
-            'login_id' => 'required|login_id',
             'rating' => 'required',
             'status' => 'required',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
             $rules['display_name'] = 'required';
+        }
+
+        if ($this->handler->isUseLoginId() === true) {
+            $rules['login_id'] = 'required|login_id';
         }
 
         $this->validate($request, $rules);

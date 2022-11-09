@@ -3,13 +3,13 @@
 <div class="panel">
     <div class="panel-body">
         <div>
-            <p class="help-block">업데이트할 익스텐션이 없습니다.</p>
-            <a href="{{ route('settings.extension.install') }}" >새 익스텐션 설치</a>
+            <p class="help-block">{{ xe_trans('xe::noExtensionToUpdate') }}</p>
+            <a href="{{ route('settings.extension.install') }}" >{{ xe_trans('xe::installNewExtension') }}</a>
         </div>
 
         <div>
-            <p class="help-block">업데이트할 테마가 없습니다.</p>
-            <a href="{{ route('settings.theme.install') }}" >새 테마 설치</a>
+            <p class="help-block">{{ xe_trans('xe::noThemeToUpdate') }}</p>
+            <a href="{{ route('settings.theme.install') }}" >{{ xe_trans('xe::installNewTheme') }}</a>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
             <p class="help-block">
                 {{ xe_trans('xe::selectPluginToUpdateAndClick') }}
             </p>
-            <button type="submit" class="xe-btn xe-btn-positive-outlin xe-btn-lg">{{ xe_trans('xe::updatePlugin') }}</button>
+            <button type="submit" class="xe-btn xe-btn-positive-outline xe-btn-lg">{{ xe_trans('xe::updatePlugin') }}</button>
         </div>
 
         <div style="padding: 14px 20px;">

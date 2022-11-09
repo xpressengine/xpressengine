@@ -20,6 +20,27 @@
 |
 */
 
+/**
+ * Path: /api/category-items
+ * Alias: category_items.*
+ */
+Route::group(['prefix' => '/api/category-items'], static function () {
+    /**
+     * Path: /api/category-items/{id}
+     */
+    Route::group(['prefix' => '/{id}', 'where' => ['id' => '[0-9]+']], static function () {
+        /**
+         * Path: /api/category-items/{id}/children
+         * Alias: category_items.children
+         * Method: GET
+         */
+        Route::get('/children', [
+            'as' => 'category_items.children',
+            'uses' => 'CategoryItemController@getChildren'
+        ]);
+    });
+});
+
 Route::settings(
     '/',
     function () {
@@ -89,6 +110,7 @@ Route::group(
 
         Route::post('register/check/email', ['as' => 'auth.register.check.email', 'uses' => 'Auth\RegisterController@validateEmail']);
         Route::post('register/check/name', ['as' => 'auth.register.check.name', 'uses' => 'Auth\RegisterController@validateDisplayName']);
+        Route::post('register/check/login_id', ['as' => 'auth.register.check.login_id', 'uses' => 'Auth\RegisterController@validateLoginId']);
 
         // email confirm
         Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']); // confirm email
@@ -868,6 +890,12 @@ Route::settings(
 );
 
 Route::settings('category', function () {
+    // 전체 카테고리
+    Route::get('/', [
+        'as' => 'manage.category.index',
+        'uses' => 'CategoryController@index',
+        'settings_menu' => 'contents.category'
+    ]);
 
     // 이하 신규
     Route::group(['prefix' => '{id}', 'where' => ['id' => '[0-9]+']], function () {

@@ -164,6 +164,28 @@ class JSFile
     }
 
     /**
+     * 태그에 defer 속성을 지정한다.
+     *
+     * @return $this
+     */
+    public function defer()
+    {
+        $this->attr('defer', '');
+        return $this;
+    }
+
+    /**
+     * 태그에 async 속성을 지정한다.
+     *
+     * @return $this
+     */
+    public function async()
+    {
+        $this->attr('async','');
+        return $this;
+    }
+
+    /**
      * unload
      *
      * @return void
@@ -219,7 +241,10 @@ class JSFile
         $attr = '';
         if (count($this->attributes) > 0) {
             foreach ($this->attributes as $name => $value) {
-                $attr .= ' '.$name.'="'.$value.'"';
+                $attr .= ' '.$name;
+                if (empty($value) === false) {
+                    $attr .= '="'.$value.'"';
+                }
             }
         }
 

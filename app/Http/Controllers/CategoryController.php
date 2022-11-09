@@ -38,6 +38,18 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 class CategoryController extends Controller
 {
     /**
+     * List of categories.
+     *
+     * @return \Xpressengine\Presenter\Presentable
+     */
+    public function index()
+    {
+        $categories = XeCategory::cates()->all();
+
+        return XePresenter::make('category.index', compact('categories'));
+    }
+
+    /**
      * Show category.
      *
      * @param string $id identifier

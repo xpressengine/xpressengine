@@ -135,6 +135,22 @@ class UserHandler
     }
 
     /**
+     * @return bool
+     */
+    public function isUseDisplayName()
+    {
+        return $this->configManager->getVal('user.register.use_display_name') === true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUseLoginId()
+    {
+        return $this->configManager->getVal('user.register.use_login_id', true) === true;
+    }
+
+    /**
      * User 회원 저장소를 반환한다.
      *
      * @return UserRepositoryInterface
@@ -195,8 +211,13 @@ class UserHandler
     {
         $data['rating'] = $data['rating'] ?? Rating::USER;
         $data['status'] = $data['status'] ?? $this->configManager->getVal('user.register.register_process', User::STATUS_ACTIVATED);
-        if ($this->configManager->getVal('user.register.use_display_name') === false && isset($data['display_name']) === false) {
-            $data['display_name'] = $data['login_id'];
+
+        if ($this->isUseLoginId() === false) {
+            $data['login_id'] = $data['email'];
+        }
+
+        if ( isset($data['display_name']) === false && $this->configManager->getVal('user.register.use_display_name') === false) {
+            $data['display_name'] = $this->isUseLoginId() === true ? $data['login_id'] : $data['email'] ;
         }
 
         $this->validateForCreate($data);
@@ -307,12 +328,6 @@ class UserHandler
         // resolve group
         $groups = array_get($userData, 'group_id');
 
-        // set default group added
-        $config = app('xe.config')->get('user.register');
-        $joinGroup = $config->get('joinGroup');
-
-        if ($groups === null || count($groups) < 1) $groups[] = $joinGroup;
-
         // email, display_name, introduction, password, status, rating
         $userData = array_except($userData, ['group_id', 'profile_img_file']);
 
@@ -390,7 +405,9 @@ class UserHandler
         }
 
         // displayName 검사
-        $this->validateDisplayName($data['display_name']);
+        if ($this->isUseDisplayName() === true) {
+            $this->validateDisplayName($data['display_name']);
+        }
 
         // account 검사
         if (isset($data['account'])) {

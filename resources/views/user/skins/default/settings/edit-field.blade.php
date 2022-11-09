@@ -1,4 +1,4 @@
-<div class="setting-detail-content">
+<div class="setting-detail-content setting-detail-content-{{$id}}">
     <div class="setting-left">
         <div class="form-group has-feedback">
             <form action="{{ route('user.settings.additions.update', ['field'=>$id]) }}" method="POST" data-submit="xe-ajax" data-callback="closeSetting">

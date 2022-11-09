@@ -1,5 +1,5 @@
 @section('page_title')
-    <h2><a href="{{ route('settings.plugins') }}"><i class="xi-arrow-left"></i>{{xe_trans('xe::pluginDetails')}}</a></h2>
+    <h2><a href="{{ route('settings.extension.installed', request()->all()) }}"><i class="xi-arrow-left"></i>{{xe_trans('xe::pluginDetails')}}</a></h2>
 @stop
 
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
@@ -145,7 +145,7 @@
                                     <td>
                                     @foreach($componentTypes as $type => $typeText)
                                         @foreach($plugin->getComponentList($type) as $key => $component)
-                                            <span class="label label-{{ $color[$type] }}" title="{{ $component['name'] }}" data-toggle="tooltip">{{ $type }}</span>
+                                            <span class="label label-{{ $color[$type] }}" title="{{ $component['name'] }}" data-toggle="tooltip">{{ $typeText }}</span>
                                         @endforeach
                                     @endforeach
                                     </td>
@@ -206,7 +206,7 @@
                                                                     <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
                                                                 @endif
                                                             </td>
-                                                            <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                            <td><span class="label label-{{ $color[$type] }}">{{ $typeText }}</span></td>
                                                             <td>{{ $class::getComponentInfo('description') }}</td>
                                                         </tr>
                                                     @endif

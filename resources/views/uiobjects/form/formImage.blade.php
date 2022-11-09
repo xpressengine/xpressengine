@@ -5,15 +5,16 @@
         <div class="btn-group" role="group" aria-label="...">
             <span type="button" class="btn btn-default __xe_inputBtn fileinput-button">
                 @if($path = array_get($args, 'value.path', array_get($args, 'image')))
-                    <span>변경</span>
+                    <span>{{ xe_trans('xe::change') }}</span>
                 @else
-                    <span>{{xe_trans('xe::register')}}</span>
+                    <span>{{ xe_trans('xe::register') }}</span>
                 @endif
                 <input class="__xe_file_{{ $seq }}" type="file" name="{{ $name = array_get($args, 'name', 'image') }}"/>
             </span>
             <label @if($path === null) disabled @endif class="btn btn-default">
                 <input type="checkbox" class="__xe_delete_file_{{ $seq }}" value="__delete_file__">
-                삭제</label>
+                {{ xe_trans('xe::delete') }}
+            </label>
         </div>
 
         <div class="__xe_file_preview_{{ $seq }}" style="padding: 10px 0">
