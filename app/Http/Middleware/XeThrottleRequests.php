@@ -14,7 +14,6 @@
 
 namespace App\Http\Middleware;
 
-use RuntimeException;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 
 /**
@@ -32,24 +31,29 @@ class XeThrottleRequests extends ThrottleRequests
     /**
      * Resolve request signature.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return string
      * @throws \RuntimeException
      */
     protected function resolveRequestSignature($request)
     {
-        // Check current user is XpressEngine user (not a guest).
-        $user = $request->user();
-        if ($user instanceof \Xpressengine\User\Models\User) {
-            return sha1($user->getAuthIdentifier());
-        }
+        $userResolver = $request->getUserResolver();
 
-        if ($route = $request->route()) {
-            return sha1($route->getDomain().'|'.$request->ip());
-        }
+        // Set custom user resolver
+        $request->setUserResolver(function () use ($userResolver) {
+            $user = $userResolver();
+            if ($user instanceof \Xpressengine\User\Models\User) {
+                return $user;
+            } else {
+                return null;
+            }
+        });
 
-        throw new RuntimeException(
-            'Unable to generate the request signature. Route unavailable.'
-        );
+        $key = parent::resolveRequestSignature($request);
+
+        // Restore user resolver
+        $request->setUserResolver($userResolver);
+
+        return $key;
     }
 }
