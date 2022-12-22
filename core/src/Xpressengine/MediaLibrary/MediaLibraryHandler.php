@@ -406,9 +406,11 @@ class MediaLibraryHandler
 
         $files->setCollection(
             $files->getCollection()->filter(function (MediaLibraryFile $mediaLibraryFile) {
-                return $mediaLibraryFile->file !== null
-                    && \Storage::disk($mediaLibraryFile->file->disk)->exists($mediaLibraryFile->file->getPathname());
-            })
+                $disk = \Storage::disk($mediaLibraryFile->file->disk);
+                $path = $mediaLibraryFile->file->getPathname();
+
+                return $mediaLibraryFile->file !== null && $disk->exists($path);
+            })->values()
         );
 
         return $files;
