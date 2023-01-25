@@ -11,6 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
+
 namespace Xpressengine\Log\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,31 +31,70 @@ use Xpressengine\User\Models\User;
  */
 class Log extends DynamicModel
 {
+    /**
+     * @var \Closure
+     */
     protected static $detailResolver;
 
-    protected $table = 'admin_log';
-
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var string
+     */
+    protected $table = 'admin_log';
+
+    /**
+     * @var bool
+     */
     protected $dynamic = false;
 
+    /**
+     * @var bool
+     */
     public $timestamps = true;
 
+    /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'parameters' => 'array',
         'data' => 'array'
     ];
 
+    /**
+     * @var array
+     */
     protected $appends = [];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
-        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'target_id', 'ipaddress', 'created_at', 'site_key'
+        'type',
+        'user_id',
+        'method',
+        'url',
+        'parameters',
+        'summary',
+        'data',
+        'target_id',
+        'ipaddress',
+        'created_at',
+        'site_key'
     ];
 
     /**
      * set log detail info resolver
      *
-     * @param \Closure $resolver resolver
+     * @param  \Closure  $resolver  resolver
      *
      * @return void
      */
@@ -74,19 +114,13 @@ class Log extends DynamicModel
     }
 
     /**
-     * user를 확인해서 삭제된 user이면 UnknownUser를 반환
+     * user 확인해서 삭제된 user 인 경우엔 UnknownUser 반환
      *
      * @return User|UnknownUser
      */
     public function getUser()
     {
-        $user = $this->user;
-
-        if ($user == null) {
-            $user = new UnknownUser();
-        }
-
-        return $user;
+        return $this->user ?? new UnknownUser();
     }
 
     /**
@@ -100,28 +134,21 @@ class Log extends DynamicModel
         return $resolver($this);
     }
 
-
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }

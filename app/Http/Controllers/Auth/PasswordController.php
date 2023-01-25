@@ -148,7 +148,7 @@ class PasswordController extends Controller {
         $this->validate($request, [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed|password',
+            'password' => 'required|confirmed|xe_password',
         ]);
 
         $credentials = $request->only('email', 'password', 'password_confirmation', 'token');

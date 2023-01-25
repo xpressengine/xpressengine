@@ -28,10 +28,19 @@ use Xpressengine\User\Exceptions\AlreadyConfirmedEmailException;
  */
 class UserEmail extends DynamicModel implements EmailInterface
 {
+    /**
+     * @var string
+     */
     protected $table = 'user_email';
 
+    /**
+     * @var bool
+     */
     protected $dynamic = false;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id',
         'address'
@@ -50,7 +59,7 @@ class UserEmail extends DynamicModel implements EmailInterface
     /**
      * 이메일 주소를 반환한다.
      *
-     * @param bool $onlyEmailId true일 경우, 이메일의 `@`와 도메인을 제외한 앞부분만 반환한다.
+     * @param  bool  $onlyEmailId  true일 경우, 이메일의 `@`와 도메인을 제외한 앞부분만 반환한다.
      *
      * @return mixed
      */

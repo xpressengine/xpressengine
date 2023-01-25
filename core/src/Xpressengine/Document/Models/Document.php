@@ -176,6 +176,11 @@ class Document extends DynamicModel
     ];
 
     /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * division 테이블로 변경
      *
      * @param string $instanceId instance id
@@ -629,7 +634,7 @@ class Document extends DynamicModel
         $documentDispatcher = Document::getEventDispatcher();
         if (isset($documentDispatcher)) {
             $documentEvent = "eloquent.{$event}: " . Document::class;
-            $method = $halt ? 'until' : 'fire';
+            $method = $halt ? 'until' : 'dispatch';
             Document::getEventDispatcher()->$method($documentEvent, $this);
         }
 

@@ -32,7 +32,7 @@
                                         <tr style="padding:0;margin:0;border:0;">
                                             <td style="padding:0;margin:0;border:0;width:100%;">
                                             @section('content')
-                                            {!! $content or '' !!}
+                                            {!! $content ?? '' !!}
                                             @show
                                             </td>
                                         </tr>

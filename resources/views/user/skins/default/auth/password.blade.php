@@ -20,7 +20,7 @@
 
             <div class="xu-form-group">
                 <label class="xu-form-group__label">{{ xe_trans('xe::email') }}</label>
-                <input type="text" class="xu-form-group__control" placeholder="{{ xe_trans('xe::enterEmail') }}" name="email" value="{{ $email or old('email') }}" data-valid-name="{{ xe_trans('xe::email') }}">
+                <input type="text" class="xu-form-group__control" placeholder="{{ xe_trans('xe::enterEmail') }}" name="email" value="{{ $email ?? old('email') }}" data-valid-name="{{ xe_trans('xe::email') }}">
             </div>
 
             <div class="xu-form-group">

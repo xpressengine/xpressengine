@@ -96,7 +96,7 @@ interface UserInterface
      *
      * @return AccountInterface
      */
-    public function getAccountByProvider($provider);
+    public function getAccountByProvider(string $provider);
 
     /**
      * add this user to groups

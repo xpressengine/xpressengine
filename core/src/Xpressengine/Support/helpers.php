@@ -246,7 +246,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $locale);
+            return app('xe.translator')->get($id, $parameters, $locale);
         } catch (Exception $e) {
             return $id;
         }
@@ -268,7 +268,7 @@ if (function_exists('xe_trans_choice') === false) {
      */
     function xe_trans_choice($id, $number, array $parameters = array(), $locale = null)
     {
-        return app('xe.translator')->transChoice($id, $number, $parameters, $locale);
+        return app('xe.translator')->choice($id, $number, $parameters, $locale);
     }
 }
 

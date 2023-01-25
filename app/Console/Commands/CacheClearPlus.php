@@ -31,13 +31,6 @@ use Xpressengine\Interception\InterceptionHandler;
 class CacheClearPlus extends ClearCommand
 {
     /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'cache:clear';
-
-    /**
      * The console command description.
      *
      * @var string
@@ -51,9 +44,10 @@ class CacheClearPlus extends ClearCommand
      */
     public function handle()
     {
-        $this->laravel['events']->fire(
-            'cache:clearing', [$this->argument('store'), $this->tags()]
-        );
+        $this->laravel['events']->dispatch('cache:clearing', [
+            $this->argument('store'),
+            $this->tags()
+        ]);
 
         $this->cache()->flush();
 
@@ -61,9 +55,10 @@ class CacheClearPlus extends ClearCommand
 
         $this->flushXeCaches();
 
-        $this->laravel['events']->fire(
-            'cache:cleared', [$this->argument('store'), $this->tags()]
-        );
+        $this->laravel['events']->dispatch('cache:cleared', [
+            $this->argument('store'),
+            $this->tags()
+        ]);
 
         if (function_exists('opcache_reset')) {
             opcache_reset();
@@ -88,16 +83,20 @@ class CacheClearPlus extends ClearCommand
 
         $storeName = $this->argument('store');
 
-        if ($storeName != null) {
+        if ($storeName !== null) {
             $stores = array_intersect($stores, explode(',', $storeName));
         }
 
         foreach ($stores as $storeName) {
-            $this->laravel['events']->fire('cache:clearing', [$storeName, $this->tags()]);
+            $this->laravel['events']->dispatch('cache:clearing', [
+                $storeName, $this->tags()
+            ]);
 
             $this->cache->store($storeName)->flush();
 
-            $this->laravel['events']->fire('cache:cleared', [$storeName, $this->tags()]);
+            $this->laravel['events']->dispatch('cache:cleared', [
+                $storeName, $this->tags()
+            ]);
         }
 
         if (!$this->option('except-proxy')) {

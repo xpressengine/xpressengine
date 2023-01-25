@@ -531,10 +531,11 @@ class UserServiceProvider extends ServiceProvider
                 xe_trans('xe::validationLoginId')
             );
 
-            $validator->extend('password', function ($attribute, $value, $parameters) {
+            $validator->extend('xe_password', function ($attribute, $value, $parameters) {
                 return $this->app['xe.password.validator']->handle($value);
             });
-            $validator->replacer('password', function () {
+
+            $validator->replacer('xe_password', function () {
                 return $this->app['xe.password.validator']->getMessage();
             });
         });

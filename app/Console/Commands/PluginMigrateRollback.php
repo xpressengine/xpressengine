@@ -1,11 +1,33 @@
 <?php
 
+/**
+ * PluginMigrateRollback.php
+ *
+ * PHP version 7
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Contributor - darron1217 <darron1217@gmail.com>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Database\Console\Migrations\RollbackCommand;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Class PluginMigrateRollback
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      XE Contributor - darron1217 <darron1217@gmail.com>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginMigrateRollback extends RollbackCommand
 {
     use PluginMigrateTrait;
@@ -27,51 +49,24 @@ class PluginMigrateRollback extends RollbackCommand
     /**
      * Execute the console command.
      *
-     * @param Filesystem $filesystem
-     * @return mixed
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        // Parent's handle()
-        if (! $this->confirmToProceed()) {
+        if ($this->confirmToProceed() === false) {
             return;
         }
 
+        $options = [
+            'pretend' => $this->option('pretend'),
+            'step' => (int) $this->option('step'),
+        ];
+
         $this->migrator->setConnection($this->option('database'));
 
-        $this->migrator->rollback(
-            $this->getMigrationPaths(), [
-                'pretend' => $this->option('pretend'),
-                'step' => (int) $this->option('step'),
-                'file_list' => $this->getFileList(),
-            ]
+        $this->migrator->setOutput($this->output)->rollbackForPlugin(
+            $this->getMigrationPaths(), $options, $this->getFileList()
         );
-
-        // Once the migrator has run we will grab the note output and send it out to
-        // the console screen, since the migrator itself functions without having
-        // any instances of the OutputInterface contract passed into the class.
-        foreach ($this->migrator->getNotes() as $note) {
-            $this->output->writeln($note);
-        }
-
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use.'],
-
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
-
-            ['pretend', null, InputOption::VALUE_NONE, 'Dump the SQL queries that would be run.'],
-
-            ['step', null, InputOption::VALUE_OPTIONAL, 'The number of migrations to be reverted.'],
-        ];
     }
 }

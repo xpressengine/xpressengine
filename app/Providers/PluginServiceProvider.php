@@ -52,11 +52,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->booted(function ($app) {
             $pluginHandler = $app['xe.plugin'];
 
-            $app['events']->fire('booting.plugins', [$pluginHandler]);
+            $app['events']->dispatch('booting.plugins', [$pluginHandler]);
 
             $pluginHandler->bootPlugins();
 
-            $app['events']->fire('booted.plugins', [$pluginHandler]);
+            $app['events']->dispatch('booted.plugins', [$pluginHandler]);
         });
 
         $this->registerSettingsPermissions();
@@ -87,7 +87,6 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.pluginRegister',
             function ($app) {
-
                 /** @var \Xpressengine\Interception\InterceptionHandler $interception */
                 $interception = $app['xe.interception'];
                 $pluginRegister = $interception->proxy(PluginRegister::class, 'PluginRegister');
@@ -113,9 +112,7 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PluginScanner::class, function ($app) {
             $metaFileReader = new MetaFileReader('composer.json');
-            $scanner = new PluginScanner($metaFileReader, $app['path.plugins'], $app['path.base']);
-
-            return $scanner;
+            return new PluginScanner($metaFileReader, $app['path.plugins'], $app['path.base']);
         });
     }
 
@@ -159,8 +156,7 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->singleton(PluginProvider::class, function ($app) {
             $url = $app['config']->get('xe.plugin.api.url');
             $auth = $app['config']->get('xe.plugin.api.auth');
-            $provider = new PluginProvider($url, $auth);
-            return $provider;
+            return new PluginProvider($url, $auth);
         });
         $this->app->alias(PluginProvider::class, 'xe.plugin.provider');
     }
@@ -173,9 +169,9 @@ class PluginServiceProvider extends ServiceProvider
     protected function registerComposerWriter()
     {
         $this->app->singleton(ComposerFileWriter::class, function ($app) {
-            $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class]);
-            return $writer;
+            return new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class]);
         });
+
         $this->app->alias(ComposerFileWriter::class, 'xe.plugin.writer');
     }
 

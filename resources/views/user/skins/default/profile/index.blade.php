@@ -22,9 +22,7 @@
                                 @endif
                             </dd>
                             <dt class="xe-sr-only"><label for="nick">{{xe_trans('xe::displayName')}}</label></dt>
-                            <dd class="input-nick">
-                                <input class="__xe_nameInput" type="text" name="display_name" placeholder="{{xe_trans('xe::enterName')}}" value="{{ $user->getDisplayName() }}" readonly @if($grant['modify'] === false) style="outline: none" @endif>
-                            </dd>
+                            <dd class="input-nick"><input class="__xe_nameInput" type="text" name="display_name" placeholder="{{xe_trans('xe::enterName')}}" value="{{ $user->getDisplayName() }}" readonly></dd>
 
                             @if($grant['manage'])
                                 <dt class="xe-sr-only">{{xe_trans('xe::group')}}</dt>
@@ -37,7 +35,7 @@
 
                             <dt class="xe-sr-only"><label for="intro">{{xe_trans('xe::introduction')}}</label></dt>
                             <dd class="input-intro">
-                                <p class="__xe_introView">{!! $user->introduction or xe_trans('xe::enterIntroduction') !!}</p>
+                                <p class="__xe_introView">{!! $user->introduction ?? xe_trans('xe::enterIntroduction') !!}</p>
                                 @if($grant['modify'])
                                     <input class="__xe_introInput" style="display: none;" type="text" name="introduction" placeholder="{{xe_trans('xe::enterIntroduction')}}" value="{{ $user->introduction }}">
                                 @endif

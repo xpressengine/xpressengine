@@ -164,7 +164,7 @@ trait CacheableEloquentRepositoryTrait
      */
     protected function getLifetime()
     {
-        return 60;
+        return 3600;
     }
 
     /**

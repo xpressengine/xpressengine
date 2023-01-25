@@ -69,7 +69,7 @@ class MenuItemRepository
      *
      * @var int
      */
-    const DUPLICATE_RETRY_CNT = 3;
+    public const DUPLICATE_RETRY_CNT = 3;
 
     /**
      * MenuItemRepository constructor.
@@ -104,11 +104,13 @@ class MenuItemRepository
 
                 $this->clearCache();
 
-                $this->dispatcher->fire('xe.menu.menuitem.created', $model);
+                $this->dispatcher->dispatch('xe.menu.menuitem.created', $model);
 
                 break;
             } catch (QueryException $e) {
-                if (++$cnt >= static::DUPLICATE_RETRY_CNT || $e->getCode() != "23000") {
+                ++$cnt;
+
+                if ($cnt >= static::DUPLICATE_RETRY_CNT || $e->getCode() !== '23000') {
                     throw $e;
                 }
             }
@@ -120,15 +122,16 @@ class MenuItemRepository
     /**
      * Delete a menu item
      *
-     * @param MenuItem $item menu item
+     * @param  MenuItem  $item  menu item
      * @return bool|null
+     * @throws \Exception
      */
     public function delete(MenuItem $item)
     {
         $item->ancestors(false)->detach();
 
         $result = $this->traitDelete($item);
-        $this->dispatcher->fire('xe.menu.menuitem.deleted', $item);
+        $this->dispatcher->dispatch('xe.menu.menuitem.deleted', $item);
 
         return $result;
     }
@@ -236,7 +239,7 @@ class MenuItemRepository
      * @param string $aggregator aggregator class
      * @return void
      */
-    protected static function setAggregator($aggregator)
+    protected static function setAggregator(string $aggregator)
     {
         $model = static::getModel();
         $model::setAggregatorModel($aggregator);

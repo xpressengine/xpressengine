@@ -40,22 +40,41 @@ class User extends DynamicModel implements
     CanResetPasswordContract,
     AuthorizableContract
 {
-    use Notifiable, Authenticatable, Authorizable;
+    use Authenticatable;
+    use Authorizable;
+    use Notifiable;
 
-    protected $table = 'user';
-
+    /**
+     * @var bool
+     */
     public $incrementing = false;
+
+    /**
+     * @var string
+     */
+    protected $table = 'user';
 
     /**
      * @var bool use dynamic query
      */
     protected $dynamic = true;
 
+    /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * @var string[]
+     */
     protected $dates = [
         'password_updated_at',
         'login_at'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'email',
         'login_id',
@@ -73,14 +92,21 @@ class User extends DynamicModel implements
      *
      * @var array
      */
-    protected $visible = ['id', 'display_name', 'introduction', 'profileImage'];
+    protected $visible = [
+        'id',
+        'display_name',
+        'introduction',
+        'profileImage'
+    ];
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends = ['profileImage'];
+    protected $appends = [
+        'profileImage'
+    ];
 
     /**
      * @var \Closure 회원의 프로필 이미지 Resolver.
@@ -98,10 +124,10 @@ class User extends DynamicModel implements
      */
     public static $displayField = 'display_name';
 
-    const STATUS_ACTIVATED = 'activated';
-    const STATUS_DENIED = 'denied';
-    const STATUS_PENDING_ADMIN = 'pending_admin';
-    const STATUS_PENDING_EMAIL = 'pending_email';
+    public const STATUS_ACTIVATED = 'activated';
+    public const STATUS_DENIED = 'denied';
+    public const STATUS_PENDING_ADMIN = 'pending_admin';
+    public const STATUS_PENDING_EMAIL = 'pending_email';
 
     /**
      * @var array
@@ -116,7 +142,7 @@ class User extends DynamicModel implements
     /**
      * User constructor.
      *
-     * @param array $attributes attributes
+     * @param  array  $attributes  attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -129,7 +155,7 @@ class User extends DynamicModel implements
     /**
      * setProfileImageResolver
      *
-     * @param Closure $callback 회원의 프로필 이미지를 처리하기 위한 resolver
+     * @param  Closure  $callback  회원의 프로필 이미지를 처리하기 위한 resolver
      *
      * @return void
      */
@@ -155,12 +181,16 @@ class User extends DynamicModel implements
      */
     public function groups()
     {
-        $site_key = $this->site_key == null ? \XeSite::getCurrentSiteKey() : $this->site_key;
-        return $this->belongsToMany(UserGroup::class, 'user_group_user', 'user_id', 'group_id')->where('site_key',$site_key)->orderBy('order');
+        $site_key = $this->site_key ?? \XeSite::getCurrentSiteKey();
+
+        return $this->belongsToMany(UserGroup::class, 'user_group_user', 'user_id', 'group_id')->where(
+            'site_key',
+            $site_key
+        );
     }
 
     /**
-     * set relationship with us er accounts
+     * set relationship with user accounts
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -207,13 +237,13 @@ class User extends DynamicModel implements
     public function getEmailForPasswordReset()
     {
         // 만약 로그인시 사용된 이메일이 따로 지정돼 있을 경우 그 이메일을 사용한다.
-        return isset($this->emailForPasswordReset) ? $this->emailForPasswordReset : $this->email;
+        return $this->emailForPasswordReset ?? $this->email;
     }
 
     /**
      * Send the password reset notification.
      *
-     * @param  string $token token for password reset
+     * @param  string  $token  token for password reset
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -224,7 +254,7 @@ class User extends DynamicModel implements
     /**
      * setEmailForPasswordReset() 메소드에서 반환할 email 정보를 지정한다.
      *
-     * @param string $email 지정할 email주소
+     * @param  string  $email  지정할 email주소
      *
      * @return void
      */
@@ -272,7 +302,7 @@ class User extends DynamicModel implements
     /**
      * Finds whether user has super rating.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAdmin()
     {
@@ -282,7 +312,7 @@ class User extends DynamicModel implements
     /**
      * Finds whether user has manager or super rating.
      *
-     * @return boolean
+     * @return bool
      */
     public function isManager()
     {
@@ -333,11 +363,11 @@ class User extends DynamicModel implements
     /**
      * 회원이 소유한 계정 중에 주어진 provider를 가진 계정을 반환한다.
      *
-     * @param string $provider provider
+     * @param  string  $provider  provider
      *
      * @return UserAccount
      */
-    public function getAccountByProvider($provider)
+    public function getAccountByProvider(string $provider)
     {
         foreach ($this->getAttribute('accounts') as $account) {
             if ($account->provider === $provider) {
@@ -351,7 +381,7 @@ class User extends DynamicModel implements
     /**
      * add this user to groups
      *
-     * @param mixed $groups groups
+     * @param  mixed  $groups  groups
      *
      * @return static
      */
@@ -365,7 +395,7 @@ class User extends DynamicModel implements
     /**
      * leave groups
      *
-     * @param array $groups groups
+     * @param  array  $groups  groups
      *
      * @return static
      */
@@ -379,7 +409,7 @@ class User extends DynamicModel implements
     /**
      * 최종 로그인 시간을 기록한다.
      *
-     * @param mixed $time 로그인 시간
+     * @param  mixed  $time  로그인 시간
      *
      * @return void
      */
@@ -394,7 +424,7 @@ class User extends DynamicModel implements
     /**
      * loginAt 처리, loginAt이 지정되지 않았을 경우, null을 반환하도록 처리한다.
      *
-     * @param string $value date time string
+     * @param  string  $value  date time string
      *
      * @return \Carbon\Carbon|null
      */

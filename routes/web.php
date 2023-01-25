@@ -74,7 +74,7 @@ Route::group(
     ['prefix' => 'lang'],
     function() {
         Route::match(array('GET', 'POST'),'lines/many', ['as' => 'lang.lines.many', 'uses' => 'LangController@getLinesMany']);
-        Route::get('lines/{key}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('lines/{key?}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'lang.search', 'uses' => 'LangController@searchKeyword']);
     }
 );
@@ -832,7 +832,7 @@ Route::settings(
 
             });
 
-            Route::group(['prefix' => '{pluginId}'], function () {
+            Route::group(['prefix' => '{pluginId?}'], function () {
                 Route::get('/', [
                     'as' => 'settings.plugins.show',
                     'uses' => 'Plugin\PluginManageController@show',
@@ -898,7 +898,7 @@ Route::settings('category', function () {
     ]);
 
     // 이하 신규
-    Route::group(['prefix' => '{id}', 'where' => ['id' => '[0-9]+']], function () {
+    Route::group(['prefix' => '{id?}', 'where' => ['id' => '[0-9]+']], function () {
         Route::get('/', ['as' => 'manage.category.show', 'uses' => 'CategoryController@show']);
         Route::post('item/store', [
             'as' => 'manage.category.edit.item.store',
@@ -1007,7 +1007,7 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
         ]);
-        Route::get('/{mediaLibraryFileId}/download', [
+        Route::get('/{mediaLibraryFileId?}/download', [
             'as' => 'media_library.download_file',
             'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);

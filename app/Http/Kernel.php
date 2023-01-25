@@ -26,7 +26,8 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
  */
 class Kernel extends HttpKernel
 {
-    use ResetProvidersTrait, ModeCheckTrait;
+    use ModeCheckTrait;
+    use ResetProvidersTrait;
 
     /**
      * The bootstrap classes for the application.
@@ -45,7 +46,7 @@ class Kernel extends HttpKernel
     /**
      * The application's global HTTP middleware stack.
      *
-     * These middleware are run during every request to your application.
+     * This middleware is run during every request to your application.
      *
      * @var array
      */
@@ -101,7 +102,7 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware.
      *
-     * These middleware may be assigned to groups or used individually.
+     * This middleware may be assigned to group or used individually.
      *
      * @var array
      */
@@ -111,8 +112,9 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \App\Http\Middleware\XeThrottleRequests::class,
-
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'settings' => \Xpressengine\Settings\SettingsMiddleware::class,
         'access' => \Xpressengine\Routing\AccessMiddleware::class,
     ];

@@ -2,11 +2,20 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Exception;
 use Illuminate\Database\Console\Migrations\RefreshCommand;
-use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Class PluginComposerSync
+ *
+ * @category    Commands
+ * @package     App\Console\Commands
+ * @author      darron1217 (developers) <darron1217@gmail.com>
+ * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class PluginMigrateRefresh extends RefreshCommand
 {
     use PluginMigrateTrait;
@@ -29,43 +38,32 @@ class PluginMigrateRefresh extends RefreshCommand
      * Execute the console command.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if ($this->confirmToProceed() === false) {
             return;
         }
 
-        // Next we'll gather some of the options so that we can have the right options
-        // to pass to the commands. This includes options such as which database to
-        // use and the path to use for the migration. Then we'll run the command.
         $database = $this->input->getOption('database');
 
         $path = $this->getMigrationPath();
-
-        $force = $this->input->getOption('force');
-
-        // If the "step" option is specified it means we only want to rollback a small
-        // number of migrations before migrating again. For example, the user might
-        // only rollback and remigrate the latest four migrations instead of all.
         $step = $this->input->getOption('step') ?: 0;
 
         if ($step > 0) {
-            $this->runRollback($database, $path, $step, $force);
+            $this->runRollback($database, $path, $step);
         } else {
-            $this->runReset($database, $path, $force);
+            $this->runReset($database, $path);
         }
 
-        // The refresh command is essentially just a brief aggregate of a few other of
-        // the migration commands and just provides a convenient wrapper to execute
-        // them in succession. We'll also see if we need to re-seed the database.
         $this->call('plugin:migrate', [
             'plugin' => $this->argument('plugin'),
             '--database' => $database,
-            '--force' => $force,
+            '--force' => $this->option('force'),
         ]);
 
-        if ($this->needsSeeding()) {
+        if ($this->needsSeeding() === true) {
             $this->runSeeder($database);
         }
     }
@@ -76,16 +74,15 @@ class PluginMigrateRefresh extends RefreshCommand
      * @param  string  $database
      * @param  string  $path
      * @param  bool  $step
-     * @param  bool  $force
      * @return void
      */
-    protected function runRollback($database, $path, $step, $force)
+    protected function runRollback($database, $path, $step)
     {
         $this->call('plugin:migrate:rollback', [
             'plugin' => $this->argument('plugin'),
             '--database' => $database,
             '--step' => $step,
-            '--force' => $force,
+            '--force' => $this->option('force'),
         ]);
     }
 
@@ -94,15 +91,14 @@ class PluginMigrateRefresh extends RefreshCommand
      *
      * @param  string  $database
      * @param  string  $path
-     * @param  bool  $force
      * @return void
      */
-    protected function runReset($database, $path, $force)
+    protected function runReset($database, $path)
     {
         $this->call('plugin:migrate:reset', [
             'plugin' => $this->argument('plugin'),
             '--database' => $database,
-            '--force' => $force,
+            '--force' => $this->option('force'),
         ]);
     }
 

@@ -15,6 +15,7 @@
 namespace Xpressengine\Document\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\User\Models\User;
 
 /**
  * Revision
@@ -29,15 +30,15 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @property string writer
  * @property string email
  * @property string certify_key
- * @property integer read_count
- * @property integer comment_count
- * @property integer assent_count
- * @property integer dissent_count
- * @property integer approved
- * @property integer published
- * @property integer status
- * @property integer display
- * @property integer format
+ * @property int read_count
+ * @property int comment_count
+ * @property int assent_count
+ * @property int dissent_count
+ * @property int approved
+ * @property int published
+ * @property int status
+ * @property int display
+ * @property int format
  * @property string locale
  * @property string title
  * @property string content
@@ -65,7 +66,7 @@ class Revision extends DynamicModel
     /**
      * @var string
      */
-    public $table = 'documents_revision';
+    protected $table = 'documents_revision';
 
     /**
      * @var bool
@@ -76,10 +77,30 @@ class Revision extends DynamicModel
      * @var array
      */
     protected $fillable = [
-        'revision_no', 'id', 'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
-        'published', 'status', 'display', 'locale', 'title',
-        'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
-        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email', 'site_key'
+        'revision_no',
+        'id',
+        'parent_id',
+        'instance_id',
+        'user_id',
+        'writer',
+        'approved',
+        'published',
+        'status',
+        'display',
+        'locale',
+        'title',
+        'content',
+        'pure_content',
+        'created_at',
+        'published_at',
+        'head',
+        'reply',
+        'list_order',
+        'ipaddress',
+        'user_type',
+        'certify_key',
+        'email',
+        'site_key'
     ];
 
     /**
@@ -93,37 +114,35 @@ class Revision extends DynamicModel
     protected $primaryKey = 'revision_id';
 
     /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * user relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
-        return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }
