@@ -44,9 +44,9 @@ class XeThrottleRequests extends ThrottleRequests
             $user = $userResolver();
             if ($user instanceof \Xpressengine\User\Models\User) {
                 return $user;
-            } else {
-                return null;
             }
+
+            return null;
         });
 
         $key = parent::resolveRequestSignature($request);
