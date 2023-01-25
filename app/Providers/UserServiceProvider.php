@@ -645,6 +645,9 @@ class UserServiceProvider extends ServiceProvider
                     ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
                 )->load();
 
+                expose_trans('xe::isYourCurrentDisplayName');
+                expose_trans('xe::inputUserDisplayName');
+
                 $this->app['xe.skin']->setMobileResolver(function () {
                     return app('request')->isMobile();
                 });

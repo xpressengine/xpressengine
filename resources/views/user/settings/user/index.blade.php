@@ -87,8 +87,8 @@ use Xpressengine\User\Models\User;
                                 <div class="form-group input-group-btn">
                                     <div class="input-group">
                                         <span class="input-group-addon">{{xe_trans('xe::signUpDate')}}</span>
-                                        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="{{ Request::get('startDate') }}">
-                                        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="{{ Request::get('endDate') }}">
+                                        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="{{ Request::get('startDate') }}" placeholder="{{ xe_trans('xe::enterStartDate') }}">
+                                        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="{{ Request::get('endDate') }}" placeholder="{{ xe_trans('xe::enterEndDate') }}">
                                     </div>
                                 </div>
                                 @foreach(Request::except(['keyfield','keyword','page','startDate', 'endDate']) as $name => $value)

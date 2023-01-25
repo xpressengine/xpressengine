@@ -1079,3 +1079,22 @@ if (function_exists('is_home') === false) {
         return app('xe.site')->getHomeInstanceId() === current_instance_id();
     }
 }
+
+if (function_exists('is_settings') === false) {
+    /**
+     * 현재 관리자 세팅 (settings) 페이지인지 확인합니다.
+     *
+     * @return bool
+     */
+    function is_settings() {
+        $currentRoute = request()->route();
+
+        if (($currentRoute instanceof \Illuminate\Routing\Route) === false) {
+            return null;
+        }
+
+        $middlewares = $currentRoute->getAction('middleware') ?? [];
+
+        return in_array('settings', $middlewares, true) === true;
+    }
+}

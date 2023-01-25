@@ -130,6 +130,7 @@ abstract class AbstractPresenter implements PresenterInterface
                 continue;
             }
 
+            $col = $this->isColumn($col) ? $col : array_merge(...array_values($col));
             $content .= $this->getColumn($col);
         }
 

@@ -890,6 +890,12 @@ Route::settings(
 );
 
 Route::settings('category', function () {
+    // 전체 카테고리
+    Route::get('/', [
+        'as' => 'manage.category.index',
+        'uses' => 'CategoryController@index',
+        'settings_menu' => 'contents.category'
+    ]);
 
     // 이하 신규
     Route::group(['prefix' => '{id?}', 'where' => ['id' => '[0-9]+']], function () {

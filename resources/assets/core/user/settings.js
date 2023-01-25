@@ -170,14 +170,24 @@ window.jQuery(function ($) {
       },
 
       beforeCheck: function () {
-        var input = this.ui.nameInput.val()
+        var input = this.ui.nameInput.val(),
+          caption = this.ui.nameInput.data('caption')
+
+        var isYourCurrentDisplayNameMessage = '현재 회원 이름입니다',
+          inputUserDisplayNameMessage = '회원 이름을 입력하세요.'
+
+        if (caption) {
+          isYourCurrentDisplayNameMessage = XE.Lang.trans('xe::isYourCurrentDisplayName', {'displayName': caption})
+          inputUserDisplayNameMessage = XE.Lang.trans('xe::inputUserDisplayName', {'displayName': caption})
+        }
+
         if (input.length == 0) {
-          this.setStatus(false, '회원 이름을 입력하세요.')
+          this.setStatus(false, inputUserDisplayNameMessage)
           return false
         }
 
         if (input == this.options.originName) {
-          this.setStatus(true, '현재 회원 이름입니다')
+          this.setStatus(true, isYourCurrentDisplayNameMessage)
           return false
         }
 
@@ -341,11 +351,7 @@ window.jQuery(function ($) {
 
       beforeCheck: function () {
         var input = this.ui.inputNew.val()
-        if (input.length == 0) {
-          return false
-        }
-
-        return true
+        return input.length != 0;
       },
 
       check: function () {
