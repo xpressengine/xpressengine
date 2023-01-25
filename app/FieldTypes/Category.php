@@ -67,7 +67,7 @@ class Category extends AbstractType
     public function getColumns()
     {
         return [
-            'item_id' => (new ColumnEntity('item_id', ColumnDataType::STRING))->setParams([255]),
+            'item_id' => (new ColumnEntity('item_id', ColumnDataType::INTEGER)),
         ];
     }
 
@@ -91,11 +91,13 @@ class Category extends AbstractType
     public function getSettingsView(ConfigEntity $config = null)
     {
         $category = null;
-        if ($config != null) {
+
+        if ($config !== null) {
             // for support version beta.26 before
-            if ($config->get('category_id') == null && $config->get('categoryId') != null) {
+            if ($config->get('category_id') === null && $config->get('categoryId') !== null) {
                 $config->set('category_id', $config->get('categoryId'));
             }
+
             $category = CategoryModel::find($config->get('category_id'));
         }
 

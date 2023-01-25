@@ -502,7 +502,7 @@ return [
         'en' => 'Secret',
     ],
     'category' => [
-        'ko' => '분류',
+        'ko' => '카테고리',
         'en' => 'Category',
     ],
     'categoryModifyDescription' => [
@@ -518,7 +518,7 @@ return [
         'en' => 'Category management',
     ],
     'noneCategory' => [
-        'ko' => '분류 없음',
+        'ko' => '카테고리 없음',
         'en' => 'None category',
     ],
     'imageNotFound' => [
@@ -907,7 +907,7 @@ return [
     ],
     'validatorMin' => [
         'ko' => ':charCount 이상의 글자를 입력하세요.',
-        'en' => 'Please enter at least :charCount character.|Please enter at least :charCount characters.',
+        'en' => 'Please enter at least :charCount character.',
     ],
     'validatorBetween' => [
         'ko' => ':attribute 는 :min ~ :max 사이로 입력해주세요.',
@@ -966,7 +966,7 @@ return [
         'en' => 'Percent',
     ],
     'count' => [
-        'ko' => '갯수',
+        'ko' => '개수',
         'en' => 'Count',
     ],
     'usage' => [
@@ -1475,6 +1475,22 @@ return [
     'isYourCurrentName' => [
         'ko' => '현재 회원 이름입니다.',
         'en' => "It's current your name."
+    ],
+    'changeUserDisplayName' => [
+        'ko' => '회원 :displayName 변경',
+        'en' => 'Change user :displayName'
+    ],
+    'canChangeUserDisplayName' => [
+        'ko' => '회원 :displayName을 변경할 수 있습니다. (2자이상의 한글 또는 3자이상의 영문, 숫자만 가능합니다.)',
+        'en' => 'You can change user :displayName.'
+    ],
+    'isYourCurrentDisplayName' => [
+        'ko' => '현재 회원 :displayName입니다.',
+        'en' => "It's current your :displayName."
+    ],
+    'inputUserDisplayName' => [
+        'ko' => '회원 :displayName을 입력하세요.',
+        'en' => 'Please input your user :displayName.'
     ],
     'changedAt' => [
         'ko' => ':time에 변경됨',
@@ -2507,12 +2523,12 @@ return [
         'en' => 'This is a usable Email.',
     ],
     'invalidDisplayName' => [
-        'ko' => '회원이름 형식이 잘못되었습니다.',
-        'en' => 'The name format is invalid.',
+        'ko' => '회원 :displayName 형식이 잘못되었습니다.',
+        'en' => 'The :displayName format is invalid.',
     ],
     'usableDisplayName' => [
-        'ko' => '사용 가능한 이름입니다.',
-        'en' => 'This is a usable name.',
+        'ko' => '사용 가능한 :displayName입니다.',
+        'en' => 'This is a usable :displayName.',
     ],
     'usableLoginId' => [
         'ko' => '사용 가능한 아이디입니다.',
@@ -3612,15 +3628,15 @@ return [
     ],
     'passwordIncludeNumber' => [
         'ko' => '비밀번호에 숫자 포함',
-        'en' => 'Password contains numbers'
+        'en' => 'Please must contain at least a number.'
     ],
     'passwordIncludeCharacter' => [
         'ko' => '비밀번호에 문자 포함',
-        'en' => 'Password contains character'
+        'en' => 'Please must contain at least an Alphabet letter.'
     ],
     'passwordIncludeSpecialCharacter' => [
         'ko' => '비밀번호에 특수문자 포함',
-        'en' => 'Password contains special character'
+        'en' => 'Please must contain at least one special character.'
     ],
     'image' => [
         'ko' => '이미지',
@@ -3678,4 +3694,52 @@ return [
         'ko' => '업로드 파일이 유효하지 않습니다. 파일확장자가 수정되었을 수 있습니다.',
         'en' => 'The upload file is not valid. The file extension may have been modified.'
     ],
+    'categoryManagementSummary' => [
+        'ko' => ':count 개의 카테고리가 존재합니다.',
+        'en' => 'There is :count categories.'
+    ],
+    'categoryName' => [
+        'ko' => '카테고리명',
+        'en' => 'Category name'
+    ],
+    'change' => [
+        'ko' => '변경',
+        'en' => 'Change'
+    ],
+    'noExtensionToUpdate' => [
+        'ko' => '업데이트할 익스텐션이 없습니다.',
+        'en' => 'No extension to update.'
+    ],
+    'noThemeToUpdate' => [
+        'ko' => '업데이트할 테마가 없습니다.',
+        'en' => 'No theme to update.'
+    ],
+    'phpIniSettings' => [
+        'ko' => 'php.ini 설정 값',
+        'en' => 'php.ini settings'
+    ],
+    'pleaseInputUserName' => [
+        'ko' => '회원 이름을 입력하세요.',
+        'en' => 'Please input user name.'
+    ],
+    'enteredCurrentName' => [
+        'ko' => '현재 회원 이름과 동일한 이름을 입력하셨습니다.',
+        'en' => 'You have entered your current name.'
+    ],
+    'visibleOption' => [
+        'ko' => '노출 여부',
+        'en' => 'Display'
+    ],
+    'visible' => [
+        'ko' => '노출',
+        'en' => 'Show'
+    ],
+    'hidden' => [
+        'ko' => '노출안함',
+        'en' => 'Hidden'
+    ],
+    'addContainerOption' => [
+        'ko' => '컨테이너 옵션 추가',
+        'en' => 'Add container option'
+    ]
 ];

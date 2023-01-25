@@ -11,6 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
+
 namespace Xpressengine\Storage;
 
 use Closure;
@@ -43,6 +44,13 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 class File extends DynamicModel
 {
     /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -61,21 +69,36 @@ class File extends DynamicModel
      *
      * @var array
      */
-    protected $fillable = ['origin_id', 'user_id', 'disk', 'path', 'filename', 'clientname', 'mime', 'size', 'site_key'];
+    protected $fillable = [
+        'origin_id',
+        'user_id',
+        'disk',
+        'path',
+        'filename',
+        'clientname',
+        'mime',
+        'size',
+        'site_key'
+    ];
 
     /**
      * The attributes that should be visible for serialization.
      *
      * @var array
      */
-    protected $visible = ['id', 'user_id', 'clientname', 'mime', 'size', 'download_count'];
+    protected $visible = [
+        'id',
+        'user_id',
+        'clientname',
+        'mime',
+        'size',
+        'download_count'
+    ];
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
+     * @var string
      */
-    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The file content reader
@@ -98,7 +121,7 @@ class File extends DynamicModel
      */
     public function getPathname()
     {
-        return rtrim($this->getAttribute('path'), '/') . '/' . $this->getAttribute('filename');
+        return rtrim($this->getAttribute('path'), '/').'/'.$this->getAttribute('filename');
     }
 
     /**
@@ -139,7 +162,7 @@ class File extends DynamicModel
     public function getRawDerives()
     {
         $class = __CLASS__;
-        $model = new $class;
+        $model = new $class();
 
         return $model->derives($this)->get();
     }
@@ -147,7 +170,7 @@ class File extends DynamicModel
     /**
      * Get a file url
      *
-     * @param Closure $callback callback
+     * @param  \Closure|null  $callback  callback
      * @return string
      */
     public function url(Closure $callback = null)
@@ -158,8 +181,8 @@ class File extends DynamicModel
     /**
      * Scope for derives
      *
-     * @param Builder $query query builder instance
-     * @param File    $file  file instance
+     * @param  Builder  $query  query builder instance
+     * @param  File  $file  file instance
      * @return Builder
      */
     public function scopeDerives(Builder $query, File $file)
@@ -170,7 +193,7 @@ class File extends DynamicModel
     /**
      * Set the ContentReader instance
      *
-     * @param callable $reader file content reader
+     * @param  callable  $reader  file content reader
      * @return void
      */
     public static function setContentReader(callable $reader)
@@ -181,7 +204,7 @@ class File extends DynamicModel
     /**
      * Set the UrlMaker instance
      *
-     * @param UrlMaker $urlMaker UrlMaker instance
+     * @param  UrlMaker  $urlMaker  UrlMaker instance
      * @return void
      */
     public static function setUrlMaker(UrlMaker $urlMaker)
@@ -199,28 +222,21 @@ class File extends DynamicModel
         return $this->fileableTable;
     }
 
-
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }

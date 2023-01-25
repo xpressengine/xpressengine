@@ -11,6 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
+
 namespace Xpressengine\Editor;
 
 use Illuminate\Contracts\Events\Dispatcher;
@@ -246,13 +247,13 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * AbstractEditor constructor.
      *
-     * @param EditorHandler   $editors    EditorHandler instance
-     * @param UrlGenerator    $urls       UrlGenerator instance
-     * @param Gate            $gate       Gate instance
-     * @param SkinHandler     $skins      SkinHandler instance
-     * @param Dispatcher      $events     Dispatcher instance
-     * @param FrontendHandler $frontend   FrontendHandler instance
-     * @param string          $instanceId Instance identifier
+     * @param  EditorHandler  $editors  EditorHandler instance
+     * @param  UrlGenerator  $urls  UrlGenerator instance
+     * @param  Gate  $gate  Gate instance
+     * @param  SkinHandler  $skins  SkinHandler instance
+     * @param  Dispatcher  $events  Dispatcher instance
+     * @param  FrontendHandler  $frontend  FrontendHandler instance
+     * @param  string  $instanceId  Instance identifier
      */
     public function __construct(
         EditorHandler $editors,
@@ -275,7 +276,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set config for the editor
      *
-     * @param ConfigEntity $config config instance
+     * @param  ConfigEntity  $config  config instance
      * @return $this
      */
     public function setConfig(ConfigEntity $config)
@@ -298,7 +299,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set arguments for the editor
      *
-     * @param array $arguments arguments
+     * @param  array  $arguments  arguments
      * @return $this
      */
     public function setArguments($arguments = [])
@@ -325,7 +326,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set files the editor used
      *
-     * @param array $files file instances
+     * @param  array  $files  file instances
      * @return void
      */
     public function setFiles($files = [])
@@ -336,7 +337,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set cover file id
      *
-     * @param string $coverId cover file id
+     * @param  string  $coverId  cover file id
      * @return void
      */
     public function setCover($coverId)
@@ -389,11 +390,11 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected function buildOptions()
     {
-        $this->events->fire('xe.editor.option.building', $this);
+        $this->events->dispatch('xe.editor.option.building', $this);
 
         $options = array_merge($this->getStaticOption(), $this->getDynamicOption());
 
-        $this->events->fire('xe.editor.option.builded', $this);
+        $this->events->dispatch('xe.editor.option.builded', $this);
 
         return $options;
     }
@@ -491,7 +492,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get php.ini setting file size to MegaByte Size
      *
-     * @param  string $originalSize php.ini setting value
+     * @param  string  $originalSize  php.ini setting value
      * @return float|int|mixed
      */
     protected function getMegaSize($originalSize)
@@ -565,13 +566,13 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function render()
     {
-        $this->events->fire('xe.editor.render', $this);
+        $this->events->dispatch('xe.editor.render', $this);
 
         $this->loadTools();
 
         $htmlString = '';
         if ($this->scriptOnly === false) {
-            $htmlString = $this->getContentHtml() . $this->getEditorScript($this->getOptions());
+            $htmlString = $this->getContentHtml().$this->getEditorScript($this->getOptions());
         }
 
         return $htmlString;
@@ -580,14 +581,14 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile the raw content to be useful
      *
-     * @param string $content  content
-     * @param bool   $htmlable content is htmlable
+     * @param  string  $content  content
+     * @param  bool  $htmlable  content is htmlable
      * @return string
      */
     public function compile($content, $htmlable = false)
     {
         $content = (string)$content;
-        $this->events->fire('xe.editor.compile', $this);
+        $this->events->dispatch('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
             $content = nl2br(e($content));
@@ -611,7 +612,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile content body
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return string
      */
     abstract protected function compileBody($content);
@@ -625,13 +626,13 @@ abstract class AbstractEditor implements ComponentInterface
     {
         $args = $this->getArguments();
         $html =
-            '<textarea ' .
-            'name="' . $args['contentDomName'] . '" ' .
-            'id="' . $args['contentDomId'] . '" ' .
-            $this->getContentDomHtmlOption($args['contentDomOptions']) .
-            ' placeholder="' . xe_trans('xe::content') . '" '.
+            '<textarea '.
+            'name="'.$args['contentDomName'].'" '.
+            'id="'.$args['contentDomId'].'" '.
+            $this->getContentDomHtmlOption($args['contentDomOptions']).
+            ' placeholder="'.xe_trans('xe::content').'" '.
             'style="width:100%;">'.
-            e($args['content']) .
+            e($args['content']).
             '</textarea>';
 
         return $html;
@@ -640,14 +641,14 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get attributes string for content html tag
      *
-     * @param array $domOptions dom options
+     * @param  array  $domOptions  dom options
      * @return string
      */
     protected function getContentDomHtmlOption($domOptions)
     {
         $optionsString = '';
         foreach ($domOptions as $key => $val) {
-            $optionsString.= "$key='{$val}' ";
+            $optionsString .= "$key='{$val}' ";
         }
 
         return $optionsString;
@@ -656,7 +657,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get script for running the editor
      *
-     * @param array $options options
+     * @param  array  $options  options
      * @return mixed
      */
     protected function getEditorScript(array $options)
@@ -695,12 +696,12 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile tags in content body
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return string
      */
     protected function hashTag($content)
     {
-        $tags = $this->getData($content, '.' . $this->getTagClassName());
+        $tags = $this->getData($content, '.'.$this->getTagClassName());
         foreach ($tags as $tag) {
             $word = ltrim($tag['text'], '#');
             $content = str_replace(
@@ -716,12 +717,12 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile mentions in content body
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return string
      */
     protected function mention($content)
     {
-        $mentions = $this->getData($content, '.' . $this->getMentionClassName(), 'data-id');
+        $mentions = $this->getData($content, '.'.$this->getMentionClassName(), 'data-id');
         foreach ($mentions as $mention) {
             $name = ltrim($mention['text'], '@');
             $content = str_replace(
@@ -742,7 +743,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile links in content body
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return string
      */
     protected function link($content)
@@ -753,12 +754,16 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile images in content body
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return string
      */
     protected function image($content)
     {
-        $list = $this->getData($content, 'img.' . $this->getImageClassName(), ['data-id', 'data-media-id', 'style', 'alt', 'title', 'width', 'height']);
+        $list = $this->getData(
+            $content,
+            'img.'.$this->getImageClassName(),
+            ['data-id', 'data-media-id', 'style', 'alt', 'title', 'width', 'height']
+        );
 
         $ids = array_column($list, 'data-id');
         $images = static::resolveImage($ids);
@@ -779,10 +784,10 @@ abstract class AbstractEditor implements ComponentInterface
             $attrStr = trim($data['html'], ' </>');
             $content = str_replace(
                 [
-                    '<' . $attrStr . '>',
-                    '<' . $attrStr . '/>',
-                    '<' . $attrStr . ' >',
-                    '<' . $attrStr . ' />',
+                    '<'.$attrStr.'>',
+                    '<'.$attrStr.'/>',
+                    '<'.$attrStr.' >',
+                    '<'.$attrStr.' />',
                 ],
                 sprintf(
                     '<img src="%s" class="%s" data-id="%s" data-media-id="%s" style="%s" alt="%s" title="%s" width="%s" height="%s"/>',
@@ -806,9 +811,9 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get html node data
      *
-     * @param string $content    content
-     * @param string $selector   selector string
-     * @param array  $attributes attribute names
+     * @param  string  $content  content
+     * @param  string  $selector  selector string
+     * @param  array  $attributes  attribute names
      * @return array
      */
     private function getData($content, $selector, $attributes = [])
@@ -835,7 +840,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set the image resolver
      *
-     * @param callable $resolver resolver
+     * @param  callable  $resolver  resolver
      * @return void
      */
     public static function setImageResolver(callable $resolver)
@@ -846,7 +851,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Resolve image instances
      *
-     * @param array $ids identifier list
+     * @param  array  $ids  identifier list
      * @return array
      */
     public static function resolveImage($ids = [])
@@ -859,7 +864,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Set the privileged determiner
      *
-     * @param callable $determiner determiner
+     * @param  callable  $determiner  determiner
      * @return void
      */
     public static function setPrivilegedDeterminer(callable $determiner)
@@ -880,7 +885,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Create crawler instance
      *
-     * @param string $content content
+     * @param  string  $content  content
      * @return Crawler
      */
     private function createCrawler($content)
@@ -901,7 +906,7 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get uri for custom setting
      *
-     * @param string $instanceId instance identifier
+     * @param  string  $instanceId  instance identifier
      * @return string|null
      */
     public static function getInstanceSettingURI($instanceId)

@@ -22,7 +22,6 @@ class ContainerPresenter extends XEUIPresenter
     /**
      * Get the string contents of the presenter.
      *
-     * @author Sparkweb
      * @return string
      */
     public function render(): string

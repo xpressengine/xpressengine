@@ -69,6 +69,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Exception  $exception
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -90,9 +91,9 @@ class Handler extends ExceptionHandler
             return $e->toResponse($request);
         }
 
-        Event::fire('exception.handler:prepare.before', [$e]);
+        Event::dispatch('exception.handler:prepare.before', [$e]);
         $e = $this->prepareException($e);
-        Event::fire('exception.handler:prepare.after', [$e]);
+        Event::dispatch('exception.handler:prepare.after', [$e]);
 
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
@@ -278,7 +279,7 @@ class Handler extends ExceptionHandler
         }
 
         $view->setStatusCode($e->getStatusCode());
-        
+
         return $view;
     }
 

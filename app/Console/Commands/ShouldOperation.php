@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ShouldOperation.php
  *
@@ -14,12 +15,18 @@
 
 namespace App\Console\Commands;
 
+use Log;
+use Throwable;
 use App\Console\MultipleOutput;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
+use Monolog\Handler\StreamHandler;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
+use Xpressengine\Foundation\Operations\Operation;
 use Xpressengine\Foundation\Operator;
 
 /**
@@ -46,7 +53,7 @@ abstract class ShouldOperation extends Command
     /**
      * ShouldOperation constructor.
      *
-     * @param Operator $operator Operator instance
+     * @param  Operator  $operator  Operator instance
      */
     public function __construct(Operator $operator)
     {
@@ -58,19 +65,20 @@ abstract class ShouldOperation extends Command
     /**
      * Run the console command.
      *
-     * @param InputInterface  $input  input
-     * @param OutputInterface $output output
+     * @param  InputInterface  $input  input
+     * @param  OutputInterface  $output  output
      * @return int
+     * @throws Exception
      */
     public function run(InputInterface $input, OutputInterface $output)
     {
         $datetime = Carbon::now()->format('YmdHis');
-        $file = "logs/operation-{$datetime}.log";
+
+        $file = "logs/operation-$datetime.log";
         $path = $this->laravel->storagePath().DIRECTORY_SEPARATOR.$file;
 
-        $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'a'))]);
-
-        \Log::useFiles($path);
+        $output = new MultipleOutput([$output, new StreamOutput(fopen($path, 'ab'))]);
+        Log::getLogger()->pushHandler(new StreamHandler($path, 'debug'));
 
         $this->operator->log($file);
         $this->operator->save();
@@ -81,33 +89,36 @@ abstract class ShouldOperation extends Command
     /**
      * Start the operation
      *
-     * @param string        $mode     operation mode
-     * @param callable      $callback callback
-     * @param callable|null $onError  callback for error
+     * @param  string  $mode  operation mode
+     * @param  callable  $callback  callback
+     * @param  callable|null  $onError  callback for error
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
-    protected function start($mode, callable $callback, callable $onError = null)
+    protected function start(string $mode, callable $callback, callable $onError = null)
     {
         $this->operator->lock();
 
         $method = 'set'.ucfirst($mode).'Mode';
         $this->operator->$method();
 
-        $this->operator->expiresAt(Carbon::now()->addSeconds($limit = $this->getTimeLimit())->toDateTimeString());
+        $limit = $this->getTimeLimit();
+        $expiresAt = Carbon::now()->addSeconds($limit);
+
+        $this->operator->expiresAt($expiresAt->toDateTimeString());
         $this->operator->save();
 
         set_time_limit($limit);
 
         try {
-            if (0 !== $code = $this->clearCache(true)) {
-                throw new \RuntimeException('cache clear fail.. check your system.', $code);
+            $code = $this->clearCache(true);
+
+            if ($code !== 0) {
+                throw new RuntimeException('cache clear fail.. check your system.', $code);
             }
 
-            call_user_func($callback, $this->operator);
-        } catch (\Exception $e) {
-            $this->errorHandle($e, $onError);
-        } catch (\Throwable $e) {
+            $callback($this->operator);
+        } catch (Throwable $e) {
             $this->errorHandle($e, $onError);
         } finally {
             $this->operator->unlock();
@@ -119,16 +130,17 @@ abstract class ShouldOperation extends Command
     /**
      * Handle error for the operation.
      *
-     * @param \Throwable    $e        exception
-     * @param callable|null $callback callback
+     * @param  Throwable  $e  exception
+     * @param  callable|null  $callback  callback
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
-    protected function errorHandle($e, callable $callback = null)
+    protected function errorHandle(Throwable $e, callable $callback = null)
     {
         $this->setFailed($e->getCode());
-        if ($callback) {
-            call_user_func($callback, $e);
+
+        if (is_callable($callback) === true) {
+            $callback($e);
         }
 
         throw $e;
@@ -137,10 +149,10 @@ abstract class ShouldOperation extends Command
     /**
      * Start the core operation
      *
-     * @param callable      $callback callback
-     * @param callable|null $onError  callback for error
+     * @param  callable  $callback  callback
+     * @param  callable|null  $onError  callback for error
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function startCore(callable $callback, callable $onError = null)
     {
@@ -150,10 +162,10 @@ abstract class ShouldOperation extends Command
     /**
      * Start the plugin operation
      *
-     * @param callable      $callback callback
-     * @param callable|null $onError  callback for error
+     * @param  callable  $callback  callback
+     * @param  callable|null  $onError  callback for error
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function startPlugin(callable $callback, callable $onError = null)
     {
@@ -163,10 +175,10 @@ abstract class ShouldOperation extends Command
     /**
      * Start the private plugin operation
      *
-     * @param callable      $callback callback
-     * @param callable|null $onError  callback for error
+     * @param  callable  $callback  callback
+     * @param  callable|null  $onError  callback for error
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function startPrivate(callable $callback, callable $onError = null)
     {
@@ -176,10 +188,11 @@ abstract class ShouldOperation extends Command
     /**
      * Run cache clear.
      *
-     * @param bool $exceptProxy except proxy when clears the cache
+     * @param  bool  $exceptProxy  except proxy when clears the cache
      * @return int
+     * @throws \Exception
      */
-    protected function clearCache($exceptProxy = false)
+    protected function clearCache(bool $exceptProxy = false)
     {
         $this->warn('Clears the cache before the operation run.');
         $result = $this->call('cache:clear', ['--except-proxy' => $exceptProxy]);
@@ -192,6 +205,7 @@ abstract class ShouldOperation extends Command
      * Get time limit.
      *
      * @return int
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function getTimeLimit()
     {
@@ -211,10 +225,10 @@ abstract class ShouldOperation extends Command
     /**
      * Set operation failed.
      *
-     * @param int $code result code
+     * @param  int  $code  result code
      * @return void
      */
-    protected function setFailed($code = 1)
+    protected function setFailed(int $code = 1)
     {
         $this->writeResult($code === 0 ? 1 : $code);
     }
@@ -222,13 +236,16 @@ abstract class ShouldOperation extends Command
     /**
      * Write result.
      *
-     * @param int $result result code
+     * @param  int  $result  result code
      * @return void
      */
-    protected function writeResult($result)
+    protected function writeResult(int $result)
     {
         $operation = $this->operator->getOperation();
-        $result !== 0 ? $operation->failed() : $operation->succeed();
-        $this->operator->save();
+
+        if ($operation instanceof Operation) {
+            $result !== 0 ? $operation->failed() : $operation->succeed();
+            $this->operator->save();
+        }
     }
 }

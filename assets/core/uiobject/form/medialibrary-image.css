@@ -13,13 +13,13 @@
 .xeuio-ml__preview-item {
   position: relative;
   flex: 0 1 105px;
-  margin: 0;
-  padding: 8px;
+  margin: 8px;
 }
 .xeuio-ml__preview-image {
   width: 100%;
   border: 1px dotted #b3bac5;
   border-radius: 3px;
+  object-fit: cover;
 }
 
 /* buttons */
@@ -31,11 +31,19 @@
   background: transparent;
 }
 .xeuio-ml__add-item {
-  padding: 8px;
+  margin: 8px;
+  min-width: 105px;
+  min-height: 105px;
+  max-width: 105px;
+  max-height: 105px;
 }
 .xeuio-ml__add {
   width: 105px;
   height: 105px;
+  min-width: 105px;
+  min-height: 105px;
+  max-width: 105px;
+  max-height: 105px;
   background: #fafbfc;
   border: 1px dotted #b3bac5;
   border-radius: 3px;
@@ -66,4 +74,31 @@
 }
 .xeuio-ml__preview-item:hover .xeuio-ml__remove {
   display: unset;
+}
+
+
+.xeuio-medialibrary {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+.xeuio-medialibrary ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xeuio-medialibrary .xeuio-ml__preview {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.xeuio-medialibrary .xeuio-ml__preview-item {
+  display: flex;
+  width: 105px;
+  height: 105px;
+  min-width: 105px;
+  min-height: 105px;
+  max-width: 105px;
+  max-height: 105px;
 }

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Category;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
@@ -116,6 +117,52 @@ class CategoryHandler
         $this->setOrder($item);
 
         return $item;
+    }
+
+    /**
+     * Create a category item by hierarchies
+     *
+     * @param  Category  $category
+     * @param  array  $hierarchies
+     * @param  bool  $isUseTranslator
+     * @return \Illuminate\Support\Collection<CategoryItem>
+     */
+    public function createItemsByHierarchies(Category $category, array $hierarchies,  bool $isUseTranslator = false)
+    {
+        $items = \collect([]);
+
+        \collect($hierarchies)->each(function (array $hierarchy) use ($category, $items, $isUseTranslator) {
+            $hierarchy = \collect($hierarchy)->filter(static function ($word) {
+                return \is_string($word) === true;
+            });
+
+            $hierarchy->each(function (string $word, int $key) use ($category, $hierarchy, $items, $isUseTranslator) {
+                $parentName = $key > 0 ? $hierarchy->take($key)->implode('.') : null;
+                $currentName = $key > 0 ? $parentName . '.' . $word : $word;
+
+                if ($items->has($currentName) === true) {
+                    return;
+                }
+
+                $parentItem = $parentName ? $items->get($parentName) : null;
+                $itemWord = $word;
+
+                if ($isUseTranslator === true) {
+                    $wordUserKey = \XeLang::genUserKey();
+                    \XeLang::save($wordUserKey, \XeLang::getLocale(), $word);
+
+                    $itemWord = $wordUserKey;
+                }
+
+                $items[$currentName] = $this->createItem($category, [
+                    'parent_id' => optional($parentItem)->id ?? null,
+                    'word' => $itemWord,
+                    'description' => '',
+                ]);
+            });
+        });
+
+        return $items;
     }
 
     /**

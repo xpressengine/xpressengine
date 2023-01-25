@@ -28,11 +28,20 @@ use Xpressengine\User\UserInterface;
  */
 class UserGroup extends DynamicModel implements GroupInterface
 {
-    protected $table = 'user_group';
-
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
-    public $fillable = [
+    /**
+     * @var string
+     */
+    protected $table = 'user_group';
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
         'name',
         'description',
         'count',
@@ -43,6 +52,11 @@ class UserGroup extends DynamicModel implements GroupInterface
      * @var bool use dynamic query
      */
     protected $dynamic = false;
+
+    /**
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * set relationship with user groups
@@ -61,15 +75,15 @@ class UserGroup extends DynamicModel implements GroupInterface
      */
     public function userCountRelation()
     {
-        return $this->belongsToMany(User::class, 'user_group_user', 'group_id', 'user_id')->selectRaw(
-            '`group_id`, count(*) as `count`'
-        )->groupBy('group_id');
+        return $this->belongsToMany(User::class, 'user_group_user', 'group_id', 'user_id')
+            ->selectRaw('`group_id`, count(*) as `count`')
+            ->groupBy((array)'group_id');
     }
 
     /**
      * add User to this group
      *
-     * @param UserInterface $user user
+     * @param  UserInterface  $user  user
      *
      * @return static
      */
@@ -82,7 +96,7 @@ class UserGroup extends DynamicModel implements GroupInterface
     /**
      * except User
      *
-     * @param UserInterface $user user
+     * @param  UserInterface  $user  user
      *
      * @return static
      */
@@ -100,7 +114,7 @@ class UserGroup extends DynamicModel implements GroupInterface
     public function getCountAttribute()
     {
         $userCount = $this->userCountRelation->first();
-        return $userCount ? $userCount->count : 0;
+        return $userCount->count ?? 0;
     }
 
     /**
@@ -113,28 +127,21 @@ class UserGroup extends DynamicModel implements GroupInterface
         return $this->count;
     }
 
-
-    public static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot()
     {
         parent::boot();
 
-        self::creating(function($model){
-            if(!isset($model->site_key)){
+        $currentSiteKeyResolver = static function ($model) {
+            if (isset($model->site_key) === false) {
                 $model->site_key = \XeSite::getCurrentSiteKey();
             }
-        });
+        };
 
-        self::updating(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
-        self::saving(function($model){
-            if(!isset($model->site_key)){
-                $model->site_key = \XeSite::getCurrentSiteKey();
-            }
-        });
-
+        static::creating($currentSiteKeyResolver);
+        static::updating($currentSiteKeyResolver);
+        static::saving($currentSiteKeyResolver);
     }
 }

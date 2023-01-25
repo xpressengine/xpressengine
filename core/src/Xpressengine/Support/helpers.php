@@ -246,7 +246,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $locale);
+            return app('xe.translator')->get($id, $parameters, $locale);
         } catch (Exception $e) {
             return $id;
         }
@@ -268,7 +268,7 @@ if (function_exists('xe_trans_choice') === false) {
      */
     function xe_trans_choice($id, $number, array $parameters = array(), $locale = null)
     {
-        return app('xe.translator')->transChoice($id, $number, $parameters, $locale);
+        return app('xe.translator')->choice($id, $number, $parameters, $locale);
     }
 }
 
@@ -482,6 +482,21 @@ if (!function_exists('current_instance_id')) {
     }
 }
 
+if (!function_exists('current_selected_instance_ids')) {
+    /**
+     * Return current selected Instance Ids
+     *
+     * @package Xpressengine\Menu
+     *
+     * @return string
+     */
+    function current_selected_instance_ids()
+    {
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getSelectedInstanceIds();
+    }
+}
+
 if (!function_exists('current_menu')) {
 
     /**
@@ -561,9 +576,14 @@ if (!function_exists('menu_list')) {
                 }
             }
 
-            $current = $selected ?: current_instance_id();
+            $current = $selected ?: current_selected_instance_ids();
+
             if ($current !== null) {
-                $menu->setItemSelected($current);
+                $current = is_array($current) === true ? $current : [$current];
+
+                foreach ($current as $value) {
+                    $menu->setItemSelected($value);
+                }
             }
 
             $tree = $menu->getTree()->getTreeNodes();
@@ -999,25 +1019,82 @@ if (function_exists('phone_masking') === false) {
     {
         $phone = str_replace('-', '', $phone);
 
+        $arrNetId = [
+            '010', '011', '012', '013', '014', '015', '016', '017', '018', '019',
+            '030', '050', '060', '070', '080',
+            '020', '040', '090',
+            '02','031','032','033','041','043','042','044','051','052','053','054','055','061','062','063','064',
+        ];
+
         // 끝에 4개 마스킹
         $len = strlen($phone);
         $start = $offset;
 
-        /*
-         * 대상 문자가 너무 짧을 경우 마스킹을 하나 더 길게
-         * ex ) abcd => ab**
-         * ex ) abc => a**
-         */
-        if ($len <= $offset + 1) {
-            $start = $offset - 1;
+        // 통신망 식별변호 분리
+        $strPos = false;
+        foreach ($arrNetId as $netId) {
+            $strPos = strpos($phone, $netId);
+            if ($strPos !== false && $strPos === 0) {
+//                dump($strPos, $netId, $phone);
+                break;
+            }
         }
 
-        $str = substr($phone, 0, -$start);
-        for ($i = 0; $i < $start; $i++) {
-            $str .= '*';
+        if ($strPos !== false && $netId) {
+            $a = $len - strlen($netId) - 4;
+            $masking = '';
+            for($i=0; $i<$a; $i++) {
+                $masking .= '*';
+            }
+
+//            $str = $netId . '-' . $masking . '-' . substr($phone, -4) . '('.$phone.')';
+            $str = $netId . '-' . $masking . '-' . substr($phone, -4);
+        } else {
+            /*
+             * 대상 문자가 너무 짧을 경우 마스킹을 하나 더 길게
+             * ex ) abcd => ab**
+             * ex ) abc => a**
+             */
+            if ($len <= $offset + 1) {
+                $start = $offset - 1;
+            }
+
+            $str = substr($phone, 0, -$start);
+            for ($i = 0; $i < $start; $i++) {
+                $str .= '*';
+            }
         }
 
         return $str;
+    }
+}
 
+if (function_exists('is_home') === false) {
+    /**
+     * 현재 라우트가 홈인지 확인합니다.
+     *
+     * @return bool
+     */
+    function is_home() {
+        return app('xe.site')->getHomeInstanceId() === current_instance_id();
+    }
+}
+
+if (function_exists('is_settings') === false) {
+    /**
+     * 현재 관리자 세팅 (settings) 페이지인지 확인합니다.
+     *
+     * @return bool
+     */
+    function is_settings() {
+        $currentRoute = request()->route();
+
+        if (($currentRoute instanceof \Illuminate\Routing\Route) === false) {
+            return null;
+        }
+
+        $middlewares = $currentRoute->getAction('middleware') ?? [];
+
+        return in_array('settings', $middlewares, true) === true;
     }
 }

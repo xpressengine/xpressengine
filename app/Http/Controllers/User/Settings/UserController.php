@@ -190,12 +190,15 @@ class UserController extends Controller
     {
         $rules = [
             'email' => 'email|required',
-            'login_id' => 'required|login_id',
-            'password' => 'required|password',
+            'password' => 'required|xe_password',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
             $rules['display_name'] = 'required';
+        }
+
+        if ($this->handler->isUseLoginId() === true) {
+            $rules['login_id'] = 'required|login_id';
         }
 
         $this->validate($request, $rules);
@@ -310,13 +313,16 @@ class UserController extends Controller
 
         $rules = [
             'email' => 'email',
-            'login_id' => 'required|login_id',
             'rating' => 'required',
             'status' => 'required',
         ];
 
         if (app('xe.config')->getVal('user.register.use_display_name') === true) {
             $rules['display_name'] = 'required';
+        }
+
+        if ($this->handler->isUseLoginId() === true) {
+            $rules['login_id'] = 'required|login_id';
         }
 
         $this->validate($request, $rules);

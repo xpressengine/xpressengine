@@ -283,7 +283,7 @@ class MediaLibraryFileRepository
             $fileItem->user->addVisible(['profile_image_url']);
         }
 
-        if (!empty($fileItem->file)) {
+        if (empty($fileItem->file)  === false && \Storage::disk($fileItem->file->disk)->exists($fileItem->file->getPathname()) === true) {
             if (\XeMedia::is($fileItem->file) == true) {
                 $media = \XeMedia::getHandlerByFile($fileItem->file)->make($fileItem->file);
 

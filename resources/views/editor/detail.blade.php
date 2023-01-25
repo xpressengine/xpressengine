@@ -199,7 +199,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="clearfix">
-                                        <label>php.ini 설정 값</label>
+                                        <label>{{ xe_trans('xe::phpIniSettings') }}</label>
                                     </div>
 
                                     <div class="clearfix">

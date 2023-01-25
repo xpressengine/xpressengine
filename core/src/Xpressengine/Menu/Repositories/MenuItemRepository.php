@@ -16,6 +16,7 @@ namespace Xpressengine\Menu\Repositories;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\CacheableEloquentRepositoryTrait;
 
@@ -68,7 +69,7 @@ class MenuItemRepository
      *
      * @var int
      */
-    const DUPLICATE_RETRY_CNT = 3;
+    public const DUPLICATE_RETRY_CNT = 3;
 
     /**
      * MenuItemRepository constructor.
@@ -103,11 +104,13 @@ class MenuItemRepository
 
                 $this->clearCache();
 
-                $this->dispatcher->fire('xe.menu.menuitem.created', $model);
+                $this->dispatcher->dispatch('xe.menu.menuitem.created', $model);
 
                 break;
             } catch (QueryException $e) {
-                if (++$cnt >= static::DUPLICATE_RETRY_CNT || $e->getCode() != "23000") {
+                ++$cnt;
+
+                if ($cnt >= static::DUPLICATE_RETRY_CNT || $e->getCode() !== '23000') {
                     throw $e;
                 }
             }
@@ -119,15 +122,16 @@ class MenuItemRepository
     /**
      * Delete a menu item
      *
-     * @param MenuItem $item menu item
+     * @param  MenuItem  $item  menu item
      * @return bool|null
+     * @throws \Exception
      */
     public function delete(MenuItem $item)
     {
         $item->ancestors(false)->detach();
 
         $result = $this->traitDelete($item);
-        $this->dispatcher->fire('xe.menu.menuitem.deleted', $item);
+        $this->dispatcher->dispatch('xe.menu.menuitem.deleted', $item);
 
         return $result;
     }
@@ -143,6 +147,63 @@ class MenuItemRepository
     {
         return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($ids, $with) {
             return $this->query()->with($with)->whereIn('id', $ids)->get();
+        });
+    }
+
+    /**
+     * @param string $url
+     * @param array $with
+     * @return mixed
+     */
+    public function fetchByUrl(string $url, array $with = [])
+    {
+        return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($url, $with) {
+            $parsedUrl = parse_url($url);
+            $urlPath = str_replace_first('/', '', Arr::get($parsedUrl, 'path', ''));
+
+            parse_str(Arr::get($parsedUrl, 'query', ''), $urlQueries);
+
+            $menuItems = $this->fetchByUrlPath($urlPath, $with)
+                ->transform(static function (MenuItem $menuItem) {
+                    $parsedMenuItemUrl = parse_url($menuItem->url);
+                    $menuItemUrlPath = Arr::get($parsedMenuItemUrl, 'path', '');
+
+                    if ($menuItemUrlPath !== '' && $menuItemUrlPath[0]  === '/') {
+                        $menuItemUrlPath = str_replace_first('/', '', $menuItemUrlPath);
+                    }
+
+                    parse_str(Arr::get($parsedMenuItemUrl, 'query', ''), $menuItemUrlQueries);
+
+                    $menuItem->setAttribute('url_path', $menuItemUrlPath);
+                    $menuItem->setAttribute('url_queries', $menuItemUrlQueries);
+
+                    return $menuItem;
+                })
+                ->filter(static function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
+                    $arrayDiff = array_diff_assoc($menuItem->url_queries, $urlQueries);
+                    return $urlPath === $menuItem->url_path && empty($arrayDiff) === true;
+                });
+
+            $containedUrlMenuItems = $menuItems->filter(
+                static function (MenuItem $menuItem) use ($urlPath, $urlQueries) {
+                    $arrayDiff = array_diff_assoc($urlQueries, $menuItem->url_queries);
+                    return $urlPath === $menuItem->url_path && empty($arrayDiff) === true;
+                }
+            );
+
+            return $containedUrlMenuItems->isNotEmpty() === true ? $containedUrlMenuItems : $menuItems;
+        });
+    }
+
+    /**
+     * @param string $urlPath
+     * @param array $with
+     * @return mixed
+     */
+    protected function fetchByUrlPath(string $urlPath, array $with = [])
+    {
+        return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($urlPath, $with) {
+            return $this->query()->with($with)->where('url', 'like', $urlPath . '%')->get();
         });
     }
 
@@ -178,7 +239,7 @@ class MenuItemRepository
      * @param string $aggregator aggregator class
      * @return void
      */
-    protected static function setAggregator($aggregator)
+    protected static function setAggregator(string $aggregator)
     {
         $model = static::getModel();
         $model::setAggregatorModel($aggregator);

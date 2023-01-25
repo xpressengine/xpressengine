@@ -20,6 +20,27 @@
 |
 */
 
+/**
+ * Path: /api/category-items
+ * Alias: category_items.*
+ */
+Route::group(['prefix' => '/api/category-items'], static function () {
+    /**
+     * Path: /api/category-items/{id}
+     */
+    Route::group(['prefix' => '/{id}', 'where' => ['id' => '[0-9]+']], static function () {
+        /**
+         * Path: /api/category-items/{id}/children
+         * Alias: category_items.children
+         * Method: GET
+         */
+        Route::get('/children', [
+            'as' => 'category_items.children',
+            'uses' => 'CategoryItemController@getChildren'
+        ]);
+    });
+});
+
 Route::settings(
     '/',
     function () {
@@ -53,7 +74,7 @@ Route::group(
     ['prefix' => 'lang'],
     function() {
         Route::match(array('GET', 'POST'),'lines/many', ['as' => 'lang.lines.many', 'uses' => 'LangController@getLinesMany']);
-        Route::get('lines/{key}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('lines/{key?}', ['as' => 'lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'lang.search', 'uses' => 'LangController@searchKeyword']);
     }
 );
@@ -811,7 +832,7 @@ Route::settings(
 
             });
 
-            Route::group(['prefix' => '{pluginId}'], function () {
+            Route::group(['prefix' => '{pluginId?}'], function () {
                 Route::get('/', [
                     'as' => 'settings.plugins.show',
                     'uses' => 'Plugin\PluginManageController@show',
@@ -869,9 +890,15 @@ Route::settings(
 );
 
 Route::settings('category', function () {
+    // 전체 카테고리
+    Route::get('/', [
+        'as' => 'manage.category.index',
+        'uses' => 'CategoryController@index',
+        'settings_menu' => 'contents.category'
+    ]);
 
     // 이하 신규
-    Route::group(['prefix' => '{id}', 'where' => ['id' => '[0-9]+']], function () {
+    Route::group(['prefix' => '{id?}', 'where' => ['id' => '[0-9]+']], function () {
         Route::get('/', ['as' => 'manage.category.show', 'uses' => 'CategoryController@show']);
         Route::post('item/store', [
             'as' => 'manage.category.edit.item.store',
@@ -980,7 +1007,7 @@ Route::group(['prefix' => 'media_library'], function () {
             'as' => 'media_library.move_file',
             'uses' => 'MediaLibrary\MediaLibraryController@moveFile'
         ]);
-        Route::get('/{mediaLibraryFileId}/download', [
+        Route::get('/{mediaLibraryFileId?}/download', [
             'as' => 'media_library.download_file',
             'uses' => 'MediaLibrary\MediaLibraryController@download'
         ]);

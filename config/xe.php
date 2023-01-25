@@ -182,6 +182,12 @@ return [
                 'description' => '',
                 'ordering' => 500
             ],
+            'contents.category' => [
+                'title' => 'xe::category',
+                'display' => true,
+                'description' => '',
+                'ordering' => 600
+            ],
             'theme' => [
                 'title' => 'xe::themeDesign',
                 'display' => true,

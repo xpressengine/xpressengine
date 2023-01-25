@@ -111,7 +111,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-default" data-control="col">{{ xe_trans('xe::addCell') }}</button>
                                 <button type="button" class="btn btn-sm btn-default" data-control="opt">{{ xe_trans('xe::addOption') }}</button>
-                                <button type="button" class="btn btn-sm btn-default" data-control="container">컨테이너 옵션 추가</button>
+                                <button type="button" class="btn btn-sm btn-default" data-control="container">{{ xe_trans('xe::addContainerOption') }}</button>
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,6 @@
             <div style="position: absolute; z-index:10; width: 375px; height: 812px; top:50%; margin-top: -406px; left:50%; margin-left: -191px; right:0; bottom:0; pointer-events: none; z-index:10; background: url('/assets/core/widgetbox/img/iphone-frame.png'); background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
             <iframe id="preview" style="width: 375px; height: 812px; padding: 100px 24px 77px 24px; box-sizing: border-box; border:none; outline: none;"></iframe>
         </div>
-    </div>
     </div>
     </div>
     <!--widget layer  -->

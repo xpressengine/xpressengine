@@ -149,11 +149,11 @@ class UnknownUser implements UserInterface
     /**
      * 회원이 소유한 계정 중에 주어진 provider를 가진 계정을 반환한다.
      *
-     * @param string $provider provider
+     * @param  string  $provider provider
      *
      * @return null
      */
-    public function getAccountByProvider($provider)
+    public function getAccountByProvider(string $provider)
     {
         return null;
     }

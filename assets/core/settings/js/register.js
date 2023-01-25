@@ -22,7 +22,16 @@ $(function () {
     $areaSettingPassword.toggle()
   })
 
-  // satar:display_name
+  // start:login_id
+  // wrap
+  var $wrapLoginId = $('.__regsetting-loginid-wrap');
+
+  $wrapLoginId.find('[name=use_login_id]').on('change', function () {
+    $('[name=require_login_id]').prop('checked', $(this).prop('checked'))
+  })
+  // end:login_id
+
+  // start:display_name
   // wrap
   var $wrapDisplayname = $('.__regsetting-displayname-wrap')
   $wrapDisplayname.find('.__btn-setting-display-name').on('click', function () {

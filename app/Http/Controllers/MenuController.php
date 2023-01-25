@@ -62,15 +62,19 @@ class MenuController extends Controller
 
         $transKey = [];
         foreach ($menus as $menu) {
+            $menu->setVisible(['id', 'title', 'count', 'ordering']);
             foreach ($menu->items as $item) {
                 $transKey[] = $item->title;
+                $item->setVisible(['id', 'menu_id', 'parent_id', 'title', 'url', 'type', 'ordering', 'activated']);
             }
         }
 
         // 메뉴 어드민 트리 뷰에서 필요한 고유 다국어
         XeFrontend::translation(['xe::addMenu', 'xe::addItem', 'xe::goLink', 'xe::setHome']);
+
         // 메뉴 타이틀 user 다국어
         XeFrontend::translation($transKey);
+
         return XePresenter::make('menu.index',
             ['siteKey' => $siteKey, 'menus' => $menus, 'home' => $homeMenuId, 'maxDepth' => $menuMaxDepth]
         );
@@ -816,9 +820,13 @@ class MenuController extends Controller
         $this->validate($request, ['itemId' => 'required']);
 
         $itemId = $request->get('itemId');
+        $item = XeMenu::items()->query()->where('activated', true)->find($itemId);
+
+        if ($item === null) {
+            throw (new ModelNotFoundException())->setModel(MenuItem::class);
+        }
 
         XeSite::setHomeInstanceId($itemId);
-
         return XePresenter::makeApi([$itemId]);
     }
 }

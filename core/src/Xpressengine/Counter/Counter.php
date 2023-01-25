@@ -216,13 +216,23 @@ class Counter
         $this->checkOption($option);
         $this->checkGuest($user);
 
-        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
-            $this->newModel()->where('target_id', $targetId)->where('ipaddress', $this->request->ip())
-                ->where('counter_name', $this->name)->where('counter_option', $option)->delete();
-        } else {
-            $this->newModel()->where('target_id', $targetId)->where('user_id', $user->getId())
-                ->where('counter_name', $this->name)->where('counter_option', $option)->delete();
+        if ($this->guest === true && ($user === null || $user instanceof Guest)) {
+            $this->newModel()
+                ->where('target_id', $targetId)
+                ->where('ipaddress', $this->request->ip())
+                ->where('user_id', '')
+                ->where('counter_name', $this->name)
+                ->where('counter_option', $option)->delete();
+
+            return;
         }
+
+        $this->newModel()
+            ->where('target_id', $targetId)
+            ->where('user_id', $user->getId())
+            ->where('counter_name', $this->name)
+            ->where('counter_option', $option)
+            ->delete();
     }
 
     /**
@@ -236,12 +246,20 @@ class Counter
     public function get($targetId, UserInterface $user = null, $option = '')
     {
         if ($this->guest === true && ($user === null || $user instanceof Guest)) {
-            return $this->newModel()->where('target_id', $targetId)->where('ipaddress', $this->request->ip())
-                ->where('counter_name', $this->name)->where('counter_option', $option)->first();
-        } else {
-            return $this->newModel()->where('target_id', $targetId)->where('user_id', $user->getId())
-                ->where('counter_name', $this->name)->where('counter_option', $option)->first();
+            return $this->newModel()
+                ->where('target_id', $targetId)
+                ->where('ipaddress', $this->request->ip())
+                ->where('user_id', '')
+                ->where('counter_name', $this->name)
+                ->where('counter_option', $option)->first();
         }
+
+        return $this->newModel()
+            ->where('target_id', $targetId)
+            ->where('user_id', $user->getId())
+            ->where('counter_name', $this->name)
+            ->where('counter_option', $option)
+            ->first();
     }
 
     /**
@@ -255,13 +273,20 @@ class Counter
      */
     public function getByName($targetId, UserInterface $user = null)
     {
-        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
-            return $this->newModel()->where('target_id', $targetId)->where('ipaddress', $this->request->ip())
-                ->where('counter_name', $this->name)->first();
-        } else {
-            return $this->newModel()->where('target_id', $targetId)->where('user_id', $user->getId())
-                ->where('counter_name', $this->name)->first();
+        if ($this->guest === true && ($user === null || $user instanceof Guest)) {
+            return $this->newModel()
+                ->where('target_id', $targetId)
+                ->where('ipaddress', $this->request->ip())
+                ->where('user_id', '')
+                ->where('counter_name', $this->name)
+                ->first();
         }
+
+        return $this->newModel()
+            ->where('target_id', $targetId)
+            ->where('user_id', $user->getId())
+            ->where('counter_name', $this->name)
+            ->first();
     }
 
     /**

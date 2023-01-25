@@ -87,8 +87,8 @@ use Xpressengine\User\Models\User;
                                 <div class="form-group input-group-btn">
                                     <div class="input-group">
                                         <span class="input-group-addon">{{xe_trans('xe::signUpDate')}}</span>
-                                        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="{{ Request::get('startDate') }}">
-                                        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="{{ Request::get('endDate') }}">
+                                        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="{{ Request::get('startDate') }}" placeholder="{{ xe_trans('xe::enterStartDate') }}">
+                                        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="{{ Request::get('endDate') }}" placeholder="{{ xe_trans('xe::enterEndDate') }}">
                                     </div>
                                 </div>
                                 @foreach(Request::except(['keyfield','keyword','page','startDate', 'endDate']) as $name => $value)
@@ -104,13 +104,17 @@ use Xpressengine\User\Models\User;
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
-                            <th scope="col">
-                                @if ($config->get('use_display_name') === true)
-                                    {{xe_trans($config->get('display_name_caption'))}}
-                                @else
-                                    {{xe_trans('xe::id')}}
-                                @endif
-                            </th>
+
+                            @if ($config->get('use_display_name') === true || app('xe.user')->isUseLoginId() === true)
+                                <th scope="col">
+                                    @if ($config->get('use_display_name') === true)
+                                        {{xe_trans($config->get('display_name_caption'))}}
+                                    @else
+                                        {{xe_trans('xe::id')}}
+                                    @endif
+                                </th>
+                            @endif
+
                             <th scope="col" class="text-center">{{xe_trans('xe::account')}}</th>
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
@@ -124,17 +128,21 @@ use Xpressengine\User\Models\User;
                         @foreach($users as $user)
                         <tr>
                             <td><input name="userId[]" class="__xe_checkbox" type="checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif></td>
-                            <td>
-                                <img data-toggle="xe-page-toggle-menu"
-                                        data-url="{{ route('toggleMenuPage') }}"
-                                        data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="user-profile">
-                                <span>
-                                    <a href="#"
-                                       data-toggle="xe-page-toggle-menu"
-                                       data-url="{{ route('toggleMenuPage') }}"
-                                       data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a>
-                               </span>
-                            </td>
+
+                            @if ($config->get('use_display_name') === true || app('xe.user')->isUseLoginId() === true)
+                                <td>
+                                    <img data-toggle="xe-page-toggle-menu"
+                                         data-url="{{ route('toggleMenuPage') }}"
+                                         data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="user-profile">
+                                    <span>
+                                        <a href="#"
+                                           data-toggle="xe-page-toggle-menu"
+                                           data-url="{{ route('toggleMenuPage') }}"
+                                           data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a>
+                                   </span>
+                                </td>
+                            @endif
+
                             <td class="text-center">
                                 @if(count($user->accounts))
                                     @foreach($user->accounts as $account)

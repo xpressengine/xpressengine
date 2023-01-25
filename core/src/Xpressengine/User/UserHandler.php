@@ -99,16 +99,16 @@ class UserHandler
     /**
      * constructor.
      *
-     * @param UserRepositoryInterface         $users         User 회원 저장소
-     * @param UserAccountRepositoryInterface  $accounts      UserAccount 회원계정 저장소
-     * @param UserGroupRepositoryInterface    $groups        UserGroup 그룹 저장소
-     * @param UserEmailRepositoryInterface    $mails         회원 이메일 저장소
-     * @param PendingEmailRepositoryInterface $pendingEmails 회원 등록대기 이메일 저장소
-     * @param UserImageHandler                $imageHandler  image handler
-     * @param Hasher                          $hasher        해시코드 생성기, 비밀번호 해싱을 위해 사용됨
-     * @param Validator                       $validator     유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
-     * @param ConfigManager                   $configManager ConfigManager
-     * @param Dispatcher                      $events        event dispatcher
+     * @param  UserRepositoryInterface  $users  User 회원 저장소
+     * @param  UserAccountRepositoryInterface  $accounts  UserAccount 회원계정 저장소
+     * @param  UserGroupRepositoryInterface  $groups  UserGroup 그룹 저장소
+     * @param  UserEmailRepositoryInterface  $mails  회원 이메일 저장소
+     * @param  PendingEmailRepositoryInterface  $pendingEmails  회원 등록대기 이메일 저장소
+     * @param  UserImageHandler  $imageHandler  image handler
+     * @param  Hasher  $hasher  해시코드 생성기, 비밀번호 해싱을 위해 사용됨
+     * @param  Validator  $validator  유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param  ConfigManager  $configManager  ConfigManager
+     * @param  Dispatcher  $events  event dispatcher
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -132,6 +132,22 @@ class UserHandler
         $this->imageHandler = $imageHandler;
         $this->configManager = $configManager;
         $this->events = $events;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUseDisplayName()
+    {
+        return $this->configManager->getVal('user.register.use_display_name') === true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUseLoginId()
+    {
+        return $this->configManager->getVal('user.register.use_login_id', true) === true;
     }
 
     /**
@@ -187,16 +203,26 @@ class UserHandler
     /**
      * 주어진 정보로 신규회원을 등록한다. 회원정보에 대한 유효성검사도 병행하며, 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 추가한다.
      *
-     * @param array $data 신규회원 정보
+     * @param  array  $data  신규회원 정보
      *
      * @return UserInterface 신규 등록된 회원정보
      */
     public function create(array $data)
     {
         $data['rating'] = $data['rating'] ?? Rating::USER;
-        $data['status'] = $data['status'] ?? $this->configManager->getVal('user.register.register_process', User::STATUS_ACTIVATED);
-        if ($this->configManager->getVal('user.register.use_display_name') === false && isset($data['display_name']) === false) {
-            $data['display_name'] = $data['login_id'];
+        $data['status'] = $data['status'] ?? $this->configManager->getVal(
+                'user.register.register_process',
+                User::STATUS_ACTIVATED
+            );
+
+        if ($this->isUseLoginId() === false) {
+            $data['login_id'] = $data['email'];
+        }
+
+        if (isset($data['display_name']) === false && $this->configManager->getVal(
+                'user.register.use_display_name'
+            ) === false) {
+            $data['display_name'] = $this->isUseLoginId() === true ? $data['login_id'] : $data['email'];
         }
 
         $this->validateForCreate($data);
@@ -234,9 +260,11 @@ class UserHandler
 
         $groupIds = array_get($data, 'group_id', []);
         //설치단계에선 그룹생성보다 이게 먼저여서 패스해야됨.
-        if (count($groupIds) < 1 && $joinGroup != null) $groupIds[] = $joinGroup;
+        if (count($groupIds) < 1 && $joinGroup != null) {
+            $groupIds[] = $joinGroup;
+        }
 
-        if(count($groupIds) > 0){
+        if (count($groupIds) > 0) {
             $user->joinGroups($groupIds);
         }
 
@@ -276,8 +304,8 @@ class UserHandler
      * 회원정보를 업데이트 한다.
      * 필드: email, display_name, password, status, introduction, profile_img_file, group_id
      *
-     * @param UserInterface $user     user
-     * @param array         $userData user data
+     * @param  UserInterface  $user  user
+     * @param  array  $userData  user data
      *
      * @return UserInterface
      */
@@ -323,15 +351,14 @@ class UserHandler
     /**
      * 회원탈퇴 처리를 한다. 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 삭제한다.
      *
-     * @param string|string[] $userIds 탈퇴할 회원의 회원아이디 목록
+     * @param  string|string[]  $userIds  탈퇴할 회원의 회원아이디 목록
      *
      * @return void
      */
     public function leave($userIds)
     {
-
         /** @var UserInterface[] $users */
-        $users = $this->users()->whereIn('id', (array) $userIds)->with(['groups', 'emails'])->get();
+        $users = $this->users()->whereIn('id', (array)$userIds)->with(['groups', 'emails'])->get();
 
         $ratings = array_pluck($users, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
@@ -358,7 +385,7 @@ class UserHandler
     /**
      * 신규회원의 정보를 유효성 검사한다.
      *
-     * @param array $data 회원의 정보
+     * @param  array  $data  회원의 정보
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
@@ -384,7 +411,9 @@ class UserHandler
         }
 
         // displayName 검사
-        $this->validateDisplayName($data['display_name']);
+        if ($this->isUseDisplayName() === true) {
+            $this->validateDisplayName($data['display_name']);
+        }
 
         // account 검사
         if (isset($data['account'])) {
@@ -404,16 +433,16 @@ class UserHandler
      * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름 형식검사 및 옵션에 따른 중복검사를 병행한다.
      * 3.0.8 버전부터 중복 허용 가능 옵션 추가
      *
-     * @param string             $name 유효성 검사를 할 표시이름
-     * @param UserInterface|null $user user object
+     * @param  string  $name  유효성 검사를 할 표시이름
+     * @param  UserInterface|null  $user  user object
      *
      * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function validateDisplayName($name, UserInterface $user = null)
+    public function validateDisplayName(string $name, UserInterface $user = null)
     {
-        if (empty($name)) {
-            $name = null;
-        }
+        $displayNameCaption = xe_trans(app('xe.config')->getVal('user.register.display_name_caption'));
+        $name = empty($name) ? null : $name;
 
         $displayNameRules = ['display_name'];
         if (app('xe.config')->getVal('user.register.display_name_unique') === true) {
@@ -427,7 +456,7 @@ class UserHandler
         $this->validator->make(
             ['display_name' => $name],
             ['display_name' => $displayNameRules]
-        )->validate();
+        )->setAttributeNames(['display_name' => $displayNameCaption])->validate();
 
         return true;
     }
@@ -435,8 +464,8 @@ class UserHandler
     /**
      * LoginId에 대한 유효성 검사
      *
-     * @param string             $loginId 유효성 검사를 할 LoginId
-     * @param UserInterface|null $user    user object
+     * @param  string  $loginId  유효성 검사를 할 LoginId
+     * @param  UserInterface|null  $user  user object
      *
      * @return bool
      */
@@ -463,7 +492,7 @@ class UserHandler
     /**
      * validateEmail
      *
-     * @param string $address email address
+     * @param  string  $address  email address
      *
      * @return bool
      */
@@ -475,12 +504,14 @@ class UserHandler
 
         $this->validator->make(
             ['email' => $address],
-            ['email' => [
-                'email',
-                'required',
-                Rule::unique('user', 'email'),
-                Rule::unique('user_account', 'email'),
-            ]]
+            [
+                'email' => [
+                    'email',
+                    'required',
+                    Rule::unique('user', 'email'),
+                    Rule::unique('user_account', 'email'),
+                ]
+            ]
         )->validate();
 
         return true;
@@ -489,8 +520,8 @@ class UserHandler
     /**
      * 회원의 정보를 업데이트할 때 필요한 유효성 검사를 한다.
      *
-     * @param UserInterface $user user
-     * @param array         $data data
+     * @param  UserInterface  $user  user
+     * @param  array  $data  data
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
@@ -514,7 +545,7 @@ class UserHandler
     /**
      * 새로운 그룹을 추가한다.
      *
-     * @param array $data data
+     * @param  array  $data  data
      *
      * @return GroupInterface
      */
@@ -527,8 +558,8 @@ class UserHandler
     /**
      * 그룹을 수정한다
      *
-     * @param GroupInterface $group group
-     * @param array          $data  data
+     * @param  GroupInterface  $group  group
+     * @param  array  $data  data
      *
      * @return GroupInterface
      */
@@ -541,7 +572,7 @@ class UserHandler
     /**
      * 그룹을 삭제한다
      *
-     * @param GroupInterface $group group
+     * @param  GroupInterface  $group  group
      *
      * @return bool
      */
@@ -553,9 +584,9 @@ class UserHandler
     /**
      * 새로운 이메일을 생성한다
      *
-     * @param UserInterface $user      user
-     * @param array         $data      data
-     * @param bool          $confirmed confirmed
+     * @param  UserInterface  $user  user
+     * @param  array  $data  data
+     * @param  bool  $confirmed  confirmed
      *
      * @return EmailInterface
      */
@@ -572,8 +603,8 @@ class UserHandler
     /**
      * 이메일을 수정한다
      *
-     * @param EmailInterface $email email
-     * @param array          $data  data
+     * @param  EmailInterface  $email  email
+     * @param  array  $data  data
      *
      * @return EmailInterface
      */
@@ -590,7 +621,7 @@ class UserHandler
     /**
      * 이메일을 삭제한다
      *
-     * @param EmailInterface $email email
+     * @param  EmailInterface  $email  email
      *
      * @return bool
      */
@@ -606,8 +637,8 @@ class UserHandler
     /**
      * 새로운 계정을 추가한다.
      *
-     * @param UserInterface $user user
-     * @param array         $data data
+     * @param  UserInterface  $user  user
+     * @param  array  $data  data
      *
      * @return AccountInterface
      */
@@ -619,8 +650,8 @@ class UserHandler
     /**
      * 계정을 수정한다
      *
-     * @param AccountInterface $account account
-     * @param array            $data    data
+     * @param  AccountInterface  $account  account
+     * @param  array  $data  data
      *
      * @return AccountInterface
      */
@@ -633,7 +664,7 @@ class UserHandler
     /**
      * 계정을 삭제한다
      *
-     * @param string $account account
+     * @param  string  $account  account
      *
      * @return void
      */
@@ -659,8 +690,8 @@ class UserHandler
     /**
      * Set a menu for user setting page
      *
-     * @param string $id    id
-     * @param array  $value value
+     * @param  string  $id  id
+     * @param  array  $value  value
      * @return void
      */
     public static function setSettingsSections($id, $value)
@@ -681,7 +712,7 @@ class UserHandler
     /**
      * Set register form parts
      *
-     * @param array $parts form parts
+     * @param  array  $parts  form parts
      * @return void
      */
     public static function setRegisterParts($parts = [])
@@ -696,7 +727,7 @@ class UserHandler
     /**
      * Add register form part
      *
-     * @param string $class form part class
+     * @param  string  $class  form part class
      * @return void
      */
     public static function addRegisterPart($class)
@@ -707,7 +738,7 @@ class UserHandler
     /**
      * Set Container instance
      *
-     * @param Container $container container instance
+     * @param  Container  $container  container instance
      * @return void
      */
     public static function setContainer(Container $container)
@@ -728,8 +759,8 @@ class UserHandler
     /**
      * __call
      *
-     * @param string $method     method name
-     * @param array  $parameters parameters
+     * @param  string  $method  method name
+     * @param  array  $parameters  parameters
      *
      * @return mixed
      */
