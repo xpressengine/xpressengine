@@ -2,7 +2,7 @@
     $extensionEntity = $pluginHandler->getPlugin(data_get($extension, 'plugin_id'));
 @endphp
 <li @if ($extensionEntity != null && $extensionEntity->isActivated()) class="active" @endif>
-    <a href="{{route('settings.plugins.detail', ['pluginName' => data_get($extension, 'plugin_id')])}}" data-toggle="xe-page-modal">
+    <a href="{{route('settings.plugins.detail', ['pluginId' => data_get($extension, 'plugin_id')])}}" data-toggle="xe-page-modal">
         <span class="blind">카드 이미지</span>
         <div class="list-card__image">
             <div class="list-card__image-content" style="background-image: url({{$extension->icon}})"></div>
