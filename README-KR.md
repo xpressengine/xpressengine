@@ -27,10 +27,10 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 
 ## 시작하기
 
-XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](https://www.xpressengine.com/guide/getting-started/installation)
+XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [설치 가이드](https://www.xpressengine.com/guide/getting-started/installation)
 
 ## Xehub 커뮤니티 개발자
-[akasima](https://github.com/akasima) [jhyeon1010](https://github.com/jhyeon1010) [sirwoongke](https://github.com/woongbin) [mjae404](https://github.com/mjae404)
+[akasima](https://github.com/akasima) [Park Suhyeon](https://github.com/xharpenParksuhyeon) [Bi Kim](https://github.com/bi-kim) [Park Gitae](https://github.com/HighK)
 
 ## 매뉴얼
 * 한글 매뉴얼 : https://www.xpressengine.com/guide/README
@@ -39,10 +39,9 @@ XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인
 ## 지원
 * 공식 사이트 : https://www.xpressengine.com/
 * 공식 포럼 : https://www.xpressengine.com/qna/
-* 슬랙 : https://www.xpressengine-forum-invite.herokuapp.com/
 
 ## 라이센스
-Copyright 2020 XEHub Corp. <https://www.xehub.io>
+Copyright 2020 Xehub Corp. <https://www.xpressengine.com>
 
 "XpressEngine (XE)" is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -59,4 +58,4 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 ## Powered By
-* Xpressengine : https://www.xpressengine.com
+* XpressEngine : https://www.xpressengine.com
