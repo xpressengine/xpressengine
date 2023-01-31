@@ -30,19 +30,18 @@ Laravel is one of the most modern PHP frameworks and the most popular among them
 To install XE3, refer to the following guide. [Install guide](https://www.xpressengine.com/guide/getting-started/installation)
 
 ## Maintainers
-[akasima](https://github.com/akasima) [jhyeon1010](https://github.com/jhyeon1010) [sirwoongke](https://github.com/woongbin) [mjae404](https://github.com/mjae404)
+[akasima](https://github.com/akasima) [Park Suhyeon](https://github.com/xharpenParksuhyeon) [Bi Kim](https://github.com/bi-kim) [Park Gitae](https://github.com/HighK) [HanGyeol Kim](https://github.com/gyorudayo)
 
 ## Documentation
-* Documentation Site (Korean) : https://www.xpressengine.io/guide/README
-* Front-end Documentation Site (Korean) : https://www.xpressengine.io/guide/js/js
+* Documentation Site (Korean) : https://www.xpressengine.com/guide/README
+* Front-end Documentation Site (Korean) : https://www.xpressengine.com/guide/js/js
 
 ## Support
 * Official site (Korean) : https://www.xpressengine.com/
 * Official Forum : https://www.xpressengine.com/qna/
-* Slack : https://xpressengine-forum-invite.herokuapp.com/
 
 ## License
-Copyright 2020 XEHub Corp. <https://www.xehub.io>
+Copyright 2020 Xehub Corp. <https://www.xpressengine.com>
 
 "XpressEngine (XE)" is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -59,4 +58,4 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 ## Powered By
-* Xpressengine : https://www.xpressengine.com
+* XpressEngine : https://www.xpressengine.com
