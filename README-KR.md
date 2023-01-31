@@ -30,7 +30,7 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [설치 가이드](https://www.xpressengine.com/guide/getting-started/installation)
 
 ## Xehub 커뮤니티 개발자
-[akasima](https://github.com/akasima) [Park Suhyeon](https://github.com/xharpenParksuhyeon) [Bi Kim](https://github.com/bi-kim) [Park Gitae](https://github.com/HighK)
+[akasima](https://github.com/akasima) [Park Suhyeon](https://github.com/xharpenParksuhyeon) [Bi Kim](https://github.com/bi-kim) [Park Gitae](https://github.com/HighK) [HanGyeol Kim](https://github.com/gyorudayo)
 
 ## 매뉴얼
 * 한글 매뉴얼 : https://www.xpressengine.com/guide/README
