@@ -280,7 +280,7 @@ class MediaLibraryFileRepository
     {
         if ($fileItem->user != null) {
             $fileItem->user->setAttribute('profile_image_url', $fileItem->user->getProfileImage());
-            $fileItem->user->addVisible(['profile_image_url']);
+            $fileItem->user->makeVisible(['profile_image_url']);
         }
 
         if (empty($fileItem->file)  === false && \Storage::disk($fileItem->file->disk)->exists($fileItem->file->getPathname()) === true) {
@@ -312,7 +312,7 @@ class MediaLibraryFileRepository
             }
 
             $fileItem->file->setAttribute('download_url', route('media_library.download_file', ['file_id' => $fileItem->id]));
-            $fileItem->file->addVisible(['path', 'filename', 'url', 'download_url', 'thumbnail_url', 'width', 'height']);
+            $fileItem->file->makeVisible(['path', 'filename', 'url', 'download_url', 'thumbnail_url', 'width', 'height']);
         }
     }
 
