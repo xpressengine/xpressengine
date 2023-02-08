@@ -325,6 +325,17 @@ abstract class DynamicModel extends Model
     }
 
     /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date  datetime object
+     * @return string
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Handle dynamic method calls into the model.
      *
      * @param string $method     method
