@@ -63,6 +63,7 @@ return [
             'secret' => 'your-secret-key',
             'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
             'queue' => 'your-queue-name',
+            'suffix' => env('SQS_SUFFIX'),
             'region' => 'us-east-1',
         ],
 
