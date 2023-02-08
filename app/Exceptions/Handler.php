@@ -9,25 +9,24 @@
  * @license     https://opensource.org/licenses/MIT MIT
  * @link        https://laravel.com
  */
+
 namespace App\Exceptions;
 
-use Exception;
+use Event;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Event;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Routing\Router;
-use Illuminate\Validation\ValidationException;
-use XePresenter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Router;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
+use XePresenter;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 
@@ -63,31 +62,19 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $exception
-     * @return void
-     * @throws Exception
-     */
-    public function report(Exception $exception)
-    {
-        parent::report($exception);
-    }
-
-    /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $e
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, \Throwable $e)
     {
         if (method_exists($e, 'render') && $response = $e->render($request)) {
             return Router::toResponse($request, $response);
-        } elseif ($e instanceof Responsable) {
+        }
+
+        if ($e instanceof Responsable) {
             return $e->toResponse($request);
         }
 
@@ -97,9 +84,13 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
-        } elseif ($e instanceof AuthenticationException) {
+        }
+
+        if ($e instanceof AuthenticationException) {
             return $this->unauthenticated($request, $e);
-        } elseif ($e instanceof ValidationException) {
+        }
+
+        if ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
         }
 
@@ -111,10 +102,10 @@ class Handler extends ExceptionHandler
     /**
      * Prepare exception for rendering.
      *
-     * @param  \Exception  $e
-     * @return \Exception
+     * @param  \Throwable  $e
+     * @return \Throwable
      */
-    protected function prepareException(Exception $e)
+    protected function prepareException(\Throwable $e)
     {
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException('xe::pageNotFound', $e);
@@ -133,38 +124,38 @@ class Handler extends ExceptionHandler
     /**
      * exception filter for send xpressengine message
      *
-     * @param Exception $e
-     * @return HttpXpressengineException|Exception
+     * @param  \Throwable  $e
+     * @return HttpXpressengineException|\Throwable
      */
-    protected function convert(Exception $e)
+    protected function convert(\Throwable $e)
     {
-        $converted = $e;
-
         if ($e instanceof HttpXpressengineException) {
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
-            $converted = $e;
-        } elseif ($e instanceof HttpException) {
-            /** @var HttpException $e */
-            $converted = new HttpXpressengineException([], $e->getStatusCode(), $e);
-            $message = xe_trans($e->getMessage());
-            if ('' === $message) {
-                $message = get_class($e);
-            }
-            $converted->setMessage($message);
-        } elseif ($e->getPrevious() && $this->isHttpException($e->getPrevious())) {
-            $converted = $this->convert($e->getPrevious());
+            return $e;
         }
 
-        return $converted;
+        if ($e instanceof HttpException) {
+            $converted = new HttpXpressengineException([], $e->getStatusCode(), $e);
+            $message = xe_trans($e->getMessage()) ?: get_class($e);
+            $converted->setMessage($message);
+
+            return $converted;
+        }
+
+        if ($e->getPrevious() && $this->isHttpException($e->getPrevious())) {
+            return $this->convert($e->getPrevious());
+        }
+
+        return $e;
     }
 
     /**
      * Determine if the given exception is an HTTP exception.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return bool
      */
-    protected function isHttpException(Exception $e)
+    protected function isHttpException(\Throwable $e)
     {
         return $e instanceof HttpException || $this->isHttpXpressengineException($e);
     }
@@ -172,58 +163,46 @@ class Handler extends ExceptionHandler
     /**
      * Determine if the given exception is an HTTP exception.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable|null  $e
      * @return bool
      */
-    protected function isHttpXpressengineException(Exception $e = null)
+    protected function isHttpXpressengineException(\Throwable $e = null)
     {
-        return $e !== null && $e instanceof HttpXpressengineException;
-    }
-
-    /**
-     * is fatal error
-     *
-     * @param Exception $e
-     * @return bool
-     */
-    protected function isFatalError(Exception $e)
-    {
-        return $e instanceof \Symfony\Component\Debug\Exception\FatalErrorException;
+        return $e instanceof HttpXpressengineException;
     }
 
     /**
      * Prepare a response for the given exception.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception $e
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function prepareResponse($request, Exception $e)
+    protected function prepareResponse($request, \Throwable $e)
     {
-        if (!$this->isHttpException($e) && config('app.debug')) {
-            return $this->toIlluminateResponse(
-                $this->convertExceptionToResponse($e), $e
-            );
+        if ($this->isHttpException($e) === false && config('app.debug')) {
+            return $this->toIlluminateResponse($this->convertExceptionToResponse($e), $e);
         }
 
-        if (!$this->isHttpException($e)) {
+        if ($this->isHttpException($e) === false) {
             $e = new HttpXpressengineException([], 500, $e);
             $e->setMessage(xe_trans('xe::systemError'));
         }
 
         return (new \Illuminate\Pipeline\Pipeline($this->container))
             ->send($request)
-            ->through(!session()->isStarted() ? [
-                \App\Http\Middleware\EncryptCookies::class,
-                \Illuminate\Session\Middleware\StartSession::class,
-            ] : [])
+            ->through(
+                !session()->isStarted() ? [
+                    \App\Http\Middleware\EncryptCookies::class,
+                    \Illuminate\Session\Middleware\StartSession::class,
+                ] : []
+            )
             ->then(function ($request) use ($e) {
-                return $this->toIlluminateResponse(
-                    $this->isFatalError($e) || !$this->withTheme() ?
-                        $this->renderWithoutXE($e) :
-                        $this->renderWithTheme($e, $request),
-                    $e
-                );
+                $response = $this->withTheme() === true ?
+                    $this->renderWithTheme($e, $request) :
+                    $this->renderWithoutXE($e);
+
+                return $this->toIlluminateResponse($response, $e);
             });
     }
 
@@ -237,7 +216,7 @@ class Handler extends ExceptionHandler
     {
         $status = $e->getStatusCode();
         $path = $this->getPath();
-        if (view()->exists("{$path}.{$status}") === false) {
+        if (view()->exists("$path.$status") === false) {
             $status = 500;
         }
 
@@ -247,7 +226,8 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpXpressengineException.
      *
-     * @param  HttpXpressengineException $e
+     * @param  HttpXpressengineException  $e
+     * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function renderWithTheme(HttpXpressengineException $e, Request $request)
@@ -263,18 +243,18 @@ class Handler extends ExceptionHandler
         }
 
         $path = $this->getPath();
-        if (view()->exists("{$path}.{$status}") === false) {
+        if (view()->exists("$path.$status") === false) {
             $status = 500;
         }
 
         try {
-            if ($status == 503) {
+            if ($status === 503) {
                 // maintenance mode
                 $view = $this->getView($path, $status, $e);
             } else {
                 $view = $this->getTheme($path, $status, $e);
             }
-        } catch (Exception $renderError) {
+        } catch (\Throwable $renderError) {
             $view = $this->getView($path, $status, $e);
         }
 
@@ -288,13 +268,13 @@ class Handler extends ExceptionHandler
      *
      * @param $path
      * @param $status
-     * @param HttpXpressengineException $e
+     * @param  HttpXpressengineException  $e
      * @return Response
      */
     protected function getTheme($path, $status, HttpXpressengineException $e)
     {
         XePresenter::setSkinTargetId(null);
-        $view = XePresenter::make("{$path}.{$status}", [
+        $view = XePresenter::make("$path.$status", [
             'exception' => $e,
             'path' => $path,
             'xe' => true,
@@ -307,26 +287,25 @@ class Handler extends ExceptionHandler
      *
      * @param $path
      * @param $status
-     * @param Exception $e
+     * @param  \Xpressengine\Support\Exceptions\HttpXpressengineException  $e
      * @return Response
      */
     protected function getView($path, $status, HttpXpressengineException $e)
     {
-        $view = response()->view("{$path}.{$status}", [
+        return response()->view("$path.$status", [
             'exception' => $e,
             'path' => $path,
             'xe' => false,
         ], $status, $e->getHeaders());
-        return $view;
     }
 
     /**
      * Convert the given exception to an array.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return array
      */
-    protected function convertExceptionToArray(Exception $e)
+    protected function convertExceptionToArray(\Throwable $e)
     {
         $arr = parent::convertExceptionToArray($e);
 
