@@ -31,6 +31,7 @@
         "james-heinrich/getid3": "1.9.*",
         "jenssegers/agent": "~2.6",
         "laravel/framework": "^6.20.26",
+        "fruitcake/laravel-cors": "^2.0",
         "laravel/helpers": "^1.5",
         "laravel/tinker": "^2.5",
         "ramsey/uuid": "~3.0",
