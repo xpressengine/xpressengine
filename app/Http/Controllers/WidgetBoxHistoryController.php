@@ -28,7 +28,7 @@ class WidgetBoxHistoryController extends Controller
         /** @var Collection $histories */
         $histories = WidgetBoxHistory::whereWidgetbox($widgetbox)->orderBy(WidgetBoxHistory::ID, 'desc')->get();
         $histories->each(function (WidgetBoxHistory $history) {
-            $history->addHidden([
+            $history->makeHidden([
                 WidgetBoxHistory::WIDGETBOX_ID,
                 WidgetBoxHistory::SITE_KEY,
                 WidgetBoxHistory::CONTENT,
