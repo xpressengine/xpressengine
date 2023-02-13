@@ -57,10 +57,10 @@ var SiteMap = (function (XE, $, Tree, SearchHead, Menu) {
     },
     getUrl: function (item) {
       var url = item.url
-      // if (item.type !== 'xpressengine@directLink') {
+      if (item.type !== 'xpressengine@directLink') {
         url = '/' + url
         url = XE.Utils.getUri(window.XE.config.getters['router/origin'] + url) // @FIXME
-      // }
+      }
 
       return url
     },
