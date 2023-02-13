@@ -600,6 +600,7 @@ class Storage
             'jpe'   => 'image/jpeg',
             'png'   => 'image/png',
             'gif'   => 'image/gif',
+            'webp'  => 'image/webp',
             'bmp'   => 'image/bmp',
             'tiff'  => 'image/tiff',
             'tif'   => 'image/tiff',

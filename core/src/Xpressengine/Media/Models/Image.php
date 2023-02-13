@@ -41,7 +41,7 @@ class Image extends Media
      *
      * @var array
      */
-    protected static $mimes = ['image/jpeg', 'image/png', 'image/gif', 'image/vnd.microsoft.icon', 'image/x-icon'];
+    protected static $mimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/vnd.microsoft.icon', 'image/x-icon'];
 
     /**
      * Returns meta data model for current model

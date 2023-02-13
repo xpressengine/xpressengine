@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     editable () {
-      return ['gif', 'png', 'jpeg', 'jpg'].includes(this.$props.media.ext)
+      return ['gif', 'png', 'jpeg', 'jpg', 'webp'].includes(this.$props.media.ext)
     },
   }
 }

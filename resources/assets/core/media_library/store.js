@@ -156,7 +156,7 @@ const actions = {
   changeImportMode ({ state, commit, dispatch }, mode = 'embed') {
     if (state.importMode !== mode) {
       commit(types.SET_IMPORT_MODE, mode)
-      const mime = (mode === 'embed') ? ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%'] : null
+      const mime = (mode === 'embed') ? ['image/gif', 'image/jpeg', 'image/png', 'image/webp', 'audio/%', 'video/%'] : null
 
       return dispatch('setFilter', {
         filter: {
@@ -174,7 +174,7 @@ const actions = {
       filter.index_mode = state.listMode
 
       if (state.importMode === 'embed') {
-        filter.mime = ['image/gif', 'image/jpeg', 'image/png', 'audio/%', 'video/%']
+        filter.mime = ['image/gif', 'image/jpeg', 'image/png', 'image/webp', 'audio/%', 'video/%']
       } else {
         filter.mime = null
       }

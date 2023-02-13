@@ -73,7 +73,7 @@ export default {
       return this.editable
     },
     editable () {
-      return ['gif', 'png', 'jpeg', 'jpg'].includes(this.$props.media.ext)
+      return ['gif', 'png', 'jpeg', 'jpg', 'webp'].includes(this.$props.media.ext)
     },
     thumbnailUrl() {
       return this.$props.media.objectURL || this.$props.media.file.url
