@@ -50,7 +50,6 @@ class EditorDefine {
       if (result instanceof Promise) {
         await result
       }
-      this.initialize.call(this.editorList[sel], sel, options, editorOptions)
 
       if (!!toolInfoList && toolInfoList.length > 0) {
         let tools = {}
