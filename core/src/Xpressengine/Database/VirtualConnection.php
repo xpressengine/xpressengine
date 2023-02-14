@@ -121,6 +121,15 @@ class VirtualConnection implements VirtualConnectionInterface
         return $query->from($table);
     }
 
+    /**
+     * Get the name of the connected database.
+     *
+     * @return string
+     */
+    public function getDatabaseName()
+    {
+        return $this->connection->getDatabaseName();
+    }
 
     /**
      * Get a new query builder instance.
