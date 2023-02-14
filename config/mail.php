@@ -100,6 +100,9 @@ return [
             | transport layer security protocol should provide great security.
             |
             */
+        'mailgun' => [
+            'transport' => 'mailgun',
+        ],
 
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
 
