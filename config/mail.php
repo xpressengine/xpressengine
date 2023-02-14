@@ -105,6 +105,9 @@ return [
         ],
 
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'postmark' => [
+            'transport' => 'postmark',
+        ],
 
             /*
             |--------------------------------------------------------------------------
