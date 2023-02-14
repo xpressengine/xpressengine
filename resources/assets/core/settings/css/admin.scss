@@ -1117,6 +1117,7 @@ aside {
       border-top: 1px solid $list-group-border;
       background-color: #f8fafd;
       white-space: nowrap;
+      vertical-align: middle;
 
       &:first-child {
         padding-left: 0;
