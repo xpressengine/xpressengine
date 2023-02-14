@@ -121,6 +121,10 @@ return [
             */
 
             'username' => env('MAIL_USERNAME'),
+        'log' => [
+            'transport' => 'log',
+            'channel' => env('MAIL_LOG_CHANNEL'),
+        ],
 
             'password' => env('MAIL_PASSWORD'),
         'array' => [
