@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import config from 'xe/config'
+import _ from 'lodash'
 
 /**
  * @private
@@ -15,7 +16,7 @@ import config from 'xe/config'
  * </pre>
  * */
 class LangEditorBox {
-  constructor ({ $wrapper, seq, name, langKey, multiline, lines, autocomplete }) {
+  constructor ({ $wrapper, seq, name, langKey, multiline, lines, autocomplete, placeholder, required }) {
     this.$wrapper = $wrapper
     this.seq = seq
     this.name = name
@@ -23,6 +24,8 @@ class LangEditorBox {
     this.multiline = multiline
     this.lines = lines || []
     this.autocomplete = autocomplete
+    this.placeholder = placeholder
+    this.required = required
 
     var that = this
     window.XE.app('Lang').then((appLang) => {
@@ -33,6 +36,9 @@ class LangEditorBox {
   }
 
   init () {
+
+
+
     if (this.langKey && this.lines.length === 0) {
       window.XE.ajax({
         type: 'get',
@@ -142,9 +148,18 @@ class LangEditorBox {
     var edit = null
     var id = ('input-' + this.seq + '-' + locale)
     var name = (resource + '/locale/' + locale)
+    var placeholder = this.placeholder;
+    var required = '';
+
+    if(_.isArray(placeholder)) {
+      placeholder = _.find(placeholder, (o) => { return o.locale === locale }).value;
+    }
+    if(this.required === 'required' || this.required === 'true' || this.required === true || this.required === 1) {
+      required = 'required'
+    }
 
     if (!this.multiline) {
-      edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" />`).attr('value', value).attr('data-origin-value', value)
+      edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" placeholder="${placeholder}" ${required} />`).attr('value', value).attr('data-origin-value', value)
     } else {
       edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).text(value).attr('data-origin-value', value)
     }
@@ -169,8 +184,9 @@ window.langEditorBoxRender = function ($data, type) {
     let lines = $data.lines
     let autocomplete = $data.autocomplete
     let target = $data.target
-
-    new LangEditorBox({ $wrapper: $($data.target), seq, name, langKey, multiline, lines, autocomplete })
+    let placeholder = $data.placeholder
+    let required = $data.required
+    new LangEditorBox({ $wrapper: $($data.target), seq, name, langKey, multiline, lines, autocomplete, placeholder, required })
   } else {
     var name = $data.data('name')
     var langKey = $data.data('lang-key')
@@ -205,9 +221,15 @@ function renderLangEditorBox () {
       let multiline = $this.data('multiline')
       let lines = $this.data('lines')
       let autocomplete = $this.data('autocomplete')
+      let placeholder = $this.data('placeholder')
+      let required = $this.data('required')
 
       if (langKey) {
         langKeys.push(langKey)
+      }
+
+      if (placeholder) {
+        langKeys.push(placeholder)
       }
 
       langs.push({
@@ -216,10 +238,13 @@ function renderLangEditorBox () {
         multiline,
         lines,
         autocomplete,
+        placeholder,
+        required,
         target: $this[0]
       })
 
       idx++
+
     })
 
     if (langKeys.length > 0) {
@@ -238,8 +263,10 @@ function renderLangEditorBox () {
               }
             })
           })
-
           $.each(langs, function () {
+            if(_.hasIn(result, this.placeholder) && !_.isEmpty(result[this.placeholder])) {
+              this.placeholder = result[this.placeholder];
+            }
             window.langEditorBoxRender(this, 'obj') // @FIXME
           })
         }
