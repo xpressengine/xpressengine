@@ -1,6 +1,8 @@
 @include('editor.global._title')
 
-@include('editor.global._tab', ['_active' => 'perm'])
+<div class="container-fluid container-fluid--part">
+    @include('editor.global._tab', ['_active' => 'perm'])
+</div>
 
 <div class="container-fluid container-fluid--part">
     <div class="panel-group" role="tablist" aria-multiselectable="true">
