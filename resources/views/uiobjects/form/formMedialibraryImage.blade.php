@@ -1,17 +1,16 @@
 <div class="xe-form-group">
     <section class="xeuio-medialibrary xeuio-medialibrary--image __xeuio-medialibrary-image" id="__xeuio-{{ $seq }}" data-uio-seq="{{ $seq }}">
-        @if(array_get($args, 'browser'))
+        @if(array_get($args, 'browser', false))
             <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><input type="file" class="xe-hidden" name="file" multiple /><i class="xi-plus"></i> 추가</label></div>
-        @endif
-            @if(! array_get($args, 'browser'))
-                <li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>
-            @endif
-        <ul class="xeuio-ml__preview">
-        </ul>
+        @else
+            <div class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></div>
+         @endif
+        <ul class="xeuio-ml__preview"></ul>
     </section>
 </div>
 
 <script>
+    // files가 비어있고 value에 값이 들어있고
     $(function () {
         var $element = $('#__xeuio-{{ $seq }}')
         var options = {

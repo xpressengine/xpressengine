@@ -60,7 +60,7 @@
       }
 
 
-      this.options.limit = Number(this.options.limit)
+      this.options.limit = parseInt(this.options.limit, 10);
 
       this._refresh()
     },
@@ -77,13 +77,13 @@
         }
       }
 
-      if(this.options.limit === 1) {
-        if($(this.element).find('.xeuio-ml__preview-item').length >= 1) {
-          $(this.element).find('.xeuio-ml__add-item').hide();
-        }else {
-          $(this.element).find('.xeuio-ml__add-item').show();
-        }
-      }
+      // if(this.options.limit <= 1) {
+      //   if($(this.element).find('.xeuio-ml__preview-item').length >= 1) {
+      //     // $(this.element).find('.xeuio-ml__add-item').hide();
+      //   }else {
+      //     // $(this.element).find('.xeuio-ml__add-item').show();
+      //   }
+      // }
 
       $(this.element).trigger('media/uploadedPreviewMounted')
     },
@@ -134,9 +134,9 @@
         $tempEl.append($item)
       })
 
-      if (!that.options.limit || fileList.length < that.options.limit) {
-        if(!that.options.browser) $tempEl.append($(that.options.templates.addItem));
-      }
+      // if (!that.options.limit || fileList.length < that.options.limit) {
+      //   if(!that.options.browser) $tempEl.append($(that.options.templates.addItem));
+      // }
 
       $(this.element).find('.xeuio-ml__preview').empty().append($tempEl.find('li'))
     },
