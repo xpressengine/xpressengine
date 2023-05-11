@@ -132,7 +132,7 @@ class DynamicQuery extends Builder
      *
      * @return array
      */
-     private function schema()
+    private function schema()
     {
         $schema = $this->connection->getSchema($this->from);
 
