@@ -27,38 +27,36 @@
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            if (window.XE) {
-                XE.setup({
-                    baseURL: '{{  url('/') }}',
-                    assetsURL: '{{  request()->root() }}',
-                    userToken: '{!! csrf_token() !!}',
-                    loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
-                    user: {
-                        id: '{{ Auth::user()->getId() }}',
-                        rating: '{{ Auth::user()->getRating() }}'
-                    },
-                    useXeSpinner: true, // @DEPRECATED
-                    locale: '{{ app()->getLocale() }}',
-                    defaultLocale: '{{ app('xe.translator')->getLocale() }}',
-                    fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
-                    @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-                    settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
-                    @endif
-                    routes: {!! XeFrontend::output('route') !!},
-                    ruleSet: {!! XeFrontend::output('rule') !!},
-                    translation: {!! XeFrontend::output('translation') !!},
-                    passwordRules: '{!! app('xe.config')->getVal('user.register.password_rules') !!}'
-                });
-            }
-            if (jQuery) {
-                jQuery.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-            }
-        });
+        if (window.XE) {
+            XE.setup({
+                baseURL: '{{  url('/') }}',
+                assetsURL: '{{  request()->root() }}',
+                userToken: '{!! csrf_token() !!}',
+                loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
+                user: {
+                    id: '{{ Auth::user()->getId() }}',
+                    rating: '{{ Auth::user()->getRating() }}'
+                },
+                useXeSpinner: true, // @DEPRECATED
+                locale: '{{ app()->getLocale() }}',
+                defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+                fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
+                @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+                settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
+                @endif
+                routes: {!! XeFrontend::output('route') !!},
+                ruleSet: {!! XeFrontend::output('rule') !!},
+                translation: {!! XeFrontend::output('translation') !!},
+                passwordRules: '{!! app('xe.config')->getVal('user.register.password_rules') !!}'
+            });
+        }
+        if (jQuery) {
+            jQuery.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+        }
     </script>
 
     <!-- JS at head.append -->

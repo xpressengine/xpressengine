@@ -184,7 +184,7 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/vendor.js',
             'assets/common.js',
             'assets/core/common/js/xe.bundle.js',
-        ])->prependTo('head')->defer()->load();
+        ])->prependTo('head')->load();
     }
 
     /**
