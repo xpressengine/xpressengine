@@ -54,24 +54,23 @@ export default class DynamicLoadManager extends App {
       let src = $$.asset(arrjs[idx])
       if (!assets.js.has(src)) {
         result = result.then(() => new Promise((resolve, reject) => {
-          this.$$xe.ajax({
-            url: src,
-            dataType: 'script',
-            success: function () {
-              count++
 
-              if (callbackObj.load) {
-                callbackObj.load()
-              }
+          this.jsLoad(arrjs[idx], function () {
+            count++
 
-              if (count === arrjs.length && !!callbackObj.complete) {
-                callbackObj.complete()
-              }
+            if (callbackObj.load) {
+              callbackObj.load()
+            }
 
-              resolve()
-            },
-            error: callbackObj.error
+            if (count === arrjs.length && !!callbackObj.complete) {
+              callbackObj.complete()
+            }
+
+            resolve()
+          }, function () {
+            callbackObj.error();
           })
+
         }))
       } else {
         count++
