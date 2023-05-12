@@ -134,7 +134,13 @@ class DynamicQuery extends Builder
      */
     private function schema()
     {
-        return $this->connection->getSchema($this->from);
+        $schema = $this->connection->getSchema($this->from);
+
+        return array_reduce($schema, function ($carry, $column) {
+            $carry[] = $this->from . '.' . $column;
+            
+            return $carry;
+        }, $schema);
     }
 
     /**
