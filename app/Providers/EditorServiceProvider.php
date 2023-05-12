@@ -83,7 +83,7 @@ class EditorServiceProvider extends ServiceProvider
         });
 
         $this->app['events']->listen('xe.editor.render', function ($editor) {
-            $this->app['xe.frontend']->js('assets/core/editor/editor.bundle.js')->appendTo('head')->load();
+
         });
 
         $this->app['events']->listen('xe.editor.compile', function ($editor) {
