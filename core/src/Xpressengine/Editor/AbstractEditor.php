@@ -664,13 +664,24 @@ abstract class AbstractEditor implements ComponentInterface
     {
         $editorScript = '
         <script>
-            jQuery(function($) {
-                XE.app("Editor").then(function (Editor) {
-                    Editor.getEditor(\'%s\').then(function(editor) {
-                        editor.create(\'%s\', %s, %s, %s);
+        window.addEventListener("DOMContentLoaded", function () {
+            XE.DynamicLoadManager.jsLoadMultiple([
+                "/assets/core/editor/editor.bundle.js",
+                "/plugins/ckeditor/assets/ckeditor4-4.20.2/dev/builder/release/ckeditor/ckeditor.js",
+                "assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js",
+                "assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js",
+                "assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js",
+                "/plugins/ckeditor/assets/js/media_library.widget.js",
+                "/plugins/ckeditor/assets/js/xe.ckeditor.define.js"], {
+                complete: function () {
+                    XE.app("Editor").then(function (Editor) {
+                        Editor.getEditor(\'%s\').then(function(editor) {
+                            editor.create(\'%s\', %s, %s, %s);
+                        })
                     })
-                })
-            });
+                }
+            })
+        });
         </script>';
 
         return sprintf(

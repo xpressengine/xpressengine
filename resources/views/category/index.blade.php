@@ -5,14 +5,19 @@
 
 {{ XeFrontend::css('/assets/core/settings/css/admin_menu.css')->before('/assets/core/settings/css/admin.css')->load() }}
 
-{{ XeFrontend::js([
-    '/assets/core/lang/langEditorBox.bundle.js'
-])->appendTo('head')->load() }}
 
-{{ XeFrontend::js([
-    '/assets/core/common/js/xe.tree.js',
-    '/assets/core/category/Category.js'
-])->appendTo('body')->load() }}
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        XE.DynamicLoadManager.jsLoadMultiple([
+            "/assets/core/lang/langEditorBox.bundle.js",
+            "/assets/core/common/js/xe.tree.js",
+            "/assets/core/category/Category.js",], {
+            complete: function () {
+            }
+        })
+    });
+</script>
+
 
 {{ XeFrontend::translation([
     'xe::required',

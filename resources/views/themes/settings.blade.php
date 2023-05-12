@@ -102,8 +102,7 @@
         </ul>
     </aside>
     <script>
-        $(function () {
-
+        window.addEventListener('DOMContentLoaded', function () {
             var smartSelectSideMenu = function () {
                 var $snb = $('.settings-nav-sidebar .snb-list');
                 if ($snb.find('li.on').length == 0) {

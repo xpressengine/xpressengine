@@ -1,5 +1,3 @@
-{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
-
 @include('editor.global._title')
 
 @include('editor.global._tab', ['_active' => 'tool'])
@@ -53,10 +51,12 @@
 </div>
 
 <script>
-    $(function () {
-        $(".item-setting").sortable({
-            handle: '.handler',
-            cancel: ''
-        }).disableSelection();
+    window.addEventListener('DOMContentLoaded', function () {
+        XE.DynamicLoadManager.jsLoad("/assets/vendor/jqueryui/jquery-ui.min.js", function () {
+            $(".item-setting").sortable({
+                handle: '.handler',
+                cancel: ''
+            }).disableSelection();
+        })
     });
 </script>

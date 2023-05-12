@@ -1,5 +1,3 @@
-{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load() }}
-
 @include('editor._title')
 
 @include('editor._tab', ['_active' => 'tool', 'instanceId' => $instanceId])
@@ -58,19 +56,21 @@
 </div>
 
 <script>
-    $(function () {
-        $(".item-setting").sortable({
-            handle: '.handler',
-            cancel: ''
-        }).disableSelection();
+    window.addEventListener('DOMContentLoaded', function () {
+        XE.DynamicLoadManager.jsLoad("/assets/vendor/jqueryui/jquery-ui.min.js", function () {
+            $(".item-setting").sortable({
+                handle: '.handler',
+                cancel: ''
+            }).disableSelection();
 
 
-      $('.__xe_inherit', '#f-editor-tool').click(function (e) {
-        var bool = $(this).is(':checked');
-        $('input,select,textarea', $('#f-editor-tool .item-setting')).not(this).prop('disabled', $(this).is(':checked'));
-        bool ? $('.item-setting').sortable('disable') : $('.item-setting').sortable('enable');
-      }).each(function () {
-        $(this).triggerHandler('click');
-      });
+            $('.__xe_inherit', '#f-editor-tool').click(function (e) {
+                var bool = $(this).is(':checked');
+                $('input,select,textarea', $('#f-editor-tool .item-setting')).not(this).prop('disabled', $(this).is(':checked'));
+                bool ? $('.item-setting').sortable('disable') : $('.item-setting').sortable('enable');
+            }).each(function () {
+                $(this).triggerHandler('click');
+            });
+        })
     });
 </script>

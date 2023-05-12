@@ -43,13 +43,14 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
-    $(function () {
+    window.addEventListener('DOMContentLoaded', function () {
         $('.__xe_btn_edit', '#__xe_section_editor').click(function () {
             $('.__xe_edit_body', '#__xe_section_editor').show();
         });
         $('.__xe_btn_close', '#__xe_section_editor').click(function () {
             $('.__xe_edit_body', '#__xe_section_editor').hide();
         });
-    });
+    })
 </script>
