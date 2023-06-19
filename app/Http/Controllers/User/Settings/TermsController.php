@@ -20,6 +20,8 @@ use XeDB;
 use XeLang;
 use XePresenter;
 use Xpressengine\Http\Request;
+use Xpressengine\User\Models\Term;
+use Xpressengine\User\TermsHandler;
 
 /**
  * Class TermsController
@@ -34,13 +36,28 @@ use Xpressengine\Http\Request;
 class TermsController extends Controller
 {
     /**
+     * @var TermsHandler
+     */
+    protected $handler;
+
+    /**
+     * TermsController constructor.
+     *
+     * @param TermsHandler $handler
+     */
+    public function __construct(TermsHandler $handler)
+    {
+        $this->handler = $handler;
+    }
+
+    /**
      * Show list for registered terms.
      *
      * @return \Xpressengine\Presenter\Presentable
      */
     public function index()
     {
-        $terms = app('xe.terms')->all();
+        $terms = $this->handler->all();
 
         return XePresenter::make('user.settings.setting.terms.index', compact('terms'));
     }
@@ -67,8 +84,8 @@ class TermsController extends Controller
     {
         $this->validate($request, ['title' => 'langRequired']);
 
-        $last = app('xe.terms')->lastOrder();
-        app('xe.terms')->create([
+        $last = $this->handler->lastOrder();
+        $this->handler->create([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
             'content' => $request->get('content'),
@@ -89,7 +106,7 @@ class TermsController extends Controller
      */
     public function edit($id)
     {
-        $term = app('xe.terms')->find($id);
+        $term = $this->handler->find($id);
 
         return XePresenter::make('user.settings.setting.terms.edit', [
             'term' => $term
@@ -105,13 +122,13 @@ class TermsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!$term = app('xe.terms')->find($id)) {
+        if (!$term = $this->handler->find($id)) {
             throw new HttpException(422, "undefined [#$id]");
         }
 
         $this->validate($request, ['title' => 'langRequired']);
 
-        app('xe.terms')->update($term, [
+        $this->handler->update($term, [
             'title' => $request->get('title'),
             'description' => $request->get('description'),
             'content' => $request->get('content'),
@@ -133,7 +150,7 @@ class TermsController extends Controller
     {
         XeDB::transaction(function () use ($request) {
             foreach ($request->get('id', []) as $id) {
-                app('xe.terms')->delete(app('xe.terms')->find($id));
+                $this->handler->delete($this->handler->find($id));
             }
         });
 
@@ -151,15 +168,20 @@ class TermsController extends Controller
     public function enable(Request $request)
     {
         XeDB::transaction(function () use ($request) {
+            $orders = array_flip(array_wrap($request->get('orders')));
             $enables = $request->get('enable') ?: [];
-            $terms = app('xe.terms')->all();
-            $terms = $terms->partition(function ($term) use ($enables) {
+
+            /** @var \Illuminate\Database\Eloquent\Collection $terms */
+            $terms = $this->handler->all()->sortBy(function (Term $term, int $key) use ($orders) {
+                return array_get($orders, $term->id) ?? $key;
+            });
+
+            list($enableTerms, $disableTerms) = $terms->partition(function ($term) use ($enables) {
                 return in_array($term->id, $enables);
             });
 
-            $enables = array_merge(array_flip($enables), $terms->first()->keyBy('id')->all());
-            app('xe.terms')->enable(array_values($enables));
-            app('xe.terms')->disable($terms->last());
+            $this->handler->enable($enableTerms->values());
+            $this->handler->disable($disableTerms->values());
         });
 
         return redirect()->route('settings.user.setting.terms.index')->with('alert', [

@@ -37,7 +37,7 @@ class TermsRepository
      */
     public function all()
     {
-        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->orderBy('order')->get();
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->orderByDesc('is_enabled')->orderBy('order')->get();
     }
 
     /**
@@ -48,6 +48,16 @@ class TermsRepository
     public function lastOrder()
     {
         return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->where('is_enabled', true)->max('order');
+    }
+
+    /**
+     * Return number of last disabled order
+     *
+     * @return mixed
+     */
+    public function lastDisabledOrder()
+    {
+        return $this->query()->where('site_key',\XeSite::getCurrentSiteKey())->where('is_enabled', false)->max('order');
     }
 
     /**
