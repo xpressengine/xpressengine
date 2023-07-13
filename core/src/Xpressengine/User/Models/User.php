@@ -224,6 +224,16 @@ class User extends DynamicModel implements
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
+    public function allSiteAgreedTerms()
+    {
+        return $this->belongsToMany(Term::class, 'user_term_agrees', 'user_id', 'term_id');
+    }
+
+    /**
+     * set relationship with user term agrees
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function agreedTerms()
     {
         $site_key = $this->site_key ?? \XeSite::getCurrentSiteKey();
@@ -471,6 +481,7 @@ class User extends DynamicModel implements
 
     /**
      * Get Terms a user agreed
+     * 
      * @return array|mixed
      */
     public function getAgreedTerms()
