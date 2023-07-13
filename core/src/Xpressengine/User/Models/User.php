@@ -16,10 +16,11 @@ namespace Xpressengine\User\Models;
 
 use Closure;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Xpressengine\User\Contracts\CanResetPassword as CanResetPasswordContract;
 use Xpressengine\User\Notifications\ResetPassword as ResetPasswordNotification;
 use Xpressengine\Database\Eloquent\DynamicModel;
@@ -217,6 +218,30 @@ class User extends DynamicModel implements
     public function pendingEmail()
     {
         return $this->hasOne(PendingEmail::class, 'user_id');
+    }
+
+    /**
+     * set relationship with user term agrees
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function allSiteAgreedTerms()
+    {
+        return $this->belongsToMany(Term::class, 'user_term_agrees', 'user_id', 'term_id');
+    }
+
+    /**
+     * set relationship with user term agrees
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function agreedTerms()
+    {
+        $site_key = $this->site_key ?? \XeSite::getCurrentSiteKey();
+        return $this->belongsToMany(Term::class, 'user_term_agrees', 'user_id', 'term_id')->where(
+            'user_terms.site_key',
+            $site_key
+        )->whereNull('user_term_agrees.deleted_at');
     }
 
     /**
@@ -453,5 +478,15 @@ class User extends DynamicModel implements
         }
 
         return $displayName;
+    }
+
+    /**
+     * Get Terms a user agreed
+     *
+     * @return Collection
+     */
+    public function getAgreedTerms()
+    {
+        return $this->getAttribute('agreedTerms');
     }
 }

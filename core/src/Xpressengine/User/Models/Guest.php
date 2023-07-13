@@ -15,6 +15,7 @@
 namespace Xpressengine\User\Models;
 
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Xpressengine\User\Exceptions\UnsupportedOperationForGuestOrUnknownException;
 use Xpressengine\User\Rating;
@@ -226,5 +227,15 @@ class Guest implements UserInterface, AuthorizableContract
     public function getAuthIdentifier()
     {
         return null;
+    }
+
+    /**
+     * Get Terms a user agreed
+     *
+     * @return Collection
+     */
+    public function getAgreedTerms()
+    {
+        return new Collection();
     }
 }

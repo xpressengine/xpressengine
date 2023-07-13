@@ -12,6 +12,7 @@
 
 namespace Xpressengine\User\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Xpressengine\User\Exceptions\UnsupportedOperationForGuestOrUnknownException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -211,5 +212,15 @@ class UnknownUser implements UserInterface
     private function throwNotSupportedException()
     {
         throw new UnsupportedOperationForGuestOrUnknownException();
+    }
+
+    /**
+     * Get Terms a user agreed
+     *
+     * @return Collection
+     */
+    public function getAgreedTerms()
+    {
+        return new Collection();
     }
 }
