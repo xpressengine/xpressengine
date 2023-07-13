@@ -212,4 +212,14 @@ class UnknownUser implements UserInterface
     {
         throw new UnsupportedOperationForGuestOrUnknownException();
     }
+
+    /**
+     * Get Terms a user agreed
+     *
+     * @return array
+     */
+    public function getAgreedTerms()
+    {
+        return [];
+    }
 }

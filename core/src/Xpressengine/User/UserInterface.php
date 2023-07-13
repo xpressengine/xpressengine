@@ -115,4 +115,11 @@ interface UserInterface
      * @return static
      */
     public function leaveGroups(array $groups);
+
+    /**
+     * Get Terms a user agreed
+     *
+     * @return array
+     */
+    public function getAgreedTerms();
 }

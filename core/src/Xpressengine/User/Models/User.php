@@ -220,6 +220,20 @@ class User extends DynamicModel implements
     }
 
     /**
+     * set relationship with user term agrees
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function agreedTerms()
+    {
+        $site_key = $this->site_key ?? \XeSite::getCurrentSiteKey();
+        return $this->belongsToMany(Term::class, 'user_term_agrees', 'user_id', 'term_id')->where(
+            'user_terms.site_key',
+            $site_key
+        )->whereNull('user_term_agrees.deleted_at');
+    }
+
+    /**
      * Get profile_image
      *
      * @return string
@@ -453,5 +467,14 @@ class User extends DynamicModel implements
         }
 
         return $displayName;
+    }
+
+    /**
+     * Get Terms a user agreed
+     * @return array|mixed
+     */
+    public function getAgreedTerms()
+    {
+        return $this->getAttribute('agreedTerms') ?: [];
     }
 }
