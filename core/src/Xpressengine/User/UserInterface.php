@@ -14,6 +14,8 @@
 
 namespace Xpressengine\User;
 
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * 회원 정보를 저장하는 클래스가 구현해야 하는 인터페이스
  *
@@ -119,7 +121,7 @@ interface UserInterface
     /**
      * Get Terms a user agreed
      *
-     * @return array
+     * @return Collection
      */
     public function getAgreedTerms();
 }

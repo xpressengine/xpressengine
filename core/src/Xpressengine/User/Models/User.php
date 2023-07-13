@@ -16,10 +16,11 @@ namespace Xpressengine\User\Models;
 
 use Closure;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Xpressengine\User\Contracts\CanResetPassword as CanResetPasswordContract;
 use Xpressengine\User\Notifications\ResetPassword as ResetPasswordNotification;
 use Xpressengine\Database\Eloquent\DynamicModel;
@@ -481,11 +482,11 @@ class User extends DynamicModel implements
 
     /**
      * Get Terms a user agreed
-     * 
-     * @return array|mixed
+     *
+     * @return Collection
      */
     public function getAgreedTerms()
     {
-        return $this->getAttribute('agreedTerms') ?: [];
+        return $this->getAttribute('agreedTerms');
     }
 }
