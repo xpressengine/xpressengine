@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
- * @see         Xpressengine\Skin\SkinHandler
+ * @see         Xpressengine\Editor\EditorHandler
  */
 class XeEditor extends Facade
 {
