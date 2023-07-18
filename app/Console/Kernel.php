@@ -112,7 +112,7 @@ class Kernel extends ConsoleKernel
      */
     protected function registerPluginMethods()
     {
-        if(app()->getInstalledVersion() != null) {
+        if(app()->getInstalledVersion() != null && $this->skipXE === false) {
             $configs = \DB::table('config')->where('name', 'plugin')->get();
             foreach ($configs as $config) {
                 $vars = json_dec($config->vars, true);
