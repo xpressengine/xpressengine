@@ -53,6 +53,7 @@ class UserRegisterHandler
         $attribute['display_name_unique'] = isset($attribute['display_name_unique']);
         $attribute['use_display_name'] = isset($attribute['use_display_name']);
         $attribute['use_login_id'] = isset($attribute['use_login_id']);
+        $attribute['use_password_confirm'] = isset($attribute['use_password_confirm']);
 
         $attribute['forms'] = array_keys(array_get($attribute, 'forms', []));
         $attribute['dynamic_fields'] = array_keys(array_get($attribute, 'dynamic_fields', []));
