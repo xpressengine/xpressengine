@@ -563,6 +563,7 @@ class RegisterController extends Controller
         $valid = true;
         $message = 'xe::usableDisplayName';
         $displayName = trim($request->get('display_name'));
+        $displayNameCaption = xe_trans(app('xe.config')->getVal('user.register.display_name_caption'));
 
         try {
             $this->handler->validateDisplayName($displayName);
@@ -574,7 +575,12 @@ class RegisterController extends Controller
         }
 
         return XePresenter::makeApi(
-            ['type' => 'success', 'message' => xe_trans($message), 'displayName' => $displayName, 'valid' => $valid]
+            [
+                'type' => 'success',
+                'message' => xe_trans($message, ['displayName' => $displayNameCaption]),
+                'displayName' => $displayName,
+                'valid' => $valid
+            ]
         );
     }
 
