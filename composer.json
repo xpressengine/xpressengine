@@ -48,9 +48,6 @@
         "barryvdh/laravel-debugbar": "~3.0",
         "roave/security-advisories": "dev-latest"
     },
-    "replace": {
-        "xpressengine/xpressengine": "self.version"
-    },
     "repositories": [
         {
             "type": "path",
