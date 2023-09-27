@@ -43,9 +43,6 @@
         "phpunit/phpunit": "~6.0",
         "barryvdh/laravel-debugbar": "~3.0"
     },
-    "replace": {
-        "xpressengine/xpressengine": "self.version"
-    },
     "repositories": [
         {
             "type": "path",
