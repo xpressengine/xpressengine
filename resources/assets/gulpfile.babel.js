@@ -4,8 +4,8 @@ import webpack from 'webpack-stream'
 import wpConfig from './webpack.config.babel.js'
 import wpConfigDll, { resolveAlias } from './dll.webpack.config.babel.js'
 const argv = require('minimist')(process.argv.slice(2))
-
-const $ = require('gulp-load-plugins')()
+const sass = require('gulp-sass')(require('sass'));
+const $ = require('gulp-load-plugins')();
 
 const mode = (process.env.NODE_ENV !== 'production') ? 'develoment' : 'production'
 let generateSourceMaps = mode !== 'production'
@@ -114,7 +114,7 @@ taskFixStyle.description = '.scss 자동 교정'
 const taskSass = function () {
   return gulp.src(['./core/**/*.scss', ...ignore])
     .pipe($.if(generateSourceMaps, $.sourcemaps.init()))
-    .pipe($.sass({ outputStyle: 'compressed', includePaths: ['node_modules'] }).on('error', $.sass.logError))
+    .pipe(sass({ outputStyle: 'compressed', includePaths: ['node_modules'] }).on('error', sass.logError))
     .pipe($.autoprefixer({
       cascade: false
     }))
