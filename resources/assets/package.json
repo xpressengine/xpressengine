@@ -63,7 +63,7 @@
     "@babel/runtime": "^7.9.2",
     "@babel/runtime-corejs3": "^7.9.2",
     "babel-loader": "^8.1.0",
-    "bootstrap-sass": "3.4.1",
+    "bootstrap-sass": "3.4.3",
     "chai": "^4.2.0",
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.6.5",
