@@ -80,7 +80,7 @@ export default [
           test: /(\.js)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
+            loader: 'swc-loader'
           }
         },
         {
@@ -130,7 +130,7 @@ export default [
           test: /(\.js)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
+            loader: 'swc-loader'
           }
         },
         {
