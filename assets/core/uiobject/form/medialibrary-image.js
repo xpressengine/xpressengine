@@ -91,8 +91,14 @@
     _importFile: function () {
       var that = this
 
+      var user = {
+        id: XE.config.getters['user/id'],
+        rating: XE.config.getters['user/rating']
+      }
+
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
         appMediaLibrary.open({
+          user: user,
           selected: function (mediaList) {
             var list = []
             _.forEach(mediaList, function (media) {
