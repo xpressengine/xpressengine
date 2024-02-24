@@ -561,20 +561,24 @@ class RegisterController extends Controller
     public function validateDisplayName(Request $request)
     {
         $valid = true;
-        $message = 'xe::usableDisplayName';
         $displayName = trim($request->get('display_name'));
+        $displayNameCaption = xe_trans(app('xe.config')->getVal('user.register.display_name_caption'));
+        $message = xe_trans('xe::usableDisplayName', ['displayName' => $displayNameCaption]);
 
         try {
             $this->handler->validateDisplayName($displayName);
         } catch (ValidationException $exception) {
             $valid = false;
             $message = Arr::first($exception->errors()['display_name']);
-        } catch (\Exception $exception) {
-            throw $exception;
-        }
+        } 
 
         return XePresenter::makeApi(
-            ['type' => 'success', 'message' => xe_trans($message), 'displayName' => $displayName, 'valid' => $valid]
+            [
+                'type' => 'success',
+                'message' => $message,
+                'displayName' => $displayName,
+                'valid' => $valid
+            ]
         );
     }
 
