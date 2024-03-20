@@ -118,7 +118,7 @@ class Kernel extends ConsoleKernel
                 $vars = json_dec($config->vars, true);
 
                 if (blank(array_get($this->scheduledPlugins, $config->site_key))) {
-                    $this->scheduledPlugins[$siteKey] = [];
+                    $this->scheduledPlugins[$config->site_key] = [];
                 }
 
                 foreach ($vars['list'] as $id => $val) {
