@@ -134,7 +134,9 @@ class Kernel extends ConsoleKernel
                             if(array_get($this->scheduledPlugins, $config->site_key) == null) {
                                 $this->scheduledPlugins[$config->site_key] = [];
                             }
-                            $this->scheduledPlugins[$config->site_key][] = $pluginObj;
+                            if (!in_array($pluginObj, $this->scheduledPlugins[$config->site_key])) {
+                                $this->scheduledPlugins[$config->site_key][] = $pluginObj;
+                            }
                         }
 
                         //register command class of plugin
