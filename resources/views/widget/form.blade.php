@@ -21,6 +21,15 @@
             ],
     ]) }}
 
+    {{
+        uio('formSelect', [
+            'name'=>'@locale',
+            'label'=> '다국어',
+            'options' => $localeSelectOptions,
+            'description' => "하나 이상을 선택하지 않은 경우엔 모든 다국어 환경에서 출력됩니다."
+        ])
+    }}
+
     {!! $widgetForm !!}
 
     <input type="hidden" name="@skin-id" value="{{ $skin->getId() }}">

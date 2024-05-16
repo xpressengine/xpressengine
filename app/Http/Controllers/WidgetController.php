@@ -112,6 +112,8 @@ class WidgetController extends Controller
         $skin = $request->get('skin');
 
         $code = $request->get('code');
+        $localeSelectOptions = $this->getLocaleSelectOptions([]);
+
         // widget form
         try {
             $inputs = json_dec($code, true);
@@ -131,7 +133,7 @@ class WidgetController extends Controller
         $title = array_get($inputs, '@attributes.title', '');
         $activate = array_get($inputs, '@attributes.activate', 'activate');
 
-        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title', 'activate'));
+        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm', 'code', 'title', 'activate', 'localeSelectOptions'));
     }
 
     /**
@@ -162,6 +164,9 @@ class WidgetController extends Controller
         $title = array_get($inputs, '@attributes.title', '');
         $activate = array_get($inputs, '@attributes.activate', 'activate');
 
+        $locales = array_wrap(array_get($inputs, '@attributes.locale') ?? []);
+        $localeSelectOptions = $this->getLocaleSelectOptions($locales);
+
         // widget list
         $widgetList = $widgetHandler->getAll();
         $widgets = [];
@@ -181,7 +186,7 @@ class WidgetController extends Controller
         $skin = $skinHandler->get($skin);
         $skinForm = $skin->renderSetting($inputs);
 
-        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'activate', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm', 'code'));
+        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'activate', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm', 'code', 'localeSelectOptions'));
     }
 
     /**
@@ -200,5 +205,27 @@ class WidgetController extends Controller
         $render = $widgetHandler->render($id, $args);
 
         return $render;
+    }
+
+    /**
+     * @param array $inputLocales
+     *
+     * @return array
+     */
+    private function getLocaleSelectOptions(array $inputLocales): array
+    {
+        $options = collect(\XeLang::getLocales())->mapWithKeys(function (string $locale) use ($inputLocales) {
+            return [
+                $locale => [
+                    'text' => $locale,
+                    'value' => $locale,
+                    'checked' => in_array($locale, $inputLocales),
+                    'selected' => in_array($locale, $inputLocales),
+                ]
+            ];
+        });
+
+        $options->prepend('설정 안함', '');
+        return $options->all();
     }
 }
