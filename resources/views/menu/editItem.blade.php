@@ -57,15 +57,13 @@
                         <div class="form-group">
                             <label for="item-title">{{ xe_trans('xe::menuTitle') }}</label>
                             <div class="input-group">
-                                {!! uio('langText', ['id' => 'item-title', 'langKey'=> $item->title, 'name'=>'itemTitle', 'aria-describedby' => 'basic-addon2']) !!}
+                                {!! uio('langText', ['id' => 'item-title', 'langKey'=> $item->title_lang_key, 'name'=>'itemTitle', 'aria-describedby' => 'basic-addon2']) !!}
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="item-description">{{ xe_trans('xe::page') }} {{ xe_trans('xe::description') }}</label>
 
-                            <textarea id="item-description" name="itemDescription" class="form-control" rows="3"
-                            placeholder="{{xe_trans('xe::itemDescriptionPlaceHolder')}}">{{ $item->description }}</textarea>
-
+                            {!! uio('langTextArea', ['id' => 'item-description', 'langKey'=> $item->description_lang_key, 'name'=>'itemDescription', 'aria-describedby' => 'basic-addon2']) !!}
                         </div>
 
                         <div class="form-group">

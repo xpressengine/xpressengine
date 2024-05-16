@@ -45,6 +45,8 @@ use Xpressengine\Routing\InstanceRoute;
  */
 class MenuItem extends CategoryItem
 {
+    use Concerns\MenuItemLocalizeTrait;
+
     /**
      * @var Closure
      */

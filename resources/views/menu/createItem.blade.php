@@ -64,7 +64,8 @@
                 </div>
                 <div class="form-group">
                     <label for="item-description">{{ xe_trans('xe::page') }} {{ xe_trans('xe::description') }}</label>
-                    <textarea name="itemDescription" id="item-description" class="form-control" rows="3"placeholder="{{xe_trans('xe::itemDescriptionPlaceHolder')}}"></textarea>
+
+                    {!! uio('langTextArea', ['id' => 'item-description', 'langKey'=> '', 'name'=>'itemDescription', 'aria-describedby' => 'basic-addon2']) !!}
                 </div>
                 <div class="form-group">
                     <label for="item-target">{{ xe_trans('xe::link') }} {{ xe_trans('xe::option') }}<br><small>{{xe_trans('xe::itemTargetDescription')}}</small></label>
