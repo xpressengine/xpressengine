@@ -116,7 +116,14 @@ class WidgetParser
         foreach ((array) $xmlObject as $index => $node) {
             $value = (is_object($node)) ? $this->xml2array($node) : $node;
             $out[$index] = $value ? : '';
+
+            if ($index === '@attributes') {
+                if (filled($locales = $value['locale'] ?? null)) {
+                    $value['locale'] = explode(',', $locales ?? '');
+                }
+            }
         }
+
         return $out;
     }
 }
