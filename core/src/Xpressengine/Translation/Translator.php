@@ -554,4 +554,12 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
 
         $this->putLangData($this->getLaravelNamespace(), $langData, $force);
     }
+
+    /**
+     * @return string
+     */
+    public function getUserNamespace()
+    {
+        return $this->userKeyPrefix;
+    }
 }
