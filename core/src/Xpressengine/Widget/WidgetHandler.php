@@ -122,16 +122,23 @@ class WidgetHandler
     {
         try {
             $instance = $this->getInstance($widgetId, $args);
+            $locales = array_filter(array_wrap(array_get($args, '@attributes.locale')) ?? []);
 
-            if (in_array($this->guard->user()->getRating(), $instance::$ratingWhiteList)) {
-                $ret = $instance->render();
-                if ($ret instanceof Renderable) {
-                    $ret = $ret->render();
-                }
-                return $ret;
-            } else {
+            if (filled($locales) && !in_array(\XeLang::getLocale(), $locales)) {
                 return '';
             }
+
+            if (in_array($this->guard->user()->getRating(), $instance::$ratingWhiteList, true) === false) {
+                return '';
+            }
+
+            $ret = $instance->render();
+
+            if ($ret instanceof Renderable) {
+                $ret = $ret->render();
+            }
+
+            return $ret;
         } catch (Exception $e) {
             return $this->handleError($e);
         }
