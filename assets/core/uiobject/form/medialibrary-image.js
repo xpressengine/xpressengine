@@ -5,23 +5,23 @@
       valueTarget: 'media_id',
       name: 'image[]',
       seq: 0,
+      files: null,
       preview: true,
       limit: 0,
       typeFilter: 'image/*',
-      files: [],
       image: null,
       templates: {
-        // previewContainer: '<ul class="xeuio-ml__preview"></ul>',
         previewItem: '<li class="xeuio-ml__preview-item"><input type="hidden" class="xeuio-ml__field" name="image[]"><img class="xeuio-ml__preview-image" /><button type="button" class="xeuio-ml__button xeuio-ml__remove">삭제</button></li>',
-        addItem: '<li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>',
+        addItem: null,
       }
     },
-
-
     // The constructor
     _create: function () {
       const that = this
       const $medialibraryContainer = $(this.element)
+
+      this.files = _.get(this, 'options.files', [])
+      this.options.templates.addItem = `<li class="xeuio-ml__add-item"><label for="${this.options.elementFileId}" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i><span>추가</span></label></li>`
 
       if (_.has(that, 'options.browser')) {
         XE.app('MediaLibrary').then(function (appMediaLibrary) {
@@ -39,14 +39,14 @@
           })
           $medialibraryContainer.on('done.upload.editor', function (event, media) {
             if (event.type !== 'done') {
-              XE.toast('danger', '이미지 업로드에 실패하였습니다.');
-              return;
+              XE.toast('danger', '이미지 업로드에 실패하였습니다.')
+              return
             }
-            that.options.files.push({
+            that.files.push({
               file_id: _.get(media, 'file.file_id', null),
               media_id: _.get(media, 'file.id', null),
               preview: _.get(media, 'file.file.thumbnail_url', null)
-            });
+            })
             that._refresh()
           })
         })
@@ -70,31 +70,34 @@
       this._renderList()
 
       if (this.options.field && $(this.options.field).length) {
-        if (this.options.files[0]) {
-          $(this.options.field).val(_.get(this.options.files[0], 'file_id', null))
+        if (this.files[0]) {
+          $(this.options.field).val(_.get(this.files[0], 'file_id', null))
         } else {
           $(this.options.field).val(null)
         }
       }
 
-      if (this.options.limit === 1) {
-        if ($(this.element).find('.xeuio-ml__preview-item').length >= 1) {
-          $(this.element).find('.xeuio-ml__add-item').hide()
-        } else {
-          $(this.element).find('.xeuio-ml__add-item').show()
-        }
+      if ($(this.element).find('.xeuio-ml__preview-item').length >= 1) {
+        $(this.element).find('.xeuio-ml__add-item').first().hide()
+      } else {
+        $(this.element).find('.xeuio-ml__add-item').first().show()
       }
 
       $(this.element).trigger('media/uploadedPreviewMounted')
     },
 
     _importFile: function () {
-      var that = this
+      const that = this
+      const user = {
+        id: XE.config.getters['user/id'],
+        rating: XE.config.getters['user/rating']
+      }
 
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
         appMediaLibrary.open({
+          user: user,
           selected: function (mediaList) {
-            var list = []
+            const list = []
             _.forEach(mediaList, function (media) {
               list.push({
                 media_id: media.id,
@@ -112,7 +115,7 @@
 
     _removeFile: function (targetId) {
       var that = this
-      this.options.files.splice(_.findIndex(this.options.files, function (item) {
+      this.files.splice(_.findIndex(this.files, function (item) {
         return item.file_id === targetId
       }), 1)
       that._refresh()
@@ -136,8 +139,8 @@
         $tempEl.append($item)
       })
 
-      if (!that.options.limit || fileList.length < that.options.limit) {
-        if (!_.isEmpty(that.options.browser)) {
+      if (fileList.length >= 1) {
+        if(!_.get(this, 'options.limit', 0) || _.get(this, 'options.limit', 0) > fileList.length) {
           $tempEl.append($(that.options.templates.addItem))
         }
       }
@@ -158,13 +161,13 @@
       // 파일 수 제한
       if (that.options.limit) {
         if (that.options.limit === 1) {
-          that.options.files = [file]
-        } else if (that.options.files.length >= that.options.limit) {
+          that.files = [file]
+        } else if (that.files.length >= that.options.limit) {
           return
         }
       }
 
-      this.options.files.push(file)
+      this.files.push(file)
     },
 
     _getFiles: function () {
@@ -172,10 +175,10 @@
       var files = []
 
       if (that.options.limit) {
-        that.options.files = that.options.files.slice(0, that.options.limit)
+        that.files = that.files.slice(0, that.options.limit)
       }
 
-      _.forEach(this.options.files, function (item) {
+      _.forEach(this.files, function (item) {
         files.push(new FileItem(item))
       })
 
