@@ -10,11 +10,13 @@
   padding: 0;
   list-style: none;
 }
+
 .xeuio-ml__preview-item {
   position: relative;
   flex: 0 1 105px;
   margin: 8px;
 }
+
 .xeuio-ml__preview-image {
   width: 100%;
   border: 1px dotted #b3bac5;
@@ -30,6 +32,7 @@
   cursor: pointer;
   background: transparent;
 }
+
 .xeuio-ml__add-item {
   margin: 8px;
   min-width: 105px;
@@ -37,7 +40,12 @@
   max-width: 105px;
   max-height: 105px;
 }
+
 .xeuio-ml__add {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 105px;
   height: 105px;
   min-width: 105px;
@@ -49,29 +57,39 @@
   border-radius: 3px;
   color: #8993a4;
 }
+
+.xeuio-ml__label {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 17px;
+}
+
 .xeuio-ml__add i {
   display: block;
   font-size: 22px;
   line-height: 24px;
-  margin-bottom: 20px;
 }
+
 .xeuio-ml__remove {
   position: absolute;
-  top: 9px;
-  right: 9px;
-  line-height: 1em;
+  top: 6px;
+  right: 6px;
   font-size: 13px;
-  padding: 2px 3px;
+  line-height: 15px;
+  padding: 6px 8px;
   color: #fff;
-  border-top-right-radius: 3px;
+  border-radius: 3px;
   background: #42526e;
 }
+
 .xeuio-ml__remove:hover {
   opacity: unset;
 }
+
 .xeuio-ml__remove i {
   line-height: 24px;
 }
+
 .xeuio-ml__preview-item:hover .xeuio-ml__remove {
   display: unset;
 }
@@ -82,17 +100,20 @@
   flex-direction: row;
   width: auto;
 }
+
 .xeuio-medialibrary ul {
   display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 .xeuio-medialibrary .xeuio-ml__preview {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
+
 .xeuio-medialibrary .xeuio-ml__preview-item {
   display: flex;
   width: 105px;
