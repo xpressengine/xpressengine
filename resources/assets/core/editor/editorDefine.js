@@ -38,7 +38,7 @@ class EditorDefine {
    * @param {object} editorOptions
    * @param {array} toolInfoList
    */
-  create (sel, options, editorOptions, toolInfoList) {
+  async create (sel, options, editorOptions, toolInfoList) {
     toolInfoList = toolInfoList || []
     editorOptions = $.extend(this.configs || {}, editorOptions || {})
 
@@ -46,7 +46,10 @@ class EditorDefine {
       const editorIntance = new EditorInstance(this.name, sel, editorOptions, toolInfoList)
       editorIntance._editor = this
       this.editorList[sel] = editorIntance
-      this.initialize.call(this.editorList[sel], sel, options, editorOptions)
+      var result = this.initialize.call(this.editorList[sel], sel, options, editorOptions)
+      if (result instanceof Promise) {
+        await result
+      }
 
       if (!!toolInfoList && toolInfoList.length > 0) {
         let tools = {}

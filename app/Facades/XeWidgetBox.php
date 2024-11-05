@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2020 Copyright XEHub Corp. <https://www.xehub.io>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
- * @see         Xpressengine\Widget\WidgetHandler
+ * @see         Xpressengine\Widget\WidgetBoxHandler
  */
 class XeWidgetBox extends Facade
 {

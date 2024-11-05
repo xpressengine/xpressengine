@@ -20,3 +20,4 @@ resources/assets/jsdoc
 .well-known
 naver*html
 robots.txt
+/.vscode

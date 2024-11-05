@@ -67,8 +67,11 @@ class TagHandler
     public function set($taggableId, array $words = [], $instanceId = null)
     {
         $words = array_unique($words);
-        $whereInWords = array_map(static function(string $word) { return 'binary '. $word; }, $words);
 
+        $whereInWords = array_map(static function (string $word) {
+            return \DB::raw("binary '$word'");
+        }, $words);
+        
         $tags = $this->repo->query()
              ->where('instance_id', $instanceId)
              ->whereIn('word', $whereInWords)

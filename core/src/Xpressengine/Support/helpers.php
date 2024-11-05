@@ -1098,3 +1098,32 @@ if (function_exists('is_settings') === false) {
         return in_array('settings', $middlewares, true) === true;
     }
 }
+
+if (!function_exists('put_translator_lang_data')) {
+    /**
+     * Put translator lang data
+     *
+     * @param string $namespace
+     * @param array $langTexts
+     * @return string
+     */
+    function put_translator_lang_data(string $namespace, array $langTexts)
+    {
+        $keyGen = app(\Xpressengine\Keygen\Keygen::class);
+        $translator = app(\Xpressengine\Translation\Translator::class);
+
+        $newId = $keyGen->generate();
+
+        $langData = new \Xpressengine\Translation\LangData();
+        $locales = collect(XeLang::getLocales());
+
+        foreach ($locales as $locale) {
+            if (filled($text = array_get($langTexts, $locale))) {
+                $langData->setLine($newId, $locale, $text);
+            }
+        }
+
+        $translator->putLangData($namespace, $langData);
+        return $namespace . '::' . $newId;
+    }
+}

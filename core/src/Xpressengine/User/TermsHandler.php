@@ -56,7 +56,7 @@ class TermsHandler
      */
     public function enable($terms, $order = 0)
     {
-        if (is_array($terms) || $terms instanceof Collection) {
+        if (is_iterable($terms)) {
             foreach ($terms as $idx => $term) {
                 $this->repo->update($term, ['is_enabled' => true, 'order' => $idx]);
             }
@@ -73,10 +73,9 @@ class TermsHandler
      */
     public function disable($terms)
     {
-        $terms = is_array($terms) || $terms instanceof Collection ? $terms : [$terms];
-
-        foreach ($terms as $term) {
-            $this->repo->update($term, ['is_enabled' => false, 'order' => 999]);
+        $terms = is_iterable($terms) ? $terms : [$terms];
+        foreach ($terms as $idx => $term) {
+            $this->repo->update($term, ['is_enabled' => false, 'order' => $idx]);
         }
     }
 

@@ -1,4 +1,4 @@
-import 'nestedSortable'
+import 'xe3-nested-sortable'
 import $ from 'jquery'
 import _ from 'lodash'
 import Item from './Item'

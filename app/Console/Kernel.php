@@ -112,10 +112,15 @@ class Kernel extends ConsoleKernel
      */
     protected function registerPluginMethods()
     {
-        if(app()->getInstalledVersion() != null) {
+        if(app()->getInstalledVersion() != null && $this->skipXE === false) {
             $configs = \DB::table('config')->where('name', 'plugin')->get();
             foreach ($configs as $config) {
                 $vars = json_dec($config->vars, true);
+
+                if (blank(array_get($this->scheduledPlugins, $config->site_key))) {
+                    $this->scheduledPlugins[$config->site_key] = [];
+                }
+
                 foreach ($vars['list'] as $id => $val) {
                     if ($val['status'] == 'activated') {
                         $entity = \XePlugin::getPlugin($id);
@@ -131,10 +136,7 @@ class Kernel extends ConsoleKernel
                         //register schedule method of plugin
                         //커맨드라인에서 URL없이 접속하기때문에, 사이트키 구분을 위해 해당 플러그인이 활성화된 사이트의 config에 붙어있는 site_key를 활용
                         if (method_exists($pluginObj, 'schedule')) {
-                            if(array_get($this->scheduledPlugins, $config->site_key) == null) {
-                                $this->scheduledPlugins[$config->site_key] = [];
-                            }
-                            $this->scheduledPlugins[$config->site_key][] = $pluginObj;
+                            $this->scheduledPlugins[$config->site_key][$pluginObj->getId()] = $pluginObj;
                         }
 
                         //register command class of plugin

@@ -1,6 +1,7 @@
 import path from 'path'
 import webpack from 'webpack'
 import { VueLoaderPlugin } from 'vue-loader'
+import sass from 'sass'
 
 const pathInfo = {
   root: path.resolve(__dirname, '../../'),
@@ -142,7 +143,13 @@ export default [
           use: [
             'vue-style-loader',
             'css-loader',
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: sass,
+                outputStyle: 'compressed'
+              }
+            }
           ]
         }
       ]

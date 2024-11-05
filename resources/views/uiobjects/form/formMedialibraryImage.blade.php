@@ -1,27 +1,39 @@
 <div class="xe-form-group">
-    <section class="xeuio-medialibrary xeuio-medialibrary--image __xeuio-medialibrary-image" id="__xeuio-{{ $seq }}" data-uio-seq="{{ $seq }}">
-        @if(array_get($args, 'browser'))
-            <div class="xeuio-ml__add-item"><label class="xeuio-ml__button xeuio-ml__add" style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><input type="file" class="xe-hidden" name="file" multiple /><i class="xi-plus"></i> 추가</label></div>
+    <section class="xeuio-medialibrary xeuio-medialibrary--image __xeuio-medialibrary-image" id="__xeuio-{{ $seq }}"
+             data-uio-seq="{{ $seq }}">
+        @if(array_get($args, 'browser', false))
+            <div class="xeuio-ml__add-item">
+                <label class="xeuio-ml__button xeuio-ml__add">
+                    <input id="__xeuio-file-{{ $seq }}" type="file" class="xe-hidden" name="file" multiple/>
+                    <i class="xi-plus"></i>
+                    <span class="xeuio-ml__label">추가</span>
+                </label>
+            </div>
         @endif
-            @if(! array_get($args, 'browser'))
-                <li class="xeuio-ml__add-item"><button type="button" class="xeuio-ml__button xeuio-ml__add"><i class="xi-plus"></i> 추가</button></li>
-            @endif
-        <ul class="xeuio-ml__preview">
-        </ul>
+        @if(!array_get($args, 'browser', false))
+            <div class="xeuio-ml__add-item">
+                <button type="button" class="xeuio-ml__button xeuio-ml__add">
+                    <i class="xi-plus"></i>
+                    <span class="xeuio-ml__label">추가</span>
+                </button>
+            </div>
+        @endif
+        <ul class="xeuio-ml__preview"></ul>
     </section>
 </div>
 
-<script>
+<script defer>
     $(function () {
-        var $element = $('#__xeuio-{{ $seq }}')
-        var options = {
+        const $element = $('#__xeuio-{{ $seq }}')
+        const options = {
+            elementFileId: "__xeuio-file-{{ $seq }}",
             valueTarget: 'file_id',
             name: '{{ array_get($args, 'name', 'image[]') }}', // field name
             limit: '{{ array_get($args, 'limit', 0) }}',
-            @if(array_get($args, 'files')) files: {!! json_encode(array_get($args, 'files', [])) !!}, @endif
-            @if(array_get($args, 'field')) field: '{{ array_get($args, 'field') }}', @endif
-            @if(array_get($args, 'renderMode')) renderMode: '{{ array_get($args, 'renderMode') }}', @endif
-            @if(array_get($args, 'browser')) browser: '{{ array_get($args, 'browser') }}', @endif
+            @if(array_get($args, 'files')) files: {!! json_encode(array_get($args, 'files', null)) !!}, @endif
+                @if(array_get($args, 'field')) field: '{{ array_get($args, 'field') }}', @endif
+                @if(array_get($args, 'renderMode')) renderMode: '{{ array_get($args, 'renderMode') }}', @endif
+                @if(array_get($args, 'browser', false)) browser: {{ array_get($args, 'browser', false) ? 'true' : 'false' }}, @endif
         }
         $element.uioMedialibraryImage(options)
     })

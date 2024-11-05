@@ -64,14 +64,20 @@ class LangText extends AbstractUIObject
             </script>
         ")->appendTo('head')->load();
 
+
         $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
         $url = route('lang.lines.key', ['key'=>$langKey]);
         $autocomplete = Config::get('xe.lang.autocomplete');
+        $placeholder = array_get($args, 'placeholder');
+        $required = array_get($args, 'required');
+
 
         return "<div class=\"lang-editor-box\""
             . " data-name=\"{$args['name']}\""
             . " data-lang-key=\"{$langKey}\""
             . " data-request-url=\"{$url}\""
+            . " data-placeholder=\"{$placeholder}\""
+            . " data-required=\"{$required}\""
             . " data-autocomplete=\"{$autocomplete}\"></div>";
     }
 }

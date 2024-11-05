@@ -303,7 +303,7 @@
         }
       }
     })
-    XE.ajax(pageOptions)
+    return XE.ajax(pageOptions)
   }
 
   /**
@@ -338,7 +338,7 @@
     })
 
     if (_validation.isValidPage(options)) {
-      _page(options, callback)
+      return _page(options, callback)
     }
   }
   XE.page = page

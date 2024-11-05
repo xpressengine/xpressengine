@@ -42,7 +42,7 @@
                 defaultLocale: '{{ app('xe.translator')->getLocale() }}',
                 fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
                 @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-                    settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
+                settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
                 @endif
                 routes: {!! XeFrontend::output('route') !!},
                 ruleSet: {!! XeFrontend::output('rule') !!},

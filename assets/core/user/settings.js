@@ -67,14 +67,14 @@ window.jQuery(function ($) {
     sub.prototype = $.extend({}, Setting.prototype)
     sub.prototype.constructor = sub
     $.each(prototypes, function (index, value) {
-        sub.prototype[index] = value
-      }
+      sub.prototype[index] = value
+    }
     )
     return sub
   }
 
   Setting.generate = function (Sub) {
-    function Plugin(option) {
+    function Plugin (option) {
       return this.each(function () {
         var $this = $(this)
         var data = $this.data('xe.setting')
@@ -149,14 +149,14 @@ window.jQuery(function ($) {
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',
-          data: {name: input},
+          data: { name: input },
           success: function (data, textStatus, jqXHR) {
-            // save에 성공하면 새로고침
+          // save에 성공하면 새로고침
             window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // save에 실패하면 오류 출력
+          // save에 실패하면 오류 출력
             // _this.setStatus(false, jqXHR.responseJSON.message)
           }
         })
@@ -181,7 +181,7 @@ window.jQuery(function ($) {
           inputUserDisplayNameMessage = XE.Lang.trans('xe::inputUserDisplayName', {'displayName': caption})
         }
 
-        if (input.length === 0) {
+        if (input.length == 0) {
           this.setStatus(false, inputUserDisplayNameMessage)
           return false
         }
@@ -213,7 +213,7 @@ window.jQuery(function ($) {
             url: this.options.checkUrl,
             type: 'POST',
             dataType: 'json',
-            data: {name: input},
+            data: { name: input },
             success: function (data, textStatus, jqXHR) {
               if (_this.checkedName == input) {
                 if (callback != undefined) {
@@ -312,7 +312,7 @@ window.jQuery(function ($) {
             password_confirmation: passwordConfirmation
           },
           success: function (data, textStatus, jqXHR) {
-            // save에 성공하면 새로고침
+          // save에 성공하면 새로고침
             if (data.result) {
               window.location.reload()
             } else {
@@ -351,7 +351,7 @@ window.jQuery(function ($) {
 
       beforeCheck: function () {
         var input = this.ui.inputNew.val()
-        return input.length !== 0;
+        return input.length != 0;
       },
 
       check: function () {
@@ -470,7 +470,7 @@ window.jQuery(function ($) {
       },
 
       add: function () {
-        // 입력확인
+      // 입력확인
         var input = this.ui.addInput.val()
         if (input.length == 0 || this.checkedEmail == input) {
           return
@@ -485,13 +485,13 @@ window.jQuery(function ($) {
           url: this.options.addUrl,
           type: 'POST',
           dataType: 'json',
-          data: {address: input},
+          data: { address: input },
           success: function (data, textStatus, jqXHR) {
             window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // add에 실패하면 오류 출력
+          // add에 실패하면 오류 출력
             _this.setStatus(_this.ui.addEmailBox, false, jqXHR.responseJSON.message)
           }
         })
@@ -512,13 +512,13 @@ window.jQuery(function ($) {
           url: this.options.confirmUrl,
           type: 'POST',
           dataType: 'json',
-          data: {code: input},
+          data: { code: input },
           success: function (data, textStatus, jqXHR) {
             window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // add에 실패하면 오류 출력
+          // add에 실패하면 오류 출력
             _this.setStatus(_this.ui.confirmEmailBox, false, jqXHR.responseJSON.message)
           }
         })
@@ -532,14 +532,14 @@ window.jQuery(function ($) {
           url: this.options.deleteUrl,
           type: 'POST',
           dataType: 'json',
-          data: {address: email},
+          data: { address: email },
           success: function (data, textStatus, jqXHR) {
             box.remove()
             window.XE.toast('success', data.message)
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // delete에 실패하면 오류 출력
+          // delete에 실패하면 오류 출력
             window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
@@ -552,7 +552,7 @@ window.jQuery(function ($) {
           url: this.options.deletePendingUrl,
           type: 'POST',
           dataType: 'json',
-          data: {address: email},
+          data: { address: email },
           success: function (data, textStatus, jqXHR) {
             _this.ui.addEmailBox.show()
             _this.ui.confirmEmailBox.hide()
@@ -560,7 +560,7 @@ window.jQuery(function ($) {
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // delete에 실패하면 오류 출력
+          // delete에 실패하면 오류 출력
             window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
@@ -573,13 +573,13 @@ window.jQuery(function ($) {
           url: this.options.resendPendingUrl,
           type: 'POST',
           dataType: 'json',
-          data: {address: email},
+          data: { address: email },
           success: function (data, textStatus, jqXHR) {
             window.XE.toast('success', data.message)
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // resend에 실패하면 오류 출력
+          // resend에 실패하면 오류 출력
             window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
@@ -596,14 +596,14 @@ window.jQuery(function ($) {
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',
-          data: {address: input},
+          data: { address: input },
           success: function (data, textStatus, jqXHR) {
-            // save에 성공하면 새로고침
+          // save에 성공하면 새로고침
             window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
-            // save에 실패하면 오류 출력
+          // save에 실패하면 오류 출력
             _this.setStatus(false, jqXHR.responseJSON.message)
           }
         })

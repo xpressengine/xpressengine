@@ -7,7 +7,7 @@
 
             <div class="panel-heading">
                 <div class="pull-left">
-                    <h3 class="panel-title">{{xe_trans('xe::termsSettings')}}</h3>
+                    <h3 class="panel-title">{{ xe_trans('xe::termsSettings') }}</h3>
                 </div>
             </div>
             <div class="panel-body">
@@ -19,6 +19,7 @@
                         <ul class="list-group item-setting">
                             @foreach ($terms as $item)
                                 <li class="list-group-item">
+                                    <input type="hidden" name="orders[]" value="{{ $item->id }}">
                                     <button type="button" class="btn handler"><i class="xi-drag-vertical"></i></button>
                                     <span ><input type="checkbox" name="id[]" value="{{ $item->id }}"></span>
                                     <em class="item-title"><a href="{{ route('settings.user.setting.terms.edit', $item->id) }}">{{ xe_trans($item->title) }}</a></em>
@@ -27,7 +28,7 @@
                                         <a href="{{ route('terms', $item->id) }}" class="xe-btn xe-btn-sm" target="_blank">미리보기</a>
                                         <label>
                                             <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="enable[]" value="{{ $item->id }}" {{$item->is_enabled ? 'checked' : ''}}>
+                                            <input type="checkbox" name="enable[]" value="{{ $item->id }}" {{ $item->is_enabled ? 'checked' : '' }}>
                                             <span class="toggle"></span>
                                         </label>
                                     </div>
