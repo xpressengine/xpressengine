@@ -14,22 +14,34 @@ use Xpressengine\Http\Request;
 /*
  * Define Xpressengine Version
  */
-if (!defined('__XE_VERSION__')) {
-    define('__XE_VERSION__', '3.1.1');
+if (!defined("__XE_VERSION__")) {
+    define("__XE_VERSION__", "3.1.2");
 }
-
 
 /*
  * Set RequestFactory so that make all of generated request to Xpressengine's request
  * Request에 RequestFactory를 지정한다.
  * XE에서 새로운 request가 생성될 때에는 이 ReqeustFactory는 사용되어 항상 Xpressengine\Http\Request를 생성하도록 한다
  */
-Request::setFactory(
-    function ($query, $request, $attributes, $cookies, $files, $server, $content)
-    {
-        return new Request($query, $request, $attributes, $cookies, $files, $server, $content);
-    }
-);
+Request::setFactory(function (
+    $query,
+    $request,
+    $attributes,
+    $cookies,
+    $files,
+    $server,
+    $content
+) {
+    return new Request(
+        $query,
+        $request,
+        $attributes,
+        $cookies,
+        $files,
+        $server,
+        $content
+    );
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +54,7 @@ Request::setFactory(
 |
 */
 
-$app = new Xpressengine\Foundation\Application(
-    realpath(__DIR__.'/../')
-);
+$app = new Xpressengine\Foundation\Application(realpath(__DIR__ . "/../"));
 
 /*
 |--------------------------------------------------------------------------
