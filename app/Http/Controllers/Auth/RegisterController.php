@@ -215,6 +215,7 @@ class RegisterController extends Controller
         expose_trans('xe::passwordIncludeNumber');
         expose_trans('xe::passwordIncludeCharacter');
         expose_trans('xe::passwordIncludeSpecialCharacter');
+        expose_trans('xe::enterPasswordConfirmation');
 
         return \XePresenter::make('register.create', compact('config', 'parts'));
     }

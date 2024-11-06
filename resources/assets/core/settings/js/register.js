@@ -83,6 +83,12 @@ $(function () {
     $wrapDisplayname.trigger('toggle')
   })
   // end:display_name
+
+  var $wrapPasswordConfirm = $('.__regsetting-passwordconfirm-wrap');
+
+  $wrapPasswordConfirm.find('[name=use_password_confirm]').on('change', function () {
+    $('[name=require_password_confirm]').prop('checked', $(this).prop('checked'))
+  })
 })
 
 $.widget('xe.userRegisterDynamicFiled', {
