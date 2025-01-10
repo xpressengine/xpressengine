@@ -90,8 +90,9 @@ class ProfileController extends Controller
 
         $currentUser = auth()->user();
 
-        if ($currentUser->id !== $userId) {
-            abort(403, 'You do not have permission to edit this profile.');
+        // Check if the current user is authorized to edit the profile
+        if (!$currentUser->isAdmin() && $currentUser->id !== $userId) {
+            throw new AccessDeniedHttpException();
         }
 
         // user validation
