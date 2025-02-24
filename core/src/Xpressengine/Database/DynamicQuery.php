@@ -250,12 +250,14 @@ class DynamicQuery extends Builder
         }
 
         $result = 0;
-        if (count($insert = $this->filter($args, $this->schema())) > 0) {
-            $result = parent::insertGetId($args, $sequence);
+        $filteredValues = $this->filter($args, $this->schema());
+
+        if (filled($filteredValues)) {
+            $result = parent::insertGetId($filteredValues, $sequence);
         }
 
         if ($this->proxy === true) {
-            // autoincrement 가 primary key 일 경우 처리 할 것은?
+            $args[$sequence] = $result;
             $this->getProxyManager()->insert($args);
         }
 

@@ -900,6 +900,17 @@ Route::settings('category', function () {
     // 이하 신규
     Route::group(['prefix' => '{id}', 'where' => ['id' => '[0-9]+']], function () {
         Route::get('/', ['as' => 'manage.category.show', 'uses' => 'CategoryController@show']);
+
+        Route::get('/dynamic-fields/settings', [
+            'as' => 'manage.category_item.dynamic_fields.settings',
+            'uses' => 'CategoryItemDynamicFieldController@settings'
+        ]);
+
+        Route::get('/dynamic-fields/form', [
+            'as' => 'manage.category_item.dynamic_fields.form',
+            'uses' => 'CategoryItemDynamicFieldController@form'
+        ]);
+
         Route::post('item/store', [
             'as' => 'manage.category.edit.item.store',
             'uses' => 'CategoryController@storeItem'

@@ -52,6 +52,7 @@
                                 <th scope="col">{{ xe_trans('xe::categoryName') }}</th>
                                 <th width="10%" scope="col">{{ xe_trans('xe::count') }}</th>
                                 <th width="10%" scope="col">{{ xe_trans('xe::management') }}</th>
+                                <th width="10%" scope="col">확장필드 설정</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,7 +60,18 @@
                                     <tr>
                                         <td>{{ xe_trans($category->name) }}</td>
                                         <td>{{ $category->count }}</td>
-                                        <td><a href="{{ route('manage.category.show', $category->id) }}" class="btn btn-default">{{ xe_trans('xe::management') }}</a></td>
+                                        
+                                        <td>
+                                            <a href="{{ route('manage.category.show', $category->id) }}" class="btn btn-default">
+                                                {{ xe_trans('xe::management') }}
+                                            </a>
+                                        </td>
+                                        
+                                        <td>
+                                            <a href="{{ route('manage.category_item.dynamic_fields.settings', $category->getKey()) }}" class="btn btn-default">
+                                                확장필드 설정
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

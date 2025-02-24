@@ -64,9 +64,13 @@ class CategoryItemRepository
      * @param array $attributes attributes
      * @return CategoryItem
      */
-    public function create(array $attributes = [])
+    public function create(array $attributes = [], array $proxyOptions = [])
     {
-        $item = $this->createModel()->create($attributes);
+        // @phpstan-ignore-next-line
+        $item = $this->createModel()
+            ->setProxyOptions($proxyOptions)
+            ->create($attributes);
+
         $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
         $this->dispatcher->fire('xe.category.categoryitem.created', $item);
 

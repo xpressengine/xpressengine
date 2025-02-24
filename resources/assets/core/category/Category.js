@@ -240,6 +240,19 @@ var Category = (function (XE, $, Tree) {
 
       var template = ''
 
+      var result = '';
+
+      XE.ajax({
+        url: _config.dynamicForm,
+        type: 'GET',
+        dataType: 'json',
+        data: { id: obj.id },
+        async: false, // 동기 처리
+        success: function (data) {
+          result = data.result;
+        }
+      });
+
       template += '<form>'
       template += '<div class="panel-heading">'
       template += '<div class="pull-left">'
@@ -255,6 +268,7 @@ var Category = (function (XE, $, Tree) {
       template += '<label>' + XE.Lang.trans('xe::description') + '</label>'
       template += '<div class="lang-editor-box" data-name="description" data-autocomplete="false" data-multiline="true" ' + descriptionKeyProp + '></div>'
       template += '</div>'
+      template += result; // 동기적으로 가져온 데이터를 추가
       template += '</div>'
       template += '</form>'
 

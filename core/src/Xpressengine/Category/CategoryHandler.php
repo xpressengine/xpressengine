@@ -20,6 +20,7 @@ use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Category\Repositories\CategoryItemRepository;
 use Xpressengine\Category\Repositories\CategoryRepository;
+use Xpressengine\Category\Values\DynamicGroupKey;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
@@ -53,7 +54,7 @@ class CategoryHandler
     /**
      * CategoryHandler constructor.
      *
-     * @param CategoryRepository     $cates CategoryRepository instance
+     * @param CategoryRepository $cates CategoryRepository instance
      * @param CategoryItemRepository $items CategoryItemRepository instance
      */
     public function __construct(CategoryRepository $cates, CategoryItemRepository $items)
@@ -77,7 +78,7 @@ class CategoryHandler
      * Update category
      *
      * @param Category $category category instance
-     * @param array    $data     attributes
+     * @param array $data attributes
      * @return Category
      */
     public function updateCate(Category $category, array $data = [])
@@ -103,15 +104,21 @@ class CategoryHandler
     /**
      * Create a new category item, alias for itemCreate
      *
-     * @param Category $category   category instance
-     * @param array    $attributes item attributes for created
+     * @param Category $category category instance
+     * @param array $attributes item attributes for created
      * @return CategoryItem
      */
     public function createItem(Category $category, array $attributes)
     {
         $model = $this->items()->createModel();
+        $proxyOption = DynamicGroupKey::fromId($category->getKey())->toProxyOption();
+
+
         /** @var CategoryItem $item */
-        $item = $this->items->create(array_merge($attributes, [$model->getAggregatorKeyName() => $category->getKey()]));
+        $item = $this->items->create(
+            array_merge($attributes, [$model->getAggregatorKeyName() => $category->getKey()]),
+            $proxyOption
+        );
 
         $this->setHierarchy($item);
         $this->setOrder($item);
@@ -122,12 +129,12 @@ class CategoryHandler
     /**
      * Create a category item by hierarchies
      *
-     * @param  Category  $category
-     * @param  array  $hierarchies
-     * @param  bool  $isUseTranslator
+     * @param Category $category
+     * @param array $hierarchies
+     * @param bool $isUseTranslator
      * @return \Illuminate\Support\Collection<CategoryItem>
      */
-    public function createItemsByHierarchies(Category $category, array $hierarchies,  bool $isUseTranslator = false)
+    public function createItemsByHierarchies(Category $category, array $hierarchies, bool $isUseTranslator = false)
     {
         $items = \collect([]);
 
@@ -185,12 +192,18 @@ class CategoryHandler
      * Modify item information
      *
      * @param CategoryItem $item item object
-     * @param array        $data attribute data
+     * @param array $data attribute data
      * @return CategoryItem
      */
     public function updateItem(CategoryItem $item, array $data = [])
     {
         $parentIdName = $item->getParentIdName();
+
+        $item->setProxyOptions(
+            DynamicGroupKey::fromId($item->category_id)->toProxyOption()
+        );
+
+
         // 내용 수정시 부모 키 변경은 허용하지 않음
         // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
         // 통해 처리되야 함
@@ -200,12 +213,16 @@ class CategoryHandler
     /**
      * Delete single item or all descendant
      *
-     * @param CategoryItem $item  item object
-     * @param bool         $force if true then remove all descendant
+     * @param CategoryItem $item item object
+     * @param bool $force if true then remove all descendant
      * @return bool
      */
     public function deleteItem(CategoryItem $item, $force = true)
     {
+        $item->setProxyOptions(
+            DynamicGroupKey::fromId($item->category_id)->toProxyOption()
+        );
+
         if ($force == true) {
             /** @var CategoryItem $desc */
             foreach ($item->descendants as $desc) {
@@ -228,7 +245,7 @@ class CategoryHandler
     /**
      * Move to another parent CategoryItem
      *
-     * @param CategoryItem $item   item object
+     * @param CategoryItem $item item object
      * @param CategoryItem $parent new parent item object
      * @return CategoryItem
      * @throws UnableMoveToSelfException

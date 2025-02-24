@@ -123,6 +123,26 @@ abstract class DynamicModel extends Model
     }
 
     /**
+     * @param array $attributes
+     * @param bool $exists
+     *
+     * @return DynamicModel
+     */
+    public function newInstance($attributes = [], $exists = false)
+    {
+        $instance = parent::newInstance($attributes, $exists);
+
+        if ($this->dynamic === true) {
+            $proxyOptions = $this->getProxyOptions() ?: [];
+            $instance->setProxyOptions($proxyOptions);
+
+            $instance->fill($attributes);
+        }
+
+        return $instance;
+    }
+
+    /**
      * get key generator
      *
      * @return Keygen

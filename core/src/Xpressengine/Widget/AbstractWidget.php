@@ -142,6 +142,8 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
         if (is_null($view)) {
             return '';
         } elseif (is_string($view)) {
+            $config = $args;
+
             return view($this->view($view), compact('config', '_skin'));
         } elseif (is_array($view)) {
             return $this->makeConfigView($view, $args);

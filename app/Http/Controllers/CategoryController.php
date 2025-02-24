@@ -63,6 +63,19 @@ class CategoryController extends Controller
             throw new InvalidArgumentHttpException;
         }
 
+        \XeFrontend::css([
+            'assets/core/uiobject/form/medialibrary-image.css',
+            'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
+            'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',
+        ])->load();
+
+        \XeFrontend::js([
+            'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
+            'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
+            'assets/core/uiobject/form/medialibrary-image.js',
+        ])->load();
+
         return XePresenter::make('category.show', compact('category'));
     }
 

@@ -60,6 +60,11 @@ class CategoryItem extends Node
     protected $fillable = ['category_id', 'parent_id', 'word', 'description', 'ordering', 'site_key'];
 
     /**
+     * @var bool
+     */
+    protected $dynamic = true;
+
+    /**
      * The class name of aggregator
      *
      * @var string
