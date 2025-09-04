@@ -24,7 +24,7 @@ class LangEditorBox {
     this.multiline = multiline
     this.lines = lines || []
     this.autocomplete = autocomplete
-    this.placeholder = placeholder
+    this.placeholder = placeholder || ''
     this.required = required
 
     var that = this
