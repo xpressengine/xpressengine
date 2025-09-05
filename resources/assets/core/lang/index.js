@@ -12,11 +12,8 @@ import config from 'xe/config'
 class Lang extends App {
   constructor () {
     super()
-
     Translator.placeHolderPrefix = ':'
     Translator.placeHolderSuffix = ''
-
-    this.locales = [] // @FIXME
   }
 
   static appName () {
@@ -37,13 +34,9 @@ class Lang extends App {
           current: options.locale
         })
       }
-
-      this.locales = this.$$config.getters['lang/locales'] || []
-
       if (options.translation) {
         this.set(options.translation.terms)
       }
-
       resolve(this)
     })
   }
@@ -63,7 +56,7 @@ class Lang extends App {
   * @param {locales} locales
   */
   setLocales (locales) {
-    this.locales = locales
+    this.$$config.dispatch('lang/setLocales', locales)
     Translator.locale = (locales.length > 0) ? locales[0] : 'en'
   }
 
@@ -102,17 +95,16 @@ class Lang extends App {
   * @return {Promise}
   */
   requestTrans (id, parameters, callback) {
-    const that = this
     const item = id.split('::')[1]
     let message = ''
 
     return new Promise((resolve, reject) => {
+      const currentLocale = this.getCurrentLocale()
       this.$$xe.get('/lang/lines/' + item).then((response) => {
         if (Array.isArray(response.data)) {
-          message = $$.find(response.data, { 'locale': this.locales[0] }).value
+          message = $$.find(response.data, { 'locale': currentLocale })
           Translator.add(id, message)
         }
-
         resolve(message)
         if (typeof callback === 'function') {
           callback(item, message) // @deprecated
@@ -129,10 +121,8 @@ class Lang extends App {
   */
   requestTransAll (langKeys, callback) {
     const result = {}
-    const that = this
-
     return new Promise((resolve, reject) => {
-      this.$$xe.post(this.$$config.getters['router/origin'] + '/lang/lines/many', { keys: langKeys }).then(response => {
+      this.$$xe.post(`${this.$$config.getters['router/origin']}/lang/lines/many`, { keys: langKeys }).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
             result[key] = $$.find(val, { 'locale': config.getters['lang/current'].code }).value

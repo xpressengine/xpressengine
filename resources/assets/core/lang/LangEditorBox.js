@@ -125,12 +125,11 @@ class LangEditorBox {
   }
 
   setLines (lines) {
-    var _this = this
     this.lines = lines
 
-    window.XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + _this.seq + '-' + locale.code
-      var value = _this.getValueFromLinesWithLocale(locale.code)
+    config.getters['lang/locales'].forEach(locale => {
+      const selector = `#input-${this.seq}-${locale.code}`
+      const value = this.getValueFromLinesWithLocale(locale.code)
       $(selector).val(value)
     })
   }
