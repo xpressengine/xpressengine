@@ -8,6 +8,7 @@ export default {
   target: 'web',
   entry: {
     'core/common/js/xe.bundle': [
+      pathInfo.core + '/jquery-global.js',
       'xe',
       pathInfo.common + '/js/lang.js',
       pathInfo.common + '/js/progress.js',

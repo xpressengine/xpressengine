@@ -1,9 +1,12 @@
 import $ from 'jquery'
 import App from 'xe/app'
-import Vue from 'vue'
-import Vuex from 'vuex'
 import EventBus from './vue/components/eventBus'
 import _ from 'lodash'
+
+const VueModule = require('vue')
+const VuexModule = require('vuex')
+const Vue = VueModule.default || VueModule
+const Vuex = VuexModule.default || VuexModule
 
 import { module as media } from './store'
 // import RouteMap from './route_map'
