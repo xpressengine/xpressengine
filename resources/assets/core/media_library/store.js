@@ -1,5 +1,7 @@
-import Vue from 'vue';
 import _ from 'lodash'
+
+const VueModule = require('vue')
+const Vue = VueModule.default || VueModule
 
 const types = {
   SET_FILTER: 'SET_FILTER',

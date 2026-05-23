@@ -1,5 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+const VueModule = require('vue')
+const VuexModule = require('vuex')
+const Vue = VueModule.default || VueModule
+const Vuex = VuexModule.default || VuexModule
 import { module as lang } from 'xe/lang/store'
 import { module as mediaLibrary } from 'xe/media_library/store'
 import { module as request } from 'xe/request/store'
