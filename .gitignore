@@ -16,7 +16,6 @@ node_modules
 npm-debug.log
 _ide_helper.php
 package-lock.json
-!resources/assets/package-lock.json
 resources/assets/jsdoc
 .well-known
 naver*html

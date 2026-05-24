@@ -1,5 +1,4 @@
-const VueModule = require('vue')
-const Vue = VueModule.default || VueModule
+import Vue from 'vue'
 
 const EventBus = new Vue()
 
