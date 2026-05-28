@@ -41,6 +41,19 @@
     </div>
 </div>
 
+{{-- password confirmation --}}
+@if (app('xe.config')->getVal('user.register.use_password_confirm') === true)
+    <div class="xu-form-group xu-form-group--large">
+        <label class="xu-form-group__label" for="f-password-confirm">{{ xe_trans('xe::passwordConfirm') }}</label>
+        <div class="xu-form-group__box xu-form-group__box--icon-right">
+            <input type="password" id="f-password-confirm-confirm" class="xu-form-group__control" placeholder="{{ xe_trans('xe::enterPassword') }}" name="password_confirmation" required data-valid-name="{{xe_trans('xe::password')}}">
+            <button type="button" class="xu-form-group__icon __xe-toggle-password">
+                <i class="xi-eye"></i>
+            </button>
+        </div>
+    </div>
+@endif
+
 <script>
     $(function () {
         $('.__xe-toggle-password').on('click', function () {
