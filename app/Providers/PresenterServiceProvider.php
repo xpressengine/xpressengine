@@ -177,7 +177,7 @@ class PresenterServiceProvider extends ServiceProvider
         $frontendHandler->css([
             'assets/core/common/css/xe-common.css',
             'assets/core/xe-ui-component/xe-ui-component.css', // @TODO 제거
-            'https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css', // @TODO 제거
+            'https://cdn.jsdelivr.net/npm/@xpressengine/xeicon@2.3.3/xeicon.min.css', // @TODO 제거
         ])->load();
 
         $frontendHandler->js([

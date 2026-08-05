@@ -56,7 +56,8 @@ class MenuController extends Controller
     public function index()
     {
         $siteKey = XeSite::getCurrentSiteKey();
-        $menus = XeMenu::menus()->fetchBySiteKey($siteKey, 'items')->getDictionary();
+        // $menus = XeMenu::menus()->fetchBySiteKey($siteKey, 'items')->getDictionary();
+        $menus = XeMenu::menus()->fetchBySiteKey($siteKey, 'items')->sortBy('ordering')->getDictionary();
         $homeMenuId = XeSite::getHomeInstanceId();
         $menuMaxDepth = config('xe.menu.maxDepth');
 
