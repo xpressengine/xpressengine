@@ -188,7 +188,10 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->registerPluginMethods();
+        if ($this->skipXE === false) {
+            $this->registerPluginMethods();
+        }
+
         require base_path('routes/console.php');
     }
 
