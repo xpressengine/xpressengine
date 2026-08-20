@@ -576,7 +576,7 @@ class UserController extends Controller
      */
     public function updateAdditionField(Request $request, $field)
     {
-        $inputs = $request->except('_token');
+        $inputs = $request->except(['_token', 'rating']);
         $this->handler->update($request->user(), $inputs);
         $showUrl = route('user.settings.additions.show', ['field' => $field]);
 

@@ -297,7 +297,7 @@ class RegisterController extends Controller
             $part->validate();
         });
 
-        $userData = $request->except(['_token']);
+        $userData = $request->except(['_token', 'rating']);
 
         // set default join group
         $joinGroup = $config->get('joinGroup');
