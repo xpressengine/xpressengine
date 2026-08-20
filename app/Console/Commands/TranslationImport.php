@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TranslationImport.php
  *
@@ -15,11 +16,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Xpressengine\Database\VirtualConnectionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Xpressengine\Database\DatabaseHandler;
-use Xpressengine\Translation\LaravelLangData;
 use Xpressengine\Translation\Translator;
 
 /**
@@ -58,7 +56,7 @@ class TranslationImport extends Command
     /**
      * Create a new command instance.
      *
-     * @param Translator $translator translator
+     * @param  Translator  $translator  translator
      */
     public function __construct(Translator $translator)
     {
@@ -70,7 +68,7 @@ class TranslationImport extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -78,28 +76,28 @@ class TranslationImport extends Command
         $path = $this->option('path');
         $force = $this->option('force');
 
-        if ($path && !file_exists(base_path($path))) {
-            $this->error(sprintf('Not exists [%s]', base_path($path)));
-            return;
+        $source = $this->resolveImportPath($name, $path);
+
+        if ($source === false) {
+            $this->error('Invalid path.');
+            return 1;
         }
 
         $files = [];
-        if ($path && !is_dir(base_path($path))) {
-            $files = [base_path($path)];
+        if (is_file($source)) {
+            $files = [$source];
         } else {
-            $dirPath = !$path ? $this->getLangsDir($name) : base_path($path);
-
-            $dir = dir($dirPath);
+            $dir = dir($source);
 
             while ($entry = $dir->read()) {
-                $path = $dirPath . DIRECTORY_SEPARATOR . $entry;
-                if (is_dir($path)) {
+                $file = $source.DIRECTORY_SEPARATOR.$entry;
+                if (is_dir($file)) {
                     continue;
-                } elseif (strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== 'php') {
+                } elseif (strtolower(pathinfo($file, PATHINFO_EXTENSION)) !== 'php') {
                     continue;
                 }
 
-                $files[] = $path;
+                $files[] = $file;
             }
         }
 
@@ -112,22 +110,72 @@ class TranslationImport extends Command
         }
 
         $this->info('Language import complete!');
+        return 0;
     }
 
     /**
      * Get the directory path where the language file.
      *
-     * @param string $name name of target
+     * @param  string  $name  name of target
      * @return string
      */
     protected function getLangsDir($name)
     {
         if ($name === 'xe') {
             // core language
-            return base_path('resources') . DIRECTORY_SEPARATOR . 'lang';
+            return base_path('resources').DIRECTORY_SEPARATOR.'lang';
         }
 
-        return base_path('plugins') . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'langs';
+        return base_path('plugins').DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR.'langs';
+    }
+
+    /**
+     * Resolve the import path under the allowed language directory.
+     *
+     * @param  string  $name  plugin name
+     * @param  string|null  $path  requested path
+     *
+     * @return string|false
+     */
+    protected function resolveImportPath($name, $path = null)
+    {
+        $allowedDir = realpath($this->getLangsDir($name));
+
+        if ($allowedDir === false) {
+            return false;
+        }
+
+        if ($name !== 'xe') {
+            $pluginsDir = realpath(base_path('plugins'));
+
+            if ($pluginsDir === false || !$this->isSameOrChildPath($allowedDir, $pluginsDir)) {
+                return false;
+            }
+        }
+
+        $realPath = realpath($path ? base_path($path) : $allowedDir);
+
+        if ($realPath === false || !$this->isSameOrChildPath($realPath, $allowedDir)) {
+            return false;
+        }
+
+        if (is_file($realPath) && strtolower(pathinfo($realPath, PATHINFO_EXTENSION)) !== 'php') {
+            return false;
+        }
+
+        return $realPath;
+    }
+
+    /**
+     * Check whether a path is a directory itself or one of its children.
+     *
+     * @param  string  $path  path
+     * @param  string  $directory  directory
+     * @return bool
+     */
+    protected function isSameOrChildPath($path, $directory)
+    {
+        return $path === $directory || strpos($path, $directory.DIRECTORY_SEPARATOR) === 0;
     }
 
     /**

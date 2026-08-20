@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LangController.php
  *
@@ -16,6 +17,7 @@ namespace App\Http\Controllers;
 
 use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use XePlugin;
@@ -23,6 +25,8 @@ use XePresenter;
 use XeLang;
 use XeDB;
 use XeFrontend;
+use Xpressengine\Database\DynamicQuery;
+use Xpressengine\Presenter\Presentable;
 
 /**
  * Class LangController
@@ -37,21 +41,22 @@ use XeFrontend;
 class LangController extends Controller
 {
     /**
-     * Show list of languages.
+     * Show a list of languages.
      *
-     * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @param  Request  $request  request
+     * @return Presentable
      */
     public function index(Request $request)
     {
         $namespace = $request->get('namespace');
         $keyword = $request->get('keyword');
-        
+
         XeFrontend::translation([
             'xe::saved', 'xe::failed'
         ]);
 
         $conditions = [];
+
         if ($namespace) {
             $conditions['namespace'] = $namespace;
         }
@@ -59,7 +64,11 @@ class LangController extends Controller
             $conditions['keyword'] = $keyword;
         }
 
-        $pagination = $this->search($conditions)->groupBy('item')->groupBy('namespace')->paginate(10);
+        $pagination = $this->search($conditions)
+            ->groupBy('item')
+            ->groupBy('namespace')
+            ->paginate(10);
+
         $searchList = $pagination->toArray()['data'];
         $this->withLines($searchList);
 
@@ -71,44 +80,56 @@ class LangController extends Controller
             'selected_keyword' => $keyword,
             'namespaces' => $namespaces,
             'searchList' => $searchList,
-            'pagination' => $pagination->appends($request->except([$pagination->getPageName()]))
+            'pagination' => $pagination->appends($request->except([
+                $pagination->getPageName(),
+            ]))
         ]);
     }
 
     /**
-     * Search languages by given keyword.
+     * Search languages by a given keyword.
      *
-     * @param Request $request request
-     * @param string  $locale  locale
-     * @return \Xpressengine\Presenter\Presentable
+     * @param  Request  $request  request
+     * @param  string  $locale  locale
+     * @return Presentable
      */
     public function searchKeyword(Request $request, $locale)
     {
         $term = $request->input('term');
-        $searchList = $this->search(['locale' => $locale, 'value' => $term])->get()->toArray();
+
+        $searchList = $this->search([
+            'locale' => $locale,
+            'value' => $term,
+        ])->get()->toArray();
+
         $this->withLines($searchList);
 
         return XePresenter::makeApi($searchList);
     }
 
     /**
-     * Get language by given key.
+     * Get language by a given key.
      *
-     * @param string $key key
-     * @return \Xpressengine\Presenter\Presentable
+     * @param  string  $key  key
+     * @return Presentable
      */
     public function getLinesWithKey($key)
     {
         list($namespace, $item) = XeLang::parseKey($key);
-        $lines = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
+
+        $lines = $this->search([
+            'namespace' => $namespace,
+            'item' => $item,
+        ])->get()->toArray();
+
         return XePresenter::makeApi($lines);
     }
 
     /**
      * Get languages by given keys.
      *
-     * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @param  Request  $request  request
+     * @return Presentable
      */
     public function getLinesMany(Request $request)
     {
@@ -130,19 +151,18 @@ class LangController extends Controller
      * 다국어 편집 에디터에서 저장시 실행
      * 미들웨어 수준에서 미리 저장되기 때문에 별다른 작업 없음
      *
-     * @return \Xpressengine\Presenter\Presentable
-     * @todo 삭제?
+     * @return Presentable
      */
     public function save()
     {
-        return XePresenter::makeApi([]);
+        return XePresenter::makeApi();
     }
 
     /**
-     * Make query by given conditions.
+     * Make a query by given conditions.
      *
-     * @param array $conditions conditions
-     * @return \Xpressengine\Database\DynamicQuery
+     * @param  array  $conditions  conditions
+     * @return DynamicQuery
      */
     private function search($conditions = [])
     {
@@ -151,26 +171,26 @@ class LangController extends Controller
         $query->orderBy('item', 'asc');
         $query->orderBy('id', 'desc');
 
-        $query->when(Arr::get($conditions, 'namespace'), function($query, $namespace) {
+        $query->when(Arr::get($conditions, 'namespace'), function ($query, $namespace) {
             $query->where('namespace', $namespace);
         });
 
-        $query->when(Arr::get($conditions, 'keyword'), function($query, $keyword) {
-            $query->where(function($query) use($keyword) {
+        $query->when(Arr::get($conditions, 'keyword'), function ($query, $keyword) {
+            $query->where(function ($query) use ($keyword) {
                 return $query->where('item', $keyword)
                     ->orWhere('value', 'LIKE', '%'.$keyword.'%');
             });
         });
 
-        $query->when(Arr::get($conditions, 'item'), function($query, $item) {
+        $query->when(Arr::get($conditions, 'item'), function ($query, $item) {
             $query->where('item', $item);
         });
 
-        $query->when(Arr::get($conditions, 'locale'), function($query, $locale) {
+        $query->when(Arr::get($conditions, 'locale'), function ($query, $locale) {
             $query->where('locale', $locale);
         });
 
-        $query->when(Arr::get($conditions, 'value'), function($query, $value) {
+        $query->when(Arr::get($conditions, 'value'), function ($query, $value) {
             $query->where('value', 'LIKE', '%'.$value.'%');
         });
 
@@ -178,58 +198,77 @@ class LangController extends Controller
     }
 
     /**
-     * Search line for searched list.
+     * Search line for a searched list.
      *
-     * @param array $searchList search list
+     * @param  array  $searchList  search list
      * @return void
      */
-    private function withLines(&$searchList)
+    private function withLines($searchList)
     {
-        foreach ($searchList as &$search) {
+        foreach ($searchList as $search) {
             $namespace = $search->namespace;
             $item = $search->item;
-            $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
+
+            $search->lines = $this->search(
+                [
+                    'namespace' => $namespace,
+                    'item' => $item,
+                ]
+            )->get()->toArray();
         }
     }
 
     /**
      * Show plugins for imports target.
      *
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function getImport()
     {
-        return api_render('lang.import', ['plugins' => XePlugin::getAllPlugins()]);
+        return api_render('lang.import', [
+            'plugins' => XePlugin::getAllPlugins(),
+        ]);
     }
 
     /**
      * Import languages.
      *
-     * @param Request $request request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request  request
+     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function import(Request $request)
     {
         if (!$request->user()->isAdmin()) {
-            throw new AuthorizationException(xe_trans('xe::accessDenied'));
+            throw new AuthorizationException(
+                xe_trans('xe::accessDenied')
+            );
         }
 
-        $this->validate($request, ['name' => 'required']);
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
 
         $parameters = [
             'name' => $request->get('name'),
             '--no-interaction' => true,
         ];
+
         if ($request->get('force')) {
             $parameters['--force'] = true;
         }
+
         if ($path = $request->get('path')) {
             $parameters['--path'] = $path;
         }
 
-        Artisan::call('translation:import', $parameters);
+        if (Artisan::call('translation:import', $parameters) !== 0) {
+            abort(403, 'Invalid path.');
+        }
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::processed')]);
+        return redirect()->back()->with('alert', [
+            'type' => 'success',
+            'message' => xe_trans('xe::processed'),
+        ]);
     }
 }

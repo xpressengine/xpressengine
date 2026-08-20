@@ -12,12 +12,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Auth;
+use DB;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -27,11 +31,10 @@ use XeDynamicField;
 use XeFrontend;
 use XePresenter;
 use XeTheme;
+use Xpressengine\Presenter\Presentable;
 use Xpressengine\User\EmailBroker;
-use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -104,7 +107,7 @@ class RegisterController extends Controller
      * Show the application registration form.
      *
      * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function getRegister(Request $request)
     {
@@ -139,7 +142,7 @@ class RegisterController extends Controller
                 ($requireTerms->count() === 0 && $request->session()->has('pass_agree') === false))
                 //약관에 선택 약관만 존재하는데 session에 약관 동의에 대한 데이터가 없을 경우
         ) {
-            return \XePresenter::make('register.agreement', compact('terms'));
+            return XePresenter::make('register.agreement', compact('terms'));
         }
 
         return $this->getRegisterForm($request);
@@ -150,7 +153,7 @@ class RegisterController extends Controller
      *
      * @param Request $request request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function postTermAgree(Request $request)
     {
@@ -176,7 +179,7 @@ class RegisterController extends Controller
      * Show the application registration form.
      *
      * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     protected function getRegisterForm(Request $request)
     {
@@ -216,7 +219,7 @@ class RegisterController extends Controller
         expose_trans('xe::passwordIncludeCharacter');
         expose_trans('xe::passwordIncludeSpecialCharacter');
 
-        return \XePresenter::make('register.create', compact('config', 'parts'));
+        return XePresenter::make('register.create', compact('config', 'parts'));
     }
 
     /**
@@ -224,7 +227,7 @@ class RegisterController extends Controller
      *
      * @param Request                 $request         request
      * @param RegisterTokenRepository $tokenRepository RegisterTokenRepository instance
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws Exception
      *
      * @deprecated since 3.0.8 회원가입 하기 전 이메일 인증 기능 삭제
@@ -237,24 +240,24 @@ class RegisterController extends Controller
 
         try {
             $this->handler->validateEmail($email);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(400, xe_trans('xe::emailAlreadyExists'));
         }
 
         $mail = $this->handler->pendingEmails()->findByAddress($email);
 
         if ($mail === null) {
-            \DB::beginTransaction();
+            DB::beginTransaction();
             try {
                 $mailData = ['address' => $email];
                 $user = new User();
                 $user->id = app('xe.keygen')->generate();
                 $mail = $this->handler->createEmail($user, $mailData, false);
-            } catch (\Exception $e) {
-                \DB::rollBack();
+            } catch (Exception $e) {
+                DB::rollBack();
                 throw $e;
             }
-            \DB::commit();
+            DB::commit();
         }
 
         $token = $tokenRepository->create('email', ['email' => $email, 'user_id' => $mail->user_id]);
@@ -268,8 +271,8 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param \Illuminate\Http\Request $request request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request request
+     * @return RedirectResponse
      * @throws Exception
      */
     public function postRegister(Request $request)
@@ -297,7 +300,10 @@ class RegisterController extends Controller
             $part->validate();
         });
 
-        $userData = $request->except(['_token']);
+        $userData = $request->except([
+            '_token',
+            'rating',
+        ]);
 
         // set default join group
         $joinGroup = $config->get('joinGroup');
@@ -320,7 +326,7 @@ class RegisterController extends Controller
         XeDB::beginTransaction();
         try {
             $user = $this->handler->create($userData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -338,11 +344,9 @@ class RegisterController extends Controller
             switch ($user->status) {
                 case User::STATUS_PENDING_ADMIN:
                     return redirect()->route('auth.pending_admin');
-                    break;
 
                 case User::STATUS_PENDING_EMAIL:
                     return redirect()->route('auth.pending_email');
-                    break;
             }
         }
 
@@ -364,7 +368,7 @@ class RegisterController extends Controller
      *
      * @param Request $request request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function getSendApproveEmail(Request $request)
     {
@@ -399,9 +403,9 @@ class RegisterController extends Controller
      * 이메일을 통해 회원가입 이메일 인증 처리
      *
      * @param Request                 $request         request
-     * @param RegisterTokenRepository $tokenRepository register token repository
+     * @param RegisterTokenRepository $tokenRepository register a token repository
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws Exception
      */
     public function postApproveEmail(Request $request, RegisterTokenRepository $tokenRepository)
@@ -436,13 +440,13 @@ class RegisterController extends Controller
         }
         XeDB::commit();
 
-        return \XePresenter::make('confirm_email', compact('user'));
+        return XePresenter::make('confirm_email', compact('user'));
     }
 
     /**
      * Show additional form for user.
      *
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function getRegisterAddInfo()
     {
@@ -452,16 +456,16 @@ class RegisterController extends Controller
             return $field->getRules();
         })->collapse()->all());
 
-        $userData = array_merge(request()->all(), \Auth::user()->getAttributes());
+        $userData = array_merge(request()->all(), Auth::user()->getAttributes());
 
         return XePresenter::make('register.add-info', compact('fields', 'userData'));
     }
 
     /**
-     * Register additional information of user.
+     * Register additional information of the user.
      *
      * @param Request $request request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function postRegisterAddInfo(Request $request)
     {
@@ -480,7 +484,7 @@ class RegisterController extends Controller
     /**
      * Returns additional dynamic fields
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     protected function getAdditionalField()
     {
@@ -500,14 +504,14 @@ class RegisterController extends Controller
      * Validate Email
      *
      * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function validateEmail(Request $request)
     {
         $email = $request->input('email');
         $email = trim($email);
-        $exceptId = $request->input('except_id', null);
+        $exceptId = $request->input('except_id');
 
         $valid = true;
         $message = 'xe::usableEmailAddress';
@@ -532,18 +536,12 @@ class RegisterController extends Controller
                 }
 
                 $this->validate($request, [ 'email' => $uniqueRule ]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new EmailAlreadyExistsException();
             }
-        } catch (EmailAlreadyExistsException $e) {
+        } catch (EmailAlreadyExistsException|PendingEmailAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();
-        } catch (PendingEmailAlreadyExistsException $e) {
-            $valid = false;
-            $message = $e->getMessage();
-        } catch (\Exception $e) {
-            $valid = false;
-            throw $e;
         }
 
         return XePresenter::makeApi(
@@ -555,7 +553,7 @@ class RegisterController extends Controller
      * Validate display name
      *
      * @param Request $request request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function validateDisplayName(Request $request)
@@ -569,8 +567,6 @@ class RegisterController extends Controller
         } catch (ValidationException $exception) {
             $valid = false;
             $message = Arr::first($exception->errors()['display_name']);
-        } catch (\Exception $exception) {
-            throw $exception;
         }
 
         return XePresenter::makeApi(
@@ -600,10 +596,6 @@ class RegisterController extends Controller
         catch (ValidationException $exception) {
             $valid = false;
             $message = Arr::first($exception->errors()['login_id']);
-        }
-
-        catch (\Exception $e) {
-            throw $e;
         }
 
         return XePresenter::makeApi(

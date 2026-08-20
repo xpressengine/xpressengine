@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is tag handler class
+ * This file is a tag handler class
  *
  * PHP version 7
  *
@@ -14,9 +14,8 @@
 
 namespace Xpressengine\Tag;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
+use XeDB;
 
 /**
  * Class TagHandler
@@ -47,8 +46,8 @@ class TagHandler
     /**
      * TagHandler constructor.
      *
-     * @param TagRepository $repo       TagRepository instance
-     * @param Decomposer    $decomposer Decomposer instance
+     * @param  TagRepository  $repo  TagRepository instance
+     * @param  Decomposer  $decomposer  Decomposer instance
      */
     public function __construct(TagRepository $repo, Decomposer $decomposer)
     {
@@ -59,59 +58,69 @@ class TagHandler
     /**
      * Set taggable's tags
      *
-     * @param string      $taggableId taggable id
-     * @param array       $words      tag word
-     * @param string|null $instanceId instance id of taggable
-     * @return Collection|Tag[] model collection
+     * @param  string  $taggableId  taggable id
+     * @param  array  $words  tag word
+     * @param  string|null  $instanceId  instance id of taggable
+     *
+     * @return Collection model collection
      */
     public function set($taggableId, array $words = [], $instanceId = null)
     {
-        $words = array_unique($words);
+        return XeDB::transaction(
+            function () use ($taggableId, $words, $instanceId) {
+                $words = array_values(
+                    array_unique($words)
+                );
 
-        $whereInWords = array_map(static function (string $word) {
-            return \DB::raw("binary '$word'");
-        }, $words);
-        
-        $tags = $this->repo->query()
-             ->where('instance_id', $instanceId)
-             ->whereIn('word', $whereInWords)
-             ->get();
+                $tagQuery = $this->repo->query()->where('instance_id', '=', $instanceId);
 
-        // 등록되지 않은 단어가 있다면 등록 함
-        foreach (array_diff($words, $tags->pluck('word')->all()) as $word) {
-            $tag = $this->repo->create([
-                'word' => $word,
-                'decomposed' => $this->decomposer->execute($word),
-                'instance_id' => $instanceId,
-            ]);
+                $tags = collect();
 
-            $tags->push($tag);
-        }
+                if (filled($words)) {
+                    $placeholders = implode(', ', array_fill(0, count($words), '?'));
 
-        // 넘겨준 태그와 대상 아이디를 연결
-        $tags = $this->multisort($words, $tags->all());
-        $this->repo->attach($taggableId, $tags);
+                    $tags = $tagQuery
+                        ->whereRaw(sprintf('BINARY `word` IN (%s)', $placeholders), $words)
+                        ->get();
+                }
 
-        // 이전에 대상 아이디에 연결된 태그중
-        // 전달된 단어 해당하는 태그가 없는경우 연결 해제 처리
-        $olds = $this->repo->fetchByTaggable($taggableId);
-        $removes = $olds->diff($tags);
+                $registeredWords = $tags->pluck('word')->all();
+                $unregisteredWords = array_diff($words, $registeredWords);
 
-        $this->repo->detach($taggableId, $removes);
+                foreach ($unregisteredWords as $word) {
+                    $tags->push($this->repo->create([
+                        'word' => $word,
+                        'decomposed' => $this->decomposer->execute($word),
+                        'instance_id' => $instanceId,
+                    ]));
+                }
 
-        return $this->repo->newCollection($tags);
+                $tags = $this->multisort(
+                    $words,
+                    $tags->all()
+                );
+
+                $this->repo->sync(
+                    $taggableId,
+                    $tags
+                );
+
+                return $this->repo->newCollection($tags);
+            }
+        );
     }
 
     /**
      * Sort tags by given words
      *
-     * @param array $std  standard array for sort
-     * @param Tag[] $tags tags array
+     * @param  array  $std  standard array for sort
+     * @param  Tag[]  $tags  tags array
      * @return Tag[]
      */
     private function multisort($std, $tags)
     {
         $std = array_map([$this, 'nonNumeric'], array_values($std));
+
         $words = array_map(function ($tag) {
             return $this->nonNumeric($tag->word);
         }, $tags);
@@ -123,9 +132,9 @@ class TagHandler
     }
 
     /**
-     * Convert to non numeric string
+     * Convert to non-numeric string
      *
-     * @param string|int $v string
+     * @param  string|int  $v  string
      * @return string
      */
     private function nonNumeric($v)
@@ -134,24 +143,28 @@ class TagHandler
     }
 
     /**
-     * Search similar tags by given string
+     * Search similar tags by a given string
      *
-     * @param string      $string     partial of word
-     * @param int         $take       take count
-     * @param string|null $instanceId instance id of taggable
+     * @param  string  $string  partial of word
+     * @param  int  $take  take count
+     * @param  string|null  $instanceId  instance id of taggable
      * @return Collection|Tag[]
      */
     public function similar($string, $take = 15, $instanceId = null)
     {
-        return $this->repo->fetchSimilar($this->decomposer->execute($string), $take, $instanceId);
+        return $this->repo->fetchSimilar(
+            $this->decomposer->execute($string),
+            $take,
+            $instanceId
+        );
     }
 
     /**
-     * Search similar words by given string
+     * Search similar words by a given string
      *
-     * @param string      $string     partial of word
-     * @param int         $take       take count
-     * @param string|null $instanceId instance id of taggable
+     * @param  string  $string  partial of word
+     * @param  int  $take  take count
+     * @param  string|null  $instanceId  instance id of taggable
      * @return string[]
      */
     public function similarWord($string, $take = 15, $instanceId = null)
@@ -174,7 +187,7 @@ class TagHandler
     /**
      * Set the decomposer instance.
      *
-     * @param Decomposer $decomposer decomposer instance
+     * @param  Decomposer  $decomposer  decomposer instance
      * @return void
      */
     public function setDecomposer(Decomposer $decomposer)
@@ -185,8 +198,8 @@ class TagHandler
     /**
      * __call
      *
-     * @param string $name      method name
-     * @param array  $arguments arguments
+     * @param  string  $name  method name
+     * @param  array  $arguments  arguments
      * @return mixed
      */
     public function __call($name, $arguments)
