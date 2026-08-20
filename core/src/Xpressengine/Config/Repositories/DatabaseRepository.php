@@ -83,10 +83,16 @@ class DatabaseRepository implements ConfigRepository
      */
     public function fetchAncestor($siteKey, $name)
     {
+        $ancestorNames = $this->resolveAncestorNames($name);
+
+        if (empty($ancestorNames) === true) {
+            return [];
+        }
+
         $rows = $this->conn->table($this->table)
             ->where('site_key', $siteKey)
-            ->whereRaw("'{$name}' like concat(`name`, '.', '%')")
-            ->where('name', '<>', $name)->get();
+            ->whereIn('name', $ancestorNames)
+            ->get();
 
         $items = [];
         foreach ($rows as $row) {
@@ -235,10 +241,23 @@ class DatabaseRepository implements ConfigRepository
         $from = implode('.', $arr);
 
         if ($to === null) {
-            $query->update(['name' => $this->conn->raw("substr(`name`, length('{$from}') + 2)")]);
-        } else {
-            $query->update(['name' => $this->conn->raw("concat('{$to}', substr(`name`, length('{$from}') + 1))")]);
+            $query->update([
+                'name' => $this->conn->raw(sprintf(
+                    'substr(`name`, length(%s) + 2)',
+                    $this->quoteSqlString($from)
+                ))
+            ]);
+
+            return;
         }
+        $query->update([
+            'name' => $this->conn->raw(sprintf(
+                'concat(%s, substr(`name`, length(%s) + 1))',
+                $this->quoteSqlString($to),
+                $this->quoteSqlString($from)
+            ))
+        ]);
+
     }
 
     /**
@@ -251,15 +270,23 @@ class DatabaseRepository implements ConfigRepository
      */
     public function affiliate(ConfigEntity $config, $to = null)
     {
-        if ($to !== null) {
-            $this->conn->table($this->table)
-                ->where('site_key', $config->site_key)
-                ->where(function ($query) use ($config) {
-                    $query->where('name', $config->name)
-                        ->orWhere('name', 'like', $config->name . '.%');
-                })
-                ->update(['name' => $this->conn->raw("concat('{$to}', '.', `name`)")]);
+        if ($to === null) {
+            return;
         }
+
+        $this->conn->table($this->table)
+            ->where('site_key', $config->site_key)
+            ->where(function ($query) use ($config) {
+                $query->where('name', $config->name)
+                    ->orWhere('name', 'like', $config->name.'.%');
+            })
+            ->update([
+                'name' => $this->conn->raw(sprintf(
+                    'concat(%s, %s, `name`)',
+                    $this->quoteSqlString($to),
+                    $this->quoteSqlString('.')
+                ))
+            ]);
     }
 
     /**
@@ -272,5 +299,46 @@ class DatabaseRepository implements ConfigRepository
     protected function createModel(array $attributes)
     {
         return new ConfigEntity($attributes);
+    }
+
+    /**
+     * Calculates the list of ancestor names for the current name.
+     *
+     * @param  string  $name  config name
+     *
+     * @return array
+     */
+    private function resolveAncestorNames($name)
+    {
+        $segments = explode('.', $name);
+        array_pop($segments);
+
+        $ancestorNames = [];
+        $currentSegments = [];
+
+        foreach ($segments as $segment) {
+            $currentSegments[] = $segment;
+            $ancestorNames[] = implode('.', $currentSegments);
+        }
+
+        return $ancestorNames;
+    }
+
+    /**
+     * Escapes string literals included in a raw SQL expression according to SQL syntax.
+     *
+     * Used only for strings inside UPDATE expressions where Query Builder bindings cannot be used.
+     *
+     * @param  string  $value  Value to wrap as an SQL string literal
+     *
+     * @return string
+     */
+    private function quoteSqlString($value)
+    {
+        return sprintf("'%s'", str_replace(
+            ['\\', "'"],
+            ['\\\\', "''"],
+            $value
+        ));
     }
 }
