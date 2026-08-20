@@ -948,8 +948,49 @@ class PluginHandler
         if (true !== $code = $zip->open($uploadFile)) {
             throw new \RuntimeException("Zip archive error [code: $code]");
         }
+
+        $this->assertSafeArchiveEntries($zip, $uploadFile->getClientOriginalName());
+
         $zip->extractTo($path);
         $zip->close();
+    }
+
+    /**
+     * Assert archive entries stay inside the extraction directory.
+     *
+     * @param ZipArchive $zipArchive  zip archive
+     * @param string     $archiveName archive name
+     *
+     * @return void
+     */
+    private function assertSafeArchiveEntries(ZipArchive $zipArchive, $archiveName)
+    {
+        for ($index = 0; $index < $zipArchive->numFiles; $index++) {
+            $entryName = $zipArchive->getNameIndex($index);
+
+            if ($entryName === false || $this->hasUnsafeArchiveEntry($entryName)) {
+                $zipArchive->close();
+
+                throw new \RuntimeException(sprintf('Unsafe zip entry detected in archive [%s]', $archiveName));
+            }
+        }
+    }
+
+    /**
+     * Determine if the archive entry can escape the extraction directory.
+     *
+     * @param string $entryName archive entry name
+     *
+     * @return bool
+     */
+    private function hasUnsafeArchiveEntry($entryName)
+    {
+        $normalizedEntryName = str_replace('\\', '/', $entryName);
+
+        return $normalizedEntryName === ''
+            || strpos($normalizedEntryName, '/') === 0
+            || preg_match('/^[A-Za-z]:\//', $normalizedEntryName) === 1
+            || preg_match('#(^|/)\.\.?(/|$)#', $normalizedEntryName) === 1;
     }
 
     /**
