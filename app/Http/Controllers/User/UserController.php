@@ -16,15 +16,19 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Auth;
+use Closure;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
+use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use XeDB;
 use XePresenter;
 use XeTheme;
+use Xpressengine\Presenter\Presentable;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
@@ -39,6 +43,8 @@ use Xpressengine\User\HttpUserException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
+use Xpressengine\User\Repositories\UserRepositoryInterface;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserRegisterHandler;
 
@@ -55,12 +61,12 @@ use Xpressengine\User\UserRegisterHandler;
 class UserController extends Controller
 {
     /**
-     * @var \Xpressengine\User\Repositories\UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $users;
 
     /**
-     * @var \Xpressengine\User\Repositories\UserGroupRepositoryInterface
+     * @var UserGroupRepositoryInterface
      */
     protected $groups;
 
@@ -106,7 +112,7 @@ class UserController extends Controller
      *
      * @param  Request  $request  request
      * @param  string  $section  section
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function show(Request $request, $section = 'settings')
     {
@@ -126,7 +132,7 @@ class UserController extends Controller
 
         $content = $selectedSection['content'];
         $selectedSection['selected'] = true;
-        $tabContent = $content instanceof \Closure ? $content($user) : $content;
+        $tabContent = $content instanceof Closure ? $content($user) : $content;
 
         expose_trans('xe::validatorMin');
         expose_trans('xe::passwordIncludeNumber');
@@ -142,7 +148,7 @@ class UserController extends Controller
      * Update display name of user.
      *
      * @param  Request  $request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function updateDisplayName(Request $request)
@@ -153,7 +159,7 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             $this->handler->update($request->user(), ['display_name' => $displayName]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -168,9 +174,9 @@ class UserController extends Controller
      * Validate display name of user.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws ContainerExceptionInterface
      */
     public function validateDisplayName(Request $request, UserRegisterHandler $userRegisterHandler)
     {
@@ -194,7 +200,7 @@ class UserController extends Controller
             $message = Arr::first($exception->errors()['display_name']);
         }
 
-        return \XePresenter::makeApi([
+        return XePresenter::makeApi([
             'type' => 'success',
             'message' => xe_trans($message, ['displayName' => $displayNameCaption]),
             'displayName' => $displayName,
@@ -203,10 +209,10 @@ class UserController extends Controller
     }
 
     /**
-     * Update password of user.
+     * Update the password of the user.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function updatePassword(Request $request)
@@ -243,7 +249,7 @@ class UserController extends Controller
             } catch (InvalidPasswordException $e) {
                 XeDB::rollback();
                 throw new HttpException(422, $e->getMessage(), $e);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 XeDB::rollback();
                 throw $e;
             }
@@ -260,10 +266,10 @@ class UserController extends Controller
 
 
     /**
-     * Validate password of user.
+     * Validate the password of the user.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function validatePassword(Request $request)
@@ -285,7 +291,7 @@ class UserController extends Controller
      * Update user's main email address.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function updateMainMail(Request $request)
     {
@@ -317,7 +323,7 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             $this->users->update($request->user());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
         }
         XeDB::commit();
@@ -328,7 +334,7 @@ class UserController extends Controller
     /**
      * Get emails of current user.
      *
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function getMailList()
     {
@@ -343,10 +349,10 @@ class UserController extends Controller
     }
 
     /**
-     * Add email to user.
+     * Add email to a user.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function addMail(Request $request)
@@ -373,7 +379,7 @@ class UserController extends Controller
             if ($useEmailConfirm) {
                 app('xe.auth.email')->sendEmailForAddingEmail($mail);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -386,7 +392,7 @@ class UserController extends Controller
      * Confirm email by given code.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function confirmMail(Request $request)
@@ -405,7 +411,7 @@ class UserController extends Controller
             $e = new InvalidArgumentHttpException();
             $e->setMessage(xe_trans('xe::invalidConfirmationCodeCheckAndRetry'));
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -418,7 +424,7 @@ class UserController extends Controller
      * Resend pending email.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function resendPendingMail(Request $request)
     {
@@ -437,7 +443,7 @@ class UserController extends Controller
      * Delete a email.
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function deleteMail(Request $request)
@@ -474,7 +480,7 @@ class UserController extends Controller
             $e = new HttpUserException([], 400, $e);
             $e->setMessage('xe::cannotDeleteMainEmailOfUser');
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -487,7 +493,7 @@ class UserController extends Controller
      * Delete user's pending email
      *
      * @param  Request  $request  request
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      * @throws Exception
      */
     public function deletePendingMail(Request $request)
@@ -499,7 +505,7 @@ class UserController extends Controller
      * Leave the application.
      *
      * @param  Request  $request  request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws Exception
      */
     public function leave(Request $request)
@@ -522,7 +528,7 @@ class UserController extends Controller
             $e = new HttpUserException([], 400, $e);
             $e->setMessage('xe::cannotLeaveHaveSuperRatingUser');
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
@@ -534,10 +540,10 @@ class UserController extends Controller
     }
 
     /**
-     * Show additional field for user.
+     * Show additional field for the user.
      *
      * @param  string  $field  field id
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function showAdditionField($field)
     {
@@ -551,10 +557,10 @@ class UserController extends Controller
     }
 
     /**
-     * Show edit form for additional field for user.
+     * Show an edit form for an additional field for the user.
      *
      * @param  string  $field  field id
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function editAdditionField($field)
     {
@@ -572,7 +578,7 @@ class UserController extends Controller
      *
      * @param  Request  $request  request
      * @param  string  $field  field id
-     * @return \Xpressengine\Presenter\Presentable
+     * @return Presentable
      */
     public function updateAdditionField(Request $request, $field)
     {
