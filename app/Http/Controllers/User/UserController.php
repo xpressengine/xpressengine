@@ -46,7 +46,6 @@ use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\Repositories\UserRepositoryInterface;
 use Xpressengine\User\UserHandler;
-use Xpressengine\User\UserRegisterHandler;
 
 /**
  * Class UserController
@@ -178,7 +177,7 @@ class UserController extends Controller
      * @throws Exception
      * @throws ContainerExceptionInterface
      */
-    public function validateDisplayName(Request $request, UserRegisterHandler $userRegisterHandler)
+    public function validateDisplayName(Request $request)
     {
         $valid = true;
         $message = 'xe::usableDisplayName';
@@ -363,10 +362,8 @@ class UserController extends Controller
 
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
         $useEmailConfirm = app('xe.config')->getVal('user.common.guard_forced') === true;
-        if ($useEmailConfirm) {
-            if ($request->user()->getPendingEmail() !== null) {
-                $e = new PendingEmailAlreadyExistsException();
-            }
+        if ($useEmailConfirm && $request->user()->getPendingEmail() !== null) {
+            throw new PendingEmailAlreadyExistsException();
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
