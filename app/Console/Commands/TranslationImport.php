@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TranslationImport.php
  *
@@ -15,11 +16,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Xpressengine\Database\VirtualConnectionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Xpressengine\Database\DatabaseHandler;
-use Xpressengine\Translation\LaravelLangData;
 use Xpressengine\Translation\Translator;
 
 /**
@@ -58,7 +56,7 @@ class TranslationImport extends Command
     /**
      * Create a new command instance.
      *
-     * @param Translator $translator translator
+     * @param  Translator  $translator  translator
      */
     public function __construct(Translator $translator)
     {
@@ -70,13 +68,14 @@ class TranslationImport extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
         $name = $this->argument('name');
         $path = $this->option('path');
         $force = $this->option('force');
+
         $source = $this->resolveImportPath($name, $path);
 
         if ($source === false) {
@@ -91,7 +90,7 @@ class TranslationImport extends Command
             $dir = dir($source);
 
             while ($entry = $dir->read()) {
-                $file = $source . DIRECTORY_SEPARATOR . $entry;
+                $file = $source.DIRECTORY_SEPARATOR.$entry;
                 if (is_dir($file)) {
                     continue;
                 } elseif (strtolower(pathinfo($file, PATHINFO_EXTENSION)) !== 'php') {
@@ -117,24 +116,24 @@ class TranslationImport extends Command
     /**
      * Get the directory path where the language file.
      *
-     * @param string $name name of target
+     * @param  string  $name  name of target
      * @return string
      */
     protected function getLangsDir($name)
     {
         if ($name === 'xe') {
             // core language
-            return base_path('resources') . DIRECTORY_SEPARATOR . 'lang';
+            return base_path('resources').DIRECTORY_SEPARATOR.'lang';
         }
 
-        return base_path('plugins') . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'langs';
+        return base_path('plugins').DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR.'langs';
     }
 
     /**
      * Resolve the import path under the allowed language directory.
      *
-     * @param string      $name plugin name
-     * @param string|null $path requested path
+     * @param  string  $name  plugin name
+     * @param  string|null  $path  requested path
      *
      * @return string|false
      */
@@ -148,6 +147,7 @@ class TranslationImport extends Command
 
         if ($name !== 'xe') {
             $pluginsDir = realpath(base_path('plugins'));
+
             if ($pluginsDir === false || !$this->isSameOrChildPath($allowedDir, $pluginsDir)) {
                 return false;
             }
@@ -169,13 +169,13 @@ class TranslationImport extends Command
     /**
      * Check whether a path is a directory itself or one of its children.
      *
-     * @param string $path      path
-     * @param string $directory directory
+     * @param  string  $path  path
+     * @param  string  $directory  directory
      * @return bool
      */
     protected function isSameOrChildPath($path, $directory)
     {
-        return $path === $directory || strpos($path, $directory . DIRECTORY_SEPARATOR) === 0;
+        return $path === $directory || strpos($path, $directory.DIRECTORY_SEPARATOR) === 0;
     }
 
     /**

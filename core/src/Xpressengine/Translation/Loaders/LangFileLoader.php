@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Translation
  *
@@ -17,6 +18,7 @@ namespace Xpressengine\Translation\Loaders;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
+use UnexpectedValueException;
 use Xpressengine\Translation\LangData;
 
 /**
@@ -36,7 +38,7 @@ class LangFileLoader implements LoaderInterface
     /**
      * LangFileLoader constructor.
      *
-     * @param Filesystem $files 라라벨 파일 시스템
+     * @param  Filesystem  $files  라라벨 파일 시스템
      */
     public function __construct(Filesystem $files)
     {
@@ -63,7 +65,7 @@ class LangFileLoader implements LoaderInterface
         $data = $this->files->getRequire($source);
 
         if (!is_array($data)) {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Language file must return an array.'
             );
         }
