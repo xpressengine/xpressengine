@@ -45,8 +45,7 @@
     "mockery/mockery": "^1.0",
     "phpunit/phpunit": "^8.5.8|^9.3.3",
     "nunomaduro/collision": "^3.0",
-    "barryvdh/laravel-debugbar": "~3.0",
-    "roave/security-advisories": "dev-latest"
+    "barryvdh/laravel-debugbar": "~3.0"
   },
   "repositories": [
     {
