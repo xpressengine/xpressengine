@@ -19,7 +19,7 @@ use XpressEngine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
 
 /**
- * DB 에 자료를 입출력 하는 역할을 담당
+ * Handles database input and output.
  *
  * @category    Config
  * @package     Xpressengine\Config
@@ -47,7 +47,7 @@ class DatabaseRepository implements ConfigRepository
     /**
      * constructor
      *
-     * @param VirtualConnectionInterface $conn DB connection instance
+     * @param  VirtualConnectionInterface  $conn  DB connection instance
      */
     public function __construct(VirtualConnectionInterface $conn)
     {
@@ -57,17 +57,20 @@ class DatabaseRepository implements ConfigRepository
     /**
      * search getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      *
      * @return ConfigEntity
      */
     public function find($siteKey, $name)
     {
-        $row = $this->conn->table($this->table)->where('site_key', $siteKey)->where('name', $name)->first();
+        $row = $this->conn->table($this->table)
+            ->where('site_key', $siteKey)
+            ->where('name', $name)
+            ->first();
 
         if ($row !== null) {
-            return $this->createModel((array)$row);
+            return $this->createModel((array) $row);
         }
 
         return null;
@@ -76,8 +79,8 @@ class DatabaseRepository implements ConfigRepository
     /**
      * search ancestors getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      *
      * @return array
      */
@@ -95,8 +98,9 @@ class DatabaseRepository implements ConfigRepository
             ->get();
 
         $items = [];
+
         foreach ($rows as $row) {
-            $items[] = $this->createModel((array)$row);
+            $items[] = $this->createModel((array) $row);
         }
 
         return $items;
@@ -105,8 +109,8 @@ class DatabaseRepository implements ConfigRepository
     /**
      * search descendants getter
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      *
      * @return array
      */
@@ -114,12 +118,13 @@ class DatabaseRepository implements ConfigRepository
     {
         $rows = $this->conn->table($this->table)
             ->where('site_key', $siteKey)
-            ->where('name', 'like', $name . '.%')
+            ->where('name', 'like', $name.'.%')
             ->where('name', '<>', $name)->get();
 
         $items = [];
+
         foreach ($rows as $row) {
-            $items[] = $this->createModel((array)$row);
+            $items[] = $this->createModel((array) $row);
         }
 
         return $items;
@@ -128,13 +133,14 @@ class DatabaseRepository implements ConfigRepository
     /**
      * save
      *
-     * @param ConfigEntity $config config object
+     * @param  ConfigEntity  $config  config object
      *
      * @return ConfigEntity
      */
     public function save(ConfigEntity $config)
     {
         $exists = $this->find($config->site_key, $config->name);
+
         if ($exists === null) {
             return $this->insert($config);
         }
@@ -145,8 +151,8 @@ class DatabaseRepository implements ConfigRepository
     /**
      * clear all just descendants vars
      *
-     * @param ConfigEntity $config  config object
-     * @param array        $excepts target to the except
+     * @param  ConfigEntity  $config  config object
+     * @param  array  $excepts  target to the excepting
      *
      * @return void
      */
@@ -154,11 +160,11 @@ class DatabaseRepository implements ConfigRepository
     {
         $query = $this->conn->table($this->table)
             ->where('site_key', $config->site_key)
-            ->where('name', 'like', $config->name . '%')
+            ->where('name', 'like', $config->name.'%')
             ->where('name', '<>', $config->name);
 
         foreach ($excepts as $except) {
-            $query->where('name', 'not like', $except . '%');
+            $query->where('name', 'not like', $except.'%');
         }
 
         $query->update(
@@ -169,8 +175,8 @@ class DatabaseRepository implements ConfigRepository
     /**
      * remove
      *
-     * @param string $siteKey site key
-     * @param string $name    the name
+     * @param  string  $siteKey  site key
+     * @param  string  $name  the name
      *
      * @return void
      */
@@ -178,30 +184,36 @@ class DatabaseRepository implements ConfigRepository
     {
         $this->conn->table($this->table)
             ->where('site_key', $siteKey)
-            ->where(function ($query) use ($name) {
-                $query->where('name', 'like', $name . '.%')
-                    ->orWhere('name', $name);
-            })->delete();
+            ->where(
+                function ($query) use ($name) {
+                    $query->where('name', 'like', $name.'.%')
+                        ->orWhere('name', $name);
+                }
+            )->delete();
     }
 
     /**
      * insert
      *
-     * @param ConfigEntity $config config object
+     * @param  ConfigEntity  $config  config object
      *
      * @return ConfigEntity
      */
     protected function insert(ConfigEntity $config)
     {
-        $this->conn->table($this->table)->insert($config->getAttributes());
+        $this->conn->table($this->table)->insert(
+            $config->getAttributes()
+        );
 
-        return $this->createModel($config->getAttributes());
+        return $this->createModel(
+            $config->getAttributes()
+        );
     }
 
     /**
      * update
      *
-     * @param ConfigEntity $config config object
+     * @param  ConfigEntity  $config  config object
      *
      * @return ConfigEntity
      */
@@ -216,14 +228,16 @@ class DatabaseRepository implements ConfigRepository
                 ->update($diff);
         }
 
-        return $this->createModel(array_merge($config->getOriginal(), $diff));
+        return $this->createModel(
+            array_merge($config->getOriginal(), $diff)
+        );
     }
 
     /**
      * Parent Changing with descendant
      *
-     * @param ConfigEntity $config config object
-     * @param string|null  $to     to config prefix
+     * @param  ConfigEntity  $config  config object
+     * @param  string|null  $to  to config prefix
      *
      * @return void
      */
@@ -231,10 +245,12 @@ class DatabaseRepository implements ConfigRepository
     {
         $query = $this->conn->table($this->table)
             ->where('site_key', $config->site_key)
-            ->where(function ($query) use ($config) {
-                $query->where('name', $config->name)
-                    ->orWhere('name', 'like', $config->name . '.%');
-            });
+            ->where(
+                function ($query) use ($config) {
+                    $query->where('name', $config->name)
+                        ->orWhere('name', 'like', $config->name.'.%');
+                }
+            );
 
         $arr = explode('.', $config->name);
         array_pop($arr);
@@ -263,8 +279,8 @@ class DatabaseRepository implements ConfigRepository
     /**
      * affiliated to another config
      *
-     * @param ConfigEntity $config config object
-     * @param string|null  $to     parent name
+     * @param  ConfigEntity  $config  config object
+     * @param  string|null  $to  parent name
      *
      * @return void
      */
@@ -290,9 +306,9 @@ class DatabaseRepository implements ConfigRepository
     }
 
     /**
-     * make new object
+     * make a new object
      *
-     * @param array $attributes raw data
+     * @param  array  $attributes  raw data
      *
      * @return ConfigEntity
      */
