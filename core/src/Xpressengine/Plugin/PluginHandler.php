@@ -15,12 +15,17 @@
 namespace Xpressengine\Plugin;
 
 use Composer\Json\JsonFile;
-use http\Exception\InvalidArgumentException;
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
+use RuntimeException;
+use Seld\JsonLint\ParsingException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
@@ -141,11 +146,11 @@ class PluginHandler
     /**
      * 생성자. 플러그인 관리에 필요한 요소들을 주입받는다.
      *
-     * @param PluginRepository $repo        plugin repository
-     * @param PluginProvider   $provider    plugin provider
-     * @param Factory          $viewFactory View
-     * @param PluginRegister   $register    plugin register
-     * @param Application      $app         application
+     * @param  PluginRepository  $repo  plugin repository
+     * @param  PluginProvider  $provider  plugin provider
+     * @param  Factory  $viewFactory  View
+     * @param  PluginRegister  $register  plugin register
+     * @param  Application  $app  application
      */
     public function __construct(
         PluginRepository $repo,
@@ -164,7 +169,7 @@ class PluginHandler
     /**
      * config manager를 설정한다.
      *
-     * @param ConfigManager $config config manager
+     * @param  ConfigManager  $config  config manager
      *
      * @return void
      */
@@ -196,7 +201,7 @@ class PluginHandler
     /**
      * plugin directory 경로를 지정한다.
      *
-     * @param string $path 지정할 디렉토리 경로
+     * @param  string  $path  지정할 디렉토리 경로
      *
      * @return void
      *
@@ -210,7 +215,7 @@ class PluginHandler
     /**
      * get Unresolved Components
      *
-     * @param string|null $plugin target plugin
+     * @param  string|null  $plugin  target plugin
      *
      * @return array
      */
@@ -228,9 +233,10 @@ class PluginHandler
     /**
      * 주어진 플러그인을 활성화한다. 활성화된 플러그인 목록은 XE에 저장된다.
      *
-     * @param string $pluginId 활성화 할 플러그인의 id
+     * @param  string  $pluginId  활성화 할 플러그인의 id
      *
      * @return void
+     * @throws Exception
      */
     public function activatePlugin($pluginId)
     {
@@ -257,7 +263,7 @@ class PluginHandler
         // 플러그인 활성화. 플러그인을 활성화할 때마다 각 플러그인의 activate() 메소드를 호출해준다.
         try {
             $entity->activate($installedVersion);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new PluginActivationFailedException([], null, $e);
         }
 
@@ -274,7 +280,7 @@ class PluginHandler
     /**
      * 주어진 플러그인을 비활성화한다.
      *
-     * @param string $pluginId 비활성화 할 플러그인의 id
+     * @param  string  $pluginId  비활성화 할 플러그인의 id
      *
      * @return void
      */
@@ -291,6 +297,7 @@ class PluginHandler
         // 비활성화하려는 플러그인에 의존하는 활성화 상태인 플러그인이 있는지 검사한다.
         // 만약 의존하는 플러그인이 있다면, 비활성화시키지 않고 예외 처리한다.
         $activateds = $this->getActivatedPlugins();
+
         foreach ($activateds as $activated) {
             $dependencies = $this->getDependencies($activated);
             if (in_array($pluginId, $dependencies)) {
@@ -306,7 +313,7 @@ class PluginHandler
         $plugin = $entity->getObject();
         try {
             $plugin->deactivate($installedVersion);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new PluginDeactivationFailedException();
         }
 
@@ -322,7 +329,7 @@ class PluginHandler
     /**
      * 의존성 자료 정보를 반환함.
      *
-     * @param PluginEntity $entity plugin entity
+     * @param  PluginEntity  $entity  plugin entity
      * @return array
      */
     public function getDependencies(PluginEntity $entity)
@@ -352,10 +359,12 @@ class PluginHandler
     /**
      * 플러그인을 업데이트한다.
      *
-     * @param string $pluginId     업데이트할 플러그인의 아이디
-     * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
+     * @param  string  $pluginId  업데이트할 플러그인의 아이디
+     * @param  bool  $updateStatus  true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function updatePlugin($pluginId, $updateStatus = true)
     {
@@ -393,10 +402,10 @@ class PluginHandler
     /**
      * 주어진 플러그인을 uninstall 한다.
      *
-     * @param string $pluginId 삭제할 플러그인의 id
+     * @param  string  $pluginId  삭제할 플러그인의 id
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function uninstallPlugin($pluginId)
     {
@@ -422,6 +431,8 @@ class PluginHandler
      * 각 플러그인은 모든 요청에서 항상 작동되어야 할 작업을 boot() 메소드로 작성해 놓아야 한다.
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function bootPlugins()
     {
@@ -439,9 +450,10 @@ class PluginHandler
     /**
      * 플러그인에서 제공하는 요소들을 바인딩한다.
      *
-     * @param PluginEntity $entity 플러그인
+     * @param  PluginEntity  $entity  플러그인
      *
      * @return void
+     * @throws Exception
      */
     protected function registerPlugin(PluginEntity $entity)
     {
@@ -462,9 +474,9 @@ class PluginHandler
 
                 $this->registered[$entity->getId()] = true;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->handleError($entity, $e);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->handleError($entity, new FatalThrowableError($e));
         }
     }
@@ -472,9 +484,11 @@ class PluginHandler
     /**
      * 플러그인을 부트한다.
      *
-     * @param PluginEntity $entity 부트시킬 플러그인
+     * @param  PluginEntity  $entity  부트시킬 플러그인
      *
      * @return void
+     *
+     * @throws Exception
      */
     protected function bootPlugin(PluginEntity $entity)
     {
@@ -488,9 +502,9 @@ class PluginHandler
 
                 $this->booted[$entity->getId()] = true;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->handleError($entity, $e);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->handleError($entity, new FatalThrowableError($e));
         }
     }
@@ -498,12 +512,12 @@ class PluginHandler
     /**
      * Handle errors for boot plugins.
      *
-     * @param PluginEntity $entity plugin
-     * @param \Exception   $e      exception
+     * @param  PluginEntity  $entity  plugin
+     * @param  Exception  $e  exception
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function handleError(PluginEntity $entity, \Exception $e)
+    protected function handleError(PluginEntity $entity, Exception $e)
     {
         if ($this->app['config']['app.debug'] === true) {
             throw $e;
@@ -514,7 +528,7 @@ class PluginHandler
             'exception' => $e
         ];
 
-        if ($entity->isActivated() && $this->app['config']['xe.plugin.sensitive'] == true) {
+        if ($entity->isActivated() && $this->app['config']['xe.plugin.sensitive']) {
             $this->deactivatePlugin($entity->getId());
         }
     }
@@ -532,9 +546,10 @@ class PluginHandler
     /**
      * 등록된 플러그인의 목록을 반환한다.
      *
-     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     * @param  bool  $refresh  true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
      *
      * @return PluginCollection
+     * @throws Exception
      */
     public function getAllPlugins($refresh = false)
     {
@@ -567,9 +582,11 @@ class PluginHandler
     /**
      * 등록된 테마 목록을 반환
      *
-     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     * @param  bool  $refresh  true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
      *
-     * @return array|PluginCollection
+     * @return PluginCollection
+     *
+     * @throws Exception
      */
     public function getAllThemes($refresh = false)
     {
@@ -585,17 +602,17 @@ class PluginHandler
             $themes[] = $plugin;
         }
 
-        $themes = new PluginCollection($themes);
-
-        return $themes;
+        return new PluginCollection($themes);
     }
 
     /**
      * 등록된 익스텐션 목록을 반환
      *
-     * @param bool $refresh true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
+     * @param  bool  $refresh  true일 경우, cache를 사용하지 않고 다시 목록을 생성하여 반환한다.
      *
-     * @return array|PluginCollection
+     * @return PluginCollection
+     *
+     * @throws Exception
      */
     public function getAllExtensions($refresh = false)
     {
@@ -605,7 +622,7 @@ class PluginHandler
         /** @var PluginEntity $plugin */
         foreach ($allPlugins as $plugin) {
             // 총 컴포넌트 수가 테마의 숫자와 같으면 테마로 분류
-            // 나머지 경우 모두 extenstion 으로 노출
+            // 나머지 경우 모두 extension 으로 노출
             if (!empty($plugin->getComponentList('theme')) &&
                 count($plugin->getComponentList()) === count($plugin->getComponentList('theme'))
             ) {
@@ -615,9 +632,7 @@ class PluginHandler
             $extensions[] = $plugin;
         }
 
-        $extensions = new PluginCollection($extensions);
-
-        return $extensions;
+        return new PluginCollection($extensions);
     }
 
     /**
@@ -647,7 +662,7 @@ class PluginHandler
     /**
      * Create a new instance of the plugin collection.
      *
-     * @param array $items plugins
+     * @param  array  $items  plugins
      * @return PluginCollection
      */
     protected function createCollection($items)
@@ -658,7 +673,7 @@ class PluginHandler
     /**
      * 플러그인이 composer autoload 파일을 가지고 있을 경우 autoload를 등록한다.
      *
-     * @param PluginEntity $entity plugin
+     * @param  PluginEntity  $entity  plugin
      * @return void
      */
     public function registerAutoload(PluginEntity $entity)
@@ -682,7 +697,7 @@ class PluginHandler
     /**
      * 주어진 pluginId에 해당하는 플러그인을 조회하여 반환한다. PluginEntity 형태로 반환한다.
      *
-     * @param string $pluginId 조회할 plugin의 id
+     * @param  string  $pluginId  조회할 plugin의 id
      *
      * @return PluginEntity
      */
@@ -698,15 +713,14 @@ class PluginHandler
      */
     protected function getPluginsStatus()
     {
-        $configs = $this->config->getVal($this->configKey, []);
-        return $configs;
+        return $this->config->getVal($this->configKey, []);
     }
 
     /**
      * 주어진 플러그인의 상태정보를 조회한다.
      *
-     * @param string $pluginId plugin id
-     * @param null   $field    'version' or 'status'
+     * @param  string  $pluginId  plugin id
+     * @param  null  $field  'version' or 'status'
      *
      * @return mixed
      */
@@ -724,7 +738,7 @@ class PluginHandler
     /**
      * 플러그인 상태정보를 갱신한다.
      *
-     * @param array $configs status list
+     * @param  array  $configs  status list
      *
      * @return void
      */
@@ -737,9 +751,9 @@ class PluginHandler
      * 주어진 plugin의 상태를 갱신한다.
      * 상태정보에는 status, version 필드가 있으며, 둘중 하나만 선택해서 갱신할 수도 있다.
      *
-     * @param string $pluginId plugin id
-     * @param array  $field    'version' or 'status'
-     * @param null   $status   value of field
+     * @param  string  $pluginId  plugin id
+     * @param  array  $field  'version' or 'status'
+     * @param  null  $status  value of field
      *
      * @return void
      */
@@ -760,7 +774,7 @@ class PluginHandler
     /**
      * 플러그인의 view namespace를 지정한다.
      *
-     * @param PluginEntity $entity 플러그인
+     * @param  PluginEntity  $entity  플러그인
      *
      * @return void
      */
@@ -772,7 +786,7 @@ class PluginHandler
     /**
      * 플러그인이 활성화되었는지 조사한다.
      *
-     * @param string $pluginId 조사할 플러그인 아이디
+     * @param  string  $pluginId  조사할 플러그인 아이디
      *
      * @return bool 활성화된 플러그인일 경우 true 반환
      */
@@ -788,7 +802,7 @@ class PluginHandler
     /**
      * 컴포넌트를 Register에 추가한다.
      *
-     * @param string $component component class name
+     * @param  string  $component  component class name
      *
      * @return void
      */
@@ -800,19 +814,20 @@ class PluginHandler
     /**
      * Upload the plugin zip file
      *
-     * @param UploadedFile $uploadFile upload plugin file
+     * @param  UploadedFile  $uploadFile  upload plugin file
      *
-     * @return mixed
-     * @throws \Exception
+     * @return string
+     *
+     * @throws Exception
      */
     public function uploadPlugin(UploadedFile $uploadFile)
     {
         $originalDirectoryName = str_replace(
-            '.' . $uploadFile->getClientOriginalExtension(),
+            '.'.$uploadFile->getClientOriginalExtension(),
             "",
             $uploadFile->getClientOriginalName()
         );
-        $extractPath = app_storage_path('plugin/' . $originalDirectoryName);
+        $extractPath = app_storage_path('plugin/'.$originalDirectoryName);
 
         try {
             $this->checkExistPrivateDirectory();
@@ -825,11 +840,11 @@ class PluginHandler
 
             $pluginName = $this->getPluginName($extractPath);
             if (!$this->checkExistAlreadyPlugin($pluginName)) {
-                throw new \InvalidArgumentException('Plugin already exists');
+                throw new InvalidArgumentException('Plugin already exists');
             }
 
             $this->movePlugin($extractPath, $pluginName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->removeGarageDirectory($extractPath);
 
             throw $e;
@@ -841,40 +856,42 @@ class PluginHandler
     /**
      * Get plugin name
      *
-     * @param string $targetDir target directory name
+     * @param  string  $targetDir  target directory name
      *
      * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @throws FileNotFoundException
+     * @throws ParsingException
      */
     private function getPluginName($targetDir)
     {
-        $composerString = $this->getFilesystem()->get($targetDir . '/composer.json');
+        $composerString = $this->getFilesystem()->get($targetDir.'/composer.json');
 
         $pluginInformation = JsonFile::parseJson($composerString);
 
         if (isset($pluginInformation['name']) === false) {
-            throw new \InvalidArgumentException('Plugin name not exists');
+            throw new InvalidArgumentException('Plugin name not exists');
         }
 
         $pluginNamePrefix = 'xpressengine-plugin/';
         if (strpos($pluginInformation['name'], $pluginNamePrefix) === false) {
-            throw new \InvalidArgumentException('Plugin name is invalid');
+            throw new InvalidArgumentException('Plugin name is invalid');
         }
 
         return str_replace($pluginNamePrefix, '', $pluginInformation['name']);
     }
 
     /**
-     * Determine if given plugin name is already exists
+     * Determine if the given plugin name already exists
      *
-     * @param string $name target directory name
+     * @param  string  $name  target directory name
      *
      * @return bool
      */
     private function checkExistAlreadyPlugin($name)
     {
         foreach ([$this->getPrivatesDir(), $this->getPluginsDir()] as $path) {
-            if ($this->getFilesystem()->exists($path . DIRECTORY_SEPARATOR . $name) === true) {
+            if ($this->getFilesystem()->exists($path.DIRECTORY_SEPARATOR.$name) === true) {
                 return false;
             }
         }
@@ -883,28 +900,26 @@ class PluginHandler
     }
 
     /**
-     * Checks if private directory exists and creates it if it does not exist.
+     * Checks if a private directory exists and creates it if it does not exist.
      *
-     * @return boolean
+     * @return void
      */
-    private function checkExistPrivateDirectory()
+    private function checkExistPrivateDirectory(): void
     {
         if (file_exists($this->getPrivatesDir()) === false || is_dir($this->getPrivatesDir()) === false) {
             if (!mkdir($concurrentDirectory = $this->getPrivatesDir(), 0755, true) && !is_dir($concurrentDirectory)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
         }
-
-        return true;
     }
 
     /**
-     * Fix root path for the extracted plugin
+     * Fix the root path for the extracted plugin
      *
-     * @param string $targetDir target directory name
+     * @param  string  $targetDir  target directory name
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function fixExtracted($targetDir)
     {
@@ -916,37 +931,37 @@ class PluginHandler
 
         $directory = $this->searchPluginRootDirectory($tempDir);
 
-        $filesystem->move($directory, $targetDir . '/');
+        $filesystem->move($directory, $targetDir.'/');
 
         $filesystem->deleteDirectory($tempDir);
     }
 
     /**
-     * Remove temporary directory for the uploaded plugin
+     * Remove the temporary directory for the uploaded plugin
      *
-     * @param string $dir target directory name
+     * @param  string  $dir  target directory name
      *
      * @return void
      */
     private function removeGarageDirectory($dir)
     {
         $this->getFilesystem()->deleteDirectory($dir);
-        $this->getFilesystem()->deleteDirectory($dir . '_temp');
+        $this->getFilesystem()->deleteDirectory($dir.'_temp');
     }
 
     /**
      * Extract given uploaded zip file
      *
-     * @param UploadedFile $uploadFile uploaded file
-     * @param string       $path       path
+     * @param  UploadedFile  $uploadFile  uploaded a file
+     * @param  string  $path  path
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function extractZip(UploadedFile $uploadFile, $path)
     {
         $zip = new ZipArchive();
         if (true !== $code = $zip->open($uploadFile)) {
-            throw new \RuntimeException("Zip archive error [code: $code]");
+            throw new RuntimeException("Zip archive error [code: $code]");
         }
 
         $this->assertSafeArchiveEntries($zip, $uploadFile->getClientOriginalName());
@@ -958,8 +973,8 @@ class PluginHandler
     /**
      * Assert archive entries stay inside the extraction directory.
      *
-     * @param ZipArchive $zipArchive  zip archive
-     * @param string     $archiveName archive name
+     * @param  ZipArchive  $zipArchive  zip archive
+     * @param  string  $archiveName  archive name
      *
      * @return void
      */
@@ -971,7 +986,7 @@ class PluginHandler
             if ($entryName === false || $this->hasUnsafeArchiveEntry($entryName)) {
                 $zipArchive->close();
 
-                throw new \RuntimeException(sprintf('Unsafe zip entry detected in archive [%s]', $archiveName));
+                throw new RuntimeException(sprintf('Unsafe zip entry detected in archive [%s]', $archiveName));
             }
         }
     }
@@ -979,7 +994,7 @@ class PluginHandler
     /**
      * Determine if the archive entry can escape the extraction directory.
      *
-     * @param string $entryName archive entry name
+     * @param  string  $entryName  archive entry name
      *
      * @return bool
      */
@@ -994,12 +1009,13 @@ class PluginHandler
     }
 
     /**
-     * Find root directory for the plugin
+     * Find the root directory for the plugin
      *
-     * @param string $targetDir target directory name
+     * @param  string  $targetDir  target directory name
      *
-     * @return mixed
-     * @throws \Exception
+     * @return string
+     *
+     * @throws Exception
      */
     private function searchPluginRootDirectory($targetDir)
     {
@@ -1012,25 +1028,27 @@ class PluginHandler
             return $this->searchPluginRootDirectory($list[0]);
         }
 
-        throw new \RuntimeException('Unknown the plugin root');
+        throw new RuntimeException(
+            'Unknown the plugin root'
+        );
     }
 
     /**
      * Remove vendor directory
      *
-     * @param string $path target directory name
+     * @param  string  $path  target directory name
      *
      * @return void
      */
     private function removeVendorDir($path)
     {
-        $this->getFilesystem()->deleteDirectory($path . '/vendor');
+        $this->getFilesystem()->deleteDirectory($path.'/vendor');
     }
 
     /**
-     * Determine if necessary files exists
+     * Determine if the necessary files exist
      *
-     * @param string $targetDir target directory name
+     * @param  string  $targetDir  target directory name
      *
      * @return bool
      */
@@ -1046,10 +1064,10 @@ class PluginHandler
     }
 
     /**
-     * Move the plugin to private plugin directory
+     * Move the plugin to a private plugin directory
      *
-     * @param string $targetDir  target directory name
-     * @param string $pluginName plugin name
+     * @param  string  $targetDir  target directory name
+     * @param  string  $pluginName  plugin name
      *
      * @return void
      */
