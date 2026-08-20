@@ -15,9 +15,10 @@
 namespace Xpressengine\Tag;
 
 use Carbon\Carbon;
+use DateTime;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Database\QueryException;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
@@ -45,29 +46,10 @@ class TagRepository
     {
         $conn = $this->createModel()->getConnection();
         $position = 0;
-        /** @var Tag $tag */
+
         foreach ($tags as $tag) {
-            try {
-                // 대상아이디와 태그 아이템 아이디가 unique 키로 설정되어
-                // 존재 유무와 상관없이 insert 시도 함
-                // duplicate error 무시
-                $conn->table($tag->getTaggableTable())->insert([
-                    'tag_id' => $tag->getKey(),
-                    'taggable_id' => $taggableId,
-                    'position' => $position,
-                    'created_at' => $this->getNow()
-                ]);
-
+            if ($this->persistTaggable($conn, $tag, $taggableId, $position)) {
                 $tag->increment('count');
-            } catch (QueryException $e) {
-                if ($e->getCode() != "23000") {
-                    throw $e;
-                }
-
-                $conn->table($tag->getTaggableTable())
-                    ->where('tag_id', $tag->getKey())
-                    ->where('taggable_id', $taggableId)
-                    ->update(['position' => $position]);
             }
 
             $position++;
@@ -98,6 +80,86 @@ class TagRepository
                 $tag->delete();
             }
         }
+    }
+
+    /**
+     * Sync tags to taggable
+     *
+     * 대상 아이디에 연결된 태그를 주어진 태그 목록으로 갱신한다.
+     * 이미 연결된 태그는 position 만 갱신하고, 목록에서 빠진 태그는 연결을 해제한다.
+     *
+     * @param  string  $taggableId  taggable id
+     * @param  Tag[]  $tags  tag instances
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function sync($taggableId, $tags)
+    {
+        $conn = $this->createModel()->getConnection();
+        $position = 0;
+        $tagIds = [];
+
+        foreach ($tags as $tag) {
+            if ($this->persistTaggable($conn, $tag, $taggableId, $position)) {
+                $tag->increment('count');
+            }
+
+            $tagIds[] = $tag->getKey();
+            $position++;
+        }
+
+        // 대상 아이디에 연결된 태그중 갱신된 목록에 없는 태그는 연결 해제 처리
+        $removes = $this->fetchByTaggable($taggableId)->filter(
+            function (Tag $tag) use ($tagIds) {
+                return in_array($tag->getKey(), $tagIds) === false;
+            }
+        );
+
+        $this->detach($taggableId, $removes);
+    }
+
+    /**
+     * Update an existing tag relation before inserting a new one.
+     *
+     * @param  mixed  $conn  database connection
+     * @param  Tag  $tag  tag instance
+     * @param  string  $taggableId  taggable id
+     * @param  int  $position  relation position
+     *
+     * @return bool
+     */
+    private function persistTaggable($conn, Tag $tag, $taggableId, $position)
+    {
+        $table = $tag->getTaggableTable();
+        $relation = $conn->table($table)
+            ->where('tag_id', $tag->getKey())
+            ->where('taggable_id', $taggableId);
+
+        if ($relation->exists()) {
+            $relation->update(['position' => $position]);
+
+            return false;
+        }
+
+        $inserted = $conn->table($table)->insertOrIgnore([
+            'tag_id' => $tag->getKey(),
+            'taggable_id' => $taggableId,
+            'position' => $position,
+            'created_at' => $this->getNow()
+        ]);
+
+        if ($inserted > 0) {
+            return true;
+        }
+
+        $conn->table($table)
+            ->where('tag_id', $tag->getKey())
+            ->where('taggable_id', $taggableId)
+            ->update(['position' => $position]);
+
+        return false;
     }
 
     /**

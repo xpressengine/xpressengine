@@ -14,9 +14,8 @@
 
 namespace Xpressengine\Tag;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
+use XeDB;
 
 /**
  * Class TagHandler
@@ -66,40 +65,48 @@ class TagHandler
      */
     public function set($taggableId, array $words = [], $instanceId = null)
     {
-        $words = array_unique($words);
+        return XeDB::transaction(
+            function () use ($taggableId, $words, $instanceId) {
+                $words = array_values(
+                    array_unique($words)
+                );
 
-        $whereInWords = array_map(static function (string $word) {
-            return \DB::raw("binary '$word'");
-        }, $words);
-        
-        $tags = $this->repo->query()
-             ->where('instance_id', $instanceId)
-             ->whereIn('word', $whereInWords)
-             ->get();
+                $tagQuery = $this->repo->query()->where('instance_id', '=', $instanceId);
 
-        // 등록되지 않은 단어가 있다면 등록 함
-        foreach (array_diff($words, $tags->pluck('word')->all()) as $word) {
-            $tag = $this->repo->create([
-                'word' => $word,
-                'decomposed' => $this->decomposer->execute($word),
-                'instance_id' => $instanceId,
-            ]);
+                $tags = collect();
 
-            $tags->push($tag);
-        }
+                if (filled($words)) {
+                    $placeholders = implode(', ', array_fill(0, count($words), '?'));
 
-        // 넘겨준 태그와 대상 아이디를 연결
-        $tags = $this->multisort($words, $tags->all());
-        $this->repo->attach($taggableId, $tags);
+                    $tags = $tagQuery
+                        ->whereRaw(sprintf('BINARY `word` IN (%s)', $placeholders), $words)
+                        ->get();
+                }
 
-        // 이전에 대상 아이디에 연결된 태그중
-        // 전달된 단어 해당하는 태그가 없는경우 연결 해제 처리
-        $olds = $this->repo->fetchByTaggable($taggableId);
-        $removes = $olds->diff($tags);
+                $registeredWords = $tags->pluck('word')->all();
+                $unregisteredWords = array_diff($words, $registeredWords);
 
-        $this->repo->detach($taggableId, $removes);
+                foreach ($unregisteredWords as $word) {
+                    $tags->push($this->repo->create([
+                        'word' => $word,
+                        'decomposed' => $this->decomposer->execute($word),
+                        'instance_id' => $instanceId,
+                    ]));
+                }
 
-        return $this->repo->newCollection($tags);
+                $tags = $this->multisort(
+                    $words,
+                    $tags->all()
+                );
+
+                $this->repo->sync(
+                    $taggableId,
+                    $tags
+                );
+
+                return $this->repo->newCollection($tags);
+            }
+        );
     }
 
     /**
