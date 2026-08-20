@@ -228,7 +228,9 @@ class LangController extends Controller
             $parameters['--path'] = $path;
         }
 
-        Artisan::call('translation:import', $parameters);
+        if (Artisan::call('translation:import', $parameters) !== 0) {
+            abort(403, 'Invalid path.');
+        }
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::processed')]);
     }
