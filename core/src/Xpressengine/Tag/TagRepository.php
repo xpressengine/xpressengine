@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TagRepository.php
  *
@@ -38,8 +39,8 @@ class TagRepository
     /**
      * Attach tag to taggable
      *
-     * @param string $taggableId taggable id
-     * @param Tag[]  $tags       tag instances
+     * @param  string  $taggableId  taggable id
+     * @param  Tag[]  $tags  tag instances
      * @return void
      */
     public function attach($taggableId, $tags)
@@ -59,15 +60,15 @@ class TagRepository
     /**
      * Detach tag to taggable
      *
-     * @param string $taggableId taggable id
-     * @param Tag[]  $tags       tag instances
+     * @param  string  $taggableId  taggable id
+     * @param  Tag[]|Collection<Tag>  $tags  tag instances
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function detach($taggableId, $tags)
     {
         $conn = $this->createModel()->getConnection();
-        /** @var Tag $tag */
+
         foreach ($tags as $tag) {
             $conn->table($tag->getTaggableTable())
                 ->where('tag_id', $tag->getKey())
@@ -165,15 +166,20 @@ class TagRepository
     /**
      * Returns tags of the taggable
      *
-     * @param string $taggableId taggable id
-     * @return Collection|Tag[]
+     * @param  string  $taggableId  taggable id
+     * @return Collection
      */
     public function fetchByTaggable($taggableId)
     {
         $model = $this->createModel();
 
         return $this->query()
-            ->rightJoin($model->getTaggableTable(), $model->getTable().'.id', '=', $model->getTaggableTable().'.tag_id')
+            ->rightJoin(
+                $model->getTaggableTable(),
+                $model->getTable().'.id',
+                '=',
+                $model->getTaggableTable().'.tag_id'
+            )
             ->where('taggable_id', $taggableId)
             ->orderBy('position')
             ->select([$model->getTable().'.*'])
@@ -183,7 +189,7 @@ class TagRepository
     /**
      * Returns taggables of the tag
      *
-     * @param string $tagId tagId
+     * @param  string  $tagId  tagId
      * @return \Illuminate\Support\Collection
      */
     public function fetchByTag($tagId)
@@ -199,13 +205,17 @@ class TagRepository
     /**
      * Returns most popular tags
      *
-     * @param string|null $instanceId instance id
-     * @param int         $take       take count
-     * @return Collection|Tag[]
+     * @param  string|null  $instanceId  instance id
+     * @param  int  $take  take count
+     *
+     * @return Collection
      */
     public function fetchPopular($instanceId = null, $take = 15)
     {
-        $query = $this->query()->orderBy('count', 'desc')->orderBy('id', 'desc')->take($take);
+        $query = $this->query()
+            ->orderBy('count', 'desc')
+            ->orderBy('id', 'desc')
+            ->take($take);
 
         if ($instanceId !== null) {
             $query->where('instance_id', $instanceId);
@@ -217,8 +227,9 @@ class TagRepository
     /**
      * Returns most popular tags in whole
      *
-     * @param int $take take count
-     * @return Collection|Tag[]
+     * @param  int  $take  take count
+     *
+     * @return Collection
      */
     public function fetPopularWhole($take = 15)
     {
@@ -226,13 +237,14 @@ class TagRepository
     }
 
     /**
-     * Returns most popular tags of date period
+     * Returns most popular tags of a date period
      *
-     * @param \DateTime|string      $since      begin date
-     * @param \DateTime|string|null $until      end date
-     * @param string|null           $instanceId instance id
-     * @param int                   $take       take count
-     * @return Collection|Tag[]
+     * @param  DateTime|string  $since  begin date
+     * @param  DateTime|string|null  $until  end date
+     * @param  string|null  $instanceId  instance id
+     * @param  int  $take  take count
+     *
+     * @return Collection
      */
     public function fetchPopularPeriod($since, $until = null, $instanceId = null, $take = 15)
     {
@@ -260,12 +272,13 @@ class TagRepository
     }
 
     /**
-     * Returns most popular tags of date period in whole
+     * Returns most popular tags of a date period in whole
      *
-     * @param \DateTime|string      $since begin date
-     * @param \DateTime|string|null $until end date
-     * @param int                   $take  take count
-     * @return Collection|Tag[]
+     * @param  DateTime|string  $since  begin date
+     * @param  DateTime|string|null  $until  end date
+     * @param  int  $take  take count
+     *
+     * @return Collection
      */
     public function fetchPopularPeriodWhole($since, $until = null, $take = 15)
     {
@@ -273,17 +286,18 @@ class TagRepository
     }
 
     /**
-     * Search similar tags by given string
+     * Search similar tags by a given string
      *
-     * @param string      $decomposed decomposed word
-     * @param int         $take       take count
-     * @param string|null $instanceId instance id of taggable
-     * @return Collection|Tag[]
+     * @param  string  $decomposed  decomposed word
+     * @param  int  $take  take count
+     * @param  string|null  $instanceId  instance id of taggable
+     *
+     * @return Collection
      */
     public function fetchSimilar($decomposed, $take = 15, $instanceId = null)
     {
         $query = $this->query()
-            ->where('decomposed', 'like', $decomposed . '%')
+            ->where('decomposed', 'like', $decomposed.'%')
             ->orderBy('count', 'desc')
             ->take($take);
 
@@ -297,7 +311,7 @@ class TagRepository
     /**
      * Returns Datetime instance for now
      *
-     * @return \DateTime|Carbon
+     * @return DateTime|Carbon
      */
     protected function getNow()
     {

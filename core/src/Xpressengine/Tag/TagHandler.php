@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is tag handler class
+ * This file is a tag handler class
  *
  * PHP version 7
  *
@@ -46,8 +46,8 @@ class TagHandler
     /**
      * TagHandler constructor.
      *
-     * @param TagRepository $repo       TagRepository instance
-     * @param Decomposer    $decomposer Decomposer instance
+     * @param  TagRepository  $repo  TagRepository instance
+     * @param  Decomposer  $decomposer  Decomposer instance
      */
     public function __construct(TagRepository $repo, Decomposer $decomposer)
     {
@@ -58,10 +58,11 @@ class TagHandler
     /**
      * Set taggable's tags
      *
-     * @param string      $taggableId taggable id
-     * @param array       $words      tag word
-     * @param string|null $instanceId instance id of taggable
-     * @return Collection|Tag[] model collection
+     * @param  string  $taggableId  taggable id
+     * @param  array  $words  tag word
+     * @param  string|null  $instanceId  instance id of taggable
+     *
+     * @return Collection model collection
      */
     public function set($taggableId, array $words = [], $instanceId = null)
     {
@@ -112,13 +113,14 @@ class TagHandler
     /**
      * Sort tags by given words
      *
-     * @param array $std  standard array for sort
-     * @param Tag[] $tags tags array
+     * @param  array  $std  standard array for sort
+     * @param  Tag[]  $tags  tags array
      * @return Tag[]
      */
     private function multisort($std, $tags)
     {
         $std = array_map([$this, 'nonNumeric'], array_values($std));
+
         $words = array_map(function ($tag) {
             return $this->nonNumeric($tag->word);
         }, $tags);
@@ -130,9 +132,9 @@ class TagHandler
     }
 
     /**
-     * Convert to non numeric string
+     * Convert to non-numeric string
      *
-     * @param string|int $v string
+     * @param  string|int  $v  string
      * @return string
      */
     private function nonNumeric($v)
@@ -141,24 +143,28 @@ class TagHandler
     }
 
     /**
-     * Search similar tags by given string
+     * Search similar tags by a given string
      *
-     * @param string      $string     partial of word
-     * @param int         $take       take count
-     * @param string|null $instanceId instance id of taggable
+     * @param  string  $string  partial of word
+     * @param  int  $take  take count
+     * @param  string|null  $instanceId  instance id of taggable
      * @return Collection|Tag[]
      */
     public function similar($string, $take = 15, $instanceId = null)
     {
-        return $this->repo->fetchSimilar($this->decomposer->execute($string), $take, $instanceId);
+        return $this->repo->fetchSimilar(
+            $this->decomposer->execute($string),
+            $take,
+            $instanceId
+        );
     }
 
     /**
-     * Search similar words by given string
+     * Search similar words by a given string
      *
-     * @param string      $string     partial of word
-     * @param int         $take       take count
-     * @param string|null $instanceId instance id of taggable
+     * @param  string  $string  partial of word
+     * @param  int  $take  take count
+     * @param  string|null  $instanceId  instance id of taggable
      * @return string[]
      */
     public function similarWord($string, $take = 15, $instanceId = null)
@@ -181,7 +187,7 @@ class TagHandler
     /**
      * Set the decomposer instance.
      *
-     * @param Decomposer $decomposer decomposer instance
+     * @param  Decomposer  $decomposer  decomposer instance
      * @return void
      */
     public function setDecomposer(Decomposer $decomposer)
@@ -192,8 +198,8 @@ class TagHandler
     /**
      * __call
      *
-     * @param string $name      method name
-     * @param array  $arguments arguments
+     * @param  string  $name  method name
+     * @param  array  $arguments  arguments
      * @return mixed
      */
     public function __call($name, $arguments)
