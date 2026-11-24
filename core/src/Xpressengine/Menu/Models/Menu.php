@@ -48,6 +48,8 @@ class Menu extends Category
      */
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     /**
      * Indicates if the model should be timestamped.
      *
