@@ -142,6 +142,11 @@ class PluginScanner
                         $namespaceGuess = T_STRING;
                     }
 
+                    if ($namespaceGuess == T_STRING && defined('T_NAME_QUALIFIED') && $id === T_NAME_QUALIFIED) {
+                        $namespace = $text;
+                        $namespaceGuess = 0;
+                    }
+
                     if ($namespaceGuess == T_STRING && $id == T_STRING) {
                         $namespace .= $text;
                         $namespaceGuess = T_NS_SEPARATOR;

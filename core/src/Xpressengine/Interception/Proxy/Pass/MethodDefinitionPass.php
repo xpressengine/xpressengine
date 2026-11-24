@@ -157,21 +157,25 @@ BODY;
             return $typehint;
         }
 
-        if ($rfp->isArray()) {
-            return 'array';
-        }
+        $type = $rfp->getType();
+        if ($type instanceof \ReflectionNamedType) {
+            $name = $type->getName();
 
-        /*
-         * PHP < 5.4.1 has some strange behaviour with a typehint of self and
-         * subclass signatures, so we risk the regexp instead
-         */
-        if ((version_compare(PHP_VERSION, '5.4.1') >= 0)) {
-            try {
-                if ($rfp->getClass()) {
-                    return $rfp->getClass()->getName();
+            if ($name === 'array') {
+                return 'array';
+            }
+
+            if (!$type->isBuiltin()) {
+                if ($name === 'self' || $name === 'parent') {
+                    $class = $rfp->getDeclaringClass();
+                    if ($name === 'parent' && $class !== null) {
+                        $class = $class->getParentClass();
+                    }
+
+                    return $class ? $class->getName() : $name;
                 }
-            } catch (\ReflectionException $re) {
-                // noop
+
+                return $name;
             }
         }
 

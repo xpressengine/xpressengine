@@ -804,7 +804,7 @@ class XeInstall extends Command
         $files = $filesystem->files(base_path('migrations'));
 
         usort($files, function ($pre, $post) {
-            return $pre->getFileName() > $post->getFileName();
+            return $pre->getFileName() <=> $post->getFileName();
         });
 
         $config = app('config');
